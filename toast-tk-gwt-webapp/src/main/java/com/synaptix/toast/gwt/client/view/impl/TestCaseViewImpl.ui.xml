@@ -1,0 +1,33 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.important {
+			font-weight: bold;
+		}
+		.add{
+			padding-left: 10px;
+		}
+		.add2{
+			padding-top: 7px;
+			padding-left: 20px;
+		}
+		.pull-right{
+			float: right;
+		}
+	</ui:style>
+	<g:HTMLPanel styleName="testCase">
+		<g:HorizontalPanel>
+			<g:HorizontalPanel ui:field="testSlot" width="335"/>
+			<g:HorizontalPanel styleName="{style.add}">
+				<g:Button styleName="{style.important}" ui:field="editButton">Edit</g:Button>
+				<g:Button styleName="{style.important}" ui:field="playButton">Play</g:Button>
+			</g:HorizontalPanel>
+			<g:HorizontalPanel styleName="{style.add2} {style.pull-right}">
+				<g:Image ui:field="loadingImg" url="img/ajax-loader.gif"/>
+				<g:Image ui:field="successImg" url="img/check-icon.png"/>
+				<g:Image ui:field="failureImg" url="img/Close-icon.png"/>
+			</g:HorizontalPanel>
+		</g:HorizontalPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 

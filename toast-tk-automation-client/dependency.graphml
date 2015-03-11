@@ -1,0 +1,83 @@
+com.synaptix.redpepper:redpepper-automation:jar:1.3-SNAPSHOT
++- com.svnkit:svnkit:jar:1.1.0:compile
+|  \- ch.ethz.ganymed:ganymed-ssh2:jar:build210:compile
++- xml-apis:xml-apis:jar:1.4.01:compile
++- com.synaptix.redpepper:redpepper-runtime:jar:1.3-SNAPSHOT:compile
+|  +- com.synaptix.redpepper:redpepper-fixtures:jar:1.3-SNAPSHOT:compile
+|  |  +- commons-beanutils:commons-beanutils:jar:1.8.3:compile
+|  |  +- org.seleniumhq.selenium:selenium-server:jar:2.31.0:compile
+|  |  |  +- org.bouncycastle:bcprov-jdk15on:jar:1.48:compile
+|  |  |  +- org.bouncycastle:bcpkix-jdk15on:jar:1.48:compile
+|  |  |  +- mx4j:mx4j-tools:jar:3.0.1:compile
+|  |  |  +- org.mortbay.jetty:servlet-api-2.5:jar:6.1.9:compile
+|  |  |  +- org.seleniumhq.selenium:jetty-repacked:jar:7.6.1:compile
+|  |  |  +- net.jcip:jcip-annotations:jar:1.0:compile
+|  |  |  +- org.seleniumhq.selenium:selenium-java:jar:2.31.0:compile
+|  |  |  |  +- org.seleniumhq.selenium:selenium-android-driver:jar:2.31.0:compile
+|  |  |  |  |  \- org.seleniumhq.selenium:selenium-remote-driver:jar:2.31.0:compile
+|  |  |  |  +- org.seleniumhq.selenium:selenium-chrome-driver:jar:2.31.0:compile
+|  |  |  |  +- org.seleniumhq.selenium:selenium-htmlunit-driver:jar:2.31.0:compile
+|  |  |  |  |  +- org.seleniumhq.selenium:selenium-api:jar:2.31.0:compile
+|  |  |  |  |  \- net.sourceforge.htmlunit:htmlunit:jar:2.11:compile
+|  |  |  |  |     +- xalan:xalan:jar:2.7.1:compile
+|  |  |  |  |     |  \- xalan:serializer:jar:2.7.1:compile
+|  |  |  |  |     +- commons-collections:commons-collections:jar:3.2.1:compile
+|  |  |  |  |     +- org.apache.httpcomponents:httpmime:jar:4.2.2:compile
+|  |  |  |  |     |  \- org.apache.httpcomponents:httpcore:jar:4.2.2:compile
+|  |  |  |  |     +- net.sourceforge.htmlunit:htmlunit-core-js:jar:2.11:compile
+|  |  |  |  |     +- xerces:xercesImpl:jar:2.10.0:compile
+|  |  |  |  |     +- net.sourceforge.nekohtml:nekohtml:jar:1.9.17:compile
+|  |  |  |  |     +- net.sourceforge.cssparser:cssparser:jar:0.9.8:compile
+|  |  |  |  |     |  \- org.w3c.css:sac:jar:1.3:compile
+|  |  |  |  |     \- org.eclipse.jetty:jetty-websocket:jar:8.1.7.v20120910:compile
+|  |  |  |  |        +- org.eclipse.jetty:jetty-util:jar:8.1.7.v20120910:compile
+|  |  |  |  |        +- org.eclipse.jetty:jetty-io:jar:8.1.7.v20120910:compile
+|  |  |  |  |        \- org.eclipse.jetty:jetty-http:jar:8.1.7.v20120910:compile
+|  |  |  |  +- org.seleniumhq.selenium:selenium-firefox-driver:jar:2.31.0:compile
+|  |  |  |  |  +- commons-io:commons-io:jar:2.2:compile
+|  |  |  |  |  \- org.apache.commons:commons-exec:jar:1.1:compile
+|  |  |  |  +- org.seleniumhq.selenium:selenium-ie-driver:jar:2.31.0:compile
+|  |  |  |  |  +- net.java.dev.jna:jna:jar:3.4.0:compile
+|  |  |  |  |  \- net.java.dev.jna:platform:jar:3.4.0:compile
+|  |  |  |  +- org.seleniumhq.selenium:selenium-iphone-driver:jar:2.31.0:compile
+|  |  |  |  +- org.seleniumhq.selenium:selenium-safari-driver:jar:2.31.0:compile
+|  |  |  |  +- org.seleniumhq.selenium:selenium-support:jar:2.31.0:compile
+|  |  |  |  \- org.webbitserver:webbit:jar:0.4.14:compile
+|  |  |  |     \- io.netty:netty:jar:3.5.2.Final:compile
+|  |  |  +- org.yaml:snakeyaml:jar:1.8:compile
+|  |  |  \- commons-codec:commons-codec:jar:1.6:compile
+|  |  \- org.easytesting:fest-swing:jar:1.2.1:compile
+|  |     +- org.easytesting:fest-assert:jar:1.2:compile
+|  |     +- org.easytesting:fest-reflect:jar:1.2:compile
+|  |     \- org.easytesting:fest-util:jar:1.1.3:compile
+|  +- commons-lang:commons-lang:jar:2.3:compile
+|  \- joda-time:joda-time:jar:2.1:compile
++- com.synaptix.redpepper:redpepper-dao:jar:1.3-SNAPSHOT:compile
+|  +- com.github.jmkgreen.morphia:morphia:jar:1.2.3:compile
+|  |  +- org.mongodb:mongo-java-driver:jar:2.11.0:compile
+|  |  +- cglib:cglib-nodep:jar:2.2.2:compile
+|  |  \- com.thoughtworks.proxytoys:proxytoys:jar:1.0:compile
+|  +- org.reflections:reflections:jar:0.9.9-RC1:compile
+|  |  +- org.javassist:javassist:jar:3.16.1-GA:compile
+|  |  \- dom4j:dom4j:jar:1.6.1:compile
+|  \- com.synaptix.redpepper:redpepper-core:jar:1.3-SNAPSHOT:compile
+|     +- com.sun.jersey:jersey-client:jar:1.17.1:compile
+|     |  \- com.sun.jersey:jersey-core:jar:1.17.1:compile
+|     +- com.google.code.gson:gson:jar:1.7.1:compile
+|     +- com.esotericsoftware:kryonet:jar:2.22.0-RC1:compile
+|     |  +- com.esotericsoftware.kryo:kryo:jar:2.24.0:compile
+|     |  |  +- com.esotericsoftware.minlog:minlog:jar:1.2:compile
+|     |  |  \- org.objenesis:objenesis:jar:2.1:compile
+|     |  \- com.esotericsoftware:jsonbeans:jar:0.7:compile
+|     +- org.apache.commons:commons-lang3:jar:3.0:compile
+|     \- org.json:json:jar:20090211:compile
++- com.google.inject:guice:jar:3.0-rc2:compile
+|  +- javax.inject:javax.inject:jar:1:compile
+|  \- aopalliance:aopalliance:jar:1.0:compile
++- log4j:log4j:jar:1.2.17:compile
++- commons-logging:commons-logging:jar:1.1.1:compile
++- com.google.inject.extensions:guice-assistedinject:jar:3.0:compile
++- com.google.inject.extensions:guice-multibindings:jar:3.0:compile
+\- org.sonatype.sisu:sisu-guice:jar:3.1.2:compile
+   \- com.google.guava:guava:jar:12.0.1:compile
+      \- com.google.code.findbugs:jsr305:jar:1.3.9:compile

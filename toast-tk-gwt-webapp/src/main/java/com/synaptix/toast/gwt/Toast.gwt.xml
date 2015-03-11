@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='toast'>
+  <!-- Inherit the core Web Toolkit stuff.                        -->
+  <inherits name='com.google.gwt.user.User'/>
+  <inherits name='com.google.gwt.user.theme.clean.Clean'/>
+  <inherits name='com.google.gwt.query.Query'/>
+  <!-- Other module inherits                                      -->
+
+  <!-- Specify the app entry point class.                         -->
+  <entry-point class='com.synaptix.toast.gwt.client.ToastGwtWebAppEntryPoint'/>
+
+  <!-- Specify the paths for translatable code                    -->
+  <source path='client'/>
+  <source path='shared'/>
+</module>

@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.synaptix.toast</groupId>
+		<version>1.3-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+		<artifactId>toast-tk</artifactId>
+	</parent>
+	<artifactId>toast-tk-annotation</artifactId>
+	<name>Toast Toolkit - Annotation module</name>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<compilerArgument>-proc:none</compilerArgument>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.gwtplatform</groupId>
+			<artifactId>gwtp-processors</artifactId>
+			<version>${gwtp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.synaptix.toast</groupId>
+			<artifactId>toast-tk-fixtures</artifactId>
+			<version>${project.version}</version>
+		</dependency> 
+		<dependency>
+			<groupId>com.synaptix.toast</groupId>
+			<artifactId>toast-tk-web-annotation</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>
