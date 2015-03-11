@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp
+    spec="$jnlpspec"
+    codebase="http://10.106.184.115:8080/toast/"
+    href="app.jnlp">
+  <information>
+    <title>Toast Tk Studio</title>
+    <vendor>$project.Organization.Name</vendor>
+    <homepage href="http://10.106.184.115:8080/"/>
+    <description>Toast Tk Studio</description>
+    <icon href="images/toast.png" width="64" height="64"/>
+    <icon href="images/Spalsh.png" kind="splash"/>
+    <offline-allowed/>
+    <shortcut online="false">
+	    <desktop/>
+		<menu submenu="Toast Tk" />
+    </shortcut>
+  </information>
+#if($allPermissions)
+  <security>
+     <all-permissions/>
+  </security>
+#end
+  <resources>
+    <j2se version="$j2seVersion"/>
+     $dependencies
+  </resources>
+  <application-desc main-class="$mainClass"/>
+</jnlp>

@@ -1,0 +1,491 @@
+h3. Domaines
+
+||auto setup||
+|insert|task status|
+|code|meaning|
+|TODO|     Todo      |
+|CURRENT|  Current   |
+|DONE|     Done      |
+|SKIPPED|  Skipped   |
+|CANCELED| Canceled  |
+
+||auto setup||
+|insert|service nature|
+|code|meaning|
+|UPDATE_STATUS|     Update status      |
+|DATA_CHECK|        Data check         |
+|ENRICHMENT|        Enrichment         |
+|MANUAL_ENRICHMENT| Manual enrichment  |
+|EXTERNAL_PROCESS|  External process   |
+
+h5. Statuts des backup files
+
+|| auto setup ||
+| insert | supplier invoice status |
+| code 	| meaning |
+| TCO 	| To confirm |
+| CFM 	| Confirmed |
+| VAL 	| Validate |
+
+h5. Langues
+
+|| auto setup ||
+| insert | language |
+| code | meaning |
+| BE | Franco-neerlandais |
+| CZ | Tchèque |
+| EN | Anglais |
+| FR | Français |
+| GE | Allemand |
+| HG | Hongrois |
+| IT | Italien |
+| NL | Neerlandais |
+| PL | Polonais |
+| PT | Portugais |
+| RO | Roumain |
+| SE | Suedois |
+| SK | Slovaque |
+| SL | Slovène |
+| SP | Espagnol |
+| TU | Turque |
+
+h5. Modes de consignation
+
+|| auto setup ||
+| insert | routing mode |
+| code | meaning |
+| CST_NO | Priority to deposit and transport controls ignored |
+| CST_CONT_NOLOCK | Priority to deposit and any transport control failure is logged |
+| CST_CONT_LOCK | Priority to deposit and any trsp ctrl fail creates deposit ano |
+| CST_FIRST | Priority to transport controls |
+
+h5. Type de retour
+
+|| auto setup ||
+| insert | return type |
+| code | meaning |
+| Ga-FR-DOPR | Garantie |
+
+h5. Types de member role
+
+|| auto setup ||
+| insert | member role type |
+| code | meaning |
+| PKP | Pickup |
+| DLV | Delivery |
+| PRIN | Principal |
+| SEND | Sender |
+| CONS | Consignee |
+| EXP | Exploitation |
+| SUP | Supplier |
+
+h5. Marques
+
+|| setup || trademark ||
+| code | meaning |
+| C | CITROEN |
+| P | PEUGEOT |
+
+h5. Types de marchandise
+
+|| auto setup ||
+| insert | commodity kind |
+| code | meaning |
+| P | Pieces |
+| E | Emballage |
+
+h5. Modes de transport
+
+|| auto setup ||
+| insert | transport mode |
+| code | meaning |
+| ROU | Overland |
+| MAR | Overseas |
+| AIR | Over air |
+| RAI | Over rail |
+
+h5. Priorité
+
+|| auto setup ||
+| insert | priority |
+| code | meaning |
+| 10 | 10 |
+
+h5. Types d'ordres d'execution
+
+|| auto setup ||
+| insert | execution order type |
+| code | meaning |
+| LOG | Logistical |
+| OVL | Overland |
+| OVS | Overseas |
+
+h5. Types d'opérations
+
+|| auto setup ||
+| insert | operation type |
+| code | meaning |
+| DAT | Livraison sur plate-forme (Delivery At   Terminal) |
+| DEL | Livraison (Delivery) |
+| PKC | Enlèvement par complet |
+| PXD | Complet Direct |
+| QDL | Livraison à quai (Quay Delivery) |
+| PKP | Enlèvement |
+| TDP | Semi-direct aval |
+| TRK | Traction |
+| TPD | Direct |
+| DEC | Livraison par complet |
+| TDD | Semi-direct amont |
+| TRE | Traction étoile |
+| PEX | Enlèvement exécuté |
+| TRC | Traction par complet |
+
+h5. Nature d'operation
+
+|| auto setup ||
+| insert | operation nature |
+| code | meaning |
+| ADM | Administrative |
+| EXP | Exploitation |
+
+h5. Type de livraison
+
+|| auto setup ||
+| insert | delivery type |
+| code | meaning |
+| DOQ | Delivery on quay |
+| DLV | Basic delivery |
+
+h5. Type d'enlèvement
+
+|| auto setup ||
+| insert | pickup type |
+| code | meaning |
+| POQ | Pickup on quay |
+| PKP | Pickup |
+
+h5. Type de consignation
+
+|| auto setup ||
+| insert | routing type |
+| code | meaning |
+| OPT | Normal |
+| OXT | Macro |
+
+h5. Mode de mise à jour des ordres d'execution
+
+|| auto setup ||
+| insert | execution order update mode |
+| code | meaning |
+| EVT | by event |
+| OPE | by operation |
+
+h5. Types d'événements
+
+|| auto setup ||
+| insert | event type |
+| code | meaning |
+| ARR | Arrivée plateforme |
+| COV | Validation d ordre client |
+| CTI | Conteneurisation |
+| DEP | Départ plate-forme |
+| DLV | Livraison |
+| PKP | Enlèvement |
+| ARS | Arrivee sur site          |
+| ART | ART                       |
+| ATQ | ATQ                       |
+| CLE | CLE                       |
+| COD | COD                       |
+| COM | COM                       |
+| DEL | DEL                       |
+| DES | Depart de site            |
+| DIP | DIP                       |
+| UDL | UDL                       |
+
+h5. Type de jalon
+
+|| auto setup ||
+| insert | milestone status |
+| code | meaning |
+| CAN | Annulé |
+| EXE | Executé |
+| FOR | Planifié |
+| REF | Replanifié |
+
+h5. Moyens de transport
+
+|| auto setup ||
+| insert | transport means |
+| code | meaning |
+| ATR | Articuled lorry |
+
+
+h5. Statuts limite pour les options
+
+|| auto setup ||
+| insert | limit option status|
+| code | meaning |
+|TRR_TCO|Transport req to confirm |
+|TRR_CFM|Trsp req confirmed       |
+|TRR_VAL|trsp req validated       |
+|ORD_TMP|Cust order tmp           |
+|ORD_CFM|Cust ord confirmed       |
+|EXE_SNT|Exec order sent          |
+|TRR_CUR|Trsp req Current         |
+|TRR_EXE|Trsp req Executed        |
+
+h5. Modes de transmission
+
+|| auto setup ||
+| insert | transmission mode |
+| code | meaning |
+| NO | No transmission |
+| MSG | Message |
+| MAI | Mail |
+| FAX | Fax |
+
+
+h5. Types de dossiers voyage
+
+|| auto setup ||
+| insert | trip file type |
+| code | meaning |
+|MTO|Voyage routier|
+|PDO|Tournee|
+
+h5. Types de segments
+
+|| auto setup ||
+| insert | segment type |
+| code | meaning |
+|ROA|	Road        |
+|TRR|	Ferroutage  |
+|SEA|	Seaship     |
+
+h5. Nature de segments
+
+|| auto setup ||
+| insert | segment nature |
+| code | meaning |
+|A	|Approche        |
+|T	|En charge       |
+|R	|Repositionnement|
+
+h3. Setup entities
+
+h5. Pays
+
+|| auto setup ||
+| insert | country |
+| country code | meaning | iso country code | iso country no |
+| POL | POLOGNE | PL | 33 |
+| FRA | FRANCE | FR | 33 |
+| AUT | AUTRICHE | AT | 43 |
+| DEU | ALLEMAGNE | DE | 49 |
+| ESP | ESPAGNE | ES | 34 |
+
+h5. Départements
+
+|| setup || State ||
+| id | stateCode | countryCode |
+| POL05 | 05 | POL |
+| FRA13 | 13 | FRA |
+| ESP13 | 13 | ESP |
+| FRA21 | 21 | FRA |
+| DEU29 | 29 | DEU |
+| AUT40 | 40 | AUT |
+| FRA44 | 44 | FRA |
+| ESP50 | 50 | ESP |
+| FRA69 | 69 | FRA |
+| FRA75 | 75 | FRA |
+| FRA78 | 78 | FRA |
+| FRA79 | 79 | FRA |
+| FRA91 | 91 | FRA |
+| FRA92 | 92 | FRA |
+
+h5. Zips
+
+|| setup || Zip ||
+| id | zip | city | idState | timeZone |
+| POL05462 | 05462 | WIAZOWNA | POL05 | Europe/Warsaw |
+| FRA91104 | 91104 | CORBEIL ESSONNES | FRA91 | Europe/Paris |
+| FRA44600 | 44600 | ST NAZAIRE | FRA44 | Europe/Paris |
+| FRA78985 | 78985 | POISSY | FRA78 | Europe/Paris |
+| FRA21300 | 21300 | CHENOVE | FRA21 | Europe/Paris |
+| AUT4063 | 4063 | HOERSCHING | AUT40 | Europe/Paris |
+| FRA69638 | 69638 | VENISSIEUX | FRA69 | Europe/Paris |
+| FRA92400 | 92400 | COURBEVOIE | FRA92 | Europe/Paris |
+| FRA50639 | 50639 | FIGUERUELAS | ESP50 | Europe/Paris |
+| FRA13127 | 13127 | VITROLLES | FRA13 | Europe/Paris |
+| FRA44980 | 44980 | SAINT LUCE SUR LOIRE | FRA44 | Europe/Paris |
+| FRA75012 | 75012 | PARIS 12 | FRA75 | Europe/Paris |
+| ESP13200 | 13200 | MANZANARES | ESP13 | Europe/Paris |
+
+h5. Plateformes
+
+|| auto setup ||
+| insert | platform |
+| platform code | meaning | address | id zip |
+| PCPYB2N | POISSY BAT 2 N | 45 RUE JEAN PIERRE TIMBAUD | FRA78985 |
+| LYOPXD | G LYON (PRIX/DÉPART) | 96 chemin du Charbonnier | FRA69638 |
+| 28URGEMA | URGEMANCHA | CAMINO CALVARIO S/N | ESP13200 |
+
+h5. Centres
+
+|| auto setup ||
+| insert | center |
+| code | meaning | name | address1 | address2 | id zip | phone | fax | type |
+| AE0380 | GEFCO VITROLLES AERIEN RMA | GEFCO FRANCE (VITROLLES) | ZAC DE L'ANJOLY | VOIE D'ESPAGNE | FRA13127 | 33-4--42-10-97-97 | 33-4-42-10-54-65 | E |
+| AE0890 | GEFCO NANTES AERIEN RMA | GEFCO FRANCE (NANTES) | 3 RUE LOUIS BLERIOT | P.A. MAISON NEUVE | FRA44980 | 33251133480 | 33251133490 | |
+| 291 | GEFCO PARIS/BERCY | GEFCO PARIS/BERCY | 65, rue du Baron Leroy | Gare de Bercy - Quai 9    Porte D | FRA75012 | 33-1-44-68-41-00 | 33-1-43-43-91-49 | |
+| 950 | GEFCO 4PL | GEFCO 4PL | 77-81 Rue Des Lilas D'Espagne | BP 313 | FRA92400 | 33-1-49-05-21-21 | 33-1-49-05-20-20 | |
+
+h5. Tiers
+
+|| auto setup ||
+| insert | third party |
+| third party code 	| check consignee 	| check sender 	| check principal 	| name 							| address 					| language | short description | id zip | check plant | check supplier | check princ is rc | check princ is do | dealer code | proximity platform | management center | exploitation center |
+| ZA 				| true 				| true 			| true 				| LINK 							| Poligono Entrerrios 		| SP | GME Zaragoza Assembly | FRA50639 | true | false | false | false | null | null | | |
+| 422133652 		| false				| false 		| false 			| LINK 							| UL. NADRZECZNA 17 		| PL | LINK | POL05462 | false | true | false | false | null | null | | |
+| 010032Z06 		| true 				| true 			| true 				| SVICA CORBEIL 				| 29 - 33 JOHN KENNEDY 		| FR | SVICA CORBEIL | FRA91104 | false | false | false | false | DOPR | 28URGEMA | | |
+| 010033V06 		| true 				| true 			| true 				| LA PYRAMIDE 					| 20 RUE DE L ETOILE DU MATIN | FR | LA PYRAMIDE | FRA44600 | false | false | false | false | RA | PCPYB2N | | |
+| 21PLAPC 			| true 				| true 			| false 			| PLASTO TECHNOLOGIES 			| RUE DE LONGVIC              \-44 | FR | PLASTO TECHNOLOGIES | FRA21300 | false | false | false | false | null | null | AE0890 | AE0380 |
+| A087 				| false				| false 		| true 				| SCHACHINGER AUTOMOTIVE GMBH 	| FISCHERWEG 10 			| GE | SCHACHINGER AUTOMOTIVE GMBH | AUT4063 | false | false | false | false | null | null | | |
+
+h5. Currency
+
+|| auto setup ||
+| insert | currency |
+| currency code | meaning | gep percent rate | currency rounding |
+| EUR | EURO  | 0 | S001 |
+
+h5. Communauté
+
+|| auto setup ||
+| insert | community |
+| code | label | client portal version |
+| GM | General Motors | GM |
+| PR | Retour PR | PR |
+| INES | INES |
+| APPRO_PSA | Appro PSA |
+
+h5. Types d'emballages
+
+|| auto setup ||
+| insert | packing kind |
+| code | meaning | check returnable | check covered | check support no | packing xcode |
+| 12 | CAISSE BOIS | true | false | false | 12 |
+
+h5. Incoterm
+
+|| auto setup ||
+| insert | incoterm |
+| code | meaning |
+| FOB | FREE ON BOARD |
+| SER | SERVICE |
+
+|| auto setup ||
+| insert | sub incoterm |
+| code | meaning | transport mode | incoterm | ines transport mode |
+| S | SERVICE | ROU | SER | R |
+
+|| auto setup ||
+| insert | exploitation mode |
+| code | meaning | community |
+| Inbound | Inbound | GM |
+| Outbound | Outbound | GM |
+
+|| auto setup ||
+| insert | transport means type |
+| code | meaning | transport mode | transport means |
+| SR_SAV90 | SEMI REMORQUE SAVOYARDE 90 | ROU | ATR |
+
+|| auto setup ||
+| insert | vat |
+| code | meaning | check taxable | check vat default | taxtn kind | expiration date |
+| 99 | REGUL | false | false | null | 31/12/2032 00:00:00 |
+
+|| auto setup ||
+| insert | tax item |
+| code | meaning | tax item key | check vat | check gross margin | vat |
+| DONT-USE | Prestation dediee aux movement-type -- ne pas utiliser | null | false | false | null |
+
+|| auto setup ||
+| insert | option type |
+| code | meaning | priority | check organize | check direct | check no routing | check authorization | check taxed option | tax item | check responsible | check means type | check supplier |
+| Acceleration | Acceleration | null | false | false | false | true | false | null | true | false | false |
+| Premium | Mean Types | null | false | true | true | true | false | null | true | true | true |
+
+|| auto setup ||
+| insert | offer |
+| code | meaning | community | check direct | check no routing | check 4PL | check exp op | check adm op | check compute adm op at creation | check compute adm op at execution | routing mode | priority |
+| G   | Standard | GM        | false        | false            | true      | false        | true         | true                             | false                             | CST_FIRST    | null     |
+| SP  | Premium  | GM        | false        | false            | true      | false        | true         | true                             | false                             | CST_FIRST    | 10       |
+| LOT | Lot      | INES      | true         | true             | false     | false        | false        | false                            | false                             | CST_NO       | 10       |
+                                            
+|| auto setup ||
+| insert | offer option type |
+| offer | option type | xcode | meaning | limit status | check authorization | check taxed option | tax item | check responsible | check means type | check supplier |
+| G | Acceleration | A | Acceleration (Level 1) | TRR_EXE | true | false | null | true | false | false |
+| SP | Premium | B | On rate (Level 2) | TRR_VAL | true | false | null | true | true | true |
+| SP | Premium | C | Spot buy (Level 3) | TRR_VAL | true | true | null | true | true | true |
+
+h1. Data
+
+h3. Statuts des demandes de transport (BOP)
+
+|| auto setup ||
+| insert | transport request status |
+| code | meaning |
+| TCO | A confirmer |
+| CFM | Confirmée |
+| VAL | Validée |
+| CAN | Annulée |
+| TIC | Pris en charge |
+| CUR | Delivered |
+| EXE | Executed |
+| CLO | Closed |
+
+h3. Statuts des ordres clients
+
+|| auto setup ||
+| insert | customer order status |
+| code | meaning |
+| PRV | Prévisionnel |
+| VAL | Ferme |
+| FOR | Planifié |
+| CUR | Confirmed |
+| EXE | Current |
+| CLO | Executed |
+| CAN | Canceled |
+
+h3. Statuts des ordres d'execution
+
+|| auto setup ||
+| insert | execution order status |
+| code | meaning |
+| CAN | Annulé |
+| CUR | En cours d execution |
+| EXE | Executé |
+| FOR | Pris en charge |
+| TBT | A transmettre |
+| NTT | Not to be transmitted |
+| TRA | Transmis |
+| CLO | Fermé |
+
+h3. Statuts des operations
+
+|| auto setup ||
+| insert | operation status |
+| code | meaning |
+| FO | Prévisionnel |
+| IP | En cours d execution |
+| EX | Executé |
+
+h3. Softwares
+
+||auto setup||
+|insert|software|
+|code |exec order trsm mode|update mode|
+|INES |                    |           |
+|ISYGO|                    |           |
