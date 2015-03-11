@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp
     spec="$jnlpspec"
-    codebase="http://10.106.184.115:8080/redpepper/"
+    codebase="http://10.106.184.115:8080/toast/"
     href="app.jnlp">
   <information>
     <title>Toast Tk Studio</title>
