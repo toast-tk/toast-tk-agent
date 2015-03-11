@@ -44,6 +44,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>webstart-maven-plugin</artifactId>
+				<version>1.0-beta6</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
