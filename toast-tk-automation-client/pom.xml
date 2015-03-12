@@ -33,17 +33,10 @@
 						<configuration>
 							<tasks>
 								<copy
-<<<<<<< HEAD
-									file="${project.basedir}/../toast-tk-automation-plugin-loader/target/toast-tk-agent-standalone.jar"
-									todir="${project.build.directory}/jnlp/agent-lib" />
-								<copy
-									file="${basedir}/../toast-tk-automation-server-plugin/target/toast-tk-server-automation-plugin-standalone.jar"
-=======
 									file="${project.basedir}/../${toast.tk.agentpath}"
 									todir="${project.build.directory}/jnlp/agent-lib" />
 								<copy
 									file="${basedir}/../${toast.tk.autopluginpath}"
->>>>>>> deployment config
 									todir="${project.build.directory}/jnlp/agent-lib" />
 								<copy file="${basedir}/src/main/resources/toast.png" 
 									todir="${project.build.directory}/jnlp/images" />
@@ -57,11 +50,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>webstart-maven-plugin</artifactId>
-<<<<<<< HEAD
 				<version>1.0-beta-6</version>
-=======
-       			<version>1.0-beta-6</version>
->>>>>>> deployment config
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -73,13 +62,10 @@
 				<configuration>
 					<excludeTransitive>false</excludeTransitive>
 					<libPath>lib</libPath>
+					<codebase>${jnlp.host}/${jnlp.host.uri}/</codebase>
 					<jnlp>
 						<inputTemplate>template.vm</inputTemplate>
 						<outputFile>app.jnlp</outputFile>
-<<<<<<< HEAD
-=======
-						<codebase>${jnlp.host}/${jnlp.host.uri}/</codebase>
->>>>>>> deployment config
 						<mainClass>com.synaptix.toast.swing.agent.AgentBoot</mainClass>
 					</jnlp>
 					<unsignAlreadySignedJars>true</unsignAlreadySignedJars>
@@ -177,17 +163,11 @@
 									<tasks>
 										<copy file="${project.build.directory}/toast-tk-automation-client-${project.version}.zip"
 											overwrite="true"
-											tofile="D:/Apps/apache-tomcat-6.0.37/webapps/toast.zip" />
+											tofile="${tomcat.deploy.jnlp.dir}/toast.zip" />
 										<delete includeEmptyDirs="true">
-<<<<<<< HEAD
-										   <fileset dir="D:/Apps/apache-tomcat-6.0.37/webapps/toast"/>
-										</delete>
-										<unzip src="D:/Apps/apache-tomcat-6.0.37/webapps/toast.zip" dest="D:/Apps/apache-tomcat-6.0.37/webapps/toast" />
-=======
 										   <fileset dir="${tomcat.deploy.jnlp.dir}/toast"/>
 										</delete>
 										<unzip src="${tomcat.deploy.jnlp.dir}/toast.zip" dest="${tomcat.deploy.jnlp.dir}/toast" />
->>>>>>> deployment config
 									</tasks>
 								</configuration>
 							</execution>
