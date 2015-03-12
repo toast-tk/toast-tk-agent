@@ -9,9 +9,15 @@
 	</parent>
 	<artifactId>toast-tk-automation-client</artifactId>
 	<name>Toast Toolkit - Automation Client</name>
+	<url>${jnlp.host}</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<tomcat.version>7.0.6</tomcat.version>
+		<toast.tk.agentpath>toast-tk-automation-plugin-loader/target/toast-tk-agent-standalone.jar</toast.tk.agentpath>
+		<toast.tk.autopluginpath>toast-tk-automation-server-plugin/target/toast-tk-server-automation-plugin-standalone.jar</toast.tk.autopluginpath>
+		<tomcat.deploy.jnlp.dir>D:/Apps/apache-tomcat-6.0.37/webapps</tomcat.deploy.jnlp.dir>
+		<jnlp.host>http://10.106.184.115:8080</jnlp.host>
+		<jnlp.host.uri>toast</jnlp.host.uri>
 	</properties>
 	<build>
 		<plugins>
@@ -27,10 +33,17 @@
 						<configuration>
 							<tasks>
 								<copy
+<<<<<<< HEAD
 									file="${project.basedir}/../toast-tk-automation-plugin-loader/target/toast-tk-agent-standalone.jar"
 									todir="${project.build.directory}/jnlp/agent-lib" />
 								<copy
 									file="${basedir}/../toast-tk-automation-server-plugin/target/toast-tk-server-automation-plugin-standalone.jar"
+=======
+									file="${project.basedir}/../${toast.tk.agentpath}"
+									todir="${project.build.directory}/jnlp/agent-lib" />
+								<copy
+									file="${basedir}/../${toast.tk.autopluginpath}"
+>>>>>>> deployment config
 									todir="${project.build.directory}/jnlp/agent-lib" />
 								<copy file="${basedir}/src/main/resources/toast.png" 
 									todir="${project.build.directory}/jnlp/images" />
@@ -44,7 +57,11 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>webstart-maven-plugin</artifactId>
+<<<<<<< HEAD
 				<version>1.0-beta-6</version>
+=======
+       			<version>1.0-beta-6</version>
+>>>>>>> deployment config
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -59,6 +76,10 @@
 					<jnlp>
 						<inputTemplate>template.vm</inputTemplate>
 						<outputFile>app.jnlp</outputFile>
+<<<<<<< HEAD
+=======
+						<codebase>${jnlp.host}/${jnlp.host.uri}/</codebase>
+>>>>>>> deployment config
 						<mainClass>com.synaptix.toast.swing.agent.AgentBoot</mainClass>
 					</jnlp>
 					<unsignAlreadySignedJars>true</unsignAlreadySignedJars>
@@ -158,9 +179,15 @@
 											overwrite="true"
 											tofile="D:/Apps/apache-tomcat-6.0.37/webapps/toast.zip" />
 										<delete includeEmptyDirs="true">
+<<<<<<< HEAD
 										   <fileset dir="D:/Apps/apache-tomcat-6.0.37/webapps/toast"/>
 										</delete>
 										<unzip src="D:/Apps/apache-tomcat-6.0.37/webapps/toast.zip" dest="D:/Apps/apache-tomcat-6.0.37/webapps/toast" />
+=======
+										   <fileset dir="${tomcat.deploy.jnlp.dir}/toast"/>
+										</delete>
+										<unzip src="${tomcat.deploy.jnlp.dir}/toast.zip" dest="${tomcat.deploy.jnlp.dir}/toast" />
+>>>>>>> deployment config
 									</tasks>
 								</configuration>
 							</execution>

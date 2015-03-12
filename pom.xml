@@ -21,7 +21,7 @@
 		<module>toast-tk-automation-plugin-loader</module>
 		<module>toast-tk-automation-client</module>
 		<module>toast-tk-gwt-webapp</module>
-		<module>toast-tk-automation-synaptix-plugin</module>
+		<!--module>toast-tk-automation-synaptix-plugin</module-->
 		<module>toast-tk-maven-plugin</module>
 	</modules>
 	<properties>
@@ -234,6 +234,22 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+	<distributionManagement>
+		<!-- <repository> <id>synaptix-releases-repository</id> <url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/releases/</url> 
+			</repository> <snapshotRepository> <id>synaptix-snapshots-repository</id> 
+			<url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/snapshots/</url> 
+			</snapshotRepository> -->
+		<repository>
+			<id>sncf-releases</id>
+			<name>Inhouse Releases Repository</name>
+			<url>http://s76cllcfakr.si.fret.sncf.fr:8090/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>sncf-snapshots</id>
+			<name>Inhouse Snapshots Repository</name>
+			<url>http://s76cllcfakr.si.fret.sncf.fr:8090/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<repositories>
 		<repository>
 			<id>mongodb-morphia</id>
@@ -243,11 +259,9 @@
 			<id>synaptix-releases-repository</id>
 			<releases>
 				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
 			</releases>
 			<snapshots>
 				<enabled>false</enabled>
-					<updatePolicy>always</updatePolicy>
 			</snapshots>
 			<url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/releases/</url>
 		</repository>
@@ -255,67 +269,11 @@
 			<id>synaptix-snapshots-repository</id>
 			<releases>
 				<enabled>false</enabled>
-				<updatePolicy>always</updatePolicy>
 			</releases>
 			<snapshots>
 				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
 			</snapshots>
 			<url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/snapshots/</url>
 		</repository>
 	</repositories>
-	<profiles>
-		<profile>
-			<id>DEPLOY_NEXUS_SYNAPTIX</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<modules>
-				<module>toast-tk-core</module>
-				<module>toast-tk-web-annotation</module>
-				<module>toast-tk-fixtures</module>
-				<module>toast-tk-annotation</module>
-				<module>toast-tk-dao</module>
-				<module>toast-tk-runtime</module>
-				<module>toast-tk-automation-server-plugin</module>
-				<module>toast-tk-automation-plugin-loader</module>
-				<module>toast-tk-automation-client</module>
-				<module>toast-tk-gwt-webapp</module>
-				<module>toast-tk-maven-plugin</module>
-			</modules>
-			<distributionManagement>
-				<repository> 
-					<id>synaptix-repository</id> 
-					<name>synaptix-releases-repository</name>
-					<url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/releases/</url> 
-				</repository> 
-				<snapshotRepository> 
-					<id>synaptix-repository</id> 
-					<name>synaptix-snapshots-repository</name> 
-					<url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/snapshots/</url> 
-				</snapshotRepository>
-			</distributionManagement>
-		</profile>
-		<profile>
-			<id>DEPLOY_NEXUS_SNCF</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<modules>
-				<module>toast-tk-automation-synaptix-plugin</module>
-			</modules>
-			<distributionManagement>
-				<repository>
-					<id>sncf-releases</id>
-					<name>SNCF Releases Repository</name>
-					<url>http://s76cllcfakr.si.fret.sncf.fr:8090/nexus/content/repositories/releases/</url>
-				</repository>
-				<snapshotRepository>
-					<id>sncf-snapshots</id>
-					<name>SNCF Releases Repository</name>
-					<url>http://s76cllcfakr.si.fret.sncf.fr:8090/nexus/content/repositories/snapshots/</url>
-				</snapshotRepository>
-			</distributionManagement>
-		</profile>
-	</profiles>
 </project>
