@@ -144,6 +144,16 @@
 	</dependencies>
 	<profiles>
 		<profile>
+			<id>DEPLOY_SCNF_VM</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<jnlp.host>http://X64ERTBIDWB:8080</jnlp.host>
+			</properties>
+		</profile>
+	
+		<profile>
 			<id>DEPLOY_LOCAL</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
