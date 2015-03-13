@@ -271,7 +271,7 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 							publish();
 							runtime.init(runtimeType, command, agentType, true);
 							Desktop.getDesktop().open(new File(Property.TOAST_HOME_DIR));
-							app.stopProgress("Done !");
+							app.stopProgress("Done, now run the created bat file !");
 						} catch (IllegalAccessException e) {
 							e.printStackTrace();
 						} catch (SAXException e) {

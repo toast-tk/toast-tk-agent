@@ -56,7 +56,7 @@ import com.synpatix.toast.runtime.core.runtime.DefaultScriptRunner;
 
 public class SwingInspectionRecorderPanel extends JPanel{
 	private static final long serialVersionUID = -8096917642917989626L;
-	final static long WAIT_THRESHOLD = 500; //in ms
+	final static long WAIT_THRESHOLD = 5; //in sec, TODO: link with fixture exist timeout
 	final JButton startRecordButton;
     final JButton stopRecordButton;
     final JButton saveScenarioButton; 
@@ -118,6 +118,7 @@ public class SwingInspectionRecorderPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
+					previousTimeStamp = null;
 					recorder.stopRecording();
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -202,8 +203,10 @@ public class SwingInspectionRecorderPanel extends JPanel{
     	if(previousTimeStamp == null){
     		previousTimeStamp = newTimeStamp;
     	}
-    	long delta = ((newTimeStamp - previousTimeStamp)/1000);
-    	return newTimeStamp - previousTimeStamp > WAIT_THRESHOLD ? "wait " + delta + "s" : null;
+    	long delta = ((newTimeStamp - previousTimeStamp)/1000000000);
+    	String res = delta > WAIT_THRESHOLD ? "wait " + delta + "s" : null;
+    	previousTimeStamp = newTimeStamp; 
+    	return res;
     }
     
 }

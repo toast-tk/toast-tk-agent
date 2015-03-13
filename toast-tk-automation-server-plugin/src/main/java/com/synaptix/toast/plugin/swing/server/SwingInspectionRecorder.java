@@ -254,8 +254,7 @@ public class SwingInspectionRecorder implements IEventRecorder {
 	private synchronized void _process(EventType eventType) {
 		eventObject.setEventType(eventType);
 		cmdServer.publishRecordEvent(eventObject);
-		liveRecordedStepsBuffer.clear(); // can be buggy due to concurrency,
-											// algo to improve..
+		liveRecordedStepsBuffer.clear();
 	}
 
 	private FilteredAWTEventListener recordFocusEvents() {

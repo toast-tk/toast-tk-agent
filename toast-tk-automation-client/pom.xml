@@ -16,7 +16,7 @@
 		<toast.tk.agentpath>toast-tk-automation-plugin-loader/target/toast-tk-agent-standalone.jar</toast.tk.agentpath>
 		<toast.tk.autopluginpath>toast-tk-automation-server-plugin/target/toast-tk-server-automation-plugin-standalone.jar</toast.tk.autopluginpath>
 		<tomcat.deploy.jnlp.dir>D:/Apps/apache-tomcat-6.0.37/webapps</tomcat.deploy.jnlp.dir>
-		<jnlp.host>http://10.106.184.115:8080</jnlp.host>
+		<jnlp.host>http://localhost:8080</jnlp.host>
 		<jnlp.host.uri>toast</jnlp.host.uri>
 	</properties>
 	<build>
@@ -149,7 +149,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-				<jnlp.host>http://X64ERTBIDWB:8080</jnlp.host>
+				<jnlp.host>http://10.23.252.131:8080</jnlp.host>
 			</properties>
 		</profile>
 	

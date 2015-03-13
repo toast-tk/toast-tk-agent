@@ -91,6 +91,7 @@ public class FocusEventRecorder extends AbstractEventRecorder {
 			captureEvent.businessValue = getEventValue(event);
 			captureEvent.componentName = wEvent.getComponent().getName();
 			captureEvent.container = container;
+			captureEvent.timeStamp = System.nanoTime();
 			
 			appendEventRecord(captureEvent);
 		}		
