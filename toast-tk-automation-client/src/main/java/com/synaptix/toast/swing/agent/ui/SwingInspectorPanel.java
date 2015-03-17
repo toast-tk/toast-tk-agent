@@ -54,6 +54,7 @@ import javax.swing.event.ListSelectionListener;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
+import com.synaptix.toast.automation.config.Config;
 import com.synaptix.toast.automation.net.ScanResponse;
 import com.synaptix.toast.automation.utils.Resource;
 import com.synaptix.toast.core.inspection.ISwingInspectionClient;
@@ -72,14 +73,17 @@ public class SwingInspectorPanel extends JPanel {
 	private final JButton scanButton;
 	private final JButton saveButton;
 	private final JButton clear;
+	private final Config config;
 	
 	private List<String> oldList = new ArrayList<String>();
 	private final ISwingInspectionClient cmdServer;
 	private final JPanel toolPanel = new JPanel();
     
     @Inject
-	public SwingInspectorPanel(ISwingInspectionClient cmdServer, EventBus evenBus) {
+	public SwingInspectorPanel(ISwingInspectionClient cmdServer, EventBus evenBus, Config config) {
     	this.cmdServer = cmdServer;
+    	
+    	this.config = config;
     	
     	this.search = new JButton("Filter", new ImageIcon(Resource.ICON_FILTER_16PX_IMG));
     	this.search.setToolTipText("Filter the items not containig the filter term..");
@@ -164,8 +168,7 @@ public class SwingInspectorPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					saveButton.setEnabled(false);
-					//String value = JOptionPane.showInputDialog("Page name: ");
-					RestUtils.postPage(pageName.getText(), list.getSelectedValues());
+					RestUtils.postPage(config.getWebAppAddr(), config.getWebAppPort(), pageName.getText(), list.getSelectedValues());
 					saveButton.setEnabled(true);
 				}
 			});

@@ -71,8 +71,6 @@ public class SwingInspectionFrame extends JFrame {
 	private final ProgressGlassPane glassPane;
 	private JMenuItem initButton;
 	private JMenuItem runtimePropertyButton;
-	private final Properties properties;
-	private final File toastPropertiesFile;
 	private final IToastClientApp app;
 	private final SutRunnerAsExec runtime;
 	
@@ -84,8 +82,6 @@ public class SwingInspectionFrame extends JFrame {
 
 		super("Toast Tk - Studio");
 		setGlassPane(glassPane = progressGlassPane);
-		this.toastPropertiesFile = new File(Property.TOAST_PROPERTIES_FILE);
-		this.properties = new Properties();
 		this.runtime = runtime;
 		this.app = app;
 		eventBus.register(this);
@@ -150,10 +146,10 @@ public class SwingInspectionFrame extends JFrame {
 					@Override
 					protected Void doInBackground() throws Exception {
 						disableInitButton();
-						initProperties(toastPropertiesFile);
-						String runtimeType = (String) properties.get(Property.TOAST_RUNTIME_TYPE);
-						String command = (String) properties.get(Property.TOAST_RUNTIME_CMD);
-						String agentType = (String) properties.get(Property.TOAST_RUNTIME_AGENT);
+						app.initProperties();
+						String runtimeType = app.getRuntimeType(); 
+						String command = app.getRuntimeCommand(); 
+						String agentType = app.getAgentType();
 						try {
 							publish();
 							runtime.init(runtimeType, command, agentType, true);
@@ -187,8 +183,8 @@ public class SwingInspectionFrame extends JFrame {
 		this.runtimePropertyButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				initProperties(toastPropertiesFile);
-				final ConfigPanel configPanel = new ConfigPanel(properties, toastPropertiesFile);
+				app.openConfigDialog();
+				
 			}
 		});
 	}
@@ -309,24 +305,23 @@ public class SwingInspectionFrame extends JFrame {
 
 	@Subscribe
 	public void startLoading(final LoadingMessage lMsg) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				if (!glassPane.isVisible()) {
-					glassPane.setVisible(true);
-				}
-				glassPane.setMessage(lMsg.msg);
-				glassPane.setProgress(lMsg.progress);
-				statusMessageLabel.setText(lMsg.msg);
+		if(lMsg.progress == 100){//FIXME: fix temporaire
+			if (!glassPane.isVisible()) {
+				glassPane.setVisible(true);
 			}
-		});
+			glassPane.setMessage(lMsg.msg);
+			glassPane.setProgress(lMsg.progress);
+			statusMessageLabel.setText(lMsg.msg);
+		}
 	}
 
 	@Subscribe
 	public void stopLoading(LoadingMessage lMsg) {
-		glassPane.setMessage(lMsg.msg);
-		statusMessageLabel.setText(lMsg.msg);
-		glassPane.setVisible(false);
+		if(lMsg.progress == 100){ //FIXME: fix temporaire
+			glassPane.setMessage(lMsg.msg);
+			statusMessageLabel.setText(lMsg.msg);
+			glassPane.setVisible(false);
+		}
 	}
 	
 	private void enableInitButton() {
@@ -339,12 +334,5 @@ public class SwingInspectionFrame extends JFrame {
 		this.initButton.setEnabled(false);
 	}
 	
-	private void initProperties(File toastProperties) {
-		try {
-			properties.load(FileUtils.openInputStream(toastProperties));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 }

@@ -46,6 +46,7 @@ import com.synaptix.toast.core.Property;
 import com.synaptix.toast.core.inspection.ISwingInspectionClient;
 import com.synaptix.toast.swing.agent.event.message.LoadingMessage;
 import com.synaptix.toast.swing.agent.event.message.StatusMessage;
+import com.synaptix.toast.swing.agent.ui.ConfigPanel;
 
 public class ToastApplication implements IToastClientApp {
 
@@ -53,6 +54,8 @@ public class ToastApplication implements IToastClientApp {
 	private final ISwingInspectionClient serverClient;
 	private static final Logger LOG = LoggerFactory.getLogger(ToastApplication.class);
 	private final Config config;
+	private final Properties properties;
+	private final File toastPropertiesFile;
 
 	@Inject
 	public ToastApplication(final Config config, final EventBus eventBus, final ISwingInspectionClient serverClient) {
@@ -60,7 +63,9 @@ public class ToastApplication implements IToastClientApp {
 
 		this.eventBus = eventBus;
 		this.serverClient = serverClient;
-
+		this.toastPropertiesFile = new File(Property.TOAST_PROPERTIES_FILE);
+		this.properties = new Properties();
+		
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
 			@Override
 			public void uncaughtException(Thread t, Throwable e) {
@@ -89,10 +94,13 @@ public class ToastApplication implements IToastClientApp {
 					toastProperties.createNewFile();
 				}
 				final String agentJarName = "toast-tk-agent-standalone.jar";
-				Download.getFile("http://" + config.getWebAppAddr() + ":8080/toast/agent-lib/"+agentJarName, 
-						config.getPluginDir());
-				Download.getFile("http://" + config.getWebAppAddr() + ":8080/toast/agent-lib/toast-tk-server-automation-plugin-standalone.jar",
-						config.getPluginDir());
+				try{
+					Download.getFile("http://" + config.getWebAppAddr() + ":8080/toast/agent-lib/"+agentJarName,  config.getPluginDir());
+					Download.getFile("http://" + config.getWebAppAddr() + ":8080/toast/agent-lib/toast-tk-server-automation-plugin-standalone.jar",config.getPluginDir());
+				}catch(Exception e){
+					LOG.error("Can't download plugin and Agent at url " + "http://" + config.getWebAppAddr() + ":8080/toast/agent-lib" ,e);
+					openConfigDialog();
+				}
 				
 				Properties p = new Properties();
 				p.setProperty(Property.TOAST_RUNTIME_TYPE, config.getRuntimeType());
@@ -142,5 +150,40 @@ public class ToastApplication implements IToastClientApp {
 	@Override
 	public Config getConfig() {
 		return this.config;
+	}
+	
+	private void initProperties(File toastProperties) {
+		try {
+			properties.load(FileUtils.openInputStream(toastProperties));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public String getRuntimeType() {
+		return (String) properties.get(Property.TOAST_RUNTIME_TYPE);
+	}
+
+	@Override
+	public void openConfigDialog() {
+		initProperties(toastPropertiesFile);
+		//TODO: manage and hide/show + reload method
+		final ConfigPanel configPanel = new ConfigPanel(properties, toastPropertiesFile);
+	}
+
+	@Override
+	public String getRuntimeCommand() {
+		return (String) properties.get(Property.TOAST_RUNTIME_CMD);
+	}
+
+	@Override
+	public String getAgentType() {
+		return (String) properties.get(Property.TOAST_RUNTIME_AGENT);
+	}
+
+	@Override
+	public void initProperties() {
+		initProperties(toastPropertiesFile);
 	}
 }

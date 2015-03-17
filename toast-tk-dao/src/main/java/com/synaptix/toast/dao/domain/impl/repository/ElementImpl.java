@@ -1,6 +1,10 @@
 package com.synaptix.toast.dao.domain.impl.repository;
 
-public class ElementImpl {
+import com.github.jmkgreen.morphia.annotations.Entity;
+import com.synaptix.toast.dao.domain.impl.common.BasicEntityBean;
+
+@Entity(value = "elements", noClassnameStored = true)
+public class ElementImpl extends BasicEntityBean{
 	public String type;
 	public String locator;
 	public String name;

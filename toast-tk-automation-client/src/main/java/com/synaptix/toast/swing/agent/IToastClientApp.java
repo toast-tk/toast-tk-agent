@@ -44,5 +44,15 @@ public interface IToastClientApp {
 	public boolean isConnected();
 	
 	public Config getConfig();
+
+	public String getRuntimeType();
+
+	public void openConfigDialog();
+
+	public String getRuntimeCommand();
+
+	public String getAgentType();
+
+	public void initProperties();
 	
 }

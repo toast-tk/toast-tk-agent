@@ -47,6 +47,7 @@ import javax.swing.SwingUtilities;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
+import com.synaptix.toast.automation.config.Config;
 import com.synaptix.toast.automation.utils.Resource;
 import com.synaptix.toast.core.inspection.ISwingInspectionClient;
 import com.synaptix.toast.core.interpret.InterpretedEvent;
@@ -56,24 +57,26 @@ import com.synpatix.toast.runtime.core.runtime.DefaultScriptRunner;
 
 public class SwingInspectionRecorderPanel extends JPanel{
 	private static final long serialVersionUID = -8096917642917989626L;
-	final static long WAIT_THRESHOLD = 5; //in sec, TODO: link with fixture exist timeout
-	final JButton startRecordButton;
-    final JButton stopRecordButton;
-    final JButton saveScenarioButton; 
+	private final static long WAIT_THRESHOLD = 5; //in sec, TODO: link with fixture exist timeout
+	private final JTextArea interpretedOutputArea;
+	private final JButton startRecordButton;
+	private final JButton stopRecordButton;
+    private final JButton saveScenarioButton; 
 	private final JButton runButton;
+	private final Config config;
     
-    final JComboBox comboBox = new JComboBox(new String[]{"RedPlay"});
+	private final JComboBox comboBox = new JComboBox(new String[]{"RedPlay"});
 	private DefaultScriptRunner runner;
-    final JTextArea interpretedOutputArea = new JTextArea();
     Long previousTimeStamp;
     
 	private ISwingInspectionClient recorder;
 	
 	@Inject
-	public SwingInspectionRecorderPanel(ISwingInspectionClient recorder, EventBus eventBus){
+	public SwingInspectionRecorderPanel(ISwingInspectionClient recorder, EventBus eventBus, Config config){
 		super(new BorderLayout());
 		this.recorder = recorder;
-		
+		this.config = config;
+		this.interpretedOutputArea = new JTextArea();
 		this.startRecordButton = new JButton("Start recording", new ImageIcon(Resource.ICON_RUN_16PX_IMG));
 		this.startRecordButton.setToolTipText("Start recording your actions in a scenario");
 		
@@ -138,7 +141,7 @@ public class SwingInspectionRecorderPanel extends JPanel{
 				recorder.saveObjectsToRepository();
 				saveScenarioButton.setEnabled(false);
 				String scenarioName = JOptionPane.showInputDialog("Scenario name: ");
-				boolean saved = RestUtils.postScenario(scenarioName, interpretedOutputArea.getText());
+				boolean saved = RestUtils.postScenario(scenarioName, config.getWebAppAddr(), config.getWebAppPort(), interpretedOutputArea.getText());
 				if(saved){
 					JOptionPane.showMessageDialog(SwingInspectionRecorderPanel.this, "Scenario succesfully saved !", "Save Scenario", JOptionPane.INFORMATION_MESSAGE);
 				}else {

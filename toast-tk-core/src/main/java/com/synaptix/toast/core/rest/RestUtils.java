@@ -31,9 +31,9 @@ public class RestUtils {
 		}
 	}
 	
-	public static void postPage(String value, Object[] selectedValues) {
+	public static void postPage( String webAppAddr, String webAppPort,String value, Object[] selectedValues) {
 		Client httpClient = Client.create();
-		String webappURL = getWebAppURI();
+		String webappURL = getWebAppURI(webAppAddr, webAppPort);
 		WebResource webResource = httpClient.resource(webappURL + "/saveNewInspectedPage");
 		InspectPage requestEntity = new InspectPage(value, Arrays.asList(selectedValues));
 		Gson gson = new Gson();
@@ -82,10 +82,10 @@ public class RestUtils {
 	}
 
 
-	public static boolean postScenario(String scenarioName, String scenarioSteps) {
+	public static boolean postScenario(String scenarioName, String webAppHost, String webAppPort, String scenarioSteps) {
 		try{
 			Client httpClient = Client.create();
-			String webappURL = getWebAppURI ();
+			String webappURL = getWebAppURI (webAppHost, webAppPort);
 			WebResource webResource = httpClient.resource(webappURL+"/saveNewInspectedScenario");
 			Gson gson = new Gson();
 			InspectScenario scenario = new InspectScenario(scenarioName, scenarioSteps);
@@ -104,11 +104,19 @@ public class RestUtils {
 	public static String getWebAppURI (String host, String port){
 		return "http://" +host + ":"  + port;
 	}
-	
-	
+
 	public static String getWebAppURI (){
-		return getWebAppURI(System.getProperty(Property.WEBAPP_ADDR), System.getProperty(Property.WEBAPP_PORT));
+		String webAppAddr = System.getProperty(Property.WEBAPP_ADDR);
+		if(webAppAddr == null || webAppAddr.isEmpty()){
+			throw new RuntimeException(Property.WEBAPP_ADDR + " system property isn't defined !");
+		}
+		
+		String webAppPort = System.getProperty(Property.WEBAPP_PORT);
+		if(webAppPort == null || webAppPort.isEmpty()){
+			throw new RuntimeException(Property.WEBAPP_PORT + " system property isn't defined !");
+		}
+		
+		return getWebAppURI(webAppAddr, webAppPort);
 	}
 	
-
 }
