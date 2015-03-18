@@ -7,7 +7,7 @@ import com.github.jmkgreen.morphia.annotations.PrePersist;
 public abstract class BasicMongoBean {
 
 	protected Date lastUpdated = new Date();
-	protected String name;
+	public String name;
 	protected Date creationDate;
 
 	public String getName() {

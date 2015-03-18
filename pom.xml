@@ -26,7 +26,7 @@
 	</modules>
 	<properties>
 		<root-directory>${project.basedir}</root-directory>
-		<project.version>1.3-SNAPSHOT</project.version>
+		<project.version>1.3-rc2</project.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>

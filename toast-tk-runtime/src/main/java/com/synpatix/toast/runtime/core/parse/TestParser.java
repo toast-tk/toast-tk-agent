@@ -25,7 +25,7 @@ import com.synaptix.toast.dao.domain.impl.test.block.SetupBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.SwingPageBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
-import com.synpatix.toast.runtime.helper.FixtureHelper;
+import com.synaptix.toast.fixture.utils.FixtureHelper;
 
 public class TestParser {
 

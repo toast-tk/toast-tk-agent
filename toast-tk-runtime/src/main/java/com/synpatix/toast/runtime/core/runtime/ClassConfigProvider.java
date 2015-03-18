@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.inject.Singleton;
+import com.synaptix.toast.fixture.utils.FixtureHelper;
 import com.synpatix.toast.runtime.core.runtime.RepositorySetup.TestComponentConfig;
 import com.synpatix.toast.runtime.core.runtime.RepositorySetup.TestEntityProperty;
-import com.synpatix.toast.runtime.helper.FixtureHelper;
 
 @Singleton
 public class ClassConfigProvider {

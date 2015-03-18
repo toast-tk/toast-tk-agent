@@ -29,15 +29,6 @@ public abstract class AbstractRunner {
 			LOG.error("No Test Environement Manager defined !", e);
 		}
 		this.injector = injector;
-		
-		//TODO: create a project analyzer
-//		Reflections ref = new Reflections(new MethodAnnotationsScanner());
-//		Set<Method> methodsAnnotatedWith = ref.getMethodsAnnotatedWith(Check.class);
-//		for (Method method : methodsAnnotatedWith) {
-//			Check annotation = method.getAnnotation(Check.class);
-//			System.out.print(method.getDeclaringClass().getName() + " -> ");
-//			System.out.println(annotation.value());
-//		}
 	}
 
 	public final void run(String... scenarios) {

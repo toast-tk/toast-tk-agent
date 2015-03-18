@@ -25,11 +25,11 @@ import com.google.gson.Gson;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
 import com.synaptix.toast.automation.net.CommandRequest;
-import com.synaptix.toast.core.Check;
-import com.synaptix.toast.core.Display;
 import com.synaptix.toast.core.IFeedableSwingPage;
 import com.synaptix.toast.core.IRepositorySetup;
 import com.synaptix.toast.core.ITestManager;
+import com.synaptix.toast.core.annotation.Check;
+import com.synaptix.toast.core.annotation.Display;
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.core.inspection.ISwingInspectionClient;
 import com.synaptix.toast.core.setup.TestResult;
@@ -48,6 +48,7 @@ import com.synaptix.toast.dao.domain.impl.test.block.SwingPageBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 import com.synaptix.toast.dao.report.HtmlReportGenerator;
+import com.synaptix.toast.fixture.service.RedPepperBackendFixture;
 import com.synaptix.toast.fixture.web.DefaultWebPage;
 
 /**

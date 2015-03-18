@@ -1,4 +1,4 @@
-package com.synpatix.toast.runtime.core.runtime;
+package com.synaptix.toast.fixture.service;
 
 import java.util.Collection;
 
@@ -6,17 +6,20 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTimeUtils;
 import org.joda.time.LocalDateTime;
 
-import com.synaptix.toast.core.Check;
-import com.synaptix.toast.core.Display;
+import com.synaptix.toast.core.annotation.Check;
+import com.synaptix.toast.core.annotation.Display;
+import com.synaptix.toast.core.annotation.Fixture;
+import com.synaptix.toast.core.annotation.FixtureKind;
 import com.synaptix.toast.core.setup.TestResult;
 import com.synaptix.toast.core.setup.TestResult.ResultKind;
-import com.synpatix.toast.runtime.helper.FixtureHelper;
+import com.synaptix.toast.fixture.utils.FixtureHelper;
 
 /**
  * Generic test methods (fixtures)
  *
  * @author Nicolas Sauvage
  */
+@Fixture(FixtureKind.service)
 public class RedPepperBackendFixture extends SynaptixBackendFixture {
 
 	public RedPepperBackendFixture() {

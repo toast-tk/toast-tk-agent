@@ -1,4 +1,4 @@
-package com.synpatix.toast.runtime.helper;
+package com.synaptix.toast.fixture.utils;
 
 import java.math.BigDecimal;
 import java.util.regex.Matcher;

@@ -7,9 +7,8 @@ import com.synaptix.toast.dao.domain.impl.common.BasicEntityBean;
 public class ElementImpl extends BasicEntityBean{
 	public String type;
 	public String locator;
-	public String name;
-	String method;
-	int position;
+	public String method;
+	public int position;
 
 	public ElementImpl() {
 		type = "";

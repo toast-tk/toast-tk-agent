@@ -3,8 +3,8 @@ package com.synpatix.toast.runtime.core.runtime;
 import com.google.inject.Inject;
 import com.synaptix.toast.core.IRepositorySetup;
 import com.synaptix.toast.core.ITestManager;
+import com.synaptix.toast.fixture.utils.FixtureHelper;
 import com.synpatix.toast.runtime.guice.IRepositoryTypeParser;
-import com.synpatix.toast.runtime.helper.FixtureHelper;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

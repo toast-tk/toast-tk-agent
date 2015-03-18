@@ -1,4 +1,4 @@
-package com.synpatix.toast.runtime.core.runtime;
+package com.synaptix.toast.fixture.service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -14,7 +14,7 @@ import org.joda.time.LocalTime;
 
 import com.google.inject.Inject;
 import com.synaptix.toast.core.IRepositorySetup;
-import com.synpatix.toast.runtime.helper.FixtureHelper;
+import com.synaptix.toast.fixture.utils.FixtureHelper;
 
 public abstract class SynaptixBackendFixture {
 

@@ -15,15 +15,18 @@ import java.io.IOException;
 
 import com.synaptix.toast.automation.net.CommandRequest;
 import com.synaptix.toast.core.AutoSwingType;
-import com.synaptix.toast.core.Check;
 import com.synaptix.toast.core.IFeedableSwingPage;
 import com.synaptix.toast.core.IRepositorySetup;
+import com.synaptix.toast.core.annotation.Check;
+import com.synaptix.toast.core.annotation.Fixture;
+import com.synaptix.toast.core.annotation.FixtureKind;
 import com.synaptix.toast.core.setup.TestResult;
 import com.synaptix.toast.core.setup.TestResult.ResultKind;
 import com.synaptix.toast.fixture.facade.ClientDriver;
 import com.synaptix.toast.fixture.facade.HasClickAction;
 import com.synaptix.toast.fixture.facade.HasSubItems;
 
+@Fixture(FixtureKind.swing)
 public abstract class RedPepperSwingFixture {
 	protected IRepositorySetup repo;
 	protected ClientDriver driver;

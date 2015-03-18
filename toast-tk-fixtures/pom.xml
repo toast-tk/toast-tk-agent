@@ -43,5 +43,10 @@
 			<artifactId>toast-tk-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<artifactId>reflections</artifactId>
+			<groupId>org.reflections</groupId>
+			<version>0.9.9-RC1</version>
+		</dependency>
 	</dependencies>
 </project>

@@ -17,9 +17,9 @@ import com.synaptix.toast.core.ITestManager;
 import com.synaptix.toast.core.setup.TestResult;
 import com.synaptix.toast.core.setup.TestResult.ResultKind;
 import com.synaptix.toast.fixture.swing.DefaultSwingPage;
+import com.synaptix.toast.fixture.utils.FixtureHelper;
 import com.synaptix.toast.fixture.web.DefaultWebPage;
 import com.synpatix.toast.runtime.guice.IRepositoryTypeParser;
-import com.synpatix.toast.runtime.helper.FixtureHelper;
 
 public class RepositorySetup implements IRepositorySetup{
 
