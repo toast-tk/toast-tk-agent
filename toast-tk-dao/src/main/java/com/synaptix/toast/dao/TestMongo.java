@@ -1,4 +1,4 @@
-package com.mongo.test;
+package com.synaptix.toast.dao;
 
 import java.util.List;
 

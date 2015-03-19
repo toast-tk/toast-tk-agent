@@ -47,6 +47,11 @@
 			<artifactId>toast-tk-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>${guice.version}</version>
+		</dependency>
 	</dependencies>
 	<profiles>
 		<profile>

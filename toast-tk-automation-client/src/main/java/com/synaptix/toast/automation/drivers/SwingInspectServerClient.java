@@ -80,7 +80,7 @@ public class SwingInspectServerClient extends SwingClientDriver implements ISwin
 			public void disconnected(Connection connection) {
 				super.disconnected(connection);
 				eventBus.post(new SeverStatusMessage(SeverStatusMessage.State.DISCONNECTED));
-				connect();
+				startConnectionLoop();
 			}
 			
 			@Override

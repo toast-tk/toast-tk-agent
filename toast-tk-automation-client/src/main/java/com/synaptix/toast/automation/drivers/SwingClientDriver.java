@@ -66,20 +66,24 @@ public class SwingClientDriver implements ClientDriver {
 		try {
 			client.connect(300000, host, CommonIOUtils.TCP_PORT);
 		} catch (IOException e) {
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					while (!client.isConnected()) {
-						connect();
-						try {
-							Thread.sleep(RECONNECTION_RATE);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+			startConnectionLoop();
+		}
+	}
+	
+	protected void startConnectionLoop() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (!client.isConnected()) {
+					connect();
+					try {
+						Thread.sleep(RECONNECTION_RATE);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
 				}
-			}).start();
-		}
+			}
+		}).start();
 	}
 
 	public void connect() {

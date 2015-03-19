@@ -30,6 +30,7 @@ Creation date: 6 févr. 2015
 package com.synaptix.toast.swing.agent.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -57,7 +58,7 @@ import com.synpatix.toast.runtime.core.runtime.DefaultScriptRunner;
 
 public class SwingInspectionRecorderPanel extends JPanel{
 	private static final long serialVersionUID = -8096917642917989626L;
-	private final static long WAIT_THRESHOLD = 5; //in sec, TODO: link with fixture exist timeout
+	private final static long WAIT_THRESHOLD = 10; //in sec, TODO: link with fixture exist timeout
 	private final JTextArea interpretedOutputArea;
 	private final JButton startRecordButton;
 	private final JButton stopRecordButton;
@@ -88,7 +89,6 @@ public class SwingInspectionRecorderPanel extends JPanel{
 		
 		this.runButton = new JButton("Run Test", new ImageIcon(Resource.ICON_RUN_16PX_IMG));
 		this.runButton.setToolTipText("Execute current scenario..");
-		this.runButton.setEnabled(false);
 		
 		eventBus.register(this);
         interpretedOutputArea.setText("");
@@ -99,7 +99,8 @@ public class SwingInspectionRecorderPanel extends JPanel{
         commandPanel.add(startRecordButton);
         commandPanel.add(stopRecordButton);
         commandPanel.add(saveScenarioButton);
-        commandPanel.add(comboBox);
+        commandPanel.add(runButton);
+        //commandPanel.add(comboBox);
 		add(commandPanel, BorderLayout.PAGE_START);
         add(scrollPanelRight, BorderLayout.CENTER);
         
@@ -107,10 +108,16 @@ public class SwingInspectionRecorderPanel extends JPanel{
 	}
 
 	private void initActions() {
+		startRecordButton.setBackground(Color.GREEN);
+		startRecordButton.setEnabled(true);
+		stopRecordButton.setEnabled(false);
 		startRecordButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
+					startRecordButton.setEnabled(false);
+					stopRecordButton.setBackground(Color.GREEN);
+					stopRecordButton.setEnabled(true);
 					recorder.startRecording();
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -121,6 +128,9 @@ public class SwingInspectionRecorderPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
+					startRecordButton.setBackground(Color.GREEN);
+					startRecordButton.setEnabled(true);
+					stopRecordButton.setEnabled(false);
 					previousTimeStamp = null;
 					recorder.stopRecording();
 				} catch (Exception e1) {
