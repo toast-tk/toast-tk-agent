@@ -48,7 +48,7 @@
 		<gin.version>1.5.0</gin.version>
 		<guice.version>3.0</guice.version>
 		<joda-time.version>2.1</joda-time.version>
-		<slfl4j.version>1.7.7</slfl4j.version>
+		<log4j.version>2.2</log4j.version>
 	</properties>
 	<developers>
 		<developer>
@@ -66,9 +66,14 @@
 	</developers>
 	<dependencies>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.7</version>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.inject.extensions</groupId>
@@ -247,7 +252,7 @@
 			</releases>
 			<snapshots>
 				<enabled>false</enabled>
-					<updatePolicy>always</updatePolicy>
+				<updatePolicy>always</updatePolicy>
 			</snapshots>
 			<url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/releases/</url>
 		</repository>
@@ -284,15 +289,15 @@
 				<module>toast-tk-maven-plugin</module>
 			</modules>
 			<distributionManagement>
-				<repository> 
-					<id>synaptix-repository</id> 
+				<repository>
+					<id>synaptix-repository</id>
 					<name>synaptix-releases-repository</name>
-					<url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/releases/</url> 
-				</repository> 
-				<snapshotRepository> 
-					<id>synaptix-repository</id> 
-					<name>synaptix-snapshots-repository</name> 
-					<url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/snapshots/</url> 
+					<url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/releases/</url>
+				</repository>
+				<snapshotRepository>
+					<id>synaptix-repository</id>
+					<name>synaptix-snapshots-repository</name>
+					<url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/snapshots/</url>
 				</snapshotRepository>
 			</distributionManagement>
 		</profile>
