@@ -35,8 +35,8 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
@@ -47,12 +47,13 @@ import com.synaptix.toast.core.inspection.ISwingInspectionClient;
 import com.synaptix.toast.swing.agent.event.message.LoadingMessage;
 import com.synaptix.toast.swing.agent.event.message.StatusMessage;
 import com.synaptix.toast.swing.agent.ui.ConfigPanel;
+import com.synaptix.toast.swing.agent.event.message.StopLoadingMessage;
 
 public class ToastApplication implements IToastClientApp {
 
+	private static final Logger LOG = LogManager.getLogger(ToastApplication.class);
 	private final EventBus eventBus;
 	private final ISwingInspectionClient serverClient;
-	private static final Logger LOG = LoggerFactory.getLogger(ToastApplication.class);
 	private final Config config;
 	private final Properties properties;
 	private final File toastPropertiesFile;
@@ -139,7 +140,7 @@ public class ToastApplication implements IToastClientApp {
 
 	@Override
 	public void stopProgress(String msg) {
-		eventBus.post(new LoadingMessage(msg, 100));
+		eventBus.post(new StopLoadingMessage(msg));
 	}
 
 	@Override

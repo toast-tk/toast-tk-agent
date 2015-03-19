@@ -40,8 +40,8 @@ import javax.swing.border.BevelBorder;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xml.sax.SAXException;
 
 import com.google.common.eventbus.EventBus;
@@ -55,6 +55,7 @@ import com.synaptix.toast.swing.agent.IToastClientApp;
 import com.synaptix.toast.swing.agent.event.message.LoadingMessage;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
 import com.synaptix.toast.swing.agent.event.message.StatusMessage;
+import com.synaptix.toast.swing.agent.event.message.StopLoadingMessage;
 
 /**
  * Created by Sallah Kokaina on 12/11/2014.
@@ -62,7 +63,7 @@ import com.synaptix.toast.swing.agent.event.message.StatusMessage;
 public class SwingInspectionFrame extends JFrame {
 
 	private static final long serialVersionUID = -3089122099692525117L;
-	private static final Logger LOG = LoggerFactory.getLogger(SwingInspectionFrame.class);
+	private static final Logger LOG = LogManager.getLogger(SwingInspectionFrame.class);
 	private final SwingInspectorPanel inspectorPanel;
 	private JDialog dialog;
 	private JProgressBar progress;
@@ -75,11 +76,15 @@ public class SwingInspectionFrame extends JFrame {
 	private final SutRunnerAsExec runtime;
 	
 	@Inject
-	public SwingInspectionFrame(final ISwingInspectionClient serverClient, final SwingInspectorPanel swingInspectorPanel,
+	public SwingInspectionFrame(
+			final ISwingInspectionClient serverClient, 
+			final SwingInspectorPanel swingInspectorPanel,
 			final SwingInspectionRecorderPanel recorderPanel,
-			final ProgressGlassPane progressGlassPane, EventBus eventBus,
-			final SutRunnerAsExec runtime, final IToastClientApp app) {
-
+			final ProgressGlassPane progressGlassPane, 
+			final EventBus eventBus,
+			final SutRunnerAsExec runtime, 
+			final IToastClientApp app
+	) {
 		super("Toast Tk - Studio");
 		setGlassPane(glassPane = progressGlassPane);
 		this.runtime = runtime;
@@ -288,7 +293,7 @@ public class SwingInspectionFrame extends JFrame {
 		switch (startUpMessage.state) {
 		case CONNECTED:
 			statusMessageLabel.setText("Toast Automation Server - Connected");
-			stopLoading(new LoadingMessage("Toast Automation Server - Connected"));
+			stopLoading(new StopLoadingMessage("Toast Automation Server - Connected"));
 			disableInitButton();
 			break;
 		default:
@@ -316,12 +321,10 @@ public class SwingInspectionFrame extends JFrame {
 	}
 
 	@Subscribe
-	public void stopLoading(LoadingMessage lMsg) {
-		if(lMsg.progress == 100){ //FIXME: fix temporaire
-			glassPane.setMessage(lMsg.msg);
-			statusMessageLabel.setText(lMsg.msg);
-			glassPane.setVisible(false);
-		}
+	public void stopLoading(StopLoadingMessage lMsg) {
+		glassPane.setMessage(lMsg.msg);
+		statusMessageLabel.setText(lMsg.msg);
+		glassPane.setVisible(false);
 	}
 	
 	private void enableInitButton() {
@@ -333,6 +336,4 @@ public class SwingInspectionFrame extends JFrame {
 		this.initButton.setBackground(Color.RED);
 		this.initButton.setEnabled(false);
 	}
-	
-
 }

@@ -6,10 +6,10 @@ import javax.naming.AuthenticationException;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.sun.jersey.api.client.Client;
@@ -19,7 +19,7 @@ import com.synaptix.toast.core.Property;
 
 public class RestUtils {
 
-	private static final Logger LOG = LoggerFactory.getLogger(RestUtils.class);
+	private static final Logger LOG = LogManager.getLogger(RestUtils.class);
 	
 	public static void get(String url) {
 		Client httpClient = Client.create();
@@ -100,7 +100,6 @@ public class RestUtils {
 			
 	}
 	
-	
 	public static String getWebAppURI (String host, String port){
 		return "http://" +host + ":"  + port;
 	}
@@ -118,5 +117,4 @@ public class RestUtils {
 		
 		return getWebAppURI(webAppAddr, webAppPort);
 	}
-	
 }
