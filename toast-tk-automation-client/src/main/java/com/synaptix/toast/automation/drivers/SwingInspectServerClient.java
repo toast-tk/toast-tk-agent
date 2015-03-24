@@ -34,8 +34,8 @@ import java.util.UUID;
 
 import javax.swing.SwingUtilities;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -53,19 +53,18 @@ import com.synaptix.toast.core.inspection.ISwingInspectionClient;
 import com.synaptix.toast.core.interpret.IEventInterpreter;
 import com.synaptix.toast.core.interpret.InterpretedEvent;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
-import com.synaptix.toast.swing.agent.interpret.DefaultEventInterpreter;
 import com.synaptix.toast.swing.agent.interpret.LiveRedPlayEventInterpreter;
 import com.synaptix.toast.swing.agent.interpret.MongoRepoManager;
 
 public class SwingInspectServerClient extends SwingClientDriver implements ISwingInspectionClient {
+
+	private static final Logger LOG = LogManager.getLogger(SwingInspectServerClient.class);
 
 	private EventBus eventBus;
 
 	private String previousInput;
 
 	IEventInterpreter interpreter;
-
-	private static final Logger LOG = LoggerFactory.getLogger(SwingInspectServerClient.class);
 	
 	public SwingInspectServerClient(String host) throws IOException {
 		super(host);

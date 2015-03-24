@@ -16,6 +16,8 @@ import javax.swing.JTextField;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.data.TableCellByColumnId;
 import org.fest.swing.fixture.JPopupMenuFixture;
@@ -24,8 +26,6 @@ import org.fest.swing.fixture.JTableFixture;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.synaptix.toast.automation.net.CommandRequest;
 import com.synaptix.toast.automation.net.IIdRequest;
@@ -35,7 +35,7 @@ import com.synaptix.toast.fixture.utils.FestRobotInstance;
 
 public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 
-	private static final Logger LOG = LoggerFactory.getLogger(RedPepperSwingWidgetHandler.class);
+	private static final Logger LOG = LogManager.getLogger(RedPepperSwingWidgetHandler.class);
 	public static final org.fest.swing.core.Robot rbt = FestRobotInstance.getRobot();
 	
 	@Override

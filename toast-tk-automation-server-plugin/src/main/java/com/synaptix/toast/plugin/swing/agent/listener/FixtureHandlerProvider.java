@@ -36,8 +36,8 @@ import java.util.Set;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -47,7 +47,8 @@ import com.synaptix.toast.core.guice.ICustomFixtureHandler;
 @Singleton
 public class FixtureHandlerProvider {
 
-	private static final Logger LOG = LoggerFactory.getLogger(FixtureHandlerProvider.class);
+	private static final Logger LOG = LogManager.getLogger(FixtureHandlerProvider.class);
+	
 	private final Set<ICustomFixtureHandler> fixtureHandlers;
 
 	@Inject

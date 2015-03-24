@@ -25,9 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.fest.swing.input.InputState;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
@@ -46,8 +46,8 @@ import com.synaptix.toast.plugin.swing.agent.record.WindowEventRecorder;
  */
 public class SwingInspectionRecorder implements IEventRecorder {
 
-	private static final Logger LOG = LoggerFactory.getLogger(SwingInspectionRecorder.class);
-
+	private static final Logger LOG = LogManager.getLogger(SwingInspectionRecorder.class);
+	
 	private static final Toolkit DEFAULT_TOOLKIT = Toolkit.getDefaultToolkit();
 
 	private final InputState state;

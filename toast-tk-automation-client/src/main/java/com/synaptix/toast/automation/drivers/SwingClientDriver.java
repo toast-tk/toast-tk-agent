@@ -3,10 +3,9 @@ package com.synaptix.toast.automation.drivers;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Observable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -26,7 +25,7 @@ import com.synaptix.toast.fixture.facade.ClientDriver;
  */
 public class SwingClientDriver implements ClientDriver {
 
-	private static final Logger LOG = LoggerFactory.getLogger(SwingClientDriver.class);
+	private static final Logger LOG = LogManager.getLogger(SwingClientDriver.class);
 	protected Client client;
 	private String host;
 	private static final int RECONNECTION_RATE = 10000;

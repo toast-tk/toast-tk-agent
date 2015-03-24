@@ -54,13 +54,17 @@ public class ProgressGlassPane extends JComponent {
 	private static final int BAR_HEIGHT = 10;
 
 	private static final Color TEXT_COLOR = new Color(0x333333);
-	private static final Color BORDER_COLOR = new Color(0x333333);
 
 	private static final float[] GRADIENT_FRACTIONS = new float[] { 0.0f, 0.499f, 0.5f, 1.0f };
 	private static final Color[] GRADIENT_COLORS = new Color[] { Color.GRAY, Color.DARK_GRAY, Color.BLACK, Color.GRAY };
 	private static final Color GRADIENT_COLOR2 = Color.WHITE;
 	private static final Color GRADIENT_COLOR1 = Color.GRAY;
 
+	private static final RenderingHints hints = new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+	static { 
+		hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		hints.put(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+	}
 	private String message = "Loading...";
 	private int progress = 0;
 
@@ -94,7 +98,7 @@ public class ProgressGlassPane extends JComponent {
 	protected void paintComponent(Graphics g) {
 		// enables anti-aliasing
 		Graphics2D g2 = (Graphics2D) g;
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHints(hints);
 
 		// gets the current clipping area
 		Rectangle clip = g.getClipBounds();
@@ -147,5 +151,6 @@ public class ProgressGlassPane extends JComponent {
 
 	public void setMessage(String msg) {
 		this.message= msg;
+		repaint();
 	}
 }

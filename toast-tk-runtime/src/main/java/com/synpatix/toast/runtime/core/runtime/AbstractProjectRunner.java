@@ -1,7 +1,7 @@
 package com.synpatix.toast.runtime.core.runtime;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.inject.ConfigurationException;
 import com.google.inject.Guice;
@@ -17,7 +17,7 @@ import com.synpatix.toast.runtime.core.parse.TestParser;
 
 public abstract class AbstractProjectRunner {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(AbstractProjectRunner.class);
+	private static final Logger LOG = LogManager.getLogger(AbstractProjectRunner.class);
 	private ITestManager testEnvManager;
 	private Injector injector;
 

@@ -37,6 +37,40 @@
 						<configuration>
 							<finalName>toast-automation-synaptix-plugin</finalName>
 							<descriptor>src/assembly/bin.xml</descriptor>
+							<archive>
+								<manifestSections>
+									<manifestSection>
+										<name>packageSystem</name>
+										<manifestEntries>
+											<id>com.synaptix.swing</id>
+										</manifestEntries>
+									</manifestSection>
+								</manifestSections>
+							</archive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<phase>install</phase>
+						<configuration>
+							<tasks>
+								<copy
+									file="${project.basedir}/../toast-tk-automation-plugin-loader/target/toast-tk-agent-standalone.jar"
+									todir="C:/Users/pgpn07841/Desktop/jar plugin redpepper" />
+								<copy
+									file="${project.basedir}/../toast-tk-automation-server-plugin/target/toast-tk-server-automation-plugin-standalone.jar"
+									todir="C:/Users/pgpn07841/Desktop/jar plugin redpepper" />
+								<copy
+									file="${project.basedir}/../toast-tk-automation-synaptix-plugin/target/toast-automation-synaptix-plugin-standalone.jar"
+									todir="C:/Users/pgpn07841/Desktop/jar plugin redpepper" />
+							</tasks>
 						</configuration>
 					</execution>
 				</executions>
@@ -85,19 +119,19 @@
 		<dependency>
 			<groupId>com.sncf.fret.rus</groupId>
 			<artifactId>RUSClientService</artifactId>
-			<version>[3.3.0-SNAPSHOT,)</version>
+			<version>[3.4.0-SNAPSHOT,)</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.sncf.fret.rus</groupId>
 			<artifactId>RUSClientCore</artifactId>
-			<version>[3.3.0-SNAPSHOT,)</version>
+			<version>[3.4.0-SNAPSHOT,)</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.sncf.fret.rus</groupId>
 			<artifactId>RUSClientBoot</artifactId>
-			<version>[3.3.0-SNAPSHOT,)</version>
+			<version>[3.4.0-SNAPSHOT,)</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>

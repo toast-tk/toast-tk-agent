@@ -17,8 +17,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.base.CaseFormat;
 import com.google.gson.Gson;
@@ -57,7 +57,7 @@ import com.synaptix.toast.fixture.web.DefaultWebPage;
  */
 public class ToastTestRunner {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ToastTestRunner.class);
+	private static final Logger LOG = LogManager.getLogger(ToastTestRunner.class);
 	private static final HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator();
 	private final ITestManager testManager;
 	private final IRepositorySetup repoSetup;

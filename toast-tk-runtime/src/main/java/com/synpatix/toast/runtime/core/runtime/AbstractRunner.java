@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
@@ -17,7 +17,7 @@ import com.synpatix.toast.runtime.core.parse.TestParser;
 
 public abstract class AbstractRunner {
 
-	private static final Logger LOG = LoggerFactory.getLogger(AbstractRunner.class);
+	private static final Logger LOG = LogManager.getLogger(AbstractRunner.class);
 	private ITestManager testEnvManager;
 	private Injector injector;
 	private boolean presetRepoFromWebApp = false;

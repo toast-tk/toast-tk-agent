@@ -50,8 +50,8 @@ import javax.swing.JTextField;
 
 import org.apache.commons.collections.EnumerationUtils;
 import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.synaptix.toast.core.Property;
 
@@ -64,7 +64,7 @@ import com.synaptix.toast.core.Property;
 public class ConfigPanel extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOG = LoggerFactory.getLogger(ConfigPanel.class);
+	private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
 	private JPanel mainPane;
 	private final Properties properties;
 	private HashMap<String, JTextField> textFields;

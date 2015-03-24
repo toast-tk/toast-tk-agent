@@ -5,8 +5,8 @@ import java.util.Collection;
 
 import javax.annotation.Nullable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.github.jmkgreen.morphia.query.Query;
 import com.google.gson.Gson;
@@ -26,7 +26,7 @@ public class RepositoryDaoService extends AbstractMongoDaoService<RepositoryImpl
 		RepositoryDaoService create(@Nullable @Assisted String dbName);
 	}
 
-	private static final Logger LOG = LoggerFactory.getLogger(RepositoryDaoService.class);
+	private static final Logger LOG = LogManager.getLogger(RepositoryDaoService.class);
 	static final String CONTAINER_TYPE = "swing page";
 	
 	@Inject

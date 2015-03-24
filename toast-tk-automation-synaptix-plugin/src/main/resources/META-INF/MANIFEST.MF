@@ -1,1 +1,2 @@
 Guice-Modules: com.synaptix.redpepper.plugin.runtime.PluginModule
+System-Load: com.synaptix.swing

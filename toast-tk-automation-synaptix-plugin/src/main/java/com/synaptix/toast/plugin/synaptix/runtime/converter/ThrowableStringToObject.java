@@ -9,5 +9,4 @@ public class ThrowableStringToObject implements StringToObject {
 	) {
 		return strObject;
 	}
-
 }

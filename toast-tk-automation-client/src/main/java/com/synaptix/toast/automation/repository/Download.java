@@ -6,12 +6,12 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Download {
 
-	private static final Logger LOG = LoggerFactory.getLogger(Download.class);
+	private static final Logger LOG = LogManager.getLogger(Download.class);
 	
 	public static String getFile(String host, String destination) {
 		InputStream input = null;
