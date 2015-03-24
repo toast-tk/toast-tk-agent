@@ -8,6 +8,6 @@ public final class DoublStringToObject implements StringToObject {
 
 	@Override
 	public Object toObject(final String strObject, final Class<?> classObject) {
-		return Double.parseDouble(strObject);
+		return Double.valueOf(Double.parseDouble(strObject));
 	}
 }

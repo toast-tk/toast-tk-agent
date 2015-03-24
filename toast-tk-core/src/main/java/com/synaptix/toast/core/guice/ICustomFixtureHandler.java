@@ -48,7 +48,7 @@ public interface ICustomFixtureHandler {
 	 * @param command
 	 * @return
 	 */
-	public List<Class<? extends CommandRequest>> getCommandRequestWhiteList();
+	public List<String> getCommandRequestWhiteList();
 
 	/**
 	 * A unique name

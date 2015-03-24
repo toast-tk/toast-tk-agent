@@ -24,6 +24,8 @@ public class NormalisedWord {
 	public final boolean isDate;
 
 	public final boolean isArticle;
+	
+	public final boolean isSeparator; 
 
 	public NormalisedWord(final String word) {
 		this.isNumeric = isNumeric(word);
@@ -32,9 +34,14 @@ public class NormalisedWord {
 		this.isDate = isDate();
 		this.isQuantifier = isQuantifier();
 		this.isArticle = isArticle(word);
+		this.isSeparator = isSeparator(word);
 		this.word = normaliseWord(word);
 	}
 
+	public boolean isASignificativeWord() {
+		return !isQuantifier && !isArticle && !isDate && !isSeparator;
+	}
+	
 	private static boolean isEndActionWord(final String word) {
 		return "sur".equals(word);
 	}
@@ -90,6 +97,20 @@ public class NormalisedWord {
 				||
 				word.equals("au")
 				;
+	}
+
+	private static boolean isSeparator(final String word) {
+		return
+				word.equals("/")
+				||
+				word.equals(",")
+				||
+				word.equals("\\")
+				||
+				word.equals("(")
+				||
+				word.equals(")")
+		;
 	}
 
 	private String normaliseWord(final String word) {

@@ -250,11 +250,10 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 		return isOk;
 	}
 
-	@SuppressWarnings("unchecked")
-	static List<Class<? extends CommandRequest>> list = Collections.unmodifiableList(Arrays.asList(CommandRequest.class, TableCommandRequest.class));
+	static List<String> list = Collections.unmodifiableList(Arrays.asList(CommandRequest.class.getName(), TableCommandRequest.class.getName()));
 	
 	@Override
-	public List<Class<? extends CommandRequest>> getCommandRequestWhiteList() {
+	public List<String> getCommandRequestWhiteList() {
 		return list;
 	}
 }

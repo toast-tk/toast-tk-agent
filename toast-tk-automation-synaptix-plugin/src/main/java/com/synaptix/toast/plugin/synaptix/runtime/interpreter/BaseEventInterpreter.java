@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import com.synaptix.toast.core.interpret.InterpretedEvent;
 import com.synaptix.toast.core.record.RecordedEvent;
-import com.synaptix.toast.plugin.synaptix.runtime.recorder.SimpleTimelineSelectionEventRecorder;
 import com.synaptix.toast.plugin.synaptix.runtime.split.Split;
 
 public final class BaseEventInterpreter implements EventInterpreter {
@@ -19,6 +18,7 @@ public final class BaseEventInterpreter implements EventInterpreter {
 	@Override
 	public InterpretedEvent interpreteEvent(final RecordedEvent recordedEvent) {
 		final StringBuilder sb = new StringBuilder(128);
+		Split.add(sb, "timeline ");
 		final String eventData = recordedEvent.getEventData();
 		final String[] split = Split.split(eventData);
 		final String mouseEvent = split[0];
@@ -67,6 +67,6 @@ public final class BaseEventInterpreter implements EventInterpreter {
 		Split.add(sb, " du ");
 		LOG.info("split[13] = {}", split[13]);
 		Split.add(sb, split[13]);
-		return new InterpretedEvent(sb.toString(), 0L);
+		return new InterpretedEvent(sb.toString(), Long.valueOf(0L));
 	}
 }

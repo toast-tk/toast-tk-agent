@@ -17,3 +17,5 @@ target/
 
 # SVN
 .svn/
+/target/
+/target/

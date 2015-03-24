@@ -8,6 +8,6 @@ public class IntStringToObject implements StringToObject {
 
 	@Override
 	public Object toObject(final String strObject, final Class<?> classObject) {
-		return Integer.parseInt(strObject);
+		return Integer.valueOf(Integer.parseInt(strObject));
 	}
 }

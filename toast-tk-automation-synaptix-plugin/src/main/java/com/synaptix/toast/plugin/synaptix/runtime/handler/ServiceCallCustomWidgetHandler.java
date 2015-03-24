@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jivesoftware.smack.XMPPConnection;
@@ -17,7 +18,6 @@ import org.jivesoftware.smack.XMPPException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.esotericsoftware.kryonet.Connection;
 import com.google.inject.Inject;
 import com.sncf.fret.rus.client.service.SendServiceDispatcher;
 import com.synaptix.service.IServiceFactory;
@@ -36,6 +36,7 @@ import com.synaptix.toast.dao.service.dao.access.test.ConfigBlockDaoService;
 import com.synaptix.toast.plugin.synaptix.runtime.annotation.ServiceCallHandler;
 import com.synaptix.toast.plugin.synaptix.runtime.converter.StringToObjectInstance;
 import com.synaptix.toast.plugin.synaptix.runtime.model.ServiceCallIdentifier;
+import com.synaptix.toast.plugin.synaptix.runtime.command.ServiceCommandRequest;
 import com.synaptix.toast.plugin.synaptix.runtime.service.ConnectionBuilder;
 
 @ServiceCallHandler
@@ -57,6 +58,8 @@ public class ServiceCallCustomWidgetHandler extends AbstractCustomFixtureHandler
 	
 	private Map<String, Class<?>[]> methodDescriptors;
 	
+	private List<String> whiteList;
+	
 	@Inject
 	public ServiceCallCustomWidgetHandler(final ConfigBlockDaoService.Factory configServiceFactory) {
 		try {
@@ -64,40 +67,51 @@ public class ServiceCallCustomWidgetHandler extends AbstractCustomFixtureHandler
 			this.connection = ConnectionBuilder.connect();
 			this.dispatcher = new SendServiceDispatcher(connection);
 			this.configBlock = initConfigService();
-			this.allServices = new HashMap<String, Map<String, Object>>();
-			this.methodDescriptors = new HashMap<String, Class<?>[]>();
-			initializeServices();
-			LOG.info("NB methodDescriptors {}", methodDescriptors.size());
+			this.whiteList = new ArrayList<String>(1);
+			initWhiteList();
+			this.allServices = new HashMap<String, Map<String, Object>>(4000);
+			this.methodDescriptors = new HashMap<String, Class<?>[]>(20000);
+			initializeServiceFactories();
+			LOG.info("NB methodDescriptors {}", Integer.valueOf(methodDescriptors.size()));
 		}
 		catch(final Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
 	}
 
+	private void initWhiteList() {
+		whiteList.add("service");
+	}
+	
 	private ConfigBlock initConfigService() {
 		return configService.loadConfigBlock("RUS");
 	}
 	
-	private void initializeServices() throws XMPPException {
-		LOG.info("Initialize services");
+	private void initializeServiceFactories() throws XMPPException {
+		LOG.info("Initialize serviceFactories");
 		final String[] factories = ServiceFactoryManager.getServiceFactoryNames(connection);
 		final ServicesManager servicesManagerInstance = ServicesManager.getInstance();
 		for(final String factory : factories) {
-			LOG.info("Finding servicefactory {}", factory);
-			
-			final Map<String, Object> recupServices = new HashMap<String, Object>();
-			final IServiceFactory clientServiceFactory = new ClientServiceFactory(dispatcher, factory, recupServices);
-			allServices.put(factory, recupServices);
-			
-			servicesManagerInstance.addServiceFactory(factory, clientServiceFactory);
-			clientServiceFactory.addServiceInterceptor(new DebugServiceInterceptor(factory));
-			
-			LOG.info("Find servicefactory {}", factory);
+			initializeServiceFactory(servicesManagerInstance, factory);
 		}
 		ClientServiceFactory.putTimeout(120000);
 		SendXmppTimedServiceManager.getInstance(connection).setDefaultReWaitResult(new AllRewaitResult());
 		
-		inspectMethod();
+		inspectServiceFactoriesMethods();
+	}
+
+	private void initializeServiceFactory(
+			final ServicesManager servicesManagerInstance, 
+			final String factory
+	) {
+		final Map<String, Object> recupServices = new HashMap<String, Object>();
+		final IServiceFactory clientServiceFactory = new ClientServiceFactory(dispatcher, factory, recupServices);
+		allServices.put(factory, recupServices);
+		
+		servicesManagerInstance.addServiceFactory(factory, clientServiceFactory);
+		clientServiceFactory.addServiceInterceptor(new DebugServiceInterceptor(factory));
+		
+		LOG.info("Finded servicefactory {}", factory);
 	}
 
 	private static class AllRewaitResult implements IReWaitResult {
@@ -112,18 +126,31 @@ public class ServiceCallCustomWidgetHandler extends AbstractCustomFixtureHandler
 		}
 	}
 
-	private void inspectMethod() {
+	private void inspectServiceFactoriesMethods() {
 		final Set<Method> objectMethods = new HashSet<Method>(Arrays.asList(Object.class.getMethods()));
 		final Set<String> factoryNames = allServices.keySet();
 		for(final String factoryName : factoryNames) {
-			final Map<String, Object> services = allServices.get(factoryName);
-			final Set<String> serviceNames = services.keySet();
-			for(final String serviceName : serviceNames) {
-				final Object service = services.get(serviceName);
-				final Method[] serviceMethods = service.getClass().getMethods();
-				fillMethodDescriptors(serviceMethods, objectMethods, factoryName, serviceName);
-			}
+			inspectServiceFactoryMethods(objectMethods, factoryName);
 		}
+	}
+
+	private void inspectServiceFactoryMethods(
+			final Set<Method> objectMethods,
+			final String factoryName
+	) {
+		final Map<String, Object> services = allServices.get(factoryName);
+		final Set<String> serviceNames = services.keySet();
+		for(final String serviceName : serviceNames) {
+			inspectServiceMethods(objectMethods, factoryName, services, serviceName);
+		}
+	}
+
+	private void inspectServiceMethods(final Set<Method> objectMethods,
+			final String factoryName, final Map<String, Object> services,
+			final String serviceName) {
+		final Object service = services.get(serviceName);
+		final Method[] serviceMethods = service.getClass().getMethods();
+		fillMethodDescriptors(serviceMethods, objectMethods, factoryName, serviceName);
 	}
 	
 	private void fillMethodDescriptors(
@@ -134,19 +161,46 @@ public class ServiceCallCustomWidgetHandler extends AbstractCustomFixtureHandler
 	) {
 		final StringBuilder sb = new StringBuilder();
 		for(final Method serviceMethod : serviceMethods) {
-			if(!objectMethods.contains(serviceMethod)) {
-				final String methodName = serviceMethod.getName();
-				final String methodDescriptor = sb.append(factoryName).append('/').append(serviceName).append('/').append(methodName).toString();
-				final Class<?>[] argTypes = serviceMethod.getParameterTypes();
-				if(!methodDescriptors.containsKey(methodDescriptor)) {
-					methodDescriptors.put(methodDescriptor, argTypes);
-				}
-				else {
-					LOG.error("Multiple method descriptors : {}", methodDescriptor);
-				}
-				sb.setLength(0);
+			if(isNotAnObjectClassMethod(objectMethods, serviceMethod)) {
+				final String methodDescriptor = buildMethodDescriptor(factoryName, serviceName, sb, serviceMethod);
+				addMethodDescriptor(serviceMethod, methodDescriptor);
+				resetStringBuilder(sb);
 			}
 		}
+	}
+
+	private static void resetStringBuilder(final StringBuilder sb) {
+		sb.setLength(0);
+	}
+
+	private void addMethodDescriptor(
+			final Method serviceMethod,
+			final String methodDescriptor
+	) {
+		if(!methodDescriptors.containsKey(methodDescriptor)) {
+			final Class<?>[] argTypes = serviceMethod.getParameterTypes();
+			methodDescriptors.put(methodDescriptor, argTypes);
+		}
+		else {
+			LOG.error("Multiple method descriptors : {}", methodDescriptor);
+		}
+	}
+
+	private static String buildMethodDescriptor(
+			final String factoryName,
+			final String serviceName, 
+			final StringBuilder sb,
+			final Method serviceMethod
+	) {
+		final String methodName = serviceMethod.getName();
+		return sb.append(factoryName).append('/').append(serviceName).append('/').append(methodName).toString();
+	}
+
+	private static boolean isNotAnObjectClassMethod(
+			final Set<Method> objectMethods,
+			final Method serviceMethod
+	) {
+		return !objectMethods.contains(serviceMethod);
 	}
 	
 	@Override
@@ -165,7 +219,7 @@ public class ServiceCallCustomWidgetHandler extends AbstractCustomFixtureHandler
 		return null;
 	}
 
-	private ServiceCallIdentifier buildServiceCallIdentifier(final String value) throws Exception {
+	private ServiceCallIdentifier buildServiceCallIdentifier(final String value) {
 		final List<String> retrieveMessageAsWord = retrieveMessageAsWords(value);
 		final String methodDescriptor = searchInRepos(retrieveMessageAsWord.get(0));
 		final String[] split = methodDescriptor.split("/");
@@ -173,7 +227,7 @@ public class ServiceCallCustomWidgetHandler extends AbstractCustomFixtureHandler
 		final String serviceName = split[1];
 		final String methodName = split[2];
 		final int nbArgs = retrieveMessageAsWord.size() - NB_NO_ARGS_WORD;
-		LOG.info("nbArgs {}", nbArgs);
+		LOG.info("nbArgs {}", Integer.valueOf(nbArgs));
 		final Class<?>[] argsType = methodDescriptors.get(methodDescriptor);
 		final Object[] args = new Object[nbArgs];
 		fillArgs(argsType, args, retrieveMessageAsWord);
@@ -189,7 +243,7 @@ public class ServiceCallCustomWidgetHandler extends AbstractCustomFixtureHandler
 			final Class<?>[] argsType,
 			final Object[] args,
 			final List<String> retrieveMessageAsWord
-	) throws Exception {
+	) {
 		final int size = retrieveMessageAsWord.size();
 		for(int index = NB_NO_ARGS_WORD; index < size; ++index) {
 			final String object = retrieveMessageAsWord.get(index);
@@ -218,11 +272,11 @@ public class ServiceCallCustomWidgetHandler extends AbstractCustomFixtureHandler
 			return new ValueResponse(id, stringuifiedResponse);
 		}
 		catch(final InvocationTargetException e) {
-			LOG.trace(e.getMessage(), e);
+			LOG.debug(e.getMessage(), e);
 			return handleInvocationTargetException(e, id);
 		}
 		catch(final UndeclaredThrowableException e) {
-			LOG.trace(e.getMessage(), e);
+			LOG.debug(e.getMessage(), e);
 			return handleUndeclaredThrowableException(e, id);
 		}
 	}
@@ -307,7 +361,7 @@ public class ServiceCallCustomWidgetHandler extends AbstractCustomFixtureHandler
 	}
 
 	@Override
-	public List<Class<? extends CommandRequest>> getCommandRequestWhiteList() {
-		return null;
+	public List<String> getCommandRequestWhiteList() {
+		return whiteList;
 	}
 }

@@ -34,6 +34,7 @@ import com.google.inject.Singleton;
 import com.synaptix.toast.core.inspection.ISwingInspectionServer;
 import com.synaptix.toast.core.record.IEventRecorder;
 import com.synaptix.toast.plugin.swing.agent.listener.CommandRequestListener;
+import com.synaptix.toast.plugin.swing.agent.listener.FixtureHandlerProvider;
 import com.synaptix.toast.plugin.swing.agent.listener.InitRequestListener;
 import com.synaptix.toast.plugin.swing.server.SwingInspectionRecorder;
 import com.synaptix.toast.plugin.swing.server.SwingInspectionServer;
@@ -45,5 +46,6 @@ public class SwingServerModule extends AbstractModule {
 		bind(CommandRequestListener.class).in(Singleton.class);
 		bind(InitRequestListener.class).in(Singleton.class);
 		bind(IEventRecorder.class).to(SwingInspectionRecorder.class).in(Singleton.class);
+		bind(FixtureHandlerProvider.class).in(Singleton.class);
 	}
 }

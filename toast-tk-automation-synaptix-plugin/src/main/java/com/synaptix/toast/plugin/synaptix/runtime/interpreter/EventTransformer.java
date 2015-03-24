@@ -47,7 +47,7 @@ public final class EventTransformer {
 	}
 
 	public static boolean isInterestingEvent(final String eventData) {
-		return eventData != null && !eventData.startsWith(NO_ACTION);
+		return eventData != null && !eventData.contains(NO_ACTION);
 	}
 	
 	private EventTransformer() {

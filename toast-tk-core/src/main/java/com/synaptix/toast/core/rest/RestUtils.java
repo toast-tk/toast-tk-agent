@@ -31,6 +31,7 @@ public class RestUtils {
 		}
 	}
 	
+
 	public static void postPage( String webAppAddr, String webAppPort,String value, Object[] selectedValues) {
 		Client httpClient = Client.create();
 		String webappURL = getWebAppURI(webAppAddr, webAppPort);
@@ -41,7 +42,7 @@ public class RestUtils {
 		int statusCode = response.getStatus();
 		LOG.info("Client response code: " + statusCode);
 	}
-	
+
 	public static String downloadRepositoyAsWiki() {
 		String webappURL = getWebAppURI();
 		return downloadRepository(webappURL + "/loadWikifiedRepository");
@@ -82,6 +83,7 @@ public class RestUtils {
 	}
 
 
+
 	public static boolean postScenario(String scenarioName, String webAppHost, String webAppPort, String scenarioSteps) {
 		try{
 			Client httpClient = Client.create();
@@ -97,7 +99,10 @@ public class RestUtils {
 			e.printStackTrace();
 			return false;
 		}
-			
+	}
+	
+	public static boolean postScenario(String scenarioName, String scenarioSteps) {
+		return postScenario(scenarioName, scenarioSteps, "one", "two");
 	}
 	
 	public static String getWebAppURI (String host, String port){

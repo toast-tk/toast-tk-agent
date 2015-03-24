@@ -8,13 +8,13 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class CommandRequest implements IIdRequest {
 
-	public final boolean isCustom;
-	public final String customCommand;
-	public final String itemType;
-	public final String item;
-	public final COMMAND_TYPE action;
-	public final String value;
-	protected final String _id;
+	public boolean isCustom;
+	public String customCommand;
+	public String itemType;
+	public String item;
+	public COMMAND_TYPE action;
+	public String value;
+	protected String _id;
 
 	public enum COMMAND_TYPE {
 		SET("set"), CLICK("click"), EXISTS("exists"), CLEAR("clear"), SELECT("select"), GET("get"),
@@ -27,6 +27,10 @@ public class CommandRequest implements IIdRequest {
 		}
 	}
 
+	public CommandRequest() {
+		
+	}
+	
 	protected CommandRequest(CommandRequestBuilder builder) {
 		this._id= builder.id;
 		this.isCustom = builder.isCustom;

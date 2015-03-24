@@ -12,8 +12,8 @@ import javax.swing.SwingUtilities;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.fest.swing.fixture.JComboBoxFixture;
 
 import com.esotericsoftware.kryonet.Connection;
@@ -29,7 +29,7 @@ import com.synaptix.toast.fixture.utils.FestRobotInstance;
  */
 public class CommandRequestListener extends Listener implements Runnable {
 
-	private final static Log LOG = LogFactory.getLog(CommandRequestListener.class);
+	private final static Logger LOG = LogManager.getLogger(CommandRequestListener.class);
 
 	private Map<String, Component> repository;
 	private BlockingQueue<Work> queue;
@@ -86,9 +86,10 @@ public class CommandRequestListener extends Listener implements Runnable {
 	public synchronized void received(Connection connection, Object object) {
 		try {
 			if (object instanceof CommandRequest) {
-				LOG.info("Processing command " + object.toString());
+				LOG.info("Processing command {}", object);
 				CommandRequest command = (CommandRequest) object;
 				if (command.isCustom()) {
+					LOG.info("Processing custom command {}", object);
 					fixtureHandlerProvider.processCustomCall(command);
 				} else {
 					Component target = getTarget(command.item, command.itemType);

@@ -10,6 +10,8 @@ public final class DateStringToObject implements StringToObject {
 
 	private static final Logger LOG = LoggerFactory.getLogger(DateStringToObject.class);
 
+	private static final String[] ACCEPTED_FORMAT = new String[]{"dd/MM/yyyy HH:mm", "dd/MM/yyyy HH:mm:ss", "dd/MM/yyyy", "dd/MM/yy"};
+	
 	DateStringToObject() {
 
 	}
@@ -20,8 +22,7 @@ public final class DateStringToObject implements StringToObject {
 	}
 
 	private static Date findDate(final String dateStr) {
-		final String[] acceptedFormats = new String[]{"dd/MM/yyyy HH:mm", "dd/MM/yyyy HH:mm:ss", "dd/MM/yyyy", "dd/MM/yy"};
-		for(final String acceptedFormat : acceptedFormats) {
+		for(final String acceptedFormat : ACCEPTED_FORMAT) {
 			final Date date = tryFormat(dateStr, acceptedFormat);
 			if(date != null) {
 				return date;

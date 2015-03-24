@@ -8,6 +8,6 @@ public final class BytStringToObject implements StringToObject {
 
 	@Override
 	public Object toObject(final String strObject, final Class<?> classObject) {
-		return Byte.parseByte(strObject);
+		return Byte.valueOf(Byte.parseByte(strObject));
 	}
 }

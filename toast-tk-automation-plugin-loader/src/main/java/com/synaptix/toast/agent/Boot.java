@@ -49,6 +49,7 @@ import com.github.kristofa.servicepluginloader.ServicePluginLoader;
 import com.github.kristofa.servicepluginloader.ServicePluginsClassPathProvider;
 import com.google.inject.Guice;
 import com.google.inject.Module;
+import com.synaptix.toast.core.Property;
 import com.synaptix.toast.core.guice.plugin.ToastPluginBoot;
 
 public class Boot {
@@ -58,8 +59,8 @@ public class Boot {
 	public static void main(String[] args) {
 		final ServicePluginLoader<ToastPluginBoot> bootPluginsLoader;
 		//TODO: else throw big error
-		//final String redpepperAgentPath = System.getProperty(Property.TOAST_PLUGIN_DIR_PROP) == null ? Property.TOAST_PLUGIN_DIR : System.getProperty(Property.TOAST_PLUGIN_DIR_PROP); 
-		final String redpepperAgentPath = "C:\\Users\\pgpn07841\\.toast\\plugins";
+		final String redpepperAgentPath = System.getProperty(Property.TOAST_PLUGIN_DIR_PROP) == null ? Property.TOAST_PLUGIN_DIR : System.getProperty(Property.TOAST_PLUGIN_DIR_PROP); 
+		//final String redpepperAgentPath = "C:\\Users\\pgpn07841\\.toast\\plugins";
 		LOG.info("Loading swing server agent plugins from directory: " + redpepperAgentPath);
 		final ServicePluginsClassPathProvider pluginsClassPathProvider = new ServicePluginsClassPathProvider() {
 			@Override

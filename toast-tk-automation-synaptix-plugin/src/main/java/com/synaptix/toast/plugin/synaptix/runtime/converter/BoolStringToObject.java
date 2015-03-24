@@ -8,6 +8,6 @@ public final class BoolStringToObject implements StringToObject {
 
 	@Override
 	public Object toObject(final String strObject, final Class<?> classObject) {
-		return Boolean.parseBoolean(strObject);
+		return Boolean.valueOf(Boolean.parseBoolean(strObject));
 	}
 }

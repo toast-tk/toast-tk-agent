@@ -46,12 +46,12 @@ public class PhraseMatchResults {
 		}
 	}
 
-	private boolean withinJWRange(final String word) {
+	private static boolean withinJWRange(final String word) {
 		/*float dist = new JaroWinkler().getSimilarity(word, this.key);
 		if (dist > SIMILARITY_DIST) {
 			return Boolean.TRUE;
 		}*/
-		return Boolean.FALSE;
+		return false;
 	}
 
 	public void addNearMatch(final List<String> words) {

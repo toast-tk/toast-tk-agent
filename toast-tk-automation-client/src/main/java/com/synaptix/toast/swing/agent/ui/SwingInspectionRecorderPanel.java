@@ -50,6 +50,7 @@ import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.synaptix.toast.automation.config.Config;
 import com.synaptix.toast.automation.utils.Resource;
+import com.synaptix.toast.core.ITestManager;
 import com.synaptix.toast.core.inspection.ISwingInspectionClient;
 import com.synaptix.toast.core.interpret.InterpretedEvent;
 import com.synaptix.toast.core.rest.RestUtils;
@@ -65,6 +66,7 @@ public class SwingInspectionRecorderPanel extends JPanel{
     private final JButton saveScenarioButton; 
 	private final JButton runButton;
 	private final Config config;
+	private ITestManager testEnvManager;
     
 	private final JComboBox comboBox = new JComboBox(new String[]{"RedPlay"});
 	private DefaultScriptRunner runner;
@@ -73,10 +75,16 @@ public class SwingInspectionRecorderPanel extends JPanel{
 	private ISwingInspectionClient recorder;
 	
 	@Inject
-	public SwingInspectionRecorderPanel(ISwingInspectionClient recorder, EventBus eventBus, Config config){
+	public SwingInspectionRecorderPanel(
+			ISwingInspectionClient recorder, 
+			EventBus eventBus, 
+			Config config,
+			ITestManager testEnvManager
+	){
 		super(new BorderLayout());
 		this.recorder = recorder;
 		this.config = config;
+		this.testEnvManager = testEnvManager;
 		this.interpretedOutputArea = new JTextArea();
 		this.startRecordButton = new JButton("Start recording", new ImageIcon(Resource.ICON_RUN_16PX_IMG));
 		this.startRecordButton.setToolTipText("Start recording your actions in a scenario");
@@ -174,7 +182,8 @@ public class SwingInspectionRecorderPanel extends JPanel{
 								runner = new DefaultScriptRunner(AgentBoot.injector);
 							}
 							String wikiScenario = toWikiScenario(test);
-							runner.runRemoteScript(wikiScenario);
+							//runner.runRemoteScript(wikiScenario);
+							runner.run(testEnvManager, wikiScenario);
 						} else {
 							JOptionPane.showMessageDialog(null, "Script Text Area is Empty !");
 						}
@@ -182,13 +191,14 @@ public class SwingInspectionRecorderPanel extends JPanel{
 				});
 			}
 
-			private String toWikiScenario(String test) {
-				String output = "|| scenario || swing ||\n";
-				String[] lines = test.split("\n");
-				for (String line : lines) {
-					output += "|" + line + "|\n";
+			private String toWikiScenario(final String test) {
+				final StringBuilder sb = new StringBuilder(1024);
+				sb.append("|| scenario || swing ||\n");
+				final String[] lines = test.split("\n");
+				for(final String line : lines) {
+					sb.append('|').append(line).append('|').append('\n');
 				}
-				return output;
+				return sb.toString();
 			}
 		});
 		
@@ -221,5 +231,4 @@ public class SwingInspectionRecorderPanel extends JPanel{
     	previousTimeStamp = newTimeStamp; 
     	return res;
     }
-    
 }

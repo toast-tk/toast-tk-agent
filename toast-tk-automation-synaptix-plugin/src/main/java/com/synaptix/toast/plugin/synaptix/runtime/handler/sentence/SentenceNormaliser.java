@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public final class SentenceNormaliser {
 
-	private static final Pattern WORD_PATTERN = Pattern.compile("[a-zA-Z_:/0-9]*");
+	private static final Pattern WORD_PATTERN = Pattern.compile("[a-zA-Z_.:/0-9]*");
 
 	private SentenceNormaliser() {
 

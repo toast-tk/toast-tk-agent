@@ -8,6 +8,6 @@ public final class FloaStringToObject implements StringToObject {
 
 	@Override
 	public Object toObject(final String strObject, final Class<?> classObject) {
-		return Float.parseFloat(strObject);
+		return Float.valueOf(Float.parseFloat(strObject));
 	}
 }

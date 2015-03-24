@@ -8,6 +8,6 @@ public final class ShorStringToObject implements StringToObject {
 
 	@Override
 	public Object toObject(final String strObject, final Class<?> classObject) {
-		return Short.parseShort(strObject);
+		return Short.valueOf(Short.parseShort(strObject));
 	}
 }

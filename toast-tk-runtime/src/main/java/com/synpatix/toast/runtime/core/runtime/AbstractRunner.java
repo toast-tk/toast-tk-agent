@@ -52,8 +52,8 @@ public abstract class AbstractRunner {
 			System.out.println("Start main test parser: " + fileName);
 
 			// Read test file
-			File file = new File(this.getClass().getClassLoader().getResource(fileName).getFile());
-			TestPage result = runScript(testEnvManager, file, null);
+			File file = readTestFile(fileName);
+			TestPage result = runScript(testEnvManager, file, fileName);
 
 			testPages.add(result);
 		}
@@ -61,6 +61,16 @@ public abstract class AbstractRunner {
 		LOG.info(scenarios.length + "file(s) processed");
 		RunUtils.printResult(testPages);
 
+	}
+
+	private File readTestFile(String fileName) {
+		try {
+			return new File(this.getClass().getClassLoader().getResource(fileName).getFile());
+		}
+		catch(final Exception e) {
+			LOG.error(e.getMessage(), e);
+		}
+		return null;
 	}
 
 	private TestPage runScript(ITestManager testEnvManager, File file, String script) {

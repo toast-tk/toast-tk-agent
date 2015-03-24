@@ -31,6 +31,7 @@ package com.synaptix.toast.plugin.swing.agent.listener;
 
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -60,6 +61,7 @@ public class FixtureHandlerProvider {
 	public void processCustomCall(final CommandRequest request) {
 		ICustomFixtureHandler handlerInterestedIn = getHandlerInterestedIn(request);
 		if (handlerInterestedIn != null) {
+			LOG.info("finded CustomFixtureHandler : {} ", handlerInterestedIn.getName());
 			handlerInterestedIn.processCustomCall(request);
 		}
 	}
@@ -70,32 +72,57 @@ public class FixtureHandlerProvider {
 		if (handlerInterestedIn != null) {
 			response = handlerInterestedIn.hanldeFixtureCall(target, request);
 		}
+		else {
+			LOG.info("No CustomFixtureHandler finded");
+		}
 		return response;
 	}
 
 	private ICustomFixtureHandler getHandlerInterestedIn(final CommandRequest request) {
 		final List<ICustomFixtureHandler> res = new ArrayList<ICustomFixtureHandler>();
-		for (ICustomFixtureHandler handler : fixtureHandlers) {
-			List<Class<? extends CommandRequest>> commandRequestWhiteList = handler.getCommandRequestWhiteList();
-			if (commandRequestWhiteList == null) {
-				LOG.warn(String.format("%s - Handler has no command request white list defined: " + handler.getName()));
-			} else if (commandRequestWhiteList.contains(request.getClass())) {
+		for(final ICustomFixtureHandler handler : fixtureHandlers) {
+			LOG.info("searching CustomFixtureHandler : {} ", handler.getName());
+			final List<String> commandRequestWhiteList = handler.getCommandRequestWhiteList();
+			if(commandRequestWhiteList == null || commandRequestWhiteList.isEmpty()) {
+				LOG.warn("{} - Handler has no command request white list defined: ", handler.getName());
+			} 
+			else if(findRequestClass(commandRequestWhiteList, request)) {
+				LOG.info("adding CustomFixtureHandler : {} ", handler.getName());
 				res.add(handler);
 			}
 		}
+		LOG.info("reflection ");
 		final String reflectionToString = ToStringBuilder.reflectionToString(request, ToStringStyle.SIMPLE_STYLE);
+		LOG.info("reflection done {}", reflectionToString);
 		if (res.size() == 0) {
-			LOG.warn("No Fixture Handler is interested in request: " + reflectionToString);
+			LOG.warn("No Fixture Handler is interested in request: {}", reflectionToString);
 			return null;
 		}
 		if (res.size() > 1) {
-			LOG.warn("More than one Handler is interested in request: " + reflectionToString);
+			LOG.warn("More than one Handler is interested in request: {}", reflectionToString);
 		}
 		ICustomFixtureHandler iCustomFixtureHandler = res.get(0);
-		LOG.info(String.format("Handler %s will process request: %s", iCustomFixtureHandler.getName(), reflectionToString));
+		LOG.info("Handler {} will process request: {}", iCustomFixtureHandler.getName(), reflectionToString);
 		return iCustomFixtureHandler;
 	}
 
+	private static boolean findRequestClass(
+			final List<String> commandRequestWhiteList, 
+			final CommandRequest request
+	) {
+		final boolean containsClassName = commandRequestWhiteList.contains(request.getClass().getName());
+		if(containsClassName) {
+			return true;
+		}
+		final String itemType = request.itemType;
+		for(final String requestWhite : commandRequestWhiteList) {
+			if(requestWhite.equals(itemType)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	private ICustomFixtureHandler getHandlerInterestedIn(Component component) {
 		final List<ICustomFixtureHandler> res = new ArrayList<ICustomFixtureHandler>();
 		for (ICustomFixtureHandler handler : fixtureHandlers) {
@@ -105,14 +132,14 @@ public class FixtureHandlerProvider {
 		}
 		final String reflectionToString = ToStringBuilder.reflectionToString(component, ToStringStyle.SIMPLE_STYLE);
 		if (res.size() == 0) {
-			LOG.warn("No Fixture Handler is interested in component: " + reflectionToString);
+			LOG.warn("No Fixture Handler is interested in component: {}", reflectionToString);
 			return null;
 		}
 		if (res.size() > 1) {
-			LOG.warn("More than one Handler is interested in component: " + reflectionToString);
+			LOG.warn("More than one Handler is interested in component: {}", reflectionToString);
 		}
 		ICustomFixtureHandler iCustomFixtureHandler = res.get(0);
-		LOG.info(String.format("Handler %s will process component: %s", iCustomFixtureHandler.getName(), reflectionToString));
+		LOG.info("Handler {} will process component: {}", iCustomFixtureHandler.getName(), reflectionToString);
 		return iCustomFixtureHandler;
 	}
 
@@ -124,5 +151,4 @@ public class FixtureHandlerProvider {
 		}
 		return target;
 	}
-
 }

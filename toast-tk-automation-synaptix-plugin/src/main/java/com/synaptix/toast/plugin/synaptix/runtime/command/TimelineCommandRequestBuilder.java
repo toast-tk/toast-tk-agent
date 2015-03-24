@@ -12,7 +12,7 @@ public class TimelineCommandRequestBuilder extends CommandRequestBuilder {
 	
 	public TimelineCommandRequestBuilder selectTask() {
         this.action = COMMAND_TYPE.CLICK;
-        this.customCommand = "task";
+        this.customCommand = "timeline";
         return this;
 	}
 	

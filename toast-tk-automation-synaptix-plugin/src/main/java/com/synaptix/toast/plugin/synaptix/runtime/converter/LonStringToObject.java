@@ -8,6 +8,6 @@ public final class LonStringToObject implements StringToObject {
 
 	@Override
 	public Object toObject(final String strObject, final Class<?> classObject) {
-		return Long.parseLong(strObject);
+		return Long.valueOf(Long.parseLong(strObject));
 	}
 }

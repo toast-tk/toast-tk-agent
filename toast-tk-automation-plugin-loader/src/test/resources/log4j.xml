@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<!-- Console output -->
+	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.EnhancedPatternLayout">
+			<param name="ConversionPattern" value="%-5p [%t] %d{MM-dd HH:mm:ss:SSS} %m  (%F:%L) %throwable %n"/>
+		</layout>
+	</appender>
+	
+	<!-- File -->
+	<appender name="FILEOUT" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<param name="MaxFileSize" value="5MB"/>
+		<param name="MaxBackupIndex" value="10"/>
+		<param name="file" value="C:/MSOCache/logs/test.log"/>
+		<layout class="org.apache.log4j.EnhancedPatternLayout">
+			<param name="ConversionPattern" value="%-5p [%t] %d{MM-dd HH:mm:ss:SSS} %m  (%F:%L) %throwable %n"/>
+		</layout>
+	</appender>
+
+	<root>
+		<priority value="debug" />
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILEOUT" />
+	</root>
+</log4j:configuration>

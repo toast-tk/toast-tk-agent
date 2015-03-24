@@ -36,7 +36,7 @@ public class Download {
 			while ((read = input.read(buffer)) > 0)
 				writeFile.write(buffer, 0, read);
 			writeFile.flush();
-			LOG.info("Downloaded: " + fileName);
+			LOG.info("Downloaded: {} from {}", fileName, url);
 			return destination + "/" + fileName;
 		} catch (IOException e) {
 			LOG.error("Error while trying to download file : " + destination + "/" + fileName);

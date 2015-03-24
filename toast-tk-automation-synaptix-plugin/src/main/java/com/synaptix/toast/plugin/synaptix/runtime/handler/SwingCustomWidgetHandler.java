@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.swing.JViewport;
 
+import org.apache.commons.lang3.StringUtils;
 import org.fest.swing.core.MouseButton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,10 +35,18 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 
 	private static final Logger LOG = LoggerFactory.getLogger(SwingCustomWidgetHandler.class);
 
+	private final List<String> whiteList;
+	
 	public SwingCustomWidgetHandler() {
 		super();
+		this.whiteList = new ArrayList<String>(1);
+		initWhiteList();
 	}
 
+	private void initWhiteList() {
+		whiteList.add("timeline");
+	}
+	
 	@Override
 	public String makeHanldeFixtureCall(final Component component, final IIdRequest request) {
 		if (component instanceof JSimpleDaysTimelineCenter) {
@@ -48,13 +57,15 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 
 	private void handleTimeline(final JSimpleDaysTimelineCenter timeline, final IIdRequest command) {
 		try {
-			if(command instanceof TimelineCommandRequest) {
-				final TimelineCommandRequest timelineCommandRequest = (TimelineCommandRequest) command;
-				if ("service".equals(timelineCommandRequest.itemType)) {
-					handleCommandTask(timelineCommandRequest, timeline);
-				}
-				else {
-					throw new IllegalAccessError("Custom command not supported: " + timelineCommandRequest.customCommand);
+			if(command instanceof CommandRequest) {
+				final CommandRequest commandRequest = (CommandRequest) command;
+				if(isTaskCustomCommand(commandRequest)) {
+					if ("timeline".equals(commandRequest.itemType)) {
+						handleCommandTask(commandRequest.value, timeline.getSimpleDaysTimeline());
+					}
+					else {
+						throw new IllegalAccessError("Custom command not supported: " + commandRequest.customCommand);
+					}
 				}
 			}
 		} catch (final Exception e) {
@@ -63,10 +74,10 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 	}
 
 	private void handleCommandTask(
-			final TimelineCommandRequest timelineCommandRequest, 
+			final String command, 
 			final JSimpleDaysTimeline simpleDaysTimeline
 	) {
-		final SentenceFinder sentenceFinder = new SentenceFinder(timelineCommandRequest.value);
+		final SentenceFinder sentenceFinder = new SentenceFinder(command);
 		if(sentenceFinder.isAValidSentence()) {
 			final SimpleDaysTask findedTask = findTaskToClick(simpleDaysTimeline, sentenceFinder.actionTimelineInfo);
 			if (findedTask != null) {
@@ -81,24 +92,18 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 		}
 	}
 
-	private void handleCommandTask(final TimelineCommandRequest timelineCommandRequest, final JSimpleDaysTimelineCenter timeline) {
-		final JSimpleDaysTimeline simpleDaysTimeline = timeline.getSimpleDaysTimeline();
-		handleCommandTask(timelineCommandRequest, simpleDaysTimeline);
-	}
-
 	private void moveToPointAndDoClick(final JSimpleDaysTimeline simpleDaysTimeline, final ActionTimelineInfo actionTimelineInfo, final SimpleDaysTask taskToClick) {
-		runAction(new Runnable() {
-			@Override
-			public void run() {
-				movetoTo(simpleDaysTimeline, actionTimelineInfo, taskToClick);
-				final Point pointToClick = findPointToClick(simpleDaysTimeline, actionTimelineInfo, taskToClick);
-				if(EventTransformer.CLIQUER_SUR.equals(actionTimelineInfo.action)) {
-					doDoubleClick(pointToClick);
-				}
-			}
-		});
+		runAction(new MoveToPointAndDoClickAction(simpleDaysTimeline, actionTimelineInfo, taskToClick));
 	}
 
+	static void doOpenMenu(final Point pointToClick) {
+		FestRobotInstance.getRobot().click(pointToClick, MouseButton.RIGHT_BUTTON, 1);
+	}
+	
+	static void doSimpleClick(final Point pointToClick) {
+		FestRobotInstance.getRobot().click(pointToClick, MouseButton.LEFT_BUTTON, 1);
+	}
+	
 	static void doDoubleClick(final Point pointToClick) {
 		FestRobotInstance.getRobot().click(pointToClick, MouseButton.LEFT_BUTTON, 2);
 	}
@@ -214,12 +219,11 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 	@Override
 	public String processCustomCall(final CommandRequest commandRequest) {
 		try {
-			if (isTaskCustomCommand(commandRequest)) {
-				if(isTimelineCommandRequest(commandRequest)) {
-					final TimelineCommandRequest timelineCommandRequest = (TimelineCommandRequest) commandRequest;
-					final JSimpleDaysTimeline timeline = findTimeline(commandRequest.value);
-					handleCommandTask(timelineCommandRequest, timeline);
-				}
+			if(isTaskCustomCommand(commandRequest)) {
+				final String command = commandRequest.value;
+				LOG.info("processing command : {}", command);
+				final JSimpleDaysTimeline timeline = findTimeline(command);
+				handleCommandTask(command, timeline);
 			}
 			else {
 				throw new IllegalAccessError("Custom command not supported: " + commandRequest.customCommand);
@@ -231,13 +235,8 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 		return null;
 	}
 
-	private boolean isTimelineCommandRequest(final CommandRequest commandRequest) {
-		return commandRequest instanceof TimelineCommandRequest;
-	}
-
-	private boolean isTaskCustomCommand(final CommandRequest commandRequest) {
-		//return "task".equals(commandRequest.customCommand);
-		return "timeline".equals(commandRequest.customCommand);
+	private static boolean isTaskCustomCommand(final CommandRequest commandRequest) {
+		return "timeline".equals(commandRequest.itemType);
 	}
 
 	public static ActionTimelineInfo constructActionTimelineInfo(final String value) {
@@ -284,11 +283,14 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 	}
 
 	private static JSimpleDaysTimeline findTimeline(final String value) {
-		final ActionTimelineInfo contructActionTimelineInfo = constructActionTimelineInfo(value);
-		final Collection<Container> containers = getWindows(contructActionTimelineInfo.container);
-		for(final Container container : containers) {
-			if(container instanceof JSimpleDaysTimeline) {
-				return (JSimpleDaysTimeline) container;
+		final SentenceFinder sentenceFinder = new SentenceFinder(value);
+		if(sentenceFinder.isAValidSentence()) {
+			final ActionTimelineInfo contructActionTimelineInfo =  sentenceFinder.actionTimelineInfo;
+			final Collection<Container> containers = getWindows(contructActionTimelineInfo.container);
+			for(final Container container : containers) {
+				if(container instanceof JSimpleDaysTimeline) {
+					return (JSimpleDaysTimeline) container;
+				}
 			}
 		}
 		return null;
@@ -311,9 +313,12 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 			final Window w,
 			final String name
 	) {
-		return name.equals(w.getName()) || name.equals(w.getClass().getName());
+		final String windowName = StringUtils.stripAccents(w.getName()).toLowerCase();
+		if(name.equals(windowName)) {
+			return true;
+		}
+		return name.equals(w.getClass().getName());
 	}
-
 
 	@Override
 	public String getName() {
@@ -326,8 +331,35 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 	}
 
 	@Override
-	public List<Class<? extends CommandRequest>> getCommandRequestWhiteList() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> getCommandRequestWhiteList() {
+		return whiteList;
+	}
+	
+	private final class MoveToPointAndDoClickAction implements Runnable {
+		
+		private final JSimpleDaysTimeline simpleDaysTimeline;
+
+		private final ActionTimelineInfo actionTimelineInfo;
+
+		private final SimpleDaysTask taskToClick;
+
+		private MoveToPointAndDoClickAction(
+				final JSimpleDaysTimeline simpleDaysTimeline,
+				final ActionTimelineInfo actionTimelineInfo,
+				final SimpleDaysTask taskToClick
+		) {
+			this.simpleDaysTimeline = simpleDaysTimeline;
+			this.actionTimelineInfo = actionTimelineInfo;
+			this.taskToClick = taskToClick;
+		}
+
+		@Override
+		public void run() {
+			movetoTo(simpleDaysTimeline, actionTimelineInfo, taskToClick);
+			final Point pointToClick = findPointToClick(simpleDaysTimeline, actionTimelineInfo, taskToClick);
+			if(EventTransformer.CLIQUER_SUR.equals(actionTimelineInfo.action)) {
+				doDoubleClick(pointToClick);
+			}
+		}
 	}
 }

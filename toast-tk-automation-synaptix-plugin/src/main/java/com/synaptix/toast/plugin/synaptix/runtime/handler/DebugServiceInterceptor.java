@@ -22,7 +22,7 @@ class DebugServiceInterceptor implements IServiceInterceptor {
 			final Class<?>[] argTypes, 
 			final Object[] args
 	) {
-		LOG.info("interceptBeginService for {}/{}/{}", factory, serviceName, methodName);
+		logInfoService("interceptBeginService", serviceName, methodName);
 	}
 
 	@Override
@@ -32,7 +32,7 @@ class DebugServiceInterceptor implements IServiceInterceptor {
 			final Class<?>[] argTypes, 
 			final Object[] args
 	) {
-		LOG.info("interceptErrorService for {}/{}/{}", factory, serviceName, methodName);
+		logInfoService("interceptErrorService", serviceName, methodName);
 	}
 
 	@Override
@@ -42,6 +42,14 @@ class DebugServiceInterceptor implements IServiceInterceptor {
 			final Class<?>[] argTypes, 
 			final Object[] args
 	) {
-		LOG.info("interceptSucessService for {}/{}/{}", factory, serviceName, methodName);
+		logInfoService("interceptSucessService", serviceName, methodName);
+	}
+	
+	private void logInfoService(
+			final String type,
+			final String serviceName,
+			final String methodName
+	) {
+		LOG.info("{} for {}/{}/{}", type, factory, serviceName, methodName);
 	}
 }

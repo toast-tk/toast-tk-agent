@@ -9,23 +9,17 @@
 	</parent>
 	<artifactId>toast-tk-automation-client</artifactId>
 	<name>Toast Toolkit - Automation Client</name>
+	<url>${jnlp.host}</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<tomcat.version>7.0.6</tomcat.version>
 		<toast.tk.agentpath>toast-tk-automation-plugin-loader/target/toast-tk-agent-standalone.jar</toast.tk.agentpath>
 		<toast.tk.autopluginpath>toast-tk-automation-server-plugin/target/toast-tk-server-automation-plugin-standalone.jar</toast.tk.autopluginpath>
 		<tomcat.deploy.jnlp.dir>D:/Apps/apache-tomcat-6.0.37/webapps</tomcat.deploy.jnlp.dir>
+		<jnlp.host>http://10.106.184.115:8080</jnlp.host>
+		<jnlp.host.uri>toast</jnlp.host.uri>
 	</properties>
 	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-				<includes>
-					<include>**/*</include>
-				</includes>
-			</resource>
-		</resources>
 		<plugins>
 			 <plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
@@ -66,7 +60,6 @@
 					</execution>
 				</executions>
 				<configuration>
-					<templateDirectory>${project.build.directory}/classes/jnlp</templateDirectory>
 					<excludeTransitive>false</excludeTransitive>
 					<libPath>lib</libPath>
 					<codebase>${jnlp.host}/${jnlp.host.uri}/</codebase>
@@ -151,25 +144,21 @@
 	</dependencies>
 	<profiles>
 		<profile>
-			<id>DEPLOY_SNCF_VM</id>
+			<id>DEPLOY_SCNF_VM</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
-			<build>
-				<filters>
-					<filter>src/main/filters/SNCF.properties</filter>
-				</filters>
-			</build>
+			<properties>
+				<jnlp.host>http://X64ERTBIDWB:8080</jnlp.host>
+			</properties>
 		</profile>
+	
 		<profile>
 			<id>DEPLOY_LOCAL</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
-				<filters>
-					<filter>src/main/filters/LOCAL.properties</filter>
-				</filters>
 				<plugins>
 					 <plugin>
 						<artifactId>maven-antrun-plugin</artifactId>

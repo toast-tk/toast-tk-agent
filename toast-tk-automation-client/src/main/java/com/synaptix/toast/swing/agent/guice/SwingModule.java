@@ -35,6 +35,7 @@ import com.google.inject.Singleton;
 import com.synaptix.toast.automation.config.Config;
 import com.synaptix.toast.automation.config.ConfigProvider;
 import com.synaptix.toast.automation.drivers.SwingInspectServerClient;
+import com.synaptix.toast.core.ITestManager;
 import com.synaptix.toast.core.inspection.ISwingInspectionClient;
 import com.synaptix.toast.swing.agent.IToastClientApp;
 import com.synaptix.toast.swing.agent.ToastApplication;
@@ -43,6 +44,7 @@ import com.synaptix.toast.swing.agent.ui.SwingAgentScriptRunnerPanel;
 import com.synaptix.toast.swing.agent.ui.SwingInspectionFrame;
 import com.synaptix.toast.swing.agent.ui.SwingInspectionRecorderPanel;
 import com.synaptix.toast.swing.agent.ui.SwingInspectorPanel;
+import com.synpatix.toast.runtime.AbstractTestManagerImpl;
 
 public class SwingModule extends AbstractModule {
 	@Override
@@ -60,5 +62,13 @@ public class SwingModule extends AbstractModule {
 		
 		bind(MongoRepoManager.class).in(Singleton.class);
 		bind(EventBus.class).in(Singleton.class);
+		bind(ITestManager.class).to(NotAbstractTestManagerImpl.class);
+	}
+	
+	public static class NotAbstractTestManagerImpl extends AbstractTestManagerImpl {
+		@Override
+		public <T> T getClassInstance(Class<T> serviceClass) {
+			return null;
+		}
 	}
 }

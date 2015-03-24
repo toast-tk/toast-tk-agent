@@ -30,11 +30,13 @@ public class PluginModule extends AbstractComponentFixtureModule {
 
 	private void addRecorder() {
 		this.eventRecorderBinder = Multibinder.newSetBinder(binder(), AbstractEventRecorder.class);
-		bind(SimpleTimelineDoubleClickEventRecorder.class).in(Singleton.class);
-		bind(SimpleTimelineSelectionEventRecorder.class).in(Singleton.class);
-		bind(SimpleTimelineRightClickEventRecorder.class).in(Singleton.class);
-		eventRecorderBinder.addBinding().to(SimpleTimelineDoubleClickEventRecorder.class);
-		eventRecorderBinder.addBinding().to(SimpleTimelineSelectionEventRecorder.class);
-		eventRecorderBinder.addBinding().to(SimpleTimelineRightClickEventRecorder.class);
+		addTimelineSelectionBinding(SimpleTimelineDoubleClickEventRecorder.class);
+		addTimelineSelectionBinding(SimpleTimelineSelectionEventRecorder.class);
+		addTimelineSelectionBinding(SimpleTimelineRightClickEventRecorder.class);
+	}
+	
+	private <T extends AbstractEventRecorder> void addTimelineSelectionBinding(final Class<T> recorderClass) {
+		bind(recorderClass).in(Singleton.class);
+		eventRecorderBinder.addBinding().to(recorderClass);
 	}
 }

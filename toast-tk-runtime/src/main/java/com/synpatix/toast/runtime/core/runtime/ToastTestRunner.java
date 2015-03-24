@@ -394,7 +394,11 @@ public class ToastTestRunner {
 			//FIXME: voir si on garde ça la
 			if(command.startsWith("service")) {
 				commandRequest = new CommandRequest.CommandRequestBuilder(null).ofType("service").asCustomCommand(command).build();
-			}else{
+			}
+			else if(command.startsWith("timeline")) {
+				commandRequest = new CommandRequest.CommandRequestBuilder(null).ofType("timeline").asCustomCommand(command).build();
+			}
+			else{
 				commandRequest = new CommandRequest.CommandRequestBuilder(null).asCustomCommand(command).build();
 			}
 			swingClient.processCustomCommand(commandRequest);
@@ -488,11 +492,11 @@ public class ToastTestRunner {
 			Annotation[] annotations = method.getAnnotations();
 			for (Annotation annotation : annotations) {
 				String methodRegex = null;
-				if (annotation.annotationType().equals(Check.class)) {
-					methodRegex = ((Check) annotation).value();
+				if (annotation.annotationType().equals(com.synaptix.toast.core.annotation.Check.class)) {
+					methodRegex = ((com.synaptix.toast.core.annotation.Check) annotation).value();
 				}
-				if (annotation.annotationType().equals(Display.class)) {
-					methodRegex = ((Display) annotation).value();
+				if (annotation.annotationType().equals(com.synaptix.toast.core.annotation.Display.class)) {
+					methodRegex = ((com.synaptix.toast.core.annotation.Display) annotation).value();
 				}
 				if (methodRegex != null) {
 					Pattern regexPattern = Pattern.compile(methodRegex);

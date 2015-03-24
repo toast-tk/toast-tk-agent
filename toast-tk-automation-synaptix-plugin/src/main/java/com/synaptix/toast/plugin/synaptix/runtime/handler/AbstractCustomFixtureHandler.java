@@ -13,6 +13,20 @@ import com.synaptix.toast.core.guice.ICustomFixtureHandler;
 
 public abstract class AbstractCustomFixtureHandler implements ICustomFixtureHandler {
 
+	private final class CustomActionThreadFactory implements ThreadFactory {
+
+		private final ICustomFixtureHandler customFixtureHandler;
+
+		private CustomActionThreadFactory(final ICustomFixtureHandler customFixtureHandler) {
+			this.customFixtureHandler = customFixtureHandler;
+		}
+
+		@Override
+		public Thread newThread(final Runnable r) {
+			return new Thread(r, "custom action " + customFixtureHandler.getClass().getName());
+		}
+	}
+
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractCustomFixtureHandler.class);
 
 	protected abstract String makeHanldeFixtureCall(Component component, IIdRequest request);
@@ -21,12 +35,7 @@ public abstract class AbstractCustomFixtureHandler implements ICustomFixtureHand
 
 	public AbstractCustomFixtureHandler() {
 		final ICustomFixtureHandler customFixtureHandler = this;
-		final ThreadFactory threadFactory = new ThreadFactory() {
-			@Override
-			public Thread newThread(final Runnable r) {
-				return new Thread(r, "custom action " + customFixtureHandler.getClass().getName());
-			}
-		};
+		final ThreadFactory threadFactory = new CustomActionThreadFactory(customFixtureHandler);
 		this.exec = Executors.newFixedThreadPool(1, threadFactory);
 	}
 

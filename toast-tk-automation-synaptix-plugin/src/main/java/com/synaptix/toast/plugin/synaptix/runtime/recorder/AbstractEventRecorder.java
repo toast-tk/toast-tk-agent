@@ -14,6 +14,7 @@ import com.google.inject.Inject;
 import com.synaptix.swing.JSimpleDaysTimeline;
 import com.synaptix.toast.core.inspection.ISwingInspectionServer;
 import com.synaptix.toast.core.record.RecordedEvent;
+import com.synaptix.toast.plugin.synaptix.runtime.helper.BoxingHelper;
 import com.synaptix.toast.plugin.synaptix.runtime.interpreter.TimelineDataEvent;
 import com.synaptix.toast.plugin.synaptix.runtime.model.TaskOnRessource;
 import com.synaptix.toast.plugin.synaptix.runtime.split.Split;
@@ -94,16 +95,16 @@ public abstract class AbstractEventRecorder implements EventRecorder {
 
 			final String classTaskName = classSimpleDaysTask.getName();
 
-			final int dayMin = (Integer) getDayMethod.invoke(dayDateMin, null);
-			final int hourMin = (Integer) getHourMethod.invoke(dayDateMin, null);
-			final int minMin = (Integer) getMinuteMethod.invoke(dayDateMin, null);
+			final int dayMin = BoxingHelper.unbox(getDayMethod.invoke(dayDateMin, null));
+			final int hourMin = BoxingHelper.unbox(getHourMethod.invoke(dayDateMin, null));
+			final int minMin = BoxingHelper.unbox(getMinuteMethod.invoke(dayDateMin, null));
 
-			final int dayMax = (Integer) getDayMethod.invoke(dayDateMax, null);
-			final int hourMax = (Integer) getHourMethod.invoke(dayDateMax, null);
-			final int minMax = (Integer) getMinuteMethod.invoke(dayDateMax, null);
+			final int dayMax = BoxingHelper.unbox(getDayMethod.invoke(dayDateMax, null));
+			final int hourMax = BoxingHelper.unbox(getHourMethod.invoke(dayDateMax, null));
+			final int minMax = BoxingHelper.unbox(getMinuteMethod.invoke(dayDateMax, null));
 
 			final Method getOrdreMethod = classSimpleDaysTask.getMethod("getOrdre", null);
-			final int ordre = (Integer) getOrdreMethod.invoke(simpleDaysTask, null);
+			final int ordre = BoxingHelper.unbox(getOrdreMethod.invoke(simpleDaysTask, null));
 
 			final int ressource = findCurrentSelectedTask.ressource;
 
@@ -192,7 +193,7 @@ public abstract class AbstractEventRecorder implements EventRecorder {
 			final StringBuilder sb,
 			final TaskOnRessource findCurrentSelectedTask
 	) {
-		Split.addWithSeparator(sb, findCurrentSelectedTask.ressource);
+		Split.addWithSeparator(sb, Integer.valueOf(findCurrentSelectedTask.ressource));
 	}
 
 	protected static void appendDayDate(
@@ -217,9 +218,9 @@ public abstract class AbstractEventRecorder implements EventRecorder {
 			final StringBuilder sb,
 			final MouseEvent mouseEvent
 	) {
-		Split.addWithSeparator(sb, mouseEvent.getID());
-		Split.addWithSeparator(sb, mouseEvent.getClickCount());
-		Split.addWithSeparator(sb, mouseEvent.getModifiers());
+		Split.addWithSeparator(sb, Integer.valueOf(mouseEvent.getID()));
+		Split.addWithSeparator(sb, Integer.valueOf(mouseEvent.getClickCount()));
+		Split.addWithSeparator(sb, Integer.valueOf(mouseEvent.getModifiers()));
 	}
 
 	protected static void appendTimelineName(
@@ -275,7 +276,7 @@ public abstract class AbstractEventRecorder implements EventRecorder {
 	protected static Object getSelectedTask(final Object selectionModel, final int ressource) {
 		try {
 			final Method method = selectionModel.getClass().getMethod("getSelectionTasks", int.class);
-			final Object invoke = method.invoke(selectionModel, ressource);
+			final Object invoke = method.invoke(selectionModel, Integer.valueOf(ressource));
 			return Array.get(invoke, 0);
 		}
 		catch(final Exception e) {
@@ -287,7 +288,7 @@ public abstract class AbstractEventRecorder implements EventRecorder {
 	protected static int getSelectionTaskCount(final Object selectionModel) {
 		try {
 			final Method method = selectionModel.getClass().getMethod("getSelectionTaskCount", null);
-			return (Integer) method.invoke(selectionModel, null);
+			return BoxingHelper.unbox( method.invoke(selectionModel, null));
 		}
 		catch(final Exception e) {
 			return 0;
@@ -311,8 +312,8 @@ public abstract class AbstractEventRecorder implements EventRecorder {
 			final Class<? extends Object> classSelectionModel = selectionModel.getClass();
 			final Method minSelectionIndexRessourceMethod = classSelectionModel.getMethod("getMinSelectionIndexResource", null);
 			final Method maxSelectionIndexRessourceMethod = classSelectionModel.getMethod("getMaxSelectionIndexResource", null);
-			final int minSelectionIndexResource = (Integer) minSelectionIndexRessourceMethod.invoke(selectionModel, null);
-			final int maxSelectionIndexResource = (Integer) maxSelectionIndexRessourceMethod.invoke(selectionModel, null);
+			final int minSelectionIndexResource = BoxingHelper.unbox(minSelectionIndexRessourceMethod.invoke(selectionModel, null));
+			final int maxSelectionIndexResource = BoxingHelper.unbox(maxSelectionIndexRessourceMethod.invoke(selectionModel, null));
 			return minSelectionIndexResource == maxSelectionIndexResource ? minSelectionIndexResource : -1;
 		}
 		catch(final Exception e) {
@@ -327,7 +328,7 @@ public abstract class AbstractEventRecorder implements EventRecorder {
 	) {
 		try {
 			final Method getRessourceMethod = resourcesModel.getClass().getMethod("getResource", int.class);
-			final /*SimpleDaysTimelineResource*/Object resource = getRessourceMethod.invoke(resourcesModel, ressource);
+			final /*SimpleDaysTimelineResource*/Object resource = getRessourceMethod.invoke(resourcesModel, Integer.valueOf(ressource));
 			final Method getNameMethod = resource.getClass().getMethod("getName", null);
 			final Object resourceName = getNameMethod.invoke(resource, null);
 			return new TaskOnRessource(curSelectedTask, ressource, String.valueOf(resourceName));

@@ -10,6 +10,6 @@ public final class CharStringToObject implements StringToObject {
 	public Object toObject(
 			final String strObject,
 			final Class<?> classObject) {
-		return strObject.toCharArray()[0];
+		return Character.valueOf(strObject.toCharArray()[0]);
 	}
 }

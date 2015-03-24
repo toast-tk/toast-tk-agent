@@ -7,5 +7,4 @@ public class TimelineCommandRequest extends CommandRequest {
 	protected TimelineCommandRequest(final CommandRequestBuilder builder) {
 		super(builder);
 	}
-
 }

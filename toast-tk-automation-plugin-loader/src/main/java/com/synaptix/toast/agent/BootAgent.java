@@ -36,6 +36,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.instrument.Instrumentation;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -55,9 +56,15 @@ import com.synaptix.toast.core.Property;
 
 public class BootAgent {
 
+	private static final int DEFAULT_BUFFER_SIZE = 4096;
+
 	private static final Logger LOG = LoggerFactory.getLogger(Boot.class);
 	
 	private static final String MANIFEST_SYSTEM_LOAD = "packageSystem";
+	
+	private static File[] EMPTY_FILES = new File[0];
+	
+	static final private FileFilter JAR_FILE_FILTER = new JarFileFilter();
 
 	private static Instrumentation instrumentation;
 	
@@ -88,7 +95,7 @@ public class BootAgent {
 	}
     
     static void loadInterestingJars(final File redpepperAgentPath) {
-    	final URL[] collectedJarsInDirectory = collectJarsInDirectory(redpepperAgentPath);
+    	final List<URL> collectedJarsInDirectory = collectJarsInDirectory(redpepperAgentPath);
 		for(final URL jar : collectedJarsInDirectory) {
 			LOG.info("Found plugin jar {}", jar);
 			loadInterestingClasses(jar);
@@ -111,7 +118,7 @@ public class BootAgent {
     			writeInterestingJarEntries(jarFile, interestingJarEntries, destFile);
     			final JarFile jarFileToLoad = new JarFile(destFile);
     			instrumentation.appendToSystemClassLoaderSearch(jarFileToLoad);
-    			testLoadingClasses(jarFileToLoad);
+    			tryLoadingClasses(jarFileToLoad);
     			jarFileToLoad.close();
     		}
     		jarFile.close();
@@ -124,28 +131,42 @@ public class BootAgent {
 	private static String getPackageToLoad(final JarFile jarFile) throws IOException {
 		final Manifest manifest = jarFile.getManifest();
 		final Attributes attributes = manifest.getAttributes(MANIFEST_SYSTEM_LOAD);
-		return attributes.getValue("id");
+		final String value = attributes != null ? attributes.getValue("id") : null;
+		LOG.info("finded {}", value);
+		return value;
 	}
 
-    private static void testLoadingClasses(final JarFile jarFileToLoad) {
+    private static void tryLoadingClasses(final JarFile jarFileToLoad) {
     	final Enumeration<JarEntry> jarEntries = jarFileToLoad.entries();
     	final ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
     	while(jarEntries.hasMoreElements()) {
-			final JarEntry jarEntry = jarEntries.nextElement();
-			final String name = jarEntry.getName();
-			if(isClass(name)) {
-				final String normalizedClassName = normalizePath(name);
-				try {
-					LOG.info("trying to load {}", normalizedClassName);
-					systemClassLoader.loadClass(normalizedClassName);
-					LOG.info("success loading {}", normalizedClassName);
-				}
-				catch(final Exception e) {
-					LOG.error(e.getMessage(), e);
-				}
-			}
+			tryLoadingClass(jarEntries, systemClassLoader);
     	}
     }
+
+	private static void tryLoadingClass(
+			final Enumeration<JarEntry> jarEntries,
+			final ClassLoader systemClassLoader
+	) {
+		final JarEntry jarEntry = jarEntries.nextElement();
+		final String name = jarEntry.getName();
+		if(isClass(name)) {
+			final String normalizedClassName = normalizePath(name);
+			tryLoadingInSystemClassLoader(systemClassLoader, normalizedClassName);
+		}
+	}
+
+	private static void tryLoadingInSystemClassLoader(
+			final ClassLoader systemClassLoader,
+			final String normalizedClassName) {
+		try {
+			systemClassLoader.loadClass(normalizedClassName);
+			LOG.debug("success loading {}", normalizedClassName);
+		}
+		catch(final Exception e) {
+			LOG.error(e.getMessage(), e);
+		}
+	}
 
 	private static boolean isClass(final String name) {
 		return name.endsWith(".class");
@@ -165,12 +186,30 @@ public class BootAgent {
 			final Collection<JarEntry> interestingJarEntries,
 			final File destFile
 	) throws IOException, FileNotFoundException {
-		final Manifest manifestJarToLoad = buildManifest();
-		final JarOutputStream jos = new JarOutputStream(new FileOutputStream(destFile), manifestJarToLoad);
-		for(final JarEntry jarEntry : interestingJarEntries) {
+		JarOutputStream jos = null;
+		try {
+			final Manifest manifestJarToLoad = buildManifest();
+			jos = new JarOutputStream(new FileOutputStream(destFile), manifestJarToLoad);
+			for(final JarEntry jarEntry : interestingJarEntries) {
+				addJarEntryToJarFile(jarFile, jos, jarEntry);
+			}
+		}
+		finally {
+			if(jos != null) {
+				jos.close();
+			}
+		}
+	}
+
+	private static void addJarEntryToJarFile(
+			final JarFile jarFile,
+			final JarOutputStream jos, 
+			final JarEntry jarEntry
+	) {
+		try {
 			final InputStream is = jarFile.getInputStream(jarEntry);
 			jos.putNextEntry(new JarEntry(jarEntry.getName()));
-			final byte[] buffer = new byte[4096];
+			final byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
 			int bytesRead = 0;
 			while((bytesRead = is.read(buffer)) != -1) {
 				jos.write(buffer, 0, bytesRead);
@@ -179,7 +218,9 @@ public class BootAgent {
 			jos.flush();
 			jos.closeEntry();
 		}
-		jos.close();
+		catch(final IOException e) {
+			LOG.error(e.getMessage(), e);
+		}
 	}
 
 	private static Manifest buildManifest() {
@@ -196,20 +237,30 @@ public class BootAgent {
 		final Collection<JarEntry> interestingJarEntries = new ArrayList<JarEntry>();
 		while(jarEntries.hasMoreElements()) {
 			final JarEntry jarEntry = jarEntries.nextElement();
-			LOG.info("jarEntry {}", jarEntry);
 			if(isFile(jarEntry)) {
 				final String name = normalizePath(jarEntry.getName());
-				if(name.startsWith(packageToLoad)) {
-					try {
-						interestingJarEntries.add(jarEntry);
-					}
-					catch(final Exception e) {
-						LOG.error(e.getMessage(), e);
-					}
+				if(isPackageToLoad(packageToLoad, name)) {
+					addJarEntry(interestingJarEntries, jarEntry);
 				}
 			}
 		}
 		return interestingJarEntries;
+	}
+
+	private static boolean isPackageToLoad(final String packageToLoad,
+			final String name) {
+		return name.startsWith(packageToLoad);
+	}
+
+	private static void addJarEntry(
+			final Collection<JarEntry> interestingJarEntries,
+			final JarEntry jarEntry) {
+		try {
+			interestingJarEntries.add(jarEntry);
+		}
+		catch(final Exception e) {
+			LOG.error(e.getMessage(), e);
+		}
 	}
 
 	private static boolean isFile(final JarEntry jarEntry) {
@@ -220,30 +271,43 @@ public class BootAgent {
 		return value.trim().replace('/', '.').replace(".class", "");
 	}
 
-    public static URL[] collectJarsInDirectory(final File directory) {
+    private static List<URL> collectJarsInDirectory(final File directory) {
+    	final File[] jarFiles = retrieveJarFiles(directory);
     	final List<URL> allJars = new ArrayList<URL>();
-		fillJarsList(allJars, directory);
-		return allJars.toArray(new URL[allJars.size()]);
+    	for(final File jar : jarFiles) {
+			addUrlJar(allJars, jar);
+		}
+		return allJars;
 	}
 	
-	static private void fillJarsList(
-			final List<URL> jars, 
-			final File dir
-	) {
+	private static void addUrlJar(final List<URL> jars, final File jar) {
 		try {
-			for(final File jar : dir.listFiles(JAR_FILE_FILTER)) {
-				jars.add(jar.toURI().toURL());
-			}
-		} 
+			jars.add(jarToUrl(jar));
+		}
 		catch(final Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
 	}
+
+	private static URL jarToUrl(final File jar) throws MalformedURLException {
+		return jar.toURI().toURL();
+	}
 	
-	static final private FileFilter JAR_FILE_FILTER = new FileFilter() {
+	private static File[] retrieveJarFiles(final File dir) {
+		final File[] jarFiles = dir.listFiles(JAR_FILE_FILTER);
+		return jarFiles != null ? jarFiles : EMPTY_FILES;
+	}
+
+	private static final class JarFileFilter implements FileFilter {
+
+		public JarFileFilter() {
+		}
+
 		@Override
 		public boolean accept(final File pathname) {
 			return pathname.isFile() && pathname.getName().endsWith(".jar");
 		}
-	};
+	}
+	
+	
 }
