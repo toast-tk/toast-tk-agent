@@ -63,6 +63,7 @@ public class ToastTestRunner {
 	private final IRepositorySetup repoSetup;
 	private URL settingsFile;
 	private Injector injector;
+	private IReportUpdateCallBack reportUpdateCallBack;
 	
 	public ToastTestRunner(ITestManager m, Injector injector, URL settingsFile) {
 		this(m, injector.getInstance(IRepositorySetup.class));
@@ -76,6 +77,11 @@ public class ToastTestRunner {
 	public ToastTestRunner(ITestManager testManager, IRepositorySetup repoSetup) {
 		this.testManager = testManager;
 		this.repoSetup = repoSetup;
+	}
+
+	public ToastTestRunner(ITestManager testEnvManager, Injector injector, URL settings, IReportUpdateCallBack reportUpdateCallBack) {
+		this(testEnvManager, injector, settings);
+		this.reportUpdateCallBack = reportUpdateCallBack;
 	}
 
 	/**
@@ -316,8 +322,14 @@ public class ToastTestRunner {
 				if(resource != null){
 					htmlReportGenerator.writeFile(generatePageHtml, testPage.getPageName(), resource.getPath());
 				}
+				if(reportUpdateCallBack != null){
+					reportUpdateCallBack.onUpdate(generatePageHtml);
+				}
 			}
 			if(ResultKind.FATAL.equals(result.getResultKind())){
+				if(reportUpdateCallBack != null){
+					reportUpdateCallBack.onFatalStepError(result.getMessage());
+				}
 				throw new IllegalAccessException("Test execution stopped, due to fail fatal step: " + line + " - Failed !");
 			}
 		}

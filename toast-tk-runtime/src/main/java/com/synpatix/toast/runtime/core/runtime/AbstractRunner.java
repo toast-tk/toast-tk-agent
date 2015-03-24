@@ -1,6 +1,7 @@
 package com.synpatix.toast.runtime.core.runtime;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public abstract class AbstractRunner {
 	private ITestManager testEnvManager;
 	private Injector injector;
 	private boolean presetRepoFromWebApp = false;
+	private IReportUpdateCallBack reportUpdateCallBack;
 
 	protected AbstractRunner(Injector injector) {
 		try {
@@ -43,6 +45,11 @@ public abstract class AbstractRunner {
 	public final void runRemoteScript(String script) {
 		this.presetRepoFromWebApp = true;
 		runScript(testEnvManager, null, script);
+	}
+	
+	public final void runRemoteScript(String script, IReportUpdateCallBack callback) {
+		this.reportUpdateCallBack = callback;
+		runRemoteScript(script);
 	}
 
 	public final void run(ITestManager testEnvManager, String... scenarios) {
@@ -67,8 +74,9 @@ public abstract class AbstractRunner {
 		TestParser testParser = new TestParser();
 		TestPage result = file == null ? testParser.parseString(script) : testParser.parse(file);
 		// Run test
-		ToastTestRunner runner = new ToastTestRunner(testEnvManager, injector, this.getClass().getClassLoader()
-				.getResource(Property.REDPEPPER_AUTOMATION_SETTINGS_DEFAULT_DIR));
+		URL defaultSettings = this.getClass().getClassLoader()
+				.getResource(Property.REDPEPPER_AUTOMATION_SETTINGS_DEFAULT_DIR);
+		ToastTestRunner runner = new ToastTestRunner(testEnvManager, injector, defaultSettings, reportUpdateCallBack);
 
 		try {
 			if (presetRepoFromWebApp) {

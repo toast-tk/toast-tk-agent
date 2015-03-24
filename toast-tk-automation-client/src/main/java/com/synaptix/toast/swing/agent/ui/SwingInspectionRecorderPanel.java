@@ -30,6 +30,8 @@ Creation date: 6 févr. 2015
 package com.synaptix.toast.swing.agent.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -38,11 +40,18 @@ import java.awt.event.ItemListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+
+import org.fit.cssbox.io.DocumentSource;
+import org.fit.cssbox.layout.Viewport;
+import org.fit.cssbox.swingbox.BrowserPane;
+import org.fit.cssbox.swingbox.util.CSSBoxAnalyzer;
+import org.w3c.dom.Document;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -55,6 +64,7 @@ import com.synaptix.toast.core.rest.RestUtils;
 import com.synaptix.toast.swing.agent.AgentBoot;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
 import com.synpatix.toast.runtime.core.runtime.DefaultScriptRunner;
+import com.synpatix.toast.runtime.core.runtime.IReportUpdateCallBack;
 
 public class SwingInspectionRecorderPanel extends JPanel{
 	private static final long serialVersionUID = -8096917642917989626L;
@@ -184,7 +194,7 @@ public class SwingInspectionRecorderPanel extends JPanel{
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						String test = interpretedOutputArea.getText();
+						final String test = interpretedOutputArea.getText();
 						if(!recorder.isConnected()){
 							JOptionPane.showMessageDialog(null, "Automation agent offline, please launch the System Under Test with an active agent!");
 						}
@@ -192,8 +202,44 @@ public class SwingInspectionRecorderPanel extends JPanel{
 							if (runner == null) {
 								runner = new DefaultScriptRunner(AgentBoot.injector);
 							}
-							String wikiScenario = toWikiScenario(test);
-							runner.runRemoteScript(wikiScenario);
+							final String wikiScenario = toWikiScenario(test);
+							final BrowserPane swingbox = new BrowserPane();
+							SwingUtilities.invokeLater(new Runnable() {
+								@Override
+								public void run() {
+									JDialog dialog = new JDialog();
+									dialog.setSize(500,300);
+									dialog.setTitle("Execution report..");
+									dialog.setLayout(new BorderLayout());
+									dialog.setModalityType(ModalityType.APPLICATION_MODAL); 
+									JScrollPane panel = new JScrollPane();
+									panel.getViewport().add(swingbox);
+									dialog.add(panel);
+									dialog.setVisible(true);
+								}
+							});
+							SwingUtilities.invokeLater(new Runnable() {
+								@Override
+								public void run() {
+									runner.runRemoteScript(wikiScenario, new IReportUpdateCallBack() {
+										@Override
+										public void onUpdate(final String report) {
+											SwingUtilities.invokeLater(new Runnable() {
+												@Override
+												public void run() {
+													swingbox.setText(report);		
+													swingbox.revalidate();
+												}
+											});
+										}
+
+										@Override
+										public void onFatalStepError(String message) {
+											JOptionPane.showMessageDialog(null, message);
+										}
+									});
+								}
+							});
 						} 
 						else {
 							JOptionPane.showMessageDialog(null, "Script Text Area is Empty !");
@@ -255,5 +301,23 @@ public class SwingInspectionRecorderPanel extends JPanel{
 		}
 	}
 
+	
+	public static void main(String[] args) {
+		String style = "body{line-height: 1.6em;font-family: \"Lucida Sans Unicode\", \"Lucida Grande\", \"Sans-Serif\";font-size: 12px;padding-left: 1em;}table{font-size: 12px;text-align: left;color: black;border: 3px solid darkgray;margin-top: 8px;margin-bottom: 12px;}th{font-size: 14px;font-weight: normal;padding: 6px 4px;border: 1px solid darkgray;}td{border: 1px solid darkgray;padding: 4px 4px;}h3{margin-top: 24pt;}div{margin: 0px;}.summary {text-align: justify;letter-spacing: 1px;padding: 2em;background-color: darkgray;color: white;} .resultSuccess {background-color:green;} .resultFailure {background-color:red;} .resultInfo {background-color:lightblue;} .resultError {background-color: orange;}.noResult {background-color: white;}.message {font-weight: bold;}";
+		String html = "<html><head>"+
+		"<style>"+style+"</style>"+
+		"</head><body><div class='summary'>Test</div></body></html>";
+		final BrowserPane swingbox = new BrowserPane();
+		swingbox.setText(html);		
+		JDialog dialog = new JDialog();
+		dialog.setSize(500,300);
+		dialog.setTitle("Execution report..");
+		dialog.setLayout(new BorderLayout());
+		dialog.setModalityType(ModalityType.APPLICATION_MODAL); 
+		JScrollPane panel = new JScrollPane();
+		panel.getViewport().add(swingbox);
+		dialog.add(panel);
+		dialog.setVisible(true);
+	}
     
 }
