@@ -51,7 +51,7 @@ public interface ISwingInspectionClient {
 
 	void killServer();
 	
-	void saveObjectsToRepository();
+	boolean saveObjectsToRepository();
 
 	boolean isConnected();
 }

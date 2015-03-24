@@ -6,6 +6,13 @@ public class TableCommandRequestQuery {
 	public final String lookupValue;
 	public final String resultCol;
 
+	/**
+	 * for serialization purpose only
+	 */
+	public TableCommandRequestQuery(){
+		this(null, null, null);
+	}
+	
 	public TableCommandRequestQuery(String lookupCol){
 		this(lookupCol, null, null);
 	}

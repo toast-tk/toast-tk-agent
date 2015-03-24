@@ -33,7 +33,7 @@ public class SwingClientDriver implements ClientDriver {
 	protected volatile Map<String, Object> responseMap;
 
 	public SwingClientDriver(String host) throws IOException {
-		this.client = new Client(8192 * 8192, 8192 * 8192);
+		this.client = new Client();
 		this.responseMap = new HashMap<String, Object>();
 		this.host = host;
 		CommonIOUtils.initSerialization(client.getKryo());

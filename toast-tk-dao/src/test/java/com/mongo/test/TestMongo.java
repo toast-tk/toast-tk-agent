@@ -1,22 +1,18 @@
 package com.mongo.test;
 
-import java.util.List;
-
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.synaptix.toast.dao.domain.impl.report.Project;
 import com.synaptix.toast.dao.guice.MongoModule;
-import com.synaptix.toast.dao.service.dao.access.project.ProjectDaoService;
+import com.synaptix.toast.dao.service.dao.access.repository.RepositoryDaoService;
 
 public class TestMongo {
 
 	public static void main(String[] args) {
 		Injector in = Guice.createInjector(new MongoModule());
-		ProjectDaoService.Factory repoFactory = in.getInstance(ProjectDaoService.Factory.class);
-		ProjectDaoService service = repoFactory.create("test_project_db");
-		List<Project> findAllLastProjects = service.findAllLastProjects();
-		//TestP
-
+		RepositoryDaoService.Factory repoFactory = in.getInstance(RepositoryDaoService.Factory.class);
+		RepositoryDaoService service = repoFactory.create("play_db");
+		String jsonRepo = service.getRepoAsJson();
+		System.out.println(jsonRepo);
 	}
 
 }

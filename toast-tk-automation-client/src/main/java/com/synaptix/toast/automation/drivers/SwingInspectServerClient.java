@@ -195,11 +195,12 @@ public class SwingInspectServerClient extends SwingClientDriver implements ISwin
 	}
 
 	@Override
-	public void saveObjectsToRepository() {
+	public boolean saveObjectsToRepository() {
 		if(interpreter instanceof LiveRedPlayEventInterpreter){
-			((LiveRedPlayEventInterpreter)interpreter).saveObjectsToRepository();
+			return ((LiveRedPlayEventInterpreter)interpreter).saveObjectsToRepository();
 		}else{
 			LOG.info("Current interpreter doesn't support repository update operation: " + interpreter.getClass().getSimpleName());
+			return false;
 		}
 	}
 

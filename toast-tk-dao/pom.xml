@@ -59,9 +59,6 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
-			<properties>
-				<gwt.style>PRETTY</gwt.style>
-			</properties>
 			<build>
 				<filters>
 					<filter>src/main/filters/DEV.properties</filter>
@@ -73,9 +70,6 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
-			<properties>
-				<gwt.style>PRETTY</gwt.style>
-			</properties>
 			<build>
 				<filters>
 					<filter>src/main/filters/TEST.properties</filter>

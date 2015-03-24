@@ -100,7 +100,9 @@ public class MongoRepoManager {
 		return name.trim().replace(" ", "_").replace("'", "_").replace("°", "_");
 	}
 
-	public void saveCache() {
-		RestMongoWrapper.saveRepository(cache, config.getWebAppAddr(), config.getWebAppPort());
+	public boolean saveCache() {
+		boolean saveRepository = RestMongoWrapper.saveRepository(cache, config.getWebAppAddr(), config.getWebAppPort());
+		initCache();
+		return saveRepository;
 	}
 }

@@ -9,6 +9,13 @@ public class TableCommandRequest extends CommandRequest {
 
 	public final TableCommandRequestQuery query;
 	
+	//for serialization purpose only
+	protected TableCommandRequest() {
+		super();
+		this.query = null;
+	}
+	
+	
 	private TableCommandRequest(TableCommandRequestBuilder builder){	
 		super(builder);
 		this.query = builder.query;

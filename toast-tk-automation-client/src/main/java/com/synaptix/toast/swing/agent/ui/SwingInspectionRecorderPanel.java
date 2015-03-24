@@ -30,7 +30,6 @@ Creation date: 6 févr. 2015
 package com.synaptix.toast.swing.agent.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -54,35 +53,38 @@ import com.synaptix.toast.core.inspection.ISwingInspectionClient;
 import com.synaptix.toast.core.interpret.InterpretedEvent;
 import com.synaptix.toast.core.rest.RestUtils;
 import com.synaptix.toast.swing.agent.AgentBoot;
+import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
 import com.synpatix.toast.runtime.core.runtime.DefaultScriptRunner;
 
 public class SwingInspectionRecorderPanel extends JPanel{
 	private static final long serialVersionUID = -8096917642917989626L;
 	private final static long WAIT_THRESHOLD = 10; //in sec, TODO: link with fixture exist timeout
 	private final JTextArea interpretedOutputArea;
-	private final JButton startRecordButton;
-	private final JButton stopRecordButton;
+	private final JButton startStopRecordButton;
     private final JButton saveScenarioButton; 
 	private final JButton runButton;
 	private final Config config;
     
 	private final JComboBox comboBox = new JComboBox(new String[]{"RedPlay"});
 	private DefaultScriptRunner runner;
-    Long previousTimeStamp;
+	private Long previousTimeStamp;
+	private boolean recordingActive;
+    private String stopRecordingLabel = "Stop recording";
+    private String startRecordingLabel = "Start recording";
+    private ImageIcon stopRecordingIcon = new ImageIcon(Resource.ICON_STOP_16PX_IMG);
+    private ImageIcon startRecordingIcon = new ImageIcon(Resource.ICON_RUN_16PX_IMG);
     
 	private ISwingInspectionClient recorder;
 	
 	@Inject
 	public SwingInspectionRecorderPanel(ISwingInspectionClient recorder, EventBus eventBus, Config config){
 		super(new BorderLayout());
+		eventBus.register(this);
 		this.recorder = recorder;
 		this.config = config;
 		this.interpretedOutputArea = new JTextArea();
-		this.startRecordButton = new JButton("Start recording", new ImageIcon(Resource.ICON_RUN_16PX_IMG));
-		this.startRecordButton.setToolTipText("Start recording your actions in a scenario");
-		
-		this.stopRecordButton = new JButton("Stop recording", new ImageIcon(Resource.ICON_STOP_16PX_IMG));
-		this.startRecordButton.setToolTipText("Stop action recording");
+		this.startStopRecordButton = new JButton(startRecordingLabel, startRecordingIcon);
+		this.startStopRecordButton.setToolTipText("Start/Stop recording your actions in a scenario");
 		
 		this.saveScenarioButton = new JButton("Share Scenario", new ImageIcon(Resource.ICON_SHARE_16PX_IMG));
 		this.saveScenarioButton.setToolTipText("Publish the scenario on Toast Tk Webapp !");
@@ -96,8 +98,7 @@ public class SwingInspectionRecorderPanel extends JPanel{
         JScrollPane scrollPanelRight = new JScrollPane(interpretedOutputArea);
         
 		final JPanel commandPanel = new JPanel();
-        commandPanel.add(startRecordButton);
-        commandPanel.add(stopRecordButton);
+        commandPanel.add(startStopRecordButton);
         commandPanel.add(saveScenarioButton);
         commandPanel.add(runButton);
         //commandPanel.add(comboBox);
@@ -107,32 +108,43 @@ public class SwingInspectionRecorderPanel extends JPanel{
         initActions();
 	}
 
+	private void enableRecording(){
+		this.startStopRecordButton.setEnabled(true);
+	}
+	
+	private void disableRecording(){
+		this.startStopRecordButton.setEnabled(false);
+	}
+	
 	private void initActions() {
-		startRecordButton.setBackground(Color.GREEN);
-		startRecordButton.setEnabled(true);
-		stopRecordButton.setEnabled(false);
-		startRecordButton.addActionListener(new ActionListener() {
+		if(recorder.isConnected()){
+			enableRecording();
+		}else{
+			disableRecording();
+		}
+		startStopRecordButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					startRecordButton.setEnabled(false);
-					stopRecordButton.setBackground(Color.GREEN);
-					stopRecordButton.setEnabled(true);
-					recorder.startRecording();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-        stopRecordButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					startRecordButton.setBackground(Color.GREEN);
-					startRecordButton.setEnabled(true);
-					stopRecordButton.setEnabled(false);
-					previousTimeStamp = null;
-					recorder.stopRecording();
+					if(recorder.isConnected()){
+						if(!recordingActive){
+							recordingActive = true;
+							startStopRecordButton.setText(stopRecordingLabel);
+							startStopRecordButton.setIcon(stopRecordingIcon);
+							recorder.startRecording();
+						}else{
+							recordingActive = false;
+							previousTimeStamp = null;
+							startStopRecordButton.setText(startRecordingLabel);
+							startStopRecordButton.setIcon(startRecordingIcon);
+							recorder.stopRecording();
+						}
+					}else{
+						startStopRecordButton.setText(startRecordingLabel);
+						startStopRecordButton.setIcon(startRecordingIcon);
+						recordingActive = false;
+						previousTimeStamp = null;
+					}
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -148,14 +160,19 @@ public class SwingInspectionRecorderPanel extends JPanel{
         saveScenarioButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				recorder.saveObjectsToRepository();
 				saveScenarioButton.setEnabled(false);
-				String scenarioName = JOptionPane.showInputDialog("Scenario name: ");
-				boolean saved = RestUtils.postScenario(scenarioName, config.getWebAppAddr(), config.getWebAppPort(), interpretedOutputArea.getText());
-				if(saved){
-					JOptionPane.showMessageDialog(SwingInspectionRecorderPanel.this, "Scenario succesfully saved !", "Save Scenario", JOptionPane.INFORMATION_MESSAGE);
-				}else {
-					JOptionPane.showMessageDialog(SwingInspectionRecorderPanel.this, "Scenario not saved !", "Save Scenario", JOptionPane.ERROR_MESSAGE);
+				if(recorder.saveObjectsToRepository()){
+					String scenarioName = JOptionPane.showInputDialog("Scenario name: ");
+					if(scenarioName != null){
+						boolean saved = RestUtils.postScenario(scenarioName, config.getWebAppAddr(), config.getWebAppPort(), interpretedOutputArea.getText());
+						if(saved){
+							JOptionPane.showMessageDialog(SwingInspectionRecorderPanel.this, "Scenario succesfully saved !", "Save Scenario", JOptionPane.INFORMATION_MESSAGE);
+						}else {
+							JOptionPane.showMessageDialog(SwingInspectionRecorderPanel.this, "Scenario not saved !", "Save Scenario", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}else{
+					JOptionPane.showMessageDialog(SwingInspectionRecorderPanel.this, "Scenario can't be saved, repository not updated !", "Repository Update", JOptionPane.ERROR_MESSAGE);
 				}
 				saveScenarioButton.setEnabled(true);
 			}
@@ -168,14 +185,17 @@ public class SwingInspectionRecorderPanel extends JPanel{
 					@Override
 					public void run() {
 						String test = interpretedOutputArea.getText();
-						if (test != null) {
-							// TODO: check if client is connected !
+						if(!recorder.isConnected()){
+							JOptionPane.showMessageDialog(null, "Automation agent offline, please launch the System Under Test with an active agent!");
+						}
+						else if (test != null && !test.isEmpty()) {
 							if (runner == null) {
 								runner = new DefaultScriptRunner(AgentBoot.injector);
 							}
 							String wikiScenario = toWikiScenario(test);
 							runner.runRemoteScript(wikiScenario);
-						} else {
+						} 
+						else {
 							JOptionPane.showMessageDialog(null, "Script Text Area is Empty !");
 						}
 					}
@@ -200,11 +220,12 @@ public class SwingInspectionRecorderPanel extends JPanel{
 			@Override
 			public void run() {
 				interpretedOutputArea.append(event.getEventData() + "\n");
+				interpretedOutputArea.setCaretPosition(interpretedOutputArea.getDocument().getLength());
 				String waitInstruction = appendWait(event.getTimeStamp());
 				if(waitInstruction != null){
 					interpretedOutputArea.append(waitInstruction + "\n");
+					interpretedOutputArea.setCaretPosition(interpretedOutputArea.getDocument().getLength());
 				}
-				interpretedOutputArea.setCaretPosition(interpretedOutputArea.getDocument().getLength());
 			}
 		});
     }
@@ -221,5 +242,18 @@ public class SwingInspectionRecorderPanel extends JPanel{
     	previousTimeStamp = newTimeStamp; 
     	return res;
     }
+    
+	@Subscribe
+	public void handleServerConnexionStatus(SeverStatusMessage startUpMessage) {
+		switch (startUpMessage.state) {
+		case CONNECTED:
+			enableRecording();
+			break;
+		default:
+			disableRecording();
+			break;
+		}
+	}
+
     
 }

@@ -114,8 +114,8 @@ public class LiveRedPlayEventInterpreter extends DefaultEventInterpreter{
 				.withValue(eventObject.componentName).build();
 	}
 
-	public void saveObjectsToRepository() {
-		mongoRepoManager.saveCache();
+	public boolean saveObjectsToRepository() {
+		return mongoRepoManager.saveCache();
 	}
 	
 

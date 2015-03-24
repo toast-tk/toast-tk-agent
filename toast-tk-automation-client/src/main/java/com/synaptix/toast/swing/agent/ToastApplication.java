@@ -107,7 +107,9 @@ public class ToastApplication implements IToastClientApp {
 				p.setProperty(Property.TOAST_RUNTIME_CMD, config.getRuntimeCommand());
 				p.setProperty(Property.TOAST_RUNTIME_AGENT, config.getPluginDir() + agentJarName);
 				p.setProperty(Property.WEBAPP_ADDR, config.getWebAppAddr());
+				System.getProperties().put(Property.WEBAPP_ADDR, config.getWebAppAddr());
 				p.setProperty(Property.WEBAPP_PORT, config.getWebAppPort());
+				System.getProperties().put(Property.WEBAPP_PORT, config.getWebAppPort());
 				p.setProperty(Property.JNLP_RUNTIME_HOST, config.getJnlpRuntimeHost());
 				p.setProperty(Property.JNLP_RUNTIME_FILE, config.getJnlpRuntimeFile());
 				p.store(FileUtils.openOutputStream(toastProperties), null);
@@ -152,12 +154,8 @@ public class ToastApplication implements IToastClientApp {
 		return this.config;
 	}
 	
-	private void initProperties(File toastProperties) {
-		try {
-			properties.load(FileUtils.openInputStream(toastProperties));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	private void initProperties(File toastProperties) throws IOException {
+		properties.load(FileUtils.openInputStream(toastProperties));
 	}
 
 	@Override
@@ -167,9 +165,13 @@ public class ToastApplication implements IToastClientApp {
 
 	@Override
 	public void openConfigDialog() {
-		initProperties(toastPropertiesFile);
-		//TODO: manage and hide/show + reload method
-		final ConfigPanel configPanel = new ConfigPanel(properties, toastPropertiesFile);
+		try {
+			initProperties(toastPropertiesFile);
+			//TODO: manage and hide/show + reload method
+			final ConfigPanel configPanel = new ConfigPanel(properties, toastPropertiesFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -184,6 +186,11 @@ public class ToastApplication implements IToastClientApp {
 
 	@Override
 	public void initProperties() {
-		initProperties(toastPropertiesFile);
+		try {
+			initProperties(toastPropertiesFile);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
