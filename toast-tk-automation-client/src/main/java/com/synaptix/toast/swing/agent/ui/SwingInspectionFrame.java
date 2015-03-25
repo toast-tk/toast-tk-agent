@@ -306,7 +306,7 @@ public class SwingInspectionFrame extends JFrame {
 
 	@Subscribe
 	public void startLoading(final LoadingMessage lMsg) {
-		if(lMsg.progress == 100){//FIXME: fix temporaire
+		if(lMsg.progress != 100){//FIXME: fix temporaire
 			if (!glassPane.isVisible()) {
 				glassPane.setVisible(true);
 			}
