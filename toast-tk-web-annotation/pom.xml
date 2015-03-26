@@ -42,4 +42,5 @@
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
+	<name>Toast Tk - GWT Web Annotation Module</name>
 </project>

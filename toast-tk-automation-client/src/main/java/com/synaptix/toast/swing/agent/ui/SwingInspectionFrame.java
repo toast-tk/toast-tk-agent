@@ -325,6 +325,7 @@ public class SwingInspectionFrame extends JFrame {
 		}
 	}
 	
+	
 	private void enableInitButton() {
 		this.initButton.setBackground(Color.GREEN);
 		this.initButton.setEnabled(true);

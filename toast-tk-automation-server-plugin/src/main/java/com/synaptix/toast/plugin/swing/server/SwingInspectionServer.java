@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Window;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -247,4 +248,8 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 		server.sendToAllTCP(new RecordResponse(sentence));
 	}
 
+	public void close() {
+		server.close();
+	}
+	
 }

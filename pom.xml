@@ -71,6 +71,11 @@
 			<version>1.7.7</version>
 		</dependency>
 		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+		</dependency>
+		<dependency>
 			<groupId>com.google.inject.extensions</groupId>
 			<artifactId>guice-assistedinject</artifactId>
 			<version>${guice.version}</version>
@@ -93,11 +98,11 @@
 			</exclusions>
 		</dependency>
 		<!--  Mvn classpath conflict -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.sonatype.sisu</groupId>
 			<artifactId>sisu-guice</artifactId>
 			<version>3.1.2</version>
-		</dependency>
+		</dependency> -->
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}-${project.version}

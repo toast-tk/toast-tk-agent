@@ -22,20 +22,22 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Creation date: 16 févr. 2015
+Creation date: 26 mars 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
 
-package com.synpatix.toast.runtime.core.runtime;
+package com.synaptix.toast.test.server.mock;
 
-import com.google.inject.Injector;
+import com.esotericsoftware.kryonet.Connection;
 
-public class DefaultScriptRunner extends AbstractRunner {
+public class FakeConnection extends Connection {
 
-	public DefaultScriptRunner(Injector injector) {
-		super(injector);
+	public Object result;
+	
+	@Override
+	public int sendTCP(Object o){
+		result = o;
+		return 0;
 	}
-
-
 }

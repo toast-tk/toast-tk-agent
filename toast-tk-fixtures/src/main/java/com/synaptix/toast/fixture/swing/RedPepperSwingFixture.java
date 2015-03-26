@@ -9,14 +9,26 @@ import static com.synaptix.toast.fixture.FixtureSentenceRef.SelectTableRow;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.SelectValueInList;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.TypeValueInInput;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.TypeVarIn;
+import static com.synaptix.toast.fixture.FixtureSentenceRef.StoreComponentValueInVar;
+import static com.synaptix.toast.fixture.FixtureSentenceRef.RemplacerVarParValue;
+import static com.synaptix.toast.fixture.FixtureSentenceRef.DiviserVarByValue;
+import static com.synaptix.toast.fixture.FixtureSentenceRef.MultiplyVarByValue;
+import static com.synaptix.toast.fixture.FixtureSentenceRef.SubstractValueFromVar;
+import static com.synaptix.toast.fixture.FixtureSentenceRef.AddValueInVar;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.Wait;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.dom4j.IllegalAddException;
 
 import com.synaptix.toast.automation.net.CommandRequest;
+import com.synaptix.toast.automation.net.TableCommandRequestQueryCriteria;
 import com.synaptix.toast.core.AutoSwingType;
 import com.synaptix.toast.core.IFeedableSwingPage;
 import com.synaptix.toast.core.IRepositorySetup;
+import com.synaptix.toast.core.Property;
 import com.synaptix.toast.core.annotation.Check;
 import com.synaptix.toast.core.annotation.Fixture;
 import com.synaptix.toast.core.annotation.FixtureKind;
@@ -24,6 +36,7 @@ import com.synaptix.toast.core.setup.TestResult;
 import com.synaptix.toast.core.setup.TestResult.ResultKind;
 import com.synaptix.toast.fixture.facade.ClientDriver;
 import com.synaptix.toast.fixture.facade.HasClickAction;
+import com.synaptix.toast.fixture.facade.HasStringValue;
 import com.synaptix.toast.fixture.facade.HasSubItems;
 
 @Fixture(FixtureKind.swing)
@@ -41,18 +54,20 @@ public abstract class RedPepperSwingFixture {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public abstract ClientDriver getDriver() throws IOException;
 
 	public abstract SwingAutoElement overrideElementInstance(SwingAutoElement autoElement);
 
-	protected SwingAutoElement getPageField(String pageName, String fieldName) {
+	protected SwingAutoElement getPageField(String pageName, String fieldName) throws IllegalAccessException {
 		DefaultSwingPage page = (DefaultSwingPage) repo.getSwingPage(pageName);
 		SwingAutoElement autoElement = page.getAutoElement(fieldName);
 		if (autoElement instanceof DefaultSwingAutoElement) {
 			autoElement = overrideElementInstance(autoElement);
+		}
+		if (autoElement == null) {
+			throw new IllegalAccessException(pageName + "." + fieldName + " not found in repository !");
 		}
 		return autoElement;
 	}
@@ -93,7 +108,7 @@ public abstract class RedPepperSwingFixture {
 			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
 		}
 	}
-	
+
 	@Check("(\\w+).(\\w+) exists")
 	public TestResult exists(String pageName, String widgetName) throws Exception {
 		try {
@@ -132,6 +147,22 @@ public abstract class RedPepperSwingFixture {
 		return new TestResult();
 	}
 
+	@Check(StoreComponentValueInVar)
+	public TestResult selectComponentValue(String pageName, String widgetName, String variable) throws Exception {
+		try {
+			SwingAutoElement pageField = getPageField(pageName, widgetName);
+			if (!(pageField instanceof HasStringValue)) {
+				throw new IllegalAccessException(pageName + "." + widgetName + " isn't supporting value fetching !");
+			}
+			HasStringValue stringValueProvider = (HasStringValue) pageField;
+			String value = stringValueProvider.getValue();
+			repo.getUserVariables().put(variable, value);
+			return new TestResult(value, ResultKind.SUCCESS);
+		} catch (Exception e) {
+			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
+		}
+	}
+
 	@Check(Wait)
 	public TestResult wait(String time) throws Exception {
 		try {
@@ -145,9 +176,10 @@ public abstract class RedPepperSwingFixture {
 	@Check(SelectMenuPath)
 	public TestResult selectPath(String menu) throws Exception {
 		try {
-			String[] locator = menu.split(" / "); 
+			String[] locator = menu.split(" / ");
 			SwingAutoUtils.confirmExist(getDriver(), locator[0], AutoSwingType.menu.name());
-			getDriver().process(new CommandRequest.CommandRequestBuilder(null).with(locator[0]).ofType(AutoSwingType.menu.name()).select(locator[1]).build());
+			getDriver().process(
+					new CommandRequest.CommandRequestBuilder(null).with(locator[0]).ofType(AutoSwingType.menu.name()).select(locator[1]).build());
 		} catch (Exception e) {
 			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
 		}
@@ -170,21 +202,36 @@ public abstract class RedPepperSwingFixture {
 		}
 		return new TestResult();
 	}
-	
-    @Check(SelectTableRow)
-    public TestResult selectMission(String pageName, String widgetName, String tableColumnFinder) throws Exception {
-        try {
-        	String col = tableColumnFinder.split("=")[0];
-        	String val = tableColumnFinder.split("=")[1];
-            SwingTableElement table = (SwingTableElement) getPageField(pageName, widgetName);
-            String outputVal = table.find(col, val, col);
+
+	@Check(SelectTableRow)
+	public TestResult selectMission(String pageName, String widgetName, String tableColumnFinder) {
+		try {
+			SwingTableElement table = (SwingTableElement) getPageField(pageName, widgetName);
+
+			String[] criteria = tableColumnFinder.split(Property.TABLE_CRITERIA_SEPARATOR);
+			List<TableCommandRequestQueryCriteria> tableCriteria = new ArrayList<TableCommandRequestQueryCriteria>();
+			if (criteria.length > 0) {
+				for (String criterion : criteria) {
+					String col = criterion.split(Property.TABLE_KEY_VALUE_SEPARATOR)[0];
+					String val = criterion.split(Property.TABLE_KEY_VALUE_SEPARATOR)[1];
+					TableCommandRequestQueryCriteria tableCriterion = new TableCommandRequestQueryCriteria(col, val);
+					tableCriteria.add(tableCriterion);
+				}
+			} else {
+				String col = tableColumnFinder.split(Property.TABLE_KEY_VALUE_SEPARATOR)[0];
+				String val = tableColumnFinder.split(Property.TABLE_KEY_VALUE_SEPARATOR)[1];
+				TableCommandRequestQueryCriteria tableCriterion = new TableCommandRequestQueryCriteria(col, val);
+				tableCriteria.add(tableCriterion);
+			}
+
+			String outputVal = table.find(tableCriteria);
 			return new TestResult(outputVal, ResultKind.SUCCESS);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
-        }
-    }    
-    
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
+		}
+	}
+
 	@Check(SelectContectualMenu)
 	public TestResult selectCtxMenu(String menu) throws Exception {
 		try {
@@ -194,6 +241,106 @@ public abstract class RedPepperSwingFixture {
 		}
 		return new TestResult();
 	}
-   
-	
+
+	// /////////////////////////////////////// 
+	// TO MOVE IN A DRIVER AGNOSTIC FIXUTRE 
+	//////////////////////////////////////////
+	@Check(AddValueInVar)
+	public TestResult addValueToVar(String value, String var) throws Exception {
+		try {
+			Object object = repo.getUserVariables().get(var);
+			if (object == null) {
+				throw new IllegalAccessException("Variable not defined !");
+			}
+			if (object instanceof String) { // for the time being we store only
+											// strings !!
+				Double v = Double.valueOf(value);
+				Double d = Double.valueOf((String) object);
+				d = d + v;
+				repo.getUserVariables().put(var, d.toString());
+				return new TestResult(d.toString(), ResultKind.SUCCESS);
+			} else {
+				throw new IllegalAccessException("Variable not in a proper format: current -> " + object.getClass().getSimpleName());
+			}
+		} catch (Exception e) {
+			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
+		}
+	}
+
+	@Check(SubstractValueFromVar)
+	public TestResult substractValueToVar(String value, String var) throws Exception {
+		try {
+			Object object = repo.getUserVariables().get(var);
+			if (object == null) {
+				throw new IllegalAccessException("Variable not defined !");
+			}
+			if (object instanceof String) { // for the time being we store only
+											// strings !!
+				Double v = Double.valueOf(value);
+				Double d = Double.valueOf((String) object);
+				d = d - v;
+				repo.getUserVariables().put(var, d.toString());
+				return new TestResult(d.toString(), ResultKind.SUCCESS);
+			} else {
+				throw new IllegalAccessException("Variable not in a proper format: current -> " + object.getClass().getSimpleName());
+			}
+		} catch (Exception e) {
+			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
+		}
+	}
+
+	@Check(MultiplyVarByValue)
+	public TestResult multiplyVarByBal(String var, String value) throws Exception {
+		try {
+			Object object = repo.getUserVariables().get(var);
+			if (object == null) {
+				throw new IllegalAccessException("Variable not defined !");
+			}
+			if (object instanceof String) { // for the time being we store only
+											// strings !!
+				Double v = Double.valueOf(value);
+				Double d = Double.valueOf((String) object);
+				d = d * v;
+				repo.getUserVariables().put(var, d.toString());
+				return new TestResult(d.toString(), ResultKind.SUCCESS);
+			} else {
+				throw new IllegalAccessException("Variable not in a proper format: current -> " + object.getClass().getSimpleName());
+			}
+		} catch (Exception e) {
+			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
+		}
+	}
+
+	@Check(DiviserVarByValue)
+	public TestResult divideVarByValue(String var, String value) throws Exception {
+		try {
+			Object object = repo.getUserVariables().get(var);
+			if (object == null) {
+				throw new IllegalAccessException("Variable not defined !");
+			}
+			if (object instanceof String) { // for the time being we store only
+											// strings !!
+				Double v = Double.valueOf(value);
+				Double d = Double.valueOf((String) object);
+				d = d / v;
+				repo.getUserVariables().put(var, d.toString());
+				return new TestResult(d.toString(), ResultKind.SUCCESS);
+			} else {
+				throw new IllegalAccessException("Variable not in a proper format: current -> " + object.getClass().getSimpleName());
+			}
+		} catch (Exception e) {
+			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
+		}
+	}
+
+	@Check(RemplacerVarParValue)
+	public TestResult replaceVarByVal(String var, String value) throws Exception {
+		try {
+			repo.getUserVariables().put(var, value);
+		} catch (Exception e) {
+			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
+		}
+		return new TestResult();
+	}
+
 }

@@ -14,9 +14,11 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.data.TableCell;
 import org.fest.swing.data.TableCellByColumnId;
 import org.fest.swing.fixture.JPopupMenuFixture;
 import org.fest.swing.fixture.JTableCellFixture;
@@ -30,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.synaptix.toast.automation.net.CommandRequest;
 import com.synaptix.toast.automation.net.IIdRequest;
 import com.synaptix.toast.automation.net.TableCommandRequest;
+import com.synaptix.toast.automation.net.TableCommandRequestQueryCriteria;
 import com.synaptix.toast.core.guice.ICustomFixtureHandler;
 import com.synaptix.toast.fixture.utils.FestRobotInstance;
 
@@ -43,17 +46,17 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 		if(request instanceof CommandRequest){
 			CommandRequest command = (CommandRequest) request;
 			if (target instanceof JLabel) {
-				handle((JLabel) target, command);
+				return handle((JLabel) target, command);
 			} else if (target instanceof JTextField) {
-				handle((JTextField) target, command);
+				return handle((JTextField) target, command);
 			} else if (target instanceof JPasswordField) {
-				handle((JPasswordField) target, command);
+				return handle((JPasswordField) target, command);
 			} else if (target instanceof JButton) {
 				handle((JButton) target, command);
 			} else if (target instanceof JCheckBox) {
-				handle((JCheckBox) target, command);
+				return handle((JCheckBox) target, command);
 			} else if (target instanceof JTextArea) {
-				handle((JTextArea) target, command);
+				return handle((JTextArea) target, command);
 			} else if (target instanceof JMenu) {
 				handle((JMenu) target, command);
 			} else if (target instanceof JTable) {
@@ -70,17 +73,20 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 		return null;
 	}
 
-	public void handle(JLabel label, CommandRequest command) {
+	public String handle(JLabel label, CommandRequest command) {
 		switch (command.action) {
 		case SET:
 			label.setText(command.value);
 			break;
+		case GET:
+			return label.getText();
 		default:
 			throw new IllegalArgumentException("Unsupported command for JLabel: " + command.action.name());
 		}
+		return null;
 	}
 	
-	public void handle(JTextField textField, CommandRequest command) {
+	public String handle(JTextField textField, CommandRequest command) {
 		switch (command.action) {
 		case SET:
 			if ("date".equals(command.itemType)) {
@@ -95,53 +101,70 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 			break;
 		case CLICK:
 			rbt.click(textField);
+			break;
+		case GET:
+			return textField.getText();
 		default:
 			throw new IllegalArgumentException("Unsupported command for JTextField: " + command.action.name());
 		}
+		return null;
 	}
 
-	public void handle(JPasswordField textField, CommandRequest command) {
+	public String handle(JPasswordField textField, CommandRequest command) {
 		switch (command.action) {
 		case SET:
 			textField.setText(command.value);
 			break;
 		case CLICK:
 			rbt.click(textField);
+			break;
+		case GET:
+			return StringUtils.join(textField.getPassword(), "");
 		default:
 			throw new IllegalArgumentException("Unsupported command for JPasswordField: " + command.action.name());
 		}
+		return null;
 	}
 	
 	private void handle(JButton button, CommandRequest command) {
 		switch (command.action) {
 		case CLICK:
 			button.doClick();
+			break;
 		default:
 			throw new IllegalArgumentException("Unsupported command for JButton: " + command.action.name());
 		}
 	}
 
-	private void handle(JCheckBox checkbox, CommandRequest command) {
+	private String handle(JCheckBox checkbox, CommandRequest command) {
 		switch (command.action) {
 		case CLICK:
 			checkbox.doClick();
+			break;
+		case GET:
+			return String.valueOf(checkbox.isSelected());
 		default:
 			throw new IllegalArgumentException("Unsupported command for JCheckBox: " + command.action.name());
 		}
+		return null;
 	}
 	
-	private void handle(JTextArea textField, CommandRequest command) {
+	private String handle(JTextArea textField, CommandRequest command) {
 		switch (command.action) {
 		case SET:
 			textField.setText(command.value);
 			break;
+		case GET:
+			return textField.getText();
 		case CLICK:
 			rbt.click(textField);
+			break;
 		case CLEAR:
 			textField.setText("");
 		default:
 			throw new IllegalArgumentException("Unsupported command for JTextArea: " + command.action.name());
 		}
+		return null;
 	}
 
 
@@ -161,31 +184,47 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 			return String.valueOf(tFixture.rowCount());
 		case FIND:
 			TableCommandRequest tcommand = (TableCommandRequest) command;
+			if(tcommand.query.criteria.size() == 0){
+				return "No Criteria to select a row !";
+			}
+			if(tFixture.rowCount() == 0){
+				return "The table is empty !";
+			}
 			for (int i = 0; i < tFixture.rowCount(); i++) {
-				JTableCellFixture cell = tFixture.cell(TableCellByColumnId.row(i).columnId(tcommand.query.lookupCol));
-				if (cell.value().equals(command.value)) {
-					JTableCellFixture cell2 = tFixture.cell(TableCellByColumnId.row(i).columnId(tcommand.query.resultCol));
-					String value = cell2.value();
-					cell2.select();
-					return value;
+				int totalFound = 0;
+				boolean found = findRowByCriteria(tFixture, tcommand, i, totalFound);
+				if(found){
+					if(tcommand.query.resultCol != null){
+						JTableCellFixture cell = tFixture.cell(TableCellByColumnId.row(i).columnId(tcommand.query.resultCol));
+						cell.select();
+						return cell.value();
+					}else{
+						return String.valueOf((i+1));
+					}
 				}
 			}
-			break;
+			return "No row matching provided criteria !";
 		case DOUBLE_CLICK:
 			tcommand = (TableCommandRequest) command;
 			for (int i = 0; i < tFixture.rowCount(); i++) {
-				JTableCellFixture cell = tFixture.cell(TableCellByColumnId.row(i).columnId(tcommand.query.lookupCol));
-				if (cell.value().equals(command.value)) {
+				int totalFound = 0;
+				boolean found = findRowByCriteria(tFixture, tcommand, i, totalFound);
+				if(found){
+					JTableCellFixture cell = tFixture.cell(TableCell.row(i).column(1));
 					cell.select();
 					cell.doubleClick();
+				}else{
+					return "No row matching provided criteria !";
 				}
 			}
 			break;
 		case SELECT_MENU:
 			tcommand = (TableCommandRequest) command;
 			for (int i = 0; i < tFixture.rowCount(); i++) {
-				JTableCellFixture cell = tFixture.cell(TableCellByColumnId.row(i).columnId(tcommand.query.lookupCol));
-				if (cell.value().equals(tcommand.query.lookupValue)) {
+				int totalFound = 0;
+				boolean found = findRowByCriteria(tFixture, tcommand, i, totalFound);
+				if(found){
+					JTableCellFixture cell = tFixture.cell(TableCell.row(i).column(1));
 					try {
 						cell.select();
 						cell.rightClick();
@@ -195,18 +234,35 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 						e.printStackTrace();
 						return e.getMessage();
 					}
+				}else{
+					return "No row matching provided criteria !";
 				}
 			}
+			break;
 		default:
 			throw new IllegalArgumentException("Unsupported command for JTable: " + command.action.name());
 		}
 		return null;
 	}
 
+	private boolean findRowByCriteria(JTableFixture tFixture, TableCommandRequest tcommand, int i, int totalFound) {
+		for(TableCommandRequestQueryCriteria criterion: tcommand.query.criteria){
+			JTableCellFixture cell = tFixture.cell(TableCellByColumnId.row(i).columnId(criterion.lookupCol));
+			if (cell.value().equals(criterion.lookupValue)) {
+				totalFound++;
+			}
+			if(totalFound == tcommand.query.criteria.size()){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private void handle(JMenu target, CommandRequest command) {
 		switch (command.action) {
 		case CLICK:
 			target.doClick();
+			break;
 		case SELECT:
 			if (target == null) { 
 				rbt.pressMouse(MouseButton.RIGHT_BUTTON);
@@ -217,6 +273,7 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 				JPopupMenuFixture pFixture = new JPopupMenuFixture(rbt, rbt.findActivePopupMenu());
 				pFixture.menuItemWithPath(command.value).click();
 			}
+			break;
 		default:
 			throw new IllegalArgumentException("Unsupported command for JMenu: " + command.action.name());
 		}

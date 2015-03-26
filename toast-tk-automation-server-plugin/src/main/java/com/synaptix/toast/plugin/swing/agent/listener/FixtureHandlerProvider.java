@@ -51,8 +51,10 @@ public class FixtureHandlerProvider {
 	private final Set<ICustomFixtureHandler> fixtureHandlers;
 
 	@Inject
-	public FixtureHandlerProvider(Set<ICustomFixtureHandler> fixtureHandlers) {
-		assert (this.fixtureHandlers != null && fixtureHandlers.size() > 0) : "No Fixture Handler available !";
+	public FixtureHandlerProvider(Set<ICustomFixtureHandler> fixtureHandlers) throws IllegalAccessException {
+		if (fixtureHandlers == null || fixtureHandlers.size() == 0) {
+			throw new IllegalAccessException("No Fixture Handler available !");
+		}
 		this.fixtureHandlers = fixtureHandlers;
 	}
 

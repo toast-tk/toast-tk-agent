@@ -4,10 +4,10 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
-* Redistributions of source code must retain the above copyright notice, this
+ * Redistributions of source code must retain the above copyright notice, this
   list of conditions and the following disclaimer.
 
-* Redistributions in binary form must reproduce the above copyright notice,
+ * Redistributions in binary form must reproduce the above copyright notice,
   this list of conditions and the following disclaimer in the documentation
   and/or other materials provided with the distribution.
 
@@ -22,20 +22,38 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Creation date: 16 févr. 2015
+Creation date: 26 mars 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
-*/
+ */
 
-package com.synpatix.toast.runtime.core.runtime;
+package com.synaptix.toast.test.server;
 
+import java.util.List;
+
+import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
+import com.synaptix.toast.plugin.swing.server.boot.Boot;
 
-public class DefaultScriptRunner extends AbstractRunner {
+public class TestSuiteHelper {
 
-	public DefaultScriptRunner(Injector injector) {
-		super(injector);
+	static Injector injector;
+
+	public static void initInjector() {
+		Boot b = new Boot();
+		b.boot();
+		injector = Guice.createInjector(b.getModules());
 	}
-
-
+	
+	public static void initInjector(List<Module> modules) {
+		injector = Guice.createInjector(modules);
+	}
+	
+	public static Injector getInjector() {
+		if(injector == null){
+			initInjector();
+		}
+		return injector;
+	}
 }

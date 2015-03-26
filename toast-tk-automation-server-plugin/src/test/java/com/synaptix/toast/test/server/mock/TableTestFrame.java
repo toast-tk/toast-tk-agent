@@ -22,20 +22,27 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Creation date: 16 févr. 2015
+Creation date: 26 mars 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
 
-package com.synpatix.toast.runtime.core.runtime;
+package com.synaptix.toast.test.server.mock;
 
-import com.google.inject.Injector;
+import javax.swing.JFrame;
+import javax.swing.JTable;
 
-public class DefaultScriptRunner extends AbstractRunner {
+public class TableTestFrame extends JFrame {
 
-	public DefaultScriptRunner(Injector injector) {
-		super(injector);
+	private JTable table;
+	
+	public TableTestFrame(){
+		Object rowData[][] = {  { "Row1-Column1", "Row1-Column2", "Row1-Column3"},
+                				{ "Row2-Column1", "Row2-Column2", "Row2-Column3"} };
+		Object columnNames[] = { "Column One", "Column Two", "Column Three"};
+		table = new JTable(rowData, columnNames);
+		getContentPane().add(table);
+		pack();
+		setVisible(true);
 	}
-
-
 }

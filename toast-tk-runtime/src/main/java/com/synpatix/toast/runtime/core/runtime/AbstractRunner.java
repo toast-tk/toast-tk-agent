@@ -23,6 +23,7 @@ public abstract class AbstractRunner {
 	private Injector injector;
 	private boolean presetRepoFromWebApp = false;
 	private IReportUpdateCallBack reportUpdateCallBack;
+	private TestPage localRepositoryTestPage;
 
 	protected AbstractRunner(Injector injector) {
 		try {
@@ -51,6 +52,13 @@ public abstract class AbstractRunner {
 		this.reportUpdateCallBack = callback;
 		runRemoteScript(script);
 	}
+	
+
+	public void runLocalScript(String wikiScenario, String repoWiki, IReportUpdateCallBack iReportUpdateCallBack) {
+		TestParser parser = new TestParser();
+		localRepositoryTestPage = parser.readString(repoWiki, "");
+		runScript(testEnvManager, null, wikiScenario);
+	}
 
 	public final void run(ITestManager testEnvManager, String... scenarios) {
 		List<TestPage> testPages = new ArrayList<TestPage>();
@@ -73,9 +81,9 @@ public abstract class AbstractRunner {
 	private TestPage runScript(ITestManager testEnvManager, File file, String script) {
 		TestParser testParser = new TestParser();
 		TestPage result = file == null ? testParser.parseString(script) : testParser.parse(file);
+		
 		// Run test
-		URL defaultSettings = this.getClass().getClassLoader()
-				.getResource(Property.REDPEPPER_AUTOMATION_SETTINGS_DEFAULT_DIR);
+		URL defaultSettings = this.getClass().getClassLoader().getResource(Property.REDPEPPER_AUTOMATION_SETTINGS_DEFAULT_DIR);
 		ToastTestRunner runner = new ToastTestRunner(testEnvManager, injector, defaultSettings, reportUpdateCallBack);
 
 		try {
@@ -87,6 +95,8 @@ public abstract class AbstractRunner {
 				if (LOG.isDebugEnabled()) {
 					LOG.debug("Preset repository from webapp rest api...");
 				}
+			}else if(localRepositoryTestPage != null){
+				runner.run(localRepositoryTestPage, false);
 			}
 
 			result = runner.run(result, true);

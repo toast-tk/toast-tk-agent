@@ -32,11 +32,12 @@ package com.synaptix.toast.plugin.swing.agent.record;
 import java.awt.AWTEvent;
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.event.AWTEventListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.AbstractButton;
 import javax.swing.JCheckBox;
@@ -52,17 +53,23 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.text.JTextComponent;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.fest.swing.input.InputState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.synaptix.toast.core.Property;
 import com.synaptix.toast.core.guice.FilteredAWTEventListener;
 import com.synaptix.toast.core.interpret.EventCapturedObject;
 import com.synaptix.toast.core.record.AwtEventProcessor;
 import com.synaptix.toast.core.record.IEventRecorder;
 
-import static com.synaptix.toast.plugin.swing.agent.listener.InspectionUtils.*;
-
 public abstract class AbstractEventRecorder implements FilteredAWTEventListener, AwtEventProcessor {
 
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractEventRecorder.class);
+	
 	private InputState state;
 
 	protected IEventRecorder eventRecorder;
@@ -99,10 +106,17 @@ public abstract class AbstractEventRecorder implements FilteredAWTEventListener,
 				return ((JTextField) mEvent.getComponent()).getText();
 			} else if (mEvent.getComponent() instanceof JTable) {
 				JTable jSyTable = (JTable) mEvent.getComponent();
-				int selectedRow = jSyTable.getSelectedRow();
-				int selectedColumn = jSyTable.getSelectedColumn();
-				String columnName = jSyTable.getModel().getColumnName(selectedColumn);
-				return columnName + "=" + jSyTable.getModel().getValueAt(selectedRow, selectedColumn);
+				int selectedRowIndex = jSyTable.getSelectedRow();
+				List<String> criteria = new ArrayList<String>();
+				if(jSyTable.getSelectedColumns().length > 0){
+					for(int columnIndex: jSyTable.getSelectedColumns()){
+						String columnName = jSyTable.getModel().getColumnName(columnIndex);
+						Object cellValue = jSyTable.getModel().getValueAt(selectedRowIndex, columnIndex);
+						criteria.add(columnName + Property.TABLE_KEY_VALUE_SEPARATOR + cellValue);
+					}
+					return StringUtils.join(criteria, Property.TABLE_CRITERIA_SEPARATOR);
+				}
+				return "No Cell Selected";
 			}
 		} else if (aEvent instanceof FocusEvent) {
 			FocusEvent fEvent = (FocusEvent) aEvent;
@@ -161,17 +175,10 @@ public abstract class AbstractEventRecorder implements FilteredAWTEventListener,
 		if(ancestorOfClass != null){
 			ancestorLocator = ((JDialog)ancestorOfClass).getTitle();
 		}
-		
 		if(ancestorOfClass == null){
 			ancestorOfClass = SwingUtilities.getAncestorOfClass(JLayeredPane.class, component);
 			if(ancestorOfClass != null){
 				ancestorLocator = ancestorOfClass.getClass().getSimpleName();
-			}
-		}
-		if (ancestorOfClass == null) {
-			ancestorOfClass = SwingUtilities.getAncestorOfClass(JTabbedPane.class, component);
-			if((ancestorOfClass instanceof JTabbedPane)){
-				ancestorLocator = ((JTabbedPane)ancestorOfClass).getTitleAt(((JTabbedPane)ancestorOfClass).getSelectedIndex());
 			}
 		}
 		if (ancestorOfClass == null) {
@@ -186,12 +193,12 @@ public abstract class AbstractEventRecorder implements FilteredAWTEventListener,
 				ancestorLocator = ((JFrame)ancestorOfClass).getTitle();
 			}
 		}
-
 		return ancestorLocator;
 	}
 	
 
 	 protected void appendEventRecord(EventCapturedObject captureEvent) {
+		LOG.info("New record event captured: " + ToStringBuilder.reflectionToString(captureEvent, ToStringStyle.SIMPLE_STYLE));
 		eventRecorder.appendInfo(captureEvent);
 	}
 

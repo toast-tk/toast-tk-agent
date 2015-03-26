@@ -30,7 +30,6 @@ Creation date: 6 févr. 2015
 package com.synaptix.toast.swing.agent.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,11 +46,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
-import org.fit.cssbox.io.DocumentSource;
-import org.fit.cssbox.layout.Viewport;
 import org.fit.cssbox.swingbox.BrowserPane;
-import org.fit.cssbox.swingbox.util.CSSBoxAnalyzer;
-import org.w3c.dom.Document;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -63,35 +58,43 @@ import com.synaptix.toast.core.interpret.InterpretedEvent;
 import com.synaptix.toast.core.rest.RestUtils;
 import com.synaptix.toast.swing.agent.AgentBoot;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
+import com.synaptix.toast.swing.agent.interpret.MongoRepoManager;
 import com.synpatix.toast.runtime.core.runtime.DefaultScriptRunner;
 import com.synpatix.toast.runtime.core.runtime.IReportUpdateCallBack;
 
 public class SwingInspectionRecorderPanel extends JPanel{
 	private static final long serialVersionUID = -8096917642917989626L;
-	private final static long WAIT_THRESHOLD = 10; //in sec, TODO: link with fixture exist timeout
+	
 	private final JTextArea interpretedOutputArea;
 	private final JButton startStopRecordButton;
     private final JButton saveScenarioButton; 
 	private final JButton runButton;
 	private final Config config;
+	private final JComboBox comboBox;
+	
+	private final static long WAIT_THRESHOLD = 15; //in sec, TODO: link with fixture exist timeout
+    private static final String stopRecordingLabel = "Stop recording";
+    private static final String startRecordingLabel = "Start recording";
+    private static final ImageIcon stopRecordingIcon = new ImageIcon(Resource.ICON_STOP_16PX_IMG);
+    private static final ImageIcon startRecordingIcon = new ImageIcon(Resource.ICON_RUN_16PX_IMG);
     
-	private final JComboBox comboBox = new JComboBox(new String[]{"RedPlay"});
+	private ISwingInspectionClient recorder;
 	private DefaultScriptRunner runner;
 	private Long previousTimeStamp;
 	private boolean recordingActive;
-    private String stopRecordingLabel = "Stop recording";
-    private String startRecordingLabel = "Start recording";
-    private ImageIcon stopRecordingIcon = new ImageIcon(Resource.ICON_STOP_16PX_IMG);
-    private ImageIcon startRecordingIcon = new ImageIcon(Resource.ICON_RUN_16PX_IMG);
-    
-	private ISwingInspectionClient recorder;
+
+	private final MongoRepoManager mongoRepoManager;
 	
 	@Inject
-	public SwingInspectionRecorderPanel(ISwingInspectionClient recorder, EventBus eventBus, Config config){
+	public SwingInspectionRecorderPanel(ISwingInspectionClient recorder, EventBus eventBus, Config config, 
+			final MongoRepoManager mongoRepoManager){
 		super(new BorderLayout());
 		eventBus.register(this);
 		this.recorder = recorder;
 		this.config = config;
+		this.mongoRepoManager = mongoRepoManager;
+		
+		this.comboBox = new JComboBox(new String[]{"RedPlay"});
 		this.interpretedOutputArea = new JTextArea();
 		this.startStopRecordButton = new JButton(startRecordingLabel, startRecordingIcon);
 		this.startStopRecordButton.setToolTipText("Start/Stop recording your actions in a scenario");
@@ -212,25 +215,18 @@ public class SwingInspectionRecorderPanel extends JPanel{
 									dialog.setTitle("Execution report..");
 									dialog.setLayout(new BorderLayout());
 									dialog.setModalityType(ModalityType.APPLICATION_MODAL); 
-									JScrollPane panel = new JScrollPane();
-									panel.getViewport().add(swingbox);
-									dialog.add(panel);
+									dialog.add(swingbox);
 									dialog.setVisible(true);
 								}
 							});
 							SwingUtilities.invokeLater(new Runnable() {
 								@Override
 								public void run() {
-									runner.runRemoteScript(wikiScenario, new IReportUpdateCallBack() {
+									runner.runLocalScript(wikiScenario, mongoRepoManager.getWikiFiedRepo(),new IReportUpdateCallBack() {
 										@Override
 										public void onUpdate(final String report) {
-											SwingUtilities.invokeLater(new Runnable() {
-												@Override
-												public void run() {
-													swingbox.setText(report);		
-													swingbox.revalidate();
-												}
-											});
+											swingbox.setText(report);		
+											swingbox.revalidate();
 										}
 
 										@Override

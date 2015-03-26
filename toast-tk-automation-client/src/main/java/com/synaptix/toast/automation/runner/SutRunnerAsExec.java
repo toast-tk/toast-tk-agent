@@ -166,7 +166,7 @@ public class SutRunnerAsExec {
 
 		String debugRemoteArgs = " " + app.getConfig().getDebugArgs() + " ";
 
-		String command = "\"" + System.getenv("JAVA_HOME") + "\\bin\\javaw.exe\" " + agentPathProperty + " " + pluginDirProperty + " " + jvmArgs
+		String command = "\"" + System.getenv("JAVA_HOME") + "\\bin\\java.exe\" " + agentPathProperty + " " + pluginDirProperty + " " + jvmArgs
 				+ debugRemoteArgs + " -cp " + homeDir.getAbsolutePath() + "\\* " + mainClass + " " + AppArgsDesc;
 		return command;
 	}
