@@ -96,8 +96,8 @@ public class ToastApplication implements IToastClientApp {
 				}
 				final String agentJarName = "toast-tk-agent-standalone.jar";
 				try{
-					Download.getFile("http://" + config.getWebAppAddr() + ":8080/toast/agent-lib/"+agentJarName,  config.getPluginDir());
-					Download.getFile("http://" + config.getWebAppAddr() + ":8080/toast/agent-lib/toast-tk-server-automation-plugin-standalone.jar",config.getPluginDir());
+					//Download.getFile("http://" + config.getWebAppAddr() + ":8080/toast/agent-lib/"+agentJarName,  config.getPluginDir());
+					//Download.getFile("http://" + config.getWebAppAddr() + ":8080/toast/agent-lib/toast-tk-server-automation-plugin-standalone.jar",config.getPluginDir());
 				}catch(Exception e){
 					LOG.error("Can't download plugin and Agent at url " + "http://" + config.getWebAppAddr() + ":8080/toast/agent-lib" ,e);
 					openConfigDialog();

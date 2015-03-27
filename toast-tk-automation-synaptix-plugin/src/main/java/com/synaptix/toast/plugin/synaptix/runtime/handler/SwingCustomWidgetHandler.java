@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.JViewport;
 
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +18,8 @@ import org.fest.swing.core.MouseButton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.synaptix.core.dock.IViewDockable;
+import com.synaptix.core.view.CoreView;
 import com.synaptix.swing.DayDate;
 import com.synaptix.swing.JSimpleDaysTimeline;
 import com.synaptix.swing.SimpleDaysTask;
@@ -26,7 +29,6 @@ import com.synaptix.toast.automation.net.CommandRequest;
 import com.synaptix.toast.automation.net.IIdRequest;
 import com.synaptix.toast.fixture.utils.FestRobotInstance;
 import com.synaptix.toast.plugin.synaptix.runtime.annotation.TimelineHandler;
-import com.synaptix.toast.plugin.synaptix.runtime.command.TimelineCommandRequest;
 import com.synaptix.toast.plugin.synaptix.runtime.handler.sentence.SentenceFinder;
 import com.synaptix.toast.plugin.synaptix.runtime.interpreter.EventTransformer;
 
@@ -286,40 +288,69 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 		final SentenceFinder sentenceFinder = new SentenceFinder(value);
 		if(sentenceFinder.isAValidSentence()) {
 			final ActionTimelineInfo contructActionTimelineInfo =  sentenceFinder.actionTimelineInfo;
-			final Collection<Container> containers = getWindows(contructActionTimelineInfo.container);
-			for(final Container container : containers) {
-				if(container instanceof JSimpleDaysTimeline) {
-					return (JSimpleDaysTimeline) container;
+			return getWindows(contructActionTimelineInfo.container);
+		}
+		return null;
+	}
+
+	private static JSimpleDaysTimeline getWindows(
+			final String name
+	) {
+		final Window[] allWindows = Window.getWindows();
+		final JSimpleDaysTimeline timeline = findGoodWindows(allWindows, name);
+		return timeline;
+	}
+
+	private static JSimpleDaysTimeline findGoodWindows(
+			final Window[] windows,
+			final String name
+	) {
+		for(final Window window : windows) {
+			if(window instanceof CoreView) {
+				final CoreView coreView = (CoreView) window;
+				final Collection<IViewDockable> viewDockables = coreView.getViewDockables();
+				for(final IViewDockable viewDockable : viewDockables) {
+					final String viewName = viewDockable.getName();
+					if(viewName != null) {
+						final String normalisedViewName = StringUtils.stripAccents(viewName).toLowerCase().replaceAll("\\s","");
+						if(name.equals(normalisedViewName)) {
+							final JComponent view = viewDockable.getView();
+							final List<JSimpleDaysTimeline> findTimelines = findTimelines(view);
+							for(final JSimpleDaysTimeline timeline : findTimelines) {
+								final String normalizedTimelineName = StringUtils.stripAccents(timeline.getName()).toLowerCase().replaceAll("\\s","");
+								if(normalizedTimelineName.equals(name)) {
+									return timeline;
+								}
+							}
+						}
+					}
 				}
 			}
 		}
 		return null;
 	}
 
-	private static Collection<Container> getWindows(
-			final String name
-	) {
-		final Window[] allWindows = Window.getWindows();
-		final Collection<Container> containers = new ArrayList<Container>();
-		for(final Window w : allWindows) {
-			if(acceptableContainer(w, name)) {
-				containers.add(w);
-			}
-		}
-		return containers;
+	private static List<JSimpleDaysTimeline> findTimelines(final Container c) {
+	    final List<JSimpleDaysTimeline> timelines = new ArrayList<JSimpleDaysTimeline>();
+	    findTimelines(c, timelines);
+	    return timelines;
 	}
-
-	private static boolean acceptableContainer(
-			final Window w,
-			final String name
+	
+	private static void findTimelines(
+			final Container c, 
+			final List<JSimpleDaysTimeline> timelines
 	) {
-		final String windowName = StringUtils.stripAccents(w.getName()).toLowerCase();
-		if(name.equals(windowName)) {
-			return true;
-		}
-		return name.equals(w.getClass().getName());
+	    final Component[] components = c.getComponents();
+	    for(final Component com : components) {
+	        if(com instanceof JSimpleDaysTimeline) {
+	            timelines.add((JSimpleDaysTimeline) com);
+	        } 
+	        else if(com instanceof Container) {
+	        	findTimelines((Container) com, timelines);
+	        }
+	    }
 	}
-
+	
 	@Override
 	public String getName() {
 		return "STX-PLUGIN-SwingCustomWidgetHandler";

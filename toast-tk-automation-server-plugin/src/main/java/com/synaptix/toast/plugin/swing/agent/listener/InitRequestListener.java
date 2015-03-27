@@ -90,7 +90,7 @@ public class InitRequestListener extends Listener {
 					String componentId = component.getName();
 					String componentLocator = componentName != null ? componentName : componentId;
 					componentLocator = componentLocator != null ? componentLocator : component.getClass() + ":" + System.identityHashCode(component);
-					if (componentLocator != null && isAutorizedComponent(component)) {
+					if (isAutorizedComponent(component)) {
 						response.items.add(componentLocator);
 						repository.put(componentLocator, component);
 					}
