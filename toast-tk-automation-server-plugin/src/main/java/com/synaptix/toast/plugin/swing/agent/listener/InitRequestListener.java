@@ -81,8 +81,6 @@ public class InitRequestListener extends Listener {
 				java.util.List<Component> allComponents = SwingInspectionManager.getInstance().getAllComponents();
 				Map<Object, String> allInstances = SwingInspectionManager.getInstance().getAllInstances();
 
-				// reset frame
-				// inspectorGui.flush(); FIXME: clear on client side
 				repository.clear();
 
 				for (Component component : allComponents) {
@@ -95,7 +93,6 @@ public class InitRequestListener extends Listener {
 						repository.put(componentLocator, component);
 					}
 				}
-				//connection.sendTCP(response); FIXME
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

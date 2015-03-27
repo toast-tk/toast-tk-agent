@@ -147,7 +147,7 @@ public class SwingInspectionRecorder implements IEventRecorder {
 	}
 
 	
-	public void liveExplore(List<EventCapturedObject> capturedEvents) throws IOException {
+	public void liveExplore(List<EventCapturedObject> capturedEvents) {
 		// TO BE MOUVED INSIDE THE INPUT CAPTURE SECTION
 		boolean inputCaptureOpened = false;
 		boolean menuCaptureOpened = false;
@@ -168,14 +168,16 @@ public class SwingInspectionRecorder implements IEventRecorder {
 			if (inputCaptureOpened) {
 				if (capturedEvent.isInputEvent() || capturedEvent.isMouseClickEvent()) {
 					continue;
-				} else if (capturedEvent.isFocusLostEvent()) {
+				} 
+				else if (capturedEvent.isFocusLostEvent()) {
 					String inputCapturedType = capturedEvent.componentType;
 					if (inputCapturedType.equals(inputTypeUnderCapture)) {
 						eventObject.componentName = "null".equals(name) || name == null ? locator : name;
 						eventObject.businessValue = capturedEvent.businessValue;
 						_process(KEY_INPUT);
 					}
-				} else {
+				} 
+				else {
 					inputTypeUnderCapture = null;
 					inputCaptureOpened = false;
 				}
@@ -189,7 +191,8 @@ public class SwingInspectionRecorder implements IEventRecorder {
 						_process(MENU_CLICK);
 						menuCaptureOpened = false;
 					}
-				} else {
+				} 
+				else {
 					eventObject.componentName = menu;
 					_process(MENU_CLICK);
 					menuCaptureOpened = false;
@@ -224,7 +227,8 @@ public class SwingInspectionRecorder implements IEventRecorder {
 			else if (isComboBoxType(type) && capturedEvent.isMouseClickEvent()) {
 				comboboxCaptureOpened = true;
 				continue;
-			} else {
+			} 
+			else {
 				/* LOOKING FOR NEW PANEL FOCUS STEP */
 				if (capturedEvent.isFocusGainedEvent()) {
 					_process(BRING_ON_TOP_DISPLAY);
@@ -239,11 +243,14 @@ public class SwingInspectionRecorder implements IEventRecorder {
 				if (capturedEvent.isMouseClickEvent()) {
 					if (isButtonType(eventObject.componentType)) {
 						_process(BUTTON_CLICK);
-					} else if (isCheckBoxType(eventObject.componentType)) {
+					} 
+					else if (isCheckBoxType(eventObject.componentType)) {
 						_process(CHECKBOX_CLICK);
-					}else if (isTableType(type)) {
+					}
+					else if (isTableType(type)) {
 						_process(TABLE_CLICK);
-					} else if (isPopupMenuType(type)) {
+					} 
+					else if (isPopupMenuType(type)) {
 						_process(POPUP_MENU_CLICK);
 					}
 				}
@@ -278,8 +285,8 @@ public class SwingInspectionRecorder implements IEventRecorder {
 		try {
 			liveRecordedStepsBuffer.add(eventData);
 			liveExplore(liveRecordedStepsBuffer);
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
 		}
 	}
 

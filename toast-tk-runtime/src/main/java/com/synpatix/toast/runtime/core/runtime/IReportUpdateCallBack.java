@@ -22,36 +22,17 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Creation date: 16 févr. 2015
+Creation date: 24 mars 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
 
-package com.synaptix.toast.core.inspection;
+package com.synpatix.toast.runtime.core.runtime;
 
-import com.synaptix.toast.automation.net.CommandRequest;
+public interface IReportUpdateCallBack {
 
-public interface ISwingInspectionClient {
+	public void onUpdate(String report);
 
-	void highlight(String selectedValue);
-
-	void scanUi(boolean selected);
-
-	void startRecording();
-
-	void stopRecording();
-
-	void setMode(int i);
-
-	void processCustomCommand(String command);
-
-	void processCustomCommand(final CommandRequest commandRequest);
-
-	public String waitForValue(String requestId);
-
-	void killServer();
+	public void onFatalStepError(String message);
 	
-	boolean saveObjectsToRepository();
-
-	boolean isConnected();
 }

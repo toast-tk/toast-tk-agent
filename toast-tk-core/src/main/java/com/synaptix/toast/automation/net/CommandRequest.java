@@ -27,8 +27,15 @@ public class CommandRequest implements IIdRequest {
 		}
 	}
 
-	public CommandRequest() {
-		
+	//for serialization purpose only
+	protected CommandRequest() {
+		this._id= null;
+		this.isCustom = false;
+		this.customCommand= null;
+		this.itemType = null;
+		this.item = null;
+		this.action = null;
+		this.value= null;
 	}
 	
 	protected CommandRequest(CommandRequestBuilder builder) {

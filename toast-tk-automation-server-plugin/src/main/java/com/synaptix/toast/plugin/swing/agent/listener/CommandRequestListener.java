@@ -117,21 +117,26 @@ public class CommandRequestListener extends Listener implements Runnable {
 		}
 	}
 
-	private void handle(JComboBox target, final CommandRequest command) {
+	private String handle(JComboBox target, final CommandRequest command) {
 		JComboBoxFixture fixture = new JComboBoxFixture(rbt, target);
 		switch (command.action) {
 		case SET:
 			fixture.focus().enterText(command.value);
 			break;
+		case GET:
+			int selectedIndex = fixture.component().getSelectedIndex();
+			return fixture.selectItem(selectedIndex).toString();
 		case SELECT:
 			if (StringUtils.isNumeric(command.value)) {
 				fixture.selectItem(Integer.parseInt(command.value));
 			} else {
 				fixture.selectItem(command.value);
 			}
+			break;
 		default:
 			throw new IllegalArgumentException("Unsupported command for JComboBox: " + command.action.name());
 		}
+		return null;
 	}
 
 	@Override

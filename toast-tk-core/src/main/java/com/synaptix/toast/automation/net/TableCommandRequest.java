@@ -1,5 +1,11 @@
 package com.synaptix.toast.automation.net;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.synaptix.toast.automation.net.CommandRequest.CommandRequestBuilder;
+import com.synaptix.toast.core.AutoSwingType;
+
 
 
 /**
@@ -8,6 +14,13 @@ package com.synaptix.toast.automation.net;
 public class TableCommandRequest extends CommandRequest {
 
 	public final TableCommandRequestQuery query;
+	
+	//for serialization purpose only
+	protected TableCommandRequest() {
+		super();
+		this.query = null;
+	}
+	
 	
 	private TableCommandRequest(TableCommandRequestBuilder builder){	
 		super(builder);
@@ -20,6 +33,7 @@ public class TableCommandRequest extends CommandRequest {
 		
 		public TableCommandRequestBuilder(String id) {
 			super(id);
+			this.itemType = AutoSwingType.table.name();
 		}
 
 		public TableCommandRequestBuilder count() {
@@ -27,29 +41,52 @@ public class TableCommandRequest extends CommandRequest {
 	        return this;
 		}
 
+		public TableCommandRequestBuilder with(String item) {
+			this.item = item;
+			return this;
+		}
+		
 		public TableCommandRequestBuilder find(String lookUpColumn, String lookUpValue, String outputColumn) {
 			this.action = COMMAND_TYPE.FIND;
 			this.value = lookUpValue;
-			this.query = new TableCommandRequestQuery(lookUpColumn, lookUpValue, outputColumn);
+			List<TableCommandRequestQueryCriteria> criteria = new ArrayList<TableCommandRequestQueryCriteria>();
+			criteria.add(new TableCommandRequestQueryCriteria(lookUpColumn, lookUpValue));
+			this.query = new TableCommandRequestQuery(criteria, outputColumn);
+			return this;
+		}
+		
+		public TableCommandRequestBuilder find(List<TableCommandRequestQueryCriteria> criteria) {
+			this.action = COMMAND_TYPE.FIND;
+			this.query = new TableCommandRequestQuery(criteria);
+			return this;
+		}
+		
+		public TableCommandRequestBuilder find(List<TableCommandRequestQueryCriteria> criteria, String outputColumn) {
+			this.action = COMMAND_TYPE.FIND;
+			this.query = new TableCommandRequestQuery(criteria, outputColumn);
 			return this;
 		}
 
 		public TableCommandRequestBuilder doubleClick(String column, String value) {
 			this.action = COMMAND_TYPE.DOUBLE_CLICK;
 			this.value = value;
-			this.query = new TableCommandRequestQuery(column);
+			List<TableCommandRequestQueryCriteria> criteria = new ArrayList<TableCommandRequestQueryCriteria>();
+			criteria.add(new TableCommandRequestQueryCriteria(column, value));
+			this.query = new TableCommandRequestQuery(criteria);
 			return this;
 		}
 
 		public TableCommandRequestBuilder selectMenu(String menu, String column, String value) {
 			this.action = COMMAND_TYPE.SELECT_MENU;
 			this.value = menu;
-			this.query = new TableCommandRequestQuery(column, value);
+			List<TableCommandRequestQueryCriteria> criteria = new ArrayList<TableCommandRequestQueryCriteria>();
+			criteria.add(new TableCommandRequestQueryCriteria(column, value));
+			this.query = new TableCommandRequestQuery(criteria);
 			return this;
 		}
 		
 		@Override
-		public CommandRequest build() {
+		public TableCommandRequest build() {
 			return new TableCommandRequest(this);
 		}
 	}

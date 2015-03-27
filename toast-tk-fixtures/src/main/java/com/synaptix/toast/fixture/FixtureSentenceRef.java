@@ -12,9 +12,16 @@ public class FixtureSentenceRef {
 	public static final String Wait = "wait (\\w+)s";
 	public static final String SelectSubMenu = "Selection menu "+ SWING_COMPONENT_REGEX + " dans " + SWING_COMPONENT_REGEX;
 	public static final String SelectMenuPath = "Selectionner menu "+ VALUE_REGEX;
+	public static final String StoreComponentValueInVar = "Récupérer la valeur de " + VALUE_REGEX + " dans " + VAR_REGEX;
 	public static final String SelectContectualMenu = "Selectionner le menu contextuel "+ VALUE_REGEX;
 	public static final String SelectValueInList = "Selectionner " + VALUE_REGEX + " dans " + SWING_COMPONENT_REGEX;
 	public static final String SelectTableRow = "Dans " + SWING_COMPONENT_REGEX +  " selectionner la ligne ayant " + VALUE_REGEX;
+	
+	public static final String AddValueInVar = "Ajouter " + VALUE_REGEX + " à " + VAR_REGEX;
+	public static final String SubstractValueFromVar = "Retrancher " + VALUE_REGEX + " à " + VAR_REGEX;
+	public static final String MultiplyVarByValue = "Multiplier " + VAR_REGEX + " par " + VALUE_REGEX;
+	public static final String DiviserVarByValue = "Diviser " + VAR_REGEX + " par " + VALUE_REGEX;
+	public static final String RemplacerVarParValue = "Enregister " + VALUE_REGEX + " dans " + VAR_REGEX;
 
 	public static enum Params {
 		VALUE(VALUE_REGEX, "@Value"), COMPONENT(SWING_COMPONENT_REGEX, "@Page.@Item"), VARIABLE(VAR_REGEX, "@Variable");

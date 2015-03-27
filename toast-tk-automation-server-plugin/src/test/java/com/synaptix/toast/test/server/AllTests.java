@@ -4,10 +4,10 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
-* Redistributions of source code must retain the above copyright notice, this
+ * Redistributions of source code must retain the above copyright notice, this
   list of conditions and the following disclaimer.
 
-* Redistributions in binary form must reproduce the above copyright notice,
+ * Redistributions in binary form must reproduce the above copyright notice,
   this list of conditions and the following disclaimer in the documentation
   and/or other materials provided with the distribution.
 
@@ -22,36 +22,37 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Creation date: 16 févr. 2015
+Creation date: 26 mars 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
-*/
+ */
 
-package com.synaptix.toast.core.inspection;
+package com.synaptix.toast.test.server;
 
-import com.synaptix.toast.automation.net.CommandRequest;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
-public interface ISwingInspectionClient {
+import com.synaptix.toast.plugin.swing.server.SwingInspectionServer;
+import com.synaptix.toast.plugin.swing.server.boot.Boot;
 
-	void highlight(String selectedValue);
+@RunWith(Suite.class)
+@SuiteClasses({ TestRequestHandlersForJTable.class, TestRequestHandlersForTextField.class })
+public class AllTests {
 
-	void scanUi(boolean selected);
+	@BeforeClass
+	public static void setUp() {
+		Boot b = new Boot();
+		b.boot();
+		TestSuiteHelper.initInjector(b.getModules());
+	}
 
-	void startRecording();
+	@AfterClass
+	public static void tearDown() {
+		SwingInspectionServer instance = TestSuiteHelper.getInjector().getInstance(SwingInspectionServer.class);
+		instance.close();
+	}
 
-	void stopRecording();
-
-	void setMode(int i);
-
-	void processCustomCommand(String command);
-
-	void processCustomCommand(final CommandRequest commandRequest);
-
-	public String waitForValue(String requestId);
-
-	void killServer();
-	
-	boolean saveObjectsToRepository();
-
-	boolean isConnected();
 }

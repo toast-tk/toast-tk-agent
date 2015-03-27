@@ -2,14 +2,20 @@ package com.synaptix.toast.dao.service.dao.access.repository;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bson.types.ObjectId;
 
 import com.github.jmkgreen.morphia.query.Query;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
@@ -34,19 +40,29 @@ public class RepositoryDaoService extends AbstractMongoDaoService<RepositoryImpl
 		super(RepositoryImpl.class, starter.getDatabaseByName(dbName != null ? dbName: default_db), cService);
 	}
 
-
 	public String getRepoAsJson(){
 		Gson gSon = new Gson();
 		Query<RepositoryImpl> query = createQuery();
 		query.field("type").equal(CONTAINER_TYPE);
-		return gSon.toJson(query.asList());
+		List<RepositoryImpl> asList = query.asList();
+		return gSon.toJson(asList);
 	}
 	
+	@Deprecated
 	public boolean saveRepoAsJson(String jsonRepo){
-		Gson g = new Gson();
+		GsonBuilder gson = new GsonBuilder();
 		Type typeOfT = new TypeToken<Collection<RepositoryImpl>>(){}.getType();
 		try{
-			Collection<RepositoryImpl> repository = (Collection<RepositoryImpl>)g.fromJson(jsonRepo, typeOfT);
+			gson.registerTypeHierarchyAdapter(ObjectId.class, new com.google.gson.JsonDeserializer<ObjectId>() {
+				@Override
+				public ObjectId deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+					if(json == null){
+						return null;
+					}
+					return new ObjectId(json.toString());
+				}
+			});
+			Collection<RepositoryImpl> repository = (Collection<RepositoryImpl>)gson.create().fromJson(jsonRepo, typeOfT);
 			for(RepositoryImpl r: repository){
 				save(r, WriteConcern.ACKNOWLEDGED);
 			}

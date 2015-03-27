@@ -35,7 +35,13 @@ import java.util.Collection;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.bson.types.ObjectId;
+
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
 import com.google.gson.reflect.TypeToken;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -58,12 +64,35 @@ public class RestMongoWrapper extends RestUtils{
 	public static boolean saveRepository(Collection<RepositoryImpl> repoToSave, String host, String port){
 		String webAppResourceURI = getWebAppURI(host, port) + "/saveRepository";
 		Client httpClient = Client.create();
-		Gson g = new Gson();
-		String json = g.toJson(repoToSave);
+		GsonBuilder gson = new GsonBuilder();
+		gson.registerTypeHierarchyAdapter(ObjectId.class, new com.google.gson.JsonSerializer<ObjectId>() {
+			@Override
+			public JsonElement serialize(ObjectId src, Type typeOfSrc, JsonSerializationContext context) {
+				if(src == null){
+					return null;
+				}
+				return new JsonPrimitive(src.toString());
+			}
+		});
+		String json = gson.create().toJson(repoToSave);
 		WebResource webResource = httpClient.resource(webAppResourceURI);
 		ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, json);
 		int statusCode = response.getStatus();
-		return statusCode == Response.Status.ACCEPTED.getStatusCode();
+		return statusCode == Response.Status.OK.getStatusCode();
+	}
+	
+	/**
+	 * main test to store the repository through play rest api
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		String webAppResourceURI = getWebAppURI("localhost", "9000") + "/saveRepository";
+		Client httpClient = Client.create();
+		String json = "[{\"type\":\"swing page\",\"rows\":[{\"type\":\"button\",\"locator\":\"Fermer\",\"method\":\"\",\"position\":0,\"id\":\"55101a046c6e446c28022c26\",\"lastUpdated\":\"Mar 23, 2015 2:49:56 PM\",\"name\":\"Fermer\"}],\"id\":\"55101a046c6e446c28022c25\",\"lastUpdated\":\"Mar 23, 2015 2:49:56 PM\",\"name\":\"Erreur_de_connexion\"}]";
+		WebResource webResource = httpClient.resource(webAppResourceURI);
+		ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, json);
+		int statusCode = response.getStatus();
+		System.out.println(statusCode);
 	}
 	
 }

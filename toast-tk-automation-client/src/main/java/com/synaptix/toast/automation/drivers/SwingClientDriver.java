@@ -20,9 +20,6 @@ import com.synaptix.toast.automation.net.ValueResponse;
 import com.synaptix.toast.core.inspection.CommonIOUtils;
 import com.synaptix.toast.fixture.facade.ClientDriver;
 
-/**
- * Created by skokaina on 07/11/2014.
- */
 public class SwingClientDriver implements ClientDriver {
 
 	private static final Logger LOG = LogManager.getLogger(SwingClientDriver.class);
@@ -31,12 +28,13 @@ public class SwingClientDriver implements ClientDriver {
 	private static final int RECONNECTION_RATE = 10000;
 	protected volatile Map<String, Object> responseMap;
 
-	public SwingClientDriver(String host) throws IOException {
-		this.client = new Client(8192 * 8192, 8192 * 8192);
+	public SwingClientDriver(String host) {
+		this.client = new Client();
 		this.responseMap = new HashMap<String, Object>();
 		this.host = host;
 		CommonIOUtils.initSerialization(client.getKryo());
 		client.addListener(new Listener() {
+			@Override
 			public void received(Connection connection, Object object) {
 				if (object instanceof ExistsResponse) {
 					ExistsResponse response = (ExistsResponse) object;

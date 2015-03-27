@@ -30,7 +30,7 @@ Creation date: 6 févr. 2015
 package com.synaptix.toast.swing.agent.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -39,11 +39,14 @@ import java.awt.event.ItemListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+
+import org.fit.cssbox.swingbox.BrowserPane;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -55,42 +58,55 @@ import com.synaptix.toast.core.inspection.ISwingInspectionClient;
 import com.synaptix.toast.core.interpret.InterpretedEvent;
 import com.synaptix.toast.core.rest.RestUtils;
 import com.synaptix.toast.swing.agent.AgentBoot;
+import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
+import com.synaptix.toast.swing.agent.interpret.MongoRepoManager;
 import com.synpatix.toast.runtime.core.runtime.DefaultScriptRunner;
+import com.synpatix.toast.runtime.core.runtime.IReportUpdateCallBack;
 
 public class SwingInspectionRecorderPanel extends JPanel{
 	private static final long serialVersionUID = -8096917642917989626L;
-	private final static long WAIT_THRESHOLD = 10; //in sec, TODO: link with fixture exist timeout
+	
 	private final JTextArea interpretedOutputArea;
-	private final JButton startRecordButton;
-	private final JButton stopRecordButton;
+	private final JButton startStopRecordButton;
     private final JButton saveScenarioButton; 
 	private final JButton runButton;
 	private final Config config;
 	private ITestManager testEnvManager;
-    
-	private final JComboBox comboBox = new JComboBox(new String[]{"RedPlay"});
-	private DefaultScriptRunner runner;
-    Long previousTimeStamp;
+	private final JComboBox comboBox;
+	
+	private final static long WAIT_THRESHOLD = 15; //in sec, TODO: link with fixture exist timeout
+    private static final String stopRecordingLabel = "Stop recording";
+    private static final String startRecordingLabel = "Start recording";
+    private static final ImageIcon stopRecordingIcon = new ImageIcon(Resource.ICON_STOP_16PX_IMG);
+    private static final ImageIcon startRecordingIcon = new ImageIcon(Resource.ICON_RUN_16PX_IMG);
     
 	private ISwingInspectionClient recorder;
+	private DefaultScriptRunner runner;
+	private Long previousTimeStamp;
+	private boolean recordingActive;
+
+	private final MongoRepoManager mongoRepoManager;
 	
 	@Inject
 	public SwingInspectionRecorderPanel(
 			ISwingInspectionClient recorder, 
 			EventBus eventBus, 
 			Config config,
-			ITestManager testEnvManager
+			ITestManager testEnvManager,
+			final MongoRepoManager mongoRepoManager
 	){
+
 		super(new BorderLayout());
+		eventBus.register(this);
 		this.recorder = recorder;
 		this.config = config;
 		this.testEnvManager = testEnvManager;
 		this.interpretedOutputArea = new JTextArea();
-		this.startRecordButton = new JButton("Start recording", new ImageIcon(Resource.ICON_RUN_16PX_IMG));
-		this.startRecordButton.setToolTipText("Start recording your actions in a scenario");
+		this.mongoRepoManager = mongoRepoManager;
 		
-		this.stopRecordButton = new JButton("Stop recording", new ImageIcon(Resource.ICON_STOP_16PX_IMG));
-		this.startRecordButton.setToolTipText("Stop action recording");
+		this.comboBox = new JComboBox(new String[]{"RedPlay"});
+		this.startStopRecordButton = new JButton(startRecordingLabel, startRecordingIcon);
+		this.startStopRecordButton.setToolTipText("Start/Stop recording your actions in a scenario");
 		
 		this.saveScenarioButton = new JButton("Share Scenario", new ImageIcon(Resource.ICON_SHARE_16PX_IMG));
 		this.saveScenarioButton.setToolTipText("Publish the scenario on Toast Tk Webapp !");
@@ -104,8 +120,7 @@ public class SwingInspectionRecorderPanel extends JPanel{
         JScrollPane scrollPanelRight = new JScrollPane(interpretedOutputArea);
         
 		final JPanel commandPanel = new JPanel();
-        commandPanel.add(startRecordButton);
-        commandPanel.add(stopRecordButton);
+        commandPanel.add(startStopRecordButton);
         commandPanel.add(saveScenarioButton);
         commandPanel.add(runButton);
         //commandPanel.add(comboBox);
@@ -115,32 +130,43 @@ public class SwingInspectionRecorderPanel extends JPanel{
         initActions();
 	}
 
+	private void enableRecording(){
+		this.startStopRecordButton.setEnabled(true);
+	}
+	
+	private void disableRecording(){
+		this.startStopRecordButton.setEnabled(false);
+	}
+	
 	private void initActions() {
-		startRecordButton.setBackground(Color.GREEN);
-		startRecordButton.setEnabled(true);
-		stopRecordButton.setEnabled(false);
-		startRecordButton.addActionListener(new ActionListener() {
+		if(recorder.isConnected()){
+			enableRecording();
+		}else{
+			disableRecording();
+		}
+		startStopRecordButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					startRecordButton.setEnabled(false);
-					stopRecordButton.setBackground(Color.GREEN);
-					stopRecordButton.setEnabled(true);
-					recorder.startRecording();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-        stopRecordButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					startRecordButton.setBackground(Color.GREEN);
-					startRecordButton.setEnabled(true);
-					stopRecordButton.setEnabled(false);
-					previousTimeStamp = null;
-					recorder.stopRecording();
+					if(recorder.isConnected()){
+						if(!recordingActive){
+							recordingActive = true;
+							startStopRecordButton.setText(stopRecordingLabel);
+							startStopRecordButton.setIcon(stopRecordingIcon);
+							recorder.startRecording();
+						}else{
+							recordingActive = false;
+							previousTimeStamp = null;
+							startStopRecordButton.setText(startRecordingLabel);
+							startStopRecordButton.setIcon(startRecordingIcon);
+							recorder.stopRecording();
+						}
+					}else{
+						startStopRecordButton.setText(startRecordingLabel);
+						startStopRecordButton.setIcon(startRecordingIcon);
+						recordingActive = false;
+						previousTimeStamp = null;
+					}
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -156,14 +182,19 @@ public class SwingInspectionRecorderPanel extends JPanel{
         saveScenarioButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				recorder.saveObjectsToRepository();
 				saveScenarioButton.setEnabled(false);
-				String scenarioName = JOptionPane.showInputDialog("Scenario name: ");
-				boolean saved = RestUtils.postScenario(scenarioName, config.getWebAppAddr(), config.getWebAppPort(), interpretedOutputArea.getText());
-				if(saved){
-					JOptionPane.showMessageDialog(SwingInspectionRecorderPanel.this, "Scenario succesfully saved !", "Save Scenario", JOptionPane.INFORMATION_MESSAGE);
-				}else {
-					JOptionPane.showMessageDialog(SwingInspectionRecorderPanel.this, "Scenario not saved !", "Save Scenario", JOptionPane.ERROR_MESSAGE);
+				if(recorder.saveObjectsToRepository()){
+					String scenarioName = JOptionPane.showInputDialog("Scenario name: ");
+					if(scenarioName != null){
+						boolean saved = RestUtils.postScenario(scenarioName, config.getWebAppAddr(), config.getWebAppPort(), interpretedOutputArea.getText());
+						if(saved){
+							JOptionPane.showMessageDialog(SwingInspectionRecorderPanel.this, "Scenario succesfully saved !", "Save Scenario", JOptionPane.INFORMATION_MESSAGE);
+						}else {
+							JOptionPane.showMessageDialog(SwingInspectionRecorderPanel.this, "Scenario not saved !", "Save Scenario", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}else{
+					JOptionPane.showMessageDialog(SwingInspectionRecorderPanel.this, "Scenario can't be saved, repository not updated !", "Repository Update", JOptionPane.ERROR_MESSAGE);
 				}
 				saveScenarioButton.setEnabled(true);
 			}
@@ -175,16 +206,48 @@ public class SwingInspectionRecorderPanel extends JPanel{
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						String test = interpretedOutputArea.getText();
-						if (test != null) {
-							// TODO: check if client is connected !
+						final String test = interpretedOutputArea.getText();
+						if(!recorder.isConnected()){
+							JOptionPane.showMessageDialog(null, "Automation agent offline, please launch the System Under Test with an active agent!");
+						}
+						else if (test != null && !test.isEmpty()) {
 							if (runner == null) {
 								runner = new DefaultScriptRunner(AgentBoot.injector);
 							}
-							String wikiScenario = toWikiScenario(test);
-							//runner.runRemoteScript(wikiScenario);
-							runner.run(testEnvManager, wikiScenario);
-						} else {
+
+							final String wikiScenario = toWikiScenario(test);
+							final BrowserPane swingbox = new BrowserPane();
+							SwingUtilities.invokeLater(new Runnable() {
+								@Override
+								public void run() {
+									JDialog dialog = new JDialog();
+									dialog.setSize(500,300);
+									dialog.setTitle("Execution report..");
+									dialog.setLayout(new BorderLayout());
+									dialog.setModalityType(ModalityType.APPLICATION_MODAL); 
+									dialog.add(swingbox);
+									dialog.setVisible(true);
+								}
+							});
+							SwingUtilities.invokeLater(new Runnable() {
+								@Override
+								public void run() {
+									runner.runLocalScript(wikiScenario, mongoRepoManager.getWikiFiedRepo(),new IReportUpdateCallBack() {
+										@Override
+										public void onUpdate(final String report) {
+											swingbox.setText(report);		
+											swingbox.revalidate();
+										}
+
+										@Override
+										public void onFatalStepError(String message) {
+											JOptionPane.showMessageDialog(null, message);
+										}
+									});
+								}
+							});
+						} 
+						else {
 							JOptionPane.showMessageDialog(null, "Script Text Area is Empty !");
 						}
 					}
@@ -210,11 +273,12 @@ public class SwingInspectionRecorderPanel extends JPanel{
 			@Override
 			public void run() {
 				interpretedOutputArea.append(event.getEventData() + "\n");
+				interpretedOutputArea.setCaretPosition(interpretedOutputArea.getDocument().getLength());
 				String waitInstruction = appendWait(event.getTimeStamp());
 				if(waitInstruction != null){
 					interpretedOutputArea.append(waitInstruction + "\n");
+					interpretedOutputArea.setCaretPosition(interpretedOutputArea.getDocument().getLength());
 				}
-				interpretedOutputArea.setCaretPosition(interpretedOutputArea.getDocument().getLength());
 			}
 		});
     }
@@ -231,4 +295,37 @@ public class SwingInspectionRecorderPanel extends JPanel{
     	previousTimeStamp = newTimeStamp; 
     	return res;
     }
+
+    
+	@Subscribe
+	public void handleServerConnexionStatus(SeverStatusMessage startUpMessage) {
+		switch (startUpMessage.state) {
+		case CONNECTED:
+			enableRecording();
+			break;
+		default:
+			disableRecording();
+			break;
+		}
+	}
+
+	
+	public static void main(String[] args) {
+		String style = "body{line-height: 1.6em;font-family: \"Lucida Sans Unicode\", \"Lucida Grande\", \"Sans-Serif\";font-size: 12px;padding-left: 1em;}table{font-size: 12px;text-align: left;color: black;border: 3px solid darkgray;margin-top: 8px;margin-bottom: 12px;}th{font-size: 14px;font-weight: normal;padding: 6px 4px;border: 1px solid darkgray;}td{border: 1px solid darkgray;padding: 4px 4px;}h3{margin-top: 24pt;}div{margin: 0px;}.summary {text-align: justify;letter-spacing: 1px;padding: 2em;background-color: darkgray;color: white;} .resultSuccess {background-color:green;} .resultFailure {background-color:red;} .resultInfo {background-color:lightblue;} .resultError {background-color: orange;}.noResult {background-color: white;}.message {font-weight: bold;}";
+		String html = "<html><head>"+
+		"<style>"+style+"</style>"+
+		"</head><body><div class='summary'>Test</div></body></html>";
+		final BrowserPane swingbox = new BrowserPane();
+		swingbox.setText(html);		
+		JDialog dialog = new JDialog();
+		dialog.setSize(500,300);
+		dialog.setTitle("Execution report..");
+		dialog.setLayout(new BorderLayout());
+		dialog.setModalityType(ModalityType.APPLICATION_MODAL); 
+		JScrollPane panel = new JScrollPane();
+		panel.getViewport().add(swingbox);
+		dialog.add(panel);
+		dialog.setVisible(true);
+	}
+    
 }

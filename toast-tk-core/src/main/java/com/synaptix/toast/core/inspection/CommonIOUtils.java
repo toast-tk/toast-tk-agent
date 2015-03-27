@@ -16,6 +16,7 @@ import com.synaptix.toast.automation.net.ScanRequest;
 import com.synaptix.toast.automation.net.ScanResponse;
 import com.synaptix.toast.automation.net.TableCommandRequest;
 import com.synaptix.toast.automation.net.TableCommandRequestQuery;
+import com.synaptix.toast.automation.net.TableCommandRequestQueryCriteria;
 import com.synaptix.toast.automation.net.ValueResponse;
 import com.synaptix.toast.automation.net.CommandRequest.COMMAND_TYPE;
 import com.synaptix.toast.core.interpret.EventCapturedObject;
@@ -32,6 +33,7 @@ public class CommonIOUtils {
         kryo.register(COMMAND_TYPE.class);
         kryo.register(InitInspectionRequest.class);
         kryo.register(CommandRequest.class);
+        kryo.register(TableCommandRequestQueryCriteria.class);
         kryo.register(TableCommandRequestQuery.class);
         kryo.register(TableCommandRequest.class);
 

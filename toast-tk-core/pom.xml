@@ -41,5 +41,10 @@
 			<artifactId>json</artifactId>
 			<version>20090211</version>
 		</dependency>
+				<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>${guice.version}</version>
+		</dependency>
 	</dependencies>
 </project>

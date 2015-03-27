@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.synaptix.toast.automation.net.CommandRequest;
 import com.synaptix.toast.core.ISwingElement;
 import com.synaptix.toast.fixture.facade.ClientDriver;
+import com.synaptix.toast.fixture.facade.HasStringValue;
 import com.synaptix.toast.fixture.facade.HasTextInput;
 
 /**
@@ -13,7 +14,7 @@ import com.synaptix.toast.fixture.facade.HasTextInput;
  * @author skokaina
  * 
  */
-public class SwingDateElement extends SwingAutoElement implements HasTextInput {
+public class SwingDateElement extends SwingAutoElement implements HasTextInput, HasStringValue {
 
 	public SwingDateElement(ISwingElement element, ClientDriver driver) {
 		super(element, driver);

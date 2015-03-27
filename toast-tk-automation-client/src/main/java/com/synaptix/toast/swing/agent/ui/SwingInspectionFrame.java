@@ -74,6 +74,7 @@ public class SwingInspectionFrame extends JFrame {
 	private JMenuItem runtimePropertyButton;
 	private final IToastClientApp app;
 	private final SutRunnerAsExec runtime;
+	private String CONNECTED_TEXT = "Toast Automation Server - Connected";
 	
 	@Inject
 	public SwingInspectionFrame(
@@ -119,7 +120,7 @@ public class SwingInspectionFrame extends JFrame {
 		statusPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
 		statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.X_AXIS));
 
-		statusMessageLabel = new JLabel("Offline");
+		statusMessageLabel = new JLabel(serverClient.isConnected() ? CONNECTED_TEXT : "Offline");
 		statusMessageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		statusPanel.add(statusMessageLabel);
 		this.add(statusPanel, BorderLayout.SOUTH);
@@ -292,8 +293,8 @@ public class SwingInspectionFrame extends JFrame {
 	public void handleServerConnexionStatus(SeverStatusMessage startUpMessage) {
 		switch (startUpMessage.state) {
 		case CONNECTED:
-			statusMessageLabel.setText("Toast Automation Server - Connected");
-			stopLoading(new StopLoadingMessage("Toast Automation Server - Connected"));
+			statusMessageLabel.setText(CONNECTED_TEXT);
+			stopLoading(new StopLoadingMessage(CONNECTED_TEXT));
 			disableInitButton();
 			break;
 		default:
@@ -324,6 +325,7 @@ public class SwingInspectionFrame extends JFrame {
 		statusMessageLabel.setText(lMsg.msg);
 		glassPane.setVisible(false);
 	}
+	
 	
 	private void enableInitButton() {
 		this.initButton.setBackground(Color.GREEN);
