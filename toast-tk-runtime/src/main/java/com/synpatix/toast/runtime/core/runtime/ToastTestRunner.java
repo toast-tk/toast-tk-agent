@@ -30,6 +30,7 @@ import com.synaptix.toast.core.IRepositorySetup;
 import com.synaptix.toast.core.ITestManager;
 import com.synaptix.toast.core.annotation.Check;
 import com.synaptix.toast.core.annotation.Display;
+import com.synaptix.toast.core.annotation.FixtureKind;
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.core.inspection.ISwingInspectionClient;
 import com.synaptix.toast.core.setup.TestResult;
@@ -175,7 +176,7 @@ public class ToastTestRunner {
 		try {
 			result = repoSetup.insertComponent(entityName2, values2);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 			return new TestResult(ExceptionUtils.getRootCauseMessage(e), ResultKind.ERROR);
 		}
 		return result;
@@ -238,7 +239,7 @@ public class ToastTestRunner {
 					try {
 						fixtureClass.getField(columnsList.get(cellIndex)).set(instance, cell);
 					} catch (Exception e) {
-						e.printStackTrace();
+						LOG.error(e.getMessage(), e);
 						row.setTestResult(new TestResult(ExceptionUtils.getRootCauseMessage(e), ResultKind.ERROR));
 						return;
 					}
@@ -247,7 +248,7 @@ public class ToastTestRunner {
 					fixtureClass.getMethod("enterRow").invoke(instance);
 					row.setTestResult(new TestResult("Done", ResultKind.INFO));
 				} catch (Exception e) {
-					e.printStackTrace();
+					LOG.error(e.getMessage(), e);
 					row.setTestResult(new TestResult(ExceptionUtils.getRootCauseMessage(e), ResultKind.ERROR));
 				}
 			}
@@ -302,11 +303,14 @@ public class ToastTestRunner {
 	 * @throws ClassNotFoundException 
 	 */
 	private void runTestBlock(TestBlock block, TestPage testPage, boolean inlineReport) throws IllegalAccessException, ClassNotFoundException {
-		String scenarioService = block.getFixtureName();
 
 		for (TestLine line : block.getBlockLines()) {
 			line.startExecution();
-			TestResult result = parseServiceCall(line.getTest(), scenarioService);
+			
+			//override with test line call
+			TestLineDescriptor descriptor = new TestLineDescriptor(block, line);
+			TestResult result = parseServiceCall(line.getTest(), descriptor.getTestLineFixtureKind());
+			
 			line.stopExecution();
 			if ("KO".equals(line.getExpected()) && ResultKind.FAILURE.equals(result.getResultKind())) {
 				result.setResultKind(ResultKind.SUCCESS);
@@ -350,13 +354,14 @@ public class ToastTestRunner {
 	 * DOCUMENT THIS METHOD
 	 * 
 	 * @param command
-	 * @param scenarioService
+	 * @param fixtureKind
 	 * @return
 	 * @throws IllegalAccessException
 	 * @throws ClassNotFoundException
 	 */
-	private TestResult parseServiceCall(String command, String scenarioService) throws IllegalAccessException, ClassNotFoundException {
+	private TestResult parseServiceCall(String command, FixtureKind fixtureKind) throws IllegalAccessException, ClassNotFoundException {
 		TestResult result;
+		//FIXME: move in TestDescriptor////////////////////////////////
 		boolean isFailFatalCmd = isFailFatalCommand(command);
 		boolean isSynchronizedCmd = isSynchronizedCommand(command);
 		if(isFailFatalCmd){
@@ -364,12 +369,11 @@ public class ToastTestRunner {
 		}
 		
 		command = command.trim().replace("*", "");
+		//////////////////////////////////////////////////////////////
 		
-		Class<?> serviceClass = locateServiceClass(scenarioService); 
-		if (serviceClass == null) {
-			throw new IllegalAccessException("Service " + scenarioService + " not found");
-		}
-		else if(LOG.isDebugEnabled()){
+		Class<?> serviceClass = locateFixtureClass(fixtureKind); 
+		
+		if(LOG.isDebugEnabled()){
 			LOG.debug(serviceClass + " : " + command);
 		}
 		
@@ -436,25 +440,25 @@ public class ToastTestRunner {
 	/**
 	 * DOCUMENT
 	 * 
-	 * @param scenarioService
+	 * @param fixture kind (swing, web, service)
 	 * @return
 	 * @throws ClassNotFoundException
+	 * @throws IllegalAccessException 
 	 */
-	private Class<?> locateServiceClass(String scenarioService) throws ClassNotFoundException {
-		Class<?> serviceClass;
+	private Class<?> locateFixtureClass(FixtureKind fixtureKind) throws ClassNotFoundException, IllegalAccessException {
+		Class<?> serviceClass = null;
 		if(settingsFile != null){
-			serviceClass = getServiceClassFromSettings(settingsFile.getFile(), scenarioService);
+			serviceClass = getServiceClassFromSettings(settingsFile.getFile(), fixtureKind.name());
 		}
-		else if("swing".equals(scenarioService.toLowerCase())){
-			serviceClass = repoSetup.getService(scenarioService);
-			if(serviceClass == null){
-				//FIXME
+		if(serviceClass == null){
+			serviceClass = repoSetup.getService(FixtureKind.swing.name());
+			if(fixtureKind.equals(FixtureKind.swing) && serviceClass == null){
+				//FIXME: try to extract all the drivers into a dedicated maven module
 				serviceClass = Class.forName("com.synaptix.toast.automation.drivers.DefaultSwingServiceFixture");
 			}
 		}
-		else{
-			 //from include header
-			serviceClass = repoSetup.getService(scenarioService);
+		if (serviceClass == null) {
+			throw new IllegalAccessException("Service " + fixtureKind + " not found");
 		}
 		return serviceClass;
 	}
@@ -481,7 +485,7 @@ public class ToastTestRunner {
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 		return null;
 	}

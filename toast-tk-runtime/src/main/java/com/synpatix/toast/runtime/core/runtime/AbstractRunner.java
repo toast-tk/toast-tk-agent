@@ -53,7 +53,6 @@ public abstract class AbstractRunner {
 		runRemoteScript(script);
 	}
 	
-
 	public void runLocalScript(String wikiScenario, String repoWiki, IReportUpdateCallBack iReportUpdateCallBack) {
 		TestParser parser = new TestParser();
 		localRepositoryTestPage = parser.readString(repoWiki, "");
