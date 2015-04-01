@@ -35,6 +35,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -46,6 +52,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.fit.cssbox.swingbox.BrowserPane;
 
 import com.google.common.eventbus.EventBus;
@@ -53,8 +60,11 @@ import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.synaptix.toast.automation.config.Config;
 import com.synaptix.toast.automation.utils.Resource;
+import com.synaptix.toast.core.Property;
 import com.synaptix.toast.core.inspection.ISwingInspectionClient;
 import com.synaptix.toast.core.interpret.InterpretedEvent;
+import com.synaptix.toast.core.rest.ImportedScenario;
+import com.synaptix.toast.core.rest.ImportedScenarioDescriptor;
 import com.synaptix.toast.core.rest.RestUtils;
 import com.synaptix.toast.swing.agent.AgentBoot;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
@@ -66,6 +76,7 @@ public class SwingInspectionRecorderPanel extends JPanel{
 	private static final long serialVersionUID = -8096917642917989626L;
 	
 	private final JTextArea interpretedOutputArea;
+	private final JButton openScenarioButton;
 	private final JButton startStopRecordButton;
     private final JButton saveScenarioButton; 
 	private final JButton runButton;
@@ -102,6 +113,8 @@ public class SwingInspectionRecorderPanel extends JPanel{
 		this.saveScenarioButton = new JButton("Share Scenario", new ImageIcon(Resource.ICON_SHARE_16PX_IMG));
 		this.saveScenarioButton.setToolTipText("Publish the scenario on Toast Tk Webapp !");
 		
+		this.openScenarioButton = new JButton("Open Scenario");
+		
 		this.runButton = new JButton("Run Test", new ImageIcon(Resource.ICON_RUN_16PX_IMG));
 		this.runButton.setToolTipText("Execute current scenario..");
 		
@@ -111,6 +124,7 @@ public class SwingInspectionRecorderPanel extends JPanel{
         JScrollPane scrollPanelRight = new JScrollPane(interpretedOutputArea);
         
 		final JPanel commandPanel = new JPanel();
+		commandPanel.add(openScenarioButton);
         commandPanel.add(startStopRecordButton);
         commandPanel.add(saveScenarioButton);
         commandPanel.add(runButton);
@@ -135,6 +149,33 @@ public class SwingInspectionRecorderPanel extends JPanel{
 		}else{
 			disableRecording();
 		}
+		
+		openScenarioButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				List<ImportedScenario> listOfScenario = new ArrayList<ImportedScenario>(RestUtils.getListOfScenario());
+				String[] scenarioItems = new String[listOfScenario.size()];
+				for (int i = 0; i < listOfScenario.size(); i++) {
+					scenarioItems[i] = listOfScenario.get(i).getName();
+				}
+
+				final ListPanel elp = new ListPanel(scenarioItems);
+				JOptionPane.showMessageDialog(null, elp);
+				int selectedIndex = elp.getSelectedIndex();
+				if (selectedIndex > -1) {
+					ImportedScenario importedScenario = listOfScenario.get(selectedIndex);	
+					ImportedScenarioDescriptor scenarioDescriptor = RestUtils.getScenario(importedScenario);
+					if(scenarioDescriptor != null){
+						interpretedOutputArea.setText("");
+						interpretedOutputArea.setText(scenarioDescriptor.getRows());
+						interpretedOutputArea.setCaretPosition(interpretedOutputArea.getDocument().getLength());
+					}else{
+						JOptionPane.showMessageDialog(null, "Scenario couldn't be loaded !");
+					}
+				}
+			}
+		});
+		
 		startStopRecordButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -245,7 +286,7 @@ public class SwingInspectionRecorderPanel extends JPanel{
 			}
 
 			private String toWikiScenario(String test) {
-				String output = "|| scenario || swing ||\n";
+				String output = "|| scenario || swing ||\n"; //TODO: bind type to selected descriptor
 				String[] lines = test.split("\n");
 				for (String line : lines) {
 					output += "|" + line + "|\n";
