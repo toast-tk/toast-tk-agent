@@ -42,7 +42,7 @@
 									<manifestSection>
 										<name>packageSystem</name>
 										<manifestEntries>
-											<id>com.synaptix.swing</id>
+											<id>com.synaptix.swing, com.sncf.fret.swi.client.assemblage.view.swing.extension.panel</id>
 										</manifestEntries>
 									</manifestSection>
 								</manifestSections>

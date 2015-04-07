@@ -28,11 +28,18 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 import com.synaptix.toast.fixture.utils.FixtureHelper;
 
 public class TestParser {
+	
+	//TODO: link to play domain
+	private enum ConfigType {
+		WEB_PAGE("web page"), SWING_PAGE("swing page"), SERVICE_ENTITY("service entity");
+		
+		public final String value;
 
-	/**
-	 * @author E413544
-	 * 
-	 */
+		ConfigType(String value){
+			this.value = value;
+		}
+	}
+	
 	private enum BlockType {
 		TEST, COMMENT
 	}
@@ -115,7 +122,7 @@ public class TestParser {
 					}
 				} else if (isTextEqual(testKind, "auto setup")) {
 					String type = block.getLineAt(1).getCellAt(0);
-					if (isTextEqual(type, "configure entity")) {
+					if (isTextEqual(type, ConfigType.SERVICE_ENTITY.value)) {
 						ConfigBlock configBlock = new ConfigBlock();
 						configBlock.setComponentName(FixtureHelper.parseTestString(block.getLineAt(1).getCellAt(1)));
 						for (BlockLine line : block.lines) {
@@ -124,7 +131,7 @@ public class TestParser {
 							}
 						}
 						testPage.addBlock(configBlock);
-					} else if (isTextEqual(type, "web page")) {
+					} else if (isTextEqual(type, ConfigType.WEB_PAGE.value)) {
 						WebPageBlock webBlock = new WebPageBlock();
 						for (BlockLine line : block.lines) {
 							webBlock.setFixtureName(block.getLineAt(1).getCellAt(1));
@@ -141,7 +148,7 @@ public class TestParser {
 						}
 						testPage.addBlock(webBlock);
 					}
-					else if (isTextEqual(type, "swing page")) {
+					else if (isTextEqual(type, ConfigType.SWING_PAGE.value)) {
 						SwingPageBlock swingPageBlock = new SwingPageBlock();
 						for (BlockLine line : block.lines) {
 							swingPageBlock.setFixtureName(block.getLineAt(1).getCellAt(1));

@@ -4,13 +4,13 @@ import java.awt.Component;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.UndeclaredThrowableException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jivesoftware.smack.XMPPConnection;
@@ -36,7 +36,6 @@ import com.synaptix.toast.dao.service.dao.access.test.ConfigBlockDaoService;
 import com.synaptix.toast.plugin.synaptix.runtime.annotation.ServiceCallHandler;
 import com.synaptix.toast.plugin.synaptix.runtime.converter.StringToObjectInstance;
 import com.synaptix.toast.plugin.synaptix.runtime.model.ServiceCallIdentifier;
-import com.synaptix.toast.plugin.synaptix.runtime.command.ServiceCommandRequest;
 import com.synaptix.toast.plugin.synaptix.runtime.service.ConnectionBuilder;
 
 @ServiceCallHandler

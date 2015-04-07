@@ -57,9 +57,7 @@ public final class BaseEventInterpreter implements EventInterpreter {
 		Split.add(sb, " ,");
 		LOG.info("split[9] = {}", split[9]);
 		Split.add(sb, split[9]);
-		Split.add(sb, ") ordre ");
-		LOG.info("split[10] = {}", split[10]);
-		Split.add(sb, split[10]);
+		Split.add(sb, ")");
 		Split.add(sb, " de ");
 		LOG.info("split[11] = {}", split[11]);
 		LOG.info("split[12] = {}", split[12]);

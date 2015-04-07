@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
-import com.synaptix.toast.core.inspection.ISwingInspectionServer;
 import com.synaptix.toast.core.interpret.InterpretedEvent;
 import com.synaptix.toast.core.record.RecordedEvent;
 import com.synaptix.toast.plugin.synaptix.runtime.interpreter.EventInterpreter;
@@ -20,9 +19,6 @@ import com.synaptix.utils.MouseHelper;
 public class SimpleTimelineSelectionEventRecorder extends AbstractEventRecorder {
 
 	private static final Logger LOG = LoggerFactory.getLogger(SimpleTimelineSelectionEventRecorder.class);
-
-	@Inject
-	protected ISwingInspectionServer cmdServer;
 
 	@Inject
 	protected EventInterpreter eventInterpreter;

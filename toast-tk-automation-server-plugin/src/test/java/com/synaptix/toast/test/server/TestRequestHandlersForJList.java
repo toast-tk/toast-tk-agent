@@ -60,7 +60,7 @@ public class TestRequestHandlersForJList {
 	}
 	
 	public static CommandRequest buildJListCommandRequest() {
-		
+		return null;//for now
 	}
 	
 	public static TableCommandRequest buildMultiCriteriaRequest(List<TableCommandRequestQueryCriteria> tableCriteria, String locator, String idRequest) {

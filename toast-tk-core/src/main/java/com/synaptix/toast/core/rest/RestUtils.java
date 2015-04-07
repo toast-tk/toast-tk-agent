@@ -1,6 +1,8 @@
 package com.synaptix.toast.core.rest;
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Collection;
 
 import javax.naming.AuthenticationException;
 import javax.ws.rs.core.MediaType;
@@ -12,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -61,7 +64,7 @@ public class RestUtils {
 			}
 			return builder.toString();
 		} catch (JSONException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 		return null;
 	}
@@ -96,7 +99,7 @@ public class RestUtils {
 			LOG.info("Client response code: " + statusCode);
 			return statusCode >= 200 && statusCode < 400;
 		}catch(Exception e){
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 			return false;
 		}
 	}
@@ -122,4 +125,34 @@ public class RestUtils {
 		
 		return getWebAppURI(webAppAddr, webAppPort);
 	}
+
+	public static Collection<ImportedScenario> getListOfScenario() {
+		try{
+			Client httpClient = Client.create();
+			String webappURL = getWebAppURI ();
+			String response = getJsonResponseAsString(webappURL+"/loadScenariiList", httpClient);
+			Gson g = new Gson();
+			Type typeOfT = new TypeToken<Collection<ImportedScenario>>(){}.getType();
+			Collection<ImportedScenario> scenarioList = g.fromJson(response, typeOfT);
+			return scenarioList;
+		}catch(Exception e){
+			LOG.error(e.getMessage(), e);
+			return null;
+		}
+	}
+	
+	public static ImportedScenarioDescriptor getScenario(ImportedScenario scenarioRef) {
+		try{
+			Client httpClient = Client.create();
+			String webappURL = getWebAppURI ();
+			String response = getJsonResponseAsString(webappURL+"/loadScenarioSteps/"+scenarioRef.getId(), httpClient);
+			Gson g = new Gson();
+			ImportedScenarioDescriptor scenarioDescriptor = g.fromJson(response, ImportedScenarioDescriptor.class);
+			return scenarioDescriptor;
+		}catch(Exception e){
+			LOG.error(e.getMessage(), e);
+			return null;
+		}
+	}
+
 }

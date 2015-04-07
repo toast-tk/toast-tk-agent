@@ -110,16 +110,22 @@ public class BootAgent {
     static void loadInterestingClasses(final URL jar) {
     	try {
     		final JarFile jarFile = new JarFile(jar.getPath());
-    		final String packageToLoad = getPackageToLoad(jarFile);
-    		if(StringUtils.isNotBlank(packageToLoad)) {
-    			final Collection<JarEntry> interestingJarEntries = retrieveInterestingClasses(packageToLoad, jarFile);
-    			final String destPath = getRootPath() + "interestingJars.jar";
-    			final File destFile = retrieveDestinationFile(destPath);
-    			writeInterestingJarEntries(jarFile, interestingJarEntries, destFile);
-    			final JarFile jarFileToLoad = new JarFile(destFile);
-    			instrumentation.appendToSystemClassLoaderSearch(jarFileToLoad);
-    			tryLoadingClasses(jarFileToLoad);
-    			jarFileToLoad.close();
+    		final String[] packagesToLoad = getPackagesToLoad(jarFile);
+    		if(packagesToLoad != null) {
+    			final int length = packagesToLoad.length;
+    			for(int index = 0; index < length; ++index) {
+    				final String packageToLoad = packagesToLoad[index].trim();
+    				if(StringUtils.isNotBlank(packageToLoad)) {
+    					final Collection<JarEntry> interestingJarEntries = retrieveInterestingClasses(packageToLoad, jarFile);
+    					final String destPath = getRootPath() + index + "_interestingJars.jar";
+    					final File destFile = retrieveDestinationFile(destPath);
+    					writeInterestingJarEntries(jarFile, interestingJarEntries, destFile);
+    					final JarFile jarFileToLoad = new JarFile(destFile);
+    					instrumentation.appendToSystemClassLoaderSearch(jarFileToLoad);
+    					tryLoadingClasses(jarFileToLoad);
+    					jarFileToLoad.close();
+    				}
+    			}
     		}
     		jarFile.close();
     	}
@@ -128,12 +134,15 @@ public class BootAgent {
     	}
     }
 
-	private static String getPackageToLoad(final JarFile jarFile) throws IOException {
+	private static String[] getPackagesToLoad(final JarFile jarFile) throws IOException {
 		final Manifest manifest = jarFile.getManifest();
 		final Attributes attributes = manifest.getAttributes(MANIFEST_SYSTEM_LOAD);
 		final String value = attributes != null ? attributes.getValue("id") : null;
 		LOG.info("finded {}", value);
-		return value;
+		if(value != null && value.contains(",")) {
+			return value.split(",");
+		}
+		return new String[]{value};
 	}
 
     private static void tryLoadingClasses(final JarFile jarFileToLoad) {

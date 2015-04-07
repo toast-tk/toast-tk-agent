@@ -251,9 +251,9 @@ public class SwingInspectionRecorder implements IEventRecorder {
 					else if(isPopupMenuType(type)) {
 						_process(POPUP_MENU_CLICK);
 					}
-					else if(isJListType(type)) {
+					/*else if(isJListType(type)) {
 						_process(POPUP_MENU_CLICK);
-					}
+					}*/
 				}
 			}
 		}

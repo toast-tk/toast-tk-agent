@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JViewport;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +19,7 @@ import org.fest.swing.core.MouseButton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sncf.fret.swi.client.assemblage.view.swing.extension.panel.gestionprevisions.CenterCellsPanel;
 import com.synaptix.core.dock.IViewDockable;
 import com.synaptix.core.view.CoreView;
 import com.synaptix.swing.DayDate;
@@ -47,12 +49,16 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 
 	private void initWhiteList() {
 		whiteList.add("timeline");
+		whiteList.add("centerCells");
 	}
 	
 	@Override
 	public String makeHanldeFixtureCall(final Component component, final IIdRequest request) {
 		if (component instanceof JSimpleDaysTimelineCenter) {
 			handleTimeline((JSimpleDaysTimelineCenter) component, request);
+		}
+		else if(component instanceof CenterCellsPanel) {
+			handleCenterCellPanel((CenterCellsPanel) component, request);
 		}
 		return null;
 	}
@@ -61,21 +67,22 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 		try {
 			if(command instanceof CommandRequest) {
 				final CommandRequest commandRequest = (CommandRequest) command;
-				if(isTaskCustomCommand(commandRequest)) {
-					if ("timeline".equals(commandRequest.itemType)) {
-						handleCommandTask(commandRequest.value, timeline.getSimpleDaysTimeline());
+				if(isCustomCommand(commandRequest)) {
+					if (isTimelineCustomCommand(commandRequest)) {
+						handleTimelineCommandTask(commandRequest.value, timeline.getSimpleDaysTimeline());
 					}
 					else {
 						throw new IllegalAccessError("Custom command not supported: " + commandRequest.customCommand);
 					}
 				}
 			}
-		} catch (final Exception e) {
+		} 
+		catch(final Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
 	}
 
-	private void handleCommandTask(
+	private void handleTimelineCommandTask(
 			final String command, 
 			final JSimpleDaysTimeline simpleDaysTimeline
 	) {
@@ -221,11 +228,17 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 	@Override
 	public String processCustomCall(final CommandRequest commandRequest) {
 		try {
-			if(isTaskCustomCommand(commandRequest)) {
+			if(isCustomCommand(commandRequest)) {
 				final String command = commandRequest.value;
 				LOG.info("processing command : {}", command);
-				final JSimpleDaysTimeline timeline = findTimeline(command);
-				handleCommandTask(command, timeline);
+				if(isTimelineCustomCommand(commandRequest)) {
+					final JSimpleDaysTimeline timeline = findTimeline(command);
+					handleTimelineCommandTask(command, timeline);
+				}
+				else if(isCellCenterCustomCommand(commandRequest)) {
+					final CenterCellsPanel centerCellsPanel = findCenterCells(command);
+					handleCommandCenterCellsPanel(command, centerCellsPanel);
+				}
 			}
 			else {
 				throw new IllegalAccessError("Custom command not supported: " + commandRequest.customCommand);
@@ -237,7 +250,19 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 		return null;
 	}
 
-	private static boolean isTaskCustomCommand(final CommandRequest commandRequest) {
+	private static boolean isCustomCommand(final CommandRequest commandRequest) {
+		return isTimelineCustomCommand(commandRequest) || isCellCenterCustomCommand(commandRequest);
+	}
+
+	private static boolean isCellCenterCustomCommand(
+			final CommandRequest commandRequest
+	) {
+		return "centerCells".equals(commandRequest.itemType);
+	}
+
+	private static boolean isTimelineCustomCommand(
+			final CommandRequest commandRequest
+	) {
 		return "timeline".equals(commandRequest.itemType);
 	}
 
@@ -293,6 +318,48 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 		return null;
 	}
 
+	private static CenterCellsPanel findCenterCells(final String value) {
+		final Window[] allWindows = Window.getWindows();
+		for(final Window window : allWindows) {
+			LOG.info("window {}", window);
+			if(window instanceof JFrame) {
+				final JFrame frame = (JFrame) window;
+				final Container contentPane = frame.getContentPane();
+				final int componentCount = contentPane.getComponentCount();
+				for(int index = 0; index < componentCount; ++index) {
+					final Component component = contentPane.getComponent(index);
+					if(component instanceof CenterCellsPanel) {
+						final String extractName = extractName(value);
+						if(extractName != null && extractName.equals(component.getName())) {
+							return (CenterCellsPanel) component;
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	private static String extractName(final String value) {
+		LOG.info("extractName from {}", value);
+		try {
+			final int indexOpenParenthesis = value.indexOf('(');
+			if(indexOpenParenthesis != -1) {
+				final int indexCloseParenthesis = value.indexOf(')');
+				if(indexCloseParenthesis != -1) {
+					final String extractedName = value.substring(indexOpenParenthesis, indexCloseParenthesis + 1); 
+					LOG.info("extractedName = {}", extractedName);
+					return extractedName;
+				}
+			}
+		}
+		catch(final Exception e) {
+			LOG.error(e.getMessage(), e);
+
+		}
+		return null;
+	}
+	
 	private static JSimpleDaysTimeline getWindows(
 			final String name
 	) {
@@ -306,6 +373,7 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 			final String name
 	) {
 		for(final Window window : windows) {
+			LOG.info("window {}", window);
 			if(window instanceof CoreView) {
 				final CoreView coreView = (CoreView) window;
 				final Collection<IViewDockable> viewDockables = coreView.getViewDockables();
@@ -392,5 +460,31 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 				doDoubleClick(pointToClick);
 			}
 		}
+	}
+	
+	private void handleCenterCellPanel(final CenterCellsPanel centerCellSPanel, final IIdRequest request) {
+		try {
+			if(request instanceof CommandRequest) {
+				final CommandRequest commandRequest = (CommandRequest) request;
+				if(isCustomCommand(commandRequest)) {
+					if (isCellCenterCustomCommand(commandRequest)) {
+						handleCommandCenterCellsPanel(commandRequest.value, centerCellSPanel);
+					}
+					else {
+						throw new IllegalAccessError("Custom command not supported: " + commandRequest.customCommand);
+					}
+				}
+			}
+		} 
+		catch(final Exception e) {
+			LOG.error(e.getMessage(), e);
+		}
+	}
+	
+	private void handleCommandCenterCellsPanel(
+			final String command,
+			final CenterCellsPanel centerCellSPanel
+	) {
+		
 	}
 }
