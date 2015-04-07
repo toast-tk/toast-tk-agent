@@ -10,6 +10,7 @@ import static com.synaptix.toast.fixture.FixtureSentenceRef.SelectValueInList;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.TypeValueInInput;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.TypeVarIn;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.StoreComponentValueInVar;
+import static com.synaptix.toast.fixture.FixtureSentenceRef.GetComponentValue;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.RemplacerVarParValue;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.DiviserVarByValue;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.MultiplyVarByValue;
@@ -147,6 +148,22 @@ public abstract class RedPepperSwingFixture {
 		return new TestResult();
 	}
 
+	
+	@Check(GetComponentValue)
+	public TestResult getComponentValue(String pageName, String widgetName) throws Exception {
+		try {
+			SwingAutoElement pageField = getPageField(pageName, widgetName);
+			if (!(pageField instanceof HasStringValue)) {
+				throw new IllegalAccessException(pageName + "." + widgetName + " isn't supporting value fetching !");
+			}
+			HasStringValue stringValueProvider = (HasStringValue) pageField;
+			String value = stringValueProvider.getValue();
+			return new TestResult(value, ResultKind.SUCCESS);
+		} catch (Exception e) {
+			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
+		}
+	}
+	
 	@Check(StoreComponentValueInVar)
 	public TestResult selectComponentValue(String pageName, String widgetName, String variable) throws Exception {
 		try {

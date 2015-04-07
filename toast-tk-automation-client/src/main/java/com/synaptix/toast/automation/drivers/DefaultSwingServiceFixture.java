@@ -33,10 +33,13 @@ import java.io.IOException;
 
 import com.google.inject.Inject;
 import com.synaptix.toast.core.IRepositorySetup;
+import com.synaptix.toast.core.annotation.Fixture;
+import com.synaptix.toast.core.annotation.FixtureKind;
 import com.synaptix.toast.fixture.facade.ClientDriver;
 import com.synaptix.toast.fixture.swing.RedPepperSwingFixture;
 import com.synaptix.toast.fixture.swing.SwingAutoElement;
 
+@Fixture(value = FixtureKind.swing, name = "toastSwingClientConnector")
 public class DefaultSwingServiceFixture extends RedPepperSwingFixture{
 
 	@Inject

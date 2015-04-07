@@ -92,7 +92,9 @@ public class RestUtils {
 			WebResource webResource = httpClient.resource(webappURL+"/saveNewInspectedScenario");
 			Gson gson = new Gson();
 			InspectScenario scenario = new InspectScenario(scenarioName, scenarioSteps);
-			ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, gson.toJson(scenario));
+			String json = gson.toJson(scenario);
+			System.out.println(json);
+			ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, json);
 			int statusCode = response.getStatus();
 			LOG.info("Client response code: " + statusCode);
 			return statusCode >= 200 && statusCode < 400;
@@ -149,6 +151,10 @@ public class RestUtils {
 			LOG.error(e.getMessage(), e);
 			return null;
 		}
+	}
+	
+	public static void main(String[] args) {
+		RestUtils.postScenario("newtest", "localhost", "9000", "a step");
 	}
 	
 }

@@ -30,12 +30,14 @@ Creation date: 17 mars 2015
 package com.synaptix.toast.fixture.api;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
 
 import com.synaptix.toast.core.annotation.Check;
 import com.synaptix.toast.core.annotation.Fixture;
@@ -62,6 +64,19 @@ public class FixtureApi {
 				fixtureKind = "undefined";
 			}
 			out.add(new FixtureDescriptor(declaringClass.getSimpleName(), fixtureKind,annotation.value()));
+		}
+		return out;
+	}
+	
+	public static List<FixtureService> listAvailableServices(){
+		final List<FixtureService> out = new ArrayList<FixtureService>();
+		final Reflections ref = new Reflections(new TypeAnnotationsScanner());
+		final Set<Class<?>> services = ref.getTypesAnnotatedWith(Fixture.class);
+		for (Class<?> service : services) {
+			if(!Modifier.isAbstract(service.getModifiers())){
+				Fixture docAnnotation = service.getAnnotation(Fixture.class);
+				out.add(new FixtureService(service, docAnnotation.value(), docAnnotation.name()));
+			}
 		}
 		return out;
 	}
