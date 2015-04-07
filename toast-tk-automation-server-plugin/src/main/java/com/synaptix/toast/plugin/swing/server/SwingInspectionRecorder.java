@@ -106,7 +106,7 @@ public class SwingInspectionRecorder implements IEventRecorder {
 		}
 	}
 
-	private void registerListener(final FilteredAWTEventListener listener) {
+	private static void registerListener(final FilteredAWTEventListener listener) {
 		DEFAULT_TOOLKIT.addAWTEventListener(listener, listener.getEventMask());
 	}
 
@@ -128,7 +128,7 @@ public class SwingInspectionRecorder implements IEventRecorder {
 		}
 	}
 
-	private void unregisterListener(final AWTEventListener listener) {
+	private static void unregisterListener(final AWTEventListener listener) {
 		DEFAULT_TOOLKIT.removeAWTEventListener(listener);
 	}
 
@@ -136,7 +136,7 @@ public class SwingInspectionRecorder implements IEventRecorder {
 		listeners.clear();
 	}
 
-	private void consumeEventLine(EventCapturedObject capturedEvent) {
+	private void consumeEventLine(final EventCapturedObject capturedEvent) {
 		String locator = capturedEvent.componentLocator;
 		String name = capturedEvent.componentName;
 		String type = capturedEvent.componentType;
@@ -147,7 +147,7 @@ public class SwingInspectionRecorder implements IEventRecorder {
 	}
 
 	
-	public void liveExplore(List<EventCapturedObject> capturedEvents) {
+	public void liveExplore(final List<EventCapturedObject> capturedEvents) {
 		// TO BE MOUVED INSIDE THE INPUT CAPTURE SECTION
 		boolean inputCaptureOpened = false;
 		boolean menuCaptureOpened = false;
@@ -155,10 +155,8 @@ public class SwingInspectionRecorder implements IEventRecorder {
 		String inputTypeUnderCapture = null;
 		// //////////////////////////////////////////////
 
-		List<EventCapturedObject> immutableLineList = ImmutableList.copyOf(capturedEvents);
-
-		for (EventCapturedObject capturedEvent : immutableLineList) {
-			
+		final List<EventCapturedObject> immutableLineList = ImmutableList.copyOf(capturedEvents);
+		for(final EventCapturedObject capturedEvent : immutableLineList) {
 			consumeEventLine(capturedEvent);
 			
 			String locator = eventObject.componentLocator;
@@ -240,17 +238,20 @@ public class SwingInspectionRecorder implements IEventRecorder {
 				}
 
 				/* LOOKING FOR MOUSE CLICK STEPS */
-				if (capturedEvent.isMouseClickEvent()) {
-					if (isButtonType(eventObject.componentType)) {
+				if(capturedEvent.isMouseClickEvent()) {
+					if(isButtonType(eventObject.componentType)) {
 						_process(BUTTON_CLICK);
 					} 
-					else if (isCheckBoxType(eventObject.componentType)) {
+					else if(isCheckBoxType(eventObject.componentType)) {
 						_process(CHECKBOX_CLICK);
 					}
-					else if (isTableType(type)) {
+					else if(isTableType(type)) {
 						_process(TABLE_CLICK);
 					} 
-					else if (isPopupMenuType(type)) {
+					else if(isPopupMenuType(type)) {
+						_process(POPUP_MENU_CLICK);
+					}
+					else if(isJListType(type)) {
 						_process(POPUP_MENU_CLICK);
 					}
 				}
@@ -281,11 +282,12 @@ public class SwingInspectionRecorder implements IEventRecorder {
 	}
 
 	@Override
-	public synchronized void appendInfo(EventCapturedObject eventData) {
+	public synchronized void appendInfo(final EventCapturedObject eventData) {
 		try {
 			liveRecordedStepsBuffer.add(eventData);
 			liveExplore(liveRecordedStepsBuffer);
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
 	}

@@ -1,6 +1,5 @@
 package com.synaptix.toast.automation.net;
 
-
 public class TableCommandRequestQueryCriteria {
 
 	public final String lookupCol;

@@ -13,6 +13,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -44,6 +45,7 @@ public class InitRequestListener extends Listener {
 		autorizedComponents.add(JComboBox.class);
 		autorizedComponents.add(JCheckBox.class);
 		autorizedComponents.add(JTable.class);
+		autorizedComponents.add(JList.class);
 		autorizedComponents.add(JMenu.class);
 		autorizedComponents.add(JMenuItem.class);
 		autorizedComponents.add(JTextArea.class);

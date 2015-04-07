@@ -56,4 +56,5 @@ public class Property {
 	public static final String TABLE_CRITERIA_SEPARATOR = "|";
 	public static final String TABLE_KEY_VALUE_SEPARATOR ="=";
 	
+	public static final String JLIST_CRITERIA_SEPARATOR = "|";
 }

@@ -51,6 +51,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.table.TableModel;
 import javax.swing.text.JTextComponent;
 
 import org.apache.commons.lang3.StringUtils;
@@ -74,108 +75,176 @@ public abstract class AbstractEventRecorder implements FilteredAWTEventListener,
 
 	protected IEventRecorder eventRecorder;
 
-	AbstractEventRecorder(InputState state, IEventRecorder eventRecorder){
+	AbstractEventRecorder(
+			final InputState state, 
+			final IEventRecorder eventRecorder
+	) {
 		this.state = state;
 		this.eventRecorder = eventRecorder;
 	}
 
 	@Override
-	public void eventDispatched(AWTEvent event) {
+	public void eventDispatched(final AWTEvent event) {
 		processEvent(event);
 	}
 
 	protected String getEventComponentLocator(AWTEvent aEvent) {
-		String componentLocator = null;
-		Component component = ((ComponentEvent) aEvent).getComponent();
+		final Component component = getEventComponent(aEvent);
+		return eventRecorder.getComponentLocator(component);
+	}
+
+	private Component getEventComponent(final AWTEvent aEvent) {
+		Component component = aEvent instanceof ComponentEvent ? ((ComponentEvent) aEvent).getComponent() : null;
 		if (component == null) {
 			component = state.deepestComponentUnderMousePointer();
 		}
-		componentLocator = eventRecorder.getComponentLocator(component);
-		return componentLocator;
+		return component;
 	}
 
-	protected String getEventValue(AWTEvent aEvent) {
+	protected static String getEventValue(final AWTEvent aEvent) {
 		if (aEvent instanceof KeyEvent) {
-			KeyEvent event = (KeyEvent) aEvent;
-			if (event.getID() == KeyEvent.KEY_RELEASED) {
-				return Character.toString(event.getKeyChar());
-			}
-		} else if (aEvent instanceof MouseEvent) {
-			MouseEvent mEvent = (MouseEvent) aEvent;
-			if (mEvent.getComponent() instanceof JTextField) {
-				return ((JTextField) mEvent.getComponent()).getText();
-			} else if (mEvent.getComponent() instanceof JTable) {
-				JTable jSyTable = (JTable) mEvent.getComponent();
-				int selectedRowIndex = jSyTable.getSelectedRow();
-				List<String> criteria = new ArrayList<String>();
-				if(jSyTable.getSelectedColumns().length > 0){
-					for(int columnIndex: jSyTable.getSelectedColumns()){
-						String columnName = jSyTable.getModel().getColumnName(columnIndex);
-						Object cellValue = jSyTable.getModel().getValueAt(selectedRowIndex, columnIndex);
-						criteria.add(columnName + Property.TABLE_KEY_VALUE_SEPARATOR + cellValue);
-					}
-					return StringUtils.join(criteria, Property.TABLE_CRITERIA_SEPARATOR);
-				}
-				return "No Cell Selected";
-			}
-		} else if (aEvent instanceof FocusEvent) {
-			FocusEvent fEvent = (FocusEvent) aEvent;
-			if (fEvent.getComponent() instanceof JCheckBox)
-				return Boolean.toString(((JCheckBox) fEvent.getComponent()).isSelected());
-			if (fEvent.getComponent() instanceof JTextField)
-				return ((JTextField) fEvent.getComponent()).getText();
-			if (fEvent.getComponent() instanceof JTextComponent) {
-				return ((JTextComponent) fEvent.getComponent()).getText();
-			}
-			if (fEvent.getComponent() instanceof JComboBox) {
-				Object selectedItem = ((JComboBox) fEvent.getComponent()).getSelectedItem();
-				JList list = new JList(((JComboBox) fEvent.getComponent()).getModel());
-				Component listCellRendererComponent = ((JComboBox) fEvent.getComponent()).getRenderer().getListCellRendererComponent(list,
-						selectedItem, 0, false, false);
-				if (selectedItem != null) {
-					String val = "";
-					if (listCellRendererComponent instanceof JTextField) {
-						val = ((JTextField) listCellRendererComponent).getText();
-					} else if (listCellRendererComponent instanceof JLabel) {
-						val = ((JLabel) listCellRendererComponent).getText();
-					} else if (selectedItem instanceof String) {
-						val = selectedItem.toString();
-					} else {
-						val = "unknowObjectType";
-					}
-					return val;
-				}
-			}
+			return getKeyEvent(aEvent);
+		}
+		else if (aEvent instanceof MouseEvent) {
+			return getMouseEvent(aEvent);
+		}
+		else if (aEvent instanceof FocusEvent) {
+			return getFocusEvent(aEvent);
 		} 
 		return null;
 	}
 
-	protected String getEventComponentLabel(AWTEvent aEvent) {
-		Component component = ((ComponentEvent) aEvent).getComponent();
-		if (component == null) {
-			component = state.deepestComponentUnderMousePointer();
+	private static String getFocusEvent(final AWTEvent aEvent) {
+		final FocusEvent fEvent = (FocusEvent) aEvent;
+		if (fEvent.getComponent() instanceof JCheckBox) {
+			return getCheckBoxFocusEvent(fEvent);
 		}
+		if (fEvent.getComponent() instanceof JTextField) {
+			return getTextFieldFocusEvent(fEvent);
+		}
+		if (fEvent.getComponent() instanceof JTextComponent) {
+			return getTextComponentFocusEvent(fEvent);
+		}
+		if (fEvent.getComponent() instanceof JComboBox) {
+			return getComboBoxFocusEvent(fEvent);
+		}
+		return null;
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private static String getComboBoxFocusEvent(final FocusEvent fEvent) {
+		final Object selectedItem = ((JComboBox) fEvent.getComponent()).getSelectedItem();
+		final JList list = new JList(((JComboBox) fEvent.getComponent()).getModel());
+		final Component listCellRendererComponent = ((JComboBox) fEvent.getComponent()).getRenderer().getListCellRendererComponent(list, selectedItem, 0, false, false);
+		if (selectedItem != null) {
+			if (listCellRendererComponent instanceof JTextField) {
+				return ((JTextField) listCellRendererComponent).getText();
+			} 
+			else if (listCellRendererComponent instanceof JLabel) {
+				return ((JLabel) listCellRendererComponent).getText();
+			} 
+			else if (selectedItem instanceof String) {
+				return selectedItem.toString();
+			} 
+			else {
+				return "unknowObjectType";
+			}
+		}
+		return null;
+	}
+
+	private static String getTextComponentFocusEvent(final FocusEvent fEvent) {
+		return ((JTextComponent) fEvent.getComponent()).getText();
+	}
+
+	private static String getTextFieldFocusEvent(final FocusEvent fEvent) {
+		return ((JTextField) fEvent.getComponent()).getText();
+	}
+
+	private static String getCheckBoxFocusEvent(final FocusEvent fEvent) {
+		return Boolean.toString(((JCheckBox) fEvent.getComponent()).isSelected());
+	}
+
+	private static String getMouseEvent(final AWTEvent aEvent) {
+		final MouseEvent mEvent = (MouseEvent) aEvent;
+		final Component componentEvent = mEvent.getComponent();
+		if (componentEvent instanceof JTextField) {
+			return getTextFieldMouseEvent(mEvent);
+		} 
+		else if (componentEvent instanceof JTable) {
+			return getJTableMouseEvent(mEvent);
+		}
+		else if (componentEvent instanceof JList) {
+			return getJListMouseEvent(mEvent);
+		}
+		return null;
+	}
+
+	private static String getTextFieldMouseEvent(final MouseEvent mEvent) {
+		return ((JTextField) mEvent.getComponent()).getText();
+	}
+
+	private static String getJTableMouseEvent(final MouseEvent mEvent) {
+		final JTable jSyTable = (JTable) mEvent.getComponent();
+		final int selectedRowIndex = jSyTable.getSelectedRow();
+		final int[] selectedColumns = jSyTable.getSelectedColumns();
+		final int length = selectedColumns.length;
+		final List<String> criteria = new ArrayList<String>(length);
+		if(length > 0) {
+			for(int columnIndex: selectedColumns) {
+				final TableModel jTableModel = jSyTable.getModel();
+				final String columnName = jTableModel.getColumnName(columnIndex);
+				final Object cellValue = jTableModel.getValueAt(selectedRowIndex, columnIndex);
+				criteria.add(columnName + Property.TABLE_KEY_VALUE_SEPARATOR + cellValue);
+			}
+			return StringUtils.join(criteria, Property.TABLE_CRITERIA_SEPARATOR);
+		}
+		return "No Cell Selected";
+	}
+
+	private static String getJListMouseEvent(final MouseEvent event) {
+		final JList jList = (JList) event.getComponent();
+		final int[] indices = jList.getSelectedIndices();
+		final int lenght = indices != null ? indices.length : 0;
+		if(lenght > 0) {
+			final StringBuilder criteria = new StringBuilder(); 
+			for(int index : indices) {
+				criteria.append(index).append(Property.JLIST_CRITERIA_SEPARATOR);
+			}
+			return criteria.toString();
+		}
+		return "No Index Selected";
+	}
+	
+	private static String getKeyEvent(final AWTEvent aEvent) {
+		final KeyEvent event = (KeyEvent) aEvent;
+		if (event.getID() == KeyEvent.KEY_RELEASED) {
+			return Character.toString(event.getKeyChar());
+		}
+		return null;
+	}
+
+	protected String getEventComponentLabel(AWTEvent aEvent) {
+		Component component = getEventComponent(aEvent);
 		return getComponentName(component);
 	}
 
-	protected String getComponentName(Component component) {
+	protected static String getComponentName(Component component) {
 		if (component instanceof AbstractButton) {
-			AbstractButton b = (AbstractButton) component;
+			final AbstractButton b = (AbstractButton) component;
 			return b.getText();
-		} else {
-			return component!=null ? component.getName() : null;
-		}
+		} 
+		return component != null ? component.getName() : null;
 	}
 	
-	protected String getEventComponentContainer(AWTEvent event) {
-		Container ancestorOfClass = null;
-		String ancestorLocator = null;
+	protected static String getEventComponentContainer(final AWTEvent event) {
 		Component component = (Component) event.getSource();
-		ancestorOfClass = SwingUtilities.getAncestorOfClass(JDialog.class, component);
-		if(ancestorOfClass != null){
+		Container ancestorOfClass = SwingUtilities.getAncestorOfClass(JDialog.class, component);
+		String ancestorLocator = null;
+		if(ancestorOfClass != null) {
 			ancestorLocator = ((JDialog)ancestorOfClass).getTitle();
 		}
-		if(ancestorOfClass == null){
+		if(ancestorOfClass == null) {
 			ancestorOfClass = SwingUtilities.getAncestorOfClass(JLayeredPane.class, component);
 			if(ancestorOfClass != null){
 				ancestorLocator = ancestorOfClass.getClass().getSimpleName();
@@ -196,10 +265,13 @@ public abstract class AbstractEventRecorder implements FilteredAWTEventListener,
 		return ancestorLocator;
 	}
 	
-
-	 protected void appendEventRecord(EventCapturedObject captureEvent) {
-		LOG.info("New record event captured: " + ToStringBuilder.reflectionToString(captureEvent, ToStringStyle.SIMPLE_STYLE));
+	protected void appendEventRecord(final EventCapturedObject captureEvent) {
+		LOG.info("New record event captured: {}", ToStringBuilder.reflectionToString(captureEvent, ToStringStyle.SIMPLE_STYLE));
 		eventRecorder.appendInfo(captureEvent);
+	}
+	
+	protected static boolean isCapturedEventUninteresting(final EventCapturedObject captureEvent) {
+		return captureEvent.businessValue == null && captureEvent.componentLocator == null;
 	}
 
 }

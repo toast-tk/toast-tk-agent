@@ -4,10 +4,10 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
-* Redistributions of source code must retain the above copyright notice, this
+ * Redistributions of source code must retain the above copyright notice, this
   list of conditions and the following disclaimer.
 
-* Redistributions in binary form must reproduce the above copyright notice,
+ * Redistributions in binary form must reproduce the above copyright notice,
   this list of conditions and the following disclaimer in the documentation
   and/or other materials provided with the distribution.
 
@@ -25,11 +25,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Creation date: 6 févr. 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
-*/
+ */
 
 package com.synaptix.toast.plugin.swing.agent.record;
 
 import java.awt.AWTEvent;
+import java.awt.Component;
 import java.awt.event.FocusEvent;
 
 import javax.swing.JFrame;
@@ -43,58 +44,110 @@ import com.synaptix.toast.core.record.IEventRecorder;
 
 public class FocusEventRecorder extends AbstractEventRecorder {
 
-	public FocusEventRecorder(InputState state, IEventRecorder eventRecorder) {
+	public FocusEventRecorder(
+			final InputState state,
+			final IEventRecorder eventRecorder
+	) {
 		super(state, eventRecorder);
 	}
 
 	@Override
-	public void processEvent(AWTEvent event) {
-		FocusEvent wEvent = (FocusEvent) event;
-		String eventComponentName = null;
-		String container = getEventComponentContainer(event);
-		if (event.getID() == FocusEvent.FOCUS_GAINED) {
-			if (!(wEvent.getComponent() instanceof JTabbedPane) && !(wEvent.getComponent() instanceof JLayeredPane)
-					&& !(wEvent.getComponent().getClass().equals(JFrame.class))) {
-				return;
+	public void processEvent(final AWTEvent event) {
+		if (isFocusGained(event)) {
+			final EventCapturedObject captureEvent = buildFocusGainEventCapturedEventObject(event);
+			if(captureEvent != null) {
+				appendEventRecord(captureEvent);
 			}
+		} 
+		else if(isFocusLost(event)) {
+			final EventCapturedObject captureEvent = buildFocusLostEventCapturedObject(event);
+			appendEventRecord(captureEvent);
+		}
+	}
+
+	private EventCapturedObject buildFocusGainEventCapturedEventObject(final AWTEvent event) {
+		final FocusEvent wEvent = (FocusEvent) event;
+		final Component component = wEvent.getComponent();
+		if (interestingInstance(component)) {
+			final String container = getEventComponentContainer(event);
 			eventRecorder.scanUi(true);
+			String eventComponentName = getEventComponentName(component);
+			final EventCapturedObject captureEvent = buildFocusGainEvent(event, component, eventComponentName, container);
+			return captureEvent;
+		}
+		return null;
+	}
 
-			if (wEvent.getComponent() instanceof JLayeredPane) {
-				JLayeredPane p = (JLayeredPane) wEvent.getComponent();
-				eventComponentName = p.getToolTipText();
-			} else if (wEvent.getComponent() instanceof JTabbedPane) {
-				JTabbedPane panel = (JTabbedPane) wEvent.getComponent();
-				eventComponentName = panel.getTitleAt(panel.getSelectedIndex());
-			} else if ((wEvent.getComponent().getClass().equals(JFrame.class))) {
-				JFrame panel = (JFrame) wEvent.getComponent();
-				eventComponentName = panel.getTitle();
-			} else {
-				eventComponentName = wEvent.getComponent().getName();
-			}
+	private EventCapturedObject buildFocusLostEventCapturedObject(final AWTEvent event) {
+		final FocusEvent wEvent = (FocusEvent) event;
+		final String container = getEventComponentContainer(event);
+		final EventCapturedObject captureEvent = buildFocusLostEvent(event, wEvent, container);
+		return captureEvent;
+	}
 
-			EventCapturedObject captureEvent = new EventCapturedObject();
-			captureEvent.eventLabel = event.getClass().getSimpleName() + ">";
-			captureEvent.componentLocator = getEventComponentLocator(event);
-			captureEvent.componentType = wEvent.getComponent().getClass().getSimpleName();
-			captureEvent.businessValue = getEventValue(event);
-			captureEvent.componentName = eventComponentName;
-			captureEvent.container = container;
-			captureEvent.timeStamp = System.nanoTime();
-			
-			appendEventRecord(captureEvent);
-		} else if (event.getID() == FocusEvent.FOCUS_LOST) {
+	private static boolean isFocusLost(final AWTEvent event) {
+		return event.getID() == FocusEvent.FOCUS_LOST;
+	}
 
-			EventCapturedObject captureEvent = new EventCapturedObject();
-			captureEvent.eventLabel = event.getClass().getSimpleName() + "<";
-			captureEvent.componentLocator = getEventComponentLocator(event);
-			captureEvent.componentType = wEvent.getComponent().getClass().getSimpleName();
-			captureEvent.businessValue = getEventValue(event);
-			captureEvent.componentName = wEvent.getComponent().getName();
-			captureEvent.container = container;
-			captureEvent.timeStamp = System.nanoTime();
-			
-			appendEventRecord(captureEvent);
-		}		
+	private static boolean isFocusGained(final AWTEvent event) {
+		return event.getID() == FocusEvent.FOCUS_GAINED;
+	}
+
+	private EventCapturedObject buildFocusGainEvent(
+			final AWTEvent event,
+			final Component component, 
+			String eventComponentName,
+			final String container
+	) {
+		final EventCapturedObject captureEvent = new EventCapturedObject();
+		captureEvent.eventLabel = event.getClass().getSimpleName() + ">";
+		captureEvent.componentLocator = getEventComponentLocator(event);
+		captureEvent.componentType = component.getClass().getSimpleName();
+		captureEvent.businessValue = getEventValue(event);
+		captureEvent.componentName = eventComponentName;
+		captureEvent.container = container;
+		captureEvent.timeStamp = System.nanoTime();
+		return captureEvent;
+	}
+
+	private EventCapturedObject buildFocusLostEvent(
+			final AWTEvent event,
+			final FocusEvent wEvent, 
+			final String container
+	) {
+		final EventCapturedObject captureEvent = new EventCapturedObject();
+		captureEvent.eventLabel = event.getClass().getSimpleName() + "<";
+		captureEvent.componentLocator = getEventComponentLocator(event);
+		captureEvent.componentType = wEvent.getComponent().getClass().getSimpleName();
+		captureEvent.businessValue = getEventValue(event);
+		captureEvent.componentName = wEvent.getComponent().getName();
+		captureEvent.container = container;
+		captureEvent.timeStamp = System.nanoTime();
+		return captureEvent;
+	}
+
+	private static String getEventComponentName(final Component component) {
+		if (component instanceof JLayeredPane) {
+			final JLayeredPane p = (JLayeredPane) component;
+			return p.getToolTipText();
+		} 
+		else if (component instanceof JTabbedPane) {
+			final JTabbedPane panel = (JTabbedPane) component;
+			return panel.getTitleAt(panel.getSelectedIndex());
+		} 
+		else if (component.getClass().equals(JFrame.class)) {
+			final JFrame panel = (JFrame) component;
+			return panel.getTitle();
+		} 
+		return component.getName();
+	}
+
+	private static boolean interestingInstance(final Component component) {
+		return 	(component instanceof JTabbedPane)
+				|| 
+				(component instanceof JLayeredPane)
+				|| 
+				component.getClass().equals(JFrame.class);
 	}
 
 	@Override
