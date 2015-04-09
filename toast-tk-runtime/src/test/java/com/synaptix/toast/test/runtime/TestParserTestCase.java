@@ -29,10 +29,9 @@ Creation date: 26 mars 2015
 
 package com.synaptix.toast.test.runtime;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.AfterClass;
@@ -57,6 +56,7 @@ public class TestParserTestCase {
 		b.append("| @service Cliquer sur *ChooseApplicationRusDialog.FIN* |").append("\n");
 		b.append("| @toto Cliquer sur *ChooseApplicationRusDialog.FIN* |").append("\n");	
 		b.append("| Cliquer sur *ChooseApplicationRusDialog.KO* |").append("\n");	
+		b.append("| @swing:connector Saisir *valeur* dans *ChooseApplicationRusDialog.applicationBox* |").append("\n");	
 	}
 
 	@Test
@@ -113,7 +113,20 @@ public class TestParserTestCase {
 		List<TestLine> blockLines = testBlock.getBlockLines();
 		assertEquals("@swing Saisir *valeur* dans *ChooseApplicationRusDialog.applicationBox*", blockLines.get(0).getTest());
 		TestLineDescriptor descriptor = new TestLineDescriptor(testBlock, blockLines.get(0));
+		assertEquals("", descriptor.getTestLineFixtureName());
+	}
+	
+	
+	@Test
+	public void testSwingParserLineFixtureName() {
+		TestParser par = new TestParser();
+		TestPage testPage = par.parseString(b.toString());
+		TestBlock testBlock = (TestBlock)testPage.getBlocks().get(0);
+		List<TestLine> blockLines = testBlock.getBlockLines();
+		assertEquals("@swing:connector Saisir *valeur* dans *ChooseApplicationRusDialog.applicationBox*", blockLines.get(5).getTest());
+		TestLineDescriptor descriptor = new TestLineDescriptor(testBlock, blockLines.get(5));
 		assertEquals(FixtureKind.swing, descriptor.getTestLineFixtureKind());
+		assertEquals("connector", descriptor.getTestLineFixtureName());
 	}
 	
 	@AfterClass
