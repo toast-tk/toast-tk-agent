@@ -357,33 +357,30 @@ public class ToastTestRunner {
 	 * @throws ClassNotFoundException
 	 */
 	private TestResult parseServiceCall(TestLineDescriptor descriptor) throws IllegalAccessException, ClassNotFoundException {
-		TestResult result;
+		TestResult result = null;
 		String command = descriptor.getCommand();
 		
 		// Locating service class ////////////////////////////////////
 		Class<?> serviceClass = locateFixtureClass(descriptor.getTestLineFixtureKind(), descriptor.getTestLineFixtureName(), command); 
-		Object instance = getClassInstance(serviceClass);
-		InFixtureService methodAndMatcher = findMethodInClass(command, serviceClass);
-		if (methodAndMatcher != null) { 
-			result = doLocalFixtureCall(instance, methodAndMatcher);
-		}
-		//////////////////////////////////////////////////////////////
-		
-		// If no class is implementing the command then 
-		// process it as a custom command sent through Kryo 
-		else if(getClassInstance(ISwingInspectionClient.class) != null){
-			result = doRemoteFixtureCall(command, descriptor);
-		}
-		//////////////////////////////////////////////////////////////
-		
-		// No Solution found
-		else {
-			if(LOG.isDebugEnabled()){
-				LOG.debug("=> Method not found in " + serviceClass);
+		if(serviceClass != null){
+			Object connector = getClassInstance(serviceClass);
+			InFixtureService methodAndMatcher = findMethodInClass(command, serviceClass);
+			if (methodAndMatcher != null) { 
+				result = doLocalFixtureCall(connector, methodAndMatcher);
 			}
+			//////////////////////////////////////////////////////////////
+			
+			// If no class is implementing the command then 
+			// process it as a custom command sent through Kryo 
+			else if(getClassInstance(ISwingInspectionClient.class) != null){
+				result = doRemoteFixtureCall(command, descriptor);
+			}
+			//////////////////////////////////////////////////////////////
+			
+			
+		}else{
 			result = new TestResult(String.format("Method not found"), ResultKind.ERROR);
 		}
-		//////////////////////////////////////////////////////////////
 		
 		if(descriptor.isFailFatalCommand()){
 			if(!result.isSuccess()){
@@ -467,7 +464,7 @@ public class ToastTestRunner {
 		}
 		
 		if (serviceClasses.size() == 0) {
-			throw new IllegalAccessException("Service " + fixtureKind + " not found");
+			return null;
 		}else if(serviceClasses.size() > 1){
 			throw new IllegalAccessException("Multiple Services of same kind found impleùenting the same command: " + command);
 		}

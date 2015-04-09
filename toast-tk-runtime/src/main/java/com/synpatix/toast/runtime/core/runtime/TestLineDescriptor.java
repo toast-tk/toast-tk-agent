@@ -43,7 +43,7 @@ public class TestLineDescriptor {
 	
 
 	public String getTestLineFixtureName() {
-		return testLineFixtureName;
+		return testLineFixtureName == null ? "" : testLineFixtureName;
 	}
 
 	private void setTestLineAction(String testLineAction) {
