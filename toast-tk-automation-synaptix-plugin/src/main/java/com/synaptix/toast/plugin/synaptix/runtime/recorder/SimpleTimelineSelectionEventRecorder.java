@@ -29,9 +29,17 @@ public class SimpleTimelineSelectionEventRecorder extends AbstractEventRecorder 
 			final MouseEvent mouseEvent = (MouseEvent) awtEvent;
 			final boolean simpleLeftClick = MouseHelper.isSimpleLeftClick((MouseEvent) awtEvent);
 			LOG.info("simpleLeftClick {}", Boolean.valueOf(simpleLeftClick));
-			final boolean isTimelineEvent = isTimelineEvent(mouseEvent);
-			LOG.info("isTimelineEvent {}", Boolean.valueOf(isTimelineEvent));
-			return simpleLeftClick && isTimelineEvent;
+			if(simpleLeftClick) {
+				final boolean isTimelineEvent = isTimelineEvent(mouseEvent);
+				LOG.info("isTimelineEvent {}", Boolean.valueOf(isTimelineEvent));
+				if(isTimelineEvent) {
+					final boolean isMouseReleased = MouseHelper.isMouseReleased(mouseEvent);
+					LOG.info("isMouseReleased {}", Boolean.valueOf(isMouseReleased));
+					return isMouseReleased;
+				}
+				return false;
+			}
+			return false;
 		}
 		return false;
 	}

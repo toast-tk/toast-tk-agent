@@ -10,6 +10,9 @@ import com.synaptix.toast.plugin.synaptix.runtime.interpreter.BaseEventInterpret
 import com.synaptix.toast.plugin.synaptix.runtime.interpreter.EventInterpreter;
 import com.synaptix.toast.plugin.synaptix.runtime.listener.TimelineFilteredAWTEventListener;
 import com.synaptix.toast.plugin.synaptix.runtime.recorder.AbstractEventRecorder;
+import com.synaptix.toast.plugin.synaptix.runtime.recorder.CenterCellDoubleClickEventRecorder;
+import com.synaptix.toast.plugin.synaptix.runtime.recorder.CenterCellRightClickEventRecorder;
+import com.synaptix.toast.plugin.synaptix.runtime.recorder.CenterCellSelectionEventRecorder;
 import com.synaptix.toast.plugin.synaptix.runtime.recorder.SimpleTimelineDoubleClickEventRecorder;
 import com.synaptix.toast.plugin.synaptix.runtime.recorder.SimpleTimelineRightClickEventRecorder;
 import com.synaptix.toast.plugin.synaptix.runtime.recorder.SimpleTimelineSelectionEventRecorder;
@@ -30,12 +33,15 @@ public class PluginModule extends AbstractComponentFixtureModule {
 
 	private void addRecorder() {
 		this.eventRecorderBinder = Multibinder.newSetBinder(binder(), AbstractEventRecorder.class);
-		addTimelineSelectionBinding(SimpleTimelineDoubleClickEventRecorder.class);
-		addTimelineSelectionBinding(SimpleTimelineSelectionEventRecorder.class);
-		addTimelineSelectionBinding(SimpleTimelineRightClickEventRecorder.class);
+		addBinding(SimpleTimelineDoubleClickEventRecorder.class);
+		addBinding(SimpleTimelineSelectionEventRecorder.class);
+		addBinding(SimpleTimelineRightClickEventRecorder.class);
+		addBinding(CenterCellSelectionEventRecorder.class);
+		addBinding(CenterCellRightClickEventRecorder.class);
+		addBinding(CenterCellDoubleClickEventRecorder.class);
 	}
 	
-	private <T extends AbstractEventRecorder> void addTimelineSelectionBinding(final Class<T> recorderClass) {
+	private <T extends AbstractEventRecorder> void addBinding(final Class<T> recorderClass) {
 		bind(recorderClass).in(Singleton.class);
 		eventRecorderBinder.addBinding().to(recorderClass);
 	}

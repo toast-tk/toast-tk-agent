@@ -29,15 +29,17 @@ Creation date: 17 mars 2015
 
 package com.synaptix.toast.fixture.api;
 
-public class FixtureDescriptor {
-	public final String name;
-	public final String fixtureType;
-	public final String pattern;
+import com.synaptix.toast.core.annotation.FixtureKind;
+
+public class FixtureService {
 	
-	public FixtureDescriptor(String name, String type, String pattern){
-		this.name = name;
-		this.fixtureType = type;
-		this.pattern = pattern;
+	public final Class<?> clazz;
+	public final FixtureKind fixtureKind;
+	public final String fixtureName;
+	
+	public FixtureService(Class<?> clazz, FixtureKind fixtureKind, String fixtureName){
+		this.clazz = clazz;
+		this.fixtureKind = fixtureKind;
+		this.fixtureName = fixtureName;
 	}
-	
 }

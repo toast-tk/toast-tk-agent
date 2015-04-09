@@ -13,7 +13,7 @@ import com.synaptix.toast.plugin.synaptix.runtime.handler.SwingCustomWidgetHandl
 
 public class Boot implements ToastPluginBoot {
 
-	private static final Logger LOG = LoggerFactory.getLogger(SwingCustomWidgetHandler.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Boot.class);
 
 	@Override
 	public void boot() {

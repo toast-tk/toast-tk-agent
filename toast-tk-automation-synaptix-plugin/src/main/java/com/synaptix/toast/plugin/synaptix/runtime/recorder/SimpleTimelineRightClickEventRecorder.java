@@ -19,10 +19,17 @@ public class SimpleTimelineRightClickEventRecorder extends AbstractEventRecorder
 	public boolean isInterestedIn(final AWTEvent awtEvent) {
 		if(isMouseEvent(awtEvent)) {
 			final MouseEvent mouseEvent = (MouseEvent) awtEvent;
-			return
-					MouseHelper.isRightClick((MouseEvent) awtEvent)
-					&&
-					isTimelineEvent(mouseEvent);
+			final boolean rightClick = MouseHelper.isRightClick((MouseEvent) awtEvent);
+			if(rightClick) {
+				boolean isTimelineEvent = isTimelineEvent(mouseEvent);
+				if(isTimelineEvent) {
+					final boolean isMouseReleased = MouseHelper.isMouseReleased(mouseEvent);
+					LOG.info("isMouseReleased {}", Boolean.valueOf(isMouseReleased));
+					return isMouseReleased;
+				}
+				return false;
+			}
+			return false;
 		}
 		return false;
 	}

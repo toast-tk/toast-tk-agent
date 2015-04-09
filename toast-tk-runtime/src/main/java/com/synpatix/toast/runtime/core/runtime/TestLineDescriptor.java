@@ -51,4 +51,12 @@ public class TestLineDescriptor {
 		this.testLineFixtureKind = testLineFixtureKind;
 	}
 
+	public boolean isSynchronizedCommand(){
+		return testLineAction.endsWith(" !");
+	}
+	
+	public boolean isFailFatalCommand(){
+		return testLineAction.startsWith("* ");
+	}
+
 }

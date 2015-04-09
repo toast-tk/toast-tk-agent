@@ -140,7 +140,16 @@ public class BootAgent {
 		final String value = attributes != null ? attributes.getValue("id") : null;
 		LOG.info("finded {}", value);
 		if(value != null && value.contains(",")) {
-			return value.split(",");
+			final String[] split = value.split(",");
+			final int lenght = split.length;
+			final List<String> ret = new ArrayList<String>(lenght);
+			for(int index  = 0; index < lenght; ++index) {
+				String trim = split[index].trim();
+				if(trim != null && !trim.isEmpty()) {
+					ret.add(trim);
+				}
+			}
+			return ret.toArray(new String[ret.size()]);
 		}
 		return new String[]{value};
 	}

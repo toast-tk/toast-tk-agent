@@ -21,9 +21,17 @@ public class CenterCellRightClickEventRecorder extends AbstractCenterCellEventRe
 			final MouseEvent mouseEvent = (MouseEvent) awtEvent;
 			final boolean rightClick = MouseHelper.isRightClick(mouseEvent);
 			LOG.info("rightClick {}", Boolean.valueOf(rightClick));
-			final boolean isCenterCellsEvent = isCenterCellsPanelEvent(mouseEvent);
-			LOG.info("isCenterCellsEvent {}", Boolean.valueOf(isCenterCellsEvent));
-			return rightClick && isCenterCellsEvent;
+			if(rightClick) {
+				final boolean isCenterCellsEvent = isCenterCellsPanelEvent(mouseEvent);
+				LOG.info("isCenterCellsEvent {}", Boolean.valueOf(isCenterCellsEvent));
+				if(isCenterCellsEvent) {
+					final boolean isMouseReleased = MouseHelper.isMouseReleased(mouseEvent);
+					LOG.info("isMouseReleased {}", Boolean.valueOf(isMouseReleased));
+					return isMouseReleased;
+				}
+				return false;
+			}
+			return false;
 		}
 		return false;
 	}

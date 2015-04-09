@@ -12,7 +12,8 @@ public class FixtureSentenceRef {
 	public static final String Wait = "wait (\\w+)s";
 	public static final String SelectSubMenu = "Selection menu "+ SWING_COMPONENT_REGEX + " dans " + SWING_COMPONENT_REGEX;
 	public static final String SelectMenuPath = "Selectionner menu "+ VALUE_REGEX;
-	public static final String StoreComponentValueInVar = "Récupérer la valeur de " + VALUE_REGEX + " dans " + VAR_REGEX;
+	public static final String StoreComponentValueInVar = "Récupérer la valeur de " + SWING_COMPONENT_REGEX + " dans " + VAR_REGEX;
+	public static final String GetComponentValue = "Récupérer la valeur de " + SWING_COMPONENT_REGEX;
 	public static final String SelectContectualMenu = "Selectionner le menu contextuel "+ VALUE_REGEX;
 	public static final String SelectValueInList = "Selectionner " + VALUE_REGEX + " dans " + SWING_COMPONENT_REGEX;
 	public static final String SelectTableRow = "Dans " + SWING_COMPONENT_REGEX +  " selectionner la ligne ayant " + VALUE_REGEX;
