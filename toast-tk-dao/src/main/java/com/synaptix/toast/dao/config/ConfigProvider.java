@@ -28,10 +28,10 @@ public class ConfigProvider implements Provider<Config> {
 		config = new Config();
 		
 		String mongDbPortProperty = p.getProperty("config.mongo.port", "27017");
-		config.setMongoPort(Integer.valueOf(mongDbPortProperty));
+		config.setMongoPort(Integer.valueOf(27017));
 		
 		String mongDbHostProperty = p.getProperty("config.mongo.host", "localhost");
-		config.setMongoServer(mongDbHostProperty);
+		config.setMongoServer("localhost");
 	}
 
 	@Override

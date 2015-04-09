@@ -2,6 +2,7 @@ package com.synaptix.toast.plugin.synaptix.runtime.handler;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
@@ -12,25 +13,27 @@ import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JViewport;
 
 import org.apache.commons.lang3.StringUtils;
-import org.fest.swing.core.MouseButton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sncf.fret.swi.client.assemblage.view.swing.extension.panel.gestionprevisions.CenterCellsPanel;
 import com.synaptix.core.dock.IViewDockable;
 import com.synaptix.core.view.CoreView;
-import com.synaptix.swing.DayDate;
 import com.synaptix.swing.JSimpleDaysTimeline;
 import com.synaptix.swing.SimpleDaysTask;
 import com.synaptix.swing.SimpleDaysTimelineModel;
 import com.synaptix.swing.simpledaystimeline.JSimpleDaysTimelineCenter;
 import com.synaptix.toast.automation.net.CommandRequest;
 import com.synaptix.toast.automation.net.IIdRequest;
-import com.synaptix.toast.fixture.utils.FestRobotInstance;
 import com.synaptix.toast.plugin.synaptix.runtime.annotation.TimelineHandler;
+import com.synaptix.toast.plugin.synaptix.runtime.handler.action.CenterCellsPanelDoClickAction;
+import com.synaptix.toast.plugin.synaptix.runtime.handler.action.CenterCellsPanelDoDoubleClickAction;
+import com.synaptix.toast.plugin.synaptix.runtime.handler.action.CenterCellsPanelDoOpenMenuAction;
+import com.synaptix.toast.plugin.synaptix.runtime.handler.action.TimelineMoveToPointAndDoClickAction;
+import com.synaptix.toast.plugin.synaptix.runtime.handler.action.TimelineMoveToPointAndDoDoubleClickAction;
+import com.synaptix.toast.plugin.synaptix.runtime.handler.action.TimelineMoveToPointAndOpenMenuAction;
 import com.synaptix.toast.plugin.synaptix.runtime.handler.sentence.SentenceFinder;
 import com.synaptix.toast.plugin.synaptix.runtime.interpreter.EventTransformer;
 
@@ -90,7 +93,19 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 		if(sentenceFinder.isAValidSentence()) {
 			final SimpleDaysTask findedTask = findTaskToClick(simpleDaysTimeline, sentenceFinder.actionTimelineInfo);
 			if (findedTask != null) {
-				moveToPointAndDoClick(simpleDaysTimeline, sentenceFinder.actionTimelineInfo, findedTask);
+				final ActionTimelineInfo actionTimelineInfo = sentenceFinder.actionTimelineInfo;
+				if(EventTransformer.DOUBLE_CLIQUER_SUR.equals(actionTimelineInfo.action)) {
+					moveToPointAndDoDoubleClick(simpleDaysTimeline, sentenceFinder.actionTimelineInfo, findedTask);
+				}
+				else if(EventTransformer.CLIQUER_SUR.equals(actionTimelineInfo.action)) {
+					moveToPointAndDoClick(simpleDaysTimeline, sentenceFinder.actionTimelineInfo, findedTask);
+				}
+				else if(EventTransformer.OUVRIR_LE_MENU_SUR.equals(actionTimelineInfo.action)) {
+					moveToPointAndDoOpenMenu(simpleDaysTimeline, sentenceFinder.actionTimelineInfo, findedTask);
+				}
+				else {
+					throw new IllegalAccessError("unknown action for timeline");
+				}
 			}
 			else {
 				// send not found message to server
@@ -101,62 +116,28 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 		}
 	}
 
-	private void moveToPointAndDoClick(final JSimpleDaysTimeline simpleDaysTimeline, final ActionTimelineInfo actionTimelineInfo, final SimpleDaysTask taskToClick) {
-		runAction(new MoveToPointAndDoClickAction(simpleDaysTimeline, actionTimelineInfo, taskToClick));
-	}
-
-	static void doOpenMenu(final Point pointToClick) {
-		FestRobotInstance.getRobot().click(pointToClick, MouseButton.RIGHT_BUTTON, 1);
-	}
-	
-	static void doSimpleClick(final Point pointToClick) {
-		FestRobotInstance.getRobot().click(pointToClick, MouseButton.LEFT_BUTTON, 1);
+	private void moveToPointAndDoClick(
+			final JSimpleDaysTimeline simpleDaysTimeline, 
+			final ActionTimelineInfo actionTimelineInfo, 
+			final SimpleDaysTask taskToClick
+	) {
+		runAction(new TimelineMoveToPointAndDoClickAction(simpleDaysTimeline, actionTimelineInfo, taskToClick));
 	}
 	
-	static void doDoubleClick(final Point pointToClick) {
-		FestRobotInstance.getRobot().click(pointToClick, MouseButton.LEFT_BUTTON, 2);
+	private void moveToPointAndDoDoubleClick(
+			final JSimpleDaysTimeline simpleDaysTimeline, 
+			final ActionTimelineInfo actionTimelineInfo, 
+			final SimpleDaysTask taskToClick
+	) {
+		runAction(new TimelineMoveToPointAndDoDoubleClickAction(simpleDaysTimeline, actionTimelineInfo, taskToClick));
 	}
 
-	static Point findPointToClick(final JSimpleDaysTimeline simpleDaysTimeline, final ActionTimelineInfo actionTimelineInfo, final SimpleDaysTask findedTask) {
-		final Point computeMiddleTaskPoint = computeMiddleTaskPoint(simpleDaysTimeline, actionTimelineInfo, findedTask);
-		final Point locationOnScreen = getLocationOnScreen(simpleDaysTimeline);
-		return new Point(locationOnScreen.x + computeMiddleTaskPoint.x, locationOnScreen.y + computeMiddleTaskPoint.y);
-	}
-
-	private static Point getLocationOnScreen(final JSimpleDaysTimeline simpleDaysTimeline) {
-		final JViewport internalTimelineViewport = simpleDaysTimeline.getInternalTimelineViewport();
-		final Point locationOnScreen = internalTimelineViewport.getLocationOnScreen();
-		final Point viewPosition = internalTimelineViewport.getViewPosition();
-		return new Point(locationOnScreen.x - viewPosition.x, locationOnScreen.y - viewPosition.y);
-	}
-
-	private static Point computeMiddleTaskPoint(final JSimpleDaysTimeline simpleDaysTimeline, final ActionTimelineInfo actionTimelineInfo,
-			final SimpleDaysTask findedTask) {
-		final int middleAbscissTask = computeMiddleAbscissTask(simpleDaysTimeline, findedTask);
-		final int middleOrdinateTask = computeMiddleOrdinateTask(simpleDaysTimeline, actionTimelineInfo);
-		return new Point(middleAbscissTask, middleOrdinateTask);
-	}
-
-	private static int computeMiddleAbscissTask(final JSimpleDaysTimeline simpleDaysTimeline, final SimpleDaysTask findedTask) {
-		final int pointAtDayMin = simpleDaysTimeline.pointAtDayDate(normalizedDayDateMin(findedTask.getDayDateMin()));
-		final int pointAtDayMax = simpleDaysTimeline.pointAtDayDate(normalizedDayDateMax(findedTask.getDayDateMax(), simpleDaysTimeline));
-		return (pointAtDayMin + pointAtDayMax) / 2;
-	}
-
-	private static DayDate normalizedDayDateMin(final DayDate dayDateMin) {
-		final DayDate groundZero = new DayDate(0);
-		return dayDateMin.before(groundZero) ? groundZero : dayDateMin;
-	}
-
-	private static DayDate normalizedDayDateMax(final DayDate dayDateMax, final JSimpleDaysTimeline simpleDaysTimeline) {
-		final int nbDays = simpleDaysTimeline.getNbDays();
-		final DayDate groundInfinite = new DayDate(nbDays + 1);
-		return dayDateMax.after(groundInfinite) ? groundInfinite : dayDateMax;
-	}
-
-	private static int computeMiddleOrdinateTask(final JSimpleDaysTimeline simpleDaysTimeline, final ActionTimelineInfo actionTimelineInfo) {
-		final Rectangle resourceRect = simpleDaysTimeline.getResourceRect(actionTimelineInfo.findedRessource);
-		return resourceRect.y + resourceRect.height / 2;
+	private void moveToPointAndDoOpenMenu(
+			final JSimpleDaysTimeline simpleDaysTimeline, final 
+			ActionTimelineInfo actionTimelineInfo, 
+			final SimpleDaysTask taskToClick
+	) {
+		runAction(new TimelineMoveToPointAndOpenMenuAction(simpleDaysTimeline, actionTimelineInfo, taskToClick));
 	}
 
 	private static int findRessource(
@@ -201,23 +182,17 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 		final Iterator<? extends SimpleDaysTask> tasksIterator = tasks.iterator();
 		while(tasksIterator.hasNext()) {
 			final SimpleDaysTask next = tasksIterator.next();
-			if(!taskType.equals(next.getClass().getName())) {
+			if(isUninterestingTaskClass(taskType, next)) {
 				tasksIterator.remove();
 			}
 		}
 	}
 
-	static void movetoTo(final JSimpleDaysTimeline timeline, final ActionTimelineInfo actionTimelineInfo, final SimpleDaysTask taskToGoTo) {
-		try {
-			final int p = timeline.pointAtDayDate(actionTimelineInfo.dayDateMin);
-			timeline.setHorizontalScrollBarValue(p);
-			final int re = timeline.convertResourceIndexToView(actionTimelineInfo.findedRessource);
-			timeline.getSelectionModel().addSelectionIndexResource(re, taskToGoTo.getDayDateMin(), taskToGoTo);
-			timeline.scrollRectToVisible(timeline.getSimpleDayTaskRect(re, taskToGoTo));
-		} 
-		catch (final Exception e) {
-			LOG.error(e.getMessage(), e);
-		}
+	private static boolean isUninterestingTaskClass(
+			final String taskType,
+			final SimpleDaysTask next
+	) {
+		return !taskType.equals(next.getClass().getName());
 	}
 
 	@Override
@@ -264,49 +239,6 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 			final CommandRequest commandRequest
 	) {
 		return "timeline".equals(commandRequest.itemType);
-	}
-
-	public static ActionTimelineInfo constructActionTimelineInfo(final String value) {
-		final String action = EventTransformer.CLIQUER_SUR;
-		if(value.startsWith(action)) {
-			int currentLenght = action.length();
-			final String actionFinded = value.substring(0, currentLenght);
-			final int indexDu = value.indexOf(" du");
-			if(indexDu != -1) {
-				final String taskType = value.substring(currentLenght + 1, currentLenght = indexDu);
-				final int indexSlash = value.indexOf('/');
-				if(indexSlash != -1) {
-					final String dayDateOne = value.substring(" du".length() + currentLenght + 1, currentLenght = indexSlash).trim();
-					final DayDate recognizeDayDateMin = recognizeDayDate(dayDateOne);
-
-					final int indexOrdre = value.indexOf("ordre");
-					if(indexOrdre != -1) {
-						final String dayDateTwo = value.substring(currentLenght + 1, currentLenght = indexOrdre);
-						final DayDate recognizeDayDateMax = recognizeDayDate(dayDateTwo);
-
-						final int indexDe = value.indexOf("de ", indexOrdre);
-						if(indexDe != -1) {
-							final int indexDudu = value.indexOf("du ", indexDe);
-							if(indexDudu != 1) {
-								final String name = value.substring(indexDe + "de ".length(), indexDudu - 1);
-								final String ressourceName = value.substring(indexDudu + "du ".length());
-								return new ActionTimelineInfo(actionFinded, taskType, recognizeDayDateMin, recognizeDayDateMax, name, ressourceName, "");
-							}
-						}
-					}
-				}
-			}
-		}
-		return null;
-	}
-
-	private static DayDate recognizeDayDate(final String dayDate) {
-		final String[] split = dayDate.replace("(", "").replace(")", "").split(",");
-		final DayDate realDayDate = new DayDate();
-		realDayDate.setDay(Integer.parseInt(split[0].trim()));
-		realDayDate.setHour(Integer.parseInt(split[1].trim()));
-		realDayDate.setMinute(Integer.parseInt(split[2].trim()));
-		return realDayDate;
 	}
 
 	private static JSimpleDaysTimeline findTimeline(final String value) {
@@ -434,34 +366,6 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 		return whiteList;
 	}
 	
-	private final class MoveToPointAndDoClickAction implements Runnable {
-		
-		private final JSimpleDaysTimeline simpleDaysTimeline;
-
-		private final ActionTimelineInfo actionTimelineInfo;
-
-		private final SimpleDaysTask taskToClick;
-
-		private MoveToPointAndDoClickAction(
-				final JSimpleDaysTimeline simpleDaysTimeline,
-				final ActionTimelineInfo actionTimelineInfo,
-				final SimpleDaysTask taskToClick
-		) {
-			this.simpleDaysTimeline = simpleDaysTimeline;
-			this.actionTimelineInfo = actionTimelineInfo;
-			this.taskToClick = taskToClick;
-		}
-
-		@Override
-		public void run() {
-			movetoTo(simpleDaysTimeline, actionTimelineInfo, taskToClick);
-			final Point pointToClick = findPointToClick(simpleDaysTimeline, actionTimelineInfo, taskToClick);
-			if(EventTransformer.CLIQUER_SUR.equals(actionTimelineInfo.action)) {
-				doDoubleClick(pointToClick);
-			}
-		}
-	}
-	
 	private void handleCenterCellPanel(final CenterCellsPanel centerCellSPanel, final IIdRequest request) {
 		try {
 			if(request instanceof CommandRequest) {
@@ -486,28 +390,86 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 			final CenterCellsPanel centerCellSPanel
 	) {
 		if(command.startsWith(EventTransformer.CLIQUER_SUR)) {
-			final Point cell = extractCoordinates(command);
-			LOG.info("cliquer sur {}/{}", Integer.valueOf(cell.x), Integer.valueOf(cell.y));
+			final Point convertedPoint = centerCellsPanelMoveTo(command, centerCellSPanel);
+			centerCellsPanelDoClick(convertedPoint);
+		}
+		else if(command.startsWith(EventTransformer.DOUBLE_CLIQUER_SUR)) {
+			final Point convertedPoint = centerCellsPanelMoveTo(command, centerCellSPanel);
+			centerCellsPanelDoDoubleClick(convertedPoint);
+		}
+		else if(command.startsWith(EventTransformer.OUVRIR_LE_MENU_SUR)) {
+			final Point convertedPoint = centerCellsPanelMoveTo(command, centerCellSPanel);
+			centerCellsPanelDoOpenMenu(convertedPoint);
 		}
 		else if(command.startsWith(EventTransformer.GET)) {
 			final Point cell = extractCoordinates(command);
-			LOG.info("cliquer sur {}/{}", Integer.valueOf(cell.x), Integer.valueOf(cell.y));
+			final String[] extractCenterCellsPanelInfo = extractCenterCellsPanelInfo(command);
+			LOG.info("get ({}:{}) {}|{}", extractCenterCellsPanelInfo[0], extractCenterCellsPanelInfo[1], Integer.valueOf(cell.x), Integer.valueOf(cell.y));
 			final int actifValue = centerCellSPanel.getActifValue(cell.x, cell.y);
+			LOG.info("finded actifValue {}", Integer.valueOf(actifValue));
+			//TODO
+		}
+		else if(command.startsWith(EventTransformer.SET)) {
+			final String[] extractCenterCellsPanelInfo = extractCenterCellsPanelInfo(command);
+			final Point cell = extractCoordinates(command);
+			centerCellSPanel.setActifValue(cell.x, extractCenterCellsPanelInfo[1], 1);
+		}
+		else {
+			throw new IllegalAccessError("unknown action for CenterCellsPanel");
 		}
 	}
 
-	private Point extractCoordinates(final String command) {
+	private static Point centerCellsPanelMoveTo(
+			final String command,
+			final CenterCellsPanel centerCellSPanel
+	) {
+		final Point cell = extractCoordinates(command);
+		final String[] extractCenterCellsPanelInfo = extractCenterCellsPanelInfo(command);
+		LOG.info("cliquer sur ({}:{}) {}|{}", extractCenterCellsPanelInfo[0], extractCenterCellsPanelInfo[1], Integer.valueOf(cell.x), Integer.valueOf(cell.y));
+		centerCellSPanel.changeSelection(extractCenterCellsPanelInfo[1], cell.x, false, false);
+		final int pointAtJour = CenterCellsPanel.pointAtJour(cell.x);
+		final int pointAtRow = CenterCellsPanel.pointAtRow(cell.y);
+		final Point convertedPoint = new Point(pointAtJour, pointAtRow);
+		final Dimension cellDimension = new Dimension(CenterCellsPanel.getCellWidth(), CenterCellsPanel.getCellHeight());
+		final Rectangle rectangle = new Rectangle(convertedPoint, cellDimension);
+		centerCellSPanel.scrollRectToVisible(rectangle);
+		return convertedPoint;
+	}
+
+	private static Point extractCoordinates(final String command) {
+		final int indexEndParenthesis = command.indexOf(')');
+		if(indexEndParenthesis != -1) {
+			final String lastPart = command.substring(indexEndParenthesis);
+			final String[] split = lastPart.split("|");
+			final int x = Integer.parseInt(split[0]);
+			final int y = Integer.parseInt(split[1]);
+			return new Point(x, y);
+		}
+		return null;
+	}
+	
+	private static String[] extractCenterCellsPanelInfo(final String command) {
 		final int indexBeginParenthesis = command.indexOf('(');
 		if(indexBeginParenthesis != -1) {
 			final int indexEndParenthesis = command.indexOf(')');
 			if(indexEndParenthesis != -1) {
 				final String infoCordonnees = command.substring(indexBeginParenthesis, indexEndParenthesis + 1);
 				final String[] split = infoCordonnees.split(":");
-				final int x = Integer.parseInt(split[0]);
-				final int y = Integer.parseInt(split[1]);
-				return new Point(x, y);
+				return split;
 			}
 		}
 		return null;
+	}
+	
+	private void centerCellsPanelDoDoubleClick(final Point pointToClick) {
+		runAction(new CenterCellsPanelDoDoubleClickAction(pointToClick));
+	}
+	
+	private void centerCellsPanelDoClick(final Point pointToClick) {
+		runAction(new CenterCellsPanelDoClickAction(pointToClick));
+	}
+	
+	private void centerCellsPanelDoOpenMenu(final Point pointToClick) {
+		runAction(new CenterCellsPanelDoOpenMenuAction(pointToClick));
 	}
 }

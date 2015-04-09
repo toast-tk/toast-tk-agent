@@ -39,11 +39,11 @@ import com.synaptix.toast.plugin.synaptix.runtime.model.ServiceCallIdentifier;
 import com.synaptix.toast.plugin.synaptix.runtime.service.ConnectionBuilder;
 
 @ServiceCallHandler
-public class ServiceCallCustomWidgetHandler extends AbstractCustomFixtureHandler {
+public class ServiceCallCustomHandler extends AbstractCustomFixtureHandler {
 
 	private static final int NB_NO_ARGS_WORD = 1;
 
-	static final Logger LOG = LoggerFactory.getLogger(ServiceCallCustomWidgetHandler.class);
+	static final Logger LOG = LoggerFactory.getLogger(ServiceCallCustomHandler.class);
 
 	private ConfigBlockDaoService configService;
 
@@ -60,7 +60,7 @@ public class ServiceCallCustomWidgetHandler extends AbstractCustomFixtureHandler
 	private List<String> whiteList;
 	
 	@Inject
-	public ServiceCallCustomWidgetHandler(final ConfigBlockDaoService.Factory configServiceFactory) {
+	public ServiceCallCustomHandler(final ConfigBlockDaoService.Factory configServiceFactory) {
 		try {
 			this.configService = configServiceFactory.create(null);
 			this.connection = ConnectionBuilder.connect();
@@ -144,9 +144,12 @@ public class ServiceCallCustomWidgetHandler extends AbstractCustomFixtureHandler
 		}
 	}
 
-	private void inspectServiceMethods(final Set<Method> objectMethods,
-			final String factoryName, final Map<String, Object> services,
-			final String serviceName) {
+	private void inspectServiceMethods(
+			final Set<Method> objectMethods,
+			final String factoryName, 
+			final Map<String, Object> services,
+			final String serviceName
+	) {
 		final Object service = services.get(serviceName);
 		final Method[] serviceMethods = service.getClass().getMethods();
 		fillMethodDescriptors(serviceMethods, objectMethods, factoryName, serviceName);
@@ -351,7 +354,7 @@ public class ServiceCallCustomWidgetHandler extends AbstractCustomFixtureHandler
 
 	@Override
 	public String getName() {
-		return "STX-PLUGIN-ServiceCallCustomWidgetHandler";
+		return "STX-PLUGIN-ServiceCallCustomHandler";
 	}
 
 	@Override

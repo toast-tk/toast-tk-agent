@@ -27,8 +27,9 @@ public abstract class AbstractCenterCellEventRecorder extends AbstractEventRecor
 			final Point findCurrentCell,
 			final String action
 	) {
+		final String selectedNomFlux = centerCellsPanel.getSelectedNomFlux();
 		final StringBuilder sb = new StringBuilder(action);
-		sb.append('(').append(centerCellsPanel.getName()).append(')').append(" ").append(findCurrentCell.x).append('|').append(findCurrentCell.y);
+		sb.append('(').append(centerCellsPanel.getName()).append(':').append(selectedNomFlux).append(')').append(" ").append(findCurrentCell.x).append('|').append(findCurrentCell.y);
 		return sb.toString();
 	}
 }

@@ -12,10 +12,11 @@ import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 
 public class TestLineDescriptor {
 
-	private String regex = "@(" + FixtureKind.swing.name()+ "|" + FixtureKind.web.name() + "|" +  FixtureKind.service.name() + ")([\\w\\W]+)"; 
+	private String regex = "@(" + FixtureKind.swing.name()+ "|" + FixtureKind.web.name() + "|" +  FixtureKind.service.name() + "):?([\\w]*)([\\w\\W]+)"; 
 	
 	public final TestLine testLine;
 	private String testLineAction;
+	private String testLineFixtureName;
 	private FixtureKind testLineFixtureKind;
 	
 	public TestLineDescriptor(TestBlock testBlock, TestLine testLine){
@@ -28,11 +29,21 @@ public class TestLineDescriptor {
 		Matcher matcher = pattern.matcher(testLine.getTest());
 		if(matcher.find()){
 			setTestLineFixtureKind(FixtureKind.valueOf(matcher.group(1)));
-			setTestLineAction(matcher.group(2));
+			setTestLineFixtureName(matcher.group(2));
+			setTestLineAction(matcher.group(3));
 		}else{
 			setTestLineFixtureKind(FixtureKind.valueOf(testBlock.getFixtureName())); // exception otherwise !!
 			setTestLineAction(testLine.getTest());
 		}
+	}
+
+	private void setTestLineFixtureName(String testLineFixtureName) {
+		this.testLineFixtureName = testLineFixtureName;
+	}
+	
+
+	public String getTestLineFixtureName() {
+		return testLineFixtureName == null ? "" : testLineFixtureName;
 	}
 
 	private void setTestLineAction(String testLineAction) {
@@ -57,6 +68,15 @@ public class TestLineDescriptor {
 	
 	public boolean isFailFatalCommand(){
 		return testLineAction.startsWith("* ");
+	}
+	
+	public String getCommand(){
+		String command = testLine.getTest();
+		if(isFailFatalCommand()){
+			command = command.substring(2);
+		}
+		command = command.trim().replace("*", "");
+		return command;
 	}
 
 }

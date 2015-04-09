@@ -50,9 +50,7 @@ import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 import com.synaptix.toast.dao.report.HtmlReportGenerator;
 import com.synaptix.toast.fixture.api.FixtureApi;
-import com.synaptix.toast.fixture.api.FixtureDescriptor;
 import com.synaptix.toast.fixture.api.FixtureService;
-import com.synaptix.toast.fixture.service.RedPepperBackendFixture;
 import com.synaptix.toast.fixture.web.DefaultWebPage;
 
 /**
@@ -316,7 +314,7 @@ public class ToastTestRunner {
 			
 			//override with test line call
 			TestLineDescriptor descriptor = new TestLineDescriptor(block, line);
-			TestResult result = parseServiceCall(line.getTest(), descriptor);
+			TestResult result = parseServiceCall(descriptor);
 			
 			line.stopExecution();
 			if ("KO".equals(line.getExpected()) && ResultKind.FAILURE.equals(result.getResultKind())) {
@@ -353,79 +351,36 @@ public class ToastTestRunner {
 	 * 
 	 * DOCUMENT THIS METHOD
 	 * 
-	 * @param command
-	 * @param fixtureKind
+	 * @param descriptor 
 	 * @return
 	 * @throws IllegalAccessException
 	 * @throws ClassNotFoundException
 	 */
-	private TestResult parseServiceCall(String command, TestLineDescriptor descriptor) throws IllegalAccessException, ClassNotFoundException {
-		TestResult result;
-		
-		//FIXME: move in TestDescriptor////////////////////////////////
-		if(descriptor.isFailFatalCommand()){
-			command = command.substring(2);
-		}
-		command = command.trim().replace("*", "");
-		//////////////////////////////////////////////////////////////
+	private TestResult parseServiceCall(TestLineDescriptor descriptor) throws IllegalAccessException, ClassNotFoundException {
+		TestResult result = null;
+		String command = descriptor.getCommand();
 		
 		// Locating service class ////////////////////////////////////
-		Class<?> serviceClass = locateFixtureClass(descriptor.getTestLineFixtureKind(), command); 
-		Object instance = getClassInstance(serviceClass);
-		InFixtureService methodAndMatcher = findMethodInClass(command, serviceClass);
-		methodAndMatcher = methodAndMatcher == null ? findMethodInClass(command, serviceClass.getSuperclass()) : methodAndMatcher;
-		if (methodAndMatcher != null) { 
-			Matcher matcher = methodAndMatcher.matcher;
-			matcher.matches();
-			int groupCount = matcher.groupCount();
-			Object[] args = new Object[groupCount];
-			for (int i = 0; i < groupCount; i++) {
-				args[i] = matcher.group(i + 1);
+		Class<?> serviceClass = locateFixtureClass(descriptor.getTestLineFixtureKind(), descriptor.getTestLineFixtureName(), command); 
+		if(serviceClass != null){
+			Object connector = getClassInstance(serviceClass);
+			InFixtureService methodAndMatcher = findMethodInClass(command, serviceClass);
+			if (methodAndMatcher != null) { 
+				result = doLocalFixtureCall(connector, methodAndMatcher);
 			}
-
-			try {
-				result = (TestResult) methodAndMatcher.method.invoke(instance, args);
-			} catch (Exception e) {
-				LOG.error("Error found !", e);
-				result = new TestResult(ExceptionUtils.getRootCauseMessage(e), ResultKind.FAILURE);
-			}
-		}
-		//////////////////////////////////////////////////////////////
-		
-		// If no class is implementing the command then 
-		// process it as a custom command sent through Kryo 
-		else if(getClassInstance(ISwingInspectionClient.class) != null){
+			//////////////////////////////////////////////////////////////
 			
-			ISwingInspectionClient swingClient = (ISwingInspectionClient) getClassInstance(ISwingInspectionClient.class);
-			final CommandRequest commandRequest;
+			// If no class is implementing the command then 
+			// process it as a custom command sent through Kryo 
+			else if(getClassInstance(ISwingInspectionClient.class) != null){
+				result = doRemoteFixtureCall(command, descriptor);
+			}
+			//////////////////////////////////////////////////////////////
 			
-			//FIXME: voir si on garde ça la
-			if(command.startsWith("service")) {
-				commandRequest = new CommandRequest.CommandRequestBuilder(null).ofType("service").asCustomCommand(command).build();
-			}
-			else if(command.startsWith("timeline")) {
-				commandRequest = new CommandRequest.CommandRequestBuilder(null).ofType("timeline").asCustomCommand(command).build();
-			}
-			else{
-				commandRequest = new CommandRequest.CommandRequestBuilder(null).asCustomCommand(command).build();
-			}
-			swingClient.processCustomCommand(commandRequest);
 			
-			if(LOG.isDebugEnabled()){
-				LOG.debug("Client Plugin Mode: Delegating command interpretation to server plugins !");
-			}
-			result = new TestResult("Client Plugin Mode: Delegating command interpretation to server plugins !", ResultKind.INFO);
-		}
-		//////////////////////////////////////////////////////////////
-		
-		// No Solution found
-		else {
-			if(LOG.isDebugEnabled()){
-				LOG.debug("=> Method not found in " + serviceClass);
-			}
+		}else{
 			result = new TestResult(String.format("Method not found"), ResultKind.ERROR);
 		}
-		//////////////////////////////////////////////////////////////
 		
 		if(descriptor.isFailFatalCommand()){
 			if(!result.isSuccess()){
@@ -437,6 +392,50 @@ public class ToastTestRunner {
 		
 	}
 
+	private TestResult doRemoteFixtureCall(String command, TestLineDescriptor descriptor) {
+		TestResult result;
+		ISwingInspectionClient swingClient = (ISwingInspectionClient) getClassInstance(ISwingInspectionClient.class);
+		swingClient.processCustomCommand(buildCommandRequest(command, descriptor));
+		
+		if(LOG.isDebugEnabled()){
+			LOG.debug("Client Plugin Mode: Delegating command interpretation to server plugins !");
+		}
+		result = new TestResult("Client Plugin Mode: Delegating command interpretation to server plugins !", ResultKind.INFO);
+		return result;
+	}
+
+	private TestResult doLocalFixtureCall(Object instance, InFixtureService methodAndMatcher) {
+		TestResult result;
+		Matcher matcher = methodAndMatcher.matcher;
+		matcher.matches();
+		int groupCount = matcher.groupCount();
+		Object[] args = new Object[groupCount];
+		for (int i = 0; i < groupCount; i++) {
+			args[i] = matcher.group(i + 1);
+		}
+
+		try {
+			result = (TestResult) methodAndMatcher.method.invoke(instance, args);
+		} catch (Exception e) {
+			LOG.error("Error found !", e);
+			result = new TestResult(ExceptionUtils.getRootCauseMessage(e), ResultKind.FAILURE);
+		}
+		return result;
+	}
+
+	private CommandRequest buildCommandRequest(String command, TestLineDescriptor descriptor) {
+		final CommandRequest commandRequest;
+		switch (descriptor.getTestLineFixtureKind()) {
+		case service:
+			commandRequest = new CommandRequest.CommandRequestBuilder(null).ofType(FixtureKind.service.name()).asCustomCommand(command).build();
+			break;
+		default:
+			commandRequest = new CommandRequest.CommandRequestBuilder(null).asCustomCommand(command).build();
+			break;
+		}
+		return commandRequest;
+	}
+
 	/**
 	 * DOCUMENT
 	 * 
@@ -445,7 +444,7 @@ public class ToastTestRunner {
 	 * @throws ClassNotFoundException
 	 * @throws IllegalAccessException 
 	 */
-	private Class<?> locateFixtureClass(FixtureKind fixtureKind, String command) throws ClassNotFoundException, IllegalAccessException {
+	private Class<?> locateFixtureClass(FixtureKind fixtureKind, String fixtureName, String command) throws ClassNotFoundException, IllegalAccessException {
 		List<Class<?>> serviceClasses = new ArrayList<Class<?>>();
 		if(settingsFile != null){
 			Class<?> serviceClass = getServiceClassFromSettings(settingsFile.getFile(), fixtureKind.name());
@@ -456,11 +455,8 @@ public class ToastTestRunner {
 		}
 		
 		for (FixtureService fixtureService : fixtureApiServices) {
-			if(fixtureService.fixtureKind.equals(fixtureKind)){
+			if(fixtureService.fixtureKind.equals(fixtureKind) && fixtureService.fixtureName.equals(fixtureName)){
 				InFixtureService methodAndMatcher = findMethodInClass(command, fixtureService.clazz);
-				if(methodAndMatcher == null){
-					methodAndMatcher = findMethodInClass(command, fixtureService.clazz.getSuperclass());
-				}
 				if(methodAndMatcher != null){
 					serviceClasses.add(fixtureService.clazz);
 				}
@@ -468,7 +464,7 @@ public class ToastTestRunner {
 		}
 		
 		if (serviceClasses.size() == 0) {
-			throw new IllegalAccessException("Service " + fixtureKind + " not found");
+			return null;
 		}else if(serviceClasses.size() > 1){
 			throw new IllegalAccessException("Multiple Services of same kind found impleùenting the same command: " + command);
 		}
@@ -516,18 +512,18 @@ public class ToastTestRunner {
 	 * @param serviceClass
 	 * @return
 	 */
-	private InFixtureService findMethodInClass(final String command, final Class<?> serviceClass) {
+	public InFixtureService findMethodInClass(final String command, final Class<?> serviceClass) {
 		InFixtureService serviceFixtureConnector = null;
 		Method[] methods = serviceClass.getMethods();
 		for (Method method : methods) {
 			Annotation[] annotations = method.getAnnotations();
 			for (Annotation annotation : annotations) {
 				String methodRegex = null;
-				if (annotation.annotationType().equals(com.synaptix.toast.core.annotation.Check.class)) {
-					methodRegex = ((com.synaptix.toast.core.annotation.Check) annotation).value();
+				if (annotation.annotationType().equals(Check.class)) {
+					methodRegex = ((Check) annotation).value();
 				}
-				if (annotation.annotationType().equals(com.synaptix.toast.core.annotation.Display.class)) {
-					methodRegex = ((com.synaptix.toast.core.annotation.Display) annotation).value();
+				if (annotation.annotationType().equals(Display.class)) {
+					methodRegex = ((Display) annotation).value();
 				}
 				if (methodRegex != null) {
 					Pattern regexPattern = Pattern.compile(methodRegex);
@@ -538,6 +534,9 @@ public class ToastTestRunner {
 					}
 				}
 			}
+		}
+		if(serviceFixtureConnector == null &&  serviceClass.getSuperclass() != null){
+			return findMethodInClass(command, serviceClass.getSuperclass());
 		}
 		return serviceFixtureConnector;
 	}

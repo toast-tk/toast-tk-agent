@@ -4,7 +4,7 @@ import com.google.inject.Singleton;
 import com.google.inject.multibindings.Multibinder;
 import com.synaptix.toast.core.guice.AbstractComponentFixtureModule;
 import com.synaptix.toast.dao.guice.MongoModule;
-import com.synaptix.toast.plugin.synaptix.runtime.handler.ServiceCallCustomWidgetHandler;
+import com.synaptix.toast.plugin.synaptix.runtime.handler.ServiceCallCustomHandler;
 import com.synaptix.toast.plugin.synaptix.runtime.handler.SwingCustomWidgetHandler;
 import com.synaptix.toast.plugin.synaptix.runtime.interpreter.BaseEventInterpreter;
 import com.synaptix.toast.plugin.synaptix.runtime.interpreter.EventInterpreter;
@@ -24,7 +24,7 @@ public class PluginModule extends AbstractComponentFixtureModule {
 	@Override
 	protected void configureModule() {
 		addTypeHandler(SwingCustomWidgetHandler.class);
-		addTypeHandler(ServiceCallCustomWidgetHandler.class);
+		addTypeHandler(ServiceCallCustomHandler.class);
 		addCustomFilteredAWTEventListener(TimelineFilteredAWTEventListener.class);
 		bind(EventInterpreter.class).to(BaseEventInterpreter.class).in(Singleton.class);
 		install(new MongoModule());

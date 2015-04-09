@@ -21,6 +21,8 @@ public final class EventTransformer {
 	public static final String CLIQUER_SUR = "Cliquer sur";
 	
 	public static final String GET = "get";
+	
+	public static final String SET = "set";
 
 	public static final String CLIQUER_SUR_SOUNDEX = new Soundex().encode(CLIQUER_SUR);
 
