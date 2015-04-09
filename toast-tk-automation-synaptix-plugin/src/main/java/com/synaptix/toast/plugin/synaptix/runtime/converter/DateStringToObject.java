@@ -10,7 +10,7 @@ public final class DateStringToObject implements StringToObject {
 
 	private static final Logger LOG = LoggerFactory.getLogger(DateStringToObject.class);
 
-	private static final String[] ACCEPTED_FORMAT = new String[]{"dd/MM/yyyy HH:mm", "dd/MM/yyyy HH:mm:ss", "dd/MM/yyyy", "dd/MM/yy"};
+	private static final String[] ACCEPTED_FORMAT = new String[]{"dd/MM/yyyy", "dd/MM/yy", "dd/MM/yyyy HH:mm", "dd/MM/yyyy HH:mm:ss"};
 	
 	DateStringToObject() {
 

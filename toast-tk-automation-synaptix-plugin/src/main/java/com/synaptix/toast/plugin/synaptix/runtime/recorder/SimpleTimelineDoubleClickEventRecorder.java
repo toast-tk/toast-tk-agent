@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.synaptix.toast.core.record.RecordedEvent;
 import com.synaptix.toast.plugin.synaptix.runtime.model.TaskOnRessource;
-import com.synaptix.utils.MouseHelper;
+import com.synaptix.toast.plugin.synaptix.runtime.helper.MouseHelper;
 
 public class SimpleTimelineDoubleClickEventRecorder extends AbstractEventRecorder {
 

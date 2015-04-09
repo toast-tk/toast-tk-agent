@@ -73,4 +73,8 @@ public final class MouseHelper {
 	public static boolean isLeftDoubleClickAndNotAltDown(final MouseEvent e) {
 		return isLeftDoubleClick(e) && !e.isAltDown();
 	}
+	
+	public static boolean isMouseReleased(final MouseEvent e) {
+		return e.getID() == MouseEvent.MOUSE_RELEASED;
+	}
 }

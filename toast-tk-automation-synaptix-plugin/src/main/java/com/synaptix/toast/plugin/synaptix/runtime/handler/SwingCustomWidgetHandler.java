@@ -485,6 +485,29 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 			final String command,
 			final CenterCellsPanel centerCellSPanel
 	) {
-		
+		if(command.startsWith(EventTransformer.CLIQUER_SUR)) {
+			final Point cell = extractCoordinates(command);
+			LOG.info("cliquer sur {}/{}", Integer.valueOf(cell.x), Integer.valueOf(cell.y));
+		}
+		else if(command.startsWith(EventTransformer.GET)) {
+			final Point cell = extractCoordinates(command);
+			LOG.info("cliquer sur {}/{}", Integer.valueOf(cell.x), Integer.valueOf(cell.y));
+			final int actifValue = centerCellSPanel.getActifValue(cell.x, cell.y);
+		}
+	}
+
+	private Point extractCoordinates(final String command) {
+		final int indexBeginParenthesis = command.indexOf('(');
+		if(indexBeginParenthesis != -1) {
+			final int indexEndParenthesis = command.indexOf(')');
+			if(indexEndParenthesis != -1) {
+				final String infoCordonnees = command.substring(indexBeginParenthesis, indexEndParenthesis + 1);
+				final String[] split = infoCordonnees.split(":");
+				final int x = Integer.parseInt(split[0]);
+				final int y = Integer.parseInt(split[1]);
+				return new Point(x, y);
+			}
+		}
+		return null;
 	}
 }

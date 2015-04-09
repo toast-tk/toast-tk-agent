@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.sncf.fret.swi.client.assemblage.view.swing.extension.panel.gestionprevisions.CenterCellsPanel;
 import com.synaptix.toast.plugin.synaptix.runtime.interpreter.EventTransformer;
-import com.synaptix.utils.MouseHelper;
+import com.synaptix.toast.plugin.synaptix.runtime.helper.MouseHelper;
 
 public class CenterCellSelectionEventRecorder extends AbstractCenterCellEventRecorder {
 

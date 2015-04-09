@@ -114,7 +114,7 @@ public class BootAgent {
     		if(packagesToLoad != null) {
     			final int length = packagesToLoad.length;
     			for(int index = 0; index < length; ++index) {
-    				final String packageToLoad = packagesToLoad[index].trim();
+    				final String packageToLoad = packagesToLoad[index];
     				if(StringUtils.isNotBlank(packageToLoad)) {
     					final Collection<JarEntry> interestingJarEntries = retrieveInterestingClasses(packageToLoad, jarFile);
     					final String destPath = getRootPath() + index + "_interestingJars.jar";
@@ -144,9 +144,12 @@ public class BootAgent {
 			final int lenght = split.length;
 			final List<String> ret = new ArrayList<String>(lenght);
 			for(int index  = 0; index < lenght; ++index) {
-				String trim = split[index].trim();
-				if(trim != null && !trim.isEmpty()) {
-					ret.add(trim);
+				final String namePackageToLoad = split[index];
+				if(namePackageToLoad != null && !namePackageToLoad.isEmpty()) {
+					final String trim = namePackageToLoad.trim();
+					if(trim != null && !trim.isEmpty()) {
+						ret.add(trim);
+					}
 				}
 			}
 			return ret.toArray(new String[ret.size()]);

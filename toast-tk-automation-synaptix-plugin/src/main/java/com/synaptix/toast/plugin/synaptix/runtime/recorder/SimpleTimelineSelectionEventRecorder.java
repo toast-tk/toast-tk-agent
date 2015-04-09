@@ -14,7 +14,7 @@ import com.synaptix.toast.plugin.synaptix.runtime.interpreter.EventInterpreter;
 import com.synaptix.toast.plugin.synaptix.runtime.interpreter.EventTransformer;
 import com.synaptix.toast.plugin.synaptix.runtime.interpreter.TimelineDataEvent;
 import com.synaptix.toast.plugin.synaptix.runtime.model.TaskOnRessource;
-import com.synaptix.utils.MouseHelper;
+import com.synaptix.toast.plugin.synaptix.runtime.helper.MouseHelper;
 
 public class SimpleTimelineSelectionEventRecorder extends AbstractEventRecorder {
 

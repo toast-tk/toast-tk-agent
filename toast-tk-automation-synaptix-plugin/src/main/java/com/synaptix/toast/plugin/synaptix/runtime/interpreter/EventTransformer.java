@@ -19,6 +19,8 @@ public final class EventTransformer {
 	public static final String DOUBLE_CLIQUER_SUR_SOUNDEX = new Soundex().encode(DOUBLE_CLIQUER_SUR);
 
 	public static final String CLIQUER_SUR = "Cliquer sur";
+	
+	public static final String GET = "get";
 
 	public static final String CLIQUER_SUR_SOUNDEX = new Soundex().encode(CLIQUER_SUR);
 

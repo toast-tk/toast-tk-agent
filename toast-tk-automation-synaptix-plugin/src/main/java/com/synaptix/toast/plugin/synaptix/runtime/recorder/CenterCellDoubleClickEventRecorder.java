@@ -8,8 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.sncf.fret.swi.client.assemblage.view.swing.extension.panel.gestionprevisions.CenterCellsPanel;
+import com.synaptix.toast.plugin.synaptix.runtime.helper.MouseHelper;
 import com.synaptix.toast.plugin.synaptix.runtime.interpreter.EventTransformer;
-import com.synaptix.utils.MouseHelper;
 
 public class CenterCellDoubleClickEventRecorder extends AbstractCenterCellEventRecorder {
 

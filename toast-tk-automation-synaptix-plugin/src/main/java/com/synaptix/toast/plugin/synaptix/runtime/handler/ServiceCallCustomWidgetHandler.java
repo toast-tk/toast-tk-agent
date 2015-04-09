@@ -255,7 +255,7 @@ public class ServiceCallCustomWidgetHandler extends AbstractCustomFixtureHandler
 			final Class<?> parameterClass,
 			final String stringObject
 	) {
-		return StringToObjectInstance.getInstance().toObject(stringObject, parameterClass);
+		return "null".equalsIgnoreCase(stringObject) ? null : StringToObjectInstance.getInstance().toObject(stringObject, parameterClass);
 	}
 
 	private static ValueResponse callService(
