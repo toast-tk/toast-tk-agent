@@ -62,7 +62,7 @@ public class ServiceCallCustomHandler extends AbstractCustomFixtureHandler {
 	@Inject
 	public ServiceCallCustomHandler(final ConfigBlockDaoService.Factory configServiceFactory) {
 		try {
-			this.configService = configServiceFactory.create(null);
+			this.configService = configServiceFactory.create("test_project_db");
 			this.connection = ConnectionBuilder.connect();
 			this.dispatcher = new SendServiceDispatcher(connection);
 			this.configBlock = initConfigService();
@@ -223,7 +223,8 @@ public class ServiceCallCustomHandler extends AbstractCustomFixtureHandler {
 
 	private ServiceCallIdentifier buildServiceCallIdentifier(final String value) {
 		final List<String> retrieveMessageAsWord = retrieveMessageAsWords(value);
-		final String methodDescriptor = searchInRepos(retrieveMessageAsWord.get(0));
+		//final String methodDescriptor = searchInRepos(retrieveMessageAsWord.get(0));
+		final String methodDescriptor = retrieveMessageAsWord.get(0);
 		final String[] split = methodDescriptor.split("/");
 		final String factory = split[0];
 		final String serviceName = split[1];
@@ -339,7 +340,7 @@ public class ServiceCallCustomHandler extends AbstractCustomFixtureHandler {
 			return classAlias;
 		}
 		catch(final Exception e) {
-			LOG.trace(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 			return locator;
 		}
 	}

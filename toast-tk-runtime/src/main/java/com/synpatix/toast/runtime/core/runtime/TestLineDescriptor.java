@@ -71,7 +71,7 @@ public class TestLineDescriptor {
 	}
 	
 	public String getCommand(){
-		String command = testLine.getTest();
+		String command = testLineAction;
 		if(isFailFatalCommand()){
 			command = command.substring(2);
 		}

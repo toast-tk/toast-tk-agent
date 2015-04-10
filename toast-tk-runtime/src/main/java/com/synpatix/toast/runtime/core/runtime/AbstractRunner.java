@@ -35,6 +35,7 @@ public abstract class AbstractRunner {
 	}
 
 	public final void run(String... scenarios) {
+		this.presetRepoFromWebApp = false;
 		run(testEnvManager, scenarios);
 	}
 

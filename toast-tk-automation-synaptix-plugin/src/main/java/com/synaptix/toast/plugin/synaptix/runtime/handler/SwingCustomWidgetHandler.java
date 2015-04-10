@@ -27,7 +27,9 @@ import com.synaptix.swing.SimpleDaysTimelineModel;
 import com.synaptix.swing.simpledaystimeline.JSimpleDaysTimelineCenter;
 import com.synaptix.toast.automation.net.CommandRequest;
 import com.synaptix.toast.automation.net.IIdRequest;
+import com.synaptix.toast.plugin.synaptix.runtime.annotation.ServiceCallHandler;
 import com.synaptix.toast.plugin.synaptix.runtime.annotation.TimelineHandler;
+import com.synaptix.toast.plugin.synaptix.runtime.annotation.CenterCellsHandler;
 import com.synaptix.toast.plugin.synaptix.runtime.handler.action.CenterCellsPanelDoClickAction;
 import com.synaptix.toast.plugin.synaptix.runtime.handler.action.CenterCellsPanelDoDoubleClickAction;
 import com.synaptix.toast.plugin.synaptix.runtime.handler.action.CenterCellsPanelDoOpenMenuAction;
@@ -211,7 +213,10 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 					handleTimelineCommandTask(command, timeline);
 				}
 				else if(isCellCenterCustomCommand(commandRequest)) {
-					final CenterCellsPanel centerCellsPanel = findCenterCells(command);
+					final Point cell = extractCoordinates(command);
+					final String[] extractCenterCellsPanelInfo = extractCenterCellsPanelInfo(command);
+					LOG.info("cliquer sur ({}:{}) {}|{}", extractCenterCellsPanelInfo[0], extractCenterCellsPanelInfo[1], Integer.valueOf(cell.x), Integer.valueOf(cell.y));
+					final CenterCellsPanel centerCellsPanel = findCenterCells(extractCenterCellsPanelInfo[0]);
 					handleCommandCenterCellsPanel(command, centerCellsPanel);
 				}
 			}
@@ -439,8 +444,8 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 	private static Point extractCoordinates(final String command) {
 		final int indexEndParenthesis = command.indexOf(')');
 		if(indexEndParenthesis != -1) {
-			final String lastPart = command.substring(indexEndParenthesis);
-			final String[] split = lastPart.split("|");
+			final String lastPart = command.substring(indexEndParenthesis + 1).trim();
+			final String[] split = lastPart.split(":");
 			final int x = Integer.parseInt(split[0]);
 			final int y = Integer.parseInt(split[1]);
 			return new Point(x, y);
@@ -454,8 +459,11 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 			final int indexEndParenthesis = command.indexOf(')');
 			if(indexEndParenthesis != -1) {
 				final String infoCordonnees = command.substring(indexBeginParenthesis, indexEndParenthesis + 1);
-				final String[] split = infoCordonnees.split(":");
-				return split;
+				final String[] splits = infoCordonnees.split(":");
+				for(final String split : splits) {
+					
+				}
+				return splits;
 			}
 		}
 		return null;

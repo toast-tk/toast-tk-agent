@@ -11,7 +11,7 @@ public final class ConnectionBuilder {
 	}
 
 	public static XMPPConnection connect() throws XMPPException {
-		return connect("s76cllcfakr.si.fret.sncf.fr");
+		return connect("localhost");
 	}
 
 	public static XMPPConnection connect(final String adresseServeur) throws XMPPException {
