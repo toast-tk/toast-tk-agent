@@ -37,7 +37,7 @@ import org.junit.Test;
 
 import com.synaptix.toast.core.annotation.Check;
 import com.synpatix.toast.runtime.core.runtime.ToastTestRunner;
-import com.synpatix.toast.runtime.core.runtime.ToastTestRunner.InFixtureService;
+import com.synpatix.toast.runtime.core.runtime.ToastTestRunner.FixtureExecCommandDescriptor;
 
 public class TestRunnerTestCase {
 	
@@ -60,14 +60,14 @@ public class TestRunnerTestCase {
 	@Test
 	public void testEmptyResult() {
 		ToastTestRunner runner = new ToastTestRunner(null, null);
-		InFixtureService findMethodInClass = runner.findMethodInClass("Titi", Toto.class);
+		FixtureExecCommandDescriptor findMethodInClass = runner.findMethodInClass("Titi", Toto.class);
 		assertNull(findMethodInClass);
 	}
 	
 	@Test
 	public void testNonEmptyResult() {
 		ToastTestRunner runner = new ToastTestRunner(null, null);
-		InFixtureService findMethodInClass = runner.findMethodInClass("Titi", Titi.class);
+		FixtureExecCommandDescriptor findMethodInClass = runner.findMethodInClass("Titi", Titi.class);
 		assertNotNull(findMethodInClass);
 	}
 	

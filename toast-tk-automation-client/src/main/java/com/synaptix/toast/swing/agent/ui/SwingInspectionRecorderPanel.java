@@ -286,7 +286,8 @@ public class SwingInspectionRecorderPanel extends JPanel{
 			}
 
 			private String toWikiScenario(String test) {
-				String output = "|| scenario || swing ||\n"; //TODO: bind type to selected descriptor
+				//TODO: bind type to selected descriptor
+				String output = "|| scenario || swing ||\n"; 
 				String[] lines = test.split("\n");
 				for (String line : lines) {
 					output += "|" + line + "|\n";

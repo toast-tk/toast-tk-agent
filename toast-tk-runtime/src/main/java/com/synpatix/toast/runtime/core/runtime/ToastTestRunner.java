@@ -361,23 +361,16 @@ public class ToastTestRunner {
 		String command = descriptor.getCommand();
 		
 		// Locating service class ////////////////////////////////////
-		Class<?> serviceClass = locateFixtureClass(descriptor.getTestLineFixtureKind(), descriptor.getTestLineFixtureName(), command); 
-		if(serviceClass != null){
-			Object connector = getClassInstance(serviceClass);
-			InFixtureService methodAndMatcher = findMethodInClass(command, serviceClass);
-			if (methodAndMatcher != null) { 
-				result = doLocalFixtureCall(connector, methodAndMatcher);
-			}
-			//////////////////////////////////////////////////////////////
-			
+		Class<?> localFixtureClass = locateFixtureClass(descriptor.getTestLineFixtureKind(), descriptor.getTestLineFixtureName(), command); 
+		if(localFixtureClass != null){
+			Object connector = getClassInstance(localFixtureClass);
+			FixtureExecCommandDescriptor commandMethodImpl = findMethodInClass(command, localFixtureClass);
+			result = doLocalFixtureCall(connector, commandMethodImpl);
+		}
+		else if(getClassInstance(ISwingInspectionClient.class) != null){
 			// If no class is implementing the command then 
 			// process it as a custom command sent through Kryo 
-			else if(getClassInstance(ISwingInspectionClient.class) != null){
-				result = doRemoteFixtureCall(command, descriptor);
-			}
-			//////////////////////////////////////////////////////////////
-			
-			
+			result = doRemoteFixtureCall(command, descriptor);
 		}else{
 			result = new TestResult(String.format("Method not found"), ResultKind.ERROR);
 		}
@@ -404,10 +397,12 @@ public class ToastTestRunner {
 		return result;
 	}
 
-	private TestResult doLocalFixtureCall(Object instance, InFixtureService methodAndMatcher) {
+	private TestResult doLocalFixtureCall(Object instance, FixtureExecCommandDescriptor fixtureExecDescriptor) {
 		TestResult result;
-		Matcher matcher = methodAndMatcher.matcher;
+		
+		Matcher matcher = fixtureExecDescriptor.matcher;
 		matcher.matches();
+		
 		int groupCount = matcher.groupCount();
 		Object[] args = new Object[groupCount];
 		for (int i = 0; i < groupCount; i++) {
@@ -415,7 +410,7 @@ public class ToastTestRunner {
 		}
 
 		try {
-			result = (TestResult) methodAndMatcher.method.invoke(instance, args);
+			result = (TestResult) fixtureExecDescriptor.method.invoke(instance, args);
 		} catch (Exception e) {
 			LOG.error("Error found !", e);
 			result = new TestResult(ExceptionUtils.getRootCauseMessage(e), ResultKind.FAILURE);
@@ -454,9 +449,22 @@ public class ToastTestRunner {
 			}
 		}
 		
+		//round1 - hard match: based on type and name
+		if(serviceClasses.size() == 0){
+			for (FixtureService fixtureService : fixtureApiServices) {
+				if(fixtureService.fixtureKind.equals(fixtureKind) && fixtureService.fixtureName.equals(fixtureName)){
+					FixtureExecCommandDescriptor methodAndMatcher = findMethodInClass(command, fixtureService.clazz);
+					if(methodAndMatcher != null){
+						serviceClasses.add(fixtureService.clazz);
+					}
+				}
+			}
+		}
+		
+		//round2 - soft match: based on type only
 		for (FixtureService fixtureService : fixtureApiServices) {
-			if(fixtureService.fixtureKind.equals(fixtureKind) && fixtureService.fixtureName.equals(fixtureName)){
-				InFixtureService methodAndMatcher = findMethodInClass(command, fixtureService.clazz);
+			if(fixtureService.fixtureKind.equals(fixtureKind)){
+				FixtureExecCommandDescriptor methodAndMatcher = findMethodInClass(command, fixtureService.clazz);
 				if(methodAndMatcher != null){
 					serviceClasses.add(fixtureService.clazz);
 				}
@@ -512,8 +520,8 @@ public class ToastTestRunner {
 	 * @param serviceClass
 	 * @return
 	 */
-	public InFixtureService findMethodInClass(final String command, final Class<?> serviceClass) {
-		InFixtureService serviceFixtureConnector = null;
+	public FixtureExecCommandDescriptor findMethodInClass(final String command, final Class<?> serviceClass) {
+		FixtureExecCommandDescriptor serviceFixtureConnector = null;
 		Method[] methods = serviceClass.getMethods();
 		for (Method method : methods) {
 			Annotation[] annotations = method.getAnnotations();
@@ -530,7 +538,7 @@ public class ToastTestRunner {
 					Matcher matcher = regexPattern.matcher(command);
 					boolean matches = matcher.matches();
 					if (matches) {
-						serviceFixtureConnector = new InFixtureService(method, matcher);
+						serviceFixtureConnector = new FixtureExecCommandDescriptor(method, matcher);
 					}
 				}
 			}
@@ -556,11 +564,11 @@ public class ToastTestRunner {
 		public String className;
 	}
 
-	public class InFixtureService {
+	public class FixtureExecCommandDescriptor {
 		Method method;
 		Matcher matcher;
 
-		public InFixtureService(Method method, Matcher matcher) {
+		public FixtureExecCommandDescriptor(Method method, Matcher matcher) {
 			this.method = method;
 			this.matcher = matcher;
 		}

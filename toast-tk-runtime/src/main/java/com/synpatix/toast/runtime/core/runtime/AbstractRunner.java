@@ -48,12 +48,8 @@ public abstract class AbstractRunner {
 		runScript(testEnvManager, null, script);
 	}
 	
-	public final void runRemoteScript(String script, IReportUpdateCallBack callback) {
-		this.reportUpdateCallBack = callback;
-		runRemoteScript(script);
-	}
-	
 	public void runLocalScript(String wikiScenario, String repoWiki, IReportUpdateCallBack iReportUpdateCallBack) {
+		this.reportUpdateCallBack = iReportUpdateCallBack;
 		TestParser parser = new TestParser();
 		localRepositoryTestPage = parser.readString(repoWiki, "");
 		runScript(testEnvManager, null, wikiScenario);
