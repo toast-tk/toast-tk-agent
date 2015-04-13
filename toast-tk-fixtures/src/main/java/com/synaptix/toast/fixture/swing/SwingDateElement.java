@@ -26,9 +26,15 @@ public class SwingDateElement extends SwingAutoElement implements HasTextInput, 
 
 	@Override
 	public void setInput(String e) {
-		exists();;
+		exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).sendKeys(e).build());
 	}
+	
+	public void setDateText(String e) {
+		exists();
+		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType("date_text").sendKeys(e).build());
+	}
+
 
 	@Override
 	public String getValue() {
