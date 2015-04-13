@@ -62,6 +62,9 @@ public abstract class RedPepperSwingFixture {
 	public abstract SwingAutoElement overrideElementInstance(SwingAutoElement autoElement);
 
 	protected SwingAutoElement getPageField(String pageName, String fieldName) throws IllegalAccessException {
+		if (repo.getSwingPage(pageName) == null) {
+			throw new IllegalAccessException(pageName + " swing page not found in repository !");
+		}
 		DefaultSwingPage page = (DefaultSwingPage) repo.getSwingPage(pageName);
 		SwingAutoElement autoElement = page.getAutoElement(fieldName);
 		if (autoElement instanceof DefaultSwingAutoElement) {
@@ -148,7 +151,6 @@ public abstract class RedPepperSwingFixture {
 		return new TestResult();
 	}
 
-	
 	@Check(GetComponentValue)
 	public TestResult getComponentValue(String pageName, String widgetName) throws Exception {
 		try {

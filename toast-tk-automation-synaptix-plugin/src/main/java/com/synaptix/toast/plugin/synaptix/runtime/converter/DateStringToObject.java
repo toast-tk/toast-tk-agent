@@ -21,7 +21,7 @@ public final class DateStringToObject implements StringToObject {
 		return findDate(strObject);
 	}
 
-	private static Date findDate(final String dateStr) {
+	public static Date findDate(final String dateStr) {
 		for(final String acceptedFormat : ACCEPTED_FORMAT) {
 			final Date date = tryFormat(dateStr, acceptedFormat);
 			if(date != null) {

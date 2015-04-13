@@ -117,16 +117,16 @@ public class MongoRepoManager {
 		}
 		String res = "";
 		for(RepositoryImpl page: cache){
-			res = "page id:" + page.getId().toString() + "\n";
-			res = res + "|| auto setup || " + page.name + " ||\n";
-			res = res + "| " + page.type + " | " + page.name + " |\n";
-			res = res + "| name | type | locator |\n";
+			res += "#Page id:" + page.getId().toString() + "\n";
+			res += "|| auto setup ||\n";
+			res += "| " + page.type + " | " + page.name + " |\n";
+			res += "| name | type | locator |\n";
 			if(page.rows != null){
 				for (ElementImpl row: page.rows) {
-					res = res + "|" + row.name + "|" + row.type + "|" + row.locator + "|\n";
+					res += "|" + row.name + "|" + row.type + "|" + row.locator + "|\n";
 				}
 			}
-			res = res + "\n";
+			res += "\n";
 		}
 		return res;
 	}

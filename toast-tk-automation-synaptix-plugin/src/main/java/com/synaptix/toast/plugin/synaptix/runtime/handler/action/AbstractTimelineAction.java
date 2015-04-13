@@ -16,7 +16,11 @@ import com.synaptix.toast.plugin.synaptix.runtime.handler.ActionTimelineInfo;
 public abstract class AbstractTimelineAction extends AbstractClickAction {
 
 	private static final Logger LOG = LogManager.getLogger(AbstractTimelineAction.class);
-	
+
+	public AbstractTimelineAction(final Point pointToClick) {
+		super(pointToClick);
+	}
+
 	static void movetoTo(final JSimpleDaysTimeline timeline, final ActionTimelineInfo actionTimelineInfo, final SimpleDaysTask taskToGoTo) {
 		try {
 			setHorizontalScrollValue(timeline, actionTimelineInfo);

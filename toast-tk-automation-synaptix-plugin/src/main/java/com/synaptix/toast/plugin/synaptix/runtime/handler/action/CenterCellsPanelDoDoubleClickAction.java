@@ -4,12 +4,10 @@ import java.awt.Point;
 
 public final class CenterCellsPanelDoDoubleClickAction extends AbstractClickAction {
 
-	private final Point pointToClick;
-
 	public CenterCellsPanelDoDoubleClickAction(
 			final Point pointToClick
 	) {
-		this.pointToClick = pointToClick;
+		super(pointToClick);
 	}
 
 	@Override

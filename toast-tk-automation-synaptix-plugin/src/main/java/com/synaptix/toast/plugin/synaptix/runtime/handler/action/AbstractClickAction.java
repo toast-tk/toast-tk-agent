@@ -8,6 +8,12 @@ import com.synaptix.toast.fixture.utils.FestRobotInstance;
 
 public abstract class AbstractClickAction implements Runnable {
 
+	protected final Point pointToClick;
+	
+	public AbstractClickAction(final Point pointToClick) {
+		this.pointToClick = pointToClick;
+	}
+	
 	static void doOpenMenu(final Point pointToClick) {
 		FestRobotInstance.getRobot().click(pointToClick, MouseButton.RIGHT_BUTTON, 1);
 	}

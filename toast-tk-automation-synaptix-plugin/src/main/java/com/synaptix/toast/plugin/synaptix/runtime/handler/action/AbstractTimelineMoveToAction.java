@@ -21,6 +21,7 @@ public abstract class AbstractTimelineMoveToAction extends AbstractTimelineActio
 			final ActionTimelineInfo actionTimelineInfo,
 			final SimpleDaysTask taskToClick
 	) {
+		super(null);
 		this.simpleDaysTimeline = simpleDaysTimeline;
 		this.actionTimelineInfo = actionTimelineInfo;
 		this.taskToClick = taskToClick;

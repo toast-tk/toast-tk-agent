@@ -4,12 +4,10 @@ import java.awt.Point;
 
 public final class CenterCellsPanelDoOpenMenuAction extends AbstractClickAction {
 
-	private final Point pointToClick;
-
 	public CenterCellsPanelDoOpenMenuAction(
 			final Point pointToClick
 	) {
-		this.pointToClick = pointToClick;
+		super(pointToClick);
 	}
 
 	@Override
