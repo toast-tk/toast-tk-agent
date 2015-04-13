@@ -79,8 +79,16 @@ public abstract class RedPepperSwingFixture {
 	@Check(TypeValueInInput)
 	public TestResult typeIn(String text, String pageName, String widgetName) throws Exception {
 		try {
-			SwingInputElement input = (SwingInputElement) getPageField(pageName, widgetName);
-			input.setInput(text);
+			SwingAutoElement pageField = getPageField(pageName, widgetName);
+			if(pageField instanceof SwingInputElement){
+				SwingInputElement input = (SwingInputElement) pageField;
+				input.setInput(text);
+			}else if(pageField instanceof SwingDateElement){
+				SwingDateElement input = (SwingDateElement) pageField;
+				input.setDateText(text);
+			}else{
+				throw new IllegalAccessException(String.format("%s.%s is not handled to type values in !", pageName, pageField));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
@@ -361,5 +369,46 @@ public abstract class RedPepperSwingFixture {
 		}
 		return new TestResult();
 	}
-
+	
+	@Check("Ajuster date (\\w+).(\\w+) à plus (\\w+) jours")
+	public TestResult setDate(String pageName, String widgetName, String days) throws Exception {
+		try {
+			SwingDateElement input = (SwingDateElement) getPageField(pageName, widgetName);
+			input.setInput(days);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
+		}
+		return new TestResult();
+	}
+	
+	@Check("\\$(\\w+) égale à \\$(\\w+)")
+	public TestResult VarEqVar(String var1, String var2) throws Exception {
+		try {
+			Object object = repo.getUserVariables().get(var1);
+			Object object2 = repo.getUserVariables().get(var2);
+			if(object.equals(object2)){
+				return new TestResult(Boolean.TRUE.toString(), ResultKind.SUCCESS);
+			}else{
+				return new TestResult(String.format("%s == %s => %s", object.toString(), object2.toString(), Boolean.FALSE.toString()), ResultKind.FAILURE);
+			}
+		} catch (Exception e) {
+			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
+		}
+	}
+	
+	@Check("([\\w\\W]+) égale à \\$(\\w+)")
+	public TestResult ValueEqVar(String value, String var) throws Exception {
+		try {
+			Object object = repo.getUserVariables().get(var);
+			if(object.equals(value)){
+				return new TestResult(Boolean.TRUE.toString(), ResultKind.SUCCESS);
+			}else{
+				return new TestResult(String.format("%s == %s => %s", value, var.toString(), Boolean.FALSE.toString()), ResultKind.FAILURE);
+			}
+		} catch (Exception e) {
+			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
+		}
+	}
+	
 }

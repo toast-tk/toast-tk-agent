@@ -95,7 +95,9 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 				DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yy");
 				String formattedDate = formatter.print(date);
 				textField.setText(formattedDate);
-			} else {
+			}else if("date_text".equals(command.itemType)){
+				textField.setText(command.value);
+			}else{
 				textField.setText(command.value);
 			}
 			break;

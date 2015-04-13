@@ -476,14 +476,11 @@ public class ToastTestRunner {
 		if (serviceClasses.size() == 0) {
 			return null;
 		}else if(serviceClasses.size() > 1){
-			throw new IllegalAccessException("Multiple Services of same kind found impleùenting the same command: " + command);
+			LOG.warn("Multiple Services of same kind found implementing the same command: " + command);
 		}
 
 		Class<?> serviceClass = serviceClasses.iterator().next();
-		
-		if(LOG.isDebugEnabled()){
-			LOG.debug(serviceClass + " : " + command);
-		}
+		LOG.info(serviceClass + " : " + command);
 		
 		return serviceClass;
 	}
