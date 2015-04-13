@@ -223,10 +223,14 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 					handleTimelineCommandTask(command, timeline);
 				}
 				else if(isCellCenterCustomCommand(commandRequest)) {
-					final Point cell = extractCoordinates(command);
+					final Date extractDate = extractDate(command);
+					final Calendar cal = Calendar.getInstance();
+					final Date datePrevision = roundToDay(extractDate, cal);
 					final String[] extractCenterCellsPanelInfo = extractCenterCellsPanelInfo(command);
-					LOG.info("cliquer sur ({}:{}) {}|{}", extractCenterCellsPanelInfo[0], extractCenterCellsPanelInfo[1], Integer.valueOf(cell.x), Integer.valueOf(cell.y));
-					final CenterCellsPanel centerCellsPanel = findCenterCells(extractCenterCellsPanelInfo[0]);
+					final String centerCellsPanelName = extractCenterCellsPanelInfo[0];
+					final CenterCellsPanel centerCellsPanel = findCenterCells(centerCellsPanelName);
+					final int row = findColumnFromDate(centerCellsPanel, cal, datePrevision);
+					LOG.info("cliquer sur ({}:{}) {} {}", centerCellsPanelName, centerCellsPanelName, datePrevision, Integer.valueOf(row));
 					handleCommandCenterCellsPanel(command, centerCellsPanel);
 				}
 			}
@@ -449,7 +453,7 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 			final Date datePrevision = roundToDay(extractDate, cal);
 			final int row = findColumnFromDate(centerCellSPanel, cal, datePrevision);
 			final String[] extractCenterCellsPanelInfo = extractCenterCellsPanelInfo(command);
-			LOG.info("get ({}:{}) {}|{}", extractCenterCellsPanelInfo[0], extractCenterCellsPanelInfo[1], Integer.valueOf(cell.x), Integer.valueOf(cell.y));
+			LOG.info("get ({}:{}) {}", extractCenterCellsPanelInfo[0], extractCenterCellsPanelInfo[1], extractDate);
 			final int actifValue = centerCellSPanel.getActifValue(row, extractCenterCellsPanelInfo[1]);
 			LOG.info("finded actifValue {}", Integer.valueOf(actifValue));
 			//TODO
@@ -459,7 +463,7 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 			final Date extractDate = extractDate(command);
 			final Calendar cal = Calendar.getInstance();
 			final Date datePrevision = roundToDay(extractDate, cal);
-			LOG.info("cliquer sur ({}:{}) {}|{}", extractCenterCellsPanelInfo[0], extractCenterCellsPanelInfo[1], datePrevision);
+			LOG.info("cliquer sur ({}:{}) {}", extractCenterCellsPanelInfo[0], extractCenterCellsPanelInfo[1], datePrevision);
 			final int row = findColumnFromDate(centerCellSPanel, cal, datePrevision);
 			centerCellSPanel.setActifValue(row, extractCenterCellsPanelInfo[1], 1);
 		}
