@@ -228,9 +228,10 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 					final Date datePrevision = roundToDay(extractDate, cal);
 					final String[] extractCenterCellsPanelInfo = extractCenterCellsPanelInfo(command);
 					final String centerCellsPanelName = extractCenterCellsPanelInfo[0];
+					final String nomFlux = extractCenterCellsPanelInfo[1];
 					final CenterCellsPanel centerCellsPanel = findCenterCells(centerCellsPanelName);
 					final int row = findColumnFromDate(centerCellsPanel, cal, datePrevision);
-					LOG.info("cliquer sur ({}:{}) {} {}", centerCellsPanelName, centerCellsPanelName, datePrevision, Integer.valueOf(row));
+					LOG.info("cliquer sur ({}:{}) {} {}", centerCellsPanelName, nomFlux, datePrevision, Integer.valueOf(row));
 					handleCommandCenterCellsPanel(command, centerCellsPanel);
 				}
 			}
@@ -453,19 +454,24 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 			final Date datePrevision = roundToDay(extractDate, cal);
 			final int row = findColumnFromDate(centerCellSPanel, cal, datePrevision);
 			final String[] extractCenterCellsPanelInfo = extractCenterCellsPanelInfo(command);
-			LOG.info("get ({}:{}) {}", extractCenterCellsPanelInfo[0], extractCenterCellsPanelInfo[1], extractDate);
-			final int actifValue = centerCellSPanel.getActifValue(row, extractCenterCellsPanelInfo[1]);
+			final String centerCellsPanelName = extractCenterCellsPanelInfo[0];
+			final String nomFlux = extractCenterCellsPanelInfo[1];
+			LOG.info("get ({}:{}) {}", centerCellsPanelName, nomFlux, extractDate);
+			final int actifValue = centerCellSPanel.getActifValue(row, nomFlux);
 			LOG.info("finded actifValue {}", Integer.valueOf(actifValue));
 			//TODO
+			//final CommandRequest commandRequest = new CommandRequest.CommandRequestBuilder("1").asCustomCommand(sb.toString()).ofType("centerCells").build();
 		}
 		else if(command.startsWith(EventTransformer.SET)) {
 			final String[] extractCenterCellsPanelInfo = extractCenterCellsPanelInfo(command);
 			final Date extractDate = extractDate(command);
 			final Calendar cal = Calendar.getInstance();
 			final Date datePrevision = roundToDay(extractDate, cal);
-			LOG.info("cliquer sur ({}:{}) {}", extractCenterCellsPanelInfo[0], extractCenterCellsPanelInfo[1], datePrevision);
+			final String nomFlux = extractCenterCellsPanelInfo[1];
+			final String centerCellsPanelName = extractCenterCellsPanelInfo[0];
+			LOG.info("cliquer sur ({}:{}) {}", centerCellsPanelName, nomFlux, datePrevision);
 			final int row = findColumnFromDate(centerCellSPanel, cal, datePrevision);
-			centerCellSPanel.setActifValue(row, extractCenterCellsPanelInfo[1], 1);
+			centerCellSPanel.setActifValue(row, nomFlux, 1);
 		}
 		else {
 			throw new IllegalAccessError("unknown action for CenterCellsPanel");
@@ -493,14 +499,18 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 		final Calendar cal = Calendar.getInstance();
 		final Date datePrevision = roundToDay(extractDate, cal);
 		final String[] extractCenterCellsPanelInfo = extractCenterCellsPanelInfo(command);
-		LOG.info("cliquer sur ({}:{}) {}|{}", extractCenterCellsPanelInfo[0], extractCenterCellsPanelInfo[1], datePrevision);
+		final String nomFlux = extractCenterCellsPanelInfo[1];
+		final String centerCellsPanelName = extractCenterCellsPanelInfo[0];
+		LOG.info("cliquer sur ({}:{}) {}|{}", centerCellsPanelName, nomFlux, datePrevision);
 		final int row = findColumnFromDate(centerCellSPanel, cal, datePrevision);
-		int indexFromNomFlux = centerCellSPanel.getIndexFromNomFlux(extractCenterCellsPanelInfo[1]);
-		centerCellSPanel.changeSelection(extractCenterCellsPanelInfo[1], row, false, false);
+		int indexFromNomFlux = centerCellSPanel.getIndexFromNomFlux(nomFlux);
+		centerCellSPanel.changeSelection(nomFlux, row, false, false);
+		LOG.info("changeSelection");
 		final int pointAtJour = CenterCellsPanel.pointAtJour(row);
 		final int pointAtRow = CenterCellsPanel.pointAtRow(indexFromNomFlux);
 		LOG.info("pointAtJour = {} pointAtRow = {}", Integer.valueOf(pointAtJour), Integer.valueOf(pointAtRow));
 		final Point convertedPoint = new Point(pointAtJour, pointAtRow);
+		LOG.info("convertedPoint = {}", convertedPoint);
 		final Dimension cellDimension = new Dimension(CenterCellsPanel.getCellWidth(), CenterCellsPanel.getCellHeight());
 		final Rectangle rectangleToScrollTo = new Rectangle(convertedPoint, cellDimension);
 		LOG.info("rectangleToScrollTo = {}", rectangleToScrollTo);
@@ -516,6 +526,7 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 		final List<Jour> jours = centerCellSPanel.getJours();
 		final int nbJours = jours != null ? jours.size() : 0;
 		for(int index = 0; index < nbJours; ++index) {
+			@SuppressWarnings("null")
 			final Jour currentJour = jours.get(index);
 			final Date currentDate = currentJour.date;
 			final Date currentRoundedDate = roundToDay(currentDate, cal);

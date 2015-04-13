@@ -1,6 +1,8 @@
 package com.synaptix.toast.plugin.synaptix.runtime.handler;
 
 import java.awt.Component;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.UndeclaredThrowableException;
@@ -40,10 +42,34 @@ import com.synaptix.toast.plugin.synaptix.runtime.service.ConnectionBuilder;
 
 @ServiceCallHandler
 public class ServiceCallCustomHandler extends AbstractCustomFixtureHandler {
+	
+	static {
+		LOG = LoggerFactory.getLogger(ServiceCallCustomHandler.class);
+		try {
+			new Thread("MouseLocation"){
+				@Override
+				public void run() {
+					while(true){
+						try {
+							Thread.sleep(1000);
+				        	final Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+				        	System.out.println("("+Integer.valueOf(mouseLocation.x)+","+Integer.valueOf(mouseLocation.y)+")");
+						}
+						catch(final Exception e) {
+							e.printStackTrace();
+						}
+				    }
+				}
+			}.start();
+		}
+		catch(final Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	private static final int NB_NO_ARGS_WORD = 1;
 
-	static final Logger LOG = LoggerFactory.getLogger(ServiceCallCustomHandler.class);
+	static final Logger LOG;
 
 	private ConfigBlockDaoService configService;
 

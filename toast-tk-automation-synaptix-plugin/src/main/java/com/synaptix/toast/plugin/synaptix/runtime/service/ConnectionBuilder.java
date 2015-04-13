@@ -33,10 +33,10 @@ public final class ConnectionBuilder {
 	}
 
 	public static String getUsername() {
-		return "GPERSON";
+		return "ROOT";
 	}
 
 	public static String getPassword() {
-		return "toto123";
+		return "kao2k2gy";
 	}
 }
