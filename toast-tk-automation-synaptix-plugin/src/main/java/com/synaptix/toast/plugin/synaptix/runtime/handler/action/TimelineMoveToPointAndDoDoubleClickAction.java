@@ -17,7 +17,7 @@ public final class TimelineMoveToPointAndDoDoubleClickAction extends AbstractTim
 	}
 
 	@Override
-	public void doAction(final Point pointToClick) {
-		doDoubleClick(pointToClick);
+	public void doAction() {
+		doDoubleClick();
 	}
 }

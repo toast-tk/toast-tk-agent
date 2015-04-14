@@ -1,29 +1,35 @@
 package com.synaptix.toast.plugin.synaptix.runtime.handler.action;
 
+import java.awt.Component;
 import java.awt.Point;
 
 import org.fest.swing.core.MouseButton;
 
 import com.synaptix.toast.fixture.utils.FestRobotInstance;
 
-public abstract class AbstractClickAction implements Runnable {
+public abstract class AbstractClickAction<C extends Component> implements Runnable {
 
-	protected final Point pointToClick;
+	protected Point pointToClick;
 	
-	public AbstractClickAction(final Point pointToClick) {
+	protected final C component;
+	
+	public AbstractClickAction(
+			final C component,
+			final Point pointToClick
+	) {
+		this.component = component;
 		this.pointToClick = pointToClick;
 	}
 	
-	static void doOpenMenu(final Point pointToClick) {
-		FestRobotInstance.getRobot().click(pointToClick, MouseButton.RIGHT_BUTTON, 1);
+	public void doOpenMenu() {
+		FestRobotInstance.getRobot().click(component, pointToClick, MouseButton.RIGHT_BUTTON, 1);
 	}
 	
-	static void doSimpleClick(final Point pointToClick) {
-		FestRobotInstance.getRobot().click(pointToClick, MouseButton.LEFT_BUTTON, 1);
+	public void doSimpleClick() {
+		FestRobotInstance.getRobot().click(component, pointToClick, MouseButton.LEFT_BUTTON, 1);
 	}
 	
-	static void doDoubleClick(final Point pointToClick) {
-		FestRobotInstance.getRobot().click(pointToClick, MouseButton.LEFT_BUTTON, 2);
+	public void doDoubleClick() {
+		FestRobotInstance.getRobot().click(component, pointToClick, MouseButton.LEFT_BUTTON, 2);
 	}
-	
 }

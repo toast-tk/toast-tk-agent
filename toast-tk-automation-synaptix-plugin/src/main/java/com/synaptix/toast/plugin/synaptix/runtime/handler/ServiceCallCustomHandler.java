@@ -71,13 +71,13 @@ public class ServiceCallCustomHandler extends AbstractCustomFixtureHandler {
 
 	static final Logger LOG;
 
-	private ConfigBlockDaoService configService;
+	//private ConfigBlockDaoService configService;
 
 	private IServiceCommunicator dispatcher;
 
 	private XMPPConnection connection;
 	
-	private ConfigBlock configBlock; 
+	//private ConfigBlock configBlock; 
 
 	private Map<String, Map<String, Object>> allServices;
 	
@@ -88,10 +88,10 @@ public class ServiceCallCustomHandler extends AbstractCustomFixtureHandler {
 	@Inject
 	public ServiceCallCustomHandler(final ConfigBlockDaoService.Factory configServiceFactory) {
 		try {
-			this.configService = configServiceFactory.create("test_project_db");
+			//this.configService = configServiceFactory.create("test_project_db");
 			this.connection = ConnectionBuilder.connect();
 			this.dispatcher = new SendServiceDispatcher(connection);
-			this.configBlock = initConfigService();
+			//this.configBlock = initConfigService();
 			this.whiteList = new ArrayList<String>(1);
 			initWhiteList();
 			this.allServices = new HashMap<String, Map<String, Object>>(4000);
@@ -108,9 +108,9 @@ public class ServiceCallCustomHandler extends AbstractCustomFixtureHandler {
 		whiteList.add("service");
 	}
 	
-	private ConfigBlock initConfigService() {
-		return configService.loadConfigBlock("RUS");
-	}
+	//private ConfigBlock initConfigService() {
+		//return configService.loadConfigBlock("RUS");
+	//}
 	
 	private void initializeServiceFactories() throws XMPPException {
 		LOG.info("Initialize serviceFactories");
@@ -352,7 +352,7 @@ public class ServiceCallCustomHandler extends AbstractCustomFixtureHandler {
 
 	public String searchInRepos(final String locator) {
 		try {
-			final List<ComponentConfigLine> componentConfigLines = configBlock.getLines();
+			/*final List<ComponentConfigLine> componentConfigLines = configBlock.getLines();
 			for(final ComponentConfigLine componentConfigLine : componentConfigLines) {
 				if(componentConfigLine.getTestName().equals(locator)) {
 					return componentConfigLine.getComponentAssociation();
@@ -361,9 +361,10 @@ public class ServiceCallCustomHandler extends AbstractCustomFixtureHandler {
 			final String[] classAndAssociation = locator.split(":");
 			final String fullClassName = classAndAssociation[0];
 			final String classAlias = classAndAssociation[1];
-			configBlock.addLine(classAlias, "", fullClassName);
-			configService.saveNormal(configBlock);
-			return classAlias;
+			configBlock.addLine(classAlias, "", fullClassName);*/
+			//configService.saveNormal(configBlock);
+			//return classAlias;
+			return locator;
 		}
 		catch(final Exception e) {
 			LOG.error(e.getMessage(), e);

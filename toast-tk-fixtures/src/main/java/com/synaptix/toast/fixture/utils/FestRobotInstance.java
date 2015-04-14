@@ -26,7 +26,11 @@ public final class FestRobotInstance {
 		rbt.click(where, MouseButton.LEFT_BUTTON, 2);
 	}
 	
-	public void leftClick(final Point where) {
+	public void rightClick(final Point where) {
 		rbt.click(where, MouseButton.RIGHT_BUTTON, 1);
+	}
+	
+	public void leftClick(final Point where) {
+		rbt.click(where, MouseButton.LEFT_BUTTON, 1);
 	}
 }

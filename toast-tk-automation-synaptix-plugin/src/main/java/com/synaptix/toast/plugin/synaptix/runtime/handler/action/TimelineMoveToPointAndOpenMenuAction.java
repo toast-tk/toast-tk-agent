@@ -17,7 +17,7 @@ public final class TimelineMoveToPointAndOpenMenuAction extends AbstractTimeline
 	}
 
 	@Override
-	public void doAction(final Point pointToClick) {
-		doOpenMenu(pointToClick);
+	public void doAction() {
+		doOpenMenu();
 	}
 }

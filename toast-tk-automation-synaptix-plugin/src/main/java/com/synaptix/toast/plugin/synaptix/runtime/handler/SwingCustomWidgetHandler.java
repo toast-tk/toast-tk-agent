@@ -436,17 +436,17 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 		if(command.startsWith(EventTransformer.CLIQUER_SUR)) {
 			final Point pointToClick = centerCellsPanelMoveTo(command, centerCellSPanel);
 			LOG.info("pointToClick = {}", pointToClick);
-			centerCellsPanelDoClick(pointToClick);
+			centerCellsPanelDoClick(centerCellSPanel, pointToClick);
 		}
 		else if(command.startsWith(EventTransformer.DOUBLE_CLIQUER_SUR)) {
 			final Point pointToClick = centerCellsPanelMoveTo(command, centerCellSPanel);
 			LOG.info("pointToClick = {}", pointToClick);
-			centerCellsPanelDoDoubleClick(pointToClick);
+			centerCellsPanelDoDoubleClick(centerCellSPanel, pointToClick);
 		}
 		else if(command.startsWith(EventTransformer.OUVRIR_LE_MENU_SUR)) {
 			final Point pointToClick = centerCellsPanelMoveTo(command, centerCellSPanel);
 			LOG.info("pointToClick = {}", pointToClick);
-			centerCellsPanelDoOpenMenu(pointToClick);
+			centerCellsPanelDoOpenMenu(centerCellSPanel, pointToClick);
 		}
 		else if(command.startsWith(EventTransformer.GET)) {
 			final Date extractDate = extractDate(command);
@@ -564,15 +564,15 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 		return null;
 	}
 	
-	private void centerCellsPanelDoDoubleClick(final Point pointToClick) {
-		runAction(new CenterCellsPanelDoDoubleClickAction(pointToClick));
+	private void centerCellsPanelDoDoubleClick(final CenterCellsPanel centerCellsPanel, final Point pointToClick) {
+		runAction(new CenterCellsPanelDoDoubleClickAction(centerCellsPanel, pointToClick));
 	}
 	
-	private void centerCellsPanelDoClick(final Point pointToClick) {
-		runAction(new CenterCellsPanelDoClickAction(pointToClick));
+	private void centerCellsPanelDoClick(final CenterCellsPanel centerCellsPanel, final Point pointToClick) {
+		runAction(new CenterCellsPanelDoClickAction(centerCellsPanel, pointToClick));
 	}
 	
-	private void centerCellsPanelDoOpenMenu(final Point pointToClick) {
-		runAction(new CenterCellsPanelDoOpenMenuAction(pointToClick));
+	private void centerCellsPanelDoOpenMenu(final CenterCellsPanel centerCellsPanel, final Point pointToClick) {
+		runAction(new CenterCellsPanelDoOpenMenuAction(centerCellsPanel, pointToClick));
 	}
 }
