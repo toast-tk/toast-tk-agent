@@ -32,6 +32,7 @@ import com.synaptix.smackx.service.ServiceFactoryManager;
 import com.synaptix.toast.automation.net.CommandRequest;
 import com.synaptix.toast.automation.net.IIdRequest;
 import com.synaptix.toast.automation.net.ValueResponse;
+import com.synaptix.toast.core.Property;
 import com.synaptix.toast.dao.domain.impl.test.ComponentConfigLine;
 import com.synaptix.toast.dao.domain.impl.test.block.ConfigBlock;
 import com.synaptix.toast.dao.service.dao.access.test.ConfigBlockDaoService;
@@ -42,29 +43,28 @@ import com.synaptix.toast.plugin.synaptix.runtime.service.ConnectionBuilder;
 
 @ServiceCallHandler
 public class ServiceCallCustomHandler extends AbstractCustomFixtureHandler {
-	
 	static {
 		LOG = LoggerFactory.getLogger(ServiceCallCustomHandler.class);
-		try {
-			new Thread("MouseLocation"){
-				@Override
-				public void run() {
-					while(true){
-						try {
-							Thread.sleep(1000);
-				        	final Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-				        	System.out.println("("+Integer.valueOf(mouseLocation.x)+","+Integer.valueOf(mouseLocation.y)+")");
-						}
-						catch(final Exception e) {
-							e.printStackTrace();
-						}
-				    }
-				}
-			}.start();
-		}
-		catch(final Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			new Thread("MouseLocation"){
+//				@Override
+//				public void run() {
+//					while(true){
+//						try {
+//							Thread.sleep(1000);
+//				        	final Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+//				        	System.out.println("("+Integer.valueOf(mouseLocation.x)+","+Integer.valueOf(mouseLocation.y)+")");
+//						}
+//						catch(final Exception e) {
+//							e.printStackTrace();
+//						}
+//				    }
+//				}
+//			}.start();
+//		}
+//		catch(final Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	private static final int NB_NO_ARGS_WORD = 1;
@@ -248,7 +248,14 @@ public class ServiceCallCustomHandler extends AbstractCustomFixtureHandler {
 	}
 
 	private ServiceCallIdentifier buildServiceCallIdentifier(final String value) {
-		final List<String> retrieveMessageAsWord = retrieveMessageAsWords(value);
+		final List<String> retrieveMessageAsWord;
+		if(value.contains(Property.DEFAULT_PARAM_INPUT_SEPARATOR)){
+			String[] initSplit = value.split(Property.DEFAULT_PARAM_INPUT_SEPARATOR);
+			retrieveMessageAsWord = new ArrayList<String>(retrieveMessageAsWords(initSplit[0]));
+			retrieveMessageAsWord.addAll(retrieveParametersAsWords(initSplit[1]));
+		}else{
+			retrieveMessageAsWord = new ArrayList<String>(retrieveMessageAsWords(value));
+		}
 		//final String methodDescriptor = searchInRepos(retrieveMessageAsWord.get(0));
 		final String methodDescriptor = retrieveMessageAsWord.get(0);
 		final String[] split = methodDescriptor.split("/");
@@ -267,6 +274,9 @@ public class ServiceCallCustomHandler extends AbstractCustomFixtureHandler {
 	private static List<String> retrieveMessageAsWords(final String value) {
 		return Arrays.asList(StringUtils.split(value));
 	}
+	private static List<String> retrieveParametersAsWords(final String value) {
+		return Arrays.asList(StringUtils.split(value, Property.DEFAULT_PARAM_SEPARATOR));
+	}
 
 	private static void fillArgs(
 			final Class<?>[] argsType,
@@ -276,8 +286,9 @@ public class ServiceCallCustomHandler extends AbstractCustomFixtureHandler {
 		final int size = retrieveMessageAsWord.size();
 		for(int index = NB_NO_ARGS_WORD; index < size; ++index) {
 			final String object = retrieveMessageAsWord.get(index);
+			final String param = object != null ? object.trim() : "null";
 			final Class<?> classArgs = argsType[index - NB_NO_ARGS_WORD];
-			args[index - NB_NO_ARGS_WORD] = computeObject(classArgs, object);
+			args[index - NB_NO_ARGS_WORD] = computeObject(classArgs, param);
 		}
 	}
 
@@ -373,7 +384,7 @@ public class ServiceCallCustomHandler extends AbstractCustomFixtureHandler {
 	}
 
 	@Override
-	protected String makeHanldeFixtureCall(
+	protected String makeHandleFixtureCall(
 			final Component component,
 			final IIdRequest request
 	) {
@@ -393,5 +404,16 @@ public class ServiceCallCustomHandler extends AbstractCustomFixtureHandler {
 	@Override
 	public List<String> getCommandRequestWhiteList() {
 		return whiteList;
+	}
+	
+	public static void main(String[] args) {
+		//add in unit test
+		String value = "swi-normal/assemblage.prevision/findEstActifPrevisionForTnr 03/02/2015 " +Property.DEFAULT_PARAM_INPUT_SEPARATOR+ " TGVWAGON In Plaza|DFCE";
+		String[] initSplit = value.split(Property.DEFAULT_PARAM_INPUT_SEPARATOR);
+		final List<String> retrieveMessageHeader = retrieveMessageAsWords(initSplit[0]);
+		final List<String> retrieveMessageAsWord = new ArrayList<String>(retrieveMessageHeader);
+		retrieveMessageAsWord.addAll(retrieveParametersAsWords(initSplit[1]));
+		System.out.println(StringUtils.join(retrieveMessageAsWord, ","));
+		
 	}
 }

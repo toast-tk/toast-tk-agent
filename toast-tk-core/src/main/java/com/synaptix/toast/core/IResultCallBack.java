@@ -22,31 +22,14 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Creation date: 16 févr. 2015
+Creation date: 13 avr. 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
 
-package com.synaptix.toast.automation.drivers;
+package com.synaptix.toast.core;
 
-import com.google.inject.Inject;
-import com.synaptix.toast.core.IRepositorySetup;
-import com.synaptix.toast.core.annotation.Fixture;
-import com.synaptix.toast.core.annotation.FixtureKind;
-import com.synaptix.toast.fixture.swing.RedPepperSwingFixture;
-import com.synaptix.toast.fixture.swing.SwingAutoElement;
+public interface IResultCallBack {
 
-@Fixture(value = FixtureKind.swing, name = "toastSwingClientConnector")
-public class DefaultSwingServiceFixture extends RedPepperSwingFixture{
-
-	@Inject
-	public DefaultSwingServiceFixture(IRepositorySetup repo, SwingClientDriver driver) {
-		super(repo, driver);
-	}
-
-	@Override
-	public SwingAutoElement overrideElementInstance(SwingAutoElement autoElement) {
-		return null;
-	}
-
+	public void onResult(String value);
 }

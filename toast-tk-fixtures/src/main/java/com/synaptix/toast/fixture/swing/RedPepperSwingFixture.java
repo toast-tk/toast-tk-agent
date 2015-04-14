@@ -1,29 +1,28 @@
 package com.synaptix.toast.fixture.swing;
 
+import static com.synaptix.toast.fixture.FixtureSentenceRef.AddValueInVar;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.ClickOn;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.ClickOnIn;
+import static com.synaptix.toast.fixture.FixtureSentenceRef.DiviserVarByValue;
+import static com.synaptix.toast.fixture.FixtureSentenceRef.GetComponentValue;
+import static com.synaptix.toast.fixture.FixtureSentenceRef.MultiplyVarByValue;
+import static com.synaptix.toast.fixture.FixtureSentenceRef.RemplacerVarParValue;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.SelectContectualMenu;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.SelectMenuPath;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.SelectSubMenu;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.SelectTableRow;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.SelectValueInList;
+import static com.synaptix.toast.fixture.FixtureSentenceRef.StoreComponentValueInVar;
+import static com.synaptix.toast.fixture.FixtureSentenceRef.SubstractValueFromVar;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.TypeValueInInput;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.TypeVarIn;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.StoreComponentValueInVar;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.GetComponentValue;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.RemplacerVarParValue;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.DiviserVarByValue;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.MultiplyVarByValue;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.SubstractValueFromVar;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.AddValueInVar;
 import static com.synaptix.toast.fixture.FixtureSentenceRef.Wait;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dom4j.IllegalAddException;
-
+import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.synaptix.toast.automation.net.CommandRequest;
 import com.synaptix.toast.automation.net.TableCommandRequestQueryCriteria;
 import com.synaptix.toast.core.AutoSwingType;
@@ -45,19 +44,17 @@ public abstract class RedPepperSwingFixture {
 	protected IRepositorySetup repo;
 	protected ClientDriver driver;
 
-	public RedPepperSwingFixture(IRepositorySetup repo) {
+	public RedPepperSwingFixture(IRepositorySetup repo, ClientDriver driver) {
 		this.repo = repo;
+		this.driver = driver;
 		try {
-			driver = getDriver();
 			for (IFeedableSwingPage page : repo.getSwingPages()) {
 				((DefaultSwingPage) page).setDriver(driver);
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
-	public abstract ClientDriver getDriver() throws IOException;
 
 	public abstract SwingAutoElement overrideElementInstance(SwingAutoElement autoElement);
 
@@ -204,8 +201,8 @@ public abstract class RedPepperSwingFixture {
 	public TestResult selectPath(String menu) throws Exception {
 		try {
 			String[] locator = menu.split(" / ");
-			SwingAutoUtils.confirmExist(getDriver(), locator[0], AutoSwingType.menu.name());
-			getDriver().process(
+			SwingAutoUtils.confirmExist(driver, locator[0], AutoSwingType.menu.name());
+			driver.process(
 					new CommandRequest.CommandRequestBuilder(null).with(locator[0]).ofType(AutoSwingType.menu.name()).select(locator[1]).build());
 		} catch (Exception e) {
 			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
@@ -262,7 +259,7 @@ public abstract class RedPepperSwingFixture {
 	@Check(SelectContectualMenu)
 	public TestResult selectCtxMenu(String menu) throws Exception {
 		try {
-			getDriver().process(new CommandRequest.CommandRequestBuilder(null).with(menu).ofType(AutoSwingType.menu.name()).select(menu).build());
+			driver.process(new CommandRequest.CommandRequestBuilder(null).with(menu).ofType(AutoSwingType.menu.name()).select(menu).build());
 		} catch (Exception e) {
 			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
 		}
@@ -382,11 +379,11 @@ public abstract class RedPepperSwingFixture {
 		return new TestResult();
 	}
 	
-	@Check("\\$(\\w+) égale à \\$(\\w+)")
+	@Check("\\$(\\w+) == \\$(\\w+)")
 	public TestResult VarEqVar(String var1, String var2) throws Exception {
 		try {
-			Object object = repo.getUserVariables().get(var1);
-			Object object2 = repo.getUserVariables().get(var2);
+			Object object = repo.getUserVariables().get(var1) == null ? "undefined" : repo.getUserVariables().get(var1);
+			Object object2 = repo.getUserVariables().get(var2)== null ? "undefined" : repo.getUserVariables().get(var2);
 			if(object.equals(object2)){
 				return new TestResult(Boolean.TRUE.toString(), ResultKind.SUCCESS);
 			}else{
@@ -401,14 +398,25 @@ public abstract class RedPepperSwingFixture {
 	public TestResult ValueEqVar(String value, String var) throws Exception {
 		try {
 			Object object = repo.getUserVariables().get(var);
-			if(object.equals(value)){
+			if(value.equals(object)){
 				return new TestResult(Boolean.TRUE.toString(), ResultKind.SUCCESS);
 			}else{
-				return new TestResult(String.format("%s == %s => %s", value, var.toString(), Boolean.FALSE.toString()), ResultKind.FAILURE);
+				return new TestResult(String.format("%s == %s => %s", value, object, Boolean.FALSE.toString()), ResultKind.FAILURE);
 			}
 		} catch (Exception e) {
 			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
 		}
 	}
 	
+	@Check("Clear (\\w+).(\\w+)")
+	public TestResult clear(String pageName, String widgetName) throws Exception {
+		try {
+			SwingInputElement input = (SwingInputElement) getPageField(pageName, widgetName);
+			input.clear();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
+		}
+		return new TestResult();
+	}
 }

@@ -80,7 +80,7 @@ public class BootAgent {
         instrumentation = inst;
         final String redpepperAgentPath = getRootPath(); 
       	final File toastAgentPath = new File(redpepperAgentPath);
-      	loadInterestingJars(toastAgentPath);
+      	//loadInterestingJars(toastAgentPath);
         Boot.main(null);
     }
     

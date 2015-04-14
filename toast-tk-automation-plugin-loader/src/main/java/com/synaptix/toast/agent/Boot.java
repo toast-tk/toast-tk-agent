@@ -35,9 +35,13 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -74,9 +78,10 @@ public class Boot {
 				return plugins;
 			}
 		};
+		
+		List<Module> pluginModules = new ArrayList<Module>();
 		bootPluginsLoader = new ServicePluginLoader<ToastPluginBoot>(ToastPluginBoot.class, pluginsClassPathProvider);
 		Collection<ServicePlugin<ToastPluginBoot>> load = bootPluginsLoader.load();
-		List<Module> pluginModules = new ArrayList<Module>();
 		for (ServicePlugin<ToastPluginBoot> servicePlugin : load) {
 			ToastPluginBoot plugin = servicePlugin.getPlugin();
 			plugin.boot();

@@ -43,6 +43,7 @@ import org.apache.logging.log4j.Logger;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.synaptix.toast.automation.net.CommandRequest;
+import com.synaptix.toast.core.IResultCallBack;
 import com.synaptix.toast.core.guice.ICustomFixtureHandler;
 
 @Singleton
@@ -60,12 +61,13 @@ public class FixtureHandlerProvider {
 		this.fixtureHandlers = fixtureHandlers;
 	}
 
-	public void processCustomCall(final CommandRequest request) {
+	public String processCustomCall(final CommandRequest request) {
 		ICustomFixtureHandler handlerInterestedIn = getHandlerInterestedIn(request);
 		if (handlerInterestedIn != null) {
 			LOG.info("finded CustomFixtureHandler : {} ", handlerInterestedIn.getName());
-			handlerInterestedIn.processCustomCall(request);
+			return handlerInterestedIn.processCustomCall(request);
 		}
+		return null;
 	}
 
 	public String processFixtureCall(Component target, CommandRequest request) {
