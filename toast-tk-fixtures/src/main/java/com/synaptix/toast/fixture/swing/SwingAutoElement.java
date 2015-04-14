@@ -41,23 +41,6 @@ public abstract class SwingAutoElement {
 	public SwingAutoElement() {
 
 	}
-//
-//	public boolean confirmExist(){
-//		int retry = 20;
-//		while(retry > 0){
-//			try {
-//				if(exists()){
-//					return true;
-//				}
-//				Thread.sleep(5000);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//			retry--;
-//		}
-//		return false;
-//	}
-
 	
 	public boolean exists(){
 		final String requestId = UUID.randomUUID().toString();

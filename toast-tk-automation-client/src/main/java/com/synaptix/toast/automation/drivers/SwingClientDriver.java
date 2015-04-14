@@ -27,11 +27,13 @@ public class SwingClientDriver implements ClientDriver {
 	private String host;
 	private static final int RECONNECTION_RATE = 10000;
 	protected volatile Map<String, Object> responseMap;
+	private Object VOID_RESULT = new Object();
+	//TODO: add wait loop timeout !
 
-	public SwingClientDriver(String host) {
+	public SwingClientDriver() {
 		this.client = new Client();
 		this.responseMap = new HashMap<String, Object>();
-		this.host = host;
+		this.host = "localhost";
 		CommonIOUtils.initSerialization(client.getKryo());
 		client.addListener(new Listener() {
 			@Override
@@ -56,6 +58,7 @@ public class SwingClientDriver implements ClientDriver {
 			}
 		});
 		client.start();
+		start();
 	}
 
 	@Override
@@ -98,7 +101,7 @@ public class SwingClientDriver implements ClientDriver {
 		}
 		init();
 		if (request.getId() != null) {
-			responseMap.put(request.getId(), null);
+			responseMap.put(request.getId(), VOID_RESULT);
 		}
 		//TODO: block any request with No ID !!
 		client.sendTCP(request);
@@ -123,7 +126,7 @@ public class SwingClientDriver implements ClientDriver {
 
 	public static void main(String[] args) {
 		try {
-			SwingClientDriver c = new SwingClientDriver("localhost");
+			SwingClientDriver c = new SwingClientDriver();
 			c.start();
 			c.init();
 		} catch (Exception e) {
@@ -135,7 +138,7 @@ public class SwingClientDriver implements ClientDriver {
 	public boolean waitForExist(String reqId) {
 		boolean res = false;
 		if (responseMap.containsKey(reqId)) {
-			while (responseMap.get(reqId) == null) {
+			while (VOID_RESULT.equals(responseMap.get(reqId))) {
 				try {
 					client.sendTCP(FrameworkMessage.keepAlive);
 					Thread.sleep(500);
@@ -154,7 +157,7 @@ public class SwingClientDriver implements ClientDriver {
 	public String waitForValue(String reqId) {
 		String res = null;
 		if (responseMap.containsKey(reqId)) {
-			while (responseMap.get(reqId) == null) {
+			while (VOID_RESULT.equals(responseMap.get(reqId))) {
 				try {
 					client.sendTCP(FrameworkMessage.keepAlive);
 					Thread.sleep(500);
@@ -170,5 +173,10 @@ public class SwingClientDriver implements ClientDriver {
 	
 	protected void handleResponse(IIdRequest response){
 		//TODO
+	}
+
+	@Override
+	public void stop() {
+		client.close();
 	}
 }

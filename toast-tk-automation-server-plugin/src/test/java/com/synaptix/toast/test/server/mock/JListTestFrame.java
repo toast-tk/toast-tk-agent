@@ -7,11 +7,11 @@ public class JListTestFrame extends JFrame {
 
 	private static final long serialVersionUID = 596546026271112299L;
 
-	private JList<String> jList;
+	private JList jList;
 
 	public JListTestFrame() {
 		final String[] datas = new String[]{"one", "two", "three", "four"};
-		this.jList = new JList<String>(datas);
+		this.jList = new JList(datas);
 		getContentPane().add(jList);
 		pack();
 		setVisible(true);

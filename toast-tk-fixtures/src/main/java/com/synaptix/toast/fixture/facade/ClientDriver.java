@@ -14,5 +14,7 @@ public interface ClientDriver {
 	public boolean waitForExist(String requestId);
 
 	public String waitForValue(String requestId);
+
+	public void stop();
 	 
 }

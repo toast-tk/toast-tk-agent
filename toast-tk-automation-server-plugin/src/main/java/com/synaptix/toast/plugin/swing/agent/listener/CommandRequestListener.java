@@ -7,6 +7,7 @@ import java.util.concurrent.BlockingQueue;
 
 import javax.swing.AbstractButton;
 import javax.swing.JComboBox;
+import javax.swing.JMenu;
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +15,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.fest.swing.core.MouseButton;
 import org.fest.swing.fixture.JComboBoxFixture;
+import org.fest.swing.fixture.JPopupMenuFixture;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -90,7 +93,10 @@ public class CommandRequestListener extends Listener implements Runnable {
 				CommandRequest command = (CommandRequest) object;
 				if (command.isCustom()) {
 					LOG.info("Processing custom command {}", object);
-					fixtureHandlerProvider.processCustomCall(command);
+					String result = fixtureHandlerProvider.processCustomCall(command);
+					if(command.getId() != null){
+						connection.sendTCP(new ValueResponse(command.getId(), result));
+					}
 				} else {
 					Component target = getTarget(command.item, command.itemType);
 					LOG.info("Found target command " + ToStringBuilder.reflectionToString(target, ToStringStyle.SHORT_PREFIX_STYLE));
@@ -100,7 +106,10 @@ public class CommandRequestListener extends Listener implements Runnable {
 						// outside edt
 						if (target instanceof JComboBox) {
 							handle((JComboBox) target, command);
-						} else {
+						}else if(target instanceof JMenu){
+							handle((JMenu)target, command);
+						}
+						else {
 							// within edt
 							queue.put(new Work(command, target, connection));
 							SwingUtilities.invokeLater(CommandRequestListener.this);
@@ -139,6 +148,27 @@ public class CommandRequestListener extends Listener implements Runnable {
 		return null;
 	}
 
+	
+	private void handle(JMenu target, CommandRequest command) {
+		switch (command.action) {
+		case CLICK:
+			rbt.click(target);
+			break;
+		case SELECT:
+			if (target == null) { 
+				rbt.pressMouse(MouseButton.RIGHT_BUTTON);
+				JPopupMenuFixture pFixture = new JPopupMenuFixture(rbt, rbt.findActivePopupMenu());
+				pFixture.menuItemWithPath(command.value).click();
+			} else {
+				rbt.click(target);
+				JPopupMenuFixture pFixture = new JPopupMenuFixture(rbt, rbt.findActivePopupMenu());
+				pFixture.menuItemWithPath(command.value).click();
+			}
+			break;
+		default:
+			throw new IllegalArgumentException("Unsupported command for JMenu: " + command.action.name());
+		}
+	}
 	@Override
 	public void run() {
 		try {

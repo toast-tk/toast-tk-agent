@@ -51,7 +51,7 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 	@Inject
 	public SwingInspectionServer(CommandRequestListener commandRequestListener, InitRequestListener initRequestListener) {
 		repository = new ConcurrentHashMap<String, Component>();
-		server = new Server(8192 * 8192, 8192 * 8192);
+		server = new Server(8192 * 1024, 8192 * 1024);
 		try {
 			CommonIOUtils.initSerialization(server.getKryo());
 			server.start();

@@ -35,7 +35,9 @@ import java.util.List;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.google.inject.Singleton;
 import com.synaptix.toast.automation.drivers.DefaultSwingServiceFixture;
+import com.synaptix.toast.automation.drivers.SwingClientDriver;
 import com.synaptix.toast.core.guice.AbstractFixtureModule;
 import com.synaptix.toast.fixture.swing.guice.RedPepperSwingFixturePluginModule;
 import com.synaptix.toast.swing.agent.guice.SwingModule;
@@ -50,6 +52,7 @@ public class AgentBoot {
 		modules.add(new AbstractFixtureModule() {
 			@Override
 			protected void configure() {
+				bind(SwingClientDriver.class).in(Singleton.class);
 				bindFixture(DefaultSwingServiceFixture.class);
 			}
 		});

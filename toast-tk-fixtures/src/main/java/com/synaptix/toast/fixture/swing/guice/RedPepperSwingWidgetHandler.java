@@ -1,18 +1,22 @@
 package com.synaptix.toast.fixture.swing.guice;
 
 import java.awt.Component;
+import java.awt.event.ActionListener;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPasswordField;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -22,9 +26,12 @@ import org.apache.logging.log4j.Logger;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.data.TableCell;
 import org.fest.swing.data.TableCellByColumnId;
+import org.fest.swing.fixture.JButtonFixture;
+import org.fest.swing.fixture.JCheckBoxFixture;
 import org.fest.swing.fixture.JPopupMenuFixture;
 import org.fest.swing.fixture.JTableCellFixture;
 import org.fest.swing.fixture.JTableFixture;
+import org.fest.swing.fixture.JTextComponentFixture;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -47,18 +54,22 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 			CommandRequest command = (CommandRequest) request;
 			if (target instanceof JLabel) {
 				return handle((JLabel) target, command);
-			} else if (target instanceof JTextField) {
-				return handle((JTextField) target, command);
-			} else if (target instanceof JPasswordField) {
+			} 
+			else if (target instanceof JFormattedTextField) {
+				return handle((JFormattedTextField) target, command);
+			}
+			else if (target instanceof JPasswordField) {
 				return handle((JPasswordField) target, command);
-			} else if (target instanceof JButton) {
+			} 
+			else if (target instanceof JTextField) {
+				return handle((JTextField) target, command);
+			} 
+			else if (target instanceof JButton) {
 				handle((JButton) target, command);
 			} else if (target instanceof JCheckBox) {
 				return handle((JCheckBox) target, command);
 			} else if (target instanceof JTextArea) {
 				return handle((JTextArea) target, command);
-			} else if (target instanceof JMenu) {
-				handle((JMenu) target, command);
 			} else if (target instanceof JTable) {
 				if(command instanceof TableCommandRequest){
 					return handle((JTable) target, (TableCommandRequest)command);
@@ -86,19 +97,96 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 		return null;
 	}
 	
-	public String handle(JTextField textField, CommandRequest command) {
+	
+	public String handle(final JFormattedTextField textField, final CommandRequest command) {
 		switch (command.action) {
 		case SET:
 			if ("date".equals(command.itemType)) {
-				int value = Integer.parseInt(command.value);
-				LocalDate date = LocalDate.now().plusDays(value);
-				DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yy");
-				String formattedDate = formatter.print(date);
-				textField.setText(formattedDate);
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						int value = Integer.parseInt(command.value);
+						LocalDate date = LocalDate.now().plusDays(value);
+						DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yy");
+						String formattedDate = formatter.print(date);
+						
+						
+						/*ActionListener[] actionListeners = textField.getActionListeners();
+						if(actionListeners != null) {
+							for(final ActionListener actionListener :actionListeners)
+							textField.removeActionListener(l)
+						}*/
+						
+						textField.setText(formattedDate);
+						try {
+							textField.commitEdit();
+						}catch(ParseException e) {
+							e.printStackTrace();
+						}
+					}
+				});
 			}else if("date_text".equals(command.itemType)){
-				textField.setText(command.value);
+				SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						textField.setText(command.value);
+						try {
+							textField.commitEdit();
+						}catch(ParseException e) {
+							e.printStackTrace();
+						}
+					}
+				});
 			}else{
-				textField.setText(command.value);
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						textField.setText(command.value);
+					}
+				});
+			}
+			break;
+		case CLICK:
+			rbt.click(textField);
+			break;
+		case GET:
+			return textField.getText();
+		default:
+			throw new IllegalArgumentException("Unsupported command for JTextField: " + command.action.name());
+		}
+		return null;
+	}
+	
+	public String handle(final JTextField textField, final CommandRequest command) {
+		switch (command.action) {
+		case SET:
+			if ("date".equals(command.itemType)) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						int value = Integer.parseInt(command.value);
+						LocalDate date = LocalDate.now().plusDays(value);
+						DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yy");
+						String formattedDate = formatter.print(date);
+						textField.setText(formattedDate);
+					}
+				});
+			}else if("date_text".equals(command.itemType)){
+				SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						textField.setText(command.value);
+					}
+				});
+			}else{
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						textField.setText(command.value);
+					}
+				});
 			}
 			break;
 		case CLICK:
@@ -113,9 +201,10 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 	}
 
 	public String handle(JPasswordField textField, CommandRequest command) {
+		JTextComponentFixture tFixture = new JTextComponentFixture(rbt, textField);
 		switch (command.action) {
 		case SET:
-			textField.setText(command.value);
+			tFixture.setText(command.value);
 			break;
 		case CLICK:
 			rbt.click(textField);
@@ -128,10 +217,16 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 		return null;
 	}
 	
-	private void handle(JButton button, CommandRequest command) {
+	private void handle(final JButton button, CommandRequest command) {
 		switch (command.action) {
 		case CLICK:
-			button.doClick();
+			SwingUtilities.invokeLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					button.doClick(1);					
+				}
+			});
 			break;
 		default:
 			throw new IllegalArgumentException("Unsupported command for JButton: " + command.action.name());
@@ -141,7 +236,8 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 	private String handle(JCheckBox checkbox, CommandRequest command) {
 		switch (command.action) {
 		case CLICK:
-			checkbox.doClick();
+			JCheckBoxFixture bFixture = new JCheckBoxFixture(rbt, checkbox);
+			bFixture.click();
 			break;
 		case GET:
 			return String.valueOf(checkbox.isSelected());
@@ -152,17 +248,19 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 	}
 	
 	private String handle(JTextArea textField, CommandRequest command) {
+
+		JTextComponentFixture tFixture = new JTextComponentFixture(rbt, textField);
 		switch (command.action) {
 		case SET:
-			textField.setText(command.value);
+			tFixture.setText(command.value);
 			break;
 		case GET:
-			return textField.getText();
+			return tFixture.text();
 		case CLICK:
 			rbt.click(textField);
 			break;
 		case CLEAR:
-			textField.setText("");
+			tFixture.setText(command.value);
 		default:
 			throw new IllegalArgumentException("Unsupported command for JTextArea: " + command.action.name());
 		}
@@ -260,26 +358,6 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 		return false;
 	}
 
-	private void handle(JMenu target, CommandRequest command) {
-		switch (command.action) {
-		case CLICK:
-			target.doClick();
-			break;
-		case SELECT:
-			if (target == null) { 
-				rbt.pressMouse(MouseButton.RIGHT_BUTTON);
-				JPopupMenuFixture pFixture = new JPopupMenuFixture(rbt, rbt.findActivePopupMenu());
-				pFixture.menuItemWithPath(command.value).click();
-			} else {
-				target.doClick();
-				JPopupMenuFixture pFixture = new JPopupMenuFixture(rbt, rbt.findActivePopupMenu());
-				pFixture.menuItemWithPath(command.value).click();
-			}
-			break;
-		default:
-			throw new IllegalArgumentException("Unsupported command for JMenu: " + command.action.name());
-		}
-	}
 
 	@Override
 	public Component locateComponentTarget(String item, String itemType, Component value) {

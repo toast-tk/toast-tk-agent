@@ -19,10 +19,10 @@
 		<module>toast-tk-runtime</module>
 		<module>toast-tk-automation-server-plugin</module>
 		<module>toast-tk-automation-plugin-loader</module>
-		<module>toast-tk-automation-client</module>
-		<module>toast-tk-gwt-webapp</module>
+		<!-- <module>toast-tk-automation-client</module> -->
+		<!-- <module>toast-tk-gwt-webapp</module> -->
 		<module>toast-tk-automation-synaptix-plugin</module>
-		<module>toast-tk-maven-plugin</module>
+		<!-- <module>toast-tk-maven-plugin</module> -->
 	</modules>
 	<properties>
 		<root-directory>${project.basedir}</root-directory>

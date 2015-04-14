@@ -53,7 +53,6 @@ import com.synaptix.toast.core.inspection.ISwingInspectionClient;
 import com.synaptix.toast.core.interpret.IEventInterpreter;
 import com.synaptix.toast.core.interpret.InterpretedEvent;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
-import com.synaptix.toast.swing.agent.interpret.DefaultEventInterpreter;
 import com.synaptix.toast.swing.agent.interpret.LiveRedPlayEventInterpreter;
 import com.synaptix.toast.swing.agent.interpret.MongoRepoManager;
 
@@ -68,7 +67,7 @@ public class SwingInspectServerClient extends SwingClientDriver implements ISwin
 	private static final Logger LOG = LogManager.getLogger(SwingInspectServerClient.class);
 	
 	public SwingInspectServerClient(String host) throws IOException {
-		super(host);
+		super();
 	}
 
 	@Inject
