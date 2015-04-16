@@ -1,8 +1,6 @@
 package com.synaptix.toast.plugin.synaptix.runtime.handler;
 
 import java.awt.Component;
-import java.awt.MouseInfo;
-import java.awt.Point;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.UndeclaredThrowableException;
@@ -33,8 +31,6 @@ import com.synaptix.toast.automation.net.CommandRequest;
 import com.synaptix.toast.automation.net.IIdRequest;
 import com.synaptix.toast.automation.net.ValueResponse;
 import com.synaptix.toast.core.Property;
-import com.synaptix.toast.dao.domain.impl.test.ComponentConfigLine;
-import com.synaptix.toast.dao.domain.impl.test.block.ConfigBlock;
 import com.synaptix.toast.dao.service.dao.access.test.ConfigBlockDaoService;
 import com.synaptix.toast.plugin.synaptix.runtime.annotation.ServiceCallHandler;
 import com.synaptix.toast.plugin.synaptix.runtime.converter.StringToObjectInstance;
@@ -45,26 +41,6 @@ import com.synaptix.toast.plugin.synaptix.runtime.service.ConnectionBuilder;
 public class ServiceCallCustomHandler extends AbstractCustomFixtureHandler {
 	static {
 		LOG = LoggerFactory.getLogger(ServiceCallCustomHandler.class);
-//		try {
-//			new Thread("MouseLocation"){
-//				@Override
-//				public void run() {
-//					while(true){
-//						try {
-//							Thread.sleep(1000);
-//				        	final Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-//				        	System.out.println("("+Integer.valueOf(mouseLocation.x)+","+Integer.valueOf(mouseLocation.y)+")");
-//						}
-//						catch(final Exception e) {
-//							e.printStackTrace();
-//						}
-//				    }
-//				}
-//			}.start();
-//		}
-//		catch(final Exception e) {
-//			e.printStackTrace();
-//		}
 	}
 
 	private static final int NB_NO_ARGS_WORD = 1;

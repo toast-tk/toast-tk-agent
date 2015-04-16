@@ -25,6 +25,7 @@ import com.google.inject.Inject;
 import com.synaptix.toast.automation.net.CommandRequest;
 import com.synaptix.toast.automation.net.ExistsResponse;
 import com.synaptix.toast.automation.net.ValueResponse;
+import com.synaptix.toast.core.AutoSwingType;
 import com.synaptix.toast.fixture.utils.FestRobotInstance;
 
 /**
@@ -37,7 +38,6 @@ public class CommandRequestListener extends Listener implements Runnable {
 	private Map<String, Component> repository;
 	private BlockingQueue<Work> queue;
 	private final FixtureHandlerProvider fixtureHandlerProvider;
-	public static final org.fest.swing.core.Robot rbt = FestRobotInstance.getRobot();
 
 	@Inject
 	public CommandRequestListener(FixtureHandlerProvider fixtureHandlerProvider) {
@@ -115,7 +115,11 @@ public class CommandRequestListener extends Listener implements Runnable {
 							SwingUtilities.invokeLater(CommandRequestListener.this);
 						}
 
-					} else {
+					} 
+					else if(command.itemType.equals(AutoSwingType.menu.name())){
+						handlePopupMenuItem(command);
+					}
+					else {
 						LOG.error("No target found for command: " + ToStringBuilder.reflectionToString(command, ToStringStyle.SHORT_PREFIX_STYLE));
 					}
 				}
@@ -126,8 +130,19 @@ public class CommandRequestListener extends Listener implements Runnable {
 		}
 	}
 
+	private void handlePopupMenuItem(CommandRequest command) {
+		switch (command.action) {
+		case SELECT:
+			JPopupMenuFixture pFixture = new JPopupMenuFixture(FestRobotInstance.getRobot(), FestRobotInstance.getRobot().findActivePopupMenu());
+			pFixture.menuItemWithPath(command.value).click();
+			break;
+		default:
+			throw new IllegalArgumentException("Unsupported command for JMenu: " + command.action.name());
+		}
+	}
+
 	private String handle(JComboBox target, final CommandRequest command) {
-		JComboBoxFixture fixture = new JComboBoxFixture(rbt, target);
+		JComboBoxFixture fixture = new JComboBoxFixture(FestRobotInstance.getRobot(), target);
 		switch (command.action) {
 		case SET:
 			fixture.focus().enterText(command.value);
@@ -152,16 +167,16 @@ public class CommandRequestListener extends Listener implements Runnable {
 	private void handle(JMenu target, CommandRequest command) {
 		switch (command.action) {
 		case CLICK:
-			rbt.click(target);
+			FestRobotInstance.getRobot().click(target);
 			break;
 		case SELECT:
 			if (target == null) { 
-				rbt.pressMouse(MouseButton.RIGHT_BUTTON);
-				JPopupMenuFixture pFixture = new JPopupMenuFixture(rbt, rbt.findActivePopupMenu());
+				FestRobotInstance.getRobot().pressMouse(MouseButton.RIGHT_BUTTON);
+				JPopupMenuFixture pFixture = new JPopupMenuFixture(FestRobotInstance.getRobot(), FestRobotInstance.getRobot().findActivePopupMenu());
 				pFixture.menuItemWithPath(command.value).click();
 			} else {
-				rbt.click(target);
-				JPopupMenuFixture pFixture = new JPopupMenuFixture(rbt, rbt.findActivePopupMenu());
+				FestRobotInstance.getRobot().click(target);
+				JPopupMenuFixture pFixture = new JPopupMenuFixture(FestRobotInstance.getRobot(), FestRobotInstance.getRobot().findActivePopupMenu());
 				pFixture.menuItemWithPath(command.value).click();
 			}
 			break;

@@ -46,7 +46,6 @@ import com.synaptix.toast.fixture.utils.FestRobotInstance;
 public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 
 	private static final Logger LOG = LogManager.getLogger(RedPepperSwingWidgetHandler.class);
-	public static final org.fest.swing.core.Robot rbt = FestRobotInstance.getRobot();
 	
 	@Override
 	public String hanldeFixtureCall(Component target, IIdRequest request) {
@@ -148,7 +147,7 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 			}
 			break;
 		case CLICK:
-			rbt.click(textField);
+			FestRobotInstance.getRobot().click(textField);
 			break;
 		case GET:
 			return textField.getText();
@@ -190,7 +189,7 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 			}
 			break;
 		case CLICK:
-			rbt.click(textField);
+			FestRobotInstance.getRobot().click(textField);
 			break;
 		case GET:
 			return textField.getText();
@@ -201,13 +200,13 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 	}
 
 	public String handle(JPasswordField textField, CommandRequest command) {
-		JTextComponentFixture tFixture = new JTextComponentFixture(rbt, textField);
+		JTextComponentFixture tFixture = new JTextComponentFixture(FestRobotInstance.getRobot(), textField);
 		switch (command.action) {
 		case SET:
 			tFixture.setText(command.value);
 			break;
 		case CLICK:
-			rbt.click(textField);
+			FestRobotInstance.getRobot().click(textField);
 			break;
 		case GET:
 			return StringUtils.join(textField.getPassword(), "");
@@ -236,7 +235,7 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 	private String handle(JCheckBox checkbox, CommandRequest command) {
 		switch (command.action) {
 		case CLICK:
-			JCheckBoxFixture bFixture = new JCheckBoxFixture(rbt, checkbox);
+			JCheckBoxFixture bFixture = new JCheckBoxFixture(FestRobotInstance.getRobot(), checkbox);
 			bFixture.click();
 			break;
 		case GET:
@@ -249,7 +248,7 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 	
 	private String handle(JTextArea textField, CommandRequest command) {
 
-		JTextComponentFixture tFixture = new JTextComponentFixture(rbt, textField);
+		JTextComponentFixture tFixture = new JTextComponentFixture(FestRobotInstance.getRobot(), textField);
 		switch (command.action) {
 		case SET:
 			tFixture.setText(command.value);
@@ -257,7 +256,7 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 		case GET:
 			return tFixture.text();
 		case CLICK:
-			rbt.click(textField);
+			FestRobotInstance.getRobot().click(textField);
 			break;
 		case CLEAR:
 			tFixture.setText(command.value);
@@ -269,7 +268,7 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 
 
 	private String handle(JTable target, final TableCommandRequest command) {
-		JTableFixture tFixture = new JTableFixture(rbt, (JTable) target);
+		JTableFixture tFixture = new JTableFixture(FestRobotInstance.getRobot(), (JTable) target);
 		switch (command.action) {
 		case COUNT:
 			int tries = 30;
@@ -328,7 +327,7 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 					try {
 						cell.select();
 						cell.rightClick();
-						JPopupMenuFixture pFixture = new JPopupMenuFixture(rbt, rbt.findActivePopupMenu());
+						JPopupMenuFixture pFixture = new JPopupMenuFixture(FestRobotInstance.getRobot(), FestRobotInstance.getRobot().findActivePopupMenu());
 						pFixture.menuItemWithPath(command.value).click();
 					} catch (Exception e) {
 						e.printStackTrace();

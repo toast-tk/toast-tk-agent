@@ -20,6 +20,7 @@ public final class FestRobotInstance {
 
 	FestRobotInstance() {
 		this.rbt = BasicRobot.robotWithCurrentAwtHierarchy();
+		rbt.cleanUpWithoutDisposingWindows();
 	}
 	
 	public void doubleClick(final Point where) {

@@ -1,7 +1,5 @@
 package com.synaptix.toast.plugin.synaptix.runtime.handler.action;
 
-import java.awt.Point;
-
 import com.synaptix.swing.JSimpleDaysTimeline;
 import com.synaptix.swing.SimpleDaysTask;
 import com.synaptix.toast.plugin.synaptix.runtime.handler.ActionTimelineInfo;
