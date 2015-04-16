@@ -175,6 +175,7 @@ public class ToastToolKitMavenMojo extends AbstractMojo {
 								sentence = sentence.replace("\"+SWING_COMPONENT_REGEX", FixtureSentenceRef.SWING_COMPONENT_REGEX);
 								sentence = sentence.replace("\"+VAR_IN_REGEX", FixtureSentenceRef.VAR_IN_REGEX);
 								sentence = sentence.replace("\"+VAR_OUT_REGEX", FixtureSentenceRef.VAR_OUT_REGEX);
+								sentence = sentence.substring(1, sentence.length()-1);
 								FixtureDescriptorLine descriptorLine = new FixtureDescriptorLine(fixtureName, fixtureKind, sentence);
 								sentences.add(descriptorLine);
 							}

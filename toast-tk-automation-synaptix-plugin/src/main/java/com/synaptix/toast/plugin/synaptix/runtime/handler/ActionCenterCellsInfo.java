@@ -10,7 +10,7 @@ import com.synaptix.toast.plugin.synaptix.runtime.converter.DateStringToObject;
 
 public final class ActionCenterCellsInfo {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(CenterCellsHandler.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ActionCenterCellsInfo.class);
 
 	public final Date datePrevision;
 

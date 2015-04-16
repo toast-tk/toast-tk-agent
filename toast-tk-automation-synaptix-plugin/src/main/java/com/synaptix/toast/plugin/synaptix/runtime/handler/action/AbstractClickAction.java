@@ -2,9 +2,6 @@ package com.synaptix.toast.plugin.synaptix.runtime.handler.action;
 
 import java.awt.Component;
 import java.awt.Point;
-import java.awt.Robot;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 
 import javax.swing.SwingUtilities;
 
@@ -13,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.synaptix.toast.fixture.utils.FestRobotInstance;
-import com.synaptix.toast.plugin.synaptix.runtime.handler.CenterCellsHandler;
 
 public abstract class AbstractClickAction<C extends Component> implements Runnable {
 	

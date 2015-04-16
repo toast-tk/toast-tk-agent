@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sncf.fret.swi.client.assemblage.view.swing.extension.panel.gestionprevisions.CenterCellsPanel;
-import com.synaptix.toast.plugin.synaptix.runtime.handler.CenterCellsHandler;
 
 public final class CenterCellsPanelDoOpenMenuAction extends AbstractClickAction<CenterCellsPanel> {
 
