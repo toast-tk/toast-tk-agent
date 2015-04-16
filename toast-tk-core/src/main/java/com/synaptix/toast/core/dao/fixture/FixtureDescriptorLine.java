@@ -22,47 +22,22 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Creation date: 2 févr. 2015
+Creation date: 17 mars 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
 
-package com.synaptix.toast.fixture;
+package com.synaptix.toast.core.dao.fixture;
 
-import com.synaptix.toast.core.annotation.FixtureSentenceRef.Types;
-
-public class SentenceBuilder {
-	String output = "";
-
-	public SentenceBuilder() {
-	}
-
-	public SentenceBuilder ofType(Types type) {
-		this.output = type.metaValue();
-		return this;
+public class FixtureDescriptorLine {
+	public final String name;
+	public final String fixtureType;
+	public final String pattern;
+	
+	public FixtureDescriptorLine(String name, String type, String pattern){
+		this.name = name;
+		this.fixtureType = type;
+		this.pattern = pattern;
 	}
 	
-	public SentenceBuilder withPage(String page) {
-		assert output != null;
-		output = output.replace("@Page", "*"+page);
-		return this;
-	}
-
-	public SentenceBuilder withComponent(String item) {
-		assert output != null;
-		output = output.replace("@Item", item+"*");
-		return this;
-	}
-
-	public SentenceBuilder withValue(String value) {
-		assert output != null;
-		output = output.replace("@Value", "*" + value + "*");
-		return this;
-	}
-	
-	public String build(){
-		String result  = new String(output);
-		output = null;
-		return result;
-	}
 }

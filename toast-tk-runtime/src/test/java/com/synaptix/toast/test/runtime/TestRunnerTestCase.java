@@ -29,13 +29,21 @@ Creation date: 26 mars 2015
 
 package com.synaptix.toast.test.runtime;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.fest.assertions.AssertExtension;
 import org.junit.AfterClass;
 import org.junit.Test;
 
+import com.synaptix.toast.core.IRepositorySetup;
 import com.synaptix.toast.core.annotation.Check;
+import com.synaptix.toast.test.runtime.mock.DefaultRepositorySetup;
+import com.synpatix.toast.runtime.core.runtime.ToastRunnerHelper;
 import com.synpatix.toast.runtime.core.runtime.ToastTestRunner;
 import com.synpatix.toast.runtime.core.runtime.ToastTestRunner.FixtureExecCommandDescriptor;
 
@@ -69,6 +77,24 @@ public class TestRunnerTestCase {
 		ToastTestRunner runner = new ToastTestRunner(null, null);
 		FixtureExecCommandDescriptor findMethodInClass = runner.findMethodInClass("Titi", Titi.class);
 		assertNotNull(findMethodInClass);
+	}
+	
+	@Test
+	public void testArgumentBuild() {
+		IRepositorySetup repo = new DefaultRepositorySetup();
+		Map<String,Object> userVarMap = new HashMap<String, Object>();
+		userVarMap.put("$variable", "200");
+		repo.setUserVariables(userVarMap);
+		Object buildArgument = ToastRunnerHelper.buildArgument(repo, "$variable");
+		assertEquals(buildArgument, "200");
+		buildArgument = ToastRunnerHelper.buildArgument(repo, "*$variable*");
+		assertEquals(buildArgument, "200");
+		buildArgument = ToastRunnerHelper.buildArgument(repo, "$vaiable");
+		assertNull(buildArgument);
+		buildArgument = ToastRunnerHelper.buildArgument(repo, "$$variable");
+		assertEquals(buildArgument, "$variable");
+		buildArgument = ToastRunnerHelper.buildArgument(repo, "*variable*");
+		assertEquals(buildArgument, "variable");
 	}
 	
 	

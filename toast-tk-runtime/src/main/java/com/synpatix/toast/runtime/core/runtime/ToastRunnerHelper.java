@@ -22,47 +22,27 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Creation date: 2 févr. 2015
+Creation date: 15 avr. 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
 
-package com.synaptix.toast.fixture;
+package com.synpatix.toast.runtime.core.runtime;
 
-import com.synaptix.toast.core.annotation.FixtureSentenceRef.Types;
+import com.synaptix.toast.core.IRepositorySetup;
 
-public class SentenceBuilder {
-	String output = "";
+public class ToastRunnerHelper {
 
-	public SentenceBuilder() {
+	public static Object buildArgument(IRepositorySetup repoSetup, String group) {
+		//System.out.println("IN <- "+ group);
+		group = group.replaceAll("\\*", "");
+		//System.out.println("OUT -> "+ group);
+		if(group.startsWith("$$")){
+			return group.substring(1);
+		}else if (group.startsWith("$")){
+			return repoSetup.getUserVariables().get(group);
+		}
+		return group;
 	}
 
-	public SentenceBuilder ofType(Types type) {
-		this.output = type.metaValue();
-		return this;
-	}
-	
-	public SentenceBuilder withPage(String page) {
-		assert output != null;
-		output = output.replace("@Page", "*"+page);
-		return this;
-	}
-
-	public SentenceBuilder withComponent(String item) {
-		assert output != null;
-		output = output.replace("@Item", item+"*");
-		return this;
-	}
-
-	public SentenceBuilder withValue(String value) {
-		assert output != null;
-		output = output.replace("@Value", "*" + value + "*");
-		return this;
-	}
-	
-	public String build(){
-		String result  = new String(output);
-		output = null;
-		return result;
-	}
 }

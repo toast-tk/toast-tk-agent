@@ -75,7 +75,7 @@ public class TestLineDescriptor {
 		if(isFailFatalCommand()){
 			command = command.substring(2);
 		}
-		command = command.trim().replace("*", "");
+		//command = command.trim().replace("*", "");
 		return command;
 	}
 

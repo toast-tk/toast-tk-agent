@@ -39,7 +39,7 @@
 		<dependency>
 			<artifactId>reflections</artifactId>
 			<groupId>org.reflections</groupId>
-			<version>0.9.9-RC1</version>
+			<version>0.9.9</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>

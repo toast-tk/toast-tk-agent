@@ -408,7 +408,7 @@ public class ToastTestRunner {
 		int groupCount = matcher.groupCount();
 		Object[] args = new Object[groupCount];
 		for (int i = 0; i < groupCount; i++) {
-			args[i] = matcher.group(i + 1);
+			args[i] = ToastRunnerHelper.buildArgument(repoSetup, matcher.group(i + 1));
 		}
 
 		try {
@@ -419,6 +419,7 @@ public class ToastTestRunner {
 		}
 		return result;
 	}
+
 
 	private CommandRequest buildCommandRequest(String command, TestLineDescriptor descriptor) {
 		final CommandRequest commandRequest;

@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Fixture {
 	FixtureKind value();
-	String name() default "";
+	String name();
 }

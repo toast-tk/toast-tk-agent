@@ -19,7 +19,7 @@ import com.synaptix.toast.fixture.utils.FixtureHelper;
  *
  * @author Nicolas Sauvage
  */
-@Fixture(FixtureKind.service)
+@Fixture(value = FixtureKind.service, name = "")
 public class RedPepperBackendFixture extends SynaptixBackendFixture {
 
 	public RedPepperBackendFixture() {

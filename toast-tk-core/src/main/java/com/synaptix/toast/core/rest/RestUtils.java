@@ -160,4 +160,13 @@ public class RestUtils {
 	public static void main(String[] args) {
 		RestUtils.postScenario("newtest", "localhost", "9000", "a step");
 	}
+
+
+	public static void post(String url, String jsonFixtureDescriptor) {
+		Client httpClient = Client.create();
+		WebResource webResource = httpClient.resource(url);
+		ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, jsonFixtureDescriptor);
+		int statusCode = response.getStatus();
+		LOG.info("Client response code: " + statusCode);
+	}
 }

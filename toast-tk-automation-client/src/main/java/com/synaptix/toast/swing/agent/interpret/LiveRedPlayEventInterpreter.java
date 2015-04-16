@@ -1,9 +1,9 @@
 package com.synaptix.toast.swing.agent.interpret;
 
+import com.synaptix.toast.core.annotation.FixtureSentenceRef.Types;
 import com.synaptix.toast.core.interpret.EventCapturedObject;
 import com.synaptix.toast.dao.domain.impl.repository.RepositoryImpl;
 import com.synaptix.toast.fixture.SentenceBuilder;
-import com.synaptix.toast.fixture.FixtureSentenceRef.Types;
 
 
 /**

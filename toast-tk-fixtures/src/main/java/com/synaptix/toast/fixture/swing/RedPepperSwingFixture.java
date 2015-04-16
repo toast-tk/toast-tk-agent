@@ -1,22 +1,22 @@
 package com.synaptix.toast.fixture.swing;
 
-import static com.synaptix.toast.fixture.FixtureSentenceRef.AddValueInVar;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.ClickOn;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.ClickOnIn;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.DiviserVarByValue;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.GetComponentValue;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.MultiplyVarByValue;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.RemplacerVarParValue;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.SelectContectualMenu;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.SelectMenuPath;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.SelectSubMenu;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.SelectTableRow;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.SelectValueInList;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.StoreComponentValueInVar;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.SubstractValueFromVar;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.TypeValueInInput;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.TypeVarIn;
-import static com.synaptix.toast.fixture.FixtureSentenceRef.Wait;
+import static com.synaptix.toast.core.annotation.FixtureSentenceRef.AddValueInVar;
+import static com.synaptix.toast.core.annotation.FixtureSentenceRef.ClickOn;
+import static com.synaptix.toast.core.annotation.FixtureSentenceRef.ClickOnIn;
+import static com.synaptix.toast.core.annotation.FixtureSentenceRef.DiviserVarByValue;
+import static com.synaptix.toast.core.annotation.FixtureSentenceRef.GetComponentValue;
+import static com.synaptix.toast.core.annotation.FixtureSentenceRef.MultiplyVarByValue;
+import static com.synaptix.toast.core.annotation.FixtureSentenceRef.RemplacerVarParValue;
+import static com.synaptix.toast.core.annotation.FixtureSentenceRef.SelectContectualMenu;
+import static com.synaptix.toast.core.annotation.FixtureSentenceRef.SelectMenuPath;
+import static com.synaptix.toast.core.annotation.FixtureSentenceRef.SelectSubMenu;
+import static com.synaptix.toast.core.annotation.FixtureSentenceRef.SelectTableRow;
+import static com.synaptix.toast.core.annotation.FixtureSentenceRef.SelectValueInList;
+import static com.synaptix.toast.core.annotation.FixtureSentenceRef.StoreComponentValueInVar;
+import static com.synaptix.toast.core.annotation.FixtureSentenceRef.SubstractValueFromVar;
+import static com.synaptix.toast.core.annotation.FixtureSentenceRef.TypeValueInInput;
+import static com.synaptix.toast.core.annotation.FixtureSentenceRef.TypeVarIn;
+import static com.synaptix.toast.core.annotation.FixtureSentenceRef.Wait;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ import com.synaptix.toast.fixture.facade.HasClickAction;
 import com.synaptix.toast.fixture.facade.HasStringValue;
 import com.synaptix.toast.fixture.facade.HasSubItems;
 
-@Fixture(FixtureKind.swing)
+@Fixture(value = FixtureKind.swing, name="")
 public abstract class RedPepperSwingFixture {
 	protected IRepositorySetup repo;
 	protected ClientDriver driver;
