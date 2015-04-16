@@ -29,18 +29,9 @@ public abstract class AbstractClickAction<C extends Component> implements Runnab
 	
 	public void doOpenMenu() {
 		try {
-			LOG.info("doOpenMenu to {} on {}", pointToClick, component);
 			SwingUtilities.convertPointToScreen(pointToClick, component);
-			LOG.info("new Point{} ", pointToClick);
+			LOG.info("doOpenMenu to {} on {}", pointToClick, component);
 			FestRobotInstance.getRobot().click(pointToClick, MouseButton.RIGHT_BUTTON, 1);
-			/*Robot robot = new Robot();
-			robot.mouseMove(pointToClick.x, pointToClick.y);
-			robot.delay(100);
-			robot.mousePress(InputEvent.BUTTON3_MASK);
-			robot.delay(100);
-            robot.mouseRelease(InputEvent.BUTTON3_MASK);*/
-            LOG.info("doneOpenMenu to {} on {}", pointToClick, component);
-			//FestRobotInstance.getRobot().click(component, pointToClick, MouseButton.RIGHT_BUTTON, 1);
 		}
 		catch(final Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -49,6 +40,7 @@ public abstract class AbstractClickAction<C extends Component> implements Runnab
 	
 	public void doSimpleClick() {
 		try {
+			SwingUtilities.convertPointToScreen(pointToClick, component);
 			LOG.info("doSimpleClick to {} on {}", pointToClick, component);
 			FestRobotInstance.getRobot().click(component, pointToClick, MouseButton.LEFT_BUTTON, 1);
 		}
@@ -59,6 +51,7 @@ public abstract class AbstractClickAction<C extends Component> implements Runnab
 	
 	public void doDoubleClick() {
 		try {
+			SwingUtilities.convertPointToScreen(pointToClick, component);
 			LOG.info("doDoubleClick to {} on {}", pointToClick, component);
 			FestRobotInstance.getRobot().click(component, pointToClick, MouseButton.LEFT_BUTTON, 2);
 		}
