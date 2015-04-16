@@ -1,7 +1,5 @@
 package com.synaptix.toast.plugin.synaptix.runtime.handler.action;
 
-import java.awt.Point;
-
 import com.synaptix.swing.JSimpleDaysTimeline;
 import com.synaptix.swing.SimpleDaysTask;
 import com.synaptix.toast.plugin.synaptix.runtime.handler.ActionTimelineInfo;
@@ -17,7 +15,7 @@ public final class TimelineMoveToPointAndDoDoubleClickAction extends AbstractTim
 	}
 
 	@Override
-	public void doAction(final Point pointToClick) {
-		doDoubleClick(pointToClick);
+	public void doAction() {
+		doDoubleClick();
 	}
 }

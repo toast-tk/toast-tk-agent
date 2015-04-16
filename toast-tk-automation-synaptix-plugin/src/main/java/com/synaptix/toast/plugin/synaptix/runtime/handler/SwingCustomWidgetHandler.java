@@ -2,53 +2,27 @@ package com.synaptix.toast.plugin.synaptix.runtime.handler;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Window;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
 import org.apache.commons.lang3.StringUtils;
-import org.fest.swing.core.MouseButton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
-import com.sncf.fret.swi.client.assemblage.helper.GestionPrevisionsHelper.Jour;
 import com.sncf.fret.swi.client.assemblage.view.swing.extension.panel.gestionprevisions.CenterCellsPanel;
 import com.synaptix.core.dock.IViewDockable;
 import com.synaptix.core.view.CoreView;
 import com.synaptix.swing.JSimpleDaysTimeline;
-import com.synaptix.swing.SimpleDaysTask;
-import com.synaptix.swing.SimpleDaysTimelineModel;
 import com.synaptix.swing.simpledaystimeline.JSimpleDaysTimelineCenter;
 import com.synaptix.toast.automation.net.CommandRequest;
 import com.synaptix.toast.automation.net.IIdRequest;
-import com.synaptix.toast.core.IRepositorySetup;
-import com.synaptix.toast.fixture.utils.FestRobotInstance;
-import com.synaptix.toast.plugin.synaptix.runtime.annotation.ServiceCallHandler;
 import com.synaptix.toast.plugin.synaptix.runtime.annotation.TimelineHandler;
-import com.synaptix.toast.plugin.synaptix.runtime.annotation.CenterCellsHandler;
-import com.synaptix.toast.plugin.synaptix.runtime.converter.DateStringToObject;
-import com.synaptix.toast.plugin.synaptix.runtime.handler.action.CenterCellsPanelDoClickAction;
-import com.synaptix.toast.plugin.synaptix.runtime.handler.action.CenterCellsPanelDoDoubleClickAction;
-import com.synaptix.toast.plugin.synaptix.runtime.handler.action.CenterCellsPanelDoOpenMenuAction;
-import com.synaptix.toast.plugin.synaptix.runtime.handler.action.TimelineMoveToPointAndDoClickAction;
-import com.synaptix.toast.plugin.synaptix.runtime.handler.action.TimelineMoveToPointAndDoDoubleClickAction;
-import com.synaptix.toast.plugin.synaptix.runtime.handler.action.TimelineMoveToPointAndOpenMenuAction;
 import com.synaptix.toast.plugin.synaptix.runtime.handler.sentence.SentenceFinder;
-import com.synaptix.toast.plugin.synaptix.runtime.interpreter.EventTransformer;
 
 @TimelineHandler
 public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
@@ -57,159 +31,47 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 
 	private final List<String> whiteList;
 	
-	//private final IRepositorySetup repo;
-	
-	//@Inject
-	public SwingCustomWidgetHandler(/*final IRepositorySetup repo*/) {
+	public SwingCustomWidgetHandler() {
 		super();
-		this.whiteList = new ArrayList<String>(1);
-		initWhiteList();
-		//this.repo = repo;
+		this.whiteList = buildWhiteList();
 	}
 
-	private void initWhiteList() {
+	private static List<String> buildWhiteList() {
+		final List<String> whiteList = new ArrayList<String>(2); 
 		whiteList.add("timeline");
 		whiteList.add("centerCells");
+		return whiteList;
 	}
 	
 	@Override
-	public String makeHanldeFixtureCall(final Component component, final IIdRequest request) {
-		if (component instanceof JSimpleDaysTimelineCenter) {
-			handleTimeline((JSimpleDaysTimelineCenter) component, request);
-		}
-		else if(component instanceof CenterCellsPanel) {
-			handleCenterCellPanel((CenterCellsPanel) component, request);
+	public String makeHandleFixtureCall(
+			final Component component, 
+			final IIdRequest command
+	) {
+		if(command instanceof CommandRequest) {
+			final CommandRequest commandRequest = (CommandRequest) command;
+			if(isCustomCommand(commandRequest)) {
+				if (isJSimpleDaysTimelineCenter(component)) {
+					final JSimpleDaysTimeline simpleDaysTimeline = ((JSimpleDaysTimelineCenter) component).getSimpleDaysTimeline();
+					final JSimpleDaysTimelineHandler timelineHandler =  new JSimpleDaysTimelineHandler(commandRequest.value, simpleDaysTimeline);
+					timelineHandler.handleCommand();
+				}
+				else if(isCenterCellsPanel(component)) {
+					final CenterCellsPanel centerCellsPanel = (CenterCellsPanel) component;
+					final CenterCellsHandler centerCellsHandler = new CenterCellsHandler(centerCellsPanel, commandRequest);
+					return centerCellsHandler.handleCommand();
+				}
+			}
 		}
 		return null;
 	}
 
-	private void handleTimeline(final JSimpleDaysTimelineCenter timeline, final IIdRequest command) {
-		try {
-			if(command instanceof CommandRequest) {
-				final CommandRequest commandRequest = (CommandRequest) command;
-				if(isCustomCommand(commandRequest)) {
-					if (isTimelineCustomCommand(commandRequest)) {
-						handleTimelineCommandTask(commandRequest.value, timeline.getSimpleDaysTimeline());
-					}
-					else {
-						throw new IllegalAccessError("Custom command not supported: " + commandRequest.customCommand);
-					}
-				}
-			}
-		} 
-		catch(final Exception e) {
-			LOG.error(e.getMessage(), e);
-		}
+	private static boolean isCenterCellsPanel(final Component component) {
+		return component instanceof CenterCellsPanel;
 	}
 
-	private void handleTimelineCommandTask(
-			final String command, 
-			final JSimpleDaysTimeline simpleDaysTimeline
-	) {
-		final SentenceFinder sentenceFinder = new SentenceFinder(command);
-		if(sentenceFinder.isAValidSentence()) {
-			final SimpleDaysTask findedTask = findTaskToClick(simpleDaysTimeline, sentenceFinder.actionTimelineInfo);
-			if (findedTask != null) {
-				final ActionTimelineInfo actionTimelineInfo = sentenceFinder.actionTimelineInfo;
-				if(EventTransformer.DOUBLE_CLIQUER_SUR.equals(actionTimelineInfo.action)) {
-					moveToPointAndDoDoubleClick(simpleDaysTimeline, sentenceFinder.actionTimelineInfo, findedTask);
-				}
-				else if(EventTransformer.CLIQUER_SUR.equals(actionTimelineInfo.action)) {
-					moveToPointAndDoClick(simpleDaysTimeline, sentenceFinder.actionTimelineInfo, findedTask);
-				}
-				else if(EventTransformer.OUVRIR_LE_MENU_SUR.equals(actionTimelineInfo.action)) {
-					moveToPointAndDoOpenMenu(simpleDaysTimeline, sentenceFinder.actionTimelineInfo, findedTask);
-				}
-				else {
-					throw new IllegalAccessError("unknown action for timeline");
-				}
-			}
-			else {
-				// send not found message to server
-			}
-		}
-		else {
-			LOG.info("sentence invalid {}", sentenceFinder);
-		}
-	}
-
-	private void moveToPointAndDoClick(
-			final JSimpleDaysTimeline simpleDaysTimeline, 
-			final ActionTimelineInfo actionTimelineInfo, 
-			final SimpleDaysTask taskToClick
-	) {
-		runAction(new TimelineMoveToPointAndDoClickAction(simpleDaysTimeline, actionTimelineInfo, taskToClick));
-	}
-	
-	private void moveToPointAndDoDoubleClick(
-			final JSimpleDaysTimeline simpleDaysTimeline, 
-			final ActionTimelineInfo actionTimelineInfo, 
-			final SimpleDaysTask taskToClick
-	) {
-		runAction(new TimelineMoveToPointAndDoDoubleClickAction(simpleDaysTimeline, actionTimelineInfo, taskToClick));
-	}
-
-	private void moveToPointAndDoOpenMenu(
-			final JSimpleDaysTimeline simpleDaysTimeline, final 
-			ActionTimelineInfo actionTimelineInfo, 
-			final SimpleDaysTask taskToClick
-	) {
-		runAction(new TimelineMoveToPointAndOpenMenuAction(simpleDaysTimeline, actionTimelineInfo, taskToClick));
-	}
-
-	private static int findRessource(
-			final JSimpleDaysTimeline simpleDaysTimeline,
-			final ActionTimelineInfo actionTimelineInfo
-	) {
-		final SimpleDaysTimelineModel model = simpleDaysTimeline.getModel();
-		final int resourceCount = model.getResourceCount();
-		for(int index = 0; index < resourceCount; ++index) {
-			final String simpleName = model.getSimpleName(index);
-			if(actionTimelineInfo.ressourceName.contains(simpleName)) {
-				return index;
-			}
-		}
-		return -1;
-	}
-
-	private static SimpleDaysTask findTaskToClick(
-			final JSimpleDaysTimeline simpleDaysTimeline,
-			final ActionTimelineInfo actionTimelineInfo
-	) {
-		final int findedRessource = findRessource(simpleDaysTimeline, actionTimelineInfo);
-		if(findedRessource != -1) {
-			actionTimelineInfo.findedRessource = findedRessource;
-			final List<? extends SimpleDaysTask> tasks = simpleDaysTimeline.getModel().getTasks(
-					findedRessource,
-					actionTimelineInfo.dayDateMin,
-					actionTimelineInfo.dayDateMax
-			);
-			filterByHint(tasks, actionTimelineInfo);
-			return tasks != null && tasks.size() > 0 ? tasks.get(0) : null;
-		}
-		LOG.info("No Task Finded for {} in {}", actionTimelineInfo.ressourceName, actionTimelineInfo.container);
-		return null;
-	}
-
-	private static void filterByHint(
-			final List<? extends SimpleDaysTask> tasks,
-			final ActionTimelineInfo actionTimelineInfo
-	) {
-		final String taskType = actionTimelineInfo.taskType;
-		final Iterator<? extends SimpleDaysTask> tasksIterator = tasks.iterator();
-		while(tasksIterator.hasNext()) {
-			final SimpleDaysTask next = tasksIterator.next();
-			if(isUninterestingTaskClass(taskType, next)) {
-				tasksIterator.remove();
-			}
-		}
-	}
-
-	private static boolean isUninterestingTaskClass(
-			final String taskType,
-			final SimpleDaysTask next
-	) {
-		return !taskType.equals(next.getClass().getName());
+	private static boolean isJSimpleDaysTimelineCenter(final Component component) {
+		return component instanceof JSimpleDaysTimelineCenter;
 	}
 
 	@Override
@@ -222,22 +84,17 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 		try {
 			if(isCustomCommand(commandRequest)) {
 				final String command = commandRequest.value;
-				LOG.info("processing command : {}", command);
+				LOG.info("processing custom command : {}", command);
 				if(isTimelineCustomCommand(commandRequest)) {
-					final JSimpleDaysTimeline timeline = findTimeline(command);
-					handleTimelineCommandTask(command, timeline);
+					final JSimpleDaysTimeline simpleDaysTimeline = findTimeline(command);
+					final JSimpleDaysTimelineHandler timelineHandler =  new JSimpleDaysTimelineHandler(commandRequest.value, simpleDaysTimeline);
+					timelineHandler.handleCommand();
 				}
 				else if(isCellCenterCustomCommand(commandRequest)) {
-					final Date extractDate = extractDate(command);
-					final Calendar cal = Calendar.getInstance();
-					final Date datePrevision = roundToDay(extractDate, cal);
-					final String[] extractCenterCellsPanelInfo = extractCenterCellsPanelInfo(command);
-					final String centerCellsPanelName = extractCenterCellsPanelInfo[0];
-					final String nomFlux = extractCenterCellsPanelInfo[1];
-					final CenterCellsPanel centerCellsPanel = findCenterCells(centerCellsPanelName);
-					final int row = findColumnFromDate(centerCellsPanel, cal, datePrevision);
-					LOG.info("cliquer sur ({}:{}) {} {}", centerCellsPanelName, nomFlux, datePrevision, Integer.valueOf(row));
-					return handleCommandCenterCellsPanel(command, centerCellsPanel);
+					final ActionCenterCellsInfo actionCenterCellsInfo = new ActionCenterCellsInfo(commandRequest.value);
+					final CenterCellsPanel centerCellsPanel = findCenterCells(actionCenterCellsInfo.centerCellsPanelName);
+					final CenterCellsHandler centerCellHandler = new CenterCellsHandler(centerCellsPanel, commandRequest);
+					return centerCellHandler.handleCommand();
 				}
 			}
 			else {
@@ -295,7 +152,7 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 	) {
 	    final Component[] components = c.getComponents();
 	    for(final Component com : components) {
-	        if(com instanceof CenterCellsPanel) {
+	        if(isCenterCellsPanel(com)) {
 	            centerCellsPanels.add((CenterCellsPanel) com);
 	        } 
 	        else if(com instanceof Container) {
@@ -317,26 +174,6 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 					return findCenterCellsPanel;
 				}
 			}
-		}
-		return null;
-	}
-	
-	private static String extractName(final String value) {
-		LOG.info("extractName from {}", value);
-		try {
-			final int indexOpenParenthesis = value.indexOf('(');
-			if(indexOpenParenthesis != -1) {
-				final int indexCloseParenthesis = value.indexOf(')');
-				if(indexCloseParenthesis != -1) {
-					final String extractedName = value.substring(indexOpenParenthesis, indexCloseParenthesis + 1); 
-					LOG.info("extractedName = {}", extractedName);
-					return extractedName;
-				}
-			}
-		}
-		catch(final Exception e) {
-			LOG.error(e.getMessage(), e);
-
 		}
 		return null;
 	}
@@ -413,177 +250,5 @@ public class SwingCustomWidgetHandler extends AbstractCustomFixtureHandler {
 	@Override
 	public List<String> getCommandRequestWhiteList() {
 		return whiteList;
-	}
-	
-	private String handleCenterCellPanel(final CenterCellsPanel centerCellSPanel, final IIdRequest request) {
-		try {
-			if(request instanceof CommandRequest) {
-				final CommandRequest commandRequest = (CommandRequest) request;
-				if(isCustomCommand(commandRequest)) {
-					if (isCellCenterCustomCommand(commandRequest)) {
-						return handleCommandCenterCellsPanel(commandRequest.value, centerCellSPanel);
-					}
-					else {
-						throw new IllegalAccessError("Custom command not supported: " + commandRequest.customCommand);
-					}
-				}
-			}
-		} 
-		catch(final Exception e) {
-			LOG.error(e.getMessage(), e);
-		}
-		return null;
-	}
-	
-	private String handleCommandCenterCellsPanel(
-			final String command,
-			final CenterCellsPanel centerCellSPanel
-	) {
-		if(command.startsWith(EventTransformer.CLIQUER_SUR)) {
-			final Point pointToClick = centerCellsPanelMoveTo(command, centerCellSPanel);
-			LOG.info("pointToClick = {}", pointToClick);
-			centerCellsPanelDoClick(centerCellSPanel, pointToClick);
-		}
-		else if(command.startsWith(EventTransformer.DOUBLE_CLIQUER_SUR)) {
-			final Point pointToClick = centerCellsPanelMoveTo(command, centerCellSPanel);
-			LOG.info("pointToClick = {}", pointToClick);
-			centerCellsPanelDoDoubleClick(centerCellSPanel, pointToClick);
-		}
-		else if(command.startsWith(EventTransformer.OUVRIR_LE_MENU_SUR)) {
-			final Point pointToClick = centerCellsPanelMoveTo(command, centerCellSPanel);
-			LOG.info("pointToClick = {}", pointToClick);
-			centerCellsPanelDoOpenMenu(centerCellSPanel, pointToClick);
-		}
-		else if(command.startsWith(EventTransformer.GET)) {
-			final Date extractDate = extractDate(command);
-			final Calendar cal = Calendar.getInstance();
-			final Date datePrevision = roundToDay(extractDate, cal);
-			final int row = findColumnFromDate(centerCellSPanel, cal, datePrevision);
-			final String[] extractCenterCellsPanelInfo = extractCenterCellsPanelInfo(command);
-			final String centerCellsPanelName = extractCenterCellsPanelInfo[0];
-			final String nomFlux = extractCenterCellsPanelInfo[1];
-			LOG.info("get ({}:{}) {}", centerCellsPanelName, nomFlux, extractDate);
-			final int actifValue = centerCellSPanel.getActifValue(row, nomFlux);
-			LOG.info("finded actifValue  {}", Integer.valueOf(actifValue));
-			return String.valueOf(actifValue);
-		}
-		else if(command.startsWith(EventTransformer.SET)) {
-			final String[] extractCenterCellsPanelInfo = extractCenterCellsPanelInfo(command);
-			final Date extractDate = extractDate(command);
-			final Calendar cal = Calendar.getInstance();
-			final Date datePrevision = roundToDay(extractDate, cal);
-			final String nomFlux = extractCenterCellsPanelInfo[1];
-			final String centerCellsPanelName = extractCenterCellsPanelInfo[0];
-			LOG.info("cliquer sur ({}:{}) {}", centerCellsPanelName, nomFlux, datePrevision);
-			final int row = findColumnFromDate(centerCellSPanel, cal, datePrevision);
-			centerCellSPanel.setActifValue(row, nomFlux, 1);
-		}
-		else {
-			throw new IllegalAccessError("unknown action for CenterCellsPanel");
-		}
-		return null;
-	}
-
-	private static Date roundToDay(
-			final Date date,
-			final Calendar cal
-	) {
-		if(date != null) {
-			cal.setTime(date);
-			cal.set(Calendar.MILLISECOND, 0);
-			cal.set(Calendar.SECOND, 0);
-			cal.set(Calendar.HOUR, 0);
-		}
-		return date;
-	}
-	
-	private static Point centerCellsPanelMoveTo(
-			final String command,
-			final CenterCellsPanel centerCellSPanel
-	) {
-		final Date extractDate = extractDate(command);
-		final Calendar cal = Calendar.getInstance();
-		final Date datePrevision = roundToDay(extractDate, cal);
-		final String[] extractCenterCellsPanelInfo = extractCenterCellsPanelInfo(command);
-		final String nomFlux = extractCenterCellsPanelInfo[1];
-		final String centerCellsPanelName = extractCenterCellsPanelInfo[0];
-		LOG.info("cliquer sur ({}:{}) {}|{}", centerCellsPanelName, nomFlux, datePrevision);
-		final int row = findColumnFromDate(centerCellSPanel, cal, datePrevision);
-		final Rectangle changeSelection = centerCellSPanel.changeSelection(nomFlux, row, false, false);
-		final Point middlePoint = new Point(changeSelection.x + changeSelection.width / 2, changeSelection.y - changeSelection.height / 2);
-		return middlePoint;
-	}
-
-	private static int findColumnFromDate(
-			final CenterCellsPanel centerCellSPanel, 
-			final Calendar cal,
-			final Date datePrevision
-	) {
-		final DateFormat df = new SimpleDateFormat("dd/MM/yy");
-		final List<Jour> jours = centerCellSPanel.getJours();
-		final int nbJours = jours != null ? jours.size() : 0;
-		for(int index = 0; index < nbJours; ++index) {
-			@SuppressWarnings("null")
-			final Jour currentJour = jours.get(index);
-			final Date currentDate = currentJour.date;
-			final Date currentRoundedDate = roundToDay(currentDate, cal);
-			LOG.info("currentRoundedDate = {}", currentRoundedDate);
-			if(df.format(datePrevision).equals(df.format(currentRoundedDate))) {
-				LOG.info("finded date = {}", currentRoundedDate);
-				return index;
-			}
-		}
-		return -1;
-	}
-
-	private static Date extractDate(final String command) {
-		final int indexEndParenthesis = command.indexOf(')');
-		if(indexEndParenthesis != -1) {
-			final String lastPartDate = command.substring(indexEndParenthesis + 1).trim();
-			LOG.info("lastPartDate = {}", lastPartDate);
-			final Date findDate = DateStringToObject.findDate(lastPartDate);
-			LOG.info("findDate = {}", findDate);
-			return findDate;
-		}
-		return null;
-	}
-	
-	private static String[] extractCenterCellsPanelInfo(final String command) {
-		final int indexBeginParenthesis = command.indexOf('(');
-		if(indexBeginParenthesis != -1) {
-			final int indexEndParenthesis = command.indexOf(')');
-			if(indexEndParenthesis != -1) {
-				final String infoCordonnees = command.substring(indexBeginParenthesis + 1, indexEndParenthesis);
-				final String[] splits = infoCordonnees.split(":");
-				return splits;
-			}
-		}
-		return null;
-	}
-	
-	private void centerCellsPanelDoDoubleClick(final CenterCellsPanel centerCellSPanel, final Point pointToClick) {
-		new Thread("Click") {
-			public void run() {
-				FestRobotInstance.getRobot().click(centerCellSPanel, pointToClick, MouseButton.LEFT_BUTTON, 2);
-			}
-		}.start();
-		//runAction(new CenterCellsPanelDoDoubleClickAction(pointToClick));
-	}
-	
-	private void centerCellsPanelDoClick(final CenterCellsPanel centerCellSPanel, final Point pointToClick) {
-		new Thread("Click") {
-			public void run() {
-				FestRobotInstance.getRobot().click(centerCellSPanel, pointToClick, MouseButton.LEFT_BUTTON, 1);
-			}
-		}.start();
-		//runAction(new CenterCellsPanelDoClickAction(pointToClick));
-	}
-	
-	private void centerCellsPanelDoOpenMenu(final CenterCellsPanel centerCellSPanel, final Point pointToClick) {
-		new Thread("Click") {
-			public void run() {
-				FestRobotInstance.getRobot().click(centerCellSPanel, pointToClick, MouseButton.RIGHT_BUTTON, 1);
-			}
-		}.start();
 	}
 }
