@@ -8,7 +8,7 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>toast-automation-server-plugin</artifactId>
-	<name>Toast Toolking - Swing Automation Server Plugin</name>
+	<name>Toast Toolkit - Swing Automation Server Plugin</name>
 
 	<build>
 		<plugins>

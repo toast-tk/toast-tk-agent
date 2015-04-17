@@ -46,7 +46,8 @@
 		<dependency>
 			<groupId>org.reflections</groupId>
 			<artifactId>reflections</artifactId>
-			<version>0.9.9</version>
+			<version>${org.reflection.version}</version>
 		</dependency>
 	</dependencies>
+	<name>Toast Toolkit - Fixture Module</name>
 </project>

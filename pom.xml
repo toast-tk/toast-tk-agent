@@ -42,6 +42,7 @@
 		<lifecycle-mapping-plugin.version>1.0.0</lifecycle-mapping-plugin.version>
 		<gwt.bootstrap.version>2.1.1.1</gwt.bootstrap.version>
 		<gwt-maven-plugin.version>2.4.0</gwt-maven-plugin.version>
+		<org.reflection.version>0.9.9-RC1</org.reflection.version>
 		<gwt.version>2.4.0</gwt.version>
 		<gwt.maven>2.4.0</gwt.maven>
 		<gwtp.version>1.0.1</gwtp.version>
@@ -328,4 +329,5 @@
 			</distributionManagement>
 		</profile>
 	</profiles>
+	<name>Toast Toolkit - Parent Module</name>
 </project>
