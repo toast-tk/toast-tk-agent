@@ -363,11 +363,11 @@ public class ToastTestRunner {
 		String command = descriptor.getCommand();
 		
 		// Locating service class ////////////////////////////////////
-		String studyCommand = command.replace("$$", "$");
+		final String studyCommand = command.replace("$$", "$");
 		Class<?> localFixtureClass = locateFixtureClass(descriptor.getTestLineFixtureKind(), descriptor.getTestLineFixtureName(), studyCommand); 
 		if(localFixtureClass != null){
 			Object connector = getClassInstance(localFixtureClass);
-			FixtureExecCommandDescriptor commandMethodImpl = findMethodInClass(command, localFixtureClass);
+			FixtureExecCommandDescriptor commandMethodImpl = findMethodInClass(studyCommand, localFixtureClass);
 			result = doLocalFixtureCall(connector, commandMethodImpl);
 		}
 		else if(getClassInstance(ISwingInspectionClient.class) != null){
