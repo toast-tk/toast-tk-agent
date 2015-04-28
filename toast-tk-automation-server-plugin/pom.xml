@@ -56,6 +56,11 @@
 			<version>2.22.0-RC1</version>
 		</dependency>
 		<dependency>
+			<groupId>com.google.collections</groupId>
+			<artifactId>google-collections</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
 			<groupId>com.synaptix.toast</groupId>
 			<artifactId>toast-tk-fixtures</artifactId>
 			<version>${project.version}</version>
