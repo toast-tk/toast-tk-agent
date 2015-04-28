@@ -138,12 +138,7 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 					}
 				});
 			}else{
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						textField.setText(command.value);
-					}
-				});
+				textField.setText(command.value);
 			}
 			break;
 		case CLICK:
@@ -180,12 +175,7 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 					}
 				});
 			}else{
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						textField.setText(command.value);
-					}
-				});
+				textField.setText(command.value);
 			}
 			break;
 		case CLICK:
@@ -200,10 +190,10 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 	}
 
 	public String handle(JPasswordField textField, CommandRequest command) {
-		JTextComponentFixture tFixture = new JTextComponentFixture(FestRobotInstance.getRobot(), textField);
+		//JTextComponentFixture tFixture = new JTextComponentFixture(FestRobotInstance.getRobot(), textField);
 		switch (command.action) {
 		case SET:
-			tFixture.setText(command.value);
+			textField.setText(command.value);
 			break;
 		case CLICK:
 			FestRobotInstance.getRobot().click(textField);

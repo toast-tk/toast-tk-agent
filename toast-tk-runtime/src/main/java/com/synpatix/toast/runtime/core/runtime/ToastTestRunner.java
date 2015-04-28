@@ -363,7 +363,8 @@ public class ToastTestRunner {
 		String command = descriptor.getCommand();
 		
 		// Locating service class ////////////////////////////////////
-		Class<?> localFixtureClass = locateFixtureClass(descriptor.getTestLineFixtureKind(), descriptor.getTestLineFixtureName(), command); 
+		String studyCommand = command.replace("$$", "$");
+		Class<?> localFixtureClass = locateFixtureClass(descriptor.getTestLineFixtureKind(), descriptor.getTestLineFixtureName(), studyCommand); 
 		if(localFixtureClass != null){
 			Object connector = getClassInstance(localFixtureClass);
 			FixtureExecCommandDescriptor commandMethodImpl = findMethodInClass(command, localFixtureClass);
@@ -574,4 +575,12 @@ public class ToastTestRunner {
 		}
 	}
 
+	public static void main(String[] args) {
+		String o = "$$dab $$in $df";
+		
+		String v = o.replace("$$", "$");
+		System.out.println(v);
+		
+	} 
+	
 }
