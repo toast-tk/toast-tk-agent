@@ -6,6 +6,7 @@
 	<artifactId>toast-tk</artifactId>
 	<version>1.3-rc2</version>
 	<packaging>pom</packaging>
+	<name>Toast Toolkit - Parent Module</name>
 	<organization>
 		<name>Synaptix-Labs</name>
 		<url>http://www.synaptix-labs.com</url>
@@ -19,10 +20,9 @@
 		<module>toast-tk-runtime</module>
 		<module>toast-tk-automation-server-plugin</module>
 		<module>toast-tk-automation-plugin-loader</module>
-		<!-- <module>toast-tk-automation-client</module> -->
-		<!-- <module>toast-tk-gwt-webapp</module> -->
-		<!-- <module>toast-tk-automation-synaptix-plugin</module> -->
-		<!-- <module>toast-tk-maven-plugin</module> -->
+		<module>toast-tk-automation-client</module> 
+		<module>toast-tk-gwt-webapp</module> 
+		<module>toast-tk-maven-plugin</module> 
 	</modules>
 	<properties>
 		<root-directory>${project.basedir}</root-directory>
@@ -281,19 +281,6 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
-			<modules>
-				<module>toast-tk-core</module>
-				<module>toast-tk-web-annotation</module>
-				<module>toast-tk-fixtures</module>
-				<module>toast-tk-annotation</module>
-				<module>toast-tk-dao</module>
-				<module>toast-tk-runtime</module>
-				<module>toast-tk-automation-server-plugin</module>
-				<module>toast-tk-automation-plugin-loader</module>
-				<module>toast-tk-automation-client</module>
-				<module>toast-tk-gwt-webapp</module>
-				<module>toast-tk-maven-plugin</module>
-			</modules>
 			<distributionManagement>
 				<repository>
 					<id>synaptix-repository</id>
@@ -312,9 +299,6 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
-			<modules>
-				<module>toast-tk-automation-synaptix-plugin</module>
-			</modules>
 			<distributionManagement>
 				<repository>
 					<id>sncf-releases</id>
@@ -329,5 +313,4 @@
 			</distributionManagement>
 		</profile>
 	</profiles>
-	<name>Toast Toolkit - Parent Module</name>
 </project>

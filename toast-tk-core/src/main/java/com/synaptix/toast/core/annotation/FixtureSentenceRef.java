@@ -11,7 +11,7 @@ public class FixtureSentenceRef {
 	public static final String ClickOnIn = "Click on " + SWING_COMPONENT_REGEX + " in " + SWING_COMPONENT_REGEX;
 	public static final String ClickOn = "Click on " + SWING_COMPONENT_REGEX;
 	public static final String TypeVarIn = "Type " + VAR_IN_REGEX + " in " + SWING_COMPONENT_REGEX;
-	public static final String Wait = "wait (\\w+)s";
+	public static final String Wait = "wait for (\\w+) sec";
 	public static final String SelectSubMenu = "Selection menu "+ SWING_COMPONENT_REGEX + " dans " + SWING_COMPONENT_REGEX;
 	public static final String SelectMenuPath = "Selectionner menu "+ VALUE_REGEX;
 	public static final String StoreComponentValueInVar = "Récupérer la valeur de " + SWING_COMPONENT_REGEX + " dans " + VAR_IN_REGEX;

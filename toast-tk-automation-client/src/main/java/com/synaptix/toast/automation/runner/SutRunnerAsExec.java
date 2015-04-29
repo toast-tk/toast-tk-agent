@@ -99,7 +99,7 @@ public class SutRunnerAsExec {
 		// 0 - create runtime dir
 		final File homeDir = new File(Property.TOAST_RUNTIME_DIR);
 		final String pluginDirProperty = " -DIGNORE_CLIENT_SERVER_VERSION_CHECK=true -D" + Property.TOAST_PLUGIN_DIR_PROP + "="
-				+ Property.TOAST_PLUGIN_DIR;
+				+ Property.TOAST_PLUGIN_DIR + " -Drus.server.address=swingrec-app.fret.sncf.fr ";
 		final String agentPathProperty = "-javaagent:" + agentPath.replace("/", "\\");
 		if (!homeDir.exists()) {
 			homeDir.mkdirs();
