@@ -1,5 +1,7 @@
 package com.synaptix.toast.core.guice;
 
+import java.lang.annotation.Annotation;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.multibindings.Multibinder;
@@ -26,6 +28,14 @@ public abstract class AbstractComponentFixtureModule extends AbstractModule {
 
 	protected final void addTypeHandler(Class<? extends ICustomFixtureHandler> typeHandlerClass) {
 		bind(typeHandlerClass).in(Singleton.class);
+		uriCustomFixtureHandlerBinder.addBinding().to(typeHandlerClass);
+	}
+	
+	protected final void addTypeHandler(
+			final Class<? extends ICustomFixtureHandler> typeHandlerClass,
+			final Class<? extends Annotation> annotationClass
+	) {
+		bind(typeHandlerClass).annotatedWith(annotationClass).in(Singleton.class);
 		uriCustomFixtureHandlerBinder.addBinding().to(typeHandlerClass);
 	}
 }

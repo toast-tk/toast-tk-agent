@@ -30,7 +30,11 @@ Creation date: 10 mars 2015
 package com.synaptix.toast.swing.agent.interpret;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.synaptix.toast.automation.config.Config;
@@ -40,6 +44,7 @@ import com.synaptix.toast.dao.domain.impl.repository.RepositoryImpl;
 
 public class MongoRepoManager {
 
+	private static final Logger LOG = LoggerFactory.getLogger(MongoRepoManager.class);
 	Collection<RepositoryImpl> cache = null;
 	private Config config;
 	
@@ -100,7 +105,29 @@ public class MongoRepoManager {
 		return name.trim().replace(" ", "_").replace("'", "_").replace("°", "_");
 	}
 
-	public void saveCache() {
-		RestMongoWrapper.saveRepository(cache, config.getWebAppAddr(), config.getWebAppPort());
+	public boolean saveCache() {
+		boolean saveRepository = RestMongoWrapper.saveRepository(cache, config.getWebAppAddr(), config.getWebAppPort());
+		initCache();
+		return saveRepository;
+	}
+
+	public String getWikiFiedRepo() {
+		if(cache == null){
+			initCache();
+		}
+		String res = "";
+		for(RepositoryImpl page: cache){
+			res += "#Page id:" + page.getId().toString() + "\n";
+			res += "|| auto setup ||\n";
+			res += "| " + page.type + " | " + page.name + " |\n";
+			res += "| name | type | locator |\n";
+			if(page.rows != null){
+				for (ElementImpl row: page.rows) {
+					res += "|" + row.name + "|" + row.type + "|" + row.locator + "|\n";
+				}
+			}
+			res += "\n";
+		}
+		return res;
 	}
 }

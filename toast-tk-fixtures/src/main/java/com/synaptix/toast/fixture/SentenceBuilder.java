@@ -29,7 +29,7 @@ Creation date: 2 févr. 2015
 
 package com.synaptix.toast.fixture;
 
-import com.synaptix.toast.fixture.FixtureSentenceRef.Types;
+import com.synaptix.toast.core.annotation.FixtureSentenceRef.Types;
 
 public class SentenceBuilder {
 	String output = "";

@@ -6,7 +6,7 @@ package com.synaptix.toast.core.interpret;
 public interface IEventInterpreter {
 
 	public enum EventType { 
-		CHECKBOX_CLICK, BUTTON_CLICK, CLICK,TABLE_CLICK, MENU_CLICK, POPUP_MENU_CLICK, COMBOBOX_CLICK, WINDOW_DISPLAY, KEY_INPUT, BRING_ON_TOP_DISPLAY
+		CHECKBOX_CLICK, BUTTON_CLICK, CLICK,TABLE_CLICK, MENU_CLICK, POPUP_MENU_CLICK, JLIST_CLICk, COMBOBOX_CLICK, WINDOW_DISPLAY, KEY_INPUT, BRING_ON_TOP_DISPLAY
 	}
 	
 	public String onCheckBoxClick(EventCapturedObject eventObject);

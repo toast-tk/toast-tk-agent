@@ -4,8 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.synaptix.toast</groupId>
 	<artifactId>toast-tk</artifactId>
-	<version>1.3-SNAPSHOT</version>
+	<version>1.3-rc2</version>
 	<packaging>pom</packaging>
+	<name>Toast Toolkit - Parent Module</name>
 	<organization>
 		<name>Synaptix-Labs</name>
 		<url>http://www.synaptix-labs.com</url>
@@ -19,14 +20,13 @@
 		<module>toast-tk-runtime</module>
 		<module>toast-tk-automation-server-plugin</module>
 		<module>toast-tk-automation-plugin-loader</module>
-		<module>toast-tk-automation-client</module>
-		<module>toast-tk-gwt-webapp</module>
-<!-- 		<module>toast-tk-automation-synaptix-plugin</module> -->
-		<module>toast-tk-maven-plugin</module>
+		<module>toast-tk-automation-client</module> 
+		<module>toast-tk-gwt-webapp</module> 
+		<module>toast-tk-maven-plugin</module> 
 	</modules>
 	<properties>
 		<root-directory>${project.basedir}</root-directory>
-		<project.version>1.3-SNAPSHOT</project.version>
+		<project.version>1.3-rc2</project.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
@@ -42,13 +42,14 @@
 		<lifecycle-mapping-plugin.version>1.0.0</lifecycle-mapping-plugin.version>
 		<gwt.bootstrap.version>2.1.1.1</gwt.bootstrap.version>
 		<gwt-maven-plugin.version>2.4.0</gwt-maven-plugin.version>
+		<org.reflection.version>0.9.9-RC1</org.reflection.version>
 		<gwt.version>2.4.0</gwt.version>
 		<gwt.maven>2.4.0</gwt.maven>
 		<gwtp.version>1.0.1</gwtp.version>
 		<gin.version>1.5.0</gin.version>
 		<guice.version>3.0</guice.version>
 		<joda-time.version>2.1</joda-time.version>
-		<slfl4j.version>1.7.7</slfl4j.version>
+		<log4j.version>2.2</log4j.version>
 	</properties>
 	<developers>
 		<developer>
@@ -66,9 +67,19 @@
 	</developers>
 	<dependencies>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.7</version>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.inject.extensions</groupId>
@@ -92,11 +103,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
+		<!--  Mvn classpath conflict -->
+		<!-- <dependency>
 			<groupId>org.sonatype.sisu</groupId>
 			<artifactId>sisu-guice</artifactId>
 			<version>3.1.2</version>
-		</dependency>
+		</dependency> -->
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}-${project.version}
@@ -105,7 +117,6 @@
 		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
 		<scriptSourceDirectory>${basedir}/src/main/scripts</scriptSourceDirectory>
 		<testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
-		<outputDirectory>${basedir}/target/classes</outputDirectory>
 		<testOutputDirectory>${basedir}/target/test-classes</testOutputDirectory>
 		<resources>
 			<resource>
@@ -247,7 +258,7 @@
 			</releases>
 			<snapshots>
 				<enabled>false</enabled>
-					<updatePolicy>always</updatePolicy>
+				<updatePolicy>always</updatePolicy>
 			</snapshots>
 			<url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/releases/</url>
 		</repository>
@@ -270,29 +281,16 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
-			<modules>
-				<module>toast-tk-core</module>
-				<module>toast-tk-web-annotation</module>
-				<module>toast-tk-fixtures</module>
-				<module>toast-tk-annotation</module>
-				<module>toast-tk-dao</module>
-				<module>toast-tk-runtime</module>
-				<module>toast-tk-automation-server-plugin</module>
-				<module>toast-tk-automation-plugin-loader</module>
-				<module>toast-tk-automation-client</module>
-				<module>toast-tk-gwt-webapp</module>
-				<module>toast-tk-maven-plugin</module>
-			</modules>
 			<distributionManagement>
-				<repository> 
-					<id>synaptix-repository</id> 
+				<repository>
+					<id>synaptix-repository</id>
 					<name>synaptix-releases-repository</name>
-					<url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/releases/</url> 
-				</repository> 
-				<snapshotRepository> 
-					<id>synaptix-repository</id> 
-					<name>synaptix-snapshots-repository</name> 
-					<url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/snapshots/</url> 
+					<url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/releases/</url>
+				</repository>
+				<snapshotRepository>
+					<id>synaptix-repository</id>
+					<name>synaptix-snapshots-repository</name>
+					<url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/snapshots/</url>
 				</snapshotRepository>
 			</distributionManagement>
 		</profile>
@@ -301,9 +299,6 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
-			<modules>
-				<module>toast-tk-automation-synaptix-plugin</module>
-			</modules>
 			<distributionManagement>
 				<repository>
 					<id>sncf-releases</id>

@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Window;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +51,7 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 	@Inject
 	public SwingInspectionServer(CommandRequestListener commandRequestListener, InitRequestListener initRequestListener) {
 		repository = new ConcurrentHashMap<String, Component>();
-		server = new Server(8192 * 8192, 8192 * 8192);
+		server = new Server(8192 * 1024, 8192 * 1024);
 		try {
 			CommonIOUtils.initSerialization(server.getKryo());
 			server.start();
@@ -247,4 +248,8 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 		server.sendToAllTCP(new RecordResponse(sentence));
 	}
 
+	public void close() {
+		server.close();
+	}
+	
 }

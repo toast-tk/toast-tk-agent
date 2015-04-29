@@ -1,1 +1,0 @@
-Guice-Modules: com.synaptix.redpepper.plugin.runtime.PluginModule

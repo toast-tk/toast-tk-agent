@@ -10,26 +10,29 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.base.CaseFormat;
 import com.google.gson.Gson;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
 import com.synaptix.toast.automation.net.CommandRequest;
-import com.synaptix.toast.core.Check;
-import com.synaptix.toast.core.Display;
 import com.synaptix.toast.core.IFeedableSwingPage;
 import com.synaptix.toast.core.IRepositorySetup;
 import com.synaptix.toast.core.ITestManager;
+import com.synaptix.toast.core.annotation.Check;
+import com.synaptix.toast.core.annotation.Display;
+import com.synaptix.toast.core.annotation.FixtureKind;
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.core.inspection.ISwingInspectionClient;
 import com.synaptix.toast.core.setup.TestResult;
@@ -48,6 +51,8 @@ import com.synaptix.toast.dao.domain.impl.test.block.SwingPageBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 import com.synaptix.toast.dao.report.HtmlReportGenerator;
+import com.synaptix.toast.fixture.api.FixtureApi;
+import com.synaptix.toast.fixture.api.FixtureService;
 import com.synaptix.toast.fixture.web.DefaultWebPage;
 
 /**
@@ -56,12 +61,14 @@ import com.synaptix.toast.fixture.web.DefaultWebPage;
  */
 public class ToastTestRunner {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ToastTestRunner.class);
+	private static final Logger LOG = LogManager.getLogger(ToastTestRunner.class);
 	private static final HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator();
 	private final ITestManager testManager;
 	private final IRepositorySetup repoSetup;
 	private URL settingsFile;
 	private Injector injector;
+	private IReportUpdateCallBack reportUpdateCallBack;
+	private List<FixtureService> fixtureApiServices;
 	
 	public ToastTestRunner(ITestManager m, Injector injector, URL settingsFile) {
 		this(m, injector.getInstance(IRepositorySetup.class));
@@ -70,11 +77,19 @@ public class ToastTestRunner {
 		if(settingsFile != null){
 			LOG.info("Overriding fixture definitions with settings in " + settingsFile.getFile());
 		}
+		this.fixtureApiServices = FixtureApi.listAvailableServices();
 	}
 	
 	public ToastTestRunner(ITestManager testManager, IRepositorySetup repoSetup) {
 		this.testManager = testManager;
 		this.repoSetup = repoSetup;
+		this.fixtureApiServices = FixtureApi.listAvailableServices();
+	}
+
+	public ToastTestRunner(ITestManager testEnvManager, Injector injector, URL settings, IReportUpdateCallBack reportUpdateCallBack) {
+		this(testEnvManager, injector, settings);
+		this.reportUpdateCallBack = reportUpdateCallBack;
+		this.fixtureApiServices = FixtureApi.listAvailableServices();
 	}
 
 	/**
@@ -168,7 +183,7 @@ public class ToastTestRunner {
 		try {
 			result = repoSetup.insertComponent(entityName2, values2);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 			return new TestResult(ExceptionUtils.getRootCauseMessage(e), ResultKind.ERROR);
 		}
 		return result;
@@ -231,7 +246,7 @@ public class ToastTestRunner {
 					try {
 						fixtureClass.getField(columnsList.get(cellIndex)).set(instance, cell);
 					} catch (Exception e) {
-						e.printStackTrace();
+						LOG.error(e.getMessage(), e);
 						row.setTestResult(new TestResult(ExceptionUtils.getRootCauseMessage(e), ResultKind.ERROR));
 						return;
 					}
@@ -240,7 +255,7 @@ public class ToastTestRunner {
 					fixtureClass.getMethod("enterRow").invoke(instance);
 					row.setTestResult(new TestResult("Done", ResultKind.INFO));
 				} catch (Exception e) {
-					e.printStackTrace();
+					LOG.error(e.getMessage(), e);
 					row.setTestResult(new TestResult(ExceptionUtils.getRootCauseMessage(e), ResultKind.ERROR));
 				}
 			}
@@ -295,11 +310,14 @@ public class ToastTestRunner {
 	 * @throws ClassNotFoundException 
 	 */
 	private void runTestBlock(TestBlock block, TestPage testPage, boolean inlineReport) throws IllegalAccessException, ClassNotFoundException {
-		String scenarioService = block.getFixtureName();
-
+		
 		for (TestLine line : block.getBlockLines()) {
 			line.startExecution();
-			TestResult result = parseServiceCall(line.getTest(), scenarioService);
+			
+			//override with test line call
+			TestLineDescriptor descriptor = new TestLineDescriptor(block, line);
+			TestResult result = parseServiceCall(descriptor);
+			
 			line.stopExecution();
 			if ("KO".equals(line.getExpected()) && ResultKind.FAILURE.equals(result.getResultKind())) {
 				result.setResultKind(ResultKind.SUCCESS);
@@ -315,8 +333,14 @@ public class ToastTestRunner {
 				if(resource != null){
 					htmlReportGenerator.writeFile(generatePageHtml, testPage.getPageName(), resource.getPath());
 				}
+				if(reportUpdateCallBack != null){
+					reportUpdateCallBack.onUpdate(generatePageHtml);
+				}
 			}
 			if(ResultKind.FATAL.equals(result.getResultKind())){
+				if(reportUpdateCallBack != null){
+					reportUpdateCallBack.onFatalStepError(result.getMessage());
+				}
 				throw new IllegalAccessException("Test execution stopped, due to fail fatal step: " + line + " - Failed !");
 			}
 		}
@@ -324,93 +348,37 @@ public class ToastTestRunner {
 	}
 	
 	
-	public boolean isSynchronizedCommand(String cmd){
-		return cmd.endsWith(" !");
-	}
-	
-	public boolean isFailFatalCommand(String cmd){
-		return cmd.startsWith("* ");
-	}
 
 	/**
 	 * 
 	 * DOCUMENT THIS METHOD
 	 * 
-	 * @param command
-	 * @param scenarioService
+	 * @param descriptor 
 	 * @return
 	 * @throws IllegalAccessException
 	 * @throws ClassNotFoundException
 	 */
-	private TestResult parseServiceCall(String command, String scenarioService) throws IllegalAccessException, ClassNotFoundException {
-		TestResult result;
-		boolean isFailFatalCmd = isFailFatalCommand(command);
-		boolean isSynchronizedCmd = isSynchronizedCommand(command);
-		if(isFailFatalCmd){
-			command = command.substring(2);
-		}
+	private TestResult parseServiceCall(TestLineDescriptor descriptor) throws IllegalAccessException, ClassNotFoundException {
+		TestResult result = null;
+		String command = descriptor.getCommand();
 		
-		command = command.trim().replace("*", "");
-		
-		Class<?> serviceClass = locateServiceClass(scenarioService); 
-		if (serviceClass == null) {
-			throw new IllegalAccessException("Service " + scenarioService + " not found");
-		}
-		else if(LOG.isDebugEnabled()){
-			LOG.debug(serviceClass + " : " + command);
-		}
-		
-		//FIXME: use a better pattern
-		Object instance = getClassInstance(serviceClass);
-		FixtureService methodAndMatcher = findMethodInClass(command, serviceClass);
-		if (methodAndMatcher == null) {
-			methodAndMatcher = findMethodInClass(command, serviceClass.getSuperclass());
-		}
-		if (methodAndMatcher == null) { //FIXME: créer une autre fixture generique !!
-			methodAndMatcher = findMethodInClass(command, RedPepperBackendFixture.class);
-			instance = getClassInstance(RedPepperBackendFixture.class);
-		}
-		if (methodAndMatcher != null) {
-			Matcher matcher = methodAndMatcher.matcher;
-			matcher.matches();
-			int groupCount = matcher.groupCount();
-			Object[] args = new Object[groupCount];
-			for (int i = 0; i < groupCount; i++) {
-				args[i] = matcher.group(i + 1);
-			}
-
-			try {
-				result = (TestResult) methodAndMatcher.method.invoke(instance, args);
-			} catch (Exception e) {
-				e.printStackTrace();
-				result = new TestResult(ExceptionUtils.getRootCauseMessage(e), ResultKind.FAILURE);
-			}
+		// Locating service class ////////////////////////////////////
+		final String studyCommand = command.replace("$$", "$");
+		Class<?> localFixtureClass = locateFixtureClass(descriptor.getTestLineFixtureKind(), descriptor.getTestLineFixtureName(), studyCommand); 
+		if(localFixtureClass != null){
+			Object connector = getClassInstance(localFixtureClass);
+			FixtureExecCommandDescriptor commandMethodImpl = findMethodInClass(studyCommand, localFixtureClass);
+			result = doLocalFixtureCall(connector, commandMethodImpl);
 		}
 		else if(getClassInstance(ISwingInspectionClient.class) != null){
-			ISwingInspectionClient swingClient = (ISwingInspectionClient) getClassInstance(ISwingInspectionClient.class);
-			final CommandRequest commandRequest;
-			
-			//FIXME: voir si on garde ça la
-			if(command.startsWith("service")) {
-				commandRequest = new CommandRequest.CommandRequestBuilder(null).ofType("service").asCustomCommand(command).build();
-			}else{
-				commandRequest = new CommandRequest.CommandRequestBuilder(null).asCustomCommand(command).build();
-			}
-			swingClient.processCustomCommand(commandRequest);
-			if(LOG.isDebugEnabled()){
-				LOG.debug("Client Plugin Mode: Delegating command interpretation to server plugins !");
-			}
-
-			result = new TestResult("Client Plugin Mode: Delegating command interpretation to server plugins !", ResultKind.INFO);
-		}
-		else {
-			if(LOG.isDebugEnabled()){
-				LOG.debug("=> Method not found in " + serviceClass);
-			}
-			return new TestResult(String.format("Method not found"), ResultKind.ERROR);
+			// If no class is implementing the command then 
+			// process it as a custom command sent through Kryo 
+			result = doRemoteFixtureCall(command, descriptor);
+		}else{
+			result = new TestResult(String.format("Method not found"), ResultKind.ERROR);
 		}
 		
-		if(isFailFatalCmd){
+		if(descriptor.isFailFatalCommand()){
 			if(!result.isSuccess()){
 				result.setResultKind(ResultKind.FATAL);
 			}
@@ -420,29 +388,102 @@ public class ToastTestRunner {
 		
 	}
 
+	private TestResult doRemoteFixtureCall(String command, TestLineDescriptor descriptor) {
+		TestResult result;
+		ISwingInspectionClient swingClient = (ISwingInspectionClient) getClassInstance(ISwingInspectionClient.class);
+		swingClient.processCustomCommand(buildCommandRequest(command, descriptor));
+		
+		if(LOG.isDebugEnabled()){
+			LOG.debug("Client Plugin Mode: Delegating command interpretation to server plugins !");
+		}
+		result = new TestResult("Client Plugin Mode: Delegating command interpretation to server plugins !", ResultKind.INFO);
+		return result;
+	}
+
+	private TestResult doLocalFixtureCall(Object instance, FixtureExecCommandDescriptor fixtureExecDescriptor) {
+		TestResult result;
+		
+		Matcher matcher = fixtureExecDescriptor.matcher;
+		matcher.matches();
+		
+		int groupCount = matcher.groupCount();
+		Object[] args = new Object[groupCount];
+		for (int i = 0; i < groupCount; i++) {
+			args[i] = ToastRunnerHelper.buildArgument(repoSetup, matcher.group(i + 1));
+		}
+
+		try {
+			result = (TestResult) fixtureExecDescriptor.method.invoke(instance, args);
+		} catch (Exception e) {
+			LOG.error("Error found !", e);
+			result = new TestResult(ExceptionUtils.getRootCauseMessage(e), ResultKind.FAILURE);
+		}
+		return result;
+	}
+
+
+	private CommandRequest buildCommandRequest(String command, TestLineDescriptor descriptor) {
+		final CommandRequest commandRequest;
+		switch (descriptor.getTestLineFixtureKind()) {
+		case service:
+			commandRequest = new CommandRequest.CommandRequestBuilder(null).ofType(FixtureKind.service.name()).asCustomCommand(command).build();
+			break;
+		default:
+			commandRequest = new CommandRequest.CommandRequestBuilder(null).asCustomCommand(command).build();
+			break;
+		}
+		return commandRequest;
+	}
+
 	/**
 	 * DOCUMENT
 	 * 
-	 * @param scenarioService
+	 * @param fixture kind (swing, web, service)
 	 * @return
 	 * @throws ClassNotFoundException
+	 * @throws IllegalAccessException 
 	 */
-	private Class<?> locateServiceClass(String scenarioService) throws ClassNotFoundException {
-		Class<?> serviceClass;
+	private Class<?> locateFixtureClass(FixtureKind fixtureKind, String fixtureName, String command) throws ClassNotFoundException, IllegalAccessException {
+		Set<Class<?>> serviceClasses = new HashSet<Class<?>>();
 		if(settingsFile != null){
-			serviceClass = getServiceClassFromSettings(settingsFile.getFile(), scenarioService);
-		}
-		else if("swing".equals(scenarioService.toLowerCase())){
-			serviceClass = repoSetup.getService(scenarioService);
-			if(serviceClass == null){
-				//FIXME
-				serviceClass = Class.forName("com.synaptix.toast.automation.drivers.DefaultSwingServiceFixture");
+			Class<?> serviceClass = getServiceClassFromSettings(settingsFile.getFile(), fixtureKind.name());
+			if(serviceClass != null){
+				LOG.info(String.format("Identified a new service class ( %s ) in setting file !", serviceClass));
+				serviceClasses.add(serviceClass);
 			}
 		}
-		else{
-			 //from include header
-			serviceClass = repoSetup.getService(scenarioService);
+		
+		//round1 - hard match: based on type and name
+		if(serviceClasses.size() == 0){
+			for (FixtureService fixtureService : fixtureApiServices) {
+				if(fixtureService.fixtureKind.equals(fixtureKind) && fixtureService.fixtureName.equals(fixtureName)){
+					FixtureExecCommandDescriptor methodAndMatcher = findMethodInClass(command, fixtureService.clazz);
+					if(methodAndMatcher != null){
+						serviceClasses.add(fixtureService.clazz);
+					}
+				}
+			}
 		}
+		
+		//round2 - soft match: based on type only
+		for (FixtureService fixtureService : fixtureApiServices) {
+			if(fixtureService.fixtureKind.equals(fixtureKind)){
+				FixtureExecCommandDescriptor methodAndMatcher = findMethodInClass(command, fixtureService.clazz);
+				if(methodAndMatcher != null){
+					serviceClasses.add(fixtureService.clazz);
+				}
+			}
+		}
+		
+		if (serviceClasses.size() == 0) {
+			return null;
+		}else if(serviceClasses.size() > 1){
+			LOG.warn("Multiple Services of same kind found implementing the same command: " + command);
+		}
+
+		Class<?> serviceClass = serviceClasses.iterator().next();
+		LOG.info(serviceClass + " : " + command);
+		
 		return serviceClass;
 	}
 
@@ -468,7 +509,7 @@ public class ToastTestRunner {
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 		return null;
 	}
@@ -480,8 +521,8 @@ public class ToastTestRunner {
 	 * @param serviceClass
 	 * @return
 	 */
-	private FixtureService findMethodInClass(final String command, final Class<?> serviceClass) {
-		FixtureService serviceFixtureConnector = null;
+	public FixtureExecCommandDescriptor findMethodInClass(final String command, final Class<?> serviceClass) {
+		FixtureExecCommandDescriptor serviceFixtureConnector = null;
 		Method[] methods = serviceClass.getMethods();
 		for (Method method : methods) {
 			Annotation[] annotations = method.getAnnotations();
@@ -498,12 +539,14 @@ public class ToastTestRunner {
 					Matcher matcher = regexPattern.matcher(command);
 					boolean matches = matcher.matches();
 					if (matches) {
-						serviceFixtureConnector = new FixtureService(method, matcher);
+						serviceFixtureConnector = new FixtureExecCommandDescriptor(method, matcher);
 					}
 				}
 			}
 		}
-		
+		if(serviceFixtureConnector == null &&  serviceClass.getSuperclass() != null){
+			return findMethodInClass(command, serviceClass.getSuperclass());
+		}
 		return serviceFixtureConnector;
 	}
 
@@ -522,14 +565,22 @@ public class ToastTestRunner {
 		public String className;
 	}
 
-	public class FixtureService {
+	public class FixtureExecCommandDescriptor {
 		Method method;
 		Matcher matcher;
 
-		public FixtureService(Method method, Matcher matcher) {
+		public FixtureExecCommandDescriptor(Method method, Matcher matcher) {
 			this.method = method;
 			this.matcher = matcher;
 		}
 	}
 
+	public static void main(String[] args) {
+		String o = "$$dab $$in $df";
+		
+		String v = o.replace("$$", "$");
+		System.out.println(v);
+		
+	} 
+	
 }

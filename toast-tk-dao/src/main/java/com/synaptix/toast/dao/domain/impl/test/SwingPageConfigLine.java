@@ -11,7 +11,7 @@ import com.synaptix.toast.core.setup.TestResult;
  * @author E413544
  * 
  */
-@Entity(value = "test")
+@Entity(value = "test", noClassnameStored = true)
 @Embedded
 public class SwingPageConfigLine {
 

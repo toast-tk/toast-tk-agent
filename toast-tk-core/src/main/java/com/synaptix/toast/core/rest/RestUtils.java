@@ -1,17 +1,20 @@
 package com.synaptix.toast.core.rest;
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Collection;
 
 import javax.naming.AuthenticationException;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -19,7 +22,7 @@ import com.synaptix.toast.core.Property;
 
 public class RestUtils {
 
-	private static final Logger LOG = LoggerFactory.getLogger(RestUtils.class);
+	private static final Logger LOG = LogManager.getLogger(RestUtils.class);
 	
 	public static void get(String url) {
 		Client httpClient = Client.create();
@@ -31,9 +34,10 @@ public class RestUtils {
 		}
 	}
 	
-	public static void postPage(String value, Object[] selectedValues) {
+
+	public static void postPage( String webAppAddr, String webAppPort,String value, Object[] selectedValues) {
 		Client httpClient = Client.create();
-		String webappURL = getWebAppURI();
+		String webappURL = getWebAppURI(webAppAddr, webAppPort);
 		WebResource webResource = httpClient.resource(webappURL + "/saveNewInspectedPage");
 		InspectPage requestEntity = new InspectPage(value, Arrays.asList(selectedValues));
 		Gson gson = new Gson();
@@ -41,7 +45,7 @@ public class RestUtils {
 		int statusCode = response.getStatus();
 		LOG.info("Client response code: " + statusCode);
 	}
-	
+
 	public static String downloadRepositoyAsWiki() {
 		String webappURL = getWebAppURI();
 		return downloadRepository(webappURL + "/loadWikifiedRepository");
@@ -60,7 +64,7 @@ public class RestUtils {
 			}
 			return builder.toString();
 		} catch (JSONException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 		return null;
 	}
@@ -82,33 +86,87 @@ public class RestUtils {
 	}
 
 
-	public static boolean postScenario(String scenarioName, String scenarioSteps) {
+
+	public static boolean postScenario(String scenarioName, String webAppHost, String webAppPort, String scenarioSteps) {
 		try{
 			Client httpClient = Client.create();
-			String webappURL = getWebAppURI ();
+			String webappURL = getWebAppURI (webAppHost, webAppPort);
 			WebResource webResource = httpClient.resource(webappURL+"/saveNewInspectedScenario");
 			Gson gson = new Gson();
 			InspectScenario scenario = new InspectScenario(scenarioName, scenarioSteps);
-			ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, gson.toJson(scenario));
+			String json = gson.toJson(scenario);
+			System.out.println(json);
+			ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, json);
 			int statusCode = response.getStatus();
 			LOG.info("Client response code: " + statusCode);
 			return statusCode >= 200 && statusCode < 400;
 		}catch(Exception e){
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 			return false;
 		}
-			
 	}
 	
+	public static boolean postScenario(String scenarioName, String scenarioSteps) {
+		return postScenario(scenarioName, scenarioSteps, "one", "two");
+	}
 	
 	public static String getWebAppURI (String host, String port){
 		return "http://" +host + ":"  + port;
 	}
-	
-	
+
 	public static String getWebAppURI (){
-		return getWebAppURI(System.getProperty(Property.WEBAPP_ADDR), System.getProperty(Property.WEBAPP_PORT));
+		String webAppAddr = System.getProperty(Property.WEBAPP_ADDR);
+		if(webAppAddr == null || webAppAddr.isEmpty()){
+			throw new RuntimeException(Property.WEBAPP_ADDR + " system property isn't defined !");
+		}
+		
+		String webAppPort = System.getProperty(Property.WEBAPP_PORT);
+		if(webAppPort == null || webAppPort.isEmpty()){
+			throw new RuntimeException(Property.WEBAPP_PORT + " system property isn't defined !");
+		}
+		
+		return getWebAppURI(webAppAddr, webAppPort);
+	}
+
+	public static Collection<ImportedScenario> getListOfScenario() {
+		try{
+			Client httpClient = Client.create();
+			String webappURL = getWebAppURI ();
+			String response = getJsonResponseAsString(webappURL+"/loadScenariiList", httpClient);
+			Gson g = new Gson();
+			Type typeOfT = new TypeToken<Collection<ImportedScenario>>(){}.getType();
+			Collection<ImportedScenario> scenarioList = g.fromJson(response, typeOfT);
+			return scenarioList;
+		}catch(Exception e){
+			LOG.error(e.getMessage(), e);
+			return null;
+		}
 	}
 	
+	public static ImportedScenarioDescriptor getScenario(ImportedScenario scenarioRef) {
+		try{
+			Client httpClient = Client.create();
+			String webappURL = getWebAppURI ();
+			String response = getJsonResponseAsString(webappURL+"/loadScenarioSteps/"+scenarioRef.getId(), httpClient);
+			Gson g = new Gson();
+			ImportedScenarioDescriptor scenarioDescriptor = g.fromJson(response, ImportedScenarioDescriptor.class);
+			return scenarioDescriptor;
+		}catch(Exception e){
+			LOG.error(e.getMessage(), e);
+			return null;
+		}
+	}
 
+	public static void main(String[] args) {
+		RestUtils.postScenario("newtest", "localhost", "9000", "a step");
+	}
+
+
+	public static void post(String url, String jsonFixtureDescriptor) {
+		Client httpClient = Client.create();
+		WebResource webResource = httpClient.resource(url);
+		ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, jsonFixtureDescriptor);
+		int statusCode = response.getStatus();
+		LOG.info("Client response code: " + statusCode);
+	}
 }

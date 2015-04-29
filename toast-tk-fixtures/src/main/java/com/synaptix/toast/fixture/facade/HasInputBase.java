@@ -6,8 +6,6 @@ package com.synaptix.toast.fixture.facade;
  * 
  * @param <T>
  */
-public interface HasInputBase<T> {
+public interface HasInputBase<T> extends HasValueBase<T> {
 	public void setInput(T e);
-
-	public T getValue();
 }

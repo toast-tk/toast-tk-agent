@@ -13,6 +13,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -44,6 +45,7 @@ public class InitRequestListener extends Listener {
 		autorizedComponents.add(JComboBox.class);
 		autorizedComponents.add(JCheckBox.class);
 		autorizedComponents.add(JTable.class);
+		autorizedComponents.add(JList.class);
 		autorizedComponents.add(JMenu.class);
 		autorizedComponents.add(JMenuItem.class);
 		autorizedComponents.add(JTextArea.class);
@@ -81,8 +83,6 @@ public class InitRequestListener extends Listener {
 				java.util.List<Component> allComponents = SwingInspectionManager.getInstance().getAllComponents();
 				Map<Object, String> allInstances = SwingInspectionManager.getInstance().getAllInstances();
 
-				// reset frame
-				// inspectorGui.flush(); FIXME: clear on client side
 				repository.clear();
 
 				for (Component component : allComponents) {
@@ -90,12 +90,11 @@ public class InitRequestListener extends Listener {
 					String componentId = component.getName();
 					String componentLocator = componentName != null ? componentName : componentId;
 					componentLocator = componentLocator != null ? componentLocator : component.getClass() + ":" + System.identityHashCode(component);
-					if (componentLocator != null && isAutorizedComponent(component)) {
+					if (isAutorizedComponent(component)) {
 						response.items.add(componentLocator);
 						repository.put(componentLocator, component);
 					}
 				}
-				//connection.sendTCP(response); FIXME
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

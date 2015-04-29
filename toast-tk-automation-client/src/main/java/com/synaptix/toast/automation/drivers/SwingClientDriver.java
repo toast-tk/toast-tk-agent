@@ -3,10 +3,9 @@ package com.synaptix.toast.automation.drivers;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Observable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -21,23 +20,23 @@ import com.synaptix.toast.automation.net.ValueResponse;
 import com.synaptix.toast.core.inspection.CommonIOUtils;
 import com.synaptix.toast.fixture.facade.ClientDriver;
 
-/**
- * Created by skokaina on 07/11/2014.
- */
 public class SwingClientDriver implements ClientDriver {
 
-	private static final Logger LOG = LoggerFactory.getLogger(SwingClientDriver.class);
+	private static final Logger LOG = LogManager.getLogger(SwingClientDriver.class);
 	protected Client client;
 	private String host;
 	private static final int RECONNECTION_RATE = 10000;
 	protected volatile Map<String, Object> responseMap;
+	private Object VOID_RESULT = new Object();
+	//TODO: add wait loop timeout !
 
-	public SwingClientDriver(String host) throws IOException {
-		this.client = new Client(8192 * 8192, 8192 * 8192);
+	public SwingClientDriver() {
+		this.client = new Client();
 		this.responseMap = new HashMap<String, Object>();
-		this.host = host;
+		this.host = "localhost";
 		CommonIOUtils.initSerialization(client.getKryo());
 		client.addListener(new Listener() {
+			@Override
 			public void received(Connection connection, Object object) {
 				if (object instanceof ExistsResponse) {
 					ExistsResponse response = (ExistsResponse) object;
@@ -59,6 +58,7 @@ public class SwingClientDriver implements ClientDriver {
 			}
 		});
 		client.start();
+		start();
 	}
 
 	@Override
@@ -66,20 +66,24 @@ public class SwingClientDriver implements ClientDriver {
 		try {
 			client.connect(300000, host, CommonIOUtils.TCP_PORT);
 		} catch (IOException e) {
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					while (!client.isConnected()) {
-						connect();
-						try {
-							Thread.sleep(RECONNECTION_RATE);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+			startConnectionLoop();
+		}
+	}
+	
+	protected void startConnectionLoop() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (!client.isConnected()) {
+					connect();
+					try {
+						Thread.sleep(RECONNECTION_RATE);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
 				}
-			}).start();
-		}
+			}
+		}).start();
 	}
 
 	public void connect() {
@@ -97,7 +101,7 @@ public class SwingClientDriver implements ClientDriver {
 		}
 		init();
 		if (request.getId() != null) {
-			responseMap.put(request.getId(), null);
+			responseMap.put(request.getId(), VOID_RESULT);
 		}
 		//TODO: block any request with No ID !!
 		client.sendTCP(request);
@@ -122,7 +126,7 @@ public class SwingClientDriver implements ClientDriver {
 
 	public static void main(String[] args) {
 		try {
-			SwingClientDriver c = new SwingClientDriver("localhost");
+			SwingClientDriver c = new SwingClientDriver();
 			c.start();
 			c.init();
 		} catch (Exception e) {
@@ -134,7 +138,7 @@ public class SwingClientDriver implements ClientDriver {
 	public boolean waitForExist(String reqId) {
 		boolean res = false;
 		if (responseMap.containsKey(reqId)) {
-			while (responseMap.get(reqId) == null) {
+			while (VOID_RESULT.equals(responseMap.get(reqId))) {
 				try {
 					client.sendTCP(FrameworkMessage.keepAlive);
 					Thread.sleep(500);
@@ -153,7 +157,7 @@ public class SwingClientDriver implements ClientDriver {
 	public String waitForValue(String reqId) {
 		String res = null;
 		if (responseMap.containsKey(reqId)) {
-			while (responseMap.get(reqId) == null) {
+			while (VOID_RESULT.equals(responseMap.get(reqId))) {
 				try {
 					client.sendTCP(FrameworkMessage.keepAlive);
 					Thread.sleep(500);
@@ -169,5 +173,10 @@ public class SwingClientDriver implements ClientDriver {
 	
 	protected void handleResponse(IIdRequest response){
 		//TODO
+	}
+
+	@Override
+	public void stop() {
+		client.close();
 	}
 }

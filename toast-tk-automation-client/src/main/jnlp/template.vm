@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp
     spec="$jnlpspec"
-    codebase="$jnlpCodebase"
+    codebase="${jnlp.host}/${jnlp.host.uri}/"
     href="$outputFile">
   <information>
     <title>Toast Tk Studio</title>
     <vendor>$project.Organization.Name</vendor>
-    <homepage href="$project.Url"/>
+    <homepage href="${jnlp.host}"/>
     <description>Toast Tk Studio</description>
     <icon href="images/toast.png" width="64" height="64"/>
-    <icon href="images/Spalsh.png" kind="splash"/>
+    <icon href="images/Spalsh.png" kind="splash" width="128" height="128"/>
     <offline-allowed/>
     <shortcut online="false">
 	    <desktop/>

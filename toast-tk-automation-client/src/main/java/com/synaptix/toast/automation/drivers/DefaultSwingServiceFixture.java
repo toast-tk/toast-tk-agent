@@ -29,28 +29,19 @@ Creation date: 16 févr. 2015
 
 package com.synaptix.toast.automation.drivers;
 
-import java.io.IOException;
-
 import com.google.inject.Inject;
 import com.synaptix.toast.core.IRepositorySetup;
-import com.synaptix.toast.fixture.facade.ClientDriver;
+import com.synaptix.toast.core.annotation.Fixture;
+import com.synaptix.toast.core.annotation.FixtureKind;
 import com.synaptix.toast.fixture.swing.RedPepperSwingFixture;
 import com.synaptix.toast.fixture.swing.SwingAutoElement;
 
+@Fixture(value = FixtureKind.swing, name = "toastSwingClientConnector")
 public class DefaultSwingServiceFixture extends RedPepperSwingFixture{
 
 	@Inject
-	public DefaultSwingServiceFixture(IRepositorySetup repo) {
-		super(repo);
-	}
-
-	@Override
-	public ClientDriver getDriver() throws IOException {
-		if(driver == null){
-			driver = new SwingClientDriver("localhost");
-			driver.start();
-		}
-		return driver;
+	public DefaultSwingServiceFixture(IRepositorySetup repo, SwingClientDriver driver) {
+		super(repo, driver);
 	}
 
 	@Override

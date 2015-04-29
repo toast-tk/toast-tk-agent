@@ -14,7 +14,7 @@ import com.github.jmkgreen.morphia.annotations.Reference;
 import com.synaptix.toast.dao.domain.impl.common.BasicTaggableMongoBean;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
 
-@Entity(value = "report.projects")
+@Entity(value = "report.projects", noClassnameStored = true)
 @Indexes({ @Index(value = "name"), @Index("version") })
 public class Project extends BasicTaggableMongoBean {
 

@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.fest.swing.input.InputState;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
@@ -46,7 +46,7 @@ import com.synaptix.toast.plugin.swing.agent.record.WindowEventRecorder;
  */
 public class SwingInspectionRecorder implements IEventRecorder {
 
-	private static final Logger LOG = LoggerFactory.getLogger(SwingInspectionRecorder.class);
+	private static final Logger LOG = LogManager.getLogger(SwingInspectionRecorder.class);
 
 	private static final Toolkit DEFAULT_TOOLKIT = Toolkit.getDefaultToolkit();
 
@@ -106,7 +106,7 @@ public class SwingInspectionRecorder implements IEventRecorder {
 		}
 	}
 
-	private void registerListener(final FilteredAWTEventListener listener) {
+	private static void registerListener(final FilteredAWTEventListener listener) {
 		DEFAULT_TOOLKIT.addAWTEventListener(listener, listener.getEventMask());
 	}
 
@@ -128,7 +128,7 @@ public class SwingInspectionRecorder implements IEventRecorder {
 		}
 	}
 
-	private void unregisterListener(final AWTEventListener listener) {
+	private static void unregisterListener(final AWTEventListener listener) {
 		DEFAULT_TOOLKIT.removeAWTEventListener(listener);
 	}
 
@@ -136,7 +136,7 @@ public class SwingInspectionRecorder implements IEventRecorder {
 		listeners.clear();
 	}
 
-	private void consumeEventLine(EventCapturedObject capturedEvent) {
+	private void consumeEventLine(final EventCapturedObject capturedEvent) {
 		String locator = capturedEvent.componentLocator;
 		String name = capturedEvent.componentName;
 		String type = capturedEvent.componentType;
@@ -147,7 +147,7 @@ public class SwingInspectionRecorder implements IEventRecorder {
 	}
 
 	
-	public void liveExplore(List<EventCapturedObject> capturedEvents) throws IOException {
+	public void liveExplore(final List<EventCapturedObject> capturedEvents) {
 		// TO BE MOUVED INSIDE THE INPUT CAPTURE SECTION
 		boolean inputCaptureOpened = false;
 		boolean menuCaptureOpened = false;
@@ -155,10 +155,8 @@ public class SwingInspectionRecorder implements IEventRecorder {
 		String inputTypeUnderCapture = null;
 		// //////////////////////////////////////////////
 
-		List<EventCapturedObject> immutableLineList = ImmutableList.copyOf(capturedEvents);
-
-		for (EventCapturedObject capturedEvent : immutableLineList) {
-			
+		final List<EventCapturedObject> immutableLineList = ImmutableList.copyOf(capturedEvents);
+		for(final EventCapturedObject capturedEvent : immutableLineList) {
 			consumeEventLine(capturedEvent);
 			
 			String locator = eventObject.componentLocator;
@@ -168,14 +166,16 @@ public class SwingInspectionRecorder implements IEventRecorder {
 			if (inputCaptureOpened) {
 				if (capturedEvent.isInputEvent() || capturedEvent.isMouseClickEvent()) {
 					continue;
-				} else if (capturedEvent.isFocusLostEvent()) {
+				} 
+				else if (capturedEvent.isFocusLostEvent()) {
 					String inputCapturedType = capturedEvent.componentType;
 					if (inputCapturedType.equals(inputTypeUnderCapture)) {
 						eventObject.componentName = "null".equals(name) || name == null ? locator : name;
 						eventObject.businessValue = capturedEvent.businessValue;
 						_process(KEY_INPUT);
 					}
-				} else {
+				} 
+				else {
 					inputTypeUnderCapture = null;
 					inputCaptureOpened = false;
 				}
@@ -189,7 +189,8 @@ public class SwingInspectionRecorder implements IEventRecorder {
 						_process(MENU_CLICK);
 						menuCaptureOpened = false;
 					}
-				} else {
+				} 
+				else {
 					eventObject.componentName = menu;
 					_process(MENU_CLICK);
 					menuCaptureOpened = false;
@@ -224,7 +225,8 @@ public class SwingInspectionRecorder implements IEventRecorder {
 			else if (isComboBoxType(type) && capturedEvent.isMouseClickEvent()) {
 				comboboxCaptureOpened = true;
 				continue;
-			} else {
+			} 
+			else {
 				/* LOOKING FOR NEW PANEL FOCUS STEP */
 				if (capturedEvent.isFocusGainedEvent()) {
 					_process(BRING_ON_TOP_DISPLAY);
@@ -236,16 +238,22 @@ public class SwingInspectionRecorder implements IEventRecorder {
 				}
 
 				/* LOOKING FOR MOUSE CLICK STEPS */
-				if (capturedEvent.isMouseClickEvent()) {
-					if (isButtonType(eventObject.componentType)) {
+				if(capturedEvent.isMouseClickEvent()) {
+					if(isButtonType(eventObject.componentType)) {
 						_process(BUTTON_CLICK);
-					} else if (isCheckBoxType(eventObject.componentType)) {
+					} 
+					else if(isCheckBoxType(eventObject.componentType)) {
 						_process(CHECKBOX_CLICK);
-					}else if (isTableType(type)) {
+					}
+					else if(isTableType(type)) {
 						_process(TABLE_CLICK);
-					} else if (isPopupMenuType(type)) {
+					} 
+					else if(isPopupMenuType(type)) {
 						_process(POPUP_MENU_CLICK);
 					}
+					/*else if(isJListType(type)) {
+						_process(POPUP_MENU_CLICK);
+					}*/
 				}
 			}
 		}
@@ -254,8 +262,7 @@ public class SwingInspectionRecorder implements IEventRecorder {
 	private synchronized void _process(EventType eventType) {
 		eventObject.setEventType(eventType);
 		cmdServer.publishRecordEvent(eventObject);
-		liveRecordedStepsBuffer.clear(); // can be buggy due to concurrency,
-											// algo to improve..
+		liveRecordedStepsBuffer.clear();
 	}
 
 	private FilteredAWTEventListener recordFocusEvents() {
@@ -275,12 +282,13 @@ public class SwingInspectionRecorder implements IEventRecorder {
 	}
 
 	@Override
-	public synchronized void appendInfo(EventCapturedObject eventData) {
+	public synchronized void appendInfo(final EventCapturedObject eventData) {
 		try {
 			liveRecordedStepsBuffer.add(eventData);
 			liveExplore(liveRecordedStepsBuffer);
-		} catch (IOException e) {
-			e.printStackTrace();
+		} 
+		catch (Exception e) {
+			LOG.error(e.getMessage(), e);
 		}
 	}
 

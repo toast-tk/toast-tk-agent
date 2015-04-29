@@ -41,37 +41,48 @@ import com.synaptix.toast.core.record.IEventRecorder;
 
 public class WindowEventRecorder extends AbstractEventRecorder {
 
-	public WindowEventRecorder(InputState state, IEventRecorder eventRecorder) {
+	public WindowEventRecorder(
+			final InputState state, 
+			final IEventRecorder eventRecorder
+	) {
 		super(state, eventRecorder);
 	}
 
 	@Override
-	public void processEvent(AWTEvent event) {
-		if (event.getID() == WindowEvent.WINDOW_GAINED_FOCUS) {
+	public void processEvent(final AWTEvent event) {
+		if(isGainedFocusWindowEvent(event)) {
 			eventRecorder.scanUi(true);
-			
 			String eventComponentName = null;
-			WindowEvent wEvent = (WindowEvent) event;
-			Window w = wEvent.getWindow();
-			if (w != null && w instanceof Dialog) {
+			final WindowEvent wEvent = (WindowEvent) event;
+			final Window w = wEvent.getWindow();
+			if (w instanceof Dialog) {
 				eventComponentName = ((Dialog) w).getTitle();
 			}
-
-			if (eventComponentName == null) {
-				return;
+			if (eventComponentName != null) {
+				final EventCapturedObject captureEvent = buildWindowsEventCapturedObject(event, eventComponentName, wEvent);
+				appendEventRecord(captureEvent);
 			}
-
-			EventCapturedObject captureEvent = new EventCapturedObject();
-			captureEvent.eventLabel = event.getClass().getSimpleName();
-			captureEvent.componentLocator = getEventComponentLocator(event);
-			captureEvent.componentType = wEvent.getComponent().getClass().getSimpleName();
-			captureEvent.businessValue = getEventValue(event);
-			captureEvent.componentName = eventComponentName;
-			captureEvent.container = getEventComponentContainer(event);
-			captureEvent.timeStamp = System.nanoTime();
-			
-			appendEventRecord(captureEvent);
 		}		
+	}
+
+	private EventCapturedObject buildWindowsEventCapturedObject(
+			final AWTEvent event, 
+			final String eventComponentName, 
+			final WindowEvent wEvent
+	) {
+		EventCapturedObject captureEvent = new EventCapturedObject();
+		captureEvent.eventLabel = event.getClass().getSimpleName();
+		captureEvent.componentLocator = getEventComponentLocator(event);
+		captureEvent.componentType = wEvent.getComponent().getClass().getSimpleName();
+		captureEvent.businessValue = getEventValue(event);
+		captureEvent.componentName = eventComponentName;
+		captureEvent.container = getEventComponentContainer(event);
+		captureEvent.timeStamp = System.nanoTime();
+		return captureEvent;
+	}
+
+	private static boolean isGainedFocusWindowEvent(final AWTEvent event) {
+		return event.getID() == WindowEvent.WINDOW_GAINED_FOCUS;
 	}
 
 	@Override

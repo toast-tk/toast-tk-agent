@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.synaptix.toast</groupId>
 		<artifactId>toast-tk</artifactId>
-		<version>1.3-SNAPSHOT</version>
+		<version>1.3-rc2</version>
 	</parent>
 	<artifactId>toast-tk-dao</artifactId>
 	<name>Toast Toolkit - DAO Module</name>
@@ -37,15 +37,30 @@
 			<version>1.2.3</version>
 		</dependency>
 		<dependency>
-			<artifactId>reflections</artifactId>
 			<groupId>org.reflections</groupId>
-			<version>0.9.9-RC1</version>
+			<artifactId>reflections</artifactId>
+			<version>${org.reflection.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.google.code.findbugs</groupId>
+		    <artifactId>jsr305</artifactId>
+		    <version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
 		</dependency>
 		<!-- red pepper dependencies -->
 		<dependency>
 			<groupId>com.synaptix.toast</groupId>
 			<artifactId>toast-tk-core</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>${guice.version}</version>
 		</dependency>
 	</dependencies>
 	<profiles>
@@ -54,9 +69,6 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
-			<properties>
-				<gwt.style>PRETTY</gwt.style>
-			</properties>
 			<build>
 				<filters>
 					<filter>src/main/filters/DEV.properties</filter>
@@ -68,9 +80,6 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
-			<properties>
-				<gwt.style>PRETTY</gwt.style>
-			</properties>
 			<build>
 				<filters>
 					<filter>src/main/filters/TEST.properties</filter>

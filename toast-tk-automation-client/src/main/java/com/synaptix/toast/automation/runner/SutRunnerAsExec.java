@@ -11,8 +11,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -31,7 +31,7 @@ import com.synaptix.toast.swing.agent.IToastClientApp;
 @Singleton
 public class SutRunnerAsExec {
 
-	private static final Logger LOG = LoggerFactory.getLogger(SutRunnerAsExec.class);
+	private static final Logger LOG = LogManager.getLogger(SutRunnerAsExec.class);
 	static final String CMD_EXE = "C:\\Windows\\System32\\cmd.exe";
 	private final IToastClientApp app;
 
@@ -99,7 +99,7 @@ public class SutRunnerAsExec {
 		// 0 - create runtime dir
 		final File homeDir = new File(Property.TOAST_RUNTIME_DIR);
 		final String pluginDirProperty = " -DIGNORE_CLIENT_SERVER_VERSION_CHECK=true -D" + Property.TOAST_PLUGIN_DIR_PROP + "="
-				+ Property.TOAST_PLUGIN_DIR;
+				+ Property.TOAST_PLUGIN_DIR + " -Drus.server.address=swingrec-app.fret.sncf.fr ";
 		final String agentPathProperty = "-javaagent:" + agentPath.replace("/", "\\");
 		if (!homeDir.exists()) {
 			homeDir.mkdirs();
@@ -124,9 +124,8 @@ public class SutRunnerAsExec {
 			public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
 				if (systemId.contains("JNLP-6.0.dtd")) {
 					return new InputSource(new StringReader(""));
-				} else {
-					return null;
-				}
+				} 
+				return null;
 			}
 		});
 		if (!jnlpXmlF.exists()) {
@@ -140,7 +139,7 @@ public class SutRunnerAsExec {
 		NodeList nList = doc.getElementsByTagName("jar");
 
 		// 3 - download dependencies
-		float _length = (float) nList.getLength();
+		float _length = nList.getLength();
 		for (int _index = 0; _index < nList.getLength(); _index++) {
 			Node _nNode = nList.item(_index);
 			if (_nNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -166,7 +165,7 @@ public class SutRunnerAsExec {
 
 		String debugRemoteArgs = " " + app.getConfig().getDebugArgs() + " ";
 
-		String command = "\"" + System.getenv("JAVA_HOME") + "\\bin\\javaw.exe\" " + agentPathProperty + " " + pluginDirProperty + " " + jvmArgs
+		String command = "\"" + System.getenv("JAVA_HOME") + "\\bin\\java.exe\" " + agentPathProperty + " " + pluginDirProperty + " " + jvmArgs
 				+ debugRemoteArgs + " -cp " + homeDir.getAbsolutePath() + "\\* " + mainClass + " " + AppArgsDesc;
 		return command;
 	}
@@ -197,15 +196,15 @@ public class SutRunnerAsExec {
 
 	// mvn example
 	private static void launchMavenApp() {
-		final String mvnExec = "D:\\Apps\\apache-maven-3.0.5\\bin\\mvn.bat";
-		final String workingDir = "D:\\workspace\\RUSClientBoot";
+		final String mvnExec = "C:\\MSOCache\\apache-maven-3.2.3\\bin\\mvn.bat";
+		final String workingDir = "C:\\MSOCache\\workspace\\Luna\\ToastPlugin\\RUSClientBoot";
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				ProcessBuilder builder = new ProcessBuilder();
 				builder.command().add(mvnExec);
 				builder.directory(new File(workingDir));
-				String property = "-javaagent:\"D:\\workspace\\RedPepper\\red-pepper-automation\\target\\redpepper-agent-no-guice.jar\"";
+				String property = "-javaagent:\"C:\\MSOCache\\git\\toast-tk\\toast-tk-automation-client\\target\\toast-tk-automation-client-1.3-rc2.jar\"";
 				builder.environment().put("_JAVA_OPTIONS", property);
 
 				if (builder.directory().exists()) {

@@ -53,8 +53,8 @@ import javax.swing.event.DocumentListener;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xml.sax.SAXException;
 
 import com.google.common.eventbus.EventBus;
@@ -72,7 +72,7 @@ import com.synpatix.toast.runtime.core.runtime.DefaultScriptRunner;
 public class SwingAgentScriptRunnerPanel extends JPanel {
 
 	private static final long serialVersionUID = 4749771836758704761L;
-	private static final Logger LOG = LoggerFactory.getLogger(SwingAgentScriptRunnerPanel.class);
+	private static final Logger LOG = LogManager.getLogger(SwingAgentScriptRunnerPanel.class);
 
 	// private final JButton attachButton;
 	private final JButton runButton;
@@ -271,7 +271,6 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 							publish();
 							runtime.init(runtimeType, command, agentType, true);
 							Desktop.getDesktop().open(new File(Property.TOAST_HOME_DIR));
-							app.stopProgress("Done !");
 						} catch (IllegalAccessException e) {
 							e.printStackTrace();
 						} catch (SAXException e) {
@@ -281,6 +280,9 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 						} catch (ParserConfigurationException e) {
 							e.printStackTrace();
 						}
+						finally {
+							app.stopProgress("Done, now run the created bat file !");
+						}
 						return null;
 					}
 
@@ -289,9 +291,6 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 						super.process(chunks);
 						app.startProgress("Starting SUT..");
 					}
-					
-					
-					
 				};
 				worker.execute();
 			}

@@ -6,12 +6,12 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Download {
 
-	private static final Logger LOG = LoggerFactory.getLogger(Download.class);
+	private static final Logger LOG = LogManager.getLogger(Download.class);
 	
 	public static String getFile(String host, String destination) {
 		InputStream input = null;
@@ -36,7 +36,7 @@ public class Download {
 			while ((read = input.read(buffer)) > 0)
 				writeFile.write(buffer, 0, read);
 			writeFile.flush();
-			LOG.info("Downloaded: " + fileName);
+			LOG.info("Downloaded: {} from {}", fileName, url);
 			return destination + "/" + fileName;
 		} catch (IOException e) {
 			LOG.error("Error while trying to download file : " + destination + "/" + fileName);

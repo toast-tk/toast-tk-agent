@@ -1,61 +1,74 @@
 package com.synaptix.toast.fixture.swing.guice;
 
 import java.awt.Component;
+import java.awt.event.ActionListener;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPasswordField;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.data.TableCell;
 import org.fest.swing.data.TableCellByColumnId;
+import org.fest.swing.fixture.JButtonFixture;
+import org.fest.swing.fixture.JCheckBoxFixture;
 import org.fest.swing.fixture.JPopupMenuFixture;
 import org.fest.swing.fixture.JTableCellFixture;
 import org.fest.swing.fixture.JTableFixture;
+import org.fest.swing.fixture.JTextComponentFixture;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.synaptix.toast.automation.net.CommandRequest;
 import com.synaptix.toast.automation.net.IIdRequest;
 import com.synaptix.toast.automation.net.TableCommandRequest;
+import com.synaptix.toast.automation.net.TableCommandRequestQueryCriteria;
 import com.synaptix.toast.core.guice.ICustomFixtureHandler;
 import com.synaptix.toast.fixture.utils.FestRobotInstance;
 
 public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 
-	private static final Logger LOG = LoggerFactory.getLogger(RedPepperSwingWidgetHandler.class);
-	public static final org.fest.swing.core.Robot rbt = FestRobotInstance.getRobot();
+	private static final Logger LOG = LogManager.getLogger(RedPepperSwingWidgetHandler.class);
 	
 	@Override
 	public String hanldeFixtureCall(Component target, IIdRequest request) {
 		if(request instanceof CommandRequest){
 			CommandRequest command = (CommandRequest) request;
 			if (target instanceof JLabel) {
-				handle((JLabel) target, command);
-			} else if (target instanceof JTextField) {
-				handle((JTextField) target, command);
-			} else if (target instanceof JPasswordField) {
-				handle((JPasswordField) target, command);
-			} else if (target instanceof JButton) {
+				return handle((JLabel) target, command);
+			} 
+			else if (target instanceof JFormattedTextField) {
+				return handle((JFormattedTextField) target, command);
+			}
+			else if (target instanceof JPasswordField) {
+				return handle((JPasswordField) target, command);
+			} 
+			else if (target instanceof JTextField) {
+				return handle((JTextField) target, command);
+			} 
+			else if (target instanceof JButton) {
 				handle((JButton) target, command);
 			} else if (target instanceof JCheckBox) {
-				handle((JCheckBox) target, command);
+				return handle((JCheckBox) target, command);
 			} else if (target instanceof JTextArea) {
-				handle((JTextArea) target, command);
-			} else if (target instanceof JMenu) {
-				handle((JMenu) target, command);
+				return handle((JTextArea) target, command);
 			} else if (target instanceof JTable) {
 				if(command instanceof TableCommandRequest){
 					return handle((JTable) target, (TableCommandRequest)command);
@@ -70,83 +83,182 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 		return null;
 	}
 
-	public void handle(JLabel label, CommandRequest command) {
+	public String handle(JLabel label, CommandRequest command) {
 		switch (command.action) {
 		case SET:
 			label.setText(command.value);
 			break;
+		case GET:
+			return label.getText();
 		default:
 			throw new IllegalArgumentException("Unsupported command for JLabel: " + command.action.name());
 		}
+		return null;
 	}
 	
-	public void handle(JTextField textField, CommandRequest command) {
+	
+	public String handle(final JFormattedTextField textField, final CommandRequest command) {
 		switch (command.action) {
 		case SET:
 			if ("date".equals(command.itemType)) {
-				int value = Integer.parseInt(command.value);
-				LocalDate date = LocalDate.now().plusDays(value);
-				DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yy");
-				String formattedDate = formatter.print(date);
-				textField.setText(formattedDate);
-			} else {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						int value = Integer.parseInt(command.value);
+						LocalDate date = LocalDate.now().plusDays(value);
+						DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yy");
+						String formattedDate = formatter.print(date);
+						
+						
+						/*ActionListener[] actionListeners = textField.getActionListeners();
+						if(actionListeners != null) {
+							for(final ActionListener actionListener :actionListeners)
+							textField.removeActionListener(l)
+						}*/
+						
+						textField.setText(formattedDate);
+						try {
+							textField.commitEdit();
+						}catch(ParseException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}else if("date_text".equals(command.itemType)){
+				SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						textField.setText(command.value);
+						try {
+							textField.commitEdit();
+						}catch(ParseException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}else{
 				textField.setText(command.value);
 			}
 			break;
 		case CLICK:
-			rbt.click(textField);
+			FestRobotInstance.getRobot().click(textField);
+			break;
+		case GET:
+			return textField.getText();
 		default:
 			throw new IllegalArgumentException("Unsupported command for JTextField: " + command.action.name());
 		}
+		return null;
+	}
+	
+	public String handle(final JTextField textField, final CommandRequest command) {
+		switch (command.action) {
+		case SET:
+			if ("date".equals(command.itemType)) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						int value = Integer.parseInt(command.value);
+						LocalDate date = LocalDate.now().plusDays(value);
+						DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yy");
+						String formattedDate = formatter.print(date);
+						textField.setText(formattedDate);
+					}
+				});
+			}else if("date_text".equals(command.itemType)){
+				SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						textField.setText(command.value);
+					}
+				});
+			}else{
+				textField.setText(command.value);
+			}
+			break;
+		case CLICK:
+			FestRobotInstance.getRobot().click(textField);
+			break;
+		case GET:
+			return textField.getText();
+		default:
+			throw new IllegalArgumentException("Unsupported command for JTextField: " + command.action.name());
+		}
+		return null;
 	}
 
-	public void handle(JPasswordField textField, CommandRequest command) {
+	public String handle(JPasswordField textField, CommandRequest command) {
+		//JTextComponentFixture tFixture = new JTextComponentFixture(FestRobotInstance.getRobot(), textField);
 		switch (command.action) {
 		case SET:
 			textField.setText(command.value);
 			break;
 		case CLICK:
-			rbt.click(textField);
+			FestRobotInstance.getRobot().click(textField);
+			break;
+		case GET:
+			return StringUtils.join(textField.getPassword(), "");
 		default:
 			throw new IllegalArgumentException("Unsupported command for JPasswordField: " + command.action.name());
 		}
+		return null;
 	}
 	
-	private void handle(JButton button, CommandRequest command) {
+	private void handle(final JButton button, CommandRequest command) {
 		switch (command.action) {
 		case CLICK:
-			button.doClick();
+			SwingUtilities.invokeLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					button.doClick(1);					
+				}
+			});
+			break;
 		default:
 			throw new IllegalArgumentException("Unsupported command for JButton: " + command.action.name());
 		}
 	}
 
-	private void handle(JCheckBox checkbox, CommandRequest command) {
+	private String handle(JCheckBox checkbox, CommandRequest command) {
 		switch (command.action) {
 		case CLICK:
-			checkbox.doClick();
+			JCheckBoxFixture bFixture = new JCheckBoxFixture(FestRobotInstance.getRobot(), checkbox);
+			bFixture.click();
+			break;
+		case GET:
+			return String.valueOf(checkbox.isSelected());
 		default:
 			throw new IllegalArgumentException("Unsupported command for JCheckBox: " + command.action.name());
 		}
+		return null;
 	}
 	
-	private void handle(JTextArea textField, CommandRequest command) {
+	private String handle(JTextArea textField, CommandRequest command) {
+
+		JTextComponentFixture tFixture = new JTextComponentFixture(FestRobotInstance.getRobot(), textField);
 		switch (command.action) {
 		case SET:
-			textField.setText(command.value);
+			tFixture.setText(command.value);
 			break;
+		case GET:
+			return tFixture.text();
 		case CLICK:
-			rbt.click(textField);
+			FestRobotInstance.getRobot().click(textField);
+			break;
 		case CLEAR:
-			textField.setText("");
+			tFixture.setText(command.value);
 		default:
 			throw new IllegalArgumentException("Unsupported command for JTextArea: " + command.action.name());
 		}
+		return null;
 	}
 
 
 	private String handle(JTable target, final TableCommandRequest command) {
-		JTableFixture tFixture = new JTableFixture(rbt, (JTable) target);
+		JTableFixture tFixture = new JTableFixture(FestRobotInstance.getRobot(), (JTable) target);
 		switch (command.action) {
 		case COUNT:
 			int tries = 30;
@@ -161,66 +273,80 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 			return String.valueOf(tFixture.rowCount());
 		case FIND:
 			TableCommandRequest tcommand = (TableCommandRequest) command;
+			if(tcommand.query.criteria.size() == 0){
+				return "No Criteria to select a row !";
+			}
+			if(tFixture.rowCount() == 0){
+				return "The table is empty !";
+			}
 			for (int i = 0; i < tFixture.rowCount(); i++) {
-				JTableCellFixture cell = tFixture.cell(TableCellByColumnId.row(i).columnId(tcommand.query.lookupCol));
-				if (cell.value().equals(command.value)) {
-					JTableCellFixture cell2 = tFixture.cell(TableCellByColumnId.row(i).columnId(tcommand.query.resultCol));
-					String value = cell2.value();
-					cell2.select();
-					return value;
+				int totalFound = 0;
+				boolean found = findRowByCriteria(tFixture, tcommand, i, totalFound);
+				if(found){
+					if(tcommand.query.resultCol != null){
+						JTableCellFixture cell = tFixture.cell(TableCellByColumnId.row(i).columnId(tcommand.query.resultCol));
+						cell.select();
+						return cell.value();
+					}else{
+						return String.valueOf((i+1));
+					}
 				}
 			}
-			break;
+			return "No row matching provided criteria !";
 		case DOUBLE_CLICK:
 			tcommand = (TableCommandRequest) command;
 			for (int i = 0; i < tFixture.rowCount(); i++) {
-				JTableCellFixture cell = tFixture.cell(TableCellByColumnId.row(i).columnId(tcommand.query.lookupCol));
-				if (cell.value().equals(command.value)) {
+				int totalFound = 0;
+				boolean found = findRowByCriteria(tFixture, tcommand, i, totalFound);
+				if(found){
+					JTableCellFixture cell = tFixture.cell(TableCell.row(i).column(1));
 					cell.select();
 					cell.doubleClick();
+				}else{
+					return "No row matching provided criteria !";
 				}
 			}
 			break;
 		case SELECT_MENU:
 			tcommand = (TableCommandRequest) command;
 			for (int i = 0; i < tFixture.rowCount(); i++) {
-				JTableCellFixture cell = tFixture.cell(TableCellByColumnId.row(i).columnId(tcommand.query.lookupCol));
-				if (cell.value().equals(tcommand.query.lookupValue)) {
+				int totalFound = 0;
+				boolean found = findRowByCriteria(tFixture, tcommand, i, totalFound);
+				if(found){
+					JTableCellFixture cell = tFixture.cell(TableCell.row(i).column(1));
 					try {
 						cell.select();
 						cell.rightClick();
-						JPopupMenuFixture pFixture = new JPopupMenuFixture(rbt, rbt.findActivePopupMenu());
+						JPopupMenuFixture pFixture = new JPopupMenuFixture(FestRobotInstance.getRobot(), FestRobotInstance.getRobot().findActivePopupMenu());
 						pFixture.menuItemWithPath(command.value).click();
 					} catch (Exception e) {
 						e.printStackTrace();
 						return e.getMessage();
 					}
+				}else{
+					return "No row matching provided criteria !";
 				}
 			}
+			break;
 		default:
 			throw new IllegalArgumentException("Unsupported command for JTable: " + command.action.name());
 		}
 		return null;
 	}
 
-	private void handle(JMenu target, CommandRequest command) {
-		switch (command.action) {
-		case CLICK:
-			target.doClick();
-		case SELECT:
-			if (target == null) { 
-				rbt.pressMouse(MouseButton.RIGHT_BUTTON);
-				JPopupMenuFixture pFixture = new JPopupMenuFixture(rbt, rbt.findActivePopupMenu());
-				pFixture.menuItemWithPath(command.value).click();
-			} else {
-				target.doClick();
-				JPopupMenuFixture pFixture = new JPopupMenuFixture(rbt, rbt.findActivePopupMenu());
-				pFixture.menuItemWithPath(command.value).click();
+	private boolean findRowByCriteria(JTableFixture tFixture, TableCommandRequest tcommand, int i, int totalFound) {
+		for(TableCommandRequestQueryCriteria criterion: tcommand.query.criteria){
+			JTableCellFixture cell = tFixture.cell(TableCellByColumnId.row(i).columnId(criterion.lookupCol));
+			if (cell.value().equals(criterion.lookupValue)) {
+				totalFound++;
 			}
-		default:
-			throw new IllegalArgumentException("Unsupported command for JMenu: " + command.action.name());
+			if(totalFound == tcommand.query.criteria.size()){
+				return true;
+			}
 		}
+		return false;
 	}
+
 
 	@Override
 	public Component locateComponentTarget(String item, String itemType, Component value) {
@@ -250,11 +376,10 @@ public class RedPepperSwingWidgetHandler implements ICustomFixtureHandler{
 		return isOk;
 	}
 
-	@SuppressWarnings("unchecked")
-	static List<Class<? extends CommandRequest>> list = Collections.unmodifiableList(Arrays.asList(CommandRequest.class, TableCommandRequest.class));
+	static List<String> list = Collections.unmodifiableList(Arrays.asList(CommandRequest.class.getName(), TableCommandRequest.class.getName()));
 	
 	@Override
-	public List<Class<? extends CommandRequest>> getCommandRequestWhiteList() {
+	public List<String> getCommandRequestWhiteList() {
 		return list;
 	}
 }

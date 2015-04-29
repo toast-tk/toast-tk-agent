@@ -47,23 +47,33 @@ public class KeyboardEventRecorder extends AbstractEventRecorder {
 	
 	@Override
 	public void processEvent(AWTEvent event) {
-		if (event.getID() == KeyEvent.KEY_RELEASED) {
-			KeyEvent kEvent = (KeyEvent) event;
-			EventCapturedObject captureEvent = new EventCapturedObject();
-			captureEvent.businessValue = getEventValue(event);
-			captureEvent.componentLocator = getEventComponentLocator(event);
-			captureEvent.componentName = getEventComponentLabel(event);
-			captureEvent.container = getEventComponentContainer(event);
-			captureEvent.componentType = kEvent.getComponent().getClass().getSimpleName();
-			captureEvent.eventLabel = event.getClass().getSimpleName();
-			
-			captureEvent.timeStamp = System.nanoTime();
-			if (captureEvent.businessValue == null && captureEvent.componentLocator == null) {
+		if (isKeyReleasedEvent(event)) {
+			final KeyEvent kEvent = (KeyEvent) event;
+			final EventCapturedObject captureEvent = buildKeyboardEventCapturedObject(event, kEvent);
+			if(isCapturedEventUninteresting(captureEvent)) {
 				return;
 			}
-
 			appendEventRecord(captureEvent);
 		}
+	}
+
+	private static boolean isKeyReleasedEvent(final AWTEvent event) {
+		return event.getID() == KeyEvent.KEY_RELEASED;
+	}
+
+	private EventCapturedObject buildKeyboardEventCapturedObject(
+			final AWTEvent event, 
+			final KeyEvent kEvent
+	) {
+		final EventCapturedObject captureEvent = new EventCapturedObject();
+		captureEvent.businessValue = getEventValue(event);
+		captureEvent.componentLocator = getEventComponentLocator(event);
+		captureEvent.componentName = getEventComponentLabel(event);
+		captureEvent.container = getEventComponentContainer(event);
+		captureEvent.componentType = kEvent.getComponent().getClass().getSimpleName();
+		captureEvent.eventLabel = event.getClass().getSimpleName();
+		captureEvent.timeStamp = System.nanoTime();
+		return captureEvent;
 	}
 	
 	@Override

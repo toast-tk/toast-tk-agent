@@ -1,9 +1,10 @@
 package com.synaptix.toast.fixture.swing;
 
+import java.util.List;
 import java.util.UUID;
 
-import com.synaptix.toast.automation.net.CommandRequest;
 import com.synaptix.toast.automation.net.TableCommandRequest;
+import com.synaptix.toast.automation.net.TableCommandRequestQueryCriteria;
 import com.synaptix.toast.core.ISwingElement;
 import com.synaptix.toast.fixture.facade.ClientDriver;
 import com.synaptix.toast.fixture.facade.HasClickAction;
@@ -24,6 +25,17 @@ public class SwingTableElement extends SwingAutoElement implements HasClickActio
 		super(element);
 	}
 
+	
+	public String find(List<TableCommandRequestQueryCriteria> criteria) {
+		exists();
+		final String requestId = UUID.randomUUID().toString();
+		frontEndDriver.process(new TableCommandRequest.TableCommandRequestBuilder(requestId)
+				.find(criteria)
+				.with(wrappedElement.getLocator())
+				.ofType(wrappedElement.getType().name()).build());
+		return frontEndDriver.waitForValue(requestId);
+	}
+	
 	public String find(String lookUpColumn, String lookUpValue, String outputColumn) {
 		outputColumn = outputColumn == null ? lookUpColumn : outputColumn;
 		exists();
@@ -74,5 +86,6 @@ public class SwingTableElement extends SwingAutoElement implements HasClickActio
 			.ofType(wrappedElement.getType().name()).build());
 		return null;
 	}
+
 
 }

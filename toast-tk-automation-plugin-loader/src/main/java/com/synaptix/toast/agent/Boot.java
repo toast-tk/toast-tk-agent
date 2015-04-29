@@ -35,16 +35,14 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.Enumeration;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,13 +58,13 @@ import com.synaptix.toast.core.guice.plugin.ToastPluginBoot;
 
 public class Boot {
 
-	protected static final Logger LOG = LoggerFactory.getLogger(Boot.class);
+	static final Logger LOG = LoggerFactory.getLogger(Boot.class);
 	
 	public static void main(String[] args) {
 		final ServicePluginLoader<ToastPluginBoot> bootPluginsLoader;
 		//TODO: else throw big error
 		final String redpepperAgentPath = System.getProperty(Property.TOAST_PLUGIN_DIR_PROP) == null ? Property.TOAST_PLUGIN_DIR : System.getProperty(Property.TOAST_PLUGIN_DIR_PROP); 
-		
+		//final String redpepperAgentPath = "C:\\Users\\pgpn07841\\.toast\\plugins";
 		LOG.info("Loading swing server agent plugins from directory: " + redpepperAgentPath);
 		final ServicePluginsClassPathProvider pluginsClassPathProvider = new ServicePluginsClassPathProvider() {
 			@Override
@@ -75,15 +73,15 @@ public class Boot {
 				List<ServicePluginClassPath> plugins = new ArrayList<ServicePluginClassPath>();
 				for (URL jar : collectJarsInDirector) {
 					LOG.info("Found plugin jar {}", jar);
-					//loadInterestingClasses(jar);
 					plugins.add(new ServicePluginClassPath(jar));
 				}
 				return plugins;
 			}
 		};
+		
+		List<Module> pluginModules = new ArrayList<Module>();
 		bootPluginsLoader = new ServicePluginLoader<ToastPluginBoot>(ToastPluginBoot.class, pluginsClassPathProvider);
 		Collection<ServicePlugin<ToastPluginBoot>> load = bootPluginsLoader.load();
-		List<Module> pluginModules = new ArrayList<Module>();
 		for (ServicePlugin<ToastPluginBoot> servicePlugin : load) {
 			ToastPluginBoot plugin = servicePlugin.getPlugin();
 			plugin.boot();
@@ -101,30 +99,6 @@ public class Boot {
 		}, AWTEvent.WINDOW_EVENT_MASK);
 	}
 	
-	static void loadInterestingClasses(final URL jar) {
-		try {
-			final ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
-			final JarFile jarFile = new JarFile(jar.getPath());
-			final Manifest manifest = jarFile.getManifest();
-			final Map<String, Attributes> entries = manifest.getEntries();
-			final Iterator<Entry<String, Attributes>> entriesIterator = entries.entrySet().iterator();
-			while(entriesIterator.hasNext()) {
-				final Entry<String, Attributes> entry = entriesIterator.next();
-				final String key = entry.getKey();
-				LOG.info("manifest key {}", key);
-				if(key.startsWith("class")) {
-					final Attributes value = entry.getValue();
-					final String name = value.getValue("name");
-					LOG.info("manifest value {}", name);
-					systemClassLoader.loadClass(name);
-				}
-			}
-		}
-		catch(final Exception e) {
-			LOG.error(e.getMessage(), e);
-		}
-	}
-
 	public static URL[] collectJarsInDirector(File directory,  ClassLoader parent) {
 		List<URL> allJars = new ArrayList<URL>();
 		fillJarsList(allJars, directory);

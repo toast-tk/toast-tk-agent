@@ -17,13 +17,12 @@
 
 	<listener>
 		<listener-class>
-			com.synaptix.redpepper.server.guice.WebAppServletContextListener
+			com.sncf.fret.rus.minirus.guice.MiniRusGuiceServletContextListener
 		</listener-class>
 	</listener>
   
-  <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>RedPepper.html</welcome-file>
+    <welcome-file>index.html</welcome-file>
   </welcome-file-list>
 
 </web-app>

@@ -1,9 +1,12 @@
 package com.synaptix.toast.fixture.swing;
 
+import java.util.UUID;
+
 import com.synaptix.toast.automation.net.CommandRequest;
 import com.synaptix.toast.core.ISwingElement;
 import com.synaptix.toast.fixture.facade.ClientDriver;
 import com.synaptix.toast.fixture.facade.HasClickAction;
+import com.synaptix.toast.fixture.facade.HasStringValue;
 
 /**
  * input element
@@ -11,7 +14,7 @@ import com.synaptix.toast.fixture.facade.HasClickAction;
  * @author skokaina
  * 
  */
-public class SwingCheckBoxElement extends SwingAutoElement implements HasClickAction {
+public class SwingCheckBoxElement extends SwingAutoElement implements HasClickAction, HasStringValue {
 
 	public SwingCheckBoxElement(ISwingElement element, ClientDriver driver) {
 		super(element, driver);
@@ -43,4 +46,11 @@ public class SwingCheckBoxElement extends SwingAutoElement implements HasClickAc
 		
 	}
 
+	@Override
+	public String getValue() {
+		exists();
+		final String requestId = UUID.randomUUID().toString();
+		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(requestId).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).getValue().build());
+		return frontEndDriver.waitForValue(requestId);
+	}
 }

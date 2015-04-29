@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -18,7 +18,7 @@ import com.google.inject.Singleton;
 @Singleton
 public class LaunchExecServlet extends HttpServlet {
 
-	private static final Logger LOG = LoggerFactory.getLogger(LaunchExecServlet.class);
+	private static final Logger LOG = LogManager.getLogger(LaunchExecServlet.class);
 	private static final long serialVersionUID = -1497369902256863496L;
 	private static final String COMMAND_PREFIX = "C:\\Windows\\System32\\cmd.exe /k \"\"%JAVA_HOME%\\bin\\javaws\" -J-Drus.inspect=true ";
 	private static final String COMMAND_SUFFIX = "\""; 

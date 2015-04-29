@@ -1,22 +1,25 @@
 package com.synaptix.toast.automation.net;
 
+import java.util.List;
+
 public class TableCommandRequestQuery {
 
-	public final String lookupCol;
-	public final String lookupValue;
 	public final String resultCol;
-
-	public TableCommandRequestQuery(String lookupCol){
-		this(lookupCol, null, null);
+	public final List<TableCommandRequestQueryCriteria> criteria;
+	
+	/**
+	 * for serialization purpose only
+	 */
+	public TableCommandRequestQuery(){
+		this(null, null);
 	}
 	
-	public TableCommandRequestQuery(String lookupCol, String lookupValue, String resultCol){
-		this.lookupCol = lookupCol;
-		this.lookupValue = lookupValue;
-		this.resultCol = resultCol;
+	public TableCommandRequestQuery(List<TableCommandRequestQueryCriteria> criteria){
+		this(criteria, null);
 	}
-
-	public TableCommandRequestQuery(String lookupCol, String lookupValue) {
-		this(lookupCol, lookupValue, null);
+	
+	public TableCommandRequestQuery(List<TableCommandRequestQueryCriteria> criteria, String resultCol){
+		this.criteria = criteria;
+		this.resultCol = resultCol;
 	}
 }

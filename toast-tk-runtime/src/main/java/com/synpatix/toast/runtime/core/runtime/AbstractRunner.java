@@ -1,11 +1,12 @@
 package com.synpatix.toast.runtime.core.runtime;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
@@ -17,10 +18,12 @@ import com.synpatix.toast.runtime.core.parse.TestParser;
 
 public abstract class AbstractRunner {
 
-	private static final Logger LOG = LoggerFactory.getLogger(AbstractRunner.class);
+	private static final Logger LOG = LogManager.getLogger(AbstractRunner.class);
 	private ITestManager testEnvManager;
 	private Injector injector;
 	private boolean presetRepoFromWebApp = false;
+	private IReportUpdateCallBack reportUpdateCallBack;
+	private TestPage localRepositoryTestPage;
 
 	protected AbstractRunner(Injector injector) {
 		try {
@@ -29,18 +32,10 @@ public abstract class AbstractRunner {
 			LOG.error("No Test Environement Manager defined !", e);
 		}
 		this.injector = injector;
-		
-		//TODO: create a project analyzer
-//		Reflections ref = new Reflections(new MethodAnnotationsScanner());
-//		Set<Method> methodsAnnotatedWith = ref.getMethodsAnnotatedWith(Check.class);
-//		for (Method method : methodsAnnotatedWith) {
-//			Check annotation = method.getAnnotation(Check.class);
-//			System.out.print(method.getDeclaringClass().getName() + " -> ");
-//			System.out.println(annotation.value());
-//		}
 	}
 
 	public final void run(String... scenarios) {
+		this.presetRepoFromWebApp = false;
 		run(testEnvManager, scenarios);
 	}
 
@@ -53,6 +48,13 @@ public abstract class AbstractRunner {
 		this.presetRepoFromWebApp = true;
 		runScript(testEnvManager, null, script);
 	}
+	
+	public void runLocalScript(String wikiScenario, String repoWiki, IReportUpdateCallBack iReportUpdateCallBack) {
+		this.reportUpdateCallBack = iReportUpdateCallBack;
+		TestParser parser = new TestParser();
+		localRepositoryTestPage = parser.readString(repoWiki, "");
+		runScript(testEnvManager, null, wikiScenario);
+	}
 
 	public final void run(ITestManager testEnvManager, String... scenarios) {
 		List<TestPage> testPages = new ArrayList<TestPage>();
@@ -61,8 +63,8 @@ public abstract class AbstractRunner {
 			System.out.println("Start main test parser: " + fileName);
 
 			// Read test file
-			File file = new File(this.getClass().getClassLoader().getResource(fileName).getFile());
-			TestPage result = runScript(testEnvManager, file, null);
+			File file = readTestFile(fileName);
+			TestPage result = runScript(testEnvManager, file, fileName);
 
 			testPages.add(result);
 		}
@@ -72,12 +74,23 @@ public abstract class AbstractRunner {
 
 	}
 
+	private File readTestFile(String fileName) {
+		try {
+			return new File(this.getClass().getClassLoader().getResource(fileName).getFile());
+		}
+		catch(final Exception e) {
+			LOG.error(e.getMessage(), e);
+		}
+		return null;
+	}
+
 	private TestPage runScript(ITestManager testEnvManager, File file, String script) {
 		TestParser testParser = new TestParser();
 		TestPage result = file == null ? testParser.parseString(script) : testParser.parse(file);
+		
 		// Run test
-		ToastTestRunner runner = new ToastTestRunner(testEnvManager, injector, this.getClass().getClassLoader()
-				.getResource(Property.REDPEPPER_AUTOMATION_SETTINGS_DEFAULT_DIR));
+		URL defaultSettings = this.getClass().getClassLoader().getResource(Property.REDPEPPER_AUTOMATION_SETTINGS_DEFAULT_DIR);
+		ToastTestRunner runner = new ToastTestRunner(testEnvManager, injector, defaultSettings, reportUpdateCallBack);
 
 		try {
 			if (presetRepoFromWebApp) {
@@ -88,6 +101,8 @@ public abstract class AbstractRunner {
 				if (LOG.isDebugEnabled()) {
 					LOG.debug("Preset repository from webapp rest api...");
 				}
+			}else if(localRepositoryTestPage != null){
+				runner.run(localRepositoryTestPage, false);
 			}
 
 			result = runner.run(result, true);

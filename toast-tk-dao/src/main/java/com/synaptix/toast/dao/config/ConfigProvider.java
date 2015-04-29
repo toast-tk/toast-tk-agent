@@ -2,6 +2,7 @@ package com.synaptix.toast.dao.config;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Properties;
 
 import com.google.inject.Provider;
@@ -18,26 +19,19 @@ public class ConfigProvider implements Provider<Config> {
 	}
 
 	private void initConfig() {
-		String userHomepath = Property.TOAST_HOME_DIR;
-		Properties p = null;
-		if (userHomepath != null) {
-			p = new Properties();
-			try {
-				p.load(new FileReader(userHomepath + "toast.properties"));
-			} catch (IOException e) {
-			}
-		} 
+		Properties p = new Properties();
+		try {
+			URL resource = ConfigProvider.class.getClassLoader().getResource("config.properties");
+			p.load(new FileReader(resource.getFile()));
+		} catch (IOException e) {
+		}
 		config = new Config();
 		
-		String port = System.getProperty(Property.MONGO_PORT);
-		int mongDbPort = port != null ? Integer.valueOf(port) : 27017;
-		String mongDbPortProperty = p.getProperty(Property.MONGO_PORT);
-		config.setMongoPort(mongDbPortProperty!=null ? Integer.valueOf(mongDbPortProperty) : mongDbPort);
+		String mongDbPortProperty = p.getProperty("config.mongo.port", "27017");
+		config.setMongoPort(Integer.valueOf(27017));
 		
-		String host = System.getProperty(Property.MONGO_HOST);
-		String mongDbHost = host != null ? host : "localhost";
-		String mongDbHostProperty = p.getProperty(Property.MONGO_HOST);
-		config.setMongoServer(mongDbHostProperty != null ? mongDbHostProperty : mongDbHost);
+		String mongDbHostProperty = p.getProperty("config.mongo.host", "localhost");
+		config.setMongoServer("localhost");
 	}
 
 	@Override

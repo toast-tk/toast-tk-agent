@@ -2,6 +2,10 @@ package com.synaptix.toast.dao.report;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.commons.io.IOUtils;
 
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.core.dao.ITestPage;
@@ -22,11 +26,32 @@ import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
  * 
  */
 public class HtmlReportGenerator {
+	
+	
+	public String getEmbeddedStyle(){
+		InputStream resourceAsStream = HtmlReportGenerator.class.getClassLoader().getResourceAsStream("style.css");
+		String styleAsString = "";
+		try {
+			styleAsString = IOUtils.toString(resourceAsStream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return styleAsString.replaceAll("\n", "").replaceAll("\r", "").replaceAll("\t", "");
+	}
+	
+	
 	public String generatePageHtml(ITestPage testPage) {
 		StringBuilder report = new StringBuilder();
+		report.append("<html>");
+		report.append("<head>");
 		report.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />");
 		report.append("<LINK href=\"assets/style.css\" rel=\"stylesheet\" type=\"text/css\">");
-		report.append("<div id=\"summary\">");
+		report.append("<style>");
+		report.append(getEmbeddedStyle()).append("\n");
+		report.append("</style>");
+		report.append("</head>");
+		report.append("<body>");
+		report.append("<div class=\"summary\">");
 		report.append("Test " + testPage.getPageName() + "<br>");
 		report.append("Effectué le " + testPage.getStartDateTime() + "<br>");
 		report.append("Temps d'execution " + testPage.getExecutionTime() + "ms<br>");
@@ -56,6 +81,8 @@ public class HtmlReportGenerator {
 		report.append("<script language=\"javascript\"> function toggle(text) { var ele = document.getElementById(text);if(ele.style.display == \"block\") { "
 				+ "ele.style.display = \"none\";}else {ele.style.display = \"block\";}}</script>");
 
+		report.append("</body>");
+		report.append("</html>");
 		return report.toString();
 	}
 
