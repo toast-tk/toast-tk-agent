@@ -39,34 +39,31 @@ $ mvn clean install
 ## Toast TK Studio
 
 ### JNLP Mode
-you should find toast-tk-automation-client-{version}.zip
+1) unzip toast-tk-automation-client-{version}.zip
+3) open app.jnlp and Enjoy !
 
 ### Eclipse Mode
 Clone the repository.
 Install egit/jgit plugins. 
 Import the projects from the cloned repository. 
-Build All and Enjoy !
+Build All
+Launch AppBoot as a JavaApplication and Enjoy !
 
 ## Toast TK WebApp
 You need to clone the webapp repository and compile it using sbt.
+Install and Launch a local Mongo Database
 
 ``` java
 $ git clone https://gitlab.synaptix-labs.com/sallah-kokaina/toast-tk-play-webapp.git
 $ cd toast-tk-webapp
 $ sbt
 $ dist
-$ cd target/universal
--> you should find redplay-1.0-SNAPSHOT.zip
+$ unzip target/universal/toast-tk-webapp-1.3-rc2.zip
+$ cd toast-tk-webapp-1.3-rc2/bin
+$ ./toast-tk-webapp
 ```
 
-Install and Launch a local Mongo Database
-
-Run Toast TK Webapp
-``` java
-$ unzip redplay-1.0-SNAPSHOT.zip  
-$ cd redplay-1.0-SNAPSHOT/bin
-$ redplay
-```
+Open http://localhost:9000 in Google Chrome and Enjoy !
 
 # More Information 
 
