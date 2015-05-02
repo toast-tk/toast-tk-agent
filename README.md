@@ -74,4 +74,4 @@ $ ./toast-tk-webapp
 # More Information 
 ***
 
-... Coming soon ...
+[wiki](https://gitlab.synaptix-labs.com/synaptix/toast-tk/wikis/home)
