@@ -53,7 +53,7 @@ ${version} = 1.3-rc2
 2. Install egit/jgit plugins. 
 3. Import the projects from the cloned repository. 
 4. Build All
-5. Launch AppBoot as a JavaApplication and Enjoy !
+5. Launch __AgentBoot__ as a Java Application and Enjoy !
 
 ## Toast TK WebApp
 * 1- Clone the webapp repository and compile it using sbt.
