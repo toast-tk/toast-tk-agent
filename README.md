@@ -9,7 +9,7 @@ Toast Toolkit - Test Automation Toolkit.
 # What is Toast TK ?
 ***
 
-Toast Toolkit aims to ease the collaboration between Business Analysts 
+Toast Toolkit aims to ease collaboration between Business Analysts 
 and Developpers to describe and test an application behavior. 
 
 Toast provides:
@@ -53,7 +53,7 @@ ${version} = 1.3-rc2
 2. Install egit/jgit plugins. 
 3. Import the projects as maven projects from the cloned repository. 
 4. Build All
-5. Copy toast-tk/toast-tk-studio/target/toast-studio-${version}/agent-lib in ${user.home}/.toast/plugins
+5. Copy toast-tk/toast-tk-studio/target/toast-studio-${version}/agent-lib to ${user.home}/.toast/plugins
 6. Launch __AgentBoot__ as a Java Application and Enjoy !
 
 ## Toast TK WebApp
