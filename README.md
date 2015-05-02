@@ -48,12 +48,13 @@ ${version} = 1.3-rc2
 1. cd toast-tk/toast-tk-studio/target/toast-studio-${version}
 2. open app.jnlp and Enjoy !
 
-### Eclipse Mode
+### IDE Mode (Eclipse)
 1. Clone the repository.
 2. Install egit/jgit plugins. 
-3. Import the projects from the cloned repository. 
+3. Import the projects as maven projects from the cloned repository. 
 4. Build All
-5. Launch __AgentBoot__ as a Java Application and Enjoy !
+5. Copy toast-tk/toast-tk-studio/target/toast-studio-${version}/agent-lib in ${user.home}/.toast/plugins
+6. Launch __AgentBoot__ as a Java Application and Enjoy !
 
 ## Toast TK WebApp
 * 1- Clone the webapp repository and compile it using sbt.
