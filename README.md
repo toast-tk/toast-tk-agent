@@ -51,7 +51,7 @@ Build All and Enjoy !
 You need to clone the webapp repository and compile it using sbt.
 
 ``` java
-$ git clone https://gitlab.synaptix-labs.com/synaptix/toast-tk.git
+$ git clone https://gitlab.synaptix-labs.com/sallah-kokaina/toast-tk-play-webapp.git
 $ cd toast-tk-webapp
 $ sbt
 $ dist
