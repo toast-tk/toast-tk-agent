@@ -5,7 +5,7 @@ package com.synaptix.toast.dao.domain.impl.test;
 
 import com.github.jmkgreen.morphia.annotations.Embedded;
 import com.github.jmkgreen.morphia.annotations.Entity;
-import com.synaptix.toast.core.setup.TestResult;
+import com.synaptix.toast.core.report.TestResult;
 
 /**
  * @author E413544

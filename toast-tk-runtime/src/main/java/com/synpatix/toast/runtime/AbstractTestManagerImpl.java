@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import com.google.inject.Inject;
-import com.synaptix.toast.core.ITestManager;
+import com.synaptix.toast.core.runtime.ITestManager;
 import com.synpatix.toast.runtime.core.runtime.ClassConfigProvider;
 import com.synpatix.toast.runtime.core.runtime.RepositorySetup;
 

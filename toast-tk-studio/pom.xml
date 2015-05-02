@@ -1,0 +1,25 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.synaptix.toast</groupId>
+		<artifactId>toast-tk</artifactId>
+		<version>1.3-rc2</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<packaging>pom</packaging>
+	<artifactId>toast-tk-studio</artifactId>
+	<name>Toast Toolkit - Toast TK Studio - POM Module</name>
+	<description>
+	    Toast TK Studio Parent Module.
+	    This module is the parent module for the studio, featuring:
+	    - Adapters Plugin Loader
+	    - Swing Action Adapter Plugin
+	    - Swing Agent (the Studio)
+	</description>
+	<modules>
+		<module>toast-tk-automation-client</module>
+		<module>toast-tk-automation-server-plugin</module>
+		<module>toast-tk-automation-plugin-loader</module>
+	</modules>
+</project>

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.inject.Singleton;
-import com.synaptix.toast.fixture.utils.FixtureHelper;
+import com.synaptix.toast.adapter.utils.FixtureHelper;
 import com.synpatix.toast.runtime.core.runtime.RepositorySetup.TestComponentConfig;
 import com.synpatix.toast.runtime.core.runtime.RepositorySetup.TestEntityProperty;
 

@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.github.jmkgreen.morphia.annotations.Embedded;
 import com.synaptix.toast.core.dao.IBlock;
-import com.synaptix.toast.core.setup.TestResult;
+import com.synaptix.toast.core.report.TestResult;
 
 /**
  * A setup block.

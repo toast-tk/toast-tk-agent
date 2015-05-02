@@ -17,8 +17,8 @@ import com.github.jmkgreen.morphia.annotations.PrePersist;
 import com.github.jmkgreen.morphia.annotations.Transient;
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.core.dao.ITestPage;
-import com.synaptix.toast.core.setup.TestResult;
-import com.synaptix.toast.core.setup.TestResult.ResultKind;
+import com.synaptix.toast.core.report.TestResult;
+import com.synaptix.toast.core.report.TestResult.ResultKind;
 import com.synaptix.toast.dao.domain.def.test.IRunnableTest;
 import com.synaptix.toast.dao.domain.impl.common.BasicEntityBean;
 

@@ -6,23 +6,24 @@
 	<artifactId>toast-tk</artifactId>
 	<version>1.3-rc2</version>
 	<packaging>pom</packaging>
-	<name>Toast Toolkit - Parent Module</name>
+	<name>Toast Toolkit - POM Module Module</name>
 	<organization>
 		<name>Synaptix-Labs</name>
 		<url>http://www.synaptix-labs.com</url>
 	</organization>
 	<modules>
+		<!-- <module>toast-tk-web-annotation</module> -->
+		<!-- <module>toast-tk-annotation</module> -->
+		<!-- <module>toast-tk-gwt-webapp</module> -->
+		<module>toast-tk-common-utils</module>
 		<module>toast-tk-core</module>
-		<module>toast-tk-web-annotation</module>
-		<module>toast-tk-fixtures</module>
-		<module>toast-tk-annotation</module>
+		<module>toast-tk-rest-utils</module>
+		<module>toast-tk-drivers</module>
+		<module>toast-tk-adapters</module>
 		<module>toast-tk-dao</module>
 		<module>toast-tk-runtime</module>
-		<module>toast-tk-automation-server-plugin</module>
-		<module>toast-tk-automation-plugin-loader</module>
-		<module>toast-tk-automation-client</module> 
-		<module>toast-tk-gwt-webapp</module> 
-		<module>toast-tk-maven-plugin</module> 
+		<module>toast-tk-maven-plugin</module>
+		<module>toast-tk-studio</module>
 	</modules>
 	<properties>
 		<root-directory>${project.basedir}</root-directory>
@@ -50,6 +51,13 @@
 		<guice.version>3.0</guice.version>
 		<joda-time.version>2.1</joda-time.version>
 		<log4j.version>2.2</log4j.version>
+		<gson.version>1.7.1</gson.version>
+		<jersey.version>1.17.1</jersey.version>
+		<commons.version>3.0</commons.version>
+		<common-lang.version>2.3</common-lang.version>
+		<common-io.version>2.4</common-io.version>
+		<commons-beanutils.version>1.8.3</commons-beanutils.version>
+		<junit.version>4.11</junit.version>
 	</properties>
 	<developers>
 		<developer>
@@ -77,9 +85,34 @@
 			<version>${log4j.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>${joda-time.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>${common-lang.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${common-io.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>${commons-beanutils.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>${junit.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.inject.extensions</groupId>
@@ -103,12 +136,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<!--  Mvn classpath conflict -->
-		<!-- <dependency>
-			<groupId>org.sonatype.sisu</groupId>
-			<artifactId>sisu-guice</artifactId>
-			<version>3.1.2</version>
-		</dependency> -->
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}-${project.version}
@@ -157,6 +184,11 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>com.github.ferstl</groupId>
+				<artifactId>depgraph-maven-plugin</artifactId>
+				<version>1.0.1</version>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.2</version>
@@ -179,11 +211,11 @@
 							<pluginExecutions>
 								<pluginExecution>
 									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-war-plugin</artifactId>
-										<versionRange>[1.0.0,)</versionRange>
+										<groupId>com.github.ferstl</groupId>
+										<artifactId>depgraph-maven-plugin</artifactId>
+										<versionRange>[1.0.1,)</versionRange>
 										<goals>
-											<goal>war</goal>
+											<goal>graph</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
@@ -216,24 +248,10 @@
 										<ignore />
 									</action>
 								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.codehaus.mojo</groupId>
-										<artifactId>gwt-maven-plugin</artifactId>
-										<versionRange>[2.4.0,)</versionRange>
-										<goals>
-											<goal>resources</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
-
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>

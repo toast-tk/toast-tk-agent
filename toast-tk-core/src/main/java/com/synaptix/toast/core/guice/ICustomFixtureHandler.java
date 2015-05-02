@@ -3,8 +3,8 @@ package com.synaptix.toast.core.guice;
 import java.awt.Component;
 import java.util.List;
 
-import com.synaptix.toast.automation.net.CommandRequest;
-import com.synaptix.toast.automation.net.IIdRequest;
+import com.synaptix.toast.core.net.request.CommandRequest;
+import com.synaptix.toast.core.net.request.IIdRequest;
 
 /**
  * Interface to implement within toast plugins in order to handle custom swing ui components

@@ -38,12 +38,12 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.sun.jersey.api.client.Client;
-import com.synaptix.toast.core.Property;
-import com.synaptix.toast.core.annotation.Check;
-import com.synaptix.toast.core.annotation.Fixture;
-import com.synaptix.toast.core.annotation.FixtureSentenceRef;
-import com.synaptix.toast.core.dao.fixture.FixtureDescriptor;
-import com.synaptix.toast.core.dao.fixture.FixtureDescriptorLine;
+import com.synaptix.toast.constant.Property;
+import com.synaptix.toast.core.adapter.ActionAdapterSentenceRef;
+import com.synaptix.toast.core.annotation.Action;
+import com.synaptix.toast.core.annotation.ActionAdapter;
+import com.synaptix.toast.core.dao.adapter.ActionAdapterDescriptor;
+import com.synaptix.toast.core.dao.adapter.ActionAdapterDescriptorLine;
 import com.synaptix.toast.core.rest.RestUtils;
 
 @Mojo(name = "generate", defaultPhase = LifecyclePhase.VALIDATE, requiresDependencyResolution = ResolutionScope.COMPILE)

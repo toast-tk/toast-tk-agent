@@ -32,11 +32,11 @@ package com.synaptix.toast.test.runtime.mock;
 import java.util.Collection;
 import java.util.Map;
 
-import com.synaptix.toast.core.IFeedableSwingPage;
-import com.synaptix.toast.core.IFeedableWebPage;
-import com.synaptix.toast.core.IRepositorySetup;
-import com.synaptix.toast.core.ITestManager;
-import com.synaptix.toast.core.setup.TestResult;
+import com.synaptix.toast.core.report.TestResult;
+import com.synaptix.toast.core.runtime.IFeedableSwingPage;
+import com.synaptix.toast.core.runtime.IFeedableWebPage;
+import com.synaptix.toast.core.runtime.IRepositorySetup;
+import com.synaptix.toast.core.runtime.ITestManager;
 
 public class DefaultRepositorySetup implements IRepositorySetup{
 

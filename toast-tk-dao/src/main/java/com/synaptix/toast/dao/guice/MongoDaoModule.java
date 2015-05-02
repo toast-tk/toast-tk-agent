@@ -20,7 +20,6 @@ public class MongoDaoModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		//bind(LuceneDaoService.class).in(Singleton.class);
 		bind(CommonMongoDaoService.class).in(Singleton.class);
 
 		install(new FactoryModuleBuilder().build(RepositoryDaoService.Factory.class));

@@ -16,7 +16,6 @@
 
 	<build>
 		<plugins>
-
 			<!-- plugin dependencies -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -78,16 +77,15 @@
 			<artifactId>toast-tk-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+			<dependency>
+			<groupId>com.synaptix.toast</groupId>
+			<artifactId>toast-tk-rest-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<artifactId>reflections</artifactId>
 			<groupId>org.reflections</groupId>
 			<version>0.9.9</version>
 		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
-		</dependency>
-
 	</dependencies>
 </project>

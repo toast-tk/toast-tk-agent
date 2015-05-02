@@ -36,12 +36,11 @@ import static org.junit.Assert.assertNull;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.fest.assertions.AssertExtension;
 import org.junit.AfterClass;
 import org.junit.Test;
 
-import com.synaptix.toast.core.IRepositorySetup;
-import com.synaptix.toast.core.annotation.Check;
+import com.synaptix.toast.core.annotation.Action;
+import com.synaptix.toast.core.runtime.IRepositorySetup;
 import com.synaptix.toast.test.runtime.mock.DefaultRepositorySetup;
 import com.synpatix.toast.runtime.core.runtime.ToastRunnerHelper;
 import com.synpatix.toast.runtime.core.runtime.ToastTestRunner;
@@ -58,7 +57,7 @@ public class TestRunnerTestCase {
 	}
 	
 	class Titi{
-		@Check("Titi")
+		@Action(action = "Titi", description = "")
 		public void blabla(){
 			
 		}

@@ -42,16 +42,15 @@
 			<version>${org.reflection.version}</version>
 		</dependency>
 		<dependency>
-		    <groupId>com.google.code.findbugs</groupId>
-		    <artifactId>jsr305</artifactId>
-		    <version>3.0.0</version>
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>jsr305</artifactId>
+			<version>3.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
+			<groupId>com.synaptix.toast</groupId>
+			<artifactId>toast-tk-rest-api</artifactId>
+			<version>${project.version}</version>
 		</dependency>
-		<!-- red pepper dependencies -->
 		<dependency>
 			<groupId>com.synaptix.toast</groupId>
 			<artifactId>toast-tk-core</artifactId>

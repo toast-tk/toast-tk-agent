@@ -11,14 +11,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.google.inject.Inject;
-import com.synaptix.toast.core.IFeedableSwingPage;
-import com.synaptix.toast.core.IRepositorySetup;
-import com.synaptix.toast.core.ITestManager;
-import com.synaptix.toast.core.setup.TestResult;
-import com.synaptix.toast.core.setup.TestResult.ResultKind;
-import com.synaptix.toast.fixture.swing.DefaultSwingPage;
-import com.synaptix.toast.fixture.utils.FixtureHelper;
-import com.synaptix.toast.fixture.web.DefaultWebPage;
+import com.synaptix.toast.adapter.swing.DefaultSwingPage;
+import com.synaptix.toast.adapter.utils.FixtureHelper;
+import com.synaptix.toast.adapter.web.DefaultWebPage;
+import com.synaptix.toast.core.report.TestResult;
+import com.synaptix.toast.core.report.TestResult.ResultKind;
+import com.synaptix.toast.core.runtime.IFeedableSwingPage;
+import com.synaptix.toast.core.runtime.IRepositorySetup;
+import com.synaptix.toast.core.runtime.ITestManager;
 import com.synpatix.toast.runtime.guice.IRepositoryTypeParser;
 
 public class RepositorySetup implements IRepositorySetup{

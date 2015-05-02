@@ -7,7 +7,7 @@ import org.joda.time.LocalDateTime;
 
 import com.github.jmkgreen.morphia.annotations.Embedded;
 import com.github.jmkgreen.morphia.annotations.Entity;
-import com.synaptix.toast.core.setup.TestResult;
+import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.dao.domain.def.test.IRunnableTest;
 
 /**

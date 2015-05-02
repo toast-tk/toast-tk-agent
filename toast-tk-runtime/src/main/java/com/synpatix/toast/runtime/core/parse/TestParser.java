@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 
+import com.synaptix.toast.adapter.utils.FixtureHelper;
 import com.synaptix.toast.dao.domain.impl.test.SwingPageConfigLine;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
 import com.synaptix.toast.dao.domain.impl.test.WebPageConfigLine;
@@ -25,7 +26,6 @@ import com.synaptix.toast.dao.domain.impl.test.block.SetupBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.SwingPageBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
-import com.synaptix.toast.fixture.utils.FixtureHelper;
 
 public class TestParser {
 	

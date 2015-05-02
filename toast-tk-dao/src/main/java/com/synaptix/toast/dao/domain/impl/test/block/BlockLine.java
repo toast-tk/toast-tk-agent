@@ -6,7 +6,7 @@ package com.synaptix.toast.dao.domain.impl.test.block;
 import java.util.List;
 
 import com.github.jmkgreen.morphia.annotations.Embedded;
-import com.synaptix.toast.core.setup.TestResult;
+import com.synaptix.toast.core.report.TestResult;
 
 /**
  * Standard block line, contains strings.

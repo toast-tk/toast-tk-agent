@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.synpatix.toast.runtime.core.runtime;
 
 import java.io.File;
@@ -26,17 +23,19 @@ import com.google.common.base.CaseFormat;
 import com.google.gson.Gson;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
-import com.synaptix.toast.automation.net.CommandRequest;
-import com.synaptix.toast.core.IFeedableSwingPage;
-import com.synaptix.toast.core.IRepositorySetup;
-import com.synaptix.toast.core.ITestManager;
-import com.synaptix.toast.core.annotation.Check;
-import com.synaptix.toast.core.annotation.Display;
-import com.synaptix.toast.core.annotation.FixtureKind;
+import com.synaptix.toast.adapter.ActionAdapterCollector;
+import com.synaptix.toast.adapter.FixtureService;
+import com.synaptix.toast.adapter.web.DefaultWebPage;
+import com.synaptix.toast.core.adapter.ActionAdapterKind;
+import com.synaptix.toast.core.agent.inspection.ISwingInspectionClient;
+import com.synaptix.toast.core.annotation.Action;
 import com.synaptix.toast.core.dao.IBlock;
-import com.synaptix.toast.core.inspection.ISwingInspectionClient;
-import com.synaptix.toast.core.setup.TestResult;
-import com.synaptix.toast.core.setup.TestResult.ResultKind;
+import com.synaptix.toast.core.net.request.CommandRequest;
+import com.synaptix.toast.core.report.TestResult;
+import com.synaptix.toast.core.report.TestResult.ResultKind;
+import com.synaptix.toast.core.runtime.IFeedableSwingPage;
+import com.synaptix.toast.core.runtime.IRepositorySetup;
+import com.synaptix.toast.core.runtime.ITestManager;
 import com.synaptix.toast.dao.domain.impl.test.ComponentConfigLine;
 import com.synaptix.toast.dao.domain.impl.test.SwingPageConfigLine;
 import com.synaptix.toast.dao.domain.impl.test.TestLine;
@@ -51,15 +50,8 @@ import com.synaptix.toast.dao.domain.impl.test.block.SwingPageBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 import com.synaptix.toast.dao.report.HtmlReportGenerator;
-import com.synaptix.toast.fixture.api.FixtureApi;
-import com.synaptix.toast.fixture.api.FixtureService;
-import com.synaptix.toast.fixture.web.DefaultWebPage;
 
-/**
- * @author E413544
- * 
- */
-public class ToastTestRunner {
+ public class ToastTestRunner {
 
 	private static final Logger LOG = LogManager.getLogger(ToastTestRunner.class);
 	private static final HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator();
@@ -70,6 +62,16 @@ public class ToastTestRunner {
 	private IReportUpdateCallBack reportUpdateCallBack;
 	private List<FixtureService> fixtureApiServices;
 	
+	public ToastTestRunner(ITestManager testManager, IRepositorySetup repoSetup) {
+		this.testManager = testManager;
+		this.repoSetup = repoSetup;
+		if(injector != null){
+			this.fixtureApiServices = ActionAdapterCollector.listAvailableServicesByInjection(injector);
+		}else{
+			this.fixtureApiServices = ActionAdapterCollector.listAvailableServicesByReflection();
+		}
+	}
+	
 	public ToastTestRunner(ITestManager m, Injector injector, URL settingsFile) {
 		this(m, injector.getInstance(IRepositorySetup.class));
 		this.injector = injector;
@@ -77,19 +79,11 @@ public class ToastTestRunner {
 		if(settingsFile != null){
 			LOG.info("Overriding fixture definitions with settings in " + settingsFile.getFile());
 		}
-		this.fixtureApiServices = FixtureApi.listAvailableServices();
-	}
-	
-	public ToastTestRunner(ITestManager testManager, IRepositorySetup repoSetup) {
-		this.testManager = testManager;
-		this.repoSetup = repoSetup;
-		this.fixtureApiServices = FixtureApi.listAvailableServices();
 	}
 
 	public ToastTestRunner(ITestManager testEnvManager, Injector injector, URL settings, IReportUpdateCallBack reportUpdateCallBack) {
 		this(testEnvManager, injector, settings);
 		this.reportUpdateCallBack = reportUpdateCallBack;
-		this.fixtureApiServices = FixtureApi.listAvailableServices();
 	}
 
 	/**
@@ -426,7 +420,7 @@ public class ToastTestRunner {
 		final CommandRequest commandRequest;
 		switch (descriptor.getTestLineFixtureKind()) {
 		case service:
-			commandRequest = new CommandRequest.CommandRequestBuilder(null).ofType(FixtureKind.service.name()).asCustomCommand(command).build();
+			commandRequest = new CommandRequest.CommandRequestBuilder(null).ofType(ActionAdapterKind.service.name()).asCustomCommand(command).build();
 			break;
 		default:
 			commandRequest = new CommandRequest.CommandRequestBuilder(null).asCustomCommand(command).build();
@@ -443,7 +437,7 @@ public class ToastTestRunner {
 	 * @throws ClassNotFoundException
 	 * @throws IllegalAccessException 
 	 */
-	private Class<?> locateFixtureClass(FixtureKind fixtureKind, String fixtureName, String command) throws ClassNotFoundException, IllegalAccessException {
+	private Class<?> locateFixtureClass(ActionAdapterKind fixtureKind, String fixtureName, String command) throws ClassNotFoundException, IllegalAccessException {
 		Set<Class<?>> serviceClasses = new HashSet<Class<?>>();
 		if(settingsFile != null){
 			Class<?> serviceClass = getServiceClassFromSettings(settingsFile.getFile(), fixtureKind.name());
@@ -528,11 +522,8 @@ public class ToastTestRunner {
 			Annotation[] annotations = method.getAnnotations();
 			for (Annotation annotation : annotations) {
 				String methodRegex = null;
-				if (annotation.annotationType().equals(Check.class)) {
-					methodRegex = ((Check) annotation).value();
-				}
-				if (annotation.annotationType().equals(Display.class)) {
-					methodRegex = ((Display) annotation).value();
+				if (annotation.annotationType().equals(Action.class)) {
+					methodRegex = ((Action) annotation).action();
 				}
 				if (methodRegex != null) {
 					Pattern regexPattern = Pattern.compile(methodRegex);

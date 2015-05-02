@@ -29,14 +29,13 @@ Creation date: 15 avr. 2015
 
 package com.synpatix.toast.runtime.core.runtime;
 
-import com.synaptix.toast.core.IRepositorySetup;
+import com.synaptix.toast.core.runtime.IRepositorySetup;
+
 
 public class ToastRunnerHelper {
 
 	public static Object buildArgument(IRepositorySetup repoSetup, String group) {
-		//System.out.println("IN <- "+ group);
 		group = group.replaceAll("\\*", "");
-		//System.out.println("OUT -> "+ group);
 		if(group.startsWith("$$")){
 			return group.substring(1);
 		}else if (group.startsWith("$")){

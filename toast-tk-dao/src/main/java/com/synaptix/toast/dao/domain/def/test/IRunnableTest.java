@@ -5,7 +5,7 @@ package com.synaptix.toast.dao.domain.def.test;
 
 import org.joda.time.LocalDateTime;
 
-import com.synaptix.toast.core.setup.TestResult;
+import com.synaptix.toast.core.report.TestResult;
 
 /**
  * @author E413544

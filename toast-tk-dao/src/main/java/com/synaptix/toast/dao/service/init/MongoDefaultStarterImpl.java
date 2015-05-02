@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.reflections.Reflections;
 
 import com.github.jmkgreen.morphia.Datastore;
@@ -18,10 +20,12 @@ import com.synaptix.toast.dao.domain.Domain;
 import com.synaptix.toast.dao.service.dao.common.EntityCollectionManager;
 
 public class MongoDefaultStarterImpl implements DbStarter {
-	Morphia morphia;
-	MongoClient mClient;
+	
+	private static final Logger LOG = LogManager.getLogger(MongoDefaultStarterImpl.class);
+	private Morphia morphia;
+	private MongoClient mClient;
 	private final Config config;
-	Map<String, Datastore> dsMap;
+	private Map<String, Datastore> dsMap;
 	private final EntityCollectionManager enitityManager;
 
 	@Inject
@@ -47,11 +51,10 @@ public class MongoDefaultStarterImpl implements DbStarter {
 		Reflections reflection = new Reflections(Domain.class.getPackage().getName());
 		Set<Class<?>> typesAnnotatedWith = reflection.getTypesAnnotatedWith(Entity.class);
 		for (Class<?> c : typesAnnotatedWith) {
-			System.out.println("Morphicating " + c + " !");
 			Entity entity = c.getAnnotation(Entity.class);
 			enitityManager.register(entity.value(), c);
 			morphia.map(c);
-			System.out.println(c + " is morphicated !");
+			LOG.info(c + " type has been registered to Morphia !");
 		}
 	}
 

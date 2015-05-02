@@ -8,7 +8,7 @@
 		<artifactId>toast-tk</artifactId>
 	</parent>
 	<artifactId>toast-tk-annotation</artifactId>
-	<name>Toast Toolkit - Annotation module</name>
+	<name>Toast Toolkit - DEPRECATED - Annotation Processor Module</name>
 
 	<build>
 		<plugins>

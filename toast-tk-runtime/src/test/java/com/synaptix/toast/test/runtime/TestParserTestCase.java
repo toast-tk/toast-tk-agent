@@ -38,7 +38,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.synaptix.toast.core.annotation.FixtureKind;
+import com.synaptix.toast.core.adapter.ActionAdapterKind;
 import com.synaptix.toast.dao.domain.impl.test.TestLine;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
@@ -90,7 +90,7 @@ public class TestParserTestCase {
 		TestLine testLine = blockLines.get(4);
 		assertEquals("Cliquer sur *ChooseApplicationRusDialog.KO*", testLine.getTest());
 		TestLineDescriptor descriptor = new TestLineDescriptor(testBlock, testLine);
-		assertEquals(FixtureKind.swing, descriptor.getTestLineFixtureKind());
+		assertEquals(ActionAdapterKind.swing, descriptor.getTestLineFixtureKind());
 	}
 	
 	@Test
@@ -102,7 +102,7 @@ public class TestParserTestCase {
 		TestLine testLine = blockLines.get(1);
 		assertEquals("@service Cliquer sur *ChooseApplicationRusDialog.OK*", testLine.getTest());
 		TestLineDescriptor descriptor = new TestLineDescriptor(testBlock, testLine);
-		assertEquals(FixtureKind.service, descriptor.getTestLineFixtureKind());
+		assertEquals(ActionAdapterKind.service, descriptor.getTestLineFixtureKind());
 	}
 	
 	@Test
@@ -125,7 +125,7 @@ public class TestParserTestCase {
 		List<TestLine> blockLines = testBlock.getBlockLines();
 		assertEquals("@swing:connector Saisir *valeur* dans *ChooseApplicationRusDialog.applicationBox*", blockLines.get(5).getTest());
 		TestLineDescriptor descriptor = new TestLineDescriptor(testBlock, blockLines.get(5));
-		assertEquals(FixtureKind.swing, descriptor.getTestLineFixtureKind());
+		assertEquals(ActionAdapterKind.swing, descriptor.getTestLineFixtureKind());
 		assertEquals("connector", descriptor.getTestLineFixtureName());
 	}
 	

@@ -38,12 +38,12 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.sun.jersey.api.client.Client;
-import com.synaptix.toast.core.Property;
-import com.synaptix.toast.core.annotation.Check;
-import com.synaptix.toast.core.annotation.Fixture;
-import com.synaptix.toast.core.annotation.FixtureSentenceRef;
-import com.synaptix.toast.core.dao.fixture.FixtureDescriptor;
-import com.synaptix.toast.core.dao.fixture.FixtureDescriptorLine;
+import com.synaptix.toast.constant.Property;
+import com.synaptix.toast.core.adapter.ActionAdapterSentenceRef;
+import com.synaptix.toast.core.annotation.Action;
+import com.synaptix.toast.core.annotation.ActionAdapter;
+import com.synaptix.toast.core.dao.adapter.ActionAdapterDescriptor;
+import com.synaptix.toast.core.dao.adapter.ActionAdapterDescriptorLine;
 import com.synaptix.toast.core.rest.RestUtils;
 
 @Mojo(name = "deploy", defaultPhase = LifecyclePhase.INSTALL, requiresDependencyResolution = ResolutionScope.COMPILE)
@@ -80,7 +80,7 @@ public class ToastToolKitMavenInstallMojo extends AbstractMojo {
 			for (; iterateFiles.hasNext();) {
 				String fixtureKind = null;
 				String fixtureName = null;
-				final List<FixtureDescriptorLine> sentences = new ArrayList<FixtureDescriptorLine>();
+				final List<ActionAdapterDescriptorLine> sentences = new ArrayList<ActionAdapterDescriptorLine>();
 				File javaFile = iterateFiles.next();
 				String readFileToString = FileUtils.readFileToString(javaFile, Charset.forName("UTF-8"));
 				if (readFileToString.contains("@Fixture") && readFileToString.contains("@Check")) {
@@ -105,19 +105,19 @@ public class ToastToolKitMavenInstallMojo extends AbstractMojo {
 						if (fixtureKind != null && fixtureName != null) {
 							if (line.startsWith("@Check")) {
 								String sentence = line.substring("@Check".length() + 1, line.length() - 1);
-								sentence = sentence.replace("\"+VALUE_REGEX+\"", FixtureSentenceRef.VALUE_REGEX);
-								sentence = sentence.replace("\"+VAR_OR_VALUE_REGEX+\"", FixtureSentenceRef.VAR_OR_VALUE_REGEX);
-								sentence = sentence.replace("\"+SWING_COMPONENT_REGEX+\"", FixtureSentenceRef.SWING_COMPONENT_REGEX);
-								sentence = sentence.replace("\"+VAR_IN_REGEX+\"", FixtureSentenceRef.VAR_IN_REGEX);
-								sentence = sentence.replace("\"+VAR_OUT_REGEX+\"", FixtureSentenceRef.VAR_OUT_REGEX);
+								sentence = sentence.replace("\"+VALUE_REGEX+\"", ActionAdapterSentenceRef.VALUE_REGEX);
+								sentence = sentence.replace("\"+VAR_OR_VALUE_REGEX+\"", ActionAdapterSentenceRef.VAR_OR_VALUE_REGEX);
+								sentence = sentence.replace("\"+SWING_COMPONENT_REGEX+\"", ActionAdapterSentenceRef.SWING_COMPONENT_REGEX);
+								sentence = sentence.replace("\"+VAR_IN_REGEX+\"", ActionAdapterSentenceRef.VAR_IN_REGEX);
+								sentence = sentence.replace("\"+VAR_OUT_REGEX+\"", ActionAdapterSentenceRef.VAR_OUT_REGEX);
 								
-								sentence = sentence.replace("\"+VALUE_REGEX", FixtureSentenceRef.VALUE_REGEX + "\"");
-								sentence = sentence.replace("\"+VAR_OR_VALUE_REGEX", FixtureSentenceRef.VAR_OR_VALUE_REGEX + "\"");
-								sentence = sentence.replace("\"+SWING_COMPONENT_REGEX", FixtureSentenceRef.SWING_COMPONENT_REGEX + "\"");
-								sentence = sentence.replace("\"+VAR_IN_REGEX", FixtureSentenceRef.VAR_IN_REGEX + "\"");
-								sentence = sentence.replace("\"+VAR_OUT_REGEX", FixtureSentenceRef.VAR_OUT_REGEX + "\"");
+								sentence = sentence.replace("\"+VALUE_REGEX", ActionAdapterSentenceRef.VALUE_REGEX + "\"");
+								sentence = sentence.replace("\"+VAR_OR_VALUE_REGEX", ActionAdapterSentenceRef.VAR_OR_VALUE_REGEX + "\"");
+								sentence = sentence.replace("\"+SWING_COMPONENT_REGEX", ActionAdapterSentenceRef.SWING_COMPONENT_REGEX + "\"");
+								sentence = sentence.replace("\"+VAR_IN_REGEX", ActionAdapterSentenceRef.VAR_IN_REGEX + "\"");
+								sentence = sentence.replace("\"+VAR_OUT_REGEX", ActionAdapterSentenceRef.VAR_OUT_REGEX + "\"");
 								sentence = sentence.substring(1, sentence.length()-1);
-								FixtureDescriptorLine descriptorLine = new FixtureDescriptorLine(fixtureName, fixtureKind, sentence);
+								ActionAdapterDescriptorLine descriptorLine = new ActionAdapterDescriptorLine(fixtureName, fixtureKind, sentence);
 								sentences.add(descriptorLine);
 							}
 						}
@@ -127,7 +127,7 @@ public class ToastToolKitMavenInstallMojo extends AbstractMojo {
 
 				if (sentences.size() > 0) {
 					Gson gson = new Gson();
-					FixtureDescriptor descriptor = new FixtureDescriptor(project.getName(), sentences);
+					ActionAdapterDescriptor descriptor = new ActionAdapterDescriptor(project.getName(), sentences);
 					String json = gson.toJson(descriptor);
 					RestUtils.post(host + "/postConnector", json);
 				}

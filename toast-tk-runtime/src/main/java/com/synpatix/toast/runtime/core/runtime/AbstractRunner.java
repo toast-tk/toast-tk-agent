@@ -10,9 +10,9 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
-import com.synaptix.toast.core.ITestManager;
-import com.synaptix.toast.core.Property;
+import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.rest.RestUtils;
+import com.synaptix.toast.core.runtime.ITestManager;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
 import com.synpatix.toast.runtime.core.parse.TestParser;
 

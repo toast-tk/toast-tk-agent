@@ -7,14 +7,12 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.List;
 
+import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.dao.domain.impl.report.Campaign;
 import com.synaptix.toast.dao.domain.impl.report.Project;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
 
-/**
- * @author E413544
- * 
- */
+@FixMe(todo = "replace Project by an interface in order to move the generator within the runtime module")
 public class ProjectHtmlReportGenerator {
 	private static int HISTORY_SIZE = 20;
 

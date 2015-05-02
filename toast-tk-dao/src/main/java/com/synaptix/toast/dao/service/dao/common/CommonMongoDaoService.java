@@ -8,13 +8,6 @@ import com.synaptix.toast.dao.domain.impl.common.TagImpl;
 
 public class CommonMongoDaoService {
 
-	//private final LuceneDaoService indexationService;
-
-//	@Inject
-//	public CommonMongoDaoService(LuceneDaoService indexationService) {
-//		this.indexationService = indexationService;
-//	}
-
 	public <E> List<E> getTaggedItems(com.github.jmkgreen.morphia.Datastore ds, Class<E> resultClass, TagImpl tag) {
 		Query<E> q = ds.createQuery(resultClass).field("tags").hasThisOne(tag);
 		List<E> items = q.asList();
@@ -23,6 +16,5 @@ public class CommonMongoDaoService {
 
 	public void indexEntity(Datastore ds, String collection, String idObject, Object object) {
 		throw new Error("Not implemented !");
-		//indexationService.index(ds, collection, idObject, object);
 	}
 }

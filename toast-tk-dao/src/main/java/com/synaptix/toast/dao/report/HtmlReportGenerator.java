@@ -7,10 +7,11 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 
+import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.core.dao.ITestPage;
-import com.synaptix.toast.core.setup.TestResult;
-import com.synaptix.toast.core.setup.TestResult.ResultKind;
+import com.synaptix.toast.core.report.TestResult;
+import com.synaptix.toast.core.report.TestResult.ResultKind;
 import com.synaptix.toast.dao.domain.impl.test.ComponentConfigLine;
 import com.synaptix.toast.dao.domain.impl.test.TestLine;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
@@ -21,10 +22,7 @@ import com.synaptix.toast.dao.domain.impl.test.block.InsertBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.SetupBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 
-/**
- * @author E413544
- * 
- */
+@FixMe(todo = "Use thymeleaf and move the report generator within the runtime module")
 public class HtmlReportGenerator {
 	
 	
