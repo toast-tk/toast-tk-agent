@@ -41,7 +41,6 @@ $ mvn clean install
 The packages are now installed in your local maven repository.
 
 ## Toast TK Studio
-
 ${version} = 1.3-rc2
 
 ### JNLP Mode
@@ -56,9 +55,9 @@ ${version} = 1.3-rc2
 5. Launch AppBoot as a JavaApplication and Enjoy !
 
 ## Toast TK WebApp
-1. You need to clone the webapp repository and compile it using sbt.
+* 1- Clone the webapp repository and compile it using sbt.
 
-``` java
+```
 $ git clone https://gitlab.synaptix-labs.com/sallah-kokaina/toast-tk-play-webapp.git
 $ cd toast-tk-webapp
 $ sbt
@@ -67,9 +66,8 @@ $ unzip target/universal/toast-tk-webapp-${version}.zip
 $ cd toast-tk-webapp-${version}/bin
 $ ./toast-tk-webapp
 ```
-
-2. Install and Launch a local Mongo Database
-3. Open http://localhost:9000 in Google Chrome and Enjoy !
+* 2- Install and Launch a local Mongo Database
+* 3- Open http://localhost:9000 in Google Chrome and Enjoy !
 
 # More Information 
 ***
