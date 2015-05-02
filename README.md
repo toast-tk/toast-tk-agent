@@ -7,6 +7,7 @@ Build not working, requires xvbf plugin on jenkins to support X11.
 Toast Toolkit - Test Automation Toolkit.
 
 # What is Toast TK ?
+***
 
 Toast Toolkit aims to ease the collaboration between Business Analysts 
 and Developpers to describe and test an application behavior. 
@@ -27,6 +28,7 @@ Toast records the test cases in a natural language (human readable).
 The test cases can be run either through the UI or in batch mode through Eclipse (ref. how to eclipse, eclipse archetype).
 
 # Building Toast TK
+***
 
 You need to clone this repository to compile Toast using maven.
 
@@ -36,10 +38,14 @@ $ cd toast-tk
 $ mvn clean install
 ```
 
+The packages are now installed in your local maven repository.
+
 ## Toast TK Studio
 
+${version} = 1.3-rc2
+
 ### JNLP Mode
-1. unzip toast-tk-automation-client-{version}.zip
+1. cd toast-tk/toast-tk-studio/target/toast-studio-${version}
 2. open app.jnlp and Enjoy !
 
 ### Eclipse Mode
@@ -57,8 +63,8 @@ $ git clone https://gitlab.synaptix-labs.com/sallah-kokaina/toast-tk-play-webapp
 $ cd toast-tk-webapp
 $ sbt
 $ dist
-$ unzip target/universal/toast-tk-webapp-1.3-rc2.zip
-$ cd toast-tk-webapp-1.3-rc2/bin
+$ unzip target/universal/toast-tk-webapp-${version}.zip
+$ cd toast-tk-webapp-${version}/bin
 $ ./toast-tk-webapp
 ```
 
@@ -66,5 +72,6 @@ $ ./toast-tk-webapp
 3. Open http://localhost:9000 in Google Chrome and Enjoy !
 
 # More Information 
+***
 
 ... Coming soon ...
