@@ -61,7 +61,7 @@ ${version} = 1.3-rc2
 
 ```
 $ git clone https://gitlab.synaptix-labs.com/sallah-kokaina/toast-tk-play-webapp.git
-$ cd toast-tk-webapp
+$ cd toast-tk-play-webapp
 $ sbt
 $ dist
 $ unzip target/universal/toast-tk-webapp-${version}.zip
