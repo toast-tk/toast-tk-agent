@@ -15,7 +15,7 @@ import com.synaptix.toast.core.dao.ICampaign;
 import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.dao.domain.impl.common.BasicTaggableMongoBean;
 
-@Entity(value = "report.campaigns", noClassnameStored = true)
+@Entity(value = "report.campaigns")
 @Indexes({ @Index(value = "name, -iteration"), @Index("iteration") })
 public class Campaign extends BasicTaggableMongoBean implements ICampaign {
 	

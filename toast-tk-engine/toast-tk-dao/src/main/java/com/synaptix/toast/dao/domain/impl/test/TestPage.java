@@ -28,7 +28,7 @@ import com.synaptix.toast.dao.domain.impl.common.BasicEntityBean;
  * @author E413544
  * 
  */
-@Entity(value = "test", noClassnameStored = true)
+@Entity(value = "test")
 @Indexes({ @Index(value = "pageName, -runDateTime"), @Index("runDateTime"), @Index("isTemplate") })
 public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, ITestPage {
 

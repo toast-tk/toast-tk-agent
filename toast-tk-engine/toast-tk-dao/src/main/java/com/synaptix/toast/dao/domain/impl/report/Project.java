@@ -12,13 +12,14 @@ import com.github.jmkgreen.morphia.annotations.Indexes;
 import com.github.jmkgreen.morphia.annotations.PrePersist;
 import com.github.jmkgreen.morphia.annotations.Reference;
 import com.synaptix.toast.core.dao.ICampaign;
+import com.synaptix.toast.core.dao.IProject;
 import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.dao.domain.impl.common.BasicTaggableMongoBean;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
 
-@Entity(value = "report.projects", noClassnameStored = true)
+@Entity(value = "report.projects")
 @Indexes({ @Index(value = "name"), @Index("version") })
-public class Project extends BasicTaggableMongoBean {
+public class Project extends BasicTaggableMongoBean implements IProject {
 
 	@Id
 	private ObjectId id;
