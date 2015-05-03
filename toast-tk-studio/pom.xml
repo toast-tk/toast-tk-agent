@@ -9,7 +9,7 @@
 	</parent>
 	<packaging>pom</packaging>
 	<artifactId>toast-tk-studio</artifactId>
-	<name>Toast Toolkit - Toast TK Studio - POM Module</name>
+	<name>Toast Toolkit - Studio - POM Module</name>
 	<description>
 	    Toast TK Studio Parent Module.
 	    This module is the parent module for the studio, featuring:

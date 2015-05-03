@@ -59,6 +59,8 @@
 			<artifactId>google-collections</artifactId>
 			<version>1.0</version>
 		</dependency>
+		
+		<!-- Toast Dependencies -->
 		<dependency>
 			<groupId>com.synaptix.toast</groupId>
 			<artifactId>toast-tk-adapters</artifactId>

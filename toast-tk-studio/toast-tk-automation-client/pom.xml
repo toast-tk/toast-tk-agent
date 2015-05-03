@@ -36,7 +36,8 @@
 									todir="${project.build.directory}/jnlp/agent-lib" />
 								<copy file="${basedir}/../${toast.tk.autopluginpath}"
 									todir="${project.build.directory}/jnlp/agent-lib" />
-								<copy file="${basedir}/src/main/resources/toast.png" todir="${project.build.directory}/jnlp/images" />
+								<copy file="${basedir}/src/main/resources/toast.png" 
+									todir="${project.build.directory}/jnlp/images" />
 								<copy file="${basedir}/src/main/resources/Spalsh.png"
 									todir="${project.build.directory}/jnlp/images" />
 							</tasks>
@@ -98,6 +99,25 @@
 					<verbose>true</verbose>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>deploy-jnlp</id>
+						<phase>install</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<copy file="${project.build.directory}/toast-tk-automation-client-${project.version}.zip"
+										overwrite="true" tofile="../target/toast-studio-${project.version}.zip" />
+								<unzip src="../target/toast-studio-${project.version}.zip" dest="../target/toast-studio-${project.version}" />
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
@@ -124,15 +144,18 @@
 			<version>1.4.01</version>
 		</dependency>
 		<dependency>
-			<groupId>com.synaptix.toast</groupId>
-			<artifactId>toast-tk-runtime</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
 			<version>3.0-rc2</version>
 		</dependency>
+		
+		<!-- Toast Dependencies -->
+		<dependency>
+			<groupId>com.synaptix.toast</groupId>
+			<artifactId>toast-tk-runtime</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
 	</dependencies>
 	<profiles>
 		<profile>
@@ -145,7 +168,7 @@
 			</properties>
 		</profile>
 		<profile>
-			<id>DEPLOY_LOCAL</id>
+			<id>DEPLOY_LOCAL_TOMCAT</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>

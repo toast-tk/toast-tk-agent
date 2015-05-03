@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.inject.Module;
-import com.synaptix.toast.adapter.swing.guice.ToastSwingActionAdapterPluginModule;
+import com.synaptix.toast.adapter.swing.guice.SwingActionAdapterPluginModule;
 import com.synaptix.toast.core.guice.plugin.ToastPluginBoot;
 import com.synaptix.toast.plugin.swing.server.guice.SwingServerModule;
 
@@ -45,7 +45,7 @@ public class Boot implements ToastPluginBoot {
 	public void boot() {
 		modules = new ArrayList<Module>();
 		modules.add(new SwingServerModule());
-		modules.add(new ToastSwingActionAdapterPluginModule());
+		modules.add(new SwingActionAdapterPluginModule());
 	}
 
 	@Override

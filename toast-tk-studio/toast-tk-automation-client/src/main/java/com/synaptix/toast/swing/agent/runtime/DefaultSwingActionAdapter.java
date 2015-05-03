@@ -22,22 +22,32 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Creation date: 17 mars 2015
+Creation date: 16 févr. 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
 
-package com.synaptix.toast.adapter;
+package com.synaptix.toast.swing.agent.runtime;
 
-public class FixtureDescriptor {
-	public final String name;
-	public final String fixtureType;
-	public final String pattern;
-	
-	public FixtureDescriptor(String name, String type, String pattern){
-		this.name = name;
-		this.fixtureType = type;
-		this.pattern = pattern;
+import com.google.inject.Inject;
+import com.synaptix.toast.adapter.swing.SwingAutoElement;
+import com.synaptix.toast.adapter.swing.ToastSwingActionAdapter;
+import com.synaptix.toast.automation.driver.swing.SwingClientDriver;
+import com.synaptix.toast.core.adapter.ActionAdapterKind;
+import com.synaptix.toast.core.annotation.ActionAdapter;
+import com.synaptix.toast.core.runtime.IRepositorySetup;
+
+@ActionAdapter(value = ActionAdapterKind.swing, name = "ToastSwingClientAdapter")
+public class DefaultSwingActionAdapter extends ToastSwingActionAdapter{
+
+	@Inject
+	public DefaultSwingActionAdapter(IRepositorySetup repo, SwingClientDriver driver) {
+		super(repo, driver);
 	}
-	
+
+	@Override
+	public SwingAutoElement overrideElementInstance(SwingAutoElement autoElement) {
+		return null;
+	}
+
 }

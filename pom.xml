@@ -6,23 +6,26 @@
 	<artifactId>toast-tk</artifactId>
 	<version>1.3-rc2</version>
 	<packaging>pom</packaging>
-	<name>Toast Toolkit - POM Module Module</name>
+	<name>Toast Toolkit - POM Module</name>
 	<organization>
 		<name>Synaptix-Labs</name>
 		<url>http://www.synaptix-labs.com</url>
 	</organization>
 	<modules>
+	    <!-- deprecated modules -->
 		<!-- <module>toast-tk-web-annotation</module> -->
 		<!-- <module>toast-tk-annotation</module> -->
 		<!-- <module>toast-tk-gwt-webapp</module> -->
+		
+		<!-- common modules -->
 		<module>toast-tk-common-utils</module>
 		<module>toast-tk-core</module>
 		<module>toast-tk-rest-utils</module>
-		<module>toast-tk-drivers</module>
-		<module>toast-tk-adapters</module>
-		<module>toast-tk-dao</module>
-		<module>toast-tk-runtime</module>
-		<module>toast-tk-maven-plugin</module>
+		
+		<!-- engine modules -->
+		<module>toast-tk-engine</module>
+		
+		<!-- studio modules -->
 		<module>toast-tk-studio</module>
 	</modules>
 	<properties>
