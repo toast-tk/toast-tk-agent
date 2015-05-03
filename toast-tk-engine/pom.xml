@@ -1,0 +1,28 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.synaptix.toast</groupId>
+    <artifactId>toast-tk</artifactId>
+    <version>1.3-rc2</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  <packaging>pom</packaging>
+  <artifactId>toast-tk-engine</artifactId>
+  <name>Toast Toolkit - Engine - POM Module</name>
+	<description>
+	    Toast TK Engine Parent Module.
+	    This module is the parent module for the engine module, featuring:
+	    	- Action Adapters Module
+	    	- Toast Maven Plugin
+	    	- Dao Module
+	    	- Runtime Module
+	    	- Drivers Module
+	</description>
+	<modules>
+		<module>toast-tk-dao</module>
+		<module>toast-tk-drivers</module>
+		<module>toast-tk-adapters</module>
+		<module>toast-tk-runtime</module>
+		<module>toast-tk-maven-plugin</module>
+	</modules>
+</project>

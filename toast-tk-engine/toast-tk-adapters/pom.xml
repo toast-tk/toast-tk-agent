@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.synaptix.toast</groupId>
+		<version>1.3-rc2</version>
+		<artifactId>toast-tk-engine</artifactId>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>toast-tk-adapters</artifactId>
+	<name>Toast Toolkit - Action Adapter Module</name>
+	<dependencies>
+	    <dependency>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>${org.reflection.version}</version>
+		</dependency>
+		
+		<!-- Toast Dependencies -->
+		<dependency>
+			<groupId>com.synaptix.toast</groupId>
+			<artifactId>toast-tk-drivers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.synaptix.toast</groupId>
+			<artifactId>toast-tk-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.synaptix.toast</groupId>
+			<artifactId>toast-tk-rest-utils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>
