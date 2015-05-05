@@ -38,7 +38,7 @@ import com.google.inject.Module;
 import com.google.inject.Singleton;
 import com.synaptix.toast.adapter.swing.guice.SwingActionAdapterPluginModule;
 import com.synaptix.toast.automation.driver.swing.SwingClientDriver;
-import com.synaptix.toast.core.guice.AbstractFixtureModule;
+import com.synaptix.toast.core.guice.AbstractActionAdapterModule;
 import com.synaptix.toast.swing.agent.guice.SwingModule;
 import com.synaptix.toast.swing.agent.runtime.DefaultSwingActionAdapter;
 import com.synpatix.toast.runtime.guice.BackendModule;
@@ -49,11 +49,11 @@ public class AgentBoot {
 
 	public static final void boot() {
 		final List<Module> modules = new ArrayList<Module>();
-		modules.add(new AbstractFixtureModule() {
+		modules.add(new AbstractActionAdapterModule() {
 			@Override
 			protected void configure() {
 				bind(SwingClientDriver.class).in(Singleton.class);
-				bindFixture(DefaultSwingActionAdapter.class);
+				bindActionAdapter(DefaultSwingActionAdapter.class);
 			}
 		});
 		modules.add(new SwingModule());

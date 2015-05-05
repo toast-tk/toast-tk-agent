@@ -12,15 +12,8 @@
 		<url>http://www.synaptix-labs.com</url>
 	</organization>
 	<modules>
-	    <!-- deprecated modules -->
-		<!-- <module>toast-tk-web-annotation</module> -->
-		<!-- <module>toast-tk-annotation</module> -->
-		<!-- <module>toast-tk-gwt-webapp</module> -->
-		
 		<!-- common modules -->
-		<module>toast-tk-common-utils</module>
-		<module>toast-tk-core</module>
-		<module>toast-tk-rest-utils</module>
+		<module>toast-tk-commons</module>
 		
 		<!-- engine modules -->
 		<module>toast-tk-engine</module>
