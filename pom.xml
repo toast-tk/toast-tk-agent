@@ -297,14 +297,12 @@
 			</activation>
 			<distributionManagement>
 				<repository>
-					<id>synaptix-repository</id>
-					<name>synaptix-releases-repository</name>
-					<url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/releases/</url>
+					<id>synaptix-releases-repository</id>
+					<url>http://nexus.synaptix-labs.com/content/repositories/releases/</url>
 				</repository>
 				<snapshotRepository>
-					<id>synaptix-repository</id>
-					<name>synaptix-snapshots-repository</name>
-					<url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/snapshots/</url>
+					<id>synaptix-snapshots-repository</id>
+					<url>http://nexus.synaptix-labs.com/content/repositories/snapshots/</url>
 				</snapshotRepository>
 			</distributionManagement>
 		</profile>
