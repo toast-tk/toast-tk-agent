@@ -12,11 +12,17 @@ Toast Toolkit - Test Automation Toolkit.
 Toast Toolkit aims to ease collaboration between Business Analysts 
 and Developpers to describe and test an application behavior. 
 
+<div style="text-align:center" width="100%">
+<img src="https://gitlab.synaptix-labs.com/synaptix/toast-tk/uploads/76234d43d51527bfe7264f8c0b9d9843/collaborative_cycle.png" alt="collaborative_cycle" 
+width="600px" height="400px" >
+</div>
+
 Toast provides:
-- Strongly Typed Tests: ...
-- Test Refactoring: ...
-- Team Synchronization: ...
-- Reporting: ...
+- [Strongly Typed Tests](https://gitlab.synaptix-labs.com/synaptix/toast-tk/wikis/toast-strongly-typed-tests)
+- [Test Refactoring](https://gitlab.synaptix-labs.com/synaptix/toast-tk/wikis/toast-test-refactoring)
+- [Collaborative Apporach](https://gitlab.synaptix-labs.com/synaptix/toast-tk/wikis/toast-collaborative-approach)
+- [Test Campaign Reporting](https://gitlab.synaptix-labs.com/synaptix/toast-tk/wikis/toast-campaign-reporting)
+
 
 Toast is a set of tools for recording, replaying test actions for:
 - Web Applications.
