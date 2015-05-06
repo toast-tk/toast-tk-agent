@@ -8,7 +8,7 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>toast-tk-automation-client</artifactId>
-	<name>Toast Toolkit - Studio</name>
+	<name>Toast Toolkit - JNLP Agent App</name>
 	<url>${jnlp.host}</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -66,11 +66,6 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 	public ToastTestRunner(ITestManager testManager, IRepositorySetup repoSetup) {
 		this.testManager = testManager;
 		this.repoSetup = repoSetup;
-		if(injector != null){
-			this.fixtureApiServices = ActionAdapterCollector.listAvailableServicesByInjection(injector);
-		}else{
-			this.fixtureApiServices = ActionAdapterCollector.listAvailableServicesByReflection();
-		}
 	}
 	
 	public ToastTestRunner(ITestManager m, Injector injector, URL settingsFile) {
@@ -79,6 +74,11 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 		this.settingsFile = settingsFile;
 		if(settingsFile != null){
 			LOG.info("Overriding fixture definitions with settings in " + settingsFile.getFile());
+		}
+		if(injector != null){
+			this.fixtureApiServices = ActionAdapterCollector.listAvailableServicesByInjection(injector);
+		}else{
+			this.fixtureApiServices = ActionAdapterCollector.listAvailableServicesByReflection();
 		}
 	}
 
@@ -362,7 +362,10 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 		Class<?> localFixtureClass = locateFixtureClass(descriptor.getTestLineFixtureKind(), descriptor.getTestLineFixtureName(), studyCommand); 
 		if(localFixtureClass != null){
 			Object connector = getClassInstance(localFixtureClass);
-			FixtureExecCommandDescriptor commandMethodImpl = findMethodInClass(studyCommand, localFixtureClass);
+			FixtureExecCommandDescriptor commandMethodImpl = findMethodInClass(command, localFixtureClass);
+			if(commandMethodImpl == null){
+				commandMethodImpl = findMethodInClass(studyCommand, localFixtureClass);
+			}
 			result = doLocalFixtureCall(connector, commandMethodImpl);
 		}
 		else if(getClassInstance(ISwingInspectionClient.class) != null){
