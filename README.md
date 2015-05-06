@@ -48,7 +48,7 @@ $ mvn clean install
 The packages are now installed in your local maven repository.
 
 ## Toast TK Studio
-${version} = 1.3-rc2
+${version} = __1.3-rc3__
 
 ### JNLP Mode
 1. cd toast-tk/toast-tk-studio/target/toast-studio-${version}
