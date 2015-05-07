@@ -43,6 +43,20 @@
 							</tasks>
 						</configuration>
 					</execution>
+					<execution>
+						<id>deploy-jnlp</id>
+						<phase>install</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<copy file="${project.build.directory}/toast-tk-automation-client-${project.version}.zip"
+										overwrite="true" tofile="../target/toast-studio-${project.version}.zip" />
+								<unzip src="../target/toast-studio-${project.version}.zip" dest="../target/toast-studio-${project.version}" />
+							</tasks>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>
@@ -99,25 +113,6 @@
 					<verbose>true</verbose>
 				</configuration>
 			</plugin>
-			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>deploy-jnlp</id>
-						<phase>install</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<tasks>
-								<copy file="${project.build.directory}/toast-tk-automation-client-${project.version}.zip"
-										overwrite="true" tofile="../target/toast-studio-${project.version}.zip" />
-								<unzip src="../target/toast-studio-${project.version}.zip" dest="../target/toast-studio-${project.version}" />
-							</tasks>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
@@ -125,13 +120,6 @@
 			<groupId>net.sf.cssbox</groupId>
 			<artifactId>swingbox</artifactId>
 			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>jdk.tools</groupId>
-			<artifactId>jdk.tools</artifactId>
-			<version>1.6.0_31</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/tools.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.jvnet.hudson</groupId>

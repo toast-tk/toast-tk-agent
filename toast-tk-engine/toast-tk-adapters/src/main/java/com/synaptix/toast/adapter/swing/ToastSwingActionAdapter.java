@@ -317,19 +317,17 @@ public abstract class ToastSwingActionAdapter {
 	@Action(action = MultiplyVarByValue, description = "Multiplier deux valeurs")
 	public TestResult multiplyVarByBal(String var, String value) throws Exception {
 		try {
-			Object object = repo.getUserVariables().get(var);
-			if (object == null) {
+			if (var == null) {
 				throw new IllegalAccessException("Variable not defined !");
 			}
-			if (object instanceof String) { // for the time being we store only
+			if (var instanceof String) { // for the time being we store only
 											// strings !!
 				Double v = Double.valueOf(value);
-				Double d = Double.valueOf((String) object);
+				Double d = Double.valueOf((String) var);
 				d = d * v;
-				repo.getUserVariables().put(var, d.toString());
 				return new TestResult(d.toString(), ResultKind.SUCCESS);
 			} else {
-				throw new IllegalAccessException("Variable not in a proper format: current -> " + object.getClass().getSimpleName());
+				throw new IllegalAccessException("Variable not in a proper format: current -> " + var);
 			}
 		} catch (Exception e) {
 			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
@@ -339,19 +337,17 @@ public abstract class ToastSwingActionAdapter {
 	@Action(action = DiviserVarByValue, description = "Diviseur le premier argument par le deuxième")
 	public TestResult divideVarByValue(String var, String value) throws Exception {
 		try {
-			Object object = repo.getUserVariables().get(var);
-			if (object == null) {
+			if (var == null) {
 				throw new IllegalAccessException("Variable not defined !");
 			}
-			if (object instanceof String) { // for the time being we store only
+			if (var instanceof String) { // for the time being we store only
 											// strings !!
 				Double v = Double.valueOf(value);
-				Double d = Double.valueOf((String) object);
+				Double d = Double.valueOf(var);
 				d = d / v;
-				repo.getUserVariables().put(var, d.toString());
 				return new TestResult(d.toString(), ResultKind.SUCCESS);
 			} else {
-				throw new IllegalAccessException("Variable not in a proper format: current -> " + object.getClass().getSimpleName());
+				throw new IllegalAccessException("Variable not in a proper format: current -> " + var);
 			}
 		} catch (Exception e) {
 			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
@@ -383,12 +379,10 @@ public abstract class ToastSwingActionAdapter {
 	@Action(action = "\\$(\\w+) == \\$(\\w+)", description = "Comparer deux variables")
 	public TestResult VarEqVar(String var1, String var2) throws Exception {
 		try {
-			Object object = repo.getUserVariables().get(var1) == null ? "undefined" : repo.getUserVariables().get(var1);
-			Object object2 = repo.getUserVariables().get(var2)== null ? "undefined" : repo.getUserVariables().get(var2);
-			if(object.equals(object2)){
+			if(var1.equals(var2)){
 				return new TestResult(Boolean.TRUE.toString(), ResultKind.SUCCESS);
 			}else{
-				return new TestResult(String.format("%s == %s => %s", object.toString(), object2.toString(), Boolean.FALSE.toString()), ResultKind.FAILURE);
+				return new TestResult(String.format("%s == %s => %s", var1, var2, Boolean.FALSE.toString()), ResultKind.FAILURE);
 			}
 		} catch (Exception e) {
 			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
@@ -398,11 +392,10 @@ public abstract class ToastSwingActionAdapter {
 	@Action(action = "([\\w\\W]+) égale à \\$(\\w+)", description = "Comparer une valeur à une variable")
 	public TestResult ValueEqVar(String value, String var) throws Exception {
 		try {
-			Object object = repo.getUserVariables().get(var);
-			if(value.equals(object)){
+			if(value.equals(var)){
 				return new TestResult(Boolean.TRUE.toString(), ResultKind.SUCCESS);
 			}else{
-				return new TestResult(String.format("%s == %s => %s", value, object, Boolean.FALSE.toString()), ResultKind.FAILURE);
+				return new TestResult(String.format("%s == %s => %s", value, var, Boolean.FALSE.toString()), ResultKind.FAILURE);
 			}
 		} catch (Exception e) {
 			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
