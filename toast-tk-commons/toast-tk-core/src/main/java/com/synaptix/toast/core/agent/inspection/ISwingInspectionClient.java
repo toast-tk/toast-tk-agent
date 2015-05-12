@@ -53,5 +53,16 @@ public interface ISwingInspectionClient {
 	
 	boolean saveObjectsToRepository();
 
+	/**
+	 * Check connection to SUT
+	 * 
+	 * @return
+	 */
 	boolean isConnected();
+	
+	/**
+	 * Check connection WebApp Host
+	 * @return
+	 */
+	boolean isConnectedToWebApp();
 }

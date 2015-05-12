@@ -16,10 +16,17 @@
 		<toast.tk.agentpath>toast-tk-automation-plugin-loader/target/toast-tk-agent-standalone.jar</toast.tk.agentpath>
 		<toast.tk.autopluginpath>toast-tk-automation-server-plugin/target/toast-tk-server-automation-plugin-standalone.jar</toast.tk.autopluginpath>
 		<tomcat.deploy.jnlp.dir>D:/Apps/apache-tomcat-6.0.37/webapps</tomcat.deploy.jnlp.dir>
-		<jnlp.host>http://localhost:8080</jnlp.host>
-		<jnlp.host.uri>toast</jnlp.host.uri>
 	</properties>
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
@@ -51,9 +58,11 @@
 						</goals>
 						<configuration>
 							<tasks>
-								<copy file="${project.build.directory}/toast-tk-automation-client-${project.version}.zip"
-										overwrite="true" tofile="../target/toast-studio-${project.version}.zip" />
-								<unzip src="../target/toast-studio-${project.version}.zip" dest="../target/toast-studio-${project.version}" />
+								<copy
+									file="${project.build.directory}/toast-tk-automation-client-${project.version}.zip"
+									overwrite="true" tofile="../target/toast-studio-${project.version}.zip" />
+								<unzip src="../target/toast-studio-${project.version}.zip"
+									dest="../target/toast-studio-${project.version}" />
 							</tasks>
 						</configuration>
 					</execution>
@@ -72,6 +81,7 @@
 					</execution>
 				</executions>
 				<configuration>
+					<templateDirectory>${project.build.directory}/classes/jnlp</templateDirectory>
 					<excludeTransitive>false</excludeTransitive>
 					<libPath>lib</libPath>
 					<codebase>${jnlp.host}/${jnlp.host.uri}/</codebase>
@@ -136,14 +146,19 @@
 			<artifactId>guice</artifactId>
 			<version>3.0-rc2</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+
 		<!-- Toast Dependencies -->
 		<dependency>
 			<groupId>com.synaptix.toast</groupId>
 			<artifactId>toast-tk-runtime</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 	</dependencies>
 	<profiles>
 		<profile>
@@ -151,9 +166,11 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
-			<properties>
-				<jnlp.host>http://X64ERTBIDWB:8080</jnlp.host>
-			</properties>
+			<build>
+				<filters>
+					<filter>src/main/filters/SNCF.properties</filter>
+				</filters>
+			</build>
 		</profile>
 		<profile>
 			<id>DEPLOY_LOCAL_TOMCAT</id>
@@ -161,6 +178,9 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
+				<filters>
+					<filter>src/main/filters/LOCAL.properties</filter>
+				</filters>
 				<plugins>
 					<plugin>
 						<artifactId>maven-antrun-plugin</artifactId>
@@ -188,6 +208,5 @@
 				</plugins>
 			</build>
 		</profile>
-
 	</profiles>
 </project>

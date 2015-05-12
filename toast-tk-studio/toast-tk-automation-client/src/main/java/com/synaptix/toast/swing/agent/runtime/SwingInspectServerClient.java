@@ -208,4 +208,9 @@ public class SwingInspectServerClient extends SwingClientDriver implements ISwin
 		return client.isConnected();
 	}
 
+	@Override
+	public boolean isConnectedToWebApp() {
+		return interpreter.isConnectedToWebApp();
+	}
+
 }

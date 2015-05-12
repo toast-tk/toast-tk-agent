@@ -22,32 +22,49 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Creation date: 26 mars 2015
+Creation date: 11 mai 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
 
-package com.synaptix.toast.test.server.mock;
+package com.synpatix.toast.runtime.core.parse;
 
-import javax.swing.JFrame;
-import javax.swing.JTextField;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class TexfieldTestFrame extends JFrame {
+import com.synaptix.toast.dao.domain.impl.test.block.BlockLine;
 
-	private JTextField inputField;
-	
-	public TexfieldTestFrame(){
-		inputField = new JTextField();
-		getContentPane().add(inputField);
-		pack();
-		setVisible(true);
+public class TestPageBlock {
+	protected enum BlockType {
+		TEST, COMMENT, VARIABLE
 	}
 
-	public void setTextValue(String value) {
-		inputField.setText(value);
+	public final List<BlockLine> lines;
+	public final BlockType blockType;
+
+	public TestPageBlock(BlockType type) {
+		lines = new ArrayList<BlockLine>();
+		blockType = type;
 	}
-	
-	public void setTextFocus() {
-		inputField.requestFocus();
+
+	public void addLine(List<String> cells) {
+		getLines().add(new BlockLine(cells));
+	}
+
+	public void addLine(String cell) {
+		getLines().add(new BlockLine(Arrays.asList(cell)));
+	}
+
+	public BlockType getBlockType() {
+		return blockType;
+	}
+
+	public List<BlockLine> getLines() {
+		return lines;
+	}
+
+	public BlockLine getLineAt(int i) {
+		return lines.get(i);
 	}
 }

@@ -80,6 +80,34 @@ public class TestRequestHandlersForTextField {
 	}
 
 	@Test
+	public void testSettingValue() {
+		textFieldFrame.setTextValue("");
+		CommandRequestListener requestHandler =  TestSuiteHelper.getInjector().getInstance(CommandRequestListener.class);
+		FakeConnection connection = new FakeConnection();
+		String value = "typed_value";
+		textFieldFrame.setTextFocus();
+		CommandRequest buildTypeInputValueRequest = new CommandRequest.CommandRequestBuilder(null)
+		.with(null).ofType(null).sendKeys(value).build();
+		requestHandler.received(connection, buildTypeInputValueRequest);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		CommandRequest buildGetInputValueRequest = SwingInputElement.buildGetInputValueRequest(
+				TexfieldTestFrame.class.getName()+":inputField", AutoSwingType.input.name(), "fake-id");
+		requestHandler =  TestSuiteHelper.getInjector().getInstance(CommandRequestListener.class);
+		requestHandler.received(connection, buildGetInputValueRequest);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		assertEquals(true, connection.result instanceof ValueResponse);
+		assertEquals(value, ((ValueResponse)connection.result).value);
+	}
+	
+	@Test
 	public void testGettingInputValue() {
 		String value = "test";
 		textFieldFrame.setTextValue(value);

@@ -50,6 +50,7 @@ import com.synaptix.toast.dao.domain.impl.test.block.InsertBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.SetupBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.SwingPageBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 
  public class ToastTestRunner {
@@ -96,6 +97,9 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 	public ITestPage run(ITestPage testPage, boolean inlineReport) throws IllegalAccessException, ClassNotFoundException {
 
 		testPage.startExecution();
+		
+		initTestPageVariables(testPage);
+		
 		for (IBlock block : testPage.getBlocks()) {
 			if (block instanceof CommentBlock) {
 				// runCommentBlock((CommentBlock) block, report);
@@ -127,6 +131,17 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 			LOG.info(testPage.getParsingErrorMessage());
 		}
 		return testPage;
+	}
+
+	private void initTestPageVariables(ITestPage testPage) {
+		VariableBlock varBlock = (VariableBlock) testPage.getVarBlock();
+		if(varBlock != null){
+			List<BlockLine> blockLines = varBlock.getBlockLines();
+			for (BlockLine blockLine : blockLines) {
+				//TODO: check var collision
+				repoSetup.getUserVariables().put(blockLine.getCellAt(0), blockLine.getCellAt(1));
+			}
+		}
 	}
 	
 	private void runSwingPageBlock(SwingPageBlock block, ITestPage testPage) {

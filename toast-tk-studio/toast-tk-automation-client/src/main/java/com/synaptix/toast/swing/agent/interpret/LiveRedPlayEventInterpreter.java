@@ -1,5 +1,12 @@
 package com.synaptix.toast.swing.agent.interpret;
 
+
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import org.slf4j.LoggerFactory;
+
 import com.synaptix.toast.adapter.SentenceBuilder;
 import com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.Types;
 import com.synaptix.toast.core.agent.interpret.AWTEventCapturedObject;
@@ -11,19 +18,29 @@ import com.synaptix.toast.dao.domain.impl.repository.RepositoryImpl;
  * 2. store or update repository with new objects
  * 3. query known syntax to build and record automation sentence
  * 
- * 
- * TODO: check if webapp is up
  */
 public class LiveRedPlayEventInterpreter extends DefaultEventInterpreter{
 
+	private static final Logger LOG = LogManager.getLogger(LiveRedPlayEventInterpreter.class);
 	SentenceBuilder sentenceBuilder = new SentenceBuilder();
 	private MongoRepoManager mongoRepoManager;
+	private boolean isConnected = false;
 	
 	public LiveRedPlayEventInterpreter(MongoRepoManager mongoRepoManager){
 		this.mongoRepoManager= mongoRepoManager;
-		mongoRepoManager.initCache();
+		try{
+			mongoRepoManager.initCache();
+			isConnected = true;
+		}catch(Exception e){
+			
+		}
 	}
 	
+	@Override
+	public boolean isConnectedToWebApp() {
+		return isConnected;
+	}
+
 	@Override
 	public String onWindowDisplay(AWTEventCapturedObject eventObject) {
 		return super.onWindowDisplay(eventObject);

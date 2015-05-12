@@ -15,6 +15,7 @@ import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.SelectVal
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.StoreComponentValueInVar;
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.SubstractValueFromVar;
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.TypeValueInInput;
+import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.TypeValue;
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.TypeVarIn;
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.Wait;
 
@@ -71,6 +72,25 @@ public abstract class ToastSwingActionAdapter {
 			throw new IllegalAccessException(pageName + "." + fieldName + " not found in repository !");
 		}
 		return autoElement;
+	}
+	
+	
+	
+	
+	@Action(action = TypeValue, description = "Saisir une chaine de caractère au clavier")
+	public TestResult typeValue(String text) throws Exception {
+		try {
+			try {
+				driver.process(new CommandRequest.CommandRequestBuilder(null)
+				.with(null).ofType(null).sendKeys(text).build());
+			} catch (Exception e) {
+				return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
+			}
+			return new TestResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
+		}
 	}
 
 	@Action(action = TypeValueInInput, description = "Saisir une valeur dans un composant graphique")

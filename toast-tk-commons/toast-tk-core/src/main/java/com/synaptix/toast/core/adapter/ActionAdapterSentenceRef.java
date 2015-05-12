@@ -7,6 +7,7 @@ public class ActionAdapterSentenceRef {
 	public static final String VAR_IN_REGEX = "(\\$[\\w]+)";
 	public static final String VAR_OUT_REGEX = "(\\$\\$[\\w]+)";
 
+	public static final String TypeValue = "Saisir " + VALUE_REGEX;
 	public static final String TypeValueInInput = "Type " + VALUE_REGEX + " in " + SWING_COMPONENT_REGEX;
 	public static final String ClickOnIn = "Click on " + SWING_COMPONENT_REGEX + " in " + SWING_COMPONENT_REGEX;
 	public static final String ClickOn = "Click on " + SWING_COMPONENT_REGEX;

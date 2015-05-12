@@ -93,14 +93,32 @@ public class CommandRequestListener extends Listener implements Runnable {
 				CommandRequest command = (CommandRequest) object;
 				if (command.isCustom()) {
 					processCustomRequest(connection, object, command);
-				} else {
-					//command.item != null && command.itemType != null
+				} 
+				else if(isComponentLessRequest(command)){
+					processComponentLessRequest(command);
+				}
+				else {
 					processComponentRequest(connection, command);
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void processComponentLessRequest(CommandRequest command) {
+		switch (command.action) {
+		case SET:
+			FestRobotInstance.getRobot().enterText(command.value);
+			break;
+
+		default:
+			throw new IllegalArgumentException("Unsupported command for ComponentLess Requests: " + command.action);
+		}
+	}
+
+	private boolean isComponentLessRequest(CommandRequest command) {
+		return command.item == null && command.itemType == null;
 	}
 
 	private void processComponentRequest(Connection connection, CommandRequest command) throws InterruptedException {

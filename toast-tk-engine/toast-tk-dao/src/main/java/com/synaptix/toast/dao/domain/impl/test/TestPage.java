@@ -21,6 +21,7 @@ import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
 import com.synaptix.toast.dao.domain.def.test.IRunnableTest;
 import com.synaptix.toast.dao.domain.impl.common.BasicEntityBean;
+import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
 
 /**
  * Full Test Page contains test blocks
@@ -224,6 +225,16 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 
 	public boolean getIsTemplate() {
 		return this.isTemplate;
+	}
+
+	@Override
+	public IBlock getVarBlock() {
+		for(IBlock block: blocks){
+			if(block instanceof VariableBlock){
+				return block;
+			}
+		}
+		return null;
 	}
 
 }

@@ -29,22 +29,25 @@ Creation date: 10 mars 2015
 
 package com.synaptix.toast.swing.agent.interpret;
 
+import java.net.ConnectException;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Inject;
+import com.sun.jersey.api.client.ClientHandlerException;
 import com.synaptix.toast.dao.RestMongoWrapper;
 import com.synaptix.toast.dao.domain.impl.repository.ElementImpl;
 import com.synaptix.toast.dao.domain.impl.repository.RepositoryImpl;
+import com.synaptix.toast.swing.agent.ToastApplication;
 import com.synaptix.toast.swing.agent.config.Config;
 
 public class MongoRepoManager {
 
-	private static final Logger LOG = LoggerFactory.getLogger(MongoRepoManager.class);
+	private static final Logger LOG = LogManager.getLogger(MongoRepoManager.class);
 	Collection<RepositoryImpl> cache = null;
 	private Config config;
 	
@@ -54,7 +57,11 @@ public class MongoRepoManager {
 	}
 	
 	public void initCache(){
-		cache = RestMongoWrapper.loadRepository(config.getWebAppAddr(), config.getWebAppPort());
+		try{
+			cache = RestMongoWrapper.loadRepository(config.getWebAppAddr(), config.getWebAppPort());
+		}catch(ClientHandlerException e){
+			LOG.error(String.format("WebApp not active at address %s:%s",config.getWebAppAddr(), config.getWebAppPort()),e);
+		}
 	}
 	
 	public String find(RepositoryImpl container, String type, String locator) {

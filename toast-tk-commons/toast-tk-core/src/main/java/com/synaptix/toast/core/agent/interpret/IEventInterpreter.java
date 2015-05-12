@@ -27,5 +27,13 @@ public interface IEventInterpreter {
 
 	public String onPopupMenuClick(AWTEventCapturedObject eventObject);
 
+	/**
+	 * Checks if the interpreter is connected to a remote repository
+	 * hosted within the webapp
+	 * 
+	 * @return
+	 */
+	public boolean isConnectedToWebApp();
+
 
 }

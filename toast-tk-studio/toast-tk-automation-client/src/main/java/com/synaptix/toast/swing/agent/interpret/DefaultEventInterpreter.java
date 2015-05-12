@@ -60,4 +60,9 @@ public class DefaultEventInterpreter implements IEventInterpreter {
 		return String.format("Cliquer sur la checkbox '%s'", eventObject.componentName);
 	}
 
+	@Override
+	public boolean isConnectedToWebApp() {
+		return false;
+	}
+
 }

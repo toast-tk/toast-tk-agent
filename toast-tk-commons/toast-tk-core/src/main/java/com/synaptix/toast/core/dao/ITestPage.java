@@ -12,6 +12,8 @@ import com.synaptix.toast.core.report.TestResult;
 
 public interface ITestPage extends ITaggable {
 	
+	public IBlock getVarBlock();
+	
 	public List<IBlock> getBlocks();
 
 	public String getPageName();

@@ -45,7 +45,7 @@ import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 import com.synpatix.toast.runtime.core.parse.TestParser;
 import com.synpatix.toast.runtime.core.runtime.TestLineDescriptor;
 
-public class TestParserTestCase {
+public class TestParserTestCase_1 {
 	static StringBuilder b = new StringBuilder();
 	
 	@BeforeClass
