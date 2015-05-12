@@ -79,14 +79,14 @@ public class SwingInspectServerClient extends SwingClientDriver implements ISwin
 		client.addConnectionHandler(new ITCPResponseReceivedHandler(){
 			@Override
 			public void onResponseReceived(Object object) {
-				eventBus.post(new SeverStatusMessage(SeverStatusMessage.State.DISCONNECTED));
-				startConnectionLoop();				
+				eventBus.post(new SeverStatusMessage(SeverStatusMessage.State.CONNECTED));
 			}
 		});
 		client.addDisconnectionHandler(new ITCPResponseReceivedHandler(){
 			@Override
 			public void onResponseReceived(Object object) {
-				eventBus.post(new SeverStatusMessage(SeverStatusMessage.State.CONNECTED));				
+				eventBus.post(new SeverStatusMessage(SeverStatusMessage.State.DISCONNECTED));
+				startConnectionLoop();						
 			}
 		});
 
