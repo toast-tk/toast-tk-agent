@@ -332,7 +332,15 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 			if ("KO".equals(line.getExpected()) && ResultKind.FAILURE.equals(result.getResultKind())) {
 				result.setResultKind(ResultKind.SUCCESS);
 			}
-			if (result.getMessage() != null && line.getExpected() != null && result.getMessage().equals(line.getExpected())) {
+//			else if(line.getExpected() != null && line.getExpected().startsWith("not ")){
+//				String resultNotExpected = line.getExpected().substring("not ".length());
+//				 if(!resultNotExpected.equals(line.getExpected())){
+//					 result.setResultKind(ResultKind.SUCCESS);
+//				 }else{
+//					 result.setResultKind(ResultKind.ERROR);
+//				 }
+//			}
+			else if (result.getMessage() != null && line.getExpected() != null && result.getMessage().equals(line.getExpected())) {
 				result.setResultKind(ResultKind.SUCCESS);
 			}
 			line.setTestResult(result);
@@ -388,7 +396,7 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 			// process it as a custom command sent through Kryo 
 			result = doRemoteFixtureCall(command, descriptor);
 		}else{
-			result = new TestResult(String.format("Method not found"), ResultKind.ERROR);
+			result = new TestResult(String.format("Action Implementation - Not Found"), ResultKind.ERROR);
 		}
 		
 		if(descriptor.isFailFatalCommand()){
@@ -489,6 +497,7 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 		}
 		
 		if (serviceClasses.size() == 0) {
+			LOG.error("No Connector found for command: " + command);
 			return null;
 		}else if(serviceClasses.size() > 1){
 			LOG.warn("Multiple Services of same kind found implementing the same command: " + command);

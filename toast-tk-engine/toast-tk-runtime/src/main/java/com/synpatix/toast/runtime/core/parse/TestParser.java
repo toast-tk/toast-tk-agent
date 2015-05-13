@@ -353,7 +353,7 @@ public class TestParser {
 		String varName = split[0].trim();
 		String varValue = "";
 		while((line = br.readLine()) != null && !line.trim().contains("\"\"\"")){
-			varValue += line + "\n";
+			varValue += line.replace("\n", " ").replace("\t", " ") + " ";
 		}
 		varBlock.addLine(Arrays.asList(varName, varValue));
 		return varBlock;

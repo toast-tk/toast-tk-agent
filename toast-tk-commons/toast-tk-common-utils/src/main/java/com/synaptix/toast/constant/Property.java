@@ -55,10 +55,10 @@ public class Property {
 	public static final String JNLP_RUNTIME_FILE = "toast.jnlp.runtime.file";
 	public static final String AGENT_DEBUG_AGRS = "toast.sut.debug.args";
 	
-	public static final String TABLE_CRITERIA_SEPARATOR = "|";
+	public static final String TABLE_CRITERIA_SEPARATOR = ";";
 	public static final String TABLE_KEY_VALUE_SEPARATOR ="=";
-	public static final String JLIST_CRITERIA_SEPARATOR = "|";
-	public static final String DEFAULT_PARAM_SEPARATOR = "|";
+	public static final String JLIST_CRITERIA_SEPARATOR = ";";
+	public static final String DEFAULT_PARAM_SEPARATOR = ";";
 	public static final String DEFAULT_PARAM_INPUT_SEPARATOR = "<-";
 	
 }

@@ -167,8 +167,7 @@ public abstract class ToastSwingActionAdapter {
 	@Action(action = TypeVarIn, description = "Saisir la valeur d'une variable dans un champs graphique de type input")
 	public TestResult typeVarIn(String variable, String pageName, String widgetName) throws Exception {
 		try {
-			Object object = repo.getUserVariables().get(variable);
-			typeIn(object.toString(), pageName, widgetName);
+			typeIn(variable, pageName, widgetName);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
