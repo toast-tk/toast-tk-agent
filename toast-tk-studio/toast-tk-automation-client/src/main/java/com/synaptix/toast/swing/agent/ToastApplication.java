@@ -109,33 +109,7 @@ public class ToastApplication implements IToastClientApp {
 				if (!toastProperties.exists()) {
 					toastProperties.createNewFile();
 				}
-				SwingUtilities.invokeLater(new Runnable() {
-					
-					@Override
-					public void run() {
-						try{
-							Document doc = Jsoup.connect("http://" + config.getWebAppAddr() + ":8080/toast/agent-lib").get();
-							for (Element file : doc.select("table")) {
-								String outerHtml = file.outerHtml();
-								Pattern p = Pattern.compile("<tt>([\\w-]+)\\.jar<\\/tt>");
-								Matcher matcher = p.matcher(outerHtml);
-								
-								boolean foundJar = false;
-								while(matcher.find()){
-									foundJar = true;
-									String fileName = matcher.group(1)+".jar";
-									DownloadUtils.getFile("http://" + config.getWebAppAddr() + ":8080/toast/agent-lib/"+fileName,  config.getPluginDir());
-								}
-								if(!foundJar){
-									throw new IllegalAccessError("URL doesn't contain jars! ");
-								}
-						    }
-						}catch(Exception e){
-							LOG.error("Couldn't download plugin and Agent at url " + "http://" + config.getWebAppAddr() + ":8080/toast/agent-lib" ,e);
-							openConfigDialog();
-						}						
-					}
-				});
+				//downloadPlugins(config);
 				
 				
 				Properties p = new Properties();
@@ -158,6 +132,36 @@ public class ToastApplication implements IToastClientApp {
 			LOG.error(message);
 			throw new Error(message);
 		}
+	}
+
+	private void downloadPlugins(final Config config) {
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				try{
+					Document doc = Jsoup.connect("http://" + config.getWebAppAddr() + ":8080/toast/agent-lib").get();
+					for (Element file : doc.select("table")) {
+						String outerHtml = file.outerHtml();
+						Pattern p = Pattern.compile("<tt>([\\w-]+)\\.jar<\\/tt>");
+						Matcher matcher = p.matcher(outerHtml);
+						
+						boolean foundJar = false;
+						while(matcher.find()){
+							foundJar = true;
+							String fileName = matcher.group(1)+".jar";
+							DownloadUtils.getFile("http://" + config.getWebAppAddr() + ":8080/toast/agent-lib/"+fileName,  config.getPluginDir());
+						}
+						if(!foundJar){
+							throw new IllegalAccessError("URL doesn't contain jars! ");
+						}
+				    }
+				}catch(Exception e){
+					LOG.error("Couldn't download plugin and Agent at url " + "http://" + config.getWebAppAddr() + ":8080/toast/agent-lib" ,e);
+					openConfigDialog();
+				}						
+			}
+		});
 	}
 
 	@Override

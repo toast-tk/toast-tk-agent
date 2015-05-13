@@ -19,6 +19,8 @@ import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.TypeValue
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.TypeVarIn;
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.Wait;
 
+import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.VAR_OR_VALUE_REGEX;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -395,7 +397,7 @@ public abstract class ToastSwingActionAdapter {
 		return new TestResult();
 	}
 	
-	@Action(action = "\\$(\\w+) == \\$(\\w+)", description = "Comparer deux variables")
+	@Action(action = VAR_OR_VALUE_REGEX + " == " + VAR_OR_VALUE_REGEX , description = "Comparer deux variables")
 	public TestResult VarEqVar(String var1, String var2) throws Exception {
 		try {
 			if(var1.equals(var2)){
@@ -408,7 +410,7 @@ public abstract class ToastSwingActionAdapter {
 		}
 	}
 	
-	@Action(action = "([\\w\\W]+) égale à \\$(\\w+)", description = "Comparer une valeur à une variable")
+	@Action(action = VAR_OR_VALUE_REGEX + " égale à "+ VAR_OR_VALUE_REGEX, description = "Comparer une valeur à une variable")
 	public TestResult ValueEqVar(String value, String var) throws Exception {
 		try {
 			if(value.equals(var)){

@@ -59,8 +59,8 @@ public class Boot {
 	public static void main(String[] args) {
 		final ServicePluginLoader<ToastPluginBoot> bootPluginsLoader;
 		//TODO: else throw big error
-		//final String redpepperAgentPath = System.getProperty(Property.TOAST_PLUGIN_DIR_PROP) == null ? Property.TOAST_PLUGIN_DIR : System.getProperty(Property.TOAST_PLUGIN_DIR_PROP); 
-		final String redpepperAgentPath = "C:\\Users\\PSKA09831\\.toast\\plugins";
+		final String redpepperAgentPath = System.getProperty(Property.TOAST_PLUGIN_DIR_PROP) == null ? Property.TOAST_PLUGIN_DIR : System.getProperty(Property.TOAST_PLUGIN_DIR_PROP); 
+		//final String redpepperAgentPath = "C:\\Users\\PSKA09831\\.toast\\plugins";
 		LOG.info("Loading swing server agent plugins from directory: " + redpepperAgentPath);
 		final ServicePluginsClassPathProvider pluginsClassPathProvider = new ServicePluginsClassPathProvider() {
 			@Override
