@@ -57,7 +57,7 @@ public class ToastRunnerHelper {
 					String varName = m.group(pos + 1);
 					if (repoSetup.getUserVariables().containsKey(varName)) {
 						Object varValue = repoSetup.getUserVariables().get(varName);
-						value = value.replaceFirst("\\"+varName, (String) varValue);
+						value = value.replaceFirst("\\"+varName+"\\b", (String) varValue);
 					}
 				}
 				object = value;

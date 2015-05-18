@@ -6,8 +6,10 @@ public interface ICampaign extends ITaggable {
 
 	List<ITestPage> getTestCases();
 
-	Object getName();
+	String getName();
 
 	void setId(Object object);
+
+	String getIdAsString();
 
 }

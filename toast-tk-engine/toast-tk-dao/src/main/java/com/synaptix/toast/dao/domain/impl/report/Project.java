@@ -1,5 +1,6 @@
 package com.synaptix.toast.dao.domain.impl.report;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -54,6 +55,16 @@ public class Project extends BasicTaggableMongoBean implements IProject {
 		this.campaigns = campaigns;
 	}
 
+	public void setCampaignsImpl(List<Campaign> campaigns) {
+		if(campaigns != null){
+			this.campaigns = new ArrayList<ICampaign>();
+			for (Campaign campaign : campaigns) {
+				this.campaigns.add(campaign);
+			}
+		}else {
+			this.campaigns = null;
+		}
+	}
 	public Date getStartDate() {
 		return startDate;
 	}

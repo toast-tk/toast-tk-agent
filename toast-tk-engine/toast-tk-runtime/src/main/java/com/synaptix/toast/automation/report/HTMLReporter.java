@@ -7,7 +7,7 @@ import com.synpatix.toast.runtime.dao.DAOManager;
 
 public class HTMLReporter {
 	
-	public final String getProjectHTMLReport(String name) {
+	public static final String getProjectHTMLReport(String name) {
 		Project project = DAOManager.getInstance().getLastProjectByName(name);
 		List<Project> projectHistory = DAOManager.getInstance().getProjectHistory(project);
 		ProjectHtmlReportGenerator projectHtmlReportGenerator = new ProjectHtmlReportGenerator();
@@ -15,7 +15,7 @@ public class HTMLReporter {
 		return projectReportHtml;
 	}
 	
-	public final String getProjectHTMLReport(Project project) {
+	public static final String getProjectHTMLReport(Project project) {
 		List<Project> projectHistory = DAOManager.getInstance().getProjectHistory(project);
 		ProjectHtmlReportGenerator projectHtmlReportGenerator = new ProjectHtmlReportGenerator();
 		String projectReportHtml = projectHtmlReportGenerator.generateProjectReportHtml(project, projectHistory);

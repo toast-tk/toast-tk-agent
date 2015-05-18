@@ -14,7 +14,7 @@ import com.synaptix.toast.dao.service.dao.access.repository.RepositoryDaoService
 public class TestMongo {
 
 	public static void main(String[] args) {
-		Injector in = Guice.createInjector(new MongoModule());
+		Injector in = Guice.createInjector(new MongoModule("someHost", 27017));
 		RepositoryDaoService.Factory repoFactory = in.getInstance(RepositoryDaoService.Factory.class);
 		RepositoryDaoService service = repoFactory.create("play_db");
 		String jsonRepo = service.getRepoAsJson();

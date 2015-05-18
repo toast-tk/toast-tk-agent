@@ -13,6 +13,7 @@ import com.github.jmkgreen.morphia.Datastore;
 import com.github.jmkgreen.morphia.Morphia;
 import com.github.jmkgreen.morphia.annotations.Entity;
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mongodb.MongoClient;
 import com.mongodb.WriteConcern;
 import com.synaptix.toast.dao.config.Config;
@@ -26,19 +27,29 @@ public class MongoDefaultStarterImpl implements DbStarter {
 	private MongoClient mClient;
 	private final Config config;
 	private Map<String, Datastore> dsMap;
-	private final EntityCollectionManager enitityManager;
+	private final EntityCollectionManager enitityManager;	
+	private final String mongoHost;
+	private final int mongoPort;
 
 	@Inject
-	public MongoDefaultStarterImpl(Config config, EntityCollectionManager enitityManager) {
+	public MongoDefaultStarterImpl(
+			Config config, 
+			EntityCollectionManager enitityManager,
+			@Named("MongoHost") String mongoHost,
+			@Named("MongoPort") int mongoPort
+		) 
+	{
 		this.config = config;
 		this.enitityManager = enitityManager;
+		this.mongoHost = mongoHost == null ? config.getMongoServer() : mongoHost;
+		this.mongoPort = mongoPort == -1 ? config.getMongoPort(): mongoPort;
 		init();
 	}
 
 	private void init() {
 		try {
 			dsMap = new HashMap<String, Datastore>();
-			mClient = new MongoClient(config.getMongoServer(), config.getMongoPort());
+			mClient = new MongoClient(this.mongoHost, this.mongoPort);
 			mClient.setWriteConcern(WriteConcern.JOURNALED);
 			morphia = new Morphia();
 			processMappings();
