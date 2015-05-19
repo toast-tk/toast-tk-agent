@@ -11,6 +11,7 @@ import com.github.jmkgreen.morphia.query.Query;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.name.Named;
+import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.core.dao.ICampaign;
 import com.synaptix.toast.dao.domain.impl.report.Campaign;
 import com.synaptix.toast.dao.domain.impl.report.Project;
@@ -18,6 +19,7 @@ import com.synaptix.toast.dao.service.dao.common.AbstractMongoDaoService;
 import com.synaptix.toast.dao.service.dao.common.CommonMongoDaoService;
 import com.synaptix.toast.dao.service.init.DbStarter;
 
+@FixMe(todo = "handle correctly the project")
 public class ProjectDaoService extends AbstractMongoDaoService<Project> {
 
 	public interface Factory {
@@ -69,7 +71,7 @@ public class ProjectDaoService extends AbstractMongoDaoService<Project> {
 		newEntry.setId(null);
 		newEntry.setLast(true);
 		for (ICampaign c : newEntry.getCampaigns()) {
-			cDaoService.saveAsNewIteration(c);
+			cDaoService.saveAsNewIteration((Campaign)c);
 		}
 		return save(newEntry);
 	}

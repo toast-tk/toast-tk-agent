@@ -9,16 +9,16 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.synaptix.toast.core.rest.RestUtils;
 import com.synaptix.toast.dao.guice.MongoModule;
+import com.synaptix.toast.dao.service.dao.access.project.ProjectDaoService;
 import com.synaptix.toast.dao.service.dao.access.repository.RepositoryDaoService;
 
 public class TestMongo {
 
 	public static void main(String[] args) {
-		Injector in = Guice.createInjector(new MongoModule("someHost", 27017));
-		RepositoryDaoService.Factory repoFactory = in.getInstance(RepositoryDaoService.Factory.class);
-		RepositoryDaoService service = repoFactory.create("play_db");
-		String jsonRepo = service.getRepoAsJson();
-		System.out.println(jsonRepo);
+		Injector in = Guice.createInjector(new MongoModule("10.23.252.131", 27017));
+		ProjectDaoService.Factory repoFactory = in.getInstance(ProjectDaoService.Factory.class);
+		ProjectDaoService service = repoFactory.create("play_db");
+		service.findAllLastProjects();
 	}
 
 	/**
