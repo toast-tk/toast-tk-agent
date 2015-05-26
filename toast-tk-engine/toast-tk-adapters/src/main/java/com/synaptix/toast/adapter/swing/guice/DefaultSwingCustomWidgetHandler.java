@@ -62,11 +62,14 @@ public class DefaultSwingCustomWidgetHandler implements ICustomFixtureHandler{
 			} 
 			else if (target instanceof JButton) {
 				handle((JButton) target, command);
-			} else if (target instanceof JCheckBox) {
+			} 
+			else if (target instanceof JCheckBox) {
 				return handle((JCheckBox) target, command);
-			} else if (target instanceof JTextArea) {
+			}
+			else if (target instanceof JTextArea) {
 				return handle((JTextArea) target, command);
-			} else if (target instanceof JTable) {
+			} 
+			else if (target instanceof JTable) {
 				if(command instanceof TableCommandRequest){
 					return handle((JTable) target, (TableCommandRequest)command);
 				}
@@ -89,6 +92,26 @@ public class DefaultSwingCustomWidgetHandler implements ICustomFixtureHandler{
 			return label.getText();
 		default:
 			throw new IllegalArgumentException("Unsupported command for JLabel: " + command.action.name());
+		}
+		return null;
+	}
+	
+	private String handle(JTextArea textField, CommandRequest command) {
+		JTextComponentFixture tFixture = new JTextComponentFixture(FestRobotInstance.getRobot(), textField);
+		switch (command.action) {
+		case SET:
+			textField.setText(command.value);
+			textField.revalidate();
+			break;
+		case GET:
+			return textField.getText();
+		case CLICK:
+			FestRobotInstance.getRobot().click(textField);
+			break;
+		case CLEAR:
+			tFixture.setText("");
+		default:
+			throw new IllegalArgumentException("Unsupported command for JTextArea: " + command.action.name());
 		}
 		return null;
 	}
@@ -229,26 +252,6 @@ public class DefaultSwingCustomWidgetHandler implements ICustomFixtureHandler{
 			return String.valueOf(checkbox.isSelected());
 		default:
 			throw new IllegalArgumentException("Unsupported command for JCheckBox: " + command.action.name());
-		}
-		return null;
-	}
-	
-	private String handle(JTextArea textField, CommandRequest command) {
-
-		JTextComponentFixture tFixture = new JTextComponentFixture(FestRobotInstance.getRobot(), textField);
-		switch (command.action) {
-		case SET:
-			tFixture.setText(command.value);
-			break;
-		case GET:
-			return tFixture.text();
-		case CLICK:
-			FestRobotInstance.getRobot().click(textField);
-			break;
-		case CLEAR:
-			tFixture.setText(command.value);
-		default:
-			throw new IllegalArgumentException("Unsupported command for JTextArea: " + command.action.name());
 		}
 		return null;
 	}

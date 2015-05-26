@@ -16,7 +16,7 @@ public class DAOManager {
 	private static DAOManager instance;
 	
 	private DAOManager(){
-		mongoServiceInjector = Guice.createInjector(new MongoModule());
+		mongoServiceInjector = Guice.createInjector(new MongoModule("10.23.252.131", 27017));
 		pfactory = mongoServiceInjector.getInstance(ProjectDaoService.Factory.class);
 		service = pfactory.create("test_project_db");
 	}

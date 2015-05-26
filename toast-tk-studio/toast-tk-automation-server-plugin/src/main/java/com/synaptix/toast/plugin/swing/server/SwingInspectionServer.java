@@ -59,8 +59,8 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 			commandRequestListener.setRepository(repository);
 			initRequestListener.setRepository(repository);
 
-			server.addListener(new Listener.ThreadedListener(commandRequestListener));
-			server.addListener(new Listener.ThreadedListener(initRequestListener));
+			server.addListener(commandRequestListener);
+			server.addListener(initRequestListener);
 
 			server.addListener(new Listener() {
 				@Override

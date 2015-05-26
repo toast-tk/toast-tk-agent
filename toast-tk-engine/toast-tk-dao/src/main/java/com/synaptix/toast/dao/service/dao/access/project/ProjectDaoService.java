@@ -64,10 +64,10 @@ public class ProjectDaoService extends AbstractMongoDaoService<Project> {
 		Project previousEntry = getLastByName(newEntry.getName());
 		if(previousEntry != null){
 			previousEntry.setLast(false);
+			newEntry.setIteration((short) (previousEntry.getIteration() + 1));
 			save(previousEntry);
 		}
 		
-		newEntry.setIteration((short) (previousEntry.getIteration() + 1));
 		newEntry.setId(null);
 		newEntry.setLast(true);
 		for (ICampaign c : newEntry.getCampaigns()) {

@@ -20,6 +20,9 @@ import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.TypeVarIn
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.Wait;
 
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.VAR_OR_VALUE_REGEX;
+import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.VAR_IN_REGEX;
+import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.VALUE_REGEX;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -418,6 +421,16 @@ public abstract class ToastSwingActionAdapter {
 			}else{
 				return new TestResult(String.format("%s == %s => %s", value, var, Boolean.FALSE.toString()), ResultKind.FAILURE);
 			}
+		} catch (Exception e) {
+			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
+		}
+	}
+	
+	@Action(action = "Assigner " + VALUE_REGEX + " à " + VAR_IN_REGEX, description = "Assigner valeur à variable")
+	public TestResult setValToVar(String value, String var) throws Exception {
+		try {
+			repo.getUserVariables().put(var, value);
+			return new TestResult();
 		} catch (Exception e) {
 			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
 		}

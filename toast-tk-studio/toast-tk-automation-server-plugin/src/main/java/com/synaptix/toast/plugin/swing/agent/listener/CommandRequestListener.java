@@ -1,13 +1,16 @@
 package com.synaptix.toast.plugin.swing.agent.listener;
 
 import java.awt.Component;
+import java.awt.Window;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import javax.swing.AbstractButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.fixture.JComboBoxFixture;
 import org.fest.swing.fixture.JPopupMenuFixture;
+import org.fest.swing.fixture.JTextComponentFixture;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -88,6 +92,7 @@ public class CommandRequestListener extends Listener implements Runnable {
 	@Override
 	public synchronized void received(Connection connection, Object object) {
 		try {
+			babyProtection();
 			if (object instanceof CommandRequest) {
 				LOG.info("Processing command {}", object);
 				CommandRequest command = (CommandRequest) object;
@@ -103,6 +108,21 @@ public class CommandRequestListener extends Listener implements Runnable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void babyProtection() throws InterruptedException {
+		Window[] windows = Window.getWindows();
+		for (Window window : windows) {
+			if(window instanceof JFrame){
+				JFrame superFrame = (JFrame)window;
+				String accessibleDescription = superFrame.getAccessibleContext().getAccessibleDescription();
+				if(superFrame.isVisible() && "babyProtection".equalsIgnoreCase(accessibleDescription)){
+					do{
+						Thread.sleep(1000);
+					}while("babyProtection".equalsIgnoreCase(accessibleDescription));
+				}
+			}
 		}
 	}
 
@@ -126,19 +146,16 @@ public class CommandRequestListener extends Listener implements Runnable {
 		LOG.info("Found target command " + ToStringBuilder.reflectionToString(target, ToStringStyle.SHORT_PREFIX_STYLE));
 		if (command.isExists()) {
 			connection.sendTCP(new ExistsResponse(command.getId(), target != null));
-		} else if (target != null) {
-			// outside edt
-			if (target instanceof JComboBox) {
-				handle((JComboBox) target, command);
-			}else if(target instanceof JMenu){
-				handle((JMenu)target, command);
+		} 
+		else if (target != null) {
+			if(isToRunOutsideEDT(target)){
+				handleActionOutsideEdt(target, command);
+			}else{
+				synchronized (queue) {
+					queue.put(new Work(command, target, connection));
+					SwingUtilities.invokeLater(CommandRequestListener.this);
+				}
 			}
-			else {
-				// within edt
-				queue.put(new Work(command, target, connection));
-				SwingUtilities.invokeLater(CommandRequestListener.this);
-			}
-
 		} 
 		else if(command.itemType.equals(AutoSwingType.menu.name())){
 			handlePopupMenuItem(command);
@@ -146,6 +163,18 @@ public class CommandRequestListener extends Listener implements Runnable {
 		else {
 			LOG.error("No target found for command: " + ToStringBuilder.reflectionToString(command, ToStringStyle.SHORT_PREFIX_STYLE));
 		}
+	}
+
+	private void handleActionOutsideEdt(Component target, CommandRequest command) {
+		if (target instanceof JComboBox) {
+			handle((JComboBox) target, command);
+		}else if(target instanceof JMenu){
+			handle((JMenu)target, command);
+		}
+	}
+
+	private boolean isToRunOutsideEDT(Component target) {
+		return (target instanceof JComboBox) || (target instanceof JMenu) /*|| (target instanceof JTextArea) */;
 	}
 
 	private void processCustomRequest(Connection connection, Object object, CommandRequest command) {
