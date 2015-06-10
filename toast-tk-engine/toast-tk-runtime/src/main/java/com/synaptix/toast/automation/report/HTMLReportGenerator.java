@@ -43,7 +43,6 @@ public class HTMLReportGenerator {
 		report.append("<html>");
 		report.append("<head>");
 		report.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />");
-		report.append("<LINK href=\"assets/style.css\" rel=\"stylesheet\" type=\"text/css\">");
 		report.append("<style>");
 		report.append(getEmbeddedStyle()).append("\n");
 		report.append("</style>");
@@ -62,6 +61,7 @@ public class HTMLReportGenerator {
 
 		for (IBlock block : testPage.getBlocks()) {
 			if (block instanceof CommentBlock) {
+				//partially implemented with Thymeleaf
 				reportCommentBlock((CommentBlock) block, report);
 			} else if (block instanceof TestBlock) {
 				reportTestBlock((TestBlock) block, report);
@@ -148,19 +148,6 @@ public class HTMLReportGenerator {
 		}
 	}
 
-	private String getResultKindAsString(ResultKind resultKind) {
-		if (ResultKind.SUCCESS.equals(resultKind)) {
-			return "resultSuccess";
-		} else if (ResultKind.ERROR.equals(resultKind)) {
-			return "resultError";
-		} else if (ResultKind.FAILURE.equals(resultKind)) {
-			return "resultFailure";
-		} else if (ResultKind.INFO.equals(resultKind)) {
-			return "resultInfo";
-		}
-		return "noResult";
-	}
-
 	/**
 	 * @param block
 	 * @param report
@@ -195,19 +182,7 @@ public class HTMLReportGenerator {
 	}
 
 	public String newRowWithResult(TestResult testResult) {
-		return "<tr class=\"" + getResultKindAsString(testResult) + "\">";
-	}
-
-	/**
-	 * @param testResult
-	 * @return
-	 */
-	private String getResultKindAsString(TestResult testResult) {
-		if (testResult != null) {
-			return getResultKindAsString(testResult.getResultKind());
-		} else {
-			return "noResult";
-		}
+		return "<tr class=\"" + TemplateHelper.getResultKindAsString(testResult) + "\">";
 	}
 
 	public void reportTestPage(TestPage block, StringBuilder report) {
@@ -278,19 +253,19 @@ public class HTMLReportGenerator {
 		report.append("</tr>");
 
 		for (TestLine line : block.getBlockLines()) {
+			report.append("<tr>");
 			report.append(newRowWithResult(line.getTestResult()));
 			report.append("<td>");
-			String contextualTestSentence = line.getTestResult() != null ? line.getTestResult().getContextualTestSentence() : null;
-			report.append(contextualTestSentence == null ? line.getTest() : contextualTestSentence);
+			report.append(TemplateHelper.getStepSentence(line));
 			report.append("</td>");
 			report.append("<td>");
-			report.append(line.getExpected() != null ? line.getExpected() : "&nbsp");
+			report.append(line.getExpected() != null ? line.getExpected() : "&nbsp;");
 			report.append("</td>");
 			report.append("<td>");
-			report.append(line.getTestResult() != null ? formatStringToHtml(line.getTestResult().getMessage()) : "&nbsp");
+			report.append(TemplateHelper.formatStringToHtml(line));
 			report.append("</td>");
 			report.append("<td>");
-			report.append(line.getTestCommentString() != null ? line.getTestCommentString() : "&nbsp");
+			report.append(line.getTestCommentString() != null ? line.getTestCommentString() : "&nbsp;");
 			report.append("</td>");
 			report.append("<td>");
 			report.append(line.getExecutionTime() + ("ms"));
@@ -301,9 +276,7 @@ public class HTMLReportGenerator {
 		report.append("</div>");
 	}
 
-	private String formatStringToHtml(String message) {
-		return message != null ? message.replace("\n", "<br>") : "";
-	}
+
 
 	/**
 	 * @param block

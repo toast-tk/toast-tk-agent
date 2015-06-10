@@ -26,9 +26,6 @@ public class SwingPageBlock implements IBlock {
 
 	private TestResult testResult;
 
-	/**
-	 * 
-	 */
 	public SwingPageBlock() {
 		blockLines = new ArrayList<SwingPageConfigLine>();
 	}
@@ -67,5 +64,10 @@ public class SwingPageBlock implements IBlock {
 
 	public void setTestResult(TestResult testResult) {
 		this.testResult = testResult;
+	}
+
+	@Override
+	public String getBlockType() {
+		return "swingPageBlock";
 	}
 }

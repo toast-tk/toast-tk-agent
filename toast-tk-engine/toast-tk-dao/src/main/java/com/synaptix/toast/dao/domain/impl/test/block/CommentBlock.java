@@ -42,4 +42,9 @@ public class CommentBlock implements IBlock {
 	public void setLines(List<String> lines) {
 		this.lines = lines;
 	}
+
+	@Override
+	public String getBlockType() {
+		return "comment";
+	}
 }

@@ -56,4 +56,9 @@ public class TestBlock implements IBlock {
 	public void setFixtureName(String fixtureName) {
 		this.fixtureName = fixtureName;
 	}
+
+	@Override
+	public String getBlockType() {
+		return "testBlock";
+	}
 }

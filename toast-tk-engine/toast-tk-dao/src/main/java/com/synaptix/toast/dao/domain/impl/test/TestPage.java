@@ -237,4 +237,9 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 		return null;
 	}
 
+	@Override
+	public String getBlockType() {
+		return "testPageBlock";
+	}
+
 }

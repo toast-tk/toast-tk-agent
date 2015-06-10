@@ -17,17 +17,18 @@
 	      - Test Report generation
 	</description>
 	<properties>
-	    <javassit.version>3.18.1-GA</javassit.version>
-	    <xml.api.version>1.4.01</xml.api.version>
-	    <svnkit.version>1.1.0</svnkit.version>
+		<javassit.version>3.18.1-GA</javassit.version>
+		<xml.api.version>1.4.01</xml.api.version>
+		<svnkit.version>1.1.0</svnkit.version>
+		<thymeleaf.version>2.1.4.RELEASE</thymeleaf.version>
 	</properties>
 	<dependencies>
-  		<dependency>
+		<dependency>
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
 			<version>${javassit.version}</version>
 		</dependency>
-   		<dependency>
+		<dependency>
 			<groupId>com.svnkit</groupId>
 			<artifactId>svnkit</artifactId>
 			<version>${svnkit.version}</version>
@@ -37,7 +38,12 @@
 			<artifactId>xml-apis</artifactId>
 			<version>${xml.api.version}</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>org.thymeleaf</groupId>
+			<artifactId>thymeleaf</artifactId>
+			<version>${thymeleaf.version}</version>
+		</dependency>
+
 		<!-- Toast Dependencies -->
 		<dependency>
 			<groupId>com.synaptix.toast</groupId>

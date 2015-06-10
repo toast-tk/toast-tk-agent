@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<style>
+		body {
+			line-height: 1.6em;
+			font-family: "Lucida Sans Unicode", "Lucida Grande", "Sans-Serif";
+			font-size: 12px;
+			padding-left: 1em;
+		}
+
+		table {
+			font-size: 12px;
+			text-align: left;
+			color: black;
+			border: 3px solid darkgray;
+			margin-top: 8px;
+			margin-bottom: 12px;
+		}
+
+		th {
+			font-size: 14px;
+			font-weight: normal;
+			padding: 6px 4px;
+			border: 1px solid darkgray;
+		}
+
+		td {
+			border: 1px solid darkgray;
+			padding: 4px 4px;
+		}
+
+		h3 {
+			margin-top: 24pt;
+		}
+
+		div {
+			margin: 0px;
+		}
+
+		.summary {
+			text-align: justify;
+			letter-spacing: 1px;
+			padding: 2em;
+			background: darkgray;
+			color: white;
+		}
+
+		.resultSuccess {
+			background-color: green;
+		}
+
+		.resultFailure {
+			background-color: red;
+		}
+
+		.resultInfo {
+			background-color: lightblue;
+		}
+
+		.resultError {
+			background-color: orange;
+		}
+
+		.noResult {
+			background-color: white;
+		}
+
+		.message {
+			font-weight: bold;
+		}
+	</style>
+</head>
+<body class="container">
+	<div class="summary">
+		<span th:text="${test.name}">
+			Test TNR_RUSA_PREV_v2015-05-19.script
+		</span>
+		<br/>
+		Effectué le
+		<span th:text="${test.startDateTime}">
+			2015-06-10T13:55:18.433
+		</span>
+		<br/>
+		Temps d'execution
+		<span th:text="${test.executionTime}">
+			0
+		</span> ms<br/>
+		<br/>
+		Errors: 
+		<span th:text="${test.technicalErrorNumber}">
+			0
+		</span>
+		Failures: [[${test.testFailureNumber}]]<br/>
+		Success: [[${test.testSuccessNumber}]]<br/>
+	</div>
+	<br/>
+	<div th:each="block : ${test.blocks}">
+	
+		<div th:switch="${block.getBlockType()}">
+		  <div class="comment" th:case="'comment'">
+			<p th:each="line : *{lines}" th:text="${line}"> 
+				# Données communes<br/>
+				#<br/>
+				# BLOC 0 : Connexion et accès à la gestion des prévisions<br/>
+				###########################################################
+				<br/>
+				#Connexion<br/>
+			</p>
+		  </div>
+		  <div class="test" th:case="'testBlock'">
+			<table>
+				<thead>
+					<tr>
+						<th>Test</th>
+						<th th:text="*{fixtureName}">swing</th>
+					</tr>
+				</thead>
+				<tr>
+					<td>Step</td>
+					<td>Expected</td>
+					<td>Result</td>
+					<td>Comment</td>
+					<td>Time</td>
+				</tr>
+				<tr th:class="${@com.synaptix.toast.automation.report.TemplateHelper@getResultKindAsString(${line.testResult})}" 
+					th:each="line : *{lines}"> 
+					<td th:text="${@com.synaptix.toast.automation.report.TemplateHelper@getStepSentence(${line})}">
+						Click on *Connexion.Connexion*
+					</td>
+					<td th:text="${line.expected} == null ? '&nbsp;' : ${line.expected}">
+						&nbsp;
+					</td>
+					<td th:text="${@com.synaptix.toast.automation.report.TemplateHelper@formatStringToHtml(${line})}">
+						true
+					</td>
+					<td th:text="${line.testCommentString} == null ? '&nbsp;' : ${line.testCommentString}">
+						&nbsp;
+					</td>
+					<td>
+						[[${line.executionTime}]] ms
+					</td>
+				</tr>
+			</table>
+		  </div>
+		</div>
+	</div>
+	<script language="javascript"> function toggle(text) { var ele = document.getElementById(text);if(ele.style.display == "block") { ele.style.display = "none";}else {ele.style.display = "block";}}</script>
+</body>
+</html>

@@ -74,4 +74,9 @@ public class SetupBlock implements IBlock {
 	public void setTestResult(TestResult testResult) {
 		this.testResult = testResult;
 	}
+
+	@Override
+	public String getBlockType() {
+		return "setup";
+	}
 }

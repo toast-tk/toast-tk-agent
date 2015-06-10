@@ -72,14 +72,10 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 	public ToastTestRunner(ITestManager m, Injector injector, URL settingsFile) {
 		this(m, injector.getInstance(IRepositorySetup.class));
 		this.injector = injector;
+		this.fixtureApiServices = ActionAdapterCollector.listAvailableServicesByInjection(injector);
 		this.settingsFile = settingsFile;
 		if(settingsFile != null){
 			LOG.info("Overriding fixture definitions with settings in " + settingsFile.getFile());
-		}
-		if(injector != null){
-			this.fixtureApiServices = ActionAdapterCollector.listAvailableServicesByInjection(injector);
-		}else{
-			this.fixtureApiServices = ActionAdapterCollector.listAvailableServicesByReflection();
 		}
 	}
 

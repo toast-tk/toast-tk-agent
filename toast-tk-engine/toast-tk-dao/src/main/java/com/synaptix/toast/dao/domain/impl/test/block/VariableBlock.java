@@ -47,4 +47,9 @@ public class VariableBlock implements IBlock {
 	public VariableBlock() {
 		blockLines = new ArrayList<BlockLine>();
 	}
+
+	@Override
+	public String getBlockType() {
+		return "variableBlock";
+	}
 }

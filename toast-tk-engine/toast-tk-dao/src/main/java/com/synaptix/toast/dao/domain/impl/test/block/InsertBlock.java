@@ -59,4 +59,9 @@ public class InsertBlock implements IBlock {
 	public InsertBlock() {
 		blockLines = new ArrayList<BlockLine>();
 	}
+
+	@Override
+	public String getBlockType() {
+		return "insert";
+	}
 }

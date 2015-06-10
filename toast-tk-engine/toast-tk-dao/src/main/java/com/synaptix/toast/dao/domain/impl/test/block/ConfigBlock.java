@@ -50,4 +50,9 @@ public class ConfigBlock implements IBlock {
 		lines.add(new ComponentConfigLine(testName, systemName, componentAssociation));
 	}
 
+	@Override
+	public String getBlockType() {
+		return "config";
+	}
+
 }
