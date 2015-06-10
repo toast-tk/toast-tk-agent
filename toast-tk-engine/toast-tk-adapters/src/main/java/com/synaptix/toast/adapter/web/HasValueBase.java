@@ -1,5 +1,7 @@
 package com.synaptix.toast.adapter.web;
 
+import java.util.concurrent.TimeoutException;
+
 /**
  * 
  * @author skokaina
@@ -7,5 +9,5 @@ package com.synaptix.toast.adapter.web;
  * @param <T>
  */
 public interface HasValueBase<T>  {
-	public T getValue();
+	public T getValue() throws IllegalAccessException, TimeoutException;
 }

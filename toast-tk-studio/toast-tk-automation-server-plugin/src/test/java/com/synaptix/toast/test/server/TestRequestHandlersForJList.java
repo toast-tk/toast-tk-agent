@@ -15,7 +15,7 @@ import com.synaptix.toast.core.net.request.InitInspectionRequest;
 import com.synaptix.toast.core.net.request.TableCommandRequest;
 import com.synaptix.toast.core.net.request.TableCommandRequestQueryCriteria;
 import com.synaptix.toast.core.net.response.ValueResponse;
-import com.synaptix.toast.plugin.swing.agent.listener.CommandRequestListener;
+import com.synaptix.toast.plugin.swing.agent.listener.SwingActionRequestListener;
 import com.synaptix.toast.plugin.swing.agent.listener.InitRequestListener;
 import com.synaptix.toast.test.server.mock.FakeConnection;
 import com.synaptix.toast.test.server.mock.JListTestFrame;
@@ -47,7 +47,7 @@ public class TestRequestHandlersForJList {
     	tableCriteria.add(new TableCommandRequestQueryCriteria("Column One", "Row2-Column1"));
     	tableCriteria.add(new TableCommandRequestQueryCriteria("Column Three", "Row2-Column3"));
 		TableCommandRequest buildGetInputValueRequest = buildMultiCriteriaRequest(tableCriteria, locator, idRequest);
-		CommandRequestListener requestHandler = TestSuiteHelper.getInjector().getInstance(CommandRequestListener.class);
+		SwingActionRequestListener requestHandler = TestSuiteHelper.getInjector().getInstance(SwingActionRequestListener.class);
 		FakeConnection connection = new FakeConnection();
 		requestHandler.received(connection, buildGetInputValueRequest);
 		try {

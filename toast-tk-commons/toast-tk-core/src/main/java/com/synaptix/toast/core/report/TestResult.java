@@ -4,6 +4,7 @@ package com.synaptix.toast.core.report;
 public class TestResult {
 	private final boolean isSuccess;
 	private String message;
+	private String contextualTestSentence;
 	// expected to add
 	private ResultKind resultKind;
 
@@ -75,5 +76,13 @@ public class TestResult {
 		 * Technical success, or info (blue)
 		 */
 		INFO
+	}
+
+	public void setContextualTestSentence(String contextualTestSentence) {
+		this.contextualTestSentence = contextualTestSentence;
+	}
+	
+	public String getContextualTestSentence() {
+		return contextualTestSentence;
 	}
 }

@@ -27,6 +27,7 @@ import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.VALUE_REG
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.synaptix.toast.adapter.web.HasClickAction;
@@ -226,13 +227,14 @@ public abstract class ToastSwingActionAdapter {
 		try {
 			String[] locator = menu.split(" / ");
 			SwingAutoUtils.confirmExist(driver, locator[0], AutoSwingType.menu.name());
-			driver.process(
-					new CommandRequest.CommandRequestBuilder(null).with(locator[0])
-					.ofType(AutoSwingType.menu.name()).select(locator[1]).build());
+			CommandRequest request = new CommandRequest.CommandRequestBuilder(UUID.randomUUID().toString()).with(locator[0])
+			.ofType(AutoSwingType.menu.name()).select(locator[1]).build();
+			String waitForValue = driver.processAndwaitForValue(request);
+			return ResultKind.FAILURE.name().equals(waitForValue) ? new TestResult("Menu {" + menu + "} not found !",
+					ResultKind.FAILURE) : new TestResult("", ResultKind.SUCCESS);
 		} catch (Exception e) {
 			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
 		}
-		return new TestResult();
 	}
 
 	@Action(action = SelectSubMenu, description = "Selectionner un sous menu")

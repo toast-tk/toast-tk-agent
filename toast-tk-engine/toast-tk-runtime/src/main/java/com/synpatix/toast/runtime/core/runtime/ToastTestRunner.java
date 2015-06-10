@@ -389,13 +389,15 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 			if(commandMethodImpl == null){
 				commandMethodImpl = findMethodInClass(studyCommand, localFixtureClass);
 			}
-			result = doLocalFixtureCall(connector, commandMethodImpl);
+			result = doLocalFixtureCall(command, connector, commandMethodImpl);
 		}
 		else if(getClassInstance(ISwingInspectionClient.class) != null){
 			// If no class is implementing the command then 
 			// process it as a custom command sent through Kryo 
 			result = doRemoteFixtureCall(command, descriptor);
-		}else{
+			result.setContextualTestSentence(command);
+		}
+		else{
 			result = new TestResult(String.format("Action Implementation - Not Found"), ResultKind.ERROR);
 		}
 		
@@ -417,11 +419,11 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 		if(LOG.isDebugEnabled()){
 			LOG.debug("Client Plugin Mode: Delegating command interpretation to server plugins !");
 		}
-		result = new TestResult("Client Plugin Mode: Delegating command interpretation to server plugins !", ResultKind.INFO);
+		result = new TestResult("Commande Inconnue !", ResultKind.INFO);
 		return result;
 	}
 
-	private TestResult doLocalFixtureCall(Object instance, FixtureExecCommandDescriptor fixtureExecDescriptor) {
+	private TestResult doLocalFixtureCall(String command, Object instance, FixtureExecCommandDescriptor fixtureExecDescriptor) {
 		TestResult result;
 		
 		Matcher matcher = fixtureExecDescriptor.matcher;
@@ -430,11 +432,22 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 		int groupCount = matcher.groupCount();
 		Object[] args = new Object[groupCount];
 		for (int i = 0; i < groupCount; i++) {
-			args[i] = ToastRunnerHelper.buildArgument(repoSetup, matcher.group(i + 1));
+			String group = matcher.group(i + 1);
+			args[i] = ToastRunnerHelper.buildArgument(repoSetup, group);
+			if(group.startsWith("$$")){
+				//nothing
+			}
+			else if (group.startsWith("$") && args[i] != null ){
+				command = command.replaceFirst("\\"+group+"\\b", (String) args[i]);
+			}
+			else{
+				//nothing
+			}
 		}
 
 		try {
 			result = (TestResult) fixtureExecDescriptor.method.invoke(instance, args);
+			result.setContextualTestSentence(command);
 		} catch (Exception e) {
 			LOG.error("Error found !", e);
 			result = new TestResult(ExceptionUtils.getRootCauseMessage(e), ResultKind.FAILURE);

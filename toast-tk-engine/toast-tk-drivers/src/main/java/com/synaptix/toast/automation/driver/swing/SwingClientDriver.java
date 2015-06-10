@@ -3,6 +3,7 @@ package com.synaptix.toast.automation.driver.swing;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,13 +26,16 @@ public class SwingClientDriver implements IClientDriver {
 	protected ITCPClient client;
 	private final String host = "localhost";
 	private static final int RECONNECTION_RATE = 10000;
-	protected volatile Map<String, Object> responseMap;
+	private static final int WAIT_TIMEOUT = 30000;
+	protected Map<String, Object> existsResponseMap;
+	private Map<String, Object> valueResponseMap;
 	private final Object VOID_RESULT = new Object();
 
 
 	public SwingClientDriver() {
 		this.client = new KryoTCPClient();
-		this.responseMap = new HashMap<String, Object>();
+		this.existsResponseMap = new HashMap<String, Object>();
+		this.valueResponseMap = new HashMap<String, Object>();
 		initListeners();
 		start();
 	}
@@ -42,10 +46,10 @@ public class SwingClientDriver implements IClientDriver {
 			public void onResponseReceived(Object object) {
 				if (object instanceof ExistsResponse) {
 					ExistsResponse response = (ExistsResponse) object;
-					responseMap.put(response.id, response.exists);
+					existsResponseMap.put(response.id, response.exists);
 				} else if (object instanceof ValueResponse) {
 					ValueResponse response = (ValueResponse) object;
-					responseMap.put(response.getId(), response.value);
+					valueResponseMap.put(response.getId(), response.value);
 				}
 				if (object instanceof InitResponse) {
 					if(LOG.isDebugEnabled()){
@@ -104,7 +108,7 @@ public class SwingClientDriver implements IClientDriver {
 		}
 		init();
 		if (request.getId() != null) {
-			responseMap.put(request.getId(), VOID_RESULT);
+			existsResponseMap.put(request.getId(), VOID_RESULT);
 		}
 		//TODO: block any request with No ID !!
 		client.sendRequest(request);
@@ -140,8 +144,8 @@ public class SwingClientDriver implements IClientDriver {
 	@Override
 	public boolean waitForExist(String reqId) {
 		boolean res = false;
-		if (responseMap.containsKey(reqId)) {
-			while (VOID_RESULT.equals(responseMap.get(reqId))) {
+		if (existsResponseMap.containsKey(reqId)) {
+			while (VOID_RESULT.equals(existsResponseMap.get(reqId))) {
 				try {
 					client.keepAlive();
 					Thread.sleep(500);
@@ -149,27 +153,51 @@ public class SwingClientDriver implements IClientDriver {
 					e.printStackTrace();
 				}
 			}
-			res = (Boolean) responseMap.get(reqId);
-			responseMap.remove(reqId);
+			res = (Boolean) existsResponseMap.get(reqId);
+			existsResponseMap.remove(reqId);
 		}
 		return res;
 
 	}
 
 	@Override
-	public String waitForValue(String reqId) {
+	public String processAndwaitForValue(IIdRequest request) throws IllegalAccessException, TimeoutException {
 		String res = null;
-		if (responseMap.containsKey(reqId)) {
-			while (VOID_RESULT.equals(responseMap.get(reqId))) {
+		final String idRequest = request.getId();
+		if (idRequest == null) {
+			throw new IllegalAccessException("Request requires an Id to wait for a value.");
+		}
+		init();
+		valueResponseMap.put(idRequest, VOID_RESULT);
+		client.sendRequest(request);
+		res = waitForValue(request);
+		return res;
+	}
+
+	private String waitForValue(final IIdRequest request) throws TimeoutException {
+		final String idRequest = request.getId();
+		String res = null;
+		int countTimeOut = WAIT_TIMEOUT;
+		int incOffset = 500;
+		if (valueResponseMap.containsKey(idRequest)) {
+			while (VOID_RESULT.equals(valueResponseMap.get(idRequest))) {
 				try {
 					client.keepAlive();
-					Thread.sleep(500);
+					Thread.sleep(incOffset);
+					countTimeOut = countTimeOut - incOffset;
+					if(countTimeOut <= 0){
+						valueResponseMap.remove(idRequest);
+						throw new TimeoutException("No Response received for request: " + idRequest + " after " + (WAIT_TIMEOUT/1000) +  "s !");
+					}/*else{
+						//retry
+						client.sendRequest(request);
+					}*/
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
-			res = (String) responseMap.get(reqId);
-			responseMap.remove(reqId);
+			res = (String) valueResponseMap.get(idRequest);
+			valueResponseMap.remove(idRequest);
 		}
 		return res;
 	}

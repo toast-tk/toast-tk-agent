@@ -43,7 +43,7 @@ import com.synaptix.toast.core.adapter.AutoSwingType;
 import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.net.request.InitInspectionRequest;
 import com.synaptix.toast.core.net.response.ValueResponse;
-import com.synaptix.toast.plugin.swing.agent.listener.CommandRequestListener;
+import com.synaptix.toast.plugin.swing.agent.listener.SwingActionRequestListener;
 import com.synaptix.toast.plugin.swing.agent.listener.InitRequestListener;
 import com.synaptix.toast.plugin.swing.server.boot.Boot;
 import com.synaptix.toast.test.server.mock.FakeConnection;
@@ -68,7 +68,7 @@ public class TestRequestHandlersForTextField {
 	public void testGettingResponse() {
 		String idRequest = null;
 		CommandRequest buildGetInputValueRequest = SwingInputElement.buildGetInputValueRequest(TexfieldTestFrame.class.getName()+":inputField", AutoSwingType.input.name(), idRequest);
-		CommandRequestListener requestHandler =  TestSuiteHelper.getInjector().getInstance(CommandRequestListener.class);
+		SwingActionRequestListener requestHandler =  TestSuiteHelper.getInjector().getInstance(SwingActionRequestListener.class);
 		FakeConnection connection = new FakeConnection();
 		requestHandler.received(connection, buildGetInputValueRequest);
 		try {
@@ -82,7 +82,7 @@ public class TestRequestHandlersForTextField {
 	@Test
 	public void testSettingValue() {
 		textFieldFrame.setTextValue("");
-		CommandRequestListener requestHandler =  TestSuiteHelper.getInjector().getInstance(CommandRequestListener.class);
+		SwingActionRequestListener requestHandler =  TestSuiteHelper.getInjector().getInstance(SwingActionRequestListener.class);
 		FakeConnection connection = new FakeConnection();
 		String value = "typed_value";
 		textFieldFrame.setTextFocus();
@@ -96,7 +96,7 @@ public class TestRequestHandlersForTextField {
 		}
 		CommandRequest buildGetInputValueRequest = SwingInputElement.buildGetInputValueRequest(
 				TexfieldTestFrame.class.getName()+":inputField", AutoSwingType.input.name(), "fake-id");
-		requestHandler =  TestSuiteHelper.getInjector().getInstance(CommandRequestListener.class);
+		requestHandler =  TestSuiteHelper.getInjector().getInstance(SwingActionRequestListener.class);
 		requestHandler.received(connection, buildGetInputValueRequest);
 		try {
 			Thread.sleep(1000);
@@ -113,7 +113,7 @@ public class TestRequestHandlersForTextField {
 		textFieldFrame.setTextValue(value);
 		String idRequest = "fake-id";
 		CommandRequest buildGetInputValueRequest = SwingInputElement.buildGetInputValueRequest(TexfieldTestFrame.class.getName()+":inputField", AutoSwingType.input.name(), idRequest);
-		CommandRequestListener requestHandler =  TestSuiteHelper.getInjector().getInstance(CommandRequestListener.class);
+		SwingActionRequestListener requestHandler =  TestSuiteHelper.getInjector().getInstance(SwingActionRequestListener.class);
 		FakeConnection connection = new FakeConnection();
 		requestHandler.received(connection, buildGetInputValueRequest);
 		try {

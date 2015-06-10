@@ -22,47 +22,20 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Creation date: 16 févr. 2015
+Creation date: 10 juin 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
 
-package com.synaptix.toast.core.agent.inspection;
+package com.synaptix.toast.plugin.swing.agent.listener;
 
-import com.synaptix.toast.core.net.request.CommandRequest;
-
-public interface ISwingInspectionClient {
-
-	void highlight(String selectedValue);
-
-	void scanUi(boolean selected);
-
-	void startRecording();
-
-	void stopRecording();
-
-	void setMode(int i);
-
-	void processCustomCommand(String command);
-
-	void processCustomCommand(final CommandRequest commandRequest);
-
-	public String processAndwaitForValue(String requestId);
-
-	void killServer();
-	
-	boolean saveObjectsToRepository();
+public interface ISynchronizationPoint {
 
 	/**
-	 * Check connection to SUT
+	 * Indicate to the caller if the system under test is busy to process a futher command
 	 * 
 	 * @return
 	 */
-	boolean isConnected();
+	public boolean hasToWait();
 	
-	/**
-	 * Check connection WebApp Host
-	 * @return
-	 */
-	boolean isConnectedToWebApp();
 }

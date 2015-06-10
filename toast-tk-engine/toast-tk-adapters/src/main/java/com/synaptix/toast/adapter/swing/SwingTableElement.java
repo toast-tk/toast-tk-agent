@@ -2,9 +2,11 @@ package com.synaptix.toast.adapter.swing;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeoutException;
 
 import com.synaptix.toast.adapter.web.HasClickAction;
 import com.synaptix.toast.core.driver.IClientDriver;
+import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.net.request.TableCommandRequest;
 import com.synaptix.toast.core.net.request.TableCommandRequestQueryCriteria;
 import com.synaptix.toast.core.runtime.ISwingElement;
@@ -26,34 +28,36 @@ public class SwingTableElement extends SwingAutoElement implements HasClickActio
 	}
 
 	
-	public String find(List<TableCommandRequestQueryCriteria> criteria) {
+	public String find(List<TableCommandRequestQueryCriteria> criteria) throws IllegalAccessException, TimeoutException {
 		exists();
 		final String requestId = UUID.randomUUID().toString();
-		frontEndDriver.process(new TableCommandRequest.TableCommandRequestBuilder(requestId)
+		CommandRequest request = new TableCommandRequest.TableCommandRequestBuilder(requestId)
 				.find(criteria)
 				.with(wrappedElement.getLocator())
-				.ofType(wrappedElement.getType().name()).build());
-		return frontEndDriver.waitForValue(requestId);
+				.ofType(wrappedElement.getType().name()).build();
+		return frontEndDriver.processAndwaitForValue(request);
 	}
 	
-	public String find(String lookUpColumn, String lookUpValue, String outputColumn) {
+	public String find(String lookUpColumn, String lookUpValue, String outputColumn) throws IllegalAccessException, TimeoutException {
 		outputColumn = outputColumn == null ? lookUpColumn : outputColumn;
 		exists();
 		final String requestId = UUID.randomUUID().toString();
-		frontEndDriver.process(new TableCommandRequest.TableCommandRequestBuilder(requestId)
+		CommandRequest request = new TableCommandRequest.TableCommandRequestBuilder(requestId)
 				.find(lookUpColumn, lookUpValue, outputColumn)
 				.with(wrappedElement.getLocator())
-				.ofType(wrappedElement.getType().name()).build());
-		return frontEndDriver.waitForValue(requestId);
+				.ofType(wrappedElement.getType().name()).build();
+		frontEndDriver.process(request);
+		return frontEndDriver.processAndwaitForValue(request);
 	}
 
-	public String count() {
+	public String count() throws IllegalAccessException, TimeoutException {
 		exists();
 		final String requestId = UUID.randomUUID().toString();
-		frontEndDriver.process(new TableCommandRequest.TableCommandRequestBuilder(requestId)
+		CommandRequest request = new TableCommandRequest.TableCommandRequestBuilder(requestId)
 			.count().with(wrappedElement.getLocator())
-			.ofType(wrappedElement.getType().name()).build());
-		return frontEndDriver.waitForValue(requestId);
+			.ofType(wrappedElement.getType().name()).build();
+		frontEndDriver.process(request);
+		return frontEndDriver.processAndwaitForValue(request);
 	}
 
 	@Override

@@ -213,4 +213,10 @@ public class SwingInspectServerClient extends SwingClientDriver implements ISwin
 		return interpreter.isConnectedToWebApp();
 	}
 
+	@Override
+	public String processAndwaitForValue(String requestId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

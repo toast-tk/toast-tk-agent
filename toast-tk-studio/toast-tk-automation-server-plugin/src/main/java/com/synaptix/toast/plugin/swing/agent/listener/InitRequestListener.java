@@ -35,6 +35,7 @@ import com.synaptix.toast.plugin.swing.server.SwingInspectionManager;
 public class InitRequestListener extends Listener {
 
 	private Map<String, Component> repository;
+	private final RepositoryHolder repositoryHolder;
 	static java.util.List<Class> autorizedComponents = new ArrayList<Class>();
 	static java.util.List<String> autorizedPackages = new ArrayList<String>();
 
@@ -58,7 +59,8 @@ public class InitRequestListener extends Listener {
 	}
 
 	@Inject
-	public InitRequestListener() {
+	public InitRequestListener(RepositoryHolder repositoryHolder) {
+		this.repositoryHolder = repositoryHolder;
 	}
 
 	@Override
@@ -81,7 +83,7 @@ public class InitRequestListener extends Listener {
 				java.util.List<Component> allComponents = SwingInspectionManager.getInstance().getAllComponents();
 				Map<Object, String> allInstances = SwingInspectionManager.getInstance().getAllInstances();
 
-				repository.clear();
+				repositoryHolder.getRepo().clear();
 
 				for (Component component : allComponents) {
 					String componentName = allInstances.get(component);
@@ -90,7 +92,7 @@ public class InitRequestListener extends Listener {
 					componentLocator = componentLocator != null ? componentLocator : component.getClass() + ":" + System.identityHashCode(component);
 					if (isAutorizedComponent(component)) {
 						response.items.add(componentLocator);
-						repository.put(componentLocator, component);
+						repositoryHolder.getRepo().put(componentLocator, component);
 					}
 				}
 			}

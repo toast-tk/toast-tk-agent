@@ -22,47 +22,27 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Creation date: 16 févr. 2015
+Creation date: 10 juin 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
 
-package com.synaptix.toast.core.agent.inspection;
+package com.synaptix.toast.plugin.swing.agent.listener;
 
-import com.synaptix.toast.core.net.request.CommandRequest;
+import java.awt.Component;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-public interface ISwingInspectionClient {
+public class RepositoryHolder {
 
-	void highlight(String selectedValue);
-
-	void scanUi(boolean selected);
-
-	void startRecording();
-
-	void stopRecording();
-
-	void setMode(int i);
-
-	void processCustomCommand(String command);
-
-	void processCustomCommand(final CommandRequest commandRequest);
-
-	public String processAndwaitForValue(String requestId);
-
-	void killServer();
+	private Map<String, Component> repository;
 	
-	boolean saveObjectsToRepository();
+	public RepositoryHolder(){
+		repository = new ConcurrentHashMap<String, Component>();
+	}
 
-	/**
-	 * Check connection to SUT
-	 * 
-	 * @return
-	 */
-	boolean isConnected();
+	public Map<String, Component> getRepo() {
+		return repository;
+	}
 	
-	/**
-	 * Check connection WebApp Host
-	 * @return
-	 */
-	boolean isConnectedToWebApp();
 }

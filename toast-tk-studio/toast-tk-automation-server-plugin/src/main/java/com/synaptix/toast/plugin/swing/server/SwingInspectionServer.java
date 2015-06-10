@@ -31,8 +31,9 @@ import com.synaptix.toast.core.net.request.ScanRequest;
 import com.synaptix.toast.core.net.response.RecordResponse;
 import com.synaptix.toast.core.net.response.ScanResponse;
 import com.synaptix.toast.core.record.IEventRecorder;
-import com.synaptix.toast.plugin.swing.agent.listener.CommandRequestListener;
+import com.synaptix.toast.plugin.swing.agent.listener.SwingActionRequestListener;
 import com.synaptix.toast.plugin.swing.agent.listener.InitRequestListener;
+import com.synaptix.toast.plugin.swing.agent.listener.RepositoryHolder;
 
 /**
  * Created by skokaina on 07/11/2014.
@@ -40,89 +41,91 @@ import com.synaptix.toast.plugin.swing.agent.listener.InitRequestListener;
 public class SwingInspectionServer implements ISwingInspectionServer {
 
 	Logger LOG = Logger.getLogger(SwingInspectionServer.class.getName());
-	private final Map<String, Component> repository;
 	private List<Component> allComponents;
 	private Map<Object, String> allInstances;
 	final Server server;
+	final private RepositoryHolder repositoryHolder;
 
 	@Inject
 	private IEventRecorder recorder;
 
 	@Inject
-	public SwingInspectionServer(CommandRequestListener commandRequestListener, InitRequestListener initRequestListener) {
-		repository = new ConcurrentHashMap<String, Component>();
-		server = new Server(8192 * 1024, 8192 * 1024);
+	public SwingInspectionServer(SwingActionRequestListener commandRequestListener, 
+			InitRequestListener initRequestListener,
+			RepositoryHolder repositoryHolder) {
+		this.repositoryHolder = repositoryHolder;
+		this.server = new Server(8192 * 1024, 8192 * 1024);
 		try {
 			CommonIOUtils.initSerialization(server.getKryo());
-			server.start();
-			server.bind(CommonIOUtils.TCP_PORT);
-			commandRequestListener.setRepository(repository);
-			initRequestListener.setRepository(repository);
-
-			server.addListener(commandRequestListener);
-			server.addListener(initRequestListener);
-
-			server.addListener(new Listener() {
-				@Override
-				public void received(Connection connection, Object object) {
-					try {
-						if (object instanceof ScanRequest) {
-							ScanRequest scanRequest = (ScanRequest) object;
-							List<String> components = scan(scanRequest.isDebug());
-							ScanResponse response = new ScanResponse(scanRequest.getId(), components);
-							connection.sendTCP(response);
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			});
-
-			server.addListener(new Listener() {
-				@Override
-				public void received(Connection connection, Object object) {
-					try {
-						if (object instanceof HighLightRequest) {
-							highlight(((HighLightRequest) object).getLocator());
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			});
-
-			server.addListener(new Listener() {
-				@Override
-				public void received(Connection connection, Object object) {
-					try {
-						if (object instanceof RecordRequest) {
-							manageRecordRequest(((RecordRequest) object));
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			});
-
-			server.addListener(new Listener() {
-				@Override
-				public void received(Connection connection, Object object) {
-					try {
-						if (object instanceof PoisonPill) {
-							System.exit(1);
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			});
-
+			this.server.start();
+			this.server.bind(CommonIOUtils.TCP_PORT);
+			initListeners(commandRequestListener, initRequestListener);
 			LOG.info("Inspection Server listening on port : " + CommonIOUtils.TCP_PORT);
 		} catch (Exception e) {
 			LOG.info("Server initialization error: " + e.getCause());
 			e.printStackTrace();
 			server.close();
 		}
+	}
+
+	private void initListeners(SwingActionRequestListener commandRequestListener, InitRequestListener initRequestListener) {
+		this.server.addListener(commandRequestListener);
+		this.server.addListener(initRequestListener);
+
+		this.server.addListener(new Listener() {
+			@Override
+			public void received(Connection connection, Object object) {
+				try {
+					if (object instanceof ScanRequest) {
+						ScanRequest scanRequest = (ScanRequest) object;
+						List<String> components = scan(scanRequest.isDebug());
+						ScanResponse response = new ScanResponse(scanRequest.getId(), components);
+						connection.sendTCP(response);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		this.server.addListener(new Listener() {
+			@Override
+			public void received(Connection connection, Object object) {
+				try {
+					if (object instanceof HighLightRequest) {
+						highlight(((HighLightRequest) object).getLocator());
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		this.server.addListener(new Listener() {
+			@Override
+			public void received(Connection connection, Object object) {
+				try {
+					if (object instanceof RecordRequest) {
+						manageRecordRequest(((RecordRequest) object));
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		this.server.addListener(new Listener() {
+			@Override
+			public void received(Connection connection, Object object) {
+				try {
+					if (object instanceof PoisonPill) {
+						System.exit(1);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	protected void manageRecordRequest(RecordRequest recordRequest) {
@@ -135,10 +138,6 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public SwingInspectionServer() {
-		this(new CommandRequestListener(), new InitRequestListener());
 	}
 
 	public String getComponentLocator(Component component) {
@@ -170,7 +169,7 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 			componentLocator = componentLocator != null ? componentLocator : component.getClass() + ":" + System.identityHashCode(component);
 			if (InitRequestListener.isAutorizedComponent(component)) {
 				components.add(componentLocator);
-				repository.put(componentLocator, component);
+				repositoryHolder.getRepo().put(componentLocator, component);
 			}
 		}
 		return components;
@@ -208,7 +207,7 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 	Boolean isMenuSelected = false;
 
 	public synchronized void highlight(String selectComponent) {
-		Component component = repository.get(selectComponent);
+		Component component = repositoryHolder.getRepo().get(selectComponent);
 		if (component != null) {
 
 			if (previousComponent != null) {

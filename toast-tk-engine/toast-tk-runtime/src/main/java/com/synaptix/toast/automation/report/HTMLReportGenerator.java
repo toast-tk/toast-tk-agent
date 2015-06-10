@@ -280,7 +280,8 @@ public class HTMLReportGenerator {
 		for (TestLine line : block.getBlockLines()) {
 			report.append(newRowWithResult(line.getTestResult()));
 			report.append("<td>");
-			report.append(line.getTest());
+			String contextualTestSentence = line.getTestResult() != null ? line.getTestResult().getContextualTestSentence() : null;
+			report.append(contextualTestSentence == null ? line.getTest() : contextualTestSentence);
 			report.append("</td>");
 			report.append("<td>");
 			report.append(line.getExpected() != null ? line.getExpected() : "&nbsp");

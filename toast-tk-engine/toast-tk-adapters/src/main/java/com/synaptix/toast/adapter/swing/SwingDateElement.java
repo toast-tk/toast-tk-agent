@@ -1,6 +1,7 @@
 package com.synaptix.toast.adapter.swing;
 
 import java.util.UUID;
+import java.util.concurrent.TimeoutException;
 
 import com.synaptix.toast.adapter.web.HasStringValue;
 import com.synaptix.toast.adapter.web.HasTextInput;
@@ -37,10 +38,10 @@ public class SwingDateElement extends SwingAutoElement implements HasTextInput, 
 
 
 	@Override
-	public String getValue() {
+	public String getValue() throws IllegalAccessException, TimeoutException {
 		exists();
 		final String requestId = UUID.randomUUID().toString();
-		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(requestId).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).getValue().build());
-		return frontEndDriver.waitForValue(requestId);
+		CommandRequest request = new CommandRequest.CommandRequestBuilder(requestId).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).getValue().build();
+		return frontEndDriver.processAndwaitForValue(request);
 	}
 }
