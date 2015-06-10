@@ -1,6 +1,8 @@
 package com.synpatix.toast.runtime.core.runtime;
 
+import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
+import com.synaptix.toast.automation.report.IHTMLReportGenerator;
 import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.rest.RestUtils;
@@ -25,6 +28,7 @@ public abstract class AbstractRunner {
 	private boolean presetRepoFromWebApp = false;
 	private IReportUpdateCallBack reportUpdateCallBack;
 	private TestPage localRepositoryTestPage;
+	private IHTMLReportGenerator htmlReportGenerator;
 
 	protected AbstractRunner(Injector injector) {
 		try {
@@ -32,6 +36,7 @@ public abstract class AbstractRunner {
 		} catch (ConfigurationException e) {
 			LOG.error("No Test Environement Manager defined !", e);
 		}
+		this.htmlReportGenerator = injector.getInstance(IHTMLReportGenerator.class);
 		this.injector = injector;
 	}
 
@@ -106,6 +111,7 @@ public abstract class AbstractRunner {
 			}
 			beginTest();
 			result = runner.run(result, true);
+			createAndOpenReport(result);
 			endTest();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
@@ -113,6 +119,22 @@ public abstract class AbstractRunner {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+
+	private void createAndOpenReport(ITestPage testPage) {
+		String generatePageHtml = htmlReportGenerator.generatePageHtml(testPage);
+		URL resource = this.getClass().getClassLoader() != null ? this.getClass().getClassLoader().getResource("TestResult") : null;
+		if(resource != null){
+			try {
+				final String pageName = testPage.getPageName();
+				htmlReportGenerator.writeFile(generatePageHtml, pageName, resource.getPath());
+				File htmlFile = new File(resource.getPath() + "\\" + pageName + ".html");
+				Desktop.getDesktop().browse(htmlFile.toURI());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public abstract void tearDownEnvironment();

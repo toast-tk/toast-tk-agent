@@ -30,9 +30,9 @@ public class TestLine implements IRunnableTest {
 	 */
 	private String comment;
 
-	private long startTime = System.currentTimeMillis();
+	private long startTime = 0;
 
-	private long executionTime = System.currentTimeMillis();
+	private long executionTime = 0;
 
 	public TestLine() {
 	}

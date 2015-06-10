@@ -27,6 +27,7 @@ import com.synaptix.toast.adapter.ActionAdapterCollector;
 import com.synaptix.toast.adapter.FixtureService;
 import com.synaptix.toast.adapter.web.DefaultWebPage;
 import com.synaptix.toast.automation.report.HTMLReportGenerator;
+import com.synaptix.toast.automation.report.IHTMLReportGenerator;
 import com.synaptix.toast.core.adapter.ActionAdapterKind;
 import com.synaptix.toast.core.agent.inspection.ISwingInspectionClient;
 import com.synaptix.toast.core.annotation.Action;
@@ -41,7 +42,6 @@ import com.synaptix.toast.core.runtime.ITestManager;
 import com.synaptix.toast.dao.domain.impl.test.ComponentConfigLine;
 import com.synaptix.toast.dao.domain.impl.test.SwingPageConfigLine;
 import com.synaptix.toast.dao.domain.impl.test.TestLine;
-import com.synaptix.toast.dao.domain.impl.test.TestPage;
 import com.synaptix.toast.dao.domain.impl.test.WebPageConfigLine;
 import com.synaptix.toast.dao.domain.impl.test.block.BlockLine;
 import com.synaptix.toast.dao.domain.impl.test.block.CommentBlock;
@@ -56,7 +56,7 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
  public class ToastTestRunner {
 
 	private static final Logger LOG = LogManager.getLogger(ToastTestRunner.class);
-	private static final HTMLReportGenerator htmlReportGenerator = new HTMLReportGenerator();
+	private IHTMLReportGenerator htmlReportGenerator = new HTMLReportGenerator();
 	private final ITestManager testManager;
 	private final IRepositorySetup repoSetup;
 	private URL settingsFile;
@@ -72,6 +72,7 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 	public ToastTestRunner(ITestManager m, Injector injector, URL settingsFile) {
 		this(m, injector.getInstance(IRepositorySetup.class));
 		this.injector = injector;
+		this.htmlReportGenerator = injector.getInstance(IHTMLReportGenerator.class);
 		this.fixtureApiServices = ActionAdapterCollector.listAvailableServicesByInjection(injector);
 		this.settingsFile = settingsFile;
 		if(settingsFile != null){

@@ -41,7 +41,7 @@ import com.synaptix.toast.automation.driver.swing.SwingClientDriver;
 import com.synaptix.toast.core.guice.AbstractActionAdapterModule;
 import com.synaptix.toast.swing.agent.guice.SwingModule;
 import com.synaptix.toast.swing.agent.runtime.DefaultSwingActionAdapter;
-import com.synpatix.toast.runtime.guice.BackendModule;
+import com.synpatix.toast.runtime.guice.EngineModule;
 
 public class AgentBoot {
 
@@ -57,7 +57,7 @@ public class AgentBoot {
 			}
 		});
 		modules.add(new SwingModule());
-		modules.add(new BackendModule());
+		modules.add(new EngineModule());
 		modules.add(new SwingActionAdapterPluginModule());
 		injector = Guice.createInjector(modules);
 	}

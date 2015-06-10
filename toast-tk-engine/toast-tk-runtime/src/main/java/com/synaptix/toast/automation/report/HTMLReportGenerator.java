@@ -23,8 +23,7 @@ import com.synaptix.toast.dao.domain.impl.test.block.SetupBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 
 @FixMe(todo = "Use thymeleaf and move the report generator within the runtime module")
-public class HTMLReportGenerator {
-	
+public class HTMLReportGenerator implements IHTMLReportGenerator{
 	
 	public String getEmbeddedStyle(){
 		InputStream resourceAsStream = HTMLReportGenerator.class.getClassLoader().getResourceAsStream("style.css");
@@ -37,7 +36,7 @@ public class HTMLReportGenerator {
 		return styleAsString.replaceAll("\n", "").replaceAll("\r", "").replaceAll("\t", "");
 	}
 	
-	
+	@Override
 	public String generatePageHtml(ITestPage testPage) {
 		StringBuilder report = new StringBuilder();
 		report.append("<html>");
@@ -305,6 +304,7 @@ public class HTMLReportGenerator {
 		report.append("</div>");
 	}
 
+	@Override
 	public void writeFile(String report, String pageName, String reportFolderPath) {
 		try {
 			FileWriter fstream = new FileWriter(reportFolderPath + "\\" + pageName + ".html");

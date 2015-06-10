@@ -29,44 +29,10 @@ Creation date: 10 juin 2015
 
 package com.synaptix.toast.automation.report;
 
-import com.synaptix.toast.core.report.TestResult;
-import com.synaptix.toast.core.report.TestResult.ResultKind;
-import com.synaptix.toast.dao.domain.impl.test.TestLine;
+import com.synaptix.toast.core.dao.ITestPage;
 
-public class TemplateHelper {
-	
-	public static String getResultKindAsString(TestResult testResult) {
-		if (testResult != null) {
-			return getResultKindAsString(testResult.getResultKind());
-		} else {
-			return "";
-		}
-	}
+public interface IHTMLReportGenerator {
+	public String generatePageHtml(ITestPage testPage);
 
-	private static String getResultKindAsString(ResultKind resultKind) {
-		if (ResultKind.SUCCESS.equals(resultKind)) {
-			return "success";
-		} else if (ResultKind.ERROR.equals(resultKind)) {
-			return "warning";
-		} else if (ResultKind.FAILURE.equals(resultKind)) {
-			return "danger";
-		} else if (ResultKind.INFO.equals(resultKind)) {
-			return "info";
-		}
-		return "";
-	}
-
-	
-	public static String formatStringToHtml(TestLine line) {
-		if(line.getTestResult() != null){
-			String message = line.getTestResult().getMessage();
-			return message != null ? message.replace("\n", "<br>") : "";
-		}
-		return "&nbsp;";
-	}
-	
-	public static String getStepSentence(TestLine line){
-		String contextualTestSentence = line.getTestResult() != null ? line.getTestResult().getContextualTestSentence() : null;
-		return contextualTestSentence == null ? line.getTest() : contextualTestSentence;
-	}
+	public void writeFile(String generatePageHtml, String pageName, String path);
 }

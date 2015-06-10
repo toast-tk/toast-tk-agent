@@ -2,6 +2,7 @@
 <html  xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
 	<style>
 		body {
 			line-height: 1.6em;
@@ -10,33 +11,8 @@
 			padding-left: 1em;
 		}
 
-		table {
-			font-size: 12px;
-			text-align: left;
-			color: black;
-			border: 3px solid darkgray;
-			margin-top: 8px;
-			margin-bottom: 12px;
-		}
-
-		th {
-			font-size: 14px;
-			font-weight: normal;
-			padding: 6px 4px;
-			border: 1px solid darkgray;
-		}
-
-		td {
-			border: 1px solid darkgray;
-			padding: 4px 4px;
-		}
-
 		h3 {
 			margin-top: 24pt;
-		}
-
-		div {
-			margin: 0px;
 		}
 
 		.summary {
@@ -45,26 +21,6 @@
 			padding: 2em;
 			background: darkgray;
 			color: white;
-		}
-
-		.resultSuccess {
-			background-color: green;
-		}
-
-		.resultFailure {
-			background-color: red;
-		}
-
-		.resultInfo {
-			background-color: lightblue;
-		}
-
-		.resultError {
-			background-color: orange;
-		}
-
-		.noResult {
-			background-color: white;
 		}
 
 		.message {
@@ -91,16 +47,21 @@
 		Errors: 
 		<span th:text="${test.technicalErrorNumber}">
 			0
+		</span><br/>
+		Failures:
+		<span th:text="${test.testFailureNumber}">
+			0
+		</span><br/>
+		Success:
+		<span th:text="${test.testSuccessNumber}">
+			0
 		</span>
-		Failures: [[${test.testFailureNumber}]]<br/>
-		Success: [[${test.testSuccessNumber}]]<br/>
 	</div>
 	<br/>
 	<div th:each="block : ${test.blocks}">
-	
 		<div th:switch="${block.getBlockType()}">
 		  <div class="comment" th:case="'comment'">
-			<p th:each="line : *{lines}" th:text="${line}"> 
+			<p th:each="line : ${block.lines}" th:text="${line}"> 
 				# Données communes<br/>
 				#<br/>
 				# BLOC 0 : Connexion et accès à la gestion des prévisions<br/>
@@ -110,11 +71,11 @@
 			</p>
 		  </div>
 		  <div class="test" th:case="'testBlock'">
-			<table>
+			<table class="table table-bordered table-hover">
 				<thead>
 					<tr>
 						<th>Test</th>
-						<th th:text="*{fixtureName}">swing</th>
+						<th th:text="${block.fixtureName}">swing</th>
 					</tr>
 				</thead>
 				<tr>
@@ -124,22 +85,25 @@
 					<td>Comment</td>
 					<td>Time</td>
 				</tr>
-				<tr th:class="${@com.synaptix.toast.automation.report.TemplateHelper@getResultKindAsString(${line.testResult})}" 
-					th:each="line : *{lines}"> 
-					<td th:text="${@com.synaptix.toast.automation.report.TemplateHelper@getStepSentence(${line})}">
+				<tr th:class="${line.testResult}? ${@com.synaptix.toast.automation.report.TemplateHelper@getResultKindAsString(line.testResult)}" 
+					th:each="line : ${block.blockLines}"> 
+					<td th:text="${@com.synaptix.toast.automation.report.TemplateHelper@getStepSentence(line)}">
 						Click on *Connexion.Connexion*
 					</td>
 					<td th:text="${line.expected} == null ? '&nbsp;' : ${line.expected}">
 						&nbsp;
 					</td>
-					<td th:text="${@com.synaptix.toast.automation.report.TemplateHelper@formatStringToHtml(${line})}">
+					<td th:text="${@com.synaptix.toast.automation.report.TemplateHelper@formatStringToHtml(line)}">
 						true
 					</td>
 					<td th:text="${line.testCommentString} == null ? '&nbsp;' : ${line.testCommentString}">
 						&nbsp;
 					</td>
 					<td>
-						[[${line.executionTime}]] ms
+						<span th:text="${line.executionTime}">
+							0
+						</span>
+						ms
 					</td>
 				</tr>
 			</table>
