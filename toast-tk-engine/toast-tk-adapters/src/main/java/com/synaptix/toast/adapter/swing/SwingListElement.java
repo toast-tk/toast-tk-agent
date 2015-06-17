@@ -1,6 +1,8 @@
 package com.synaptix.toast.adapter.swing;
 
 
+import java.util.concurrent.TimeoutException;
+
 import com.synaptix.toast.adapter.web.HasClickAction;
 import com.synaptix.toast.core.driver.IClientDriver;
 import com.synaptix.toast.core.net.request.CommandRequest;
@@ -23,7 +25,7 @@ public class SwingListElement extends SwingAutoElement implements HasClickAction
 	}
 
 	@Override
-	public boolean click() {
+	public boolean click() throws TimeoutException {
 		boolean res = exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).click().build());
 		return res;
@@ -34,7 +36,7 @@ public class SwingListElement extends SwingAutoElement implements HasClickAction
 	public void dbClick() {
 	}
 
-	public void select(String itemName) {
+	public void select(String itemName) throws TimeoutException {
 		exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).select(itemName).build());
 	}

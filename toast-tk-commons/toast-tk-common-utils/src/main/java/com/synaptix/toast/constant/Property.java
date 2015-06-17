@@ -49,6 +49,7 @@ public class Property {
 	public static final String TOAST_RUNTIME_DIR = System.getProperty("user.home") + "\\"+TOAST_HOME_DIR_NAME+"\\runtime";
 	public static final String TOAST_LOG_DIR = System.getProperty("user.home") +  "\\"+TOAST_HOME_DIR_NAME+"\\log";;
 	public static final String TOAST_PROPERTIES_FILE = Property.TOAST_HOME_DIR + "toast.properties";
+	public static final String TOAST_SUT_RUNNER_BAT = "run_sut.bat";
 	
 	public static final String REDPEPPER_AUTOMATION_SETTINGS_DEFAULT_DIR = "settings/toast_descriptor.json";
 	public static final String JNLP_RUNTIME_HOST = "toast.jnlp.runtime.host";
@@ -60,5 +61,6 @@ public class Property {
 	public static final String JLIST_CRITERIA_SEPARATOR = ";";
 	public static final String DEFAULT_PARAM_SEPARATOR = ";";
 	public static final String DEFAULT_PARAM_INPUT_SEPARATOR = "<-";
+	public static final int TOAST_AGENT_PORT = 7676;
 	
 }

@@ -12,7 +12,7 @@ import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 
 public class TestLineDescriptor {
 
-	private String regex = "@(" + ActionAdapterKind.swing.name()+ "|" + ActionAdapterKind.web.name() + "|" +  ActionAdapterKind.service.name() + "):?([\\w]*)([\\w\\W]+)"; 
+	private String regex = "@(" + ActionAdapterKind.swing.name()+ "|" + ActionAdapterKind.web.name() + "|" +  ActionAdapterKind.service.name() + "):?([\\w]*) ([\\w\\W]+)"; 
 	
 	public final TestLine testLine;
 	private String testLineAction;

@@ -137,21 +137,6 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 		this.file = file;
 	}
 
-	/**
-	 * @param result
-	 */
-	public void addResult(TestResult result) {
-		if (result != null) {
-			if (ResultKind.ERROR.equals(result.getResultKind())) {
-				technicalErrorNumber++;
-			} else if (ResultKind.SUCCESS.equals(result.getResultKind())) {
-				testSuccessNumber++;
-			} else if (ResultKind.FAILURE.equals(result.getResultKind())) {
-				testFailureNumber++;
-			}
-		}
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 

@@ -9,13 +9,13 @@ public interface IClientDriver {
 
 	public void process(IIdRequest request);
 	 
-	public String processAndwaitForValue(IIdRequest requestId) throws IllegalAccessException, TimeoutException;
+	public String processAndWaitForValue(IIdRequest requestId) throws IllegalAccessException, TimeoutException;
 
 	public void init();
 	
-	public void start();
+	public void start(String host);
 
-	public boolean waitForExist(String requestId);
+	public boolean waitForExist(String requestId) throws TimeoutException;
 
 	public void stop();
 	 

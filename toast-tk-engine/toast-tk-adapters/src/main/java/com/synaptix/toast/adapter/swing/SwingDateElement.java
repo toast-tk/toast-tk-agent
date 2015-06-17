@@ -26,12 +26,12 @@ public class SwingDateElement extends SwingAutoElement implements HasTextInput, 
 	}
 
 	@Override
-	public void setInput(String e) {
+	public void setInput(String e) throws TimeoutException {
 		exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).sendKeys(e).build());
 	}
 	
-	public void setDateText(String e) {
+	public void setDateText(String e) throws TimeoutException {
 		exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType("date_text").sendKeys(e).build());
 	}
@@ -42,6 +42,6 @@ public class SwingDateElement extends SwingAutoElement implements HasTextInput, 
 		exists();
 		final String requestId = UUID.randomUUID().toString();
 		CommandRequest request = new CommandRequest.CommandRequestBuilder(requestId).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).getValue().build();
-		return frontEndDriver.processAndwaitForValue(request);
+		return frontEndDriver.processAndWaitForValue(request);
 	}
 }

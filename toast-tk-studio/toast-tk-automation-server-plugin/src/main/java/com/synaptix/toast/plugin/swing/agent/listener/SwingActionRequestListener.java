@@ -1,12 +1,16 @@
 package com.synaptix.toast.plugin.swing.agent.listener;
 
 import java.awt.Component;
+import java.awt.Window;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import javax.swing.AbstractButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.SwingUtilities;
 
@@ -79,7 +83,7 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 				processReceivedCommand(connection, object);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 	}
 	
@@ -94,7 +98,7 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 			}while(synchronizationPoint.hasToWait());
 		}
 	}
-
+	
 	private void processReceivedCommand(Connection connection, Object object) throws InterruptedException {
 		CommandRequest command = (CommandRequest) object;
 		if (command.isCustom()) {
@@ -162,6 +166,29 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 	}
 	
 	private Component getTarget(String item, String itemType) {
+		Component target = null;
+		if("dialog".equalsIgnoreCase(itemType)){
+			target = findContainerComponent(item, itemType);
+		}else{
+			target = findComponent(item, itemType);
+		}
+		return target;
+	}
+
+	private Component findContainerComponent(String item, String itemType) {
+		Window[] windows = Window.getWindows();
+		for (Window window : windows) {
+			if (window instanceof JDialog) {
+				JDialog dialog = (JDialog) window;
+				if (dialog.isVisible() && dialog.getTitle().equalsIgnoreCase(item)) {
+					return dialog;
+				}
+			}
+		}
+		return null;
+	}
+
+	private Component findComponent(String item, String itemType) {
 		Map<String, Component> repository = repositoryHolder.getRepo();
 		Component target = repository.get(item);
 		if (target == null) {
@@ -169,11 +196,20 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 				Component value = entrySet.getValue();
 				if (value.getClass().getSimpleName().toLowerCase().contains(itemType)) {
 					if (value instanceof AbstractButton) {
-						if (((AbstractButton) value).getText() != null && ((AbstractButton) value).getText().toLowerCase().equals(item.toLowerCase())) {
+						String buttonLabel = ((AbstractButton) value).getText();
+						if (buttonLabel != null && buttonLabel.toLowerCase().equals(item.toLowerCase())) {
 							target = value;
 							break;
 						}
-					} else {
+					}
+					else if (value instanceof JDialog){
+						String dialogTitle = ((JDialog) value).getTitle();
+						if (dialogTitle != null && dialogTitle.toLowerCase().equals(item.toLowerCase())) {
+							target = value;
+							break;
+						}
+					}
+					else {
 						target = fixtureHandlerProvider.locateComponentTarget(item, itemType, value);
 						if (target != null) {
 							return target;

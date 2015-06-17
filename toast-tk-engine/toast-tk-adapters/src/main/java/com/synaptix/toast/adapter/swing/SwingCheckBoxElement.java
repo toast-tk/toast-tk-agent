@@ -25,18 +25,18 @@ public class SwingCheckBoxElement extends SwingAutoElement implements HasClickAc
 		super(element);
 	}
 
-	public void select() {
+	public void select() throws TimeoutException {
 		exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).sendKeys("true").build());
 	}
 	
-	public void deselect() {
+	public void deselect() throws TimeoutException {
 		exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).sendKeys("false").build());
 	}
 	
 	@Override
-	public boolean click() {
+	public boolean click() throws TimeoutException {
 		boolean res = exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).click().build());
 		return res;
@@ -52,6 +52,6 @@ public class SwingCheckBoxElement extends SwingAutoElement implements HasClickAc
 		exists();
 		final String requestId = UUID.randomUUID().toString();
 		CommandRequest request = new CommandRequest.CommandRequestBuilder(requestId).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).getValue().build();
-		return frontEndDriver.processAndwaitForValue(request);
+		return frontEndDriver.processAndWaitForValue(request);
 	}
 }

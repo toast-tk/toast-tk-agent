@@ -35,7 +35,7 @@ public class SwingTableElement extends SwingAutoElement implements HasClickActio
 				.find(criteria)
 				.with(wrappedElement.getLocator())
 				.ofType(wrappedElement.getType().name()).build();
-		return frontEndDriver.processAndwaitForValue(request);
+		return frontEndDriver.processAndWaitForValue(request);
 	}
 	
 	public String find(String lookUpColumn, String lookUpValue, String outputColumn) throws IllegalAccessException, TimeoutException {
@@ -47,7 +47,7 @@ public class SwingTableElement extends SwingAutoElement implements HasClickActio
 				.with(wrappedElement.getLocator())
 				.ofType(wrappedElement.getType().name()).build();
 		frontEndDriver.process(request);
-		return frontEndDriver.processAndwaitForValue(request);
+		return frontEndDriver.processAndWaitForValue(request);
 	}
 
 	public String count() throws IllegalAccessException, TimeoutException {
@@ -57,11 +57,11 @@ public class SwingTableElement extends SwingAutoElement implements HasClickActio
 			.count().with(wrappedElement.getLocator())
 			.ofType(wrappedElement.getType().name()).build();
 		frontEndDriver.process(request);
-		return frontEndDriver.processAndwaitForValue(request);
+		return frontEndDriver.processAndWaitForValue(request);
 	}
 
 	@Override
-	public boolean click() {
+	public boolean click() throws TimeoutException {
 		boolean res = exists();
 		frontEndDriver.process(new TableCommandRequest.TableCommandRequestBuilder(null)
 		.with(wrappedElement.getLocator())
@@ -75,7 +75,7 @@ public class SwingTableElement extends SwingAutoElement implements HasClickActio
 		throw new IllegalAccessError("Method not implemented !");
 	}
 
-	public String doubleClick(String column, String value) {
+	public String doubleClick(String column, String value) throws TimeoutException {
 		exists();
 		frontEndDriver.process(new TableCommandRequest.TableCommandRequestBuilder(null)
 				.doubleClick(column, value).with(wrappedElement.getLocator())
@@ -83,7 +83,7 @@ public class SwingTableElement extends SwingAutoElement implements HasClickActio
 		return null;
 	}
 
-	public String selectMenu(String menu, String column, String value) {
+	public String selectMenu(String menu, String column, String value) throws TimeoutException {
 		exists();
 		frontEndDriver.process(new TableCommandRequest.TableCommandRequestBuilder(null)
 			.selectMenu(menu, column, value).with(wrappedElement.getLocator())

@@ -14,22 +14,18 @@ import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.SelectTab
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.SelectValueInList;
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.StoreComponentValueInVar;
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.SubstractValueFromVar;
-import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.TypeValueInInput;
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.TypeValue;
+import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.TypeValueInInput;
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.TypeVarIn;
+import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.VALUE_REGEX;
+import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.VAR_IN_REGEX;
+import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.VAR_OR_VALUE_REGEX;
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.Wait;
 
-import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.VAR_OR_VALUE_REGEX;
-import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.VAR_IN_REGEX;
-import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.VALUE_REGEX;
-
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.synaptix.toast.adapter.web.HasClickAction;
 import com.synaptix.toast.adapter.web.HasStringValue;
 import com.synaptix.toast.adapter.web.HasSubItems;
@@ -46,7 +42,7 @@ import com.synaptix.toast.core.report.TestResult.ResultKind;
 import com.synaptix.toast.core.runtime.IFeedableSwingPage;
 import com.synaptix.toast.core.runtime.IRepositorySetup;
 
-@ActionAdapter(value = ActionAdapterKind.swing, name="")
+@ActionAdapter(value = ActionAdapterKind.swing, name = "")
 public abstract class ToastSwingActionAdapter {
 	protected IRepositorySetup repo;
 	protected IClientDriver driver;
@@ -63,32 +59,23 @@ public abstract class ToastSwingActionAdapter {
 		}
 	}
 
-	public abstract SwingAutoElement overrideElementInstance(SwingAutoElement autoElement);
-
 	protected SwingAutoElement getPageField(String pageName, String fieldName) throws IllegalAccessException {
 		if (repo.getSwingPage(pageName) == null) {
 			throw new IllegalAccessException(pageName + " swing page not found in repository !");
 		}
 		DefaultSwingPage page = (DefaultSwingPage) repo.getSwingPage(pageName);
 		SwingAutoElement autoElement = page.getAutoElement(fieldName);
-		if (autoElement instanceof DefaultSwingAutoElement) {
-			autoElement = overrideElementInstance(autoElement);
-		}
 		if (autoElement == null) {
 			throw new IllegalAccessException(pageName + "." + fieldName + " not found in repository !");
 		}
 		return autoElement;
 	}
-	
-	
-	
-	
+
 	@Action(action = TypeValue, description = "Saisir une chaine de caractère au clavier")
 	public TestResult typeValue(String text) throws Exception {
 		try {
 			try {
-				driver.process(new CommandRequest.CommandRequestBuilder(null)
-				.with(null).ofType(null).sendKeys(text).build());
+				driver.process(new CommandRequest.CommandRequestBuilder(null).with(null).ofType(null).sendKeys(text).build());
 			} catch (Exception e) {
 				return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
 			}
@@ -103,13 +90,13 @@ public abstract class ToastSwingActionAdapter {
 	public TestResult typeIn(String text, String pageName, String widgetName) throws Exception {
 		try {
 			SwingAutoElement pageField = getPageField(pageName, widgetName);
-			if(pageField instanceof SwingInputElement){
+			if (pageField instanceof SwingInputElement) {
 				SwingInputElement input = (SwingInputElement) pageField;
 				input.setInput(text);
-			}else if(pageField instanceof SwingDateElement){
+			} else if (pageField instanceof SwingDateElement) {
 				SwingDateElement input = (SwingDateElement) pageField;
 				input.setDateText(text);
-			}else{
+			} else {
 				throw new IllegalAccessException(String.format("%s.%s is not handled to type values in !", pageName, pageField));
 			}
 		} catch (Exception e) {
@@ -119,7 +106,7 @@ public abstract class ToastSwingActionAdapter {
 		return new TestResult();
 	}
 
-	@Action(action = ClickOnIn, description ="Cliquer sur un composant présent dans un contenant de composant")
+	@Action(action = ClickOnIn, description = "Cliquer sur un composant présent dans un contenant de composant")
 	public TestResult clickOnIn(String pageName, String widgetName, String parentPage, String parentWidgetName) throws Exception {
 		try {
 			HasSubItems input = (HasSubItems) getPageField(parentPage, parentWidgetName);
@@ -195,7 +182,7 @@ public abstract class ToastSwingActionAdapter {
 			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
 		}
 	}
-	
+
 	@Action(action = StoreComponentValueInVar, description = "Lire la valeur d'un composant graphique et la stocker dans une variable")
 	public TestResult selectComponentValue(String pageName, String widgetName, String variable) throws Exception {
 		try {
@@ -228,10 +215,10 @@ public abstract class ToastSwingActionAdapter {
 			String[] locator = menu.split(" / ");
 			SwingAutoUtils.confirmExist(driver, locator[0], AutoSwingType.menu.name());
 			CommandRequest request = new CommandRequest.CommandRequestBuilder(UUID.randomUUID().toString()).with(locator[0])
-			.ofType(AutoSwingType.menu.name()).select(locator[1]).build();
-			String waitForValue = driver.processAndwaitForValue(request);
-			return ResultKind.FAILURE.name().equals(waitForValue) ? new TestResult("Menu {" + menu + "} not found !",
-					ResultKind.FAILURE) : new TestResult("", ResultKind.SUCCESS);
+					.ofType(AutoSwingType.menu.name()).select(locator[1]).build();
+			String waitForValue = driver.processAndWaitForValue(request);
+			return ResultKind.FAILURE.name().equals(waitForValue) ? new TestResult("Menu {" + menu + "} not found !", ResultKind.FAILURE)
+					: new TestResult("", ResultKind.SUCCESS);
 		} catch (Exception e) {
 			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
 		}
@@ -283,7 +270,7 @@ public abstract class ToastSwingActionAdapter {
 		}
 	}
 
-	@Action(action = SelectContectualMenu , description = "selectionner un menu dans une popup contextuelle")
+	@Action(action = SelectContectualMenu, description = "selectionner un menu dans une popup contextuelle")
 	public TestResult selectCtxMenu(String menu) throws Exception {
 		try {
 			driver.process(new CommandRequest.CommandRequestBuilder(null).with(menu).ofType(AutoSwingType.menu.name()).select(menu).build());
@@ -292,10 +279,27 @@ public abstract class ToastSwingActionAdapter {
 		}
 		return new TestResult();
 	}
+	
 
-	// /////////////////////////////////////// 
-	// TO MOVE IN A DRIVER AGNOSTIC FIXUTRE 
-	//////////////////////////////////////////
+	@Action(action = "Affichage dialogue \'([\\w\\W]+)\'", description = "Afichage d'une dialogue")
+	public TestResult waitForDialogDisplay(String dialogName) throws Exception {
+		try {
+			CommandRequest request = new CommandRequest
+					.CommandRequestBuilder(UUID.randomUUID().toString())
+					.ofType(AutoSwingType.dialog.name())
+					.with(dialogName)
+					.exists().build();
+			driver.process(request);
+			boolean waitForExist = driver.waitForExist(request.getId());
+			return waitForExist ? new TestResult("", ResultKind.SUCCESS) : new TestResult("Dialogue " + dialogName + " pas disponible !",ResultKind.ERROR);
+		} catch (Exception e) {
+			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
+		}
+	}
+
+	// ///////////////////////////////////////
+	// TO MOVE IN A DRIVER AGNOSTIC FIXUTRE
+	// ////////////////////////////////////////
 	@Action(action = AddValueInVar, description = "Additionner deux valeurs numériques")
 	public TestResult addValueToVar(String value, String var) throws Exception {
 		try {
@@ -389,7 +393,7 @@ public abstract class ToastSwingActionAdapter {
 		}
 		return new TestResult();
 	}
-	
+
 	@Action(action = "Ajuster date (\\w+).(\\w+) à plus (\\w+) jours", description = "Rajouter n Jours à au composant graphique de date")
 	public TestResult setDate(String pageName, String widgetName, String days) throws Exception {
 		try {
@@ -401,33 +405,33 @@ public abstract class ToastSwingActionAdapter {
 		}
 		return new TestResult();
 	}
-	
-	@Action(action = VAR_OR_VALUE_REGEX + " == " + VAR_OR_VALUE_REGEX , description = "Comparer deux variables")
+
+	@Action(action = VAR_OR_VALUE_REGEX + " == " + VAR_OR_VALUE_REGEX, description = "Comparer deux variables")
 	public TestResult VarEqVar(String var1, String var2) throws Exception {
 		try {
-			if(var1.equals(var2)){
+			if (var1.equals(var2)) {
 				return new TestResult(Boolean.TRUE.toString(), ResultKind.SUCCESS);
-			}else{
+			} else {
 				return new TestResult(String.format("%s == %s => %s", var1, var2, Boolean.FALSE.toString()), ResultKind.FAILURE);
 			}
 		} catch (Exception e) {
 			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
 		}
 	}
-	
-	@Action(action = VAR_OR_VALUE_REGEX + " égale à "+ VAR_OR_VALUE_REGEX, description = "Comparer une valeur à une variable")
+
+	@Action(action = VAR_OR_VALUE_REGEX + " égale à " + VAR_OR_VALUE_REGEX, description = "Comparer une valeur à une variable")
 	public TestResult ValueEqVar(String value, String var) throws Exception {
 		try {
-			if(value.equals(var)){
+			if (value.equals(var)) {
 				return new TestResult(Boolean.TRUE.toString(), ResultKind.SUCCESS);
-			}else{
+			} else {
 				return new TestResult(String.format("%s == %s => %s", value, var, Boolean.FALSE.toString()), ResultKind.FAILURE);
 			}
 		} catch (Exception e) {
 			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
 		}
 	}
-	
+
 	@Action(action = "Assigner " + VALUE_REGEX + " à " + VAR_IN_REGEX, description = "Assigner valeur à variable")
 	public TestResult setValToVar(String value, String var) throws Exception {
 		try {
@@ -437,7 +441,7 @@ public abstract class ToastSwingActionAdapter {
 			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
 		}
 	}
-	
+
 	@Action(action = "Clear (\\w+).(\\w+)", description = "Effacer le contenu d'un composant input graphique")
 	public TestResult clear(String pageName, String widgetName) throws Exception {
 		try {

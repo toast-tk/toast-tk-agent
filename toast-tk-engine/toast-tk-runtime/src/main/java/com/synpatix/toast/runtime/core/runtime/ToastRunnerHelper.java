@@ -32,6 +32,7 @@ package com.synpatix.toast.runtime.core.runtime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.adapter.ActionAdapterSentenceRef;
 import com.synaptix.toast.core.runtime.IRepositorySetup;
 
@@ -46,7 +47,9 @@ public class ToastRunnerHelper {
 		group = group.replaceAll("\\*", "");
 		if (group.startsWith("$$")) {
 			return group.substring(1);
-		} else if (group.startsWith("$") && !group.substring(1).contains("$")) {
+		} else if (group.startsWith("$") 
+				&& !group.substring(1).contains("$") 
+				&& !group.substring(1).contains(Property.DEFAULT_PARAM_SEPARATOR)) {
 			Object object = repoSetup.getUserVariables().get(group);
 			if (object != null && object instanceof String) {
 				String value = (String) object;

@@ -1,13 +1,14 @@
 package com.synaptix.toast.adapter.swing;
 
 import java.util.UUID;
+import java.util.concurrent.TimeoutException;
 
 import com.synaptix.toast.core.driver.IClientDriver;
 import com.synaptix.toast.core.net.request.CommandRequest;
 
 public class SwingAutoUtils {
 	
-	public static boolean confirmExist(IClientDriver frontEndDriver, String locator, String type){
+	public static boolean confirmExist(IClientDriver frontEndDriver, String locator, String type) throws TimeoutException{
 		int retry = 20;
 		while(retry > 0){
 			try {
@@ -24,7 +25,7 @@ public class SwingAutoUtils {
 	}
 
 	
-	public static boolean exists(IClientDriver frontEndDriver, String locator, String type){
+	public static boolean exists(IClientDriver frontEndDriver, String locator, String type) throws TimeoutException{
 		final String requestId = UUID.randomUUID().toString();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(requestId).with(locator).ofType(type).exists().build());
 		return frontEndDriver.waitForExist(requestId);

@@ -315,12 +315,12 @@
 				<repository>
 					<id>sncf-releases</id>
 					<name>Inhouse Releases Repository</name>
-					<url>http://s76cllcfakr.si.fret.sncf.fr:8090/nexus/content/repositories/releases/</url>
+					<url>http://x64ertbidv3.si.fret.sncf.fr:8091/nexus/content/repositories/releases/</url>
 				</repository>
 				<snapshotRepository>
 					<id>sncf-snapshots</id>
 					<name>Inhouse Snapshots Repository</name>
-					<url>http://s76cllcfakr.si.fret.sncf.fr:8090/nexus/content/repositories/snapshots/</url>
+					<url>http://x64ertbidv3.si.fret.sncf.fr:8091/nexus/content/repositories/snapshots/</url>
 				</snapshotRepository>
 			</distributionManagement>
 		</profile>

@@ -4,10 +4,10 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
-* Redistributions of source code must retain the above copyright notice, this
+ * Redistributions of source code must retain the above copyright notice, this
   list of conditions and the following disclaimer.
 
-* Redistributions in binary form must reproduce the above copyright notice,
+ * Redistributions in binary form must reproduce the above copyright notice,
   this list of conditions and the following disclaimer in the documentation
   and/or other materials provided with the distribution.
 
@@ -22,27 +22,42 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Creation date: 16 févr. 2015
+Creation date: 11 juin 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
-*/
+ */
 
 package com.synaptix.toast.swing.agent.runtime;
 
-import com.google.inject.Inject;
-import com.synaptix.toast.adapter.swing.ToastSwingActionAdapter;
-import com.synaptix.toast.automation.driver.swing.SwingClientDriver;
-import com.synaptix.toast.core.adapter.ActionAdapterKind;
-import com.synaptix.toast.core.annotation.ActionAdapter;
-import com.synaptix.toast.core.runtime.IRepositorySetup;
+import org.vertx.java.core.Handler;
+import org.vertx.java.core.http.HttpServerRequest;
+import org.vertx.java.platform.Verticle;
 
-@ActionAdapter(value = ActionAdapterKind.swing, name = "ToastSwingClientAdapter")
-public class DefaultSwingActionAdapter extends ToastSwingActionAdapter{
+import com.synaptix.toast.constant.Property;
 
-	@Inject
-	public DefaultSwingActionAdapter(IRepositorySetup repo, SwingClientDriver driver) {
-		super(repo, driver);
+public class RestMicroService extends Verticle {
+
+	static StartCommandHandler startHandler = new StartCommandHandler();
+
+	@Override
+	public void start() {
+		vertx.createHttpServer().requestHandler(new Handler<HttpServerRequest>() {
+			public void handle(HttpServerRequest req) {
+				if (req.uri().equals("/rus/init")) {
+					boolean ok = startHandler.init();
+					if(ok){
+						req.response().setStatusCode(200).end();
+					}else{
+						req.response().setStatusCode(404).end();
+					}
+				} else if (req.uri().equals("/rus/start")) {
+					startHandler.start();
+					req.response().setStatusCode(200).end();
+				} else if (req.uri().equals("/rus/stop")) {
+					startHandler.stop();
+					req.response().setStatusCode(200).end();
+				}
+			}
+		}).listen(Property.TOAST_AGENT_PORT);
 	}
-
-
 }

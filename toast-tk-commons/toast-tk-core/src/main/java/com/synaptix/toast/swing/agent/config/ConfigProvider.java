@@ -6,7 +6,9 @@ import java.util.Properties;
 
 import com.google.inject.Provider;
 import com.synaptix.toast.constant.Property;
+import com.synaptix.toast.core.annotation.craft.FixMe;
 
+@FixMe(todo = "do external default configuration using a setting file")
 public class ConfigProvider implements Provider<Config> {
 
 	private Config config;
@@ -40,13 +42,12 @@ public class ConfigProvider implements Provider<Config> {
 		config.setMongoServer(mongDbHostProperty != null ? mongDbHostProperty : mongDbHost);
 		
 		config.setRuntimeType(p.getProperty(Property.TOAST_RUNTIME_TYPE, "JNLP"));
-		String sutJnlpHostDefaultValue = "http://s76cllcfakr.si.fret.sncf.fr:8081/RUSystem";
+		String sutJnlpHostDefaultValue = "http://swingrec-app.fret.sncf.fr:8081/RUSystem";
 		config.setJnlpRuntimeHost(p.getProperty(Property.JNLP_RUNTIME_HOST, sutJnlpHostDefaultValue));
 		String sutJnlpFileDefaultValue = "RUSystem.jnlp";
 		config.setJnlpRuntimeFile(p.getProperty(Property.JNLP_RUNTIME_FILE, sutJnlpFileDefaultValue));
 		config.setRuntimeCommand(p.getProperty(Property.TOAST_RUNTIME_CMD, sutJnlpHostDefaultValue + "/" + sutJnlpFileDefaultValue));
 		config.setWebAppAddr(p.getProperty(Property.WEBAPP_ADDR, "10.23.252.131"));
-		config.setWebAppAddr(p.getProperty(Property.WEBAPP_ADDR, "p76cllcfbs2.commun.ad.sncf.fr"));
 		config.setWebAppPort(p.getProperty(Property.WEBAPP_PORT, "9000"));
 		config.setDebugArgs(p.getProperty(Property.AGENT_DEBUG_AGRS, "-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n"));
 	}

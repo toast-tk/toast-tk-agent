@@ -9,6 +9,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.esotericsoftware.kryonet.FrameworkMessage.KeepAlive;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.synaptix.toast.core.agent.inspection.CommonIOUtils;
 import com.synaptix.toast.core.driver.IClientDriver;
 import com.synaptix.toast.core.net.request.IIdRequest;
@@ -24,20 +26,23 @@ public class SwingClientDriver implements IClientDriver {
 	//TODO: add wait loop timeout !
 	private static final Logger LOG = LogManager.getLogger(SwingClientDriver.class);
 	protected ITCPClient client;
-	private final String host = "localhost";
 	private static final int RECONNECTION_RATE = 10000;
 	private static final int WAIT_TIMEOUT = 30000;
 	protected Map<String, Object> existsResponseMap;
 	private Map<String, Object> valueResponseMap;
 	private final Object VOID_RESULT = new Object();
+	private final String host;
+	private boolean started;
 
 
-	public SwingClientDriver() {
+	@Inject
+	public SwingClientDriver(@Named("host") String host) {
 		this.client = new KryoTCPClient();
+		this.started = false;
 		this.existsResponseMap = new HashMap<String, Object>();
 		this.valueResponseMap = new HashMap<String, Object>();
+		this.host = host;
 		initListeners();
-		start();
 	}
 
 	private void initListeners() {
@@ -69,33 +74,30 @@ public class SwingClientDriver implements IClientDriver {
 	}
 
 	@Override
-	public void start() {
+	public void start(String host) {
 		try {
 			client.connect(300000, host, CommonIOUtils.TCP_PORT);
+			this.started = true;
 		} catch (IOException e) {
 			startConnectionLoop();
 		}
 	}
 	
 	protected void startConnectionLoop() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (!client.isConnected()) {
-					connect();
-					try {
-						Thread.sleep(RECONNECTION_RATE);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
+		while (!client.isConnected()) {
+			connect();
+			try {
+				Thread.sleep(RECONNECTION_RATE);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-		}).start();
+		}
 	}
 
 	public void connect() {
 		try {
 			client.reconnect();
+			this.started = true;
 		} catch (Exception e) {
 			LOG.error(String.format("Server unreachable, reattempting to connect in %d !", RECONNECTION_RATE/1000));
 		}
@@ -103,9 +105,7 @@ public class SwingClientDriver implements IClientDriver {
 
 	@Override
 	public void process(IIdRequest request) {
-		if (!client.isConnected()) {
-			connect();
-		}
+		checkConnection();
 		init();
 		if (request.getId() != null) {
 			existsResponseMap.put(request.getId(), VOID_RESULT);
@@ -114,41 +114,41 @@ public class SwingClientDriver implements IClientDriver {
 		client.sendRequest(request);
 	}
 
+	private void checkConnection() {
+		if(!started){
+			start(host);
+		}
+		if (!client.isConnected()) {
+			connect();
+		}
+	}
+
 	/**
 	 * to call before any request
 	 * 
 	 * @return
 	 */
 	public void init() {
-		if(!client.isConnected()){
-			connect();
-		}
+		checkConnection();
 		InitInspectionRequest request = new InitInspectionRequest();
 		client.sendRequest(request);
 	}
 
-	public void command() {
-
-	}
-
-	public static void main(String[] args) {
-		try {
-			SwingClientDriver c = new SwingClientDriver();
-			c.start();
-			c.init();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	@Override
-	public boolean waitForExist(String reqId) {
+	public boolean waitForExist(String reqId) throws TimeoutException {
 		boolean res = false;
+		int countTimeOut = WAIT_TIMEOUT;
+		int incOffset = 500;
 		if (existsResponseMap.containsKey(reqId)) {
 			while (VOID_RESULT.equals(existsResponseMap.get(reqId))) {
 				try {
 					client.keepAlive();
 					Thread.sleep(500);
+					countTimeOut = countTimeOut - incOffset;
+					if(countTimeOut <= 0){
+						valueResponseMap.remove(reqId);
+						throw new TimeoutException("No Response received for request: " + reqId + " after " + (WAIT_TIMEOUT/1000) +  "s !");
+					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -161,7 +161,7 @@ public class SwingClientDriver implements IClientDriver {
 	}
 
 	@Override
-	public String processAndwaitForValue(IIdRequest request) throws IllegalAccessException, TimeoutException {
+	public String processAndWaitForValue(IIdRequest request) throws IllegalAccessException, TimeoutException {
 		String res = null;
 		final String idRequest = request.getId();
 		if (idRequest == null) {

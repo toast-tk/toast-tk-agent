@@ -26,23 +26,60 @@ import com.google.inject.Singleton;
 import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.swing.agent.IToastClientApp;
+import com.synaptix.toast.swing.agent.config.Config;
 import com.synaptix.toast.utils.DownloadUtils;
 import com.synaptix.toast.utils.StreamGobbler;
 
 @Singleton
-@FixMe(todo = "Review the code, to much hardcoding ! too specific !")
+@FixMe(todo = "Review the code, too much hardcoding ! too specific !")
 public class SutRunnerAsExec {
 
 	private static final Logger LOG = LogManager.getLogger(SutRunnerAsExec.class);
 	static final String CMD_EXE = "C:\\Windows\\System32\\cmd.exe";
-	private final IToastClientApp app;
+	private IToastClientApp app;
+	private Config config;
 
 	@Inject
 	public SutRunnerAsExec(final IToastClientApp app) {
 		super();
 		this.app = app;
+		this.config= app.getConfig();
+	}
+	
+	public SutRunnerAsExec(final Config config) {
+		super();
+		this.config = config;
 	}
 
+	protected Process doRemoteAppRun(String command) {
+		if (command == null) {
+			LOG.info(String.format("No command to process !"));
+			return null;
+		}
+		LOG.info(String.format("Processing command %s !", command));
+		Process proc = null;
+		StreamGobbler outGobbler = null;
+		try {
+			ProcessBuilder builder = new ProcessBuilder();
+			builder.command().add(CMD_EXE);
+			builder.command().add("/k");
+			builder.command().add("\"" + command + "\"");
+			proc = builder.start();
+			outGobbler = new StreamGobbler(proc.getInputStream(), "OUT", Property.TOAST_LOG_DIR + "\\toast.log");
+			outGobbler.start();
+		} catch (Exception e) {
+			String out = String.format("Failed to execute cmd: %s", command);
+			LOG.error(out, e);
+			if(outGobbler != null){
+				outGobbler.interrupt();
+			}
+			if (proc != null) {
+				proc.destroy();
+			}
+		}
+		return proc;
+	}
+	
 	protected void doAppRun(String command) {
 		if (command == null) {
 			LOG.info(String.format("No command to process !"));
@@ -58,8 +95,10 @@ public class SutRunnerAsExec {
 			builder.command().add("/k");
 			builder.command().add("\"" + command + "\"");
 			proc = builder.start();
-			app.updateStatusMessage("Spawning SUT...");
-			app.updateProgress("Spawning SUT...", 98);
+			if(app != null){
+				app.updateStatusMessage("Spawning SUT...");
+				app.updateProgress("Spawning SUT...", 98);
+			}
 			outGobbler = new StreamGobbler(proc.getInputStream(), "OUT", Property.TOAST_LOG_DIR + "\\stdout.txt");
 			outGobbler.start();
 		} catch (Exception e) {
@@ -79,12 +118,12 @@ public class SutRunnerAsExec {
 		}
 	}
 
-	public void init(final String runtimeType, final String commandBase, final String agentPath, final boolean createBat)
+	public void init(final String runtimeType, final String agentPath, final boolean createBat)
 			throws IllegalAccessException, SAXException, IOException, ParserConfigurationException {
 		if ("JNLP".equals(runtimeType)) {
-			String command = lanchJnlpApp(agentPath);
+			String command = downloadDependenciesAndBuildBatCommand(agentPath);
 			if (createBat) {
-				FileWriter w = new FileWriter(Property.TOAST_HOME_DIR + "run_sut.bat");
+				FileWriter w = new FileWriter(Property.TOAST_HOME_DIR + Property.TOAST_SUT_RUNNER_BAT);
 				w.write(command + "\n");
 				w.close();
 			} else {
@@ -93,10 +132,9 @@ public class SutRunnerAsExec {
 		} else {
 			JOptionPane.showMessageDialog(null, String.format("Unsupported runtime type: %s", runtimeType));
 		}
-
 	}
 
-	private String lanchJnlpApp(final String agentPath) throws SAXException, IOException, IllegalAccessException, ParserConfigurationException {
+	private String downloadDependenciesAndBuildBatCommand(final String agentPath) throws SAXException, IOException, IllegalAccessException, ParserConfigurationException {
 		// 0 - create runtime dir
 		final File homeDir = new File(Property.TOAST_RUNTIME_DIR);
 		final String pluginDirProperty = " -DIGNORE_CLIENT_SERVER_VERSION_CHECK=true -D" + Property.TOAST_PLUGIN_DIR_PROP + "="
@@ -110,11 +148,14 @@ public class SutRunnerAsExec {
 		}
 
 		// 1 - download JNLP
-		String baseUri = app.getConfig().getJnlpRuntimeHost();
-		String file = DownloadUtils.getFile(baseUri + "/" + app.getConfig().getJnlpRuntimeFile(), homeDir.getAbsolutePath());
+		String baseUri = config.getJnlpRuntimeHost();
+		String file = DownloadUtils.getFile(baseUri + "/" + config.getJnlpRuntimeFile(), homeDir.getAbsolutePath());
 
 		File jnlpXmlF = new File(file);
-		app.updateStatusMessage("Downloading: " + file);
+		
+		if(app != null){
+			app.updateStatusMessage("Downloading: " + file);
+		}
 
 		// 2 - parse JNLP
 		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -147,9 +188,13 @@ public class SutRunnerAsExec {
 				Element _eElement = (Element) _nNode;
 				String _fileName = _eElement.getAttribute("href");
 				String _fPath = DownloadUtils.getFile(baseUri + "/" + _fileName, homeDir.getAbsolutePath());
-				app.updateStatusMessage("Downloading: " + _fPath);
+				if(app != null){
+					app.updateStatusMessage("Downloading: " + _fPath);
+				}
 				float _nbFile = (_index + 1) * 100f;
-				app.updateProgress("Downloading: " + _fileName, (int) (_nbFile / _length));
+				if(app != null){
+					app.updateProgress("Downloading: " + _fileName, (int) (_nbFile / _length));
+				}
 			}
 		}
 
@@ -164,10 +209,10 @@ public class SutRunnerAsExec {
 			LOG.debug("JNLP App Args: " + AppArgsDesc);
 		}
 
-		String debugRemoteArgs = " " + app.getConfig().getDebugArgs() + " ";
-
+		String debugRemoteArgs = " " + config.getDebugArgs() + " ";
 		String command = "\"" + System.getenv("JAVA_HOME") + "\\bin\\java.exe\" " + agentPathProperty + " " + pluginDirProperty + " " + jvmArgs
 				+ debugRemoteArgs + " -cp " + homeDir.getAbsolutePath() + "\\* " + mainClass + " " + AppArgsDesc;
+		
 		return command;
 	}
 
@@ -193,38 +238,5 @@ public class SutRunnerAsExec {
 			}
 		}
 		return res;
-	}
-
-	// mvn example
-	private static void launchMavenApp() {
-		final String mvnExec = "C:\\MSOCache\\apache-maven-3.2.3\\bin\\mvn.bat";
-		final String workingDir = "C:\\MSOCache\\workspace\\Luna\\ToastPlugin\\RUSClientBoot";
-		Thread thread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				ProcessBuilder builder = new ProcessBuilder();
-				builder.command().add(mvnExec);
-				builder.directory(new File(workingDir));
-				String property = "-javaagent:\"C:\\MSOCache\\git\\toast-tk\\toast-tk-automation-client\\target\\toast-tk-automation-client-1.3-rc2.jar\"";
-				builder.environment().put("_JAVA_OPTIONS", property);
-
-				if (builder.directory().exists()) {
-					builder.command().add("exec:java");
-					builder.command().add("-Dexec.args=--urlServer=s76cllcfakr.si.fret.sncf.fr --portServer=8081");
-					builder.command().add("-Drus.inspect=true");
-					builder.command().add("-DIGNORE_CLIENT_SERVER_VERSION_CHECK=true");
-					builder.command().add("-Dexec.mainClass=org.java.plugin.boot.Boot");
-					try {
-						Process proc = builder.start();
-						int waitFor = proc.waitFor();
-					} catch (IOException e) {
-						e.printStackTrace();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		});
-		thread.start();
 	}
 }

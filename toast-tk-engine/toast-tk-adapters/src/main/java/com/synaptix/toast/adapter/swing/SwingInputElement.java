@@ -26,7 +26,7 @@ public class SwingInputElement extends SwingAutoElement implements HasTextInput,
 	}
 
 	@Override
-	public void setInput(String e) {
+	public void setInput(String e) throws TimeoutException {
 		exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).sendKeys(e).build());
 	}
@@ -36,14 +36,14 @@ public class SwingInputElement extends SwingAutoElement implements HasTextInput,
 		exists();
 		final String requestId = UUID.randomUUID().toString();
 		CommandRequest request = buildGetInputValueRequest(wrappedElement.getLocator(), wrappedElement.getType().name(), requestId);
-		return frontEndDriver.processAndwaitForValue(request);
+		return frontEndDriver.processAndWaitForValue(request);
 	}
 
 	public static CommandRequest buildGetInputValueRequest(String locator, String type, final String requestId) {
 		return new CommandRequest.CommandRequestBuilder(requestId).with(locator).ofType(type).getValue().build();
 	}
 
-	public void clear() {
+	public void clear() throws TimeoutException {
 		exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).clear().build());
 	}

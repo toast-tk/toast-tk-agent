@@ -69,7 +69,7 @@ public class SwingInspectServerClient extends SwingClientDriver implements ISwin
 	private static final Logger LOG = LogManager.getLogger(SwingInspectServerClient.class);
 	
 	public SwingInspectServerClient(String host) throws IOException {
-		super();
+		super(host);
 	}
 
 	@Inject
@@ -91,7 +91,6 @@ public class SwingInspectServerClient extends SwingClientDriver implements ISwin
 		});
 
 		this.interpreter = new LiveRedPlayEventInterpreter(mongoRepoManager);
-		start();
 	}
 
 	@Override
