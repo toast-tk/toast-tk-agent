@@ -1,8 +1,31 @@
 <!DOCTYPE html>
-<html  xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+	<link type="text/css" rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+	<script type="text/javascript"
+		src="http://code.jquery.com/jquery-2.1.4.js"></script>
+	<script type="text/javascript"
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script language="javascript"> 
+		function displayImage(base64Image){
+			var src = "data:image/png;base64," + base64Image;
+			//display the dialog
+			$("#img1").attr("src", src);
+			$('#myModal').modal('show');
+		}
+		
+		function toggle(text) { 
+			var ele = document.getElementById(text);
+			if(ele.style.display == "block") { 
+				ele.style.display = "none";
+			}else {
+				ele.style.display = "block";
+			}
+		}
+		
+	</script>
 	<style>
 		body {
 			line-height: 1.6em;
@@ -10,11 +33,11 @@
 			font-size: 12px;
 			padding-left: 1em;
 		}
-
+		
 		h3 {
 			margin-top: 24pt;
 		}
-
+		
 		.summary {
 			text-align: justify;
 			letter-spacing: 1px;
@@ -22,94 +45,106 @@
 			background: darkgray;
 			color: white;
 		}
-
+		
 		.message {
 			font-weight: bold;
+		}
+		
+		#img1 {
+			width: 800px;
+			height: 600px;
+  			margin-left: -110px;
+		}
+		
+		#myModal{
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+		}
+		
+		.my-modal-body{
+		
+		}
+		
+		.my-modal-dialog{
+			padding: 20px;
 		}
 	</style>
 </head>
 <body class="container">
 	<div class="summary">
-		<span th:text="${test.name}">
-			Test TNR_RUSA_PREV_v2015-05-19.script
-		</span>
-		<br/>
-		Effectué le
-		<span th:text="${test.startDateTime}">
-			2015-06-10T13:55:18.433
-		</span>
-		<br/>
-		Temps d'execution
-		<span th:text="${test.executionTime}">
-			0
-		</span> ms<br/>
-		<br/>
-		Errors: 
-		<span th:text="${test.technicalErrorNumber}">
-			0
-		</span><br/>
-		Failures:
-		<span th:text="${test.testFailureNumber}">
-			0
-		</span><br/>
-		Success:
-		<span th:text="${test.testSuccessNumber}">
-			0
-		</span>
+		<span th:text="${test.name}"> Test
+			TNR_RUSA_PREV_v2015-05-19.script </span> <br /> Effectué le <span
+			th:text="${test.startDateTime}"> 2015-06-10T13:55:18.433 </span> <br />
+		Temps d'execution <span th:text="${test.executionTime}"> 0 </span> ms<br />
+		<br /> Errors: <span th:text="${test.technicalErrorNumber}"> 0
+		</span><br /> Failures: <span th:text="${test.testFailureNumber}"> 0
+		</span><br /> Success: <span th:text="${test.testSuccessNumber}"> 0 </span>
 	</div>
-	<br/>
+	<br />
 	<div th:each="block : ${test.blocks}">
 		<div th:switch="${block.getBlockType()}">
-		  <div class="comment" th:case="'comment'">
-			<p th:each="line : ${block.lines}" th:text="${line}"> 
-				# Données communes<br/>
-				#<br/>
-				# BLOC 0 : Connexion et accès à la gestion des prévisions<br/>
-				###########################################################
-				<br/>
-				#Connexion<br/>
-			</p>
-		  </div>
-		  <div class="test" th:case="'testBlock'">
-			<table class="table table-bordered table-hover">
-				<thead>
+			<div class="comment" th:case="'comment'">
+				<p th:each="line : ${block.lines}" th:text="${line}">
+					# Données communes<br /> #<br /> # BLOC 0 : Connexion et accès à
+					la gestion des prévisions<br />
+					########################################################### <br />
+					#Connexion<br />
+				</p>
+			</div>
+			<div class="test" th:case="'testBlock'">
+				<table class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>Test</th>
+							<th th:text="${block.fixtureName}">swing</th>
+						</tr>
+					</thead>
 					<tr>
-						<th>Test</th>
-						<th th:text="${block.fixtureName}">swing</th>
+						<td>Step</td>
+						<td>Expected</td>
+						<td>Result</td>
+						<td>Comment</td>
+						<td>Time</td>
 					</tr>
-				</thead>
-				<tr>
-					<td>Step</td>
-					<td>Expected</td>
-					<td>Result</td>
-					<td>Comment</td>
-					<td>Time</td>
-				</tr>
-				<tr th:class="${line.testResult}? ${@com.synaptix.toast.automation.report.TemplateHelper@getResultKindAsString(line.testResult)}" 
-					th:each="line : ${block.blockLines}"> 
-					<td th:text="${@com.synaptix.toast.automation.report.TemplateHelper@getStepSentence(line)}">
-						Click on *Connexion.Connexion*
-					</td>
-					<td th:text="${line.expected} == null ? '&nbsp;' : ${line.expected}">
-						&nbsp;
-					</td>
-					<td th:text="${@com.synaptix.toast.automation.report.TemplateHelper@formatStringToHtml(line)}">
-						true
-					</td>
-					<td th:text="${line.testCommentString} == null ? '&nbsp;' : ${line.testCommentString}">
-						&nbsp;
-					</td>
-					<td>
-						<span th:text="${line.executionTime}">
-							0
-						</span>
-						ms
-					</td>
-				</tr>
-			</table>
-		  </div>
+					<tr
+						th:class="${line.testResult}? ${@com.synaptix.toast.automation.report.TemplateHelper@getResultKindAsString(line.testResult)}"
+						th:each="line : ${block.blockLines}">
+						<td
+							th:text="${@com.synaptix.toast.automation.report.TemplateHelper@getStepSentence(line)}">
+							Click on *Connexion.Connexion*</td>
+						<td
+							th:text="${line.expected} == null ? '&nbsp;' : ${line.expected}">
+							&nbsp;</td>
+						<td
+							th:text="${@com.synaptix.toast.automation.report.TemplateHelper@formatStringToHtml(line)}">
+							true</td>
+						<td><span
+							th:text="${line.testCommentString} == null ? '&nbsp;' : ${line.testCommentString}">&nbsp;</span>
+							<span class="btn btn-link btn-xs"
+							th:if="${line.testResult.screenShot} != null"
+							th:onclick="'javascript:displayImage(\''+${@com.synaptix.toast.automation.report.TemplateHelper@getResultScreenshotAsBase64(line.testResult)}+'\');'">détails</span>
+						</td>
+						<td><span th:text="${line.executionTime}"> 0 </span> ms</td>
+					</tr>
+				</table>
+			</div>
 		</div>
 	</div>
-	<script language="javascript"> function toggle(text) { var ele = document.getElementById(text);if(ele.style.display == "block") { ele.style.display = "none";}else {ele.style.display = "block";}}</script>
+
+	<div class="modal fade" id="myModal">
+		<div class="modal-dialog">
+			<div>
+				<div class="modal-body">
+					<img id="img1"/>
+				</div>
+				<div class="modal-footer">
+					<p></p>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

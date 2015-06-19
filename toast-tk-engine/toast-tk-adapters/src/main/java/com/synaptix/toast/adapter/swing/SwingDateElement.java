@@ -7,6 +7,7 @@ import com.synaptix.toast.adapter.web.HasStringValue;
 import com.synaptix.toast.adapter.web.HasTextInput;
 import com.synaptix.toast.core.driver.IClientDriver;
 import com.synaptix.toast.core.net.request.CommandRequest;
+import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.ISwingElement;
 
 /**
@@ -26,19 +27,19 @@ public class SwingDateElement extends SwingAutoElement implements HasTextInput, 
 	}
 
 	@Override
-	public void setInput(String e) throws TimeoutException {
+	public void setInput(String e) throws TimeoutException, ErrorResultReceivedException {
 		exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).sendKeys(e).build());
 	}
 	
-	public void setDateText(String e) throws TimeoutException {
+	public void setDateText(String e) throws TimeoutException, ErrorResultReceivedException {
 		exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType("date_text").sendKeys(e).build());
 	}
 
 
 	@Override
-	public String getValue() throws IllegalAccessException, TimeoutException {
+	public String getValue() throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
 		exists();
 		final String requestId = UUID.randomUUID().toString();
 		CommandRequest request = new CommandRequest.CommandRequestBuilder(requestId).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).getValue().build();

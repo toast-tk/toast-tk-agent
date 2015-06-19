@@ -9,6 +9,7 @@ import com.synaptix.toast.core.driver.IClientDriver;
 import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.net.request.TableCommandRequest;
 import com.synaptix.toast.core.net.request.TableCommandRequestQueryCriteria;
+import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.ISwingElement;
 
 /**
@@ -28,7 +29,7 @@ public class SwingTableElement extends SwingAutoElement implements HasClickActio
 	}
 
 	
-	public String find(List<TableCommandRequestQueryCriteria> criteria) throws IllegalAccessException, TimeoutException {
+	public String find(List<TableCommandRequestQueryCriteria> criteria) throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
 		exists();
 		final String requestId = UUID.randomUUID().toString();
 		CommandRequest request = new TableCommandRequest.TableCommandRequestBuilder(requestId)
@@ -38,7 +39,7 @@ public class SwingTableElement extends SwingAutoElement implements HasClickActio
 		return frontEndDriver.processAndWaitForValue(request);
 	}
 	
-	public String find(String lookUpColumn, String lookUpValue, String outputColumn) throws IllegalAccessException, TimeoutException {
+	public String find(String lookUpColumn, String lookUpValue, String outputColumn) throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
 		outputColumn = outputColumn == null ? lookUpColumn : outputColumn;
 		exists();
 		final String requestId = UUID.randomUUID().toString();
@@ -50,7 +51,7 @@ public class SwingTableElement extends SwingAutoElement implements HasClickActio
 		return frontEndDriver.processAndWaitForValue(request);
 	}
 
-	public String count() throws IllegalAccessException, TimeoutException {
+	public String count() throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
 		exists();
 		final String requestId = UUID.randomUUID().toString();
 		CommandRequest request = new TableCommandRequest.TableCommandRequestBuilder(requestId)
@@ -61,7 +62,7 @@ public class SwingTableElement extends SwingAutoElement implements HasClickActio
 	}
 
 	@Override
-	public boolean click() throws TimeoutException {
+	public boolean click() throws TimeoutException, ErrorResultReceivedException {
 		boolean res = exists();
 		frontEndDriver.process(new TableCommandRequest.TableCommandRequestBuilder(null)
 		.with(wrappedElement.getLocator())
@@ -75,7 +76,7 @@ public class SwingTableElement extends SwingAutoElement implements HasClickActio
 		throw new IllegalAccessError("Method not implemented !");
 	}
 
-	public String doubleClick(String column, String value) throws TimeoutException {
+	public String doubleClick(String column, String value) throws TimeoutException, ErrorResultReceivedException {
 		exists();
 		frontEndDriver.process(new TableCommandRequest.TableCommandRequestBuilder(null)
 				.doubleClick(column, value).with(wrappedElement.getLocator())
@@ -83,7 +84,7 @@ public class SwingTableElement extends SwingAutoElement implements HasClickActio
 		return null;
 	}
 
-	public String selectMenu(String menu, String column, String value) throws TimeoutException {
+	public String selectMenu(String menu, String column, String value) throws TimeoutException, ErrorResultReceivedException {
 		exists();
 		frontEndDriver.process(new TableCommandRequest.TableCommandRequestBuilder(null)
 			.selectMenu(menu, column, value).with(wrappedElement.getLocator())

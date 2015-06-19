@@ -29,6 +29,15 @@ Creation date: 10 juin 2015
 
 package com.synaptix.toast.automation.report;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+
+import org.apache.commons.codec.binary.Base64;
+
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
 import com.synaptix.toast.dao.domain.impl.test.TestLine;
@@ -42,8 +51,19 @@ public class TemplateHelper {
 			return "";
 		}
 	}
+	
+	public static String getResultScreenshotAsBase64(TestResult testResult){
+		BufferedImage screenshot = testResult.getScreenShot();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			ImageIO.write(screenshot, "png", baos);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return Base64.encodeBase64String(baos.toByteArray());
+	}
 
-	private static String getResultKindAsString(ResultKind resultKind) {
+	public static String getResultKindAsString(ResultKind resultKind) {
 		if (ResultKind.SUCCESS.equals(resultKind)) {
 			return "success";
 		} else if (ResultKind.ERROR.equals(resultKind)) {

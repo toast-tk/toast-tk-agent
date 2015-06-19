@@ -31,6 +31,7 @@ package com.synaptix.toast.swing.agent.runtime;
 
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.http.HttpServerRequest;
+import org.vertx.java.core.http.RouteMatcher;
 import org.vertx.java.platform.Verticle;
 
 import com.synaptix.toast.constant.Property;
@@ -41,23 +42,41 @@ public class RestMicroService extends Verticle {
 
 	@Override
 	public void start() {
-		vertx.createHttpServer().requestHandler(new Handler<HttpServerRequest>() {
+		RouteMatcher matcher = new RouteMatcher();
+		
+		initRouteMatcher(matcher);
+		
+		vertx.createHttpServer().requestHandler(matcher).listen(Property.TOAST_AGENT_PORT);
+	}
+
+	private void initRouteMatcher(RouteMatcher matcher) {
+		matcher.get("/rus/init", new Handler<HttpServerRequest>() {
+			@Override
 			public void handle(HttpServerRequest req) {
-				if (req.uri().equals("/rus/init")) {
-					boolean ok = startHandler.init();
-					if(ok){
-						req.response().setStatusCode(200).end();
-					}else{
-						req.response().setStatusCode(404).end();
-					}
-				} else if (req.uri().equals("/rus/start")) {
-					startHandler.start();
+				boolean ok = startHandler.init();
+				if(ok){
 					req.response().setStatusCode(200).end();
-				} else if (req.uri().equals("/rus/stop")) {
-					startHandler.stop();
-					req.response().setStatusCode(200).end();
+				}else{
+					req.response().setStatusCode(404).end();
 				}
 			}
-		}).listen(Property.TOAST_AGENT_PORT);
+		});
+		
+		matcher.get("/rus/start", new Handler<HttpServerRequest>() {
+			@Override
+			public void handle(HttpServerRequest req) {
+				startHandler.start();
+				req.response().setStatusCode(200).end();				
+			}
+			
+		});
+		
+		matcher.get("/rus/stop", new Handler<HttpServerRequest>() {
+			@Override
+			public void handle(HttpServerRequest req) {
+				startHandler.stop();
+				req.response().setStatusCode(200).end();				
+			}
+		});
 	}
 }

@@ -29,11 +29,19 @@ Creation date: 26 mars 2015
 
 package com.synaptix.toast.test.runtime;
 
+import java.awt.AWTException;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.synaptix.toast.automation.report.ThymeLeafHTMLReporter;
+import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 import com.synpatix.toast.runtime.core.parse.TestPageBlock;
 import com.synpatix.toast.runtime.core.parse.TestParser;
 
@@ -96,5 +104,31 @@ public class TestParserTestCase_2 {
 		String varValue = "select 1 from dual";
 		TestPageBlock varLine = parser.handleVarLine("$var:=" + varValue, null);
 		Assert.assertEquals(varLine.getLineAt(0).getCellAt(1),varValue);
+	}
+	
+	//static check only
+	private void testReportImageDisplay(){
+		TestPage page = new TestPage();
+		page.setName("test");
+		
+		Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+		BufferedImage capture;
+		try {
+			capture = new java.awt.Robot().createScreenCapture(screenRect);
+			TestResult result = new TestResult("failure", capture);
+			result.setContextualTestSentence("test");
+			
+			TestBlock block = new TestBlock();
+			block.addLine("some test", "", "");
+			block.getBlockLines().get(0).setTestResult(result);
+			
+			page.addBlock(block);
+			
+			ThymeLeafHTMLReporter reporter = new ThymeLeafHTMLReporter();
+			String generatePageHtml = reporter.generatePageHtml(page);
+			reporter.writeFile(generatePageHtml, "go", "c:\\temp");
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
 	}
 }

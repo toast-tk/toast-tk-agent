@@ -36,9 +36,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import com.synaptix.toast.constant.Property;
+import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.swing.agent.config.Config;
 import com.synaptix.toast.swing.agent.config.ConfigProvider;
 
+@FixMe(todo = "replace sysout with a logger")
 public class StartCommandHandler {
 	Config configuration = new ConfigProvider().get();
 	Process process;
@@ -47,14 +49,12 @@ public class StartCommandHandler {
 	public void start() {
 		System.out.println("start command received !");
 		if(process != null){
-			System.out.println("A process is already on working !");
-		}else{
-			if(runner == null){
-				runner = new SutRunnerAsExec(configuration);
-			}
-			process = runner.doRemoteAppRun(Property.TOAST_HOME_DIR + Property.TOAST_SUT_RUNNER_BAT);
-			System.out.println("new process started !");
+			stop();
+			System.out.println("Stopping previous process !");
 		}
+		runner = new SutRunnerAsExec(configuration);
+		process = runner.doRemoteAppRun(Property.TOAST_HOME_DIR + Property.TOAST_SUT_RUNNER_BAT);
+		System.out.println("new process started !");
 	}
 
 	public boolean init() {

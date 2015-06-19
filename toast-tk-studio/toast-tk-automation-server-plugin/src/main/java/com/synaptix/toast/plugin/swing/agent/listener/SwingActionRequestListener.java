@@ -1,16 +1,21 @@
 package com.synaptix.toast.plugin.swing.agent.listener;
 
+import java.awt.AWTException;
 import java.awt.Component;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.image.BufferedImage;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import javassist.NotFoundException;
+
 import javax.swing.AbstractButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.SwingUtilities;
 
@@ -31,6 +36,7 @@ import com.google.inject.Inject;
 import com.synaptix.toast.adapter.swing.utils.FestRobotInstance;
 import com.synaptix.toast.core.adapter.AutoSwingType;
 import com.synaptix.toast.core.net.request.CommandRequest;
+import com.synaptix.toast.core.net.response.ErrorResponse;
 import com.synaptix.toast.core.net.response.ExistsResponse;
 import com.synaptix.toast.core.net.response.ValueResponse;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
@@ -42,15 +48,13 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 
 	private final static Logger LOG = LogManager.getLogger(SwingActionRequestListener.class);
 
-
 	private final BlockingQueue<ActionRequestWrapper> actionRequestQueue;
 	private final FixtureHandlerProvider fixtureHandlerProvider;
 	private final ISynchronizationPoint synchronizationPoint;
 	private final RepositoryHolder repositoryHolder;
 
 	@Inject
-	public SwingActionRequestListener(FixtureHandlerProvider fixtureHandlerProvider, 
-			ISynchronizationPoint synchronizationPoint,
+	public SwingActionRequestListener(FixtureHandlerProvider fixtureHandlerProvider, ISynchronizationPoint synchronizationPoint,
 			RepositoryHolder repositoryHolder) {
 		super();
 		this.actionRequestQueue = new ArrayBlockingQueue<ActionRequestWrapper>(1024);
@@ -71,56 +75,68 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 		}
 	}
 
-
 	@Override
 	public synchronized void received(Connection connection, Object object) {
 		try {
 			if (object instanceof CommandRequest) {
 				LOG.info("Waiting for SUT to be ready !");
 				checkSynchronizationPoint();
-				
 				LOG.info("Processing command {}", object);
 				processReceivedCommand(connection, object);
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
+			if (object instanceof CommandRequest) {
+				failSafeAndReportSceenshot(connection, e.getMessage(), (CommandRequest) object);
+			}
 		}
 	}
-	
+
 	private void checkSynchronizationPoint() {
-		if(synchronizationPoint != null){
-			do{
+		if (synchronizationPoint != null) {
+			do {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-			}while(synchronizationPoint.hasToWait());
+			} while (synchronizationPoint.hasToWait());
 		}
 	}
-	
+
 	private void processReceivedCommand(Connection connection, Object object) throws InterruptedException {
 		CommandRequest command = (CommandRequest) object;
 		if (command.isCustom()) {
 			processCustomRequest(connection, object, command);
-		} 
-		else if(isComponentLessRequest(command)){
+		} else if (isComponentLessRequest(command)) {
 			processComponentLessRequest(command);
-		}
-		else {
-			ResultKind response = processComponentRequest(connection, command);
-			String id = ((CommandRequest) object).getId();
-			if(id != null){
-				connection.sendTCP(new ValueResponse(id, response != null ? response.name() : null));
-			}
+		} else {
+			processComponentRequest(connection, command);
 		}
 	}
 
 	private void processCustomRequest(Connection connection, Object object, CommandRequest command) {
 		LOG.info("Processing custom command {}", object);
-		String result = fixtureHandlerProvider.processCustomCall(command);
-		if(command.getId() != null){
-			connection.sendTCP(new ValueResponse(command.getId(), result));
+		try {
+			String result = fixtureHandlerProvider.processCustomCall(command);
+			if (command.getId() != null) {
+				connection.sendTCP(new ValueResponse(command.getId(), result));
+			}
+		} catch (NotFoundException nfe) {
+			// FixMe send ErrorResponse
+			connection.sendTCP(new ValueResponse(command.getId(), "No Inplementation found"));
+			LOG.error(nfe.getMessage(), nfe);
+		}
+	}
+
+	private void failSafeAndReportSceenshot(Connection connection, String message, CommandRequest command) {
+		try {
+			Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+			BufferedImage capture = new java.awt.Robot().createScreenCapture(screenRect);
+			connection.sendTCP(new ErrorResponse(command.getId(), message, capture));
+		} catch (AWTException e) {
+			LOG.error(e.getMessage(), e);
+			connection.sendTCP(new ErrorResponse(command.getId(), message, null));
 		}
 	}
 
@@ -138,38 +154,46 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 		return command.item == null && command.itemType == null;
 	}
 
-	private ResultKind processComponentRequest(Connection connection, CommandRequest command) throws InterruptedException {
+	private void processComponentRequest(Connection connection, CommandRequest command) throws InterruptedException {
 		final Component target = getTarget(command.item, command.itemType);
+		ResultKind result = null;
 		LOG.info("Found target command " + ToStringBuilder.reflectionToString(target, ToStringStyle.SHORT_PREFIX_STYLE));
-		
+
 		boolean componentFound = target != null;
 		if (command.isExists()) {
 			connection.sendTCP(new ExistsResponse(command.getId(), componentFound));
-		} 
-		else if (componentFound) {
-			if(isToRunOutsideEDT(target)){
+		} else if (componentFound) {
+			if (isToRunOutsideEDT(target)) {
 				handleActionOutsideEdt(target, command);
-			}else{
-				synchronized (actionRequestQueue) {
-					actionRequestQueue.put(new ActionRequestWrapper(command, target, connection));
-					SwingUtilities.invokeLater(SwingActionRequestListener.this);
+			} else {
+				actionRequestQueue.put(new ActionRequestWrapper(command, target, connection));
+				SwingUtilities.invokeLater(SwingActionRequestListener.this);
+			}
+		} else if (command.itemType.equals(AutoSwingType.menu.name())) {
+			result = handlePopupMenuItem(command);
+			if (command.getId() != null) {
+				if(result != null){
+					if(result.equals(ResultKind.ERROR) || result.equals(ResultKind.FAILURE)){
+						failSafeAndReportSceenshot(connection, "", command);
+					}else{
+						connection.sendTCP(new ValueResponse(command.getId(), result != null ? result.name() : null));
+					}
+				}else{
+					connection.sendTCP(new ValueResponse(command.getId(), null));
 				}
 			}
-		} 
-		else if(command.itemType.equals(AutoSwingType.menu.name())){
-			return handlePopupMenuItem(command);
-		}
-		else {
+		} else {
 			LOG.error("No target found for command: " + ToStringBuilder.reflectionToString(command, ToStringStyle.SHORT_PREFIX_STYLE));
+			failSafeAndReportSceenshot(connection, "No target found !", command);
 		}
-		return null;
+
 	}
-	
+
 	private Component getTarget(String item, String itemType) {
 		Component target = null;
-		if("dialog".equalsIgnoreCase(itemType)){
+		if ("dialog".equalsIgnoreCase(itemType)) {
 			target = findContainerComponent(item, itemType);
-		}else{
+		} else {
 			target = findComponent(item, itemType);
 		}
 		return target;
@@ -201,15 +225,13 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 							target = value;
 							break;
 						}
-					}
-					else if (value instanceof JDialog){
+					} else if (value instanceof JDialog) {
 						String dialogTitle = ((JDialog) value).getTitle();
 						if (dialogTitle != null && dialogTitle.toLowerCase().equals(item.toLowerCase())) {
 							target = value;
 							break;
 						}
-					}
-					else {
+					} else {
 						target = fixtureHandlerProvider.locateComponentTarget(item, itemType, value);
 						if (target != null) {
 							return target;
@@ -224,14 +246,20 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 	private ResultKind handleActionOutsideEdt(Component target, CommandRequest command) {
 		if (target instanceof JComboBox) {
 			handle((JComboBox) target, command);
-		}else if(target instanceof JMenu){
-			return handle((JMenu)target, command);
+		} else if (target instanceof JMenu) {
+			return handle((JMenu) target, command);
 		}
 		return null;
 	}
 
 	private boolean isToRunOutsideEDT(Component target) {
-		return (target instanceof JComboBox) || (target instanceof JMenu) /*|| (target instanceof JTextArea) */;
+		return (target instanceof JComboBox) || (target instanceof JMenu) /*
+																		 * ||
+																		 * (target
+																		 * instanceof
+																		 * JTextArea
+																		 * )
+																		 */;
 	}
 
 	private ResultKind handlePopupMenuItem(CommandRequest command) {
@@ -240,10 +268,10 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 			Robot robot = FestRobotInstance.getRobot();
 			JPopupMenuFixture pFixture = new JPopupMenuFixture(robot, robot.findActivePopupMenu());
 			JMenuItemFixture menuItemWithPath = pFixture.menuItemWithPath(command.value);
-			if(menuItemWithPath != null && menuItemWithPath.component().isEnabled()){
+			if (menuItemWithPath != null && menuItemWithPath.component().isEnabled()) {
 				menuItemWithPath.click();
 				return ResultKind.SUCCESS;
-			}else{
+			} else {
 				return ResultKind.FAILURE;
 			}
 		default:
@@ -273,7 +301,6 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 		return null;
 	}
 
-	
 	private ResultKind handle(JMenu target, CommandRequest command) {
 		Robot robot = FestRobotInstance.getRobot();
 		switch (command.action) {
@@ -282,18 +309,18 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 			LOG.info(String.format("Request id: %s, Clicked on menu (%s)", command.getId(), command.value));
 			break;
 		case SELECT:
-			if (target == null) { 
+			if (target == null) {
 				robot.pressMouse(MouseButton.RIGHT_BUTTON);
 			} else {
 				robot.click(target);
 			}
 			JPopupMenuFixture pFixture = new JPopupMenuFixture(robot, robot.findActivePopupMenu());
 			JMenuItemFixture menuItemWithPath = pFixture.menuItemWithPath(command.value);
-			if(menuItemWithPath != null && menuItemWithPath.component().isEnabled()){
+			if (menuItemWithPath != null && menuItemWithPath.component().isEnabled()) {
 				menuItemWithPath.click();
 				LOG.info(String.format("Request id: %s, Selected menu (%s)", command.getId(), command.value));
 				return ResultKind.SUCCESS;
-			}else{
+			} else {
 				return ResultKind.FAILURE;
 			}
 		default:
@@ -301,7 +328,7 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public void run() {
 		try {

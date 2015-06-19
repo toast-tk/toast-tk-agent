@@ -1,5 +1,6 @@
 package com.synaptix.toast.core.agent.inspection;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import com.esotericsoftware.kryo.Kryo;
@@ -16,6 +17,7 @@ import com.synaptix.toast.core.net.request.TableCommandRequest;
 import com.synaptix.toast.core.net.request.TableCommandRequestQuery;
 import com.synaptix.toast.core.net.request.TableCommandRequestQueryCriteria;
 import com.synaptix.toast.core.net.request.CommandRequest.COMMAND_TYPE;
+import com.synaptix.toast.core.net.response.ErrorResponse;
 import com.synaptix.toast.core.net.response.ExistsResponse;
 import com.synaptix.toast.core.net.response.InitResponse;
 import com.synaptix.toast.core.net.response.RecordResponse;
@@ -30,6 +32,8 @@ public class CommonIOUtils {
 
     public static void initSerialization(Kryo kryo) {
         kryo.register(ArrayList.class);
+        kryo.register(BufferedImage.class);
+        
         kryo.register(COMMAND_TYPE.class);
         kryo.register(InitInspectionRequest.class);
         kryo.register(CommandRequest.class);
@@ -45,6 +49,7 @@ public class CommonIOUtils {
         kryo.register(HighLightRequest.class);
         
         kryo.register(ExistsResponse.class);
+        kryo.register(ErrorResponse.class);
         kryo.register(ValueResponse.class);
         kryo.register(InitResponse.class);
         kryo.register(ScanResponse.class);

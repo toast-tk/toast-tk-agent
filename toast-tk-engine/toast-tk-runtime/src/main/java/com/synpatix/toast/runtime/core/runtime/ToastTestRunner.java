@@ -37,6 +37,7 @@ import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
+import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.IFeedableSwingPage;
 import com.synaptix.toast.core.runtime.IRepositorySetup;
 import com.synaptix.toast.core.runtime.ITestManager;
@@ -458,11 +459,16 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 
 		try {
 			result = (TestResult) fixtureExecDescriptor.method.invoke(instance, args);
-			result.setContextualTestSentence(command);
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			LOG.error("Error found !", e);
-			result = new TestResult(ExceptionUtils.getRootCauseMessage(e), ResultKind.FAILURE);
+			if(e instanceof ErrorResultReceivedException){
+				result = ((ErrorResultReceivedException)e).getResult();
+			}else{
+				result = new TestResult(ExceptionUtils.getRootCauseMessage(e), ResultKind.FAILURE);
+			}
 		}
+		result.setContextualTestSentence(command);
 		return result;
 	}
 
