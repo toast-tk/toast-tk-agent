@@ -1,0 +1,3 @@
+mvn org.apache.maven.plugins:maven-install-plugin:2.3.1:install-file -Dfile=D:\workspace\toast-tk\toast-tk-studio\toast-tk-studio-agent\lib\vertx-core-3.0.0-milestone6.jar -DgroupId=io.vertx -DartifactId=vertx-core -Dversion=3.0.0-milestone6 -Dpackaging=jar -DlocalRepositoryPath=D:\Apps\m2\repository
+ 
+mvn org.apache.maven.plugins:maven-install-plugin:2.3.1:install-file -Dfile=D:\workspace\toast-tk\toast-tk-studio\toast-tk-studio-agent\lib\vertx-web-3.0.0-milestone6.jar -DgroupId=io.vertx -DartifactId=vertx-web -Dversion=3.0.0-milestone6 -Dpackaging=jar -DlocalRepositoryPath=D:\Apps\m2\repository

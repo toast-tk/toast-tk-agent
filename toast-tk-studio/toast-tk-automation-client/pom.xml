@@ -8,12 +8,13 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>toast-tk-automation-client</artifactId>
-	<name>Toast Toolkit - JNLP Agent App</name>
+	<name>Toast Toolkit - JNLP Swing App</name>
 	<url>${jnlp.host}</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<tomcat.version>7.0.6</tomcat.version>
-		<toast.tk.agentpath>toast-tk-automation-plugin-loader/target/toast-tk-agent-standalone.jar</toast.tk.agentpath>
+		<toast.tk.pluginLoaderPath>toast-tk-automation-plugin-loader/target/toast-tk-agent-standalone.jar</toast.tk.pluginLoaderPath>
+		<toast.tk.studioAgentPath>toast-tk-studio-agent/target/toast-tk-studio-agent-standalone.jar</toast.tk.studioAgentPath>
 		<toast.tk.autopluginpath>toast-tk-automation-server-plugin/target/toast-tk-server-automation-plugin-standalone.jar</toast.tk.autopluginpath>
 		<tomcat.deploy.jnlp.dir>D:/Apps/apache-tomcat-6.0.37/webapps</tomcat.deploy.jnlp.dir>
 	</properties>
@@ -39,8 +40,10 @@
 						</goals>
 						<configuration>
 							<tasks>
-								<copy file="${project.basedir}/../${toast.tk.agentpath}"
+								<copy file="${project.basedir}/../${toast.tk.pluginLoaderPath}"
 									todir="${project.build.directory}/jnlp/agent-lib" />
+								<copy file="${project.basedir}/../${toast.tk.studioAgentPath}"
+									todir="${project.build.directory}/jnlp/agent" />
 								<copy file="${basedir}/../${toast.tk.autopluginpath}"
 									todir="${project.build.directory}/jnlp/agent-lib" />
 								<copy file="${basedir}/src/main/resources/toast.png" 
@@ -156,6 +159,11 @@
 		<dependency>
 			<groupId>com.synaptix.toast</groupId>
 			<artifactId>toast-tk-runtime</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.synaptix.toast</groupId>
+			<artifactId>toast-tk-studio-agent</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

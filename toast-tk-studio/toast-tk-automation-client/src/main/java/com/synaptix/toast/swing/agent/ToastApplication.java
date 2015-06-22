@@ -65,23 +65,23 @@ public class ToastApplication implements IToastClientApp {
 	private final Config config;
 	private final Properties properties;
 	private final File toastPropertiesFile;
-	
 
 	final String AGENT_JAR_NAME = "toast-tk-agent-standalone.jar";
 
 	@Inject
 	public ToastApplication(final Config config, final EventBus eventBus, final ISwingInspectionClient serverClient) {
+		this.eventBus = eventBus;
+		this.serverClient = serverClient;
+		this.toastPropertiesFile = new File(Property.TOAST_PROPERTIES_FILE);
+		this.properties = new Properties();
+		intWorkspace(this.config = config);
 		
 		if(!serverClient.isConnectedToWebApp()){
 			String message = String.format("The webapp looks down @%s:%s, please check your configuration and restart the agent !", config.getWebAppAddr(), config.getWebAppPort());
 			JOptionPane.showMessageDialog(null, message);
 			System.exit(-1);
 		}
-		this.eventBus = eventBus;
-		this.serverClient = serverClient;
-		this.toastPropertiesFile = new File(Property.TOAST_PROPERTIES_FILE);
-		this.properties = new Properties();
-		intWorkspace(this.config = config);
+		
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
 			@Override
 			public void uncaughtException(Thread t, Throwable e) {
@@ -109,8 +109,7 @@ public class ToastApplication implements IToastClientApp {
 				if (!toastProperties.exists()) {
 					toastProperties.createNewFile();
 				}
-				//downloadPlugins(config);
-				
+				downloadPlugins(config);
 				
 				Properties p = new Properties();
 				p.setProperty(Property.TOAST_RUNTIME_TYPE, config.getRuntimeType());
@@ -136,7 +135,6 @@ public class ToastApplication implements IToastClientApp {
 
 	private void downloadPlugins(final Config config) {
 		SwingUtilities.invokeLater(new Runnable() {
-			
 			@Override
 			public void run() {
 				try{

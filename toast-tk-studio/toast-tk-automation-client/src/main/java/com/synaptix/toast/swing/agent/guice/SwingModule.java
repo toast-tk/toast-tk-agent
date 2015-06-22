@@ -32,6 +32,7 @@ package com.synaptix.toast.swing.agent.guice;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
+import com.google.inject.name.Names;
 import com.synaptix.toast.core.agent.inspection.ISwingInspectionClient;
 import com.synaptix.toast.core.runtime.ITestManager;
 import com.synaptix.toast.swing.agent.IToastClientApp;
@@ -49,11 +50,12 @@ import com.synpatix.toast.runtime.AbstractTestManagerImpl;
 public class SwingModule extends AbstractModule {
 	@Override
 	protected void configure() {
+		bindConstant().annotatedWith(Names.named("host")).to("localhost");
+
 		bind(IToastClientApp.class).to(ToastApplication.class).asEagerSingleton();
 		bind(SwingInspectionFrame.class).asEagerSingleton();
 
 		bind(Config.class).toProvider(ConfigProvider.class).in(Singleton.class);
-		
 		bind(SwingAgentScriptRunnerPanel.class).in(Singleton.class);
 		bind(SwingInspectorPanel.class).in(Singleton.class);
 		bind(SwingInspectionRecorderPanel.class).in(Singleton.class);

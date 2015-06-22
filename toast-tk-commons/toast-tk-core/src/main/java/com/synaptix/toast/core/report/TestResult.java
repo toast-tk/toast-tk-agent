@@ -1,10 +1,13 @@
 package com.synaptix.toast.core.report;
 
+import java.awt.image.BufferedImage;
+
 
 public class TestResult {
 	private final boolean isSuccess;
 	private String message;
 	private String contextualTestSentence;
+	private BufferedImage screenShot;
 	// expected to add
 	private ResultKind resultKind;
 
@@ -28,11 +31,21 @@ public class TestResult {
 	public TestResult(String failureMessage) {
 		this(failureMessage, ResultKind.FAILURE);
 	}
+	
+	public TestResult(String failureMessage, BufferedImage img) {
+		this(failureMessage, ResultKind.FAILURE, img);
+	}
 
-	public TestResult(String message, ResultKind resultKind) {
+	
+	public TestResult(String message, ResultKind resultKind, BufferedImage img) {
 		this.message = message;
 		this.isSuccess = resultKind.equals(ResultKind.SUCCESS) || resultKind.equals(ResultKind.INFO);
+		this.setScreenShot(img);
 		this.setResultKind(resultKind);
+	}
+	
+	public TestResult(String message, ResultKind resultKind) {
+		this(message, resultKind, null);
 	}
 
 	public boolean isSuccess() {
@@ -84,5 +97,13 @@ public class TestResult {
 	
 	public String getContextualTestSentence() {
 		return contextualTestSentence;
+	}
+
+	public BufferedImage getScreenShot() {
+		return screenShot;
+	}
+
+	public void setScreenShot(BufferedImage screenShot) {
+		this.screenShot = screenShot;
 	}
 }

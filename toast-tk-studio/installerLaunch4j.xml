@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>true</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar></jar>
+  <outfile>D:\workspace\toast-tk\toast-tk-studio\install\Toast Studio.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>D:\workspace\toast-tk\toast-tk-studio\toast-tk-automation-client\src\main\resources\toast.ico</icon>
+  <classPath>
+    <mainClass>com.synaptix.toast.swing.agent.AgentBoot</mainClass>
+    <cp>lib\*</cp>
+  </classPath>
+  <jre>
+    <path>D:\Apps\jdk1.6.0_31</path>
+    <bundledJre64Bit>false</bundledJre64Bit>
+    <bundledJreAsFallback>false</bundledJreAsFallback>
+    <minVersion>1.6.0_31</minVersion>
+    <maxVersion>1.7.0_75</maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <runtimeBits>64/32</runtimeBits>
+  </jre>
+  <versionInfo>
+    <fileVersion>1.0.0.0</fileVersion>
+    <txtFileVersion>1.0</txtFileVersion>
+    <fileDescription>Toast Tk Studio</fileDescription>
+    <copyright>Copyright (c) 2015 Synaptix Labs</copyright>
+    <productVersion>1.0.0.0</productVersion>
+    <txtProductVersion>1.0</txtProductVersion>
+    <productName>Toast Tk Studio</productName>
+    <companyName>Synaptix-Labs</companyName>
+    <internalName>Toast Tk Studio</internalName>
+    <originalFilename>Toast Tk - Studio.exe</originalFilename>
+  </versionInfo>
+</launch4jConfig>

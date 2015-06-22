@@ -28,6 +28,7 @@ import com.synaptix.toast.adapter.FixtureService;
 import com.synaptix.toast.adapter.web.DefaultWebPage;
 import com.synaptix.toast.automation.report.HTMLReportGenerator;
 import com.synaptix.toast.automation.report.IHTMLReportGenerator;
+import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.adapter.ActionAdapterKind;
 import com.synaptix.toast.core.agent.inspection.ISwingInspectionClient;
 import com.synaptix.toast.core.annotation.Action;
@@ -36,6 +37,7 @@ import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
+import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.IFeedableSwingPage;
 import com.synaptix.toast.core.runtime.IRepositorySetup;
 import com.synaptix.toast.core.runtime.ITestManager;
@@ -178,7 +180,8 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 
 			TestResult result = insertEntity(entityName, values);
 			line.setTestResult(result);
-			testPage.addResult(result);
+			//FIXME !!!
+			//testPage.addResult(result);
 		}
 	}
 
@@ -204,7 +207,8 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 		for (ComponentConfigLine line : block.getLines()) {
 			TestResult result = repoSetup.addProperty(block.getComponentName(), line.getTestName(), line.getSystemName(), line.getComponentAssociation());
 			line.setResult(result);
-			testPage.addResult(result);
+			//FIXME !!!
+			//testPage.addResult(result);
 		}
 	}
 
@@ -232,15 +236,18 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 			if (fixtureName.equals("domain")) {
 				result = addDomain(row.getCellAt(0), row.getCellAt(1), row.getCellAt(2));
 				row.setTestResult(result);
-				testPage.addResult(result);
+				//FIXME !!!
+				//testPage.addResult(result);
 			} else if (fixtureName.equals("entity")) {
 				result = addEntity(row.getCellAt(1), row.getCellAt(0), row.getCellAt(2));
 				row.setTestResult(result);
-				testPage.addResult(result);
+				//FIXME !!!
+				//testPage.addResult(result);
 			} else if (fixtureName.equals("service")) {
 				result = addService(row.getCellAt(0), row.getCellAt(1));
 				row.setTestResult(result);
-				testPage.addResult(result);
+				//FIXME !!!
+				//testPage.addResult(result);
 			} else {
 				Class<?> fixtureClass = repoSetup.getService(fixtureName);
 				if (fixtureClass == null) {
@@ -268,7 +275,8 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 			}
 		}
 		for (BlockLine row : block.getBlockLines()) {
-			testPage.addResult(row.getTestResult());
+			//FIXME !!!
+			//testPage.addResult(row.getTestResult());
 		}
 		return;
 	}
@@ -317,7 +325,7 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 	 * @throws ClassNotFoundException 
 	 */
 	private void runTestBlock(TestBlock block, ITestPage testPage, boolean inlineReport) throws IllegalAccessException, ClassNotFoundException {
-		
+		List<TestResult> results = new ArrayList<TestResult>();
 		for (TestLine line : block.getBlockLines()) {
 			line.startExecution();
 			
@@ -329,19 +337,12 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 			if ("KO".equals(line.getExpected()) && ResultKind.FAILURE.equals(result.getResultKind())) {
 				result.setResultKind(ResultKind.SUCCESS);
 			}
-//			else if(line.getExpected() != null && line.getExpected().startsWith("not ")){
-//				String resultNotExpected = line.getExpected().substring("not ".length());
-//				 if(!resultNotExpected.equals(line.getExpected())){
-//					 result.setResultKind(ResultKind.SUCCESS);
-//				 }else{
-//					 result.setResultKind(ResultKind.ERROR);
-//				 }
-//			}
 			else if (result.getMessage() != null && line.getExpected() != null && result.getMessage().equals(line.getExpected())) {
 				result.setResultKind(ResultKind.SUCCESS);
 			}
 			line.setTestResult(result);
-			testPage.addResult(result);
+			results.add(result);
+
 			if(inlineReport){
 				String generatePageHtml = htmlReportGenerator.generatePageHtml(testPage);
 				URL resource = this.getClass().getClassLoader() != null ? this.getClass().getClassLoader().getResource("TestResult") : null;
@@ -359,10 +360,22 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 				throw new IllegalAccessException("Test execution stopped, due to fail fatal step: " + line + " - Failed !");
 			}
 		}
+		
+		testPage.setTechnicalErrorNumber(getTotal(results, ResultKind.ERROR));
+		testPage.setTestSuccessNumber(getTotal(results, ResultKind.SUCCESS));
+		testPage.setTestFailureNumber(getTotal(results, ResultKind.FAILURE));
 
 	}
 	
-	
+	private int getTotal(List<TestResult> results, ResultKind resultKindFilter) {
+		int count = 0;
+		for (TestResult testResult : results) {
+			if (resultKindFilter.equals(testResult.getResultKind())) {
+				count++;
+			}
+		}
+		return count;
+	}
 
 	/**
 	 * 
@@ -434,7 +447,9 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 			if(group.startsWith("$$")){
 				//nothing
 			}
-			else if (group.startsWith("$") && args[i] != null ){
+			else if (group.startsWith("$") 
+					&& args[i] != null
+					&& !group.contains(Property.DEFAULT_PARAM_SEPARATOR)){
 				command = command.replaceFirst("\\"+group+"\\b", (String) args[i]);
 			}
 			else{
@@ -444,11 +459,16 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 
 		try {
 			result = (TestResult) fixtureExecDescriptor.method.invoke(instance, args);
-			result.setContextualTestSentence(command);
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			LOG.error("Error found !", e);
-			result = new TestResult(ExceptionUtils.getRootCauseMessage(e), ResultKind.FAILURE);
+			if(e instanceof ErrorResultReceivedException){
+				result = ((ErrorResultReceivedException)e).getResult();
+			}else{
+				result = new TestResult(ExceptionUtils.getRootCauseMessage(e), ResultKind.FAILURE);
+			}
 		}
+		result.setContextualTestSentence(command);
 		return result;
 	}
 
@@ -476,13 +496,13 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 	 */
 	private Class<?> locateFixtureClass(ActionAdapterKind fixtureKind, String fixtureName, String command) throws ClassNotFoundException, IllegalAccessException {
 		Set<Class<?>> serviceClasses = new HashSet<Class<?>>();
-		if(settingsFile != null){
-			Class<?> serviceClass = getServiceClassFromSettings(settingsFile.getFile(), fixtureKind.name());
-			if(serviceClass != null){
-				LOG.info(String.format("Identified a new service class ( %s ) in setting file !", serviceClass));
-				serviceClasses.add(serviceClass);
-			}
-		}
+//		if(settingsFile != null){
+//			Class<?> serviceClass = getServiceClassFromSettings(settingsFile.getFile(), fixtureKind.name());
+//			if(serviceClass != null){
+//				LOG.info(String.format("Identified a new service class ( %s ) in setting file !", serviceClass));
+//				serviceClasses.add(serviceClass);
+//			}
+//		}
 		
 		//round1 - hard match: based on type and name
 		if(serviceClasses.size() == 0){

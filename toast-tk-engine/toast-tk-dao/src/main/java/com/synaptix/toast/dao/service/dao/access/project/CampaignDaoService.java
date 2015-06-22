@@ -7,7 +7,6 @@ import com.google.inject.name.Named;
 import com.synaptix.toast.core.dao.ICampaign;
 import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.dao.domain.impl.report.Campaign;
-import com.synaptix.toast.dao.domain.impl.test.TestPage;
 import com.synaptix.toast.dao.service.dao.access.test.TestPageDaoService;
 import com.synaptix.toast.dao.service.dao.common.AbstractMongoDaoService;
 import com.synaptix.toast.dao.service.dao.common.CommonMongoDaoService;

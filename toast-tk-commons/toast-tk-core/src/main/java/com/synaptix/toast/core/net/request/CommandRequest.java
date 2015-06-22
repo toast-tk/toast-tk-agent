@@ -70,6 +70,11 @@ public class CommandRequest implements IIdRequest {
 			this.item = item;
 			return this;
 		}
+		
+		public CommandRequestBuilder value(String value) {
+			this.value = value;
+			return this;
+		}
 
 		public CommandRequestBuilder atPos(String pos) {
 			this.value = pos;

@@ -30,7 +30,6 @@ Creation date: 16 févr. 2015
 package com.synaptix.toast.swing.agent.runtime;
 
 import com.google.inject.Inject;
-import com.synaptix.toast.adapter.swing.SwingAutoElement;
 import com.synaptix.toast.adapter.swing.ToastSwingActionAdapter;
 import com.synaptix.toast.automation.driver.swing.SwingClientDriver;
 import com.synaptix.toast.core.adapter.ActionAdapterKind;
@@ -45,9 +44,5 @@ public class DefaultSwingActionAdapter extends ToastSwingActionAdapter{
 		super(repo, driver);
 	}
 
-	@Override
-	public SwingAutoElement overrideElementInstance(SwingAutoElement autoElement) {
-		return null;
-	}
 
 }

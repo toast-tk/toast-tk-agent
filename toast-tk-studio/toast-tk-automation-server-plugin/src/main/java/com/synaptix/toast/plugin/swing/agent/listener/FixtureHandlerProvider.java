@@ -35,6 +35,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javassist.NotFoundException;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.logging.log4j.LogManager;
@@ -60,13 +62,13 @@ public class FixtureHandlerProvider {
 		this.fixtureHandlers = fixtureHandlers;
 	}
 
-	public String processCustomCall(final CommandRequest request) {
+	public String processCustomCall(final CommandRequest request) throws NotFoundException {
 		ICustomFixtureHandler handlerInterestedIn = getHandlerInterestedIn(request);
-		if (handlerInterestedIn != null) {
-			LOG.info("finded CustomFixtureHandler : {} ", handlerInterestedIn.getName());
-			return handlerInterestedIn.processCustomCall(request);
+		if (handlerInterestedIn == null) {
+			throw new NotFoundException("No Fixture Handler found for request id: " + request.getId());
 		}
-		return null;
+		LOG.info("found CustomFixtureHandler : {} ", handlerInterestedIn.getName());
+		return handlerInterestedIn.processCustomCall(request);
 	}
 
 	public String processFixtureCall(Component target, CommandRequest request) {

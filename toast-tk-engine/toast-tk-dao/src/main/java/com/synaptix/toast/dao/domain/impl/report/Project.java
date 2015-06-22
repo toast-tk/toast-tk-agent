@@ -16,7 +16,6 @@ import com.synaptix.toast.core.dao.ICampaign;
 import com.synaptix.toast.core.dao.IProject;
 import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.dao.domain.impl.common.BasicTaggableMongoBean;
-import com.synaptix.toast.dao.domain.impl.test.TestPage;
 
 @Entity(value = "report.projects")
 @Indexes({ @Index(value = "name"), @Index("version") })

@@ -1,9 +1,11 @@
 package com.synaptix.toast.adapter.swing;
 
 import java.util.UUID;
+import java.util.concurrent.TimeoutException;
 
 import com.synaptix.toast.core.driver.IClientDriver;
 import com.synaptix.toast.core.net.request.CommandRequest;
+import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.ISwingElement;
 
 /**
@@ -42,7 +44,7 @@ public abstract class SwingAutoElement {
 
 	}
 	
-	public boolean exists(){
+	public boolean exists() throws TimeoutException, ErrorResultReceivedException{
 		final String requestId = UUID.randomUUID().toString();
 		final CommandRequest command = new CommandRequest.CommandRequestBuilder(requestId)
 														.with(wrappedElement.getLocator())

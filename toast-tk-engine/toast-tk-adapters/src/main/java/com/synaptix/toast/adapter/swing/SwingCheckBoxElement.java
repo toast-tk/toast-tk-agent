@@ -7,6 +7,7 @@ import com.synaptix.toast.adapter.web.HasClickAction;
 import com.synaptix.toast.adapter.web.HasStringValue;
 import com.synaptix.toast.core.driver.IClientDriver;
 import com.synaptix.toast.core.net.request.CommandRequest;
+import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.ISwingElement;
 
 /**
@@ -25,18 +26,18 @@ public class SwingCheckBoxElement extends SwingAutoElement implements HasClickAc
 		super(element);
 	}
 
-	public void select() {
+	public void select() throws TimeoutException, ErrorResultReceivedException {
 		exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).sendKeys("true").build());
 	}
 	
-	public void deselect() {
+	public void deselect() throws TimeoutException, ErrorResultReceivedException {
 		exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).sendKeys("false").build());
 	}
 	
 	@Override
-	public boolean click() {
+	public boolean click() throws TimeoutException, ErrorResultReceivedException {
 		boolean res = exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).click().build());
 		return res;
@@ -48,10 +49,10 @@ public class SwingCheckBoxElement extends SwingAutoElement implements HasClickAc
 	}
 
 	@Override
-	public String getValue() throws IllegalAccessException, TimeoutException {
+	public String getValue() throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
 		exists();
 		final String requestId = UUID.randomUUID().toString();
 		CommandRequest request = new CommandRequest.CommandRequestBuilder(requestId).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).getValue().build();
-		return frontEndDriver.processAndwaitForValue(request);
+		return frontEndDriver.processAndWaitForValue(request);
 	}
 }

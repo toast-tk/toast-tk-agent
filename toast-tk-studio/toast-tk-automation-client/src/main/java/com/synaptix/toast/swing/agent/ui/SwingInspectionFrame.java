@@ -154,11 +154,10 @@ public class SwingInspectionFrame extends JFrame {
 						disableInitButton();
 						app.initProperties();
 						String runtimeType = app.getRuntimeType(); 
-						String command = app.getRuntimeCommand(); 
 						String agentType = app.getAgentType();
 						try {
 							publish();
-							runtime.init(runtimeType, command, agentType, true);
+							runtime.init(runtimeType, agentType, true);
 							Desktop.getDesktop().open(new File(Property.TOAST_HOME_DIR));
 							app.stopProgress("Done !");
 						} catch (IllegalAccessException e) {

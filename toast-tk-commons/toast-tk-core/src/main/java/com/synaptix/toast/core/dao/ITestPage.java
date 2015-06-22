@@ -27,7 +27,15 @@ public interface ITestPage extends ITaggable {
 	public int getTestFailureNumber();
 
 	public int getTestSuccessNumber();
+	
+	public void setTechnicalErrorNumber(int technicalErrorNumber);
 
+	public void setTestFailureNumber(int testFailureNumber);
+
+	public void setTestSuccessNumber(int testSuccessNumber);
+
+	//addResult (find a better way to report success/failure/error)
+	
 	public boolean isSuccess();
 
 	public String getName();
@@ -39,8 +47,6 @@ public interface ITestPage extends ITaggable {
 	public long getPreviousExecutionTime();
 
 	public void startExecution();
-
-	public void addResult(TestResult result);
 
 	public void stopExecution();
 

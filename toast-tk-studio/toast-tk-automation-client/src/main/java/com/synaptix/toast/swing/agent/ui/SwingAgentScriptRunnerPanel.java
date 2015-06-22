@@ -269,7 +269,7 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 						String agentType = (String) properties.get(Property.TOAST_RUNTIME_AGENT);
 						try {
 							publish();
-							runtime.init(runtimeType, command, agentType, true);
+							runtime.init(runtimeType,  agentType, true);
 							Desktop.getDesktop().open(new File(Property.TOAST_HOME_DIR));
 						} catch (IllegalAccessException e) {
 							e.printStackTrace();

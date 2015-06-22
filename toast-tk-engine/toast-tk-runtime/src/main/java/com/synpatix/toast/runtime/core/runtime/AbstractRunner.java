@@ -106,7 +106,8 @@ public abstract class AbstractRunner {
 				if (LOG.isDebugEnabled()) {
 					LOG.debug("Preset repository from webapp rest api...");
 				}
-			}else if(localRepositoryTestPage != null){
+			}
+			else if(localRepositoryTestPage != null){
 				runner.run(localRepositoryTestPage, false);
 			}
 			beginTest();
@@ -127,10 +128,12 @@ public abstract class AbstractRunner {
 		URL resource = this.getClass().getClassLoader() != null ? this.getClass().getClassLoader().getResource("TestResult") : null;
 		if(resource != null){
 			try {
-				final String pageName = testPage.getPageName();
-				htmlReportGenerator.writeFile(generatePageHtml, pageName, resource.getPath());
-				File htmlFile = new File(resource.getPath() + "\\" + pageName + ".html");
-				Desktop.getDesktop().browse(htmlFile.toURI());
+				if(!Boolean.getBoolean("java.awt.headless")){
+					final String pageName = testPage.getPageName();
+					htmlReportGenerator.writeFile(generatePageHtml, pageName, resource.getPath());
+					File htmlFile = new File(resource.getPath() + "\\" + pageName + ".html");
+					Desktop.getDesktop().browse(htmlFile.toURI());
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

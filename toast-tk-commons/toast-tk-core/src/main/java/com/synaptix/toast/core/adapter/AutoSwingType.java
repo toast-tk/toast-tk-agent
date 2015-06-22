@@ -11,5 +11,6 @@ public enum AutoSwingType {
 	menuitem,
 	list,
 	checkbox,
+	dialog,
 	other
 }

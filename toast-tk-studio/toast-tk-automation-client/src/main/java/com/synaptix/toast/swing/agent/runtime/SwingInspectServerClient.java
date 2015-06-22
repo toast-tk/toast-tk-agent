@@ -37,8 +37,6 @@ import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.synaptix.toast.automation.driver.swing.SwingClientDriver;
@@ -69,7 +67,7 @@ public class SwingInspectServerClient extends SwingClientDriver implements ISwin
 	private static final Logger LOG = LogManager.getLogger(SwingInspectServerClient.class);
 	
 	public SwingInspectServerClient(String host) throws IOException {
-		super();
+		super(host);
 	}
 
 	@Inject
@@ -86,12 +84,24 @@ public class SwingInspectServerClient extends SwingClientDriver implements ISwin
 			@Override
 			public void onResponseReceived(Object object) {
 				eventBus.post(new SeverStatusMessage(SeverStatusMessage.State.DISCONNECTED));
-				startConnectionLoop();						
+				startConnectionDeamon();					
 			}
 		});
 
 		this.interpreter = new LiveRedPlayEventInterpreter(mongoRepoManager);
-		start();
+		startConnectionDeamon();
+	}
+
+	private void startConnectionDeamon() {
+		Thread connectionDeamon = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				start(host);				
+			}
+		});
+		connectionDeamon.setName("Connection Deamon");
+		connectionDeamon.setDaemon(true);
+		connectionDeamon.start();
 	}
 
 	@Override
