@@ -264,30 +264,6 @@
 			<id>mongodb-morphia</id>
 			<url>http://morphia.googlecode.com/svn/mavenrepo/</url>
 		</repository>
-		<repository>
-			<id>synaptix-releases-repository</id>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-			<url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/releases/</url>
-		</repository>
-		<repository>
-			<id>synaptix-snapshots-repository</id>
-			<releases>
-				<enabled>false</enabled>
-				<updatePolicy>always</updatePolicy>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-			<url>http://maven.synaptix-labs.com:8081/nexus/content/repositories/snapshots/</url>
-		</repository>
 	</repositories>
 	<profiles>
 		<profile>
