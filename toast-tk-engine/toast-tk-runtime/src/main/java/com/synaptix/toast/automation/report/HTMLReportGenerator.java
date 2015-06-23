@@ -63,6 +63,7 @@ public class HTMLReportGenerator implements IHTMLReportGenerator{
 				//partially implemented with Thymeleaf
 				reportCommentBlock((CommentBlock) block, report);
 			} else if (block instanceof TestBlock) {
+				//partially implemented with Thymeleaf
 				reportTestBlock((TestBlock) block, report);
 			} else if (block instanceof TestPage) {
 				reportTestPage((TestPage) block, report);
