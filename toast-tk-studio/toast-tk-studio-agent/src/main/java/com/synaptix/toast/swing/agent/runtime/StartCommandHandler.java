@@ -33,6 +33,8 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xml.sax.SAXException;
 
 import com.synaptix.toast.constant.Property;
@@ -42,29 +44,31 @@ import com.synaptix.toast.swing.agent.config.ConfigProvider;
 
 @FixMe(todo = "replace sysout with a logger")
 public class StartCommandHandler {
-	Config configuration = new ConfigProvider().get();
-	Process process;
-	SutRunnerAsExec runner;
+	
+	private static final Logger LOG = LogManager.getLogger(StartCommandHandler.class);
+	private final Config configuration = new ConfigProvider().get();
+	private Process process;
+	private SutRunnerAsExec runner;
 
 	public void start() {
-		System.out.println("start command received !");
+		LOG.info("start command received !");
 		if(process != null){
 			stop();
-			System.out.println("Stopping previous process !");
+			LOG.info("Stopping previous process !");
 		}
-		runner = new SutRunnerAsExec(configuration);
-		process = runner.doRemoteAppRun(Property.TOAST_HOME_DIR + Property.TOAST_SUT_RUNNER_BAT);
-		System.out.println("new process started !");
+		runner = SutRunnerAsExec.FromLocalConfiguration(configuration);
+		process = runner.executeSutBat();
+		LOG.info("new process started !");
 	}
 
 	public boolean init() {
-		System.out.println("init command received !");
+		LOG.info("init command received !");
 		try {
 			if(runner == null){
-				runner = new SutRunnerAsExec(configuration);
+				runner = SutRunnerAsExec.FromLocalConfiguration(configuration);
 			}
-			runner.init("JNLP", Property.TOAST_RUNTIME_AGENT + "\\toast-tk-agent-standalone.jar" , false);
-			System.out.println("system initialized !");
+			runner.init("JNLP", false);
+			LOG.info("system initialized !");
 			return true;
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
@@ -80,12 +84,12 @@ public class StartCommandHandler {
 
 	public void stop() {
 		if(this.process != null){
-			System.out.println("Stoping process !");
+			LOG.info("Stoping process !");
 			this.process.destroy();
 			this.process = null;
 			this.runner = null;
 		}else{
-			System.out.println("No Process to stop !");
+			LOG.info("No Process to stop !");
 		}
 	}
 	

@@ -62,7 +62,7 @@ import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.swing.agent.AgentBoot;
-import com.synaptix.toast.swing.agent.IToastClientApp;
+import com.synaptix.toast.swing.agent.IStudioApplication;
 import com.synaptix.toast.swing.agent.constant.Resource;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
 import com.synaptix.toast.swing.agent.runtime.SutRunnerAsExec;
@@ -85,10 +85,10 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 
 	private DefaultScriptRunner runner;
 	private final SutRunnerAsExec runtime;
-	private final IToastClientApp app;
+	private final IStudioApplication app;
 
 	@Inject
-	public SwingAgentScriptRunnerPanel(final SutRunnerAsExec runtime, final IToastClientApp app, EventBus eventBus) {
+	public SwingAgentScriptRunnerPanel(final SutRunnerAsExec runtime, final IStudioApplication app, EventBus eventBus) {
 
 		eventBus.register(this);
 		this.runtime = runtime;
@@ -265,11 +265,9 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 						disableInitButton();
 						initProperties(toastPropertiesFile);
 						String runtimeType = (String) properties.get(Property.TOAST_RUNTIME_TYPE);
-						String command = (String) properties.get(Property.TOAST_RUNTIME_CMD);
-						String agentType = (String) properties.get(Property.TOAST_RUNTIME_AGENT);
 						try {
 							publish();
-							runtime.init(runtimeType,  agentType, true);
+							runtime.init(runtimeType,  true);
 							Desktop.getDesktop().open(new File(Property.TOAST_HOME_DIR));
 						} catch (IllegalAccessException e) {
 							e.printStackTrace();

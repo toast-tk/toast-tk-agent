@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
-import java.util.Properties;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -28,6 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
@@ -48,8 +48,8 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.synaptix.toast.constant.Property;
-import com.synaptix.toast.core.agent.inspection.ISwingInspectionClient;
-import com.synaptix.toast.swing.agent.IToastClientApp;
+import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
+import com.synaptix.toast.swing.agent.IStudioApplication;
 import com.synaptix.toast.swing.agent.constant.Resource;
 import com.synaptix.toast.swing.agent.event.message.LoadingMessage;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
@@ -72,22 +72,23 @@ public class SwingInspectionFrame extends JFrame {
 	private final ProgressGlassPane glassPane;
 	private JMenuItem initButton;
 	private JMenuItem runtimePropertyButton;
-	private final IToastClientApp app;
+	private final IStudioApplication app;
 	private final SutRunnerAsExec runtime;
 	private String CONNECTED_TEXT = "Toast Automation Server - Connected";
 	
 	@Inject
 	public SwingInspectionFrame(
-			final ISwingInspectionClient serverClient, 
+			final ISwingAutomationClient serverClient, 
 			final SwingInspectorPanel swingInspectorPanel,
 			final SwingInspectionRecorderPanel recorderPanel,
 			final ProgressGlassPane progressGlassPane, 
 			final EventBus eventBus,
 			final SutRunnerAsExec runtime, 
-			final IToastClientApp app
+			final IStudioApplication app
 	) {
 		super("Toast Tk - Studio");
 		setGlassPane(glassPane = progressGlassPane);
+		this.inspectorPanel = swingInspectorPanel;
 		this.runtime = runtime;
 		this.app = app;
 		eventBus.register(this);
@@ -107,7 +108,7 @@ public class SwingInspectionFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setIconImage(Resource.ICON_IMG);
 		setModalExclusionType(Dialog.ModalExclusionType.TOOLKIT_EXCLUDE);
-		this.inspectorPanel = swingInspectorPanel;
+
 
 		getContentPane().setLayout(new BorderLayout());
 
@@ -154,12 +155,15 @@ public class SwingInspectionFrame extends JFrame {
 						disableInitButton();
 						app.initProperties();
 						String runtimeType = app.getRuntimeType(); 
-						String agentType = app.getAgentType();
 						try {
 							publish();
-							runtime.init(runtimeType, agentType, true);
+							runtime.init(runtimeType, true);
 							Desktop.getDesktop().open(new File(Property.TOAST_HOME_DIR));
 							app.stopProgress("Done !");
+							int response = JOptionPane.showConfirmDialog(SwingInspectionFrame.this, "SUT initialized, do you want to start it ?");
+							if(response == 1){
+								runtime.executeSutBat();
+							}
 						} catch (IllegalAccessException e) {
 							e.printStackTrace();
 						} catch (SAXException e) {
@@ -169,7 +173,7 @@ public class SwingInspectionFrame extends JFrame {
 						} catch (ParserConfigurationException e) {
 							e.printStackTrace();
 						}
-						return null;
+						return Void.TYPE.newInstance();
 					}
 
 					@Override
@@ -177,9 +181,6 @@ public class SwingInspectionFrame extends JFrame {
 						super.process(chunks);
 						app.startProgress("Starting SUT..");
 					}
-					
-					
-					
 				};
 				worker.execute();
 			}
@@ -204,7 +205,7 @@ public class SwingInspectionFrame extends JFrame {
         initButton = new JMenuItem("Download & Init SUT Bat");
         initButton.setMnemonic(KeyEvent.VK_F);
         initButton.setBackground(Color.green);
-        initButton.setToolTipText("download the system under test, and open a bat to start it's inspection & recording..");
+        initButton.setToolTipText("Download the system under test, and open a bat to start it's inspection & recording..");
         initButton.setIcon(new ImageIcon(Resource.ICON_POWER_16PX_IMG));
 
         startMenu.add(initButton);
@@ -230,7 +231,7 @@ public class SwingInspectionFrame extends JFrame {
 					Thread.sleep(100);// Simulate loading
 					publish(i);// Notify progress
 				}
-				return null;
+				return Void.TYPE.newInstance();
 			}
 
 			@Override
@@ -319,7 +320,7 @@ public class SwingInspectionFrame extends JFrame {
 	}
 
 	@Subscribe
-	public void stopLoading(StopLoadingMessage lMsg) {
+	public void stopLoading(final StopLoadingMessage lMsg) {
 		glassPane.setMessage(lMsg.msg);
 		statusMessageLabel.setText(lMsg.msg);
 		glassPane.setVisible(false);

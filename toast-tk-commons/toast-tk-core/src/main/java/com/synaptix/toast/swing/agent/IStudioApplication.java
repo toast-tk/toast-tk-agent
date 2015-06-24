@@ -31,7 +31,7 @@ package com.synaptix.toast.swing.agent;
 
 import com.synaptix.toast.swing.agent.config.Config;
 
-public interface IToastClientApp {
+public interface IStudioApplication {
 
 	public void updateStatusMessage(String msg);
 	
@@ -48,10 +48,6 @@ public interface IToastClientApp {
 	public String getRuntimeType();
 
 	public void openConfigDialog();
-
-	public String getRuntimeCommand();
-
-	public String getAgentType();
 
 	public void initProperties();
 	

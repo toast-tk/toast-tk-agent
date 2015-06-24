@@ -49,6 +49,7 @@ public class Property {
 	public static final String TOAST_RUNTIME_DIR = System.getProperty("user.home") + "\\"+TOAST_HOME_DIR_NAME+"\\runtime";
 	public static final String TOAST_LOG_DIR = System.getProperty("user.home") +  "\\"+TOAST_HOME_DIR_NAME+"\\log";;
 	public static final String TOAST_PROPERTIES_FILE = Property.TOAST_HOME_DIR + "toast.properties";
+	public static final String AGENT_JAR_NAME = "toast-tk-agent-standalone.jar";
 	public static final String TOAST_SUT_RUNNER_BAT = "run_sut.bat";
 	
 	public static final String REDPEPPER_AUTOMATION_SETTINGS_DEFAULT_DIR = "settings/toast_descriptor.json";

@@ -3,7 +3,7 @@ package com.synaptix.toast.adapter.swing;
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
-import com.synaptix.toast.core.driver.IClientDriver;
+import com.synaptix.toast.core.driver.IRemoteSwingAgentDriver;
 import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.ISwingElement;
@@ -17,21 +17,21 @@ import com.synaptix.toast.core.runtime.ISwingElement;
 public abstract class SwingAutoElement {
 
 	protected ISwingElement wrappedElement;
-	protected IClientDriver frontEndDriver;
+	protected IRemoteSwingAgentDriver frontEndDriver;
 
 	protected void setWrappedElement(ISwingElement wrappedElement) {
 		this.wrappedElement = wrappedElement;
 	}
 
-	protected IClientDriver getFrontEndDriver() {
+	protected IRemoteSwingAgentDriver getFrontEndDriver() {
 		return frontEndDriver;
 	}
 
-	protected void setFrontEndDriver(IClientDriver frontEndDriver) {
+	protected void setFrontEndDriver(IRemoteSwingAgentDriver frontEndDriver) {
 		this.frontEndDriver = frontEndDriver;
 	}
 
-	public SwingAutoElement(ISwingElement element, IClientDriver driver) {
+	public SwingAutoElement(ISwingElement element, IRemoteSwingAgentDriver driver) {
 		this.wrappedElement = element;
 		this.frontEndDriver = driver;
 	}

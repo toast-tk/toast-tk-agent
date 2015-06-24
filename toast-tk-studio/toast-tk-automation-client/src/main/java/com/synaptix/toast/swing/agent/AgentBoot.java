@@ -37,7 +37,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Singleton;
 import com.synaptix.toast.adapter.swing.guice.SwingActionAdapterPluginModule;
-import com.synaptix.toast.automation.driver.swing.SwingClientDriver;
+import com.synaptix.toast.automation.driver.swing.RemoteSwingAgentDriverImpl;
 import com.synaptix.toast.core.guice.AbstractActionAdapterModule;
 import com.synaptix.toast.swing.agent.guice.SwingModule;
 import com.synaptix.toast.swing.agent.runtime.DefaultSwingActionAdapter;
@@ -52,7 +52,7 @@ public class AgentBoot {
 		modules.add(new AbstractActionAdapterModule() {
 			@Override
 			protected void configure() {
-				bind(SwingClientDriver.class).in(Singleton.class);
+				bind(RemoteSwingAgentDriverImpl.class).in(Singleton.class);
 				bindActionAdapter(DefaultSwingActionAdapter.class);
 			}
 		});

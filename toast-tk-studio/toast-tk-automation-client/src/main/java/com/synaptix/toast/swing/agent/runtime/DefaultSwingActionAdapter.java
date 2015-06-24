@@ -31,7 +31,7 @@ package com.synaptix.toast.swing.agent.runtime;
 
 import com.google.inject.Inject;
 import com.synaptix.toast.adapter.swing.ToastSwingActionAdapter;
-import com.synaptix.toast.automation.driver.swing.SwingClientDriver;
+import com.synaptix.toast.automation.driver.swing.RemoteSwingAgentDriverImpl;
 import com.synaptix.toast.core.adapter.ActionAdapterKind;
 import com.synaptix.toast.core.annotation.ActionAdapter;
 import com.synaptix.toast.core.runtime.IRepositorySetup;
@@ -40,7 +40,7 @@ import com.synaptix.toast.core.runtime.IRepositorySetup;
 public class DefaultSwingActionAdapter extends ToastSwingActionAdapter{
 
 	@Inject
-	public DefaultSwingActionAdapter(IRepositorySetup repo, SwingClientDriver driver) {
+	public DefaultSwingActionAdapter(IRepositorySetup repo, RemoteSwingAgentDriverImpl driver) {
 		super(repo, driver);
 	}
 

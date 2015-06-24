@@ -30,7 +30,7 @@ import com.synaptix.toast.automation.report.HTMLReportGenerator;
 import com.synaptix.toast.automation.report.IHTMLReportGenerator;
 import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.adapter.ActionAdapterKind;
-import com.synaptix.toast.core.agent.inspection.ISwingInspectionClient;
+import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.core.annotation.Action;
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.core.dao.ITestPage;
@@ -401,7 +401,7 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 			}
 			result = doLocalFixtureCall(command, connector, commandMethodImpl);
 		}
-		else if(getClassInstance(ISwingInspectionClient.class) != null){
+		else if(getClassInstance(ISwingAutomationClient.class) != null){
 			// If no class is implementing the command then 
 			// process it as a custom command sent through Kryo 
 			result = doRemoteFixtureCall(command, descriptor);
@@ -423,7 +423,7 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 
 	private TestResult doRemoteFixtureCall(String command, TestLineDescriptor descriptor) {
 		TestResult result;
-		ISwingInspectionClient swingClient = (ISwingInspectionClient) getClassInstance(ISwingInspectionClient.class);
+		ISwingAutomationClient swingClient = (ISwingAutomationClient) getClassInstance(ISwingAutomationClient.class);
 		swingClient.processCustomCommand(buildCommandRequest(command, descriptor));
 		
 		if(LOG.isDebugEnabled()){

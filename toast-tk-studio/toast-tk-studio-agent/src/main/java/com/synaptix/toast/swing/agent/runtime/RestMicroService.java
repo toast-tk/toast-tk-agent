@@ -38,7 +38,7 @@ import com.synaptix.toast.constant.Property;
 
 public class RestMicroService extends Verticle {
 
-	static StartCommandHandler startHandler = new StartCommandHandler();
+	final static StartCommandHandler startHandler = new StartCommandHandler();
 
 	@Override
 	public void start() {

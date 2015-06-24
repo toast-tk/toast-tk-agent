@@ -31,7 +31,7 @@ package com.synaptix.toast.core.agent.inspection;
 
 import com.synaptix.toast.core.net.request.CommandRequest;
 
-public interface ISwingInspectionClient {
+public interface ISwingAutomationClient {
 
 	void highlight(String selectedValue);
 
@@ -46,8 +46,6 @@ public interface ISwingInspectionClient {
 	void processCustomCommand(String command);
 
 	void processCustomCommand(final CommandRequest commandRequest);
-
-	public String processAndwaitForValue(String requestId);
 
 	void killServer();
 	

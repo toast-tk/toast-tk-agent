@@ -39,8 +39,8 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
-import com.synaptix.toast.automation.driver.swing.SwingClientDriver;
-import com.synaptix.toast.core.agent.inspection.ISwingInspectionClient;
+import com.synaptix.toast.automation.driver.swing.RemoteSwingAgentDriverImpl;
+import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.core.agent.interpret.IEventInterpreter;
 import com.synaptix.toast.core.agent.interpret.InterpretedEvent;
 import com.synaptix.toast.core.net.request.CommandRequest;
@@ -54,9 +54,9 @@ import com.synaptix.toast.core.net.response.ScanResponse;
 import com.synaptix.toast.core.runtime.ITCPResponseReceivedHandler;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
 import com.synaptix.toast.swing.agent.interpret.LiveRedPlayEventInterpreter;
-import com.synaptix.toast.swing.agent.interpret.MongoRepoManager;
+import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
 
-public class SwingInspectServerClient extends SwingClientDriver implements ISwingInspectionClient {
+public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl implements ISwingAutomationClient {
 
 	private EventBus eventBus;
 
@@ -64,14 +64,14 @@ public class SwingInspectServerClient extends SwingClientDriver implements ISwin
 
 	IEventInterpreter interpreter;
 
-	private static final Logger LOG = LogManager.getLogger(SwingInspectServerClient.class);
+	private static final Logger LOG = LogManager.getLogger(StudioRemoteSwingAgentDriverImpl.class);
 	
-	public SwingInspectServerClient(String host) throws IOException {
+	public StudioRemoteSwingAgentDriverImpl(String host) throws IOException {
 		super(host);
 	}
 
 	@Inject
-	public SwingInspectServerClient(final EventBus eventBus, final MongoRepoManager mongoRepoManager) throws IOException {
+	public StudioRemoteSwingAgentDriverImpl(final EventBus eventBus, final MongoRepositoryCacheWrapper mongoRepoManager) throws IOException {
 		this("localhost");
 		this.eventBus = eventBus;
 		client.addConnectionHandler(new ITCPResponseReceivedHandler(){
@@ -221,12 +221,6 @@ public class SwingInspectServerClient extends SwingClientDriver implements ISwin
 	@Override
 	public boolean isConnectedToWebApp() {
 		return interpreter.isConnectedToWebApp();
-	}
-
-	@Override
-	public String processAndwaitForValue(String requestId) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

@@ -5,7 +5,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
 import com.synaptix.toast.adapter.web.HasClickAction;
-import com.synaptix.toast.core.driver.IClientDriver;
+import com.synaptix.toast.core.driver.IRemoteSwingAgentDriver;
 import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.net.request.TableCommandRequest;
 import com.synaptix.toast.core.net.request.TableCommandRequestQueryCriteria;
@@ -20,7 +20,7 @@ import com.synaptix.toast.core.runtime.ISwingElement;
  */
 public class SwingTableElement extends SwingAutoElement implements HasClickAction {
 
-	public SwingTableElement(ISwingElement element, IClientDriver driver) {
+	public SwingTableElement(ISwingElement element, IRemoteSwingAgentDriver driver) {
 		super(element, driver);
 	}
 

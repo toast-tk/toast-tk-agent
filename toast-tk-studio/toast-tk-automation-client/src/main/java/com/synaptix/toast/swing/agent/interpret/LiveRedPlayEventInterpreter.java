@@ -23,10 +23,10 @@ public class LiveRedPlayEventInterpreter extends DefaultEventInterpreter{
 
 	private static final Logger LOG = LogManager.getLogger(LiveRedPlayEventInterpreter.class);
 	SentenceBuilder sentenceBuilder = new SentenceBuilder();
-	private MongoRepoManager mongoRepoManager;
+	private MongoRepositoryCacheWrapper mongoRepoManager;
 	private boolean isConnected = false;
 	
-	public LiveRedPlayEventInterpreter(MongoRepoManager mongoRepoManager){
+	public LiveRedPlayEventInterpreter(MongoRepositoryCacheWrapper mongoRepoManager){
 		this.mongoRepoManager= mongoRepoManager;
 		try{
 			mongoRepoManager.initCache();

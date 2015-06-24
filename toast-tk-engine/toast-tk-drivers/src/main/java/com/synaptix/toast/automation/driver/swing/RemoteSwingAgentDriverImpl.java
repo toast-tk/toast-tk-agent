@@ -12,7 +12,7 @@ import com.esotericsoftware.kryonet.FrameworkMessage.KeepAlive;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.synaptix.toast.core.agent.inspection.CommonIOUtils;
-import com.synaptix.toast.core.driver.IClientDriver;
+import com.synaptix.toast.core.driver.IRemoteSwingAgentDriver;
 import com.synaptix.toast.core.net.request.IIdRequest;
 import com.synaptix.toast.core.net.request.InitInspectionRequest;
 import com.synaptix.toast.core.net.response.ErrorResponse;
@@ -24,10 +24,10 @@ import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.ITCPClient;
 import com.synaptix.toast.core.runtime.ITCPResponseReceivedHandler;
 
-public class SwingClientDriver implements IClientDriver {
+public class RemoteSwingAgentDriverImpl implements IRemoteSwingAgentDriver {
 	
-	private static final Logger LOG = LogManager.getLogger(SwingClientDriver.class);
-	protected ITCPClient client;
+	private static final Logger LOG = LogManager.getLogger(RemoteSwingAgentDriverImpl.class);
+	protected final ITCPClient client;
 	private static final int RECONNECTION_RATE = 10000;
 	private static final int WAIT_TIMEOUT = 30000;
 	protected Map<String, Object> existsResponseMap;
@@ -38,7 +38,7 @@ public class SwingClientDriver implements IClientDriver {
 
 
 	@Inject
-	public SwingClientDriver(@Named("host") String host) {
+	public RemoteSwingAgentDriverImpl(@Named("host") String host) {
 		this.client = new KryoTCPClient();
 		this.started = false;
 		this.existsResponseMap = new HashMap<String, Object>();
@@ -223,6 +223,7 @@ public class SwingClientDriver implements IClientDriver {
 	}
 	
 	protected void handleResponse(IIdRequest response){
+		//nothing here, check children classes
 	}
 
 	@Override

@@ -33,14 +33,14 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
-import com.synaptix.toast.core.agent.inspection.ISwingInspectionClient;
+import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.core.runtime.ITestManager;
-import com.synaptix.toast.swing.agent.IToastClientApp;
-import com.synaptix.toast.swing.agent.ToastApplication;
+import com.synaptix.toast.swing.agent.IStudioApplication;
+import com.synaptix.toast.swing.agent.StudioApplicationImpl;
 import com.synaptix.toast.swing.agent.config.Config;
 import com.synaptix.toast.swing.agent.config.ConfigProvider;
-import com.synaptix.toast.swing.agent.interpret.MongoRepoManager;
-import com.synaptix.toast.swing.agent.runtime.SwingInspectServerClient;
+import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
+import com.synaptix.toast.swing.agent.runtime.StudioRemoteSwingAgentDriverImpl;
 import com.synaptix.toast.swing.agent.ui.SwingAgentScriptRunnerPanel;
 import com.synaptix.toast.swing.agent.ui.SwingInspectionFrame;
 import com.synaptix.toast.swing.agent.ui.SwingInspectionRecorderPanel;
@@ -52,7 +52,7 @@ public class SwingModule extends AbstractModule {
 	protected void configure() {
 		bindConstant().annotatedWith(Names.named("host")).to("localhost");
 
-		bind(IToastClientApp.class).to(ToastApplication.class).asEagerSingleton();
+		bind(IStudioApplication.class).to(StudioApplicationImpl.class).asEagerSingleton();
 		bind(SwingInspectionFrame.class).asEagerSingleton();
 
 		bind(Config.class).toProvider(ConfigProvider.class).in(Singleton.class);
@@ -60,9 +60,9 @@ public class SwingModule extends AbstractModule {
 		bind(SwingInspectorPanel.class).in(Singleton.class);
 		bind(SwingInspectionRecorderPanel.class).in(Singleton.class);
 		
-		bind(ISwingInspectionClient.class).to(SwingInspectServerClient.class).in(Singleton.class);
+		bind(ISwingAutomationClient.class).to(StudioRemoteSwingAgentDriverImpl.class).in(Singleton.class);
 		
-		bind(MongoRepoManager.class).in(Singleton.class);
+		bind(MongoRepositoryCacheWrapper.class).in(Singleton.class);
 		bind(EventBus.class).in(Singleton.class);
 		bind(ITestManager.class).to(NotAbstractTestManagerImpl.class);
 	}

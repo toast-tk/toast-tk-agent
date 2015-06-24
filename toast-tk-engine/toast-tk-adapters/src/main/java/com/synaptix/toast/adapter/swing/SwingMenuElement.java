@@ -5,7 +5,7 @@ import java.util.concurrent.TimeoutException;
 
 import com.synaptix.toast.adapter.web.HasClickAction;
 import com.synaptix.toast.adapter.web.HasSubItems;
-import com.synaptix.toast.core.driver.IClientDriver;
+import com.synaptix.toast.core.driver.IRemoteSwingAgentDriver;
 import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.ISwingElement;
@@ -18,7 +18,7 @@ import com.synaptix.toast.core.runtime.ISwingElement;
  */
 public class SwingMenuElement extends SwingAutoElement implements HasClickAction, HasSubItems {
 
-	public SwingMenuElement(ISwingElement element, IClientDriver driver) {
+	public SwingMenuElement(ISwingElement element, IRemoteSwingAgentDriver driver) {
 		super(element, driver);
 	}
 

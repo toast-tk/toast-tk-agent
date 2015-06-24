@@ -9,7 +9,7 @@ import java.util.Map;
 import org.apache.commons.beanutils.BeanUtils;
 
 import com.synaptix.toast.core.adapter.AutoSwingType;
-import com.synaptix.toast.core.driver.IClientDriver;
+import com.synaptix.toast.core.driver.IRemoteSwingAgentDriver;
 import com.synaptix.toast.core.runtime.IFeedableSwingPage;
 import com.synaptix.toast.core.runtime.ISwingElement;
 
@@ -117,7 +117,7 @@ public abstract class AbstractSwingPage implements IFeedableSwingPage {
 	/**
 	 * set the driver that will be used by the automation elements
 	 */
-	public void setDriver(IClientDriver sDvr) {
+	public void setDriver(IRemoteSwingAgentDriver sDvr) {
 		for (SwingAutoElement el : autoElements.values()) {
 			el.setFrontEndDriver(sDvr);
 		}

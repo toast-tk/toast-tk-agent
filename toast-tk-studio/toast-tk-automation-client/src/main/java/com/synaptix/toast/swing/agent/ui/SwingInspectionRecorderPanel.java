@@ -59,7 +59,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.synaptix.toast.constant.Property;
-import com.synaptix.toast.core.agent.inspection.ISwingInspectionClient;
+import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.core.agent.interpret.InterpretedEvent;
 import com.synaptix.toast.core.rest.ImportedScenario;
 import com.synaptix.toast.core.rest.ImportedScenarioDescriptor;
@@ -69,7 +69,7 @@ import com.synaptix.toast.swing.agent.AgentBoot;
 import com.synaptix.toast.swing.agent.config.Config;
 import com.synaptix.toast.swing.agent.constant.Resource;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
-import com.synaptix.toast.swing.agent.interpret.MongoRepoManager;
+import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
 import com.synpatix.toast.runtime.core.runtime.DefaultScriptRunner;
 import com.synpatix.toast.runtime.core.runtime.IReportUpdateCallBack;
 
@@ -91,20 +91,20 @@ public class SwingInspectionRecorderPanel extends JPanel{
     private static final ImageIcon stopRecordingIcon = new ImageIcon(Resource.ICON_STOP_16PX_IMG);
     private static final ImageIcon startRecordingIcon = new ImageIcon(Resource.ICON_RUN_16PX_IMG);
     
-	private ISwingInspectionClient recorder;
+	private ISwingAutomationClient recorder;
 	private DefaultScriptRunner runner;
 	private Long previousTimeStamp;
 	private boolean recordingActive;
 
-	private final MongoRepoManager mongoRepoManager;
+	private final MongoRepositoryCacheWrapper mongoRepoManager;
 	
 	@Inject
 	public SwingInspectionRecorderPanel(
-			ISwingInspectionClient recorder, 
+			ISwingAutomationClient recorder, 
 			EventBus eventBus, 
 			Config config,
 			ITestManager testEnvManager,
-			final MongoRepoManager mongoRepoManager
+			final MongoRepositoryCacheWrapper mongoRepoManager
 	){
 
 		super(new BorderLayout());

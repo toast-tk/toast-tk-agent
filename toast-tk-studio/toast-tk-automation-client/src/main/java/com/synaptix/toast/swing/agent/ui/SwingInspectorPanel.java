@@ -53,7 +53,7 @@ import javax.swing.event.ListSelectionListener;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
-import com.synaptix.toast.core.agent.inspection.ISwingInspectionClient;
+import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.core.net.response.ScanResponse;
 import com.synaptix.toast.core.rest.RestUtils;
 import com.synaptix.toast.swing.agent.config.Config;
@@ -75,11 +75,11 @@ public class SwingInspectorPanel extends JPanel {
 	private final Config config;
 	
 	private List<String> oldList = new ArrayList<String>();
-	private final ISwingInspectionClient cmdServer;
+	private final ISwingAutomationClient cmdServer;
 	private final JPanel toolPanel = new JPanel();
     
     @Inject
-	public SwingInspectorPanel(ISwingInspectionClient cmdServer, EventBus evenBus, Config config) {
+	public SwingInspectorPanel(ISwingAutomationClient cmdServer, EventBus evenBus, Config config) {
     	this.cmdServer = cmdServer;
     	
     	this.config = config;

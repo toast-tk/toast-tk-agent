@@ -49,7 +49,7 @@ import org.jsoup.nodes.Element;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.synaptix.toast.constant.Property;
-import com.synaptix.toast.core.agent.inspection.ISwingInspectionClient;
+import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.swing.agent.config.Config;
 import com.synaptix.toast.swing.agent.event.message.LoadingMessage;
 import com.synaptix.toast.swing.agent.event.message.StatusMessage;
@@ -57,24 +57,23 @@ import com.synaptix.toast.swing.agent.event.message.StopLoadingMessage;
 import com.synaptix.toast.swing.agent.ui.ConfigPanel;
 import com.synaptix.toast.utils.DownloadUtils;
 
-public class ToastApplication implements IToastClientApp {
+public class StudioApplicationImpl implements IStudioApplication {
 
-	private static final Logger LOG = LogManager.getLogger(ToastApplication.class);
+	private static final Logger LOG = LogManager.getLogger(StudioApplicationImpl.class);
 	private final EventBus eventBus;
-	private final ISwingInspectionClient serverClient;
+	private final ISwingAutomationClient serverClient;
 	private final Config config;
 	private final Properties properties;
 	private final File toastPropertiesFile;
 
-	final String AGENT_JAR_NAME = "toast-tk-agent-standalone.jar";
 
 	@Inject
-	public ToastApplication(final Config config, final EventBus eventBus, final ISwingInspectionClient serverClient) {
+	public StudioApplicationImpl(final Config config, final EventBus eventBus, final ISwingAutomationClient serverClient) {
 		this.eventBus = eventBus;
 		this.serverClient = serverClient;
 		this.toastPropertiesFile = new File(Property.TOAST_PROPERTIES_FILE);
 		this.properties = new Properties();
-		intWorkspace(this.config = config);
+		initWorkspace(this.config = config);
 		
 		if(!serverClient.isConnectedToWebApp()){
 			String message = String.format("The webapp looks down @%s:%s, please check your configuration and restart the agent !", config.getWebAppAddr(), config.getWebAppPort());
@@ -98,15 +97,18 @@ public class ToastApplication implements IToastClientApp {
 		});
 	}
 
-	private void intWorkspace(final Config config) {
+	private void initWorkspace(final Config config) {
 		if (config.getUserHome() != null) {
 			try {
 				String workSpaceDir = config.getWorkSpaceDir();
 				new File(workSpaceDir).mkdir();
 				new File(config.getPluginDir()).mkdir();
 				new File(workSpaceDir + "/log").mkdir();
+				boolean isNewEnv = false;
 				File toastProperties = new File(workSpaceDir + "/toast.properties");
+				
 				if (!toastProperties.exists()) {
+					isNewEnv = true;
 					toastProperties.createNewFile();
 				}
 				downloadPlugins(config);
@@ -114,7 +116,7 @@ public class ToastApplication implements IToastClientApp {
 				Properties p = new Properties();
 				p.setProperty(Property.TOAST_RUNTIME_TYPE, config.getRuntimeType());
 				p.setProperty(Property.TOAST_RUNTIME_CMD, config.getRuntimeCommand());
-				p.setProperty(Property.TOAST_RUNTIME_AGENT, config.getPluginDir() + AGENT_JAR_NAME);
+				p.setProperty(Property.TOAST_RUNTIME_AGENT, config.getPluginDir() + Property.AGENT_JAR_NAME);
 				p.setProperty(Property.WEBAPP_ADDR, config.getWebAppAddr());
 				System.getProperties().put(Property.WEBAPP_ADDR, config.getWebAppAddr());
 				p.setProperty(Property.WEBAPP_PORT, config.getWebAppPort());
@@ -122,6 +124,9 @@ public class ToastApplication implements IToastClientApp {
 				p.setProperty(Property.JNLP_RUNTIME_HOST, config.getJnlpRuntimeHost());
 				p.setProperty(Property.JNLP_RUNTIME_FILE, config.getJnlpRuntimeFile());
 				p.store(FileUtils.openOutputStream(toastProperties), null);
+				if(isNewEnv){
+					openConfigDialog();
+				}
 			} catch (IOException e) {
 				LOG.error(e.getMessage(), e);
 				e.printStackTrace();
@@ -213,16 +218,6 @@ public class ToastApplication implements IToastClientApp {
 	}
 
 	@Override
-	public String getRuntimeCommand() {
-		return (String) properties.get(Property.TOAST_RUNTIME_CMD);
-	}
-
-	@Override
-	public String getAgentType() {
-		return (String) properties.get(Property.TOAST_RUNTIME_AGENT);
-	}
-
-	@Override
 	public void initProperties() {
 		try {
 			initProperties(toastPropertiesFile);
@@ -230,16 +225,5 @@ public class ToastApplication implements IToastClientApp {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
-	public static void main(String[] args) {
-		String outerHtml = "living in <tt>agent-jar.jar</tt> america";
-		Pattern p = Pattern.compile("<tt>([\\w-]+)\\.jar<\\/tt>", Pattern.MULTILINE);
-		Matcher matcher = p.matcher(outerHtml);
-		while(matcher.find()){
-			System.out.println(matcher.group(1));
-		}
-		
-		
 	}
 }

@@ -29,9 +29,7 @@ Creation date: 10 mars 2015
 
 package com.synaptix.toast.swing.agent.interpret;
 
-import java.net.ConnectException;
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
@@ -42,17 +40,16 @@ import com.sun.jersey.api.client.ClientHandlerException;
 import com.synaptix.toast.dao.RestMongoWrapper;
 import com.synaptix.toast.dao.domain.impl.repository.ElementImpl;
 import com.synaptix.toast.dao.domain.impl.repository.RepositoryImpl;
-import com.synaptix.toast.swing.agent.ToastApplication;
 import com.synaptix.toast.swing.agent.config.Config;
 
-public class MongoRepoManager {
+public class MongoRepositoryCacheWrapper {
 
-	private static final Logger LOG = LogManager.getLogger(MongoRepoManager.class);
+	private static final Logger LOG = LogManager.getLogger(MongoRepositoryCacheWrapper.class);
 	Collection<RepositoryImpl> cache = null;
 	private Config config;
 	
 	@Inject
-	public MongoRepoManager(Config config){
+	public MongoRepositoryCacheWrapper(Config config){
 		this.config= config;
 	}
 	
