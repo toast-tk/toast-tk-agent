@@ -18,9 +18,9 @@ import com.synaptix.toast.core.report.TestResult.ResultKind;
  * TODO: check if we need to move it in a synaptix plugin module 
  */
 @ActionAdapter(value = ActionAdapterKind.service, name = "")
-public class ToastServiceActionAdapter extends AbstractServiceActionAdapter {
+public class ServiceActionAdapter extends AbstractServiceActionAdapter {
 
-	public ToastServiceActionAdapter() {
+	public ServiceActionAdapter() {
 		super();
 	}
 

@@ -42,7 +42,7 @@ public abstract class AbstractProjectRunner {
 	}
 
 	private void execute(Project project, boolean presetRepoFromWebApp) throws Exception {
-		ToastTestRunner runner = new ToastTestRunner(testEnvManager, injector, this.getClass().getClassLoader().getResource("settings/redpepper_descriptor.json"));
+		TestRunner runner = new TestRunner(testEnvManager, injector, this.getClass().getClassLoader().getResource("settings/redpepper_descriptor.json"));
 		if(presetRepoFromWebApp){
 			String repoWiki = RestUtils.downloadRepositoyAsWiki();
 			TestParser parser = new TestParser();
@@ -55,7 +55,7 @@ public abstract class AbstractProjectRunner {
 		execute(project, runner);
 	}
 
-	private void execute(Project project, ToastTestRunner runner) throws ClassNotFoundException {
+	private void execute(Project project, TestRunner runner) throws ClassNotFoundException {
 		initEnvironment();
 		
 		for (ICampaign campaign : project.getCampaigns()) {

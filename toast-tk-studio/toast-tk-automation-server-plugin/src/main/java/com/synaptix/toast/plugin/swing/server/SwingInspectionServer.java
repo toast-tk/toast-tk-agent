@@ -5,17 +5,15 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Window;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Logger;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -31,20 +29,20 @@ import com.synaptix.toast.core.net.request.ScanRequest;
 import com.synaptix.toast.core.net.response.RecordResponse;
 import com.synaptix.toast.core.net.response.ScanResponse;
 import com.synaptix.toast.core.record.IEventRecorder;
-import com.synaptix.toast.plugin.swing.agent.listener.SwingActionRequestListener;
 import com.synaptix.toast.plugin.swing.agent.listener.InitRequestListener;
 import com.synaptix.toast.plugin.swing.agent.listener.RepositoryHolder;
+import com.synaptix.toast.plugin.swing.agent.listener.SwingActionRequestListener;
 
 /**
  * Created by skokaina on 07/11/2014.
  */
 public class SwingInspectionServer implements ISwingInspectionServer {
 
-	Logger LOG = Logger.getLogger(SwingInspectionServer.class.getName());
+	private static final Logger LOG = LogManager.getLogger(SwingInspectionServer.class);
 	private List<Component> allComponents;
 	private Map<Object, String> allInstances;
 	final Server server;
-	final private RepositoryHolder repositoryHolder;
+	private final RepositoryHolder repositoryHolder;
 
 	@Inject
 	private IEventRecorder recorder;
@@ -60,10 +58,9 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 			this.server.start();
 			this.server.bind(CommonIOUtils.TCP_PORT);
 			initListeners(commandRequestListener, initRequestListener);
-			LOG.info("Inspection Server listening on port : " + CommonIOUtils.TCP_PORT);
+			LOG.info("Toast Inspection Server listening on port : " + CommonIOUtils.TCP_PORT);
 		} catch (Exception e) {
-			LOG.info("Server initialization error: " + e.getCause());
-			e.printStackTrace();
+			LOG.error("Server initialization error: " + e.getCause(), e);
 			server.close();
 		}
 	}
@@ -71,36 +68,28 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 	private void initListeners(SwingActionRequestListener commandRequestListener, InitRequestListener initRequestListener) {
 		this.server.addListener(commandRequestListener);
 		this.server.addListener(initRequestListener);
+		initScanRequestListener();
+		initHightLightRequestListener();
+		initRecordRequestListener();
+		initPoisonPillListener();
+	}
 
+	private void initPoisonPillListener() {
 		this.server.addListener(new Listener() {
 			@Override
 			public void received(Connection connection, Object object) {
 				try {
-					if (object instanceof ScanRequest) {
-						ScanRequest scanRequest = (ScanRequest) object;
-						List<String> components = scan(scanRequest.isDebug());
-						ScanResponse response = new ScanResponse(scanRequest.getId(), components);
-						connection.sendTCP(response);
+					if (object instanceof PoisonPill) {
+						System.exit(1);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
+	}
 
-		this.server.addListener(new Listener() {
-			@Override
-			public void received(Connection connection, Object object) {
-				try {
-					if (object instanceof HighLightRequest) {
-						highlight(((HighLightRequest) object).getLocator());
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-
+	private void initRecordRequestListener() {
 		this.server.addListener(new Listener() {
 			@Override
 			public void received(Connection connection, Object object) {
@@ -113,13 +102,33 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 				}
 			}
 		});
+	}
 
+	private void initHightLightRequestListener() {
 		this.server.addListener(new Listener() {
 			@Override
 			public void received(Connection connection, Object object) {
 				try {
-					if (object instanceof PoisonPill) {
-						System.exit(1);
+					if (object instanceof HighLightRequest) {
+						highlight(((HighLightRequest) object).getLocator());
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	private void initScanRequestListener() {
+		this.server.addListener(new Listener() {
+			@Override
+			public void received(Connection connection, Object object) {
+				try {
+					if (object instanceof ScanRequest) {
+						ScanRequest scanRequest = (ScanRequest) object;
+						List<String> components = scan(scanRequest.isDebug());
+						ScanResponse response = new ScanResponse(scanRequest.getId(), components);
+						connection.sendTCP(response);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

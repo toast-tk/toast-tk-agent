@@ -68,23 +68,13 @@ public class InitRequestListener extends Listener {
 		try {
 			if (object instanceof InitInspectionRequest) {
 				SwingInspectionManager.getInstance().clearContainers();
-				for (Container f : getWindows()) {
-					SwingInspectionManager.getInstance().addContainer(f);
-					if (JDialog.class.isAssignableFrom(f.getClass())) {
-						((JDialog) f).setModal(false);
-						((JDialog) f).setModalityType(Dialog.ModalityType.MODELESS);
-					}
-				}
-
-				InitInspectionRequest request = (InitInspectionRequest) object;
+				mutateJDialogsModalityType();
 
 				InitResponse response = new InitResponse();
-
 				java.util.List<Component> allComponents = SwingInspectionManager.getInstance().getAllComponents();
 				Map<Object, String> allInstances = SwingInspectionManager.getInstance().getAllInstances();
 
 				repositoryHolder.getRepo().clear();
-
 				for (Component component : allComponents) {
 					String componentName = allInstances.get(component);
 					String componentId = component.getName();
@@ -102,17 +92,29 @@ public class InitRequestListener extends Listener {
 
 	}
 
+	private void mutateJDialogsModalityType() {
+		for (Container f : getWindows()) {
+			SwingInspectionManager.getInstance().addContainer(f);
+			if (JDialog.class.isAssignableFrom(f.getClass())) {
+				((JDialog) f).setModal(false);
+				((JDialog) f).setModalityType(Dialog.ModalityType.MODELESS);
+			}
+		}
+	}
+
 	public static boolean isAutorizedComponent(Component component) {
 		for (String packageName : autorizedPackages) {
 			if (component.getClass().getPackage().getName().startsWith(packageName)) {
 				return true;
 			}
 		}
-		if (autorizedComponents.contains(component.getClass()))
+		if (autorizedComponents.contains(component.getClass())){
 			return true;
+		}
 		for (Class<?> autorizedComponent : autorizedComponents) {
-			if (autorizedComponent.isAssignableFrom(component.getClass()))
+			if (autorizedComponent.isAssignableFrom(component.getClass())){
 				return true;
+			}
 		}
 		return false;
 	}

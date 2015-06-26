@@ -32,8 +32,6 @@ package com.synaptix.toast.swing.agent.runtime;
 import java.io.IOException;
 import java.util.UUID;
 
-import javax.swing.SwingUtilities;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -111,14 +109,9 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 
 	@Override
 	public void scanUi(final boolean selected) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				final String requestId = UUID.randomUUID().toString();
-				ScanRequest scanRequest = new ScanRequest(requestId, selected);
-				client.sendRequest(scanRequest);
-			}
-		});
+		final String requestId = UUID.randomUUID().toString();
+		ScanRequest scanRequest = new ScanRequest(requestId, selected);
+		client.sendRequest(scanRequest);
 	}
 
 	@Override

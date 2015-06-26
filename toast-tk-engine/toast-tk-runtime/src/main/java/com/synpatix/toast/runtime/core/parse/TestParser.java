@@ -30,11 +30,11 @@ import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 import com.synpatix.toast.runtime.core.parse.TestPageBlock.BlockType;
-import com.synpatix.toast.runtime.core.runtime.ToastTestRunner;
+import com.synpatix.toast.runtime.core.runtime.TestRunner;
 
 public class TestParser {
 
-	private static final Logger LOG = LogManager.getLogger(ToastTestRunner.class);
+	private static final Logger LOG = LogManager.getLogger(TestRunner.class);
 	private static String VARIABLE_ASSIGNATION_SEPARATOR = ":=";
 
 	// TODO: link to play domain

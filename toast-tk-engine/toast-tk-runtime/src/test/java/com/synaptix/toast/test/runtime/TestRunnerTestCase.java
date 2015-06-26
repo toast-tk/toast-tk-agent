@@ -43,9 +43,9 @@ import org.junit.Test;
 import com.synaptix.toast.core.annotation.Action;
 import com.synaptix.toast.core.runtime.IRepositorySetup;
 import com.synaptix.toast.test.runtime.mock.DefaultRepositorySetup;
-import com.synpatix.toast.runtime.core.runtime.ToastRunnerHelper;
-import com.synpatix.toast.runtime.core.runtime.ToastTestRunner;
-import com.synpatix.toast.runtime.core.runtime.ToastTestRunner.FixtureExecCommandDescriptor;
+import com.synpatix.toast.runtime.core.runtime.TestRunnerArgumentHelper;
+import com.synpatix.toast.runtime.core.runtime.TestRunner;
+import com.synpatix.toast.runtime.core.runtime.TestRunner.FixtureExecCommandDescriptor;
 
 public class TestRunnerTestCase {
 	
@@ -67,7 +67,7 @@ public class TestRunnerTestCase {
 	
 	@Test
 	public void testEmptyResult() {
-		ToastTestRunner runner = new ToastTestRunner(null, null);
+		TestRunner runner = new TestRunner(null, null);
 		FixtureExecCommandDescriptor findMethodInClass = runner.findMethodInClass("Titi", Toto.class);
 		assertNull(findMethodInClass);
 	}
@@ -75,7 +75,7 @@ public class TestRunnerTestCase {
 	@Test
 	@Ignore
 	public void testNonEmptyResult() {
-		ToastTestRunner runner = new ToastTestRunner(null, null);
+		TestRunner runner = new TestRunner(null, null);
 		FixtureExecCommandDescriptor findMethodInClass = runner.findMethodInClass("Titi", Titi.class);
 		assertNotNull(findMethodInClass);
 	}
@@ -87,15 +87,15 @@ public class TestRunnerTestCase {
 		Map<String,Object> userVarMap = new HashMap<String, Object>();
 		userVarMap.put("$variable", "200");
 		repo.setUserVariables(userVarMap);
-		Object buildArgument = ToastRunnerHelper.buildArgument(repo, "$variable");
+		Object buildArgument = TestRunnerArgumentHelper.buildArgument(repo, "$variable");
 		assertEquals(buildArgument, "200");
-		buildArgument = ToastRunnerHelper.buildArgument(repo, "*$variable*");
+		buildArgument = TestRunnerArgumentHelper.buildArgument(repo, "*$variable*");
 		assertEquals(buildArgument, "200");
-		buildArgument = ToastRunnerHelper.buildArgument(repo, "$vaiable");
+		buildArgument = TestRunnerArgumentHelper.buildArgument(repo, "$vaiable");
 		assertNull(buildArgument);
-		buildArgument = ToastRunnerHelper.buildArgument(repo, "$$variable");
+		buildArgument = TestRunnerArgumentHelper.buildArgument(repo, "$$variable");
 		assertEquals(buildArgument, "$variable");
-		buildArgument = ToastRunnerHelper.buildArgument(repo, "*variable*");
+		buildArgument = TestRunnerArgumentHelper.buildArgument(repo, "*variable*");
 		assertEquals(buildArgument, "variable");
 	}
 	
@@ -107,7 +107,7 @@ public class TestRunnerTestCase {
 		userVarMap.put("$var", "value");
 		userVarMap.put("$variable", "nested $var replacement");
 		repo.setUserVariables(userVarMap);
-		Object buildArgument = ToastRunnerHelper.buildArgument(repo, "$variable");
+		Object buildArgument = TestRunnerArgumentHelper.buildArgument(repo, "$variable");
 		assertEquals(buildArgument, "nested value replacement");
 	}
 	
@@ -119,7 +119,7 @@ public class TestRunnerTestCase {
 		userVarMap.put("$vari", "value");
 		userVarMap.put("$variable", "nested $var replacement \n with another $vari");
 		repo.setUserVariables(userVarMap);
-		Object buildArgument = ToastRunnerHelper.buildArgument(repo, "$variable");
+		Object buildArgument = TestRunnerArgumentHelper.buildArgument(repo, "$variable");
 		assertEquals(buildArgument, "nested value replacement \n with another value");
 	}
 	

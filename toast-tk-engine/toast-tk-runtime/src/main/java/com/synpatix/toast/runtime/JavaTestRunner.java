@@ -10,7 +10,7 @@ import com.synaptix.toast.automation.report.IReporter;
  * @author skokaina
  * 
  */
-public class ToastJavaRunner {
+public class JavaTestRunner {
 
 	private IReporter reporter;
 
@@ -18,14 +18,14 @@ public class ToastJavaRunner {
 	 * 
 	 * @param reporter
 	 */
-	public ToastJavaRunner(IReporter reporter) {
+	public JavaTestRunner(IReporter reporter) {
 		this.reporter = reporter;
 	}
 
 	/**
 	 * Default constructor
 	 */
-	public ToastJavaRunner() {
+	public JavaTestRunner() {
 
 	}
 

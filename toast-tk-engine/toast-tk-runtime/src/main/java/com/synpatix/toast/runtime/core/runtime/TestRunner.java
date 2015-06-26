@@ -32,6 +32,7 @@ import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.adapter.ActionAdapterKind;
 import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.core.annotation.Action;
+import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.net.request.CommandRequest;
@@ -55,9 +56,10 @@ import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 
- public class ToastTestRunner {
+@FixMe(todo="expose only one constructor")
+public class TestRunner {
 
-	private static final Logger LOG = LogManager.getLogger(ToastTestRunner.class);
+	private static final Logger LOG = LogManager.getLogger(TestRunner.class);
 	private IHTMLReportGenerator htmlReportGenerator = new HTMLReportGenerator();
 	private final ITestManager testManager;
 	private final IRepositorySetup repoSetup;
@@ -66,12 +68,12 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 	private IReportUpdateCallBack reportUpdateCallBack;
 	private List<FixtureService> fixtureApiServices;
 	
-	public ToastTestRunner(ITestManager testManager, IRepositorySetup repoSetup) {
+	public TestRunner(ITestManager testManager, IRepositorySetup repoSetup) {
 		this.testManager = testManager;
 		this.repoSetup = repoSetup;
 	}
 	
-	public ToastTestRunner(ITestManager m, Injector injector, URL settingsFile) {
+	public TestRunner(ITestManager m, Injector injector, URL settingsFile) {
 		this(m, injector.getInstance(IRepositorySetup.class));
 		this.injector = injector;
 		this.htmlReportGenerator = injector.getInstance(IHTMLReportGenerator.class);
@@ -82,7 +84,7 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 		}
 	}
 
-	public ToastTestRunner(ITestManager testEnvManager, Injector injector, URL settings, IReportUpdateCallBack reportUpdateCallBack) {
+	public TestRunner(ITestManager testEnvManager, Injector injector, URL settings, IReportUpdateCallBack reportUpdateCallBack) {
 		this(testEnvManager, injector, settings);
 		this.reportUpdateCallBack = reportUpdateCallBack;
 	}
@@ -443,7 +445,7 @@ import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 		Object[] args = new Object[groupCount];
 		for (int i = 0; i < groupCount; i++) {
 			String group = matcher.group(i + 1);
-			args[i] = ToastRunnerHelper.buildArgument(repoSetup, group);
+			args[i] = TestRunnerArgumentHelper.buildArgument(repoSetup, group);
 			if(group.startsWith("$$")){
 				//nothing
 			}

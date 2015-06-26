@@ -36,7 +36,7 @@ import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.adapter.ActionAdapterSentenceRef;
 import com.synaptix.toast.core.runtime.IRepositorySetup;
 
-public class ToastRunnerHelper {
+public class TestRunnerArgumentHelper {
 
 	/**
 	 * @param repoSetup

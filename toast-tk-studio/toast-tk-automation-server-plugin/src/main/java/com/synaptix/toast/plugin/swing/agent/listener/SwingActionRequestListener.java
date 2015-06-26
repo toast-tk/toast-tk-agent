@@ -7,7 +7,6 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.image.BufferedImage;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -46,7 +45,7 @@ import com.synaptix.toast.core.report.TestResult.ResultKind;
  */
 public class SwingActionRequestListener extends Listener implements Runnable {
 
-	private final static Logger LOG = LogManager.getLogger(SwingActionRequestListener.class);
+	private static final Logger LOG = LogManager.getLogger(SwingActionRequestListener.class);
 
 	private final BlockingQueue<ActionRequestWrapper> actionRequestQueue;
 	private final FixtureHandlerProvider fixtureHandlerProvider;

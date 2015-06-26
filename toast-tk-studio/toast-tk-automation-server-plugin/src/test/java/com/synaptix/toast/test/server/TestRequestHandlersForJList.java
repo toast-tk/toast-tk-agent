@@ -1,7 +1,5 @@
 package com.synaptix.toast.test.server;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,12 +12,10 @@ import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.net.request.InitInspectionRequest;
 import com.synaptix.toast.core.net.request.TableCommandRequest;
 import com.synaptix.toast.core.net.request.TableCommandRequestQueryCriteria;
-import com.synaptix.toast.core.net.response.ValueResponse;
-import com.synaptix.toast.plugin.swing.agent.listener.SwingActionRequestListener;
 import com.synaptix.toast.plugin.swing.agent.listener.InitRequestListener;
+import com.synaptix.toast.plugin.swing.agent.listener.SwingActionRequestListener;
 import com.synaptix.toast.test.server.mock.FakeConnection;
 import com.synaptix.toast.test.server.mock.JListTestFrame;
-import com.synaptix.toast.test.server.mock.TableTestFrame;
 
 public class TestRequestHandlersForJList {
 	

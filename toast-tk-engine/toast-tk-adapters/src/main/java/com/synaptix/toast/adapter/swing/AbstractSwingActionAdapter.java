@@ -45,11 +45,11 @@ import com.synaptix.toast.core.runtime.IFeedableSwingPage;
 import com.synaptix.toast.core.runtime.IRepositorySetup;
 
 @ActionAdapter(value = ActionAdapterKind.swing, name = "")
-public abstract class ToastSwingActionAdapter {
+public abstract class AbstractSwingActionAdapter {
 	protected IRepositorySetup repo;
 	protected IRemoteSwingAgentDriver driver;
 
-	public ToastSwingActionAdapter(IRepositorySetup repo, IRemoteSwingAgentDriver driver) {
+	public AbstractSwingActionAdapter(IRepositorySetup repo, IRemoteSwingAgentDriver driver) {
 		this.repo = repo;
 		this.driver = driver;
 		try {

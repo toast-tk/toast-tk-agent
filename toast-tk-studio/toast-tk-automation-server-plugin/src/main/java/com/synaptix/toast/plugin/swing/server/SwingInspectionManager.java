@@ -50,8 +50,8 @@ public class SwingInspectionManager {
 	 * @param c
 	 * @return
 	 */
-	public synchronized List<Component> getAllComponents(Container c) {
-		Component[] comps = c.getComponents();
+	public synchronized List<Component> getAllComponents(Container container) {
+		Component[] comps = container.getComponents();
 		List<Component> compList = new ArrayList<Component>();
 		for (Component comp : comps) {
 			compList.add(comp);
@@ -75,42 +75,32 @@ public class SwingInspectionManager {
 	 * @param c
 	 * @return
 	 */
-	public synchronized Map<Object, String> getAllInstances(Container c) {
-		Map<Object, String> compMap = new HashMap<Object, String>();
-		for (Field field : c.getClass().getDeclaredFields()) {
+	public synchronized Map<Object, String> getAllInstances(Container container) {
+		Map<Object, String> componentMap = new HashMap<Object, String>();
+		collectContainerFields(container, componentMap);
+		Component[] comps = container.getComponents();
+		for (Component component : comps) {
+			collectContainerFields(component, componentMap);
+			if (component instanceof Container) {
+				componentMap.putAll(getAllInstances((Container) component));
+			}
+		}
+		return componentMap;
+	}
+
+	private void collectContainerFields(Component component, Map<Object, String> componentMap) {
+		for (Field field : component.getClass().getDeclaredFields()) {
 			try {
 				field.setAccessible(true);
-				Object propertyValue = field.get(c);
-				try {
-					compMap.put(propertyValue, c.getClass().getCanonicalName()
-							+ ":" + field.getName());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				Object propertyValue = field.get(component);
+				componentMap.put(propertyValue,  component.getClass().getCanonicalName() + ":" + field.getName());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		Component[] comps = c.getComponents();
-		for (Component comp : comps) {
-			for (Field field : comp.getClass().getDeclaredFields()) {
-				try {
-					field.setAccessible(true);
-					Object propertyValue = field.get(comp);
-					compMap.put(propertyValue,
-							c.getName() + ":" + field.getName());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (comp instanceof Container) {
-				compMap.putAll(getAllInstances((Container) comp));
-			}
-		}
-		return compMap;
 	}
 
-	public synchronized static SwingInspectionManager getInstance() {
+	public static synchronized  SwingInspectionManager getInstance() {
 		if (instance == null) {
 			instance = new SwingInspectionManager();
 		}

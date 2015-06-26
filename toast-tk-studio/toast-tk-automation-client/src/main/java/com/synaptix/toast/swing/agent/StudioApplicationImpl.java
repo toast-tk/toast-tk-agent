@@ -74,13 +74,13 @@ public class StudioApplicationImpl implements IStudioApplication {
 		this.toastPropertiesFile = new File(Property.TOAST_PROPERTIES_FILE);
 		this.properties = new Properties();
 		initWorkspace(this.config = config);
-		
 		if(!serverClient.isConnectedToWebApp()){
-			String message = String.format("The webapp looks down @%s:%s, please check your configuration and restart the agent !", config.getWebAppAddr(), config.getWebAppPort());
-			JOptionPane.showMessageDialog(null, message);
-			System.exit(-1);
+			displayDialogAndExitSystem(config);
 		}
-		
+		monitorOutOfMemoryException();
+	}
+
+	private void monitorOutOfMemoryException() {
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
 			@Override
 			public void uncaughtException(Thread t, Throwable e) {
@@ -97,33 +97,25 @@ public class StudioApplicationImpl implements IStudioApplication {
 		});
 	}
 
+	private void displayDialogAndExitSystem(final Config config) {
+		String message = String.format("The webapp looks down @%s:%s, please check your configuration and restart the agent !", config.getWebAppAddr(), config.getWebAppPort());
+		JOptionPane.showMessageDialog(null, message);
+		System.exit(-1);
+	}
+
 	private void initWorkspace(final Config config) {
 		if (config.getUserHome() != null) {
 			try {
-				String workSpaceDir = config.getWorkSpaceDir();
-				new File(workSpaceDir).mkdir();
-				new File(config.getPluginDir()).mkdir();
-				new File(workSpaceDir + "/log").mkdir();
 				boolean isNewEnv = false;
+				final String workSpaceDir = config.getWorkSpaceDir();
+				createHomeDirectories(config, workSpaceDir);
 				File toastProperties = new File(workSpaceDir + "/toast.properties");
-				
 				if (!toastProperties.exists()) {
 					isNewEnv = true;
 					toastProperties.createNewFile();
 				}
 				downloadPlugins(config);
-				
-				Properties p = new Properties();
-				p.setProperty(Property.TOAST_RUNTIME_TYPE, config.getRuntimeType());
-				p.setProperty(Property.TOAST_RUNTIME_CMD, config.getRuntimeCommand());
-				p.setProperty(Property.TOAST_RUNTIME_AGENT, config.getPluginDir() + Property.AGENT_JAR_NAME);
-				p.setProperty(Property.WEBAPP_ADDR, config.getWebAppAddr());
-				System.getProperties().put(Property.WEBAPP_ADDR, config.getWebAppAddr());
-				p.setProperty(Property.WEBAPP_PORT, config.getWebAppPort());
-				System.getProperties().put(Property.WEBAPP_PORT, config.getWebAppPort());
-				p.setProperty(Property.JNLP_RUNTIME_HOST, config.getJnlpRuntimeHost());
-				p.setProperty(Property.JNLP_RUNTIME_FILE, config.getJnlpRuntimeFile());
-				p.store(FileUtils.openOutputStream(toastProperties), null);
+				initAndStoreProperties(config, toastProperties);
 				if(isNewEnv){
 					openConfigDialog();
 				}
@@ -136,6 +128,26 @@ public class StudioApplicationImpl implements IStudioApplication {
 			LOG.error(message);
 			throw new Error(message);
 		}
+	}
+
+	private void createHomeDirectories(final Config config, String workSpaceDir) {
+		new File(workSpaceDir).mkdir();
+		new File(config.getPluginDir()).mkdir();
+		new File(workSpaceDir + "/log").mkdir();
+	}
+
+	private void initAndStoreProperties(final Config config, File toastProperties) throws IOException {
+		Properties p = new Properties();
+		p.setProperty(Property.TOAST_RUNTIME_TYPE, config.getRuntimeType());
+		p.setProperty(Property.TOAST_RUNTIME_CMD, config.getRuntimeCommand());
+		p.setProperty(Property.TOAST_RUNTIME_AGENT, config.getPluginDir() + Property.AGENT_JAR_NAME);
+		p.setProperty(Property.WEBAPP_ADDR, config.getWebAppAddr());
+		System.getProperties().put(Property.WEBAPP_ADDR, config.getWebAppAddr());
+		p.setProperty(Property.WEBAPP_PORT, config.getWebAppPort());
+		System.getProperties().put(Property.WEBAPP_PORT, config.getWebAppPort());
+		p.setProperty(Property.JNLP_RUNTIME_HOST, config.getJnlpRuntimeHost());
+		p.setProperty(Property.JNLP_RUNTIME_FILE, config.getJnlpRuntimeFile());
+		p.store(FileUtils.openOutputStream(toastProperties), null);
 	}
 
 	private void downloadPlugins(final Config config) {
@@ -210,10 +222,9 @@ public class StudioApplicationImpl implements IStudioApplication {
 	public void openConfigDialog() {
 		try {
 			initProperties(toastPropertiesFile);
-			//TODO: manage and hide/show + reload method
-			final ConfigPanel configPanel = new ConfigPanel(properties, toastPropertiesFile);
+			new ConfigPanel(properties, toastPropertiesFile);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 	}
 
@@ -222,8 +233,7 @@ public class StudioApplicationImpl implements IStudioApplication {
 		try {
 			initProperties(toastPropertiesFile);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 	}
 }

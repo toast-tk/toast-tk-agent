@@ -95,7 +95,7 @@ public abstract class AbstractRunner {
 		
 		// Run test
 		URL defaultSettings = this.getClass().getClassLoader().getResource(Property.REDPEPPER_AUTOMATION_SETTINGS_DEFAULT_DIR);
-		ToastTestRunner runner = new ToastTestRunner(testEnvManager, injector, defaultSettings, reportUpdateCallBack);
+		TestRunner runner = new TestRunner(testEnvManager, injector, defaultSettings, reportUpdateCallBack);
 
 		try {
 			if (presetRepoFromWebApp) {
