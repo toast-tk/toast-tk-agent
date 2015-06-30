@@ -63,7 +63,6 @@ public class TestRunner {
 	private IHTMLReportGenerator htmlReportGenerator = new HTMLReportGenerator();
 	private final ITestManager testManager;
 	private final IRepositorySetup repoSetup;
-	private URL settingsFile;
 	private Injector injector;
 	private IReportUpdateCallBack reportUpdateCallBack;
 	private List<FixtureService> fixtureApiServices;
@@ -73,20 +72,27 @@ public class TestRunner {
 		this.repoSetup = repoSetup;
 	}
 	
-	public TestRunner(ITestManager m, Injector injector, URL settingsFile) {
-		this(m, injector.getInstance(IRepositorySetup.class));
+	public static TestRunner FromInjector(ITestManager testManager, Injector injector){
+		TestRunner runner = new TestRunner(testManager, injector.getInstance(IRepositorySetup.class));
+		runner.setInjector(injector);
+		return runner;
+	}
+	
+	public static TestRunner FromInjectorWithReportCallBack(ITestManager testManager, Injector injector, IReportUpdateCallBack reportUpdateCallBack){
+		TestRunner runner = new TestRunner(testManager, injector.getInstance(IRepositorySetup.class));
+		runner.setInjector(injector);
+		runner.setReportCallBack(reportUpdateCallBack);
+		return runner;
+	}
+	
+	private void setReportCallBack(IReportUpdateCallBack reportUpdateCallBack) {
+		this.reportUpdateCallBack = reportUpdateCallBack;
+	}
+
+	private void setInjector(Injector injector) {
 		this.injector = injector;
 		this.htmlReportGenerator = injector.getInstance(IHTMLReportGenerator.class);
 		this.fixtureApiServices = ActionAdapterCollector.listAvailableServicesByInjection(injector);
-		this.settingsFile = settingsFile;
-		if(settingsFile != null){
-			LOG.info("Overriding fixture definitions with settings in " + settingsFile.getFile());
-		}
-	}
-
-	public TestRunner(ITestManager testEnvManager, Injector injector, URL settings, IReportUpdateCallBack reportUpdateCallBack) {
-		this(testEnvManager, injector, settings);
-		this.reportUpdateCallBack = reportUpdateCallBack;
 	}
 
 	/**
@@ -445,7 +451,7 @@ public class TestRunner {
 		Object[] args = new Object[groupCount];
 		for (int i = 0; i < groupCount; i++) {
 			String group = matcher.group(i + 1);
-			args[i] = TestRunnerArgumentHelper.buildArgument(repoSetup, group);
+			args[i] = TestRunnerArgumentHelper.buildActionAdapterArgument(repoSetup, group);
 			if(group.startsWith("$$")){
 				//nothing
 			}

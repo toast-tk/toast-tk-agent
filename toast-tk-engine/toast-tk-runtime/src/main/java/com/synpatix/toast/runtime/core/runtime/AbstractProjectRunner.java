@@ -36,7 +36,7 @@ public abstract class AbstractProjectRunner {
 	}
 
 	private void execute(Project project, boolean presetRepoFromWebApp) throws Exception {
-		TestRunner runner = new TestRunner(testEnvManager, injector, this.getClass().getClassLoader().getResource("settings/redpepper_descriptor.json"));
+		TestRunner runner = TestRunner.FromInjector(testEnvManager, injector);
 		if(presetRepoFromWebApp){
 			String repoWiki = RestUtils.downloadRepositoyAsWiki();
 			TestParser parser = new TestParser();

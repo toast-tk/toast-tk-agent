@@ -75,7 +75,6 @@ public class RepositorySetup implements IRepositorySetup{
 	 */
 	public TestResult insertComponent(String componentName, Map<String, String> values) {
 		componentName = ActionAdapterHelper.parseTestString(componentName);
-
 		TestComponentConfig testEntityConfig = classesConfig.get(componentName);
 		if (testEntityConfig != null) {
 			if (testEntityConfig.isDomain) {

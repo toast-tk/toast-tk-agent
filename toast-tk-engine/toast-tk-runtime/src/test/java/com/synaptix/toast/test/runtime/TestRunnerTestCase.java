@@ -87,15 +87,15 @@ public class TestRunnerTestCase {
 		Map<String,Object> userVarMap = new HashMap<String, Object>();
 		userVarMap.put("$variable", "200");
 		repo.setUserVariables(userVarMap);
-		Object buildArgument = TestRunnerArgumentHelper.buildArgument(repo, "$variable");
+		Object buildArgument = TestRunnerArgumentHelper.buildActionAdapterArgument(repo, "$variable");
 		assertEquals(buildArgument, "200");
-		buildArgument = TestRunnerArgumentHelper.buildArgument(repo, "*$variable*");
+		buildArgument = TestRunnerArgumentHelper.buildActionAdapterArgument(repo, "*$variable*");
 		assertEquals(buildArgument, "200");
-		buildArgument = TestRunnerArgumentHelper.buildArgument(repo, "$vaiable");
+		buildArgument = TestRunnerArgumentHelper.buildActionAdapterArgument(repo, "$vaiable");
 		assertNull(buildArgument);
-		buildArgument = TestRunnerArgumentHelper.buildArgument(repo, "$$variable");
+		buildArgument = TestRunnerArgumentHelper.buildActionAdapterArgument(repo, "$$variable");
 		assertEquals(buildArgument, "$variable");
-		buildArgument = TestRunnerArgumentHelper.buildArgument(repo, "*variable*");
+		buildArgument = TestRunnerArgumentHelper.buildActionAdapterArgument(repo, "*variable*");
 		assertEquals(buildArgument, "variable");
 	}
 	
@@ -107,7 +107,7 @@ public class TestRunnerTestCase {
 		userVarMap.put("$var", "value");
 		userVarMap.put("$variable", "nested $var replacement");
 		repo.setUserVariables(userVarMap);
-		Object buildArgument = TestRunnerArgumentHelper.buildArgument(repo, "$variable");
+		Object buildArgument = TestRunnerArgumentHelper.buildActionAdapterArgument(repo, "$variable");
 		assertEquals(buildArgument, "nested value replacement");
 	}
 	
@@ -119,7 +119,7 @@ public class TestRunnerTestCase {
 		userVarMap.put("$vari", "value");
 		userVarMap.put("$variable", "nested $var replacement \n with another $vari");
 		repo.setUserVariables(userVarMap);
-		Object buildArgument = TestRunnerArgumentHelper.buildArgument(repo, "$variable");
+		Object buildArgument = TestRunnerArgumentHelper.buildActionAdapterArgument(repo, "$variable");
 		assertEquals(buildArgument, "nested value replacement \n with another value");
 	}
 	

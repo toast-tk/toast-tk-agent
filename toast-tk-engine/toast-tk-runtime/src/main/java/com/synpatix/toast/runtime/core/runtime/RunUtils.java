@@ -20,6 +20,10 @@ public class RunUtils {
 			}
 			totalSuccess += testPage.getTestSuccessNumber();
 		}
+		print(totalErrors, totalTechnical, totalSuccess, filesWithErrorsList);
+	}
+
+	private static void print(int totalErrors, int totalTechnical, int totalSuccess, List<String> filesWithErrorsList) {
 		if (totalErrors > 0) {
 			System.out.println("Files with failed tests : ");
 			for (String string : filesWithErrorsList) {

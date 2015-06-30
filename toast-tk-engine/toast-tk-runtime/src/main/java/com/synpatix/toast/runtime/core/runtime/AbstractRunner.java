@@ -13,7 +13,6 @@ import org.apache.logging.log4j.Logger;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
 import com.synaptix.toast.automation.report.IHTMLReportGenerator;
-import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.rest.RestUtils;
 import com.synaptix.toast.core.runtime.ITestManager;
@@ -91,8 +90,7 @@ public abstract class AbstractRunner {
 	private ITestPage runScript(ITestManager testEnvManager, File file, String script) throws IllegalAccessException, ClassNotFoundException {
 		TestParser testParser = new TestParser();
 		ITestPage result = file == null ? testParser.parseString(script) : testParser.parse(file);
-		URL defaultSettings = this.getClass().getClassLoader().getResource(Property.REDPEPPER_AUTOMATION_SETTINGS_DEFAULT_DIR);
-		TestRunner runner = new TestRunner(testEnvManager, injector, defaultSettings, reportUpdateCallBack);
+		TestRunner runner = TestRunner.FromInjectorWithReportCallBack(testEnvManager, injector, reportUpdateCallBack);
 		if (this.presetRepoFromWebApp) {
 			String repoWiki = RestUtils.downloadRepositoyAsWiki();
 			TestParser parser = new TestParser();
