@@ -1,16 +1,10 @@
 package com.synpatix.toast.runtime.core.runtime;
 
-import java.awt.Desktop;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
-import com.synaptix.toast.automation.report.IHTMLReportGenerator;
 import com.synaptix.toast.core.dao.ICampaign;
 import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.rest.RestUtils;

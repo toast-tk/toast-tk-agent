@@ -58,31 +58,12 @@ public class Boot {
 	
 	public static void main(String[] args) {
 		final ServicePluginLoader<ToastPluginBoot> bootPluginsLoader;
-		//TODO: else throw big error
-		final String redpepperAgentPath = System.getProperty(Property.TOAST_PLUGIN_DIR_PROP) == null ? Property.TOAST_PLUGIN_DIR : System.getProperty(Property.TOAST_PLUGIN_DIR_PROP); 
-		//final String redpepperAgentPath = "C:\\Users\\PSKA09831\\.toast\\plugins";
-		LOG.info("Loading swing server agent plugins from directory: " + redpepperAgentPath);
-		final ServicePluginsClassPathProvider pluginsClassPathProvider = new ServicePluginsClassPathProvider() {
-			@Override
-			public Collection<ServicePluginClassPath> getPlugins() {
-				URL[] collectJarsInDirector = collectJarsInDirector(new File(redpepperAgentPath), Thread.currentThread().getContextClassLoader());
-				List<ServicePluginClassPath> plugins = new ArrayList<ServicePluginClassPath>();
-				for (URL jar : collectJarsInDirector) {
-					LOG.info("Found plugin jar {}", jar);
-					plugins.add(new ServicePluginClassPath(jar));
-				}
-				return plugins;
-			}
-		};
-		
+		final String pluginsPath = System.getProperty(Property.TOAST_PLUGIN_DIR_PROP) == null ? Property.TOAST_PLUGIN_DIR : System.getProperty(Property.TOAST_PLUGIN_DIR_PROP); 
+		LOG.info("Loading swing server agent plugins from directory: " + pluginsPath);
+		final ServicePluginsClassPathProvider pluginsClassPathProvider = buildServicePluginsClassPathProvider(pluginsPath);
 		List<Module> pluginModules = new ArrayList<Module>();
 		bootPluginsLoader = new ServicePluginLoader<ToastPluginBoot>(ToastPluginBoot.class, pluginsClassPathProvider);
-		Collection<ServicePlugin<ToastPluginBoot>> load = bootPluginsLoader.load();
-		for (ServicePlugin<ToastPluginBoot> servicePlugin : load) {
-			ToastPluginBoot plugin = servicePlugin.getPlugin();
-			plugin.boot();
-			pluginModules.addAll(plugin.getModules());
-		}
+		collectPluginModules(bootPluginsLoader, pluginModules);
 		Guice.createInjector(pluginModules);
 		
 		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
@@ -94,6 +75,30 @@ public class Boot {
 			}
 		}, AWTEvent.WINDOW_EVENT_MASK);
 	}
+
+	private static void collectPluginModules(final ServicePluginLoader<ToastPluginBoot> bootPluginsLoader, List<Module> pluginModules) {
+		Collection<ServicePlugin<ToastPluginBoot>> load = bootPluginsLoader.load();
+		for (ServicePlugin<ToastPluginBoot> servicePlugin : load) {
+			ToastPluginBoot plugin = servicePlugin.getPlugin();
+			plugin.boot();
+			pluginModules.addAll(plugin.getModules());
+		}
+	}
+
+	private static ServicePluginsClassPathProvider buildServicePluginsClassPathProvider(final String redpepperAgentPath) {
+		return new ServicePluginsClassPathProvider() {
+			@Override
+			public Collection<ServicePluginClassPath> getPlugins() {
+				URL[] collectJarsInDirector = collectJarsInDirector(new File(redpepperAgentPath), Thread.currentThread().getContextClassLoader());
+				List<ServicePluginClassPath> plugins = new ArrayList<ServicePluginClassPath>();
+				for (URL jar : collectJarsInDirector) {
+					LOG.info("Found plugin jar {}", jar);
+					plugins.add(new ServicePluginClassPath(jar));
+				}
+				return plugins;
+			}
+		};
+	}
 	
 	public static URL[] collectJarsInDirector(File directory,  ClassLoader parent) {
 		List<URL> allJars = new ArrayList<URL>();
@@ -101,9 +106,9 @@ public class Boot {
 		return allJars.toArray(new URL[allJars.size()]);
 	}
 	
-	static private void fillJarsList(List<URL> jars, File dir) {
+	private static void fillJarsList(List<URL> jars, File dir) {
 		try {
-			for (File jar : dir.listFiles(_jarsFilter)) {
+			for (File jar : dir.listFiles(JAR_FILTER)) {
 				jars.add(jar.toURI().toURL());
 			}
 		} catch (Exception e) {
@@ -112,7 +117,7 @@ public class Boot {
 		}
 	}
 	
-	static final private FileFilter _jarsFilter = new FileFilter() {
+	private static final FileFilter JAR_FILTER = new FileFilter() {
 		@Override
 		public boolean accept(File pathname) {
 			return pathname.isFile() && pathname.getName().endsWith(".jar");

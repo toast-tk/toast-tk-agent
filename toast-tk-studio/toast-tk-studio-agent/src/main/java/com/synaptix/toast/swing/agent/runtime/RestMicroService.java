@@ -38,7 +38,7 @@ import com.synaptix.toast.constant.Property;
 
 public class RestMicroService extends Verticle {
 
-	final static StartCommandHandler startHandler = new StartCommandHandler();
+	static final StartCommandHandler COMMAND_HANDLER = new StartCommandHandler();
 
 	@Override
 	public void start() {
@@ -50,32 +50,42 @@ public class RestMicroService extends Verticle {
 	}
 
 	private void initRouteMatcher(RouteMatcher matcher) {
+		includeRusInitCommand(matcher);
+		includeRusStartCommand(matcher);
+		includeRusStopCommand(matcher);
+	}
+
+	private void includeRusStopCommand(RouteMatcher matcher) {
+		matcher.get("/rus/stop", new Handler<HttpServerRequest>() {
+			@Override
+			public void handle(HttpServerRequest req) {
+				COMMAND_HANDLER.stop();
+				req.response().setStatusCode(200).end();				
+			}
+		});
+	}
+
+	private void includeRusStartCommand(RouteMatcher matcher) {
+		matcher.get("/rus/start", new Handler<HttpServerRequest>() {
+			@Override
+			public void handle(HttpServerRequest req) {
+				COMMAND_HANDLER.start();
+				req.response().setStatusCode(200).end();				
+			}
+			
+		});
+	}
+
+	private void includeRusInitCommand(RouteMatcher matcher) {
 		matcher.get("/rus/init", new Handler<HttpServerRequest>() {
 			@Override
 			public void handle(HttpServerRequest req) {
-				boolean ok = startHandler.init();
+				boolean ok = COMMAND_HANDLER.init();
 				if(ok){
 					req.response().setStatusCode(200).end();
 				}else{
 					req.response().setStatusCode(404).end();
 				}
-			}
-		});
-		
-		matcher.get("/rus/start", new Handler<HttpServerRequest>() {
-			@Override
-			public void handle(HttpServerRequest req) {
-				startHandler.start();
-				req.response().setStatusCode(200).end();				
-			}
-			
-		});
-		
-		matcher.get("/rus/stop", new Handler<HttpServerRequest>() {
-			@Override
-			public void handle(HttpServerRequest req) {
-				startHandler.stop();
-				req.response().setStatusCode(200).end();				
 			}
 		});
 	}

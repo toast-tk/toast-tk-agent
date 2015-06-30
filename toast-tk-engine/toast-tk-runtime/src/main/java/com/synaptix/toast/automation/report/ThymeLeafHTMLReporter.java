@@ -1,9 +1,5 @@
 package com.synaptix.toast.automation.report;
 
-import java.awt.AWTException;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.Locale;
@@ -15,9 +11,6 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 
 import com.synaptix.toast.core.dao.ITestPage;
-import com.synaptix.toast.core.report.TestResult;
-import com.synaptix.toast.dao.domain.impl.test.TestPage;
-import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 
 /**
  * http://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html
@@ -28,7 +21,6 @@ import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 public class ThymeLeafHTMLReporter implements IHTMLReportGenerator{
 
 	public static void main(String[] args) {
-	
 	}
 	
 

@@ -34,7 +34,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -52,17 +51,6 @@ public class TemplateHelper {
 		}
 	}
 	
-	public static String getResultScreenshotAsBase64(TestResult testResult){
-		BufferedImage screenshot = testResult.getScreenShot();
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		try {
-			ImageIO.write(screenshot, "png", baos);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return Base64.encodeBase64String(baos.toByteArray());
-	}
-
 	public static String getResultKindAsString(ResultKind resultKind) {
 		if (ResultKind.SUCCESS.equals(resultKind)) {
 			return "success";
@@ -75,8 +63,18 @@ public class TemplateHelper {
 		}
 		return "";
 	}
-
 	
+	public static String getResultScreenshotAsBase64(TestResult testResult){
+		BufferedImage screenshot = testResult.getScreenShot();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			ImageIO.write(screenshot, "png", baos);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return Base64.encodeBase64String(baos.toByteArray());
+	}
+
 	public static String formatStringToHtml(TestLine line) {
 		if(line.getTestResult() != null){
 			String message = line.getTestResult().getMessage();

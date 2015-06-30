@@ -79,45 +79,6 @@ public class SutRunnerAsExec {
 		return proc;
 	}
 	
-	@Deprecated
-	private void doAppRun(String command) {
-		if (command == null) {
-			LOG.info(String.format("No command to process !"));
-			return;
-		}
-		LOG.info(String.format("Processing command %s !", command));
-		Process proc = null;
-		StreamGobbler outGobbler = null;
-		try {
-			proc = createSutProcess(command);
-			outGobbler = createStreamWriter(proc);
-			updateAppStatusWithProgress();
-		} catch (Exception e) {
-			LOG.error(String.format("Failed to execute cmd: %s", command), e);
-			updateAppStatusWithError(command);
-			try {
-				if (outGobbler != null)
-					outGobbler.join();
-			} catch (InterruptedException e1) {
-				LOG.error(String.format("Failed to close stream output !"), e1);
-			}
-			if (proc != null) {
-				proc.destroy();
-			}
-		}
-	}
-
-	@Deprecated
-	private void updateAppStatusWithError(String command) {
-		appInstance.updateStatusMessage(String.format("Failed to execute cmd: %s", command));
-	}
-
-	@Deprecated
-	private void updateAppStatusWithProgress() {
-		appInstance.updateStatusMessage("Spawning SUT...");
-		appInstance.updateProgress("Spawning SUT...", 98);
-	}
-
 	private StreamGobbler createStreamWriter(Process proc) {
 		StreamGobbler outGobbler;
 		outGobbler = new StreamGobbler(proc.getInputStream(), "OUT", STREAMGOBBLER_OUTPUT_FILEPATH);
@@ -178,8 +139,7 @@ public class SutRunnerAsExec {
 
 	private Document parseJnlp(File jnlpXmlF) throws ParserConfigurationException, IllegalAccessException, SAXException, IOException {
 		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = null;
-		builder = builderFactory.newDocumentBuilder();
+		DocumentBuilder builder = builderFactory.newDocumentBuilder();
 		builder.setEntityResolver(new EntityResolver() {
 			@Override
 			public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
@@ -189,15 +149,23 @@ public class SutRunnerAsExec {
 				return null;
 			}
 		});
-		if (!jnlpXmlF.exists()) {
-			throw new IllegalAccessException(String.format("JNLP File not available: %s ", jnlpXmlF.getAbsoluteFile()));
-		}
+		cancelProcessingIfJnlpFileIsMissing(jnlpXmlF);
 		Document doc = builder.parse(FileUtils.openInputStream(jnlpXmlF));
 		String rootNodeName = doc.getDocumentElement().getNodeName();
+		cancelProcessingIfNotJnlpFile(rootNodeName);
+		return doc;
+	}
+
+	private void cancelProcessingIfNotJnlpFile(String rootNodeName) throws IllegalAccessException {
 		if (!"jnlp".equals(rootNodeName)) {
 			throw new IllegalAccessException(String.format("Unsupported root node: %s (expected jnlp)", rootNodeName));
 		}
-		return doc;
+	}
+
+	private void cancelProcessingIfJnlpFileIsMissing(File jnlpXmlF) throws IllegalAccessException {
+		if (!jnlpXmlF.exists()) {
+			throw new IllegalAccessException(String.format("JNLP File not available: %s ", jnlpXmlF.getAbsoluteFile()));
+		}
 	}
 
 	@FixMe(todo="link java home to installed jre")

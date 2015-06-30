@@ -21,7 +21,7 @@ public class DAOManager {
 		service = pfactory.create("test_project_db");
 	}
 	
-	public synchronized static DAOManager getInstance(){
+	public static synchronized  DAOManager getInstance(){
 		if(instance == null){
 			instance = new DAOManager();
 		}
