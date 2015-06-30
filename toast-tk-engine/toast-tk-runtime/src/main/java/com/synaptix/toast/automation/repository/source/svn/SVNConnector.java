@@ -35,8 +35,8 @@ import com.synaptix.toast.automation.repository.source.ISourceConnector;
 public class SVNConnector implements ISourceConnector {
 
 	public static final String SVNURI = "http://10.61.128.222/svn/psc/trunk/";
-	public static final String SVNTestRepo = "test-repository";
-	private static final SVNConnector instance = new SVNConnector();
+	public static final String SVNTESTREPO = "test-repository";
+	private static final SVNConnector INSTANCE = new SVNConnector();
 	SVNRepository repository = null;
 
 	private SVNConnector() {
@@ -44,7 +44,7 @@ public class SVNConnector implements ISourceConnector {
 	}
 
 	public static SVNConnector getInstance() {
-		return instance;
+		return INSTANCE;
 	}
 
 	public SVNConnector build(String login, String pass) {
@@ -52,7 +52,7 @@ public class SVNConnector implements ISourceConnector {
 			DAVRepositoryFactory.setup();
 			SVNURL url;
 			try {
-				url = SVNURL.parseURIDecoded(SVNURI + SVNTestRepo);
+				url = SVNURL.parseURIDecoded(SVNURI + SVNTESTREPO);
 				repository = SVNRepositoryFactory.create(url, null);
 			} catch (SVNException e1) {
 				e1.printStackTrace();
@@ -60,7 +60,7 @@ public class SVNConnector implements ISourceConnector {
 		}
 		ISVNAuthenticationManager authManager = new BasicAuthenticationManager(login, pass);
 		repository.setAuthenticationManager(authManager);
-		return instance;
+		return INSTANCE;
 	}
 
 	/**
@@ -142,14 +142,20 @@ public class SVNConnector implements ISourceConnector {
 			editor.openFile(filePath, fileRevision);
 			editor.applyTextDelta(filePath, null);
 			byte[] bytesUtf8 = StringUtils.getBytesUtf8(newContent);
-			SVNDeltaGenerator deltaGenerator = new SVNDeltaGenerator();
-			String checksum = deltaGenerator.sendDelta(filePath, new ByteArrayInputStream(bytesUtf8), editor, true);
-			editor.closeFile(filePath, checksum);
-			editor.closeDir();
-			editor.closeDir();
-			SVNCommitInfo commitInfo = editor.closeEdit();
-			success = commitInfo.getNewRevision() != fileRevision;
+			success = compareAndCommit(filePath, editor, fileRevision, bytesUtf8);
 		}
+		return success;
+	}
+
+	private boolean compareAndCommit(String filePath, ISVNEditor editor, long fileRevision, byte[] bytesUtf8) throws SVNException {
+		boolean success;
+		SVNDeltaGenerator deltaGenerator = new SVNDeltaGenerator();
+		String checksum = deltaGenerator.sendDelta(filePath, new ByteArrayInputStream(bytesUtf8), editor, true);
+		editor.closeFile(filePath, checksum);
+		editor.closeDir();
+		editor.closeDir();
+		SVNCommitInfo commitInfo = editor.closeEdit();
+		success = commitInfo.getNewRevision() != fileRevision;
 		return success;
 	}
 
