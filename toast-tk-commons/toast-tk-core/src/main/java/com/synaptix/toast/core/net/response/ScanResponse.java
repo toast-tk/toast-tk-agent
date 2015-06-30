@@ -1,6 +1,7 @@
 package com.synaptix.toast.core.net.response;
 
 import java.util.List;
+import java.util.Set;
 
 import com.synaptix.toast.core.net.request.IIdRequest;
 
@@ -10,7 +11,7 @@ import com.synaptix.toast.core.net.request.IIdRequest;
  */
 public class ScanResponse implements IIdRequest{
 	private String id;
-	public List<String> value;
+	public Set<String> value;
 
 	/**
 	 * serialization only
@@ -19,7 +20,7 @@ public class ScanResponse implements IIdRequest{
 		
 	}
 	
-	public ScanResponse(String id, List<String> componentList) {
+	public ScanResponse(String id, Set<String> componentList) {
 		this.id = id;
 		this.value = componentList;
 	}
@@ -29,7 +30,7 @@ public class ScanResponse implements IIdRequest{
 		return id;
 	}
 	
-	public List<String> getComponents() {
+	public Set<String> getComponents() {
 		return value;
 	}
 	

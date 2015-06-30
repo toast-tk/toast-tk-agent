@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.synaptix.toast.core.guice.ICustomFixtureHandler;
+import com.synaptix.toast.core.guice.ICustomRequestHandler;
 import com.synaptix.toast.core.net.request.CommandRequest;
 
 @Singleton
@@ -22,10 +22,10 @@ public class FixtureHandlerProvider {
 
 	private static final Logger LOG = LogManager.getLogger(FixtureHandlerProvider.class);
 	
-	private final Set<ICustomFixtureHandler> fixtureHandlers;
+	private final Set<ICustomRequestHandler> fixtureHandlers;
 
 	@Inject
-	public FixtureHandlerProvider(Set<ICustomFixtureHandler> fixtureHandlers) throws IllegalAccessException {
+	public FixtureHandlerProvider(Set<ICustomRequestHandler> fixtureHandlers) throws IllegalAccessException {
 		if (fixtureHandlers == null || fixtureHandlers.size() == 0) {
 			throw new IllegalAccessException("No Fixture Handler available !");
 		}
@@ -33,7 +33,7 @@ public class FixtureHandlerProvider {
 	}
 
 	public String processCustomCall(final CommandRequest request) throws NotFoundException {
-		ICustomFixtureHandler handlerInterestedIn = getHandlerInterestedIn(request);
+		ICustomRequestHandler handlerInterestedIn = getHandlerInterestedIn(request);
 		if (handlerInterestedIn == null) {
 			throw new NotFoundException("No Fixture Handler found for request id: " + request.getId());
 		}
@@ -42,7 +42,7 @@ public class FixtureHandlerProvider {
 	}
 
 	public String processFixtureCall(Component target, CommandRequest request) {
-		ICustomFixtureHandler handlerInterestedIn = getHandlerInterestedIn(request);
+		ICustomRequestHandler handlerInterestedIn = getHandlerInterestedIn(request);
 		String response = null;
 		if (handlerInterestedIn != null) {
 			response = handlerInterestedIn.hanldeFixtureCall(target, request);
@@ -53,32 +53,22 @@ public class FixtureHandlerProvider {
 		return response;
 	}
 
-	private ICustomFixtureHandler getHandlerInterestedIn(final CommandRequest request) {
-		final List<ICustomFixtureHandler> res = new ArrayList<ICustomFixtureHandler>();
-		for(final ICustomFixtureHandler handler : fixtureHandlers) {
+
+
+	private List<ICustomRequestHandler> collectCustomFixtureRequestHanlders(final CommandRequest request) {
+		final List<ICustomRequestHandler> res = new ArrayList<ICustomRequestHandler>();
+		for(final ICustomRequestHandler handler : fixtureHandlers) {
 			LOG.info("searching CustomFixtureHandler : {} ", handler.getName());
 			final List<String> commandRequestWhiteList = handler.getCommandRequestWhiteList();
 			if(commandRequestWhiteList == null || commandRequestWhiteList.isEmpty()) {
 				LOG.warn("{} - Handler has no command request white list defined: ", handler.getName());
-			} 
+			}
 			else if(findRequestClass(commandRequestWhiteList, request)) {
 				LOG.info("adding CustomFixtureHandler : {} ", handler.getName());
 				res.add(handler);
 			}
 		}
-		LOG.info("reflection ");
-		final String reflectionToString = ToStringBuilder.reflectionToString(request, ToStringStyle.SIMPLE_STYLE);
-		LOG.info("reflection done {}", reflectionToString);
-		if (res.size() == 0) {
-			LOG.warn("No Fixture Handler is interested in request: {}", reflectionToString);
-			return null;
-		}
-		if (res.size() > 1) {
-			LOG.warn("More than one Handler is interested in request: {}", reflectionToString);
-		}
-		ICustomFixtureHandler iCustomFixtureHandler = res.get(0);
-		LOG.info("Handler {} will process request: {}", iCustomFixtureHandler.getName(), reflectionToString);
-		return iCustomFixtureHandler;
+		return res;
 	}
 
 	private static boolean findRequestClass(
@@ -98,9 +88,24 @@ public class FixtureHandlerProvider {
 		return false;
 	}
 	
-	private ICustomFixtureHandler getHandlerInterestedIn(Component component) {
-		final List<ICustomFixtureHandler> res = new ArrayList<ICustomFixtureHandler>();
-		for (ICustomFixtureHandler handler : fixtureHandlers) {
+	private ICustomRequestHandler getHandlerInterestedIn(final CommandRequest request) {
+		final List<ICustomRequestHandler> res = collectCustomFixtureRequestHanlders(request);
+		final String reflectionToString = ToStringBuilder.reflectionToString(request, ToStringStyle.SIMPLE_STYLE);
+		if (res.size() == 0) {
+			LOG.warn("No Fixture Handler is interested in request: {}", reflectionToString);
+			return null;
+		}
+		if (res.size() > 1) {
+			LOG.warn("More than one Handler is interested in request: {}", reflectionToString);
+		}
+		ICustomRequestHandler customFixtureHandler = res.get(0);
+		LOG.info("Handler {} will process request: {}", customFixtureHandler.getName(), reflectionToString);
+		return customFixtureHandler;
+	}
+	
+	private ICustomRequestHandler getHandlerInterestedIn(Component component) {
+		final List<ICustomRequestHandler> res = new ArrayList<ICustomRequestHandler>();
+		for (ICustomRequestHandler handler : fixtureHandlers) {
 			if (handler.isInterestedIn(component)) {
 				res.add(handler);
 			}
@@ -113,13 +118,13 @@ public class FixtureHandlerProvider {
 		if (res.size() > 1) {
 			LOG.warn("More than one Handler is interested in component: {}", reflectionToString);
 		}
-		ICustomFixtureHandler iCustomFixtureHandler = res.get(0);
-		LOG.info("Handler {} will process component: {}", iCustomFixtureHandler.getName(), reflectionToString);
-		return iCustomFixtureHandler;
+		ICustomRequestHandler customFixtureHandler = res.get(0);
+		LOG.info("Handler {} will process component: {}", customFixtureHandler.getName(), reflectionToString);
+		return customFixtureHandler;
 	}
 
 	public Component locateComponentTarget(String item, String itemType, Component component) {
-		ICustomFixtureHandler handlerInterestedIn = getHandlerInterestedIn(component);
+		ICustomRequestHandler handlerInterestedIn = getHandlerInterestedIn(component);
 		Component target = null;
 		if (handlerInterestedIn != null) {
 			target = handlerInterestedIn.locateComponentTarget(item, itemType, component);

@@ -34,7 +34,9 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -144,8 +146,8 @@ public class SwingInspectorPanel extends JPanel {
 					        listModel.addElement(oldList.get(i));
 						}
 					}else{
-						List<String> newList = new ArrayList<String>();
-						for(int i =0; i<oldList.size(); i++){
+						Set<String> newList = new HashSet<String>();
+						for(int i = 0; i < oldList.size(); i++){
 							String item = (String)oldList.get(i);
 							if(item.contains(text)){
 						        listModel.addElement(item);
@@ -180,7 +182,7 @@ public class SwingInspectorPanel extends JPanel {
 			});
 	}
 
-    public void addInspectComponents(final List<String> s) {
+    public void addInspectComponents(final Set<String> s) {
     	for(final String s_: s){
     		addInspectComponent(s_);
     	}

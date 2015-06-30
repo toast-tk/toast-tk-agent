@@ -34,13 +34,13 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.synaptix.toast.adapter.swing.utils.FestRobotInstance;
-import com.synaptix.toast.core.guice.ICustomFixtureHandler;
+import com.synaptix.toast.core.guice.ICustomRequestHandler;
 import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.net.request.IIdRequest;
 import com.synaptix.toast.core.net.request.TableCommandRequest;
 import com.synaptix.toast.core.net.request.TableCommandRequestQueryCriteria;
 
-public class DefaultSwingCustomWidgetHandler implements ICustomFixtureHandler{
+public class DefaultSwingCustomWidgetHandler implements ICustomRequestHandler{
 
 	private static final Logger LOG = LogManager.getLogger(DefaultSwingCustomWidgetHandler.class);
 	

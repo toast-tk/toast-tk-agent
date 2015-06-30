@@ -22,29 +22,30 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Creation date: 16 févr. 2015
+Creation date: 29 juin 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
 
-package com.synaptix.toast.core.agent.inspection;
+package com.synaptix.toast.plugin.swing.agent.action.processor.list;
 
-import java.awt.Component;
-import java.util.List;
-import java.util.Set;
+import javax.swing.JComboBox;
 
-import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
+import org.fest.swing.fixture.JComboBoxFixture;
 
-public interface ISwingInspectionServer {
+import com.synaptix.toast.adapter.swing.utils.FestRobotInstance;
+import com.synaptix.toast.core.annotation.craft.FixMe;
+import com.synaptix.toast.core.net.request.CommandRequest;
+import com.synaptix.toast.plugin.swing.agent.action.processor.ActionProcessor;
 
-	void highlight(String selectedValue);
+@FixMe(todo="fix cause it will throw an enum exception on SwingActionRequestListener side !")
+class JComboBoxGetActionProcessor implements ActionProcessor<JComboBox>{
 
-	String getComponentLocator(Component component);
-
-	void publishRecordEvent(AWTCapturedEvent eventObject);
-	
-	void publishInterpretedEvent(String sentence);
-
-	Set<String> scan(boolean b);
+	@Override
+	public String processCommandOnComponent(CommandRequest command, JComboBox target) {
+		JComboBoxFixture fixture = new JComboBoxFixture(FestRobotInstance.getRobot(), target);
+		int selectedIndex = fixture.component().getSelectedIndex();
+		return fixture.selectItem(selectedIndex).toString();
+	}
 
 }

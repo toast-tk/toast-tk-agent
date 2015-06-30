@@ -22,29 +22,19 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Creation date: 16 févr. 2015
+Creation date: 29 juin 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
 
-package com.synaptix.toast.core.agent.inspection;
+package com.synaptix.toast.plugin.swing.agent.action.processor;
 
 import java.awt.Component;
-import java.util.List;
-import java.util.Set;
 
-import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
+import com.synaptix.toast.core.net.request.CommandRequest;
 
-public interface ISwingInspectionServer {
+public interface ActionProcessor<C extends Component> {
 
-	void highlight(String selectedValue);
-
-	String getComponentLocator(Component component);
-
-	void publishRecordEvent(AWTCapturedEvent eventObject);
+	public String processCommandOnComponent(CommandRequest command, C target);
 	
-	void publishInterpretedEvent(String sentence);
-
-	Set<String> scan(boolean b);
-
 }

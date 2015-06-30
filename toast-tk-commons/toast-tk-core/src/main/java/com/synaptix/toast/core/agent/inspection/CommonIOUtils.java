@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.synaptix.toast.core.agent.interpret.AWTEventCapturedObject;
+import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
 import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.net.request.HighLightRequest;
@@ -42,7 +42,7 @@ public class CommonIOUtils {
         kryo.register(TableCommandRequest.class);
 
         kryo.register(EventType.class);
-        kryo.register(AWTEventCapturedObject.class);
+        kryo.register(AWTCapturedEvent.class);
         kryo.register(IIdRequest.class);
         kryo.register(ScanRequest.class);
         kryo.register(RecordRequest.class);

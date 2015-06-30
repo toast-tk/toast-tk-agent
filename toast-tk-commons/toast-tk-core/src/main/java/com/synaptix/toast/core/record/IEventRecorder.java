@@ -31,7 +31,7 @@ package com.synaptix.toast.core.record;
 
 import java.awt.Component;
 
-import com.synaptix.toast.core.agent.interpret.AWTEventCapturedObject;
+import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 
 public interface IEventRecorder {
 	
@@ -39,7 +39,7 @@ public interface IEventRecorder {
 	 * add eventInfo to recorder processing list
 	 * @param captureEvent
 	 */
-	void appendInfo(AWTEventCapturedObject captureEvent);
+	void appendInfo(AWTCapturedEvent captureEvent);
 
 	/**
 	 * Get the component locator

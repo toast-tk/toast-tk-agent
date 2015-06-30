@@ -54,14 +54,14 @@ public class TestRequestHandlersForTextField {
 		FakeConnection connection = new FakeConnection();
 		String value = "typed_value";
 		textFieldFrame.setTextFocus();
-		CommandRequest buildTypeInputValueRequest = new CommandRequest.CommandRequestBuilder(null)
-		.with(null).ofType(null).sendKeys(value).build();
-		requestHandler.received(connection, buildTypeInputValueRequest);
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		typeValueInTexfield(requestHandler, connection, value);
+		readValueFromTextfield(connection);
+		assertEquals(true, connection.result instanceof ValueResponse);
+		assertEquals(value, ((ValueResponse)connection.result).value);
+	}
+
+	private void readValueFromTextfield(FakeConnection connection) {
+		SwingActionRequestListener requestHandler;
 		CommandRequest buildGetInputValueRequest = SwingInputElement.buildGetInputValueRequest(
 				TexfieldTestFrame.class.getName()+":inputField", AutoSwingType.input.name(), "fake-id");
 		requestHandler =  TestSuiteHelper.getInjector().getInstance(SwingActionRequestListener.class);
@@ -71,8 +71,17 @@ public class TestRequestHandlersForTextField {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		assertEquals(true, connection.result instanceof ValueResponse);
-		assertEquals(value, ((ValueResponse)connection.result).value);
+	}
+
+	private void typeValueInTexfield(SwingActionRequestListener requestHandler, FakeConnection connection, String value) {
+		CommandRequest buildTypeInputValueRequest = new CommandRequest.CommandRequestBuilder(null)
+		.with(null).ofType(null).sendKeys(value).build();
+		requestHandler.received(connection, buildTypeInputValueRequest);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Test

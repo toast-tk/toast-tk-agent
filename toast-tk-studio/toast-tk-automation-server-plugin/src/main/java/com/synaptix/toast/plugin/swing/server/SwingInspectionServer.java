@@ -5,13 +5,14 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Window;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,7 +22,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.google.inject.Inject;
 import com.synaptix.toast.core.agent.inspection.CommonIOUtils;
 import com.synaptix.toast.core.agent.inspection.ISwingInspectionServer;
-import com.synaptix.toast.core.agent.interpret.AWTEventCapturedObject;
+import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 import com.synaptix.toast.core.net.request.HighLightRequest;
 import com.synaptix.toast.core.net.request.PoisonPill;
 import com.synaptix.toast.core.net.request.RecordRequest;
@@ -126,7 +127,7 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 				try {
 					if (object instanceof ScanRequest) {
 						ScanRequest scanRequest = (ScanRequest) object;
-						List<String> components = scan(scanRequest.isDebug());
+						Set<String> components = scan(scanRequest.isDebug());
 						ScanResponse response = new ScanResponse(scanRequest.getId(), components);
 						connection.sendTCP(response);
 					}
@@ -161,8 +162,7 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 	}
 
 	@Override
-	public List<String> scan(boolean debug) {
-		List<String> components = new ArrayList<String>();
+	public Set<String> scan(boolean debug) {
 		SwingInspectionManager.getInstance().clearContainers();
 		for (Container f : getWindows()) {
 			SwingInspectionManager.getInstance().addContainer(f);
@@ -177,11 +177,10 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 			String componentLocator = componentName != null ? componentName : componentId;
 			componentLocator = componentLocator != null ? componentLocator : component.getClass() + ":" + System.identityHashCode(component);
 			if (InitRequestListener.isAutorizedComponent(component)) {
-				components.add(componentLocator);
 				repositoryHolder.getRepo().put(componentLocator, component);
 			}
 		}
-		return components;
+		return repositoryHolder.getRepo().keySet();
 	}
 
 	public static Container[] getWindows() {
@@ -218,15 +217,9 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 	public synchronized void highlight(String selectComponent) {
 		Component component = repositoryHolder.getRepo().get(selectComponent);
 		if (component != null) {
-
 			if (previousComponent != null) {
-				previousComponent.setBackground(previousColor);
-				if (isMenuSelected && (previousComponent instanceof JMenu)) {
-					isMenuSelected = false;
-					((JMenu) previousComponent).setSelected(isMenuSelected);
-				}
+				revertComponentAppearance();
 			}
-
 			previousColor = component.getBackground();
 			if (component instanceof JLabel) {
 				((JLabel) component).setOpaque(true);
@@ -235,8 +228,15 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 				((JMenu) component).setSelected(isMenuSelected);
 			}
 			component.setBackground(Color.CYAN);
-
 			previousComponent = component;
+		}
+	}
+
+	private void revertComponentAppearance() {
+		previousComponent.setBackground(previousColor);
+		if (isMenuSelected && (previousComponent instanceof JMenu)) {
+			isMenuSelected = false;
+			((JMenu) previousComponent).setSelected(isMenuSelected);
 		}
 	}
 
@@ -247,7 +247,7 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 	// client IDs
 	// !!!
 	@Override
-	public void publishRecordEvent(AWTEventCapturedObject eventObject) {
+	public void publishRecordEvent(AWTCapturedEvent eventObject) {
 		server.sendToAllTCP(new RecordResponse(eventObject)); 
 	}
 

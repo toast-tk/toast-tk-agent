@@ -4,10 +4,10 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
-* Redistributions of source code must retain the above copyright notice, this
+ * Redistributions of source code must retain the above copyright notice, this
   list of conditions and the following disclaimer.
 
-* Redistributions in binary form must reproduce the above copyright notice,
+ * Redistributions in binary form must reproduce the above copyright notice,
   this list of conditions and the following disclaimer in the documentation
   and/or other materials provided with the distribution.
 
@@ -22,29 +22,33 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Creation date: 16 févr. 2015
+Creation date: 29 juin 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
-*/
+ */
 
-package com.synaptix.toast.core.agent.inspection;
+package com.synaptix.toast.plugin.swing.agent.action.processor.menu;
 
-import java.awt.Component;
-import java.util.List;
-import java.util.Set;
+import javax.swing.JMenu;
 
-import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
+import com.synaptix.toast.core.net.request.CommandRequest;
+import com.synaptix.toast.plugin.swing.agent.action.processor.ActionProcessor;
+import com.synaptix.toast.plugin.swing.agent.action.processor.ActionProcessorFactory;
 
-public interface ISwingInspectionServer {
+public class JMenuActionProcessorFactory extends ActionProcessorFactory {
 
-	void highlight(String selectedValue);
+	@Override
+	public ActionProcessor<JMenu> getProcessor(CommandRequest command) {
+		switch (command.action) {
+		case CLICK:
+			return new JMenuClickActionProcessor();
+		case SELECT:
+			return new JMenuSelectActionProcessor();
+		default:
+			return null;
+		}
 
-	String getComponentLocator(Component component);
+	}
 
-	void publishRecordEvent(AWTCapturedEvent eventObject);
-	
-	void publishInterpretedEvent(String sentence);
-
-	Set<String> scan(boolean b);
 
 }

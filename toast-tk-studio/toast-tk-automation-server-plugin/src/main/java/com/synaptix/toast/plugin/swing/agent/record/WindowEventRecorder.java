@@ -7,7 +7,7 @@ import java.awt.event.WindowEvent;
 
 import org.fest.swing.input.InputState;
 
-import com.synaptix.toast.core.agent.interpret.AWTEventCapturedObject;
+import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 import com.synaptix.toast.core.record.IEventRecorder;
 
 public class WindowEventRecorder extends AbstractEventRecorder {
@@ -30,18 +30,18 @@ public class WindowEventRecorder extends AbstractEventRecorder {
 				eventComponentName = ((Dialog) w).getTitle();
 			}
 			if (eventComponentName != null) {
-				final AWTEventCapturedObject captureEvent = buildWindowsEventCapturedObject(event, eventComponentName, wEvent);
+				final AWTCapturedEvent captureEvent = buildWindowsEventCapturedObject(event, eventComponentName, wEvent);
 				appendEventRecord(captureEvent);
 			}
 		}		
 	}
 
-	private AWTEventCapturedObject buildWindowsEventCapturedObject(
+	private AWTCapturedEvent buildWindowsEventCapturedObject(
 			final AWTEvent event, 
 			final String eventComponentName, 
 			final WindowEvent wEvent
 	) {
-		AWTEventCapturedObject captureEvent = new AWTEventCapturedObject();
+		AWTCapturedEvent captureEvent = new AWTCapturedEvent();
 		captureEvent.eventLabel = event.getClass().getSimpleName();
 		captureEvent.componentLocator = getEventComponentLocator(event);
 		captureEvent.componentType = wEvent.getComponent().getClass().getSimpleName();

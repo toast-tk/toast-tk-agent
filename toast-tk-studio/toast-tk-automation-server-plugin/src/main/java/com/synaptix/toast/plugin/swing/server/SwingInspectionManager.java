@@ -15,6 +15,28 @@ public class SwingInspectionManager {
 		containers = new ArrayList<Container>();
 	}
 
+	/**
+	 * Go through the gui hierarchy at runtime to reverse the fields names
+	 * mapped to related instance
+	 * 
+	 * TODO: restrict to a white list (swing.*, etc..)
+	 * 
+	 * @param c
+	 * @return
+	 */
+	public synchronized Map<Object, String> getAllInstances(Container container) {
+		Map<Object, String> componentMap = new HashMap<Object, String>();
+		collectContainerFields(container, componentMap);
+		Component[] comps = container.getComponents();
+		for (Component component : comps) {
+			collectContainerFields(component, componentMap);
+			if (component instanceof Container) {
+				componentMap.putAll(getAllInstances((Container) component));
+			}
+		}
+		return componentMap;
+	}
+
 	public synchronized Map<Object, String> getAllInstances() {
 		Map<Object, String> items = new HashMap<Object, String>();
 		for (Container container : containers) {
@@ -66,27 +88,6 @@ public class SwingInspectionManager {
 		return compList;
 	}
 
-	/**
-	 * Go through the gui hierarchy at runtime to reverse the fields names
-	 * mapped to related instance
-	 * 
-	 * TODO: restrict to a white list (swing.*, etc..)
-	 * 
-	 * @param c
-	 * @return
-	 */
-	public synchronized Map<Object, String> getAllInstances(Container container) {
-		Map<Object, String> componentMap = new HashMap<Object, String>();
-		collectContainerFields(container, componentMap);
-		Component[] comps = container.getComponents();
-		for (Component component : comps) {
-			collectContainerFields(component, componentMap);
-			if (component instanceof Container) {
-				componentMap.putAll(getAllInstances((Container) component));
-			}
-		}
-		return componentMap;
-	}
 
 	private void collectContainerFields(Component component, Map<Object, String> componentMap) {
 		for (Field field : component.getClass().getDeclaredFields()) {

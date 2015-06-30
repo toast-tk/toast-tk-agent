@@ -7,7 +7,7 @@ import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
 import com.synaptix.toast.core.annotation.craft.FixMe;
 
 @FixMe(todo="make immutable")
-public class AWTEventCapturedObject {
+public class AWTCapturedEvent {
 	
 	public String componentLocator = ""; 
 	public String componentName = "";
@@ -20,11 +20,11 @@ public class AWTEventCapturedObject {
 	private EventType eventType;
 
 	
-	public AWTEventCapturedObject(){
+	public AWTCapturedEvent(){
 		
 	}
 	
-	public AWTEventCapturedObject(String container, String locator, String name ,String type,String value, long timeStamp){
+	public AWTCapturedEvent(String container, String locator, String name ,String type,String value, long timeStamp){
 		this.container = container != null ? container.replace(" ", "_") : "COMMON_CONTAINER";
 		this.componentLocator = locator;
 		this.componentName = name;
@@ -41,25 +41,7 @@ public class AWTEventCapturedObject {
 		this.eventType = eventType;
 	}
 
-	public boolean isFocusLostEvent() {
-		return "CausedFocusEvent<".equals(eventLabel);
-	}
 
-	public boolean isFocusGainedEvent() {
-		return "CausedFocusEvent>".equals(eventLabel);
-	}
-
-	public boolean isInputEvent() {
-		return KeyEvent.class.getSimpleName().equals(eventLabel);
-	}
-
-	public boolean isMouseClickEvent() {
-		return MouseEvent.class.getSimpleName().equals(eventLabel);
-	}
-
-	public boolean isWindowClickEvent() {
-		return "TimedWindowEvent".equals(eventLabel);
-	}
 
 	
 }

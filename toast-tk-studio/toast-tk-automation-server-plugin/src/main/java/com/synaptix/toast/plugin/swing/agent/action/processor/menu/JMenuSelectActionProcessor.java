@@ -22,29 +22,43 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Creation date: 16 févr. 2015
+Creation date: 29 juin 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
 
-package com.synaptix.toast.core.agent.inspection;
+package com.synaptix.toast.plugin.swing.agent.action.processor.menu;
 
-import java.awt.Component;
-import java.util.List;
-import java.util.Set;
+import javax.swing.JMenu;
 
-import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.Robot;
+import org.fest.swing.fixture.JMenuItemFixture;
+import org.fest.swing.fixture.JPopupMenuFixture;
 
-public interface ISwingInspectionServer {
+import com.synaptix.toast.adapter.swing.utils.FestRobotInstance;
+import com.synaptix.toast.core.net.request.CommandRequest;
+import com.synaptix.toast.core.report.TestResult.ResultKind;
+import com.synaptix.toast.plugin.swing.agent.action.processor.ActionProcessor;
 
-	void highlight(String selectedValue);
+class JMenuSelectActionProcessor  implements ActionProcessor<JMenu>{
 
-	String getComponentLocator(Component component);
-
-	void publishRecordEvent(AWTCapturedEvent eventObject);
-	
-	void publishInterpretedEvent(String sentence);
-
-	Set<String> scan(boolean b);
+	@Override
+	public String processCommandOnComponent(CommandRequest command, JMenu target) {
+		Robot robot = FestRobotInstance.getRobot();
+		if (target == null) {
+			robot.pressMouse(MouseButton.RIGHT_BUTTON);
+		} else {
+			robot.click(target);
+		}
+		JPopupMenuFixture popupFixture = new JPopupMenuFixture(robot, robot.findActivePopupMenu());
+		JMenuItemFixture menuItemWithPath = popupFixture.menuItemWithPath(command.value);
+		if (menuItemWithPath != null && menuItemWithPath.component().isEnabled()) {
+			menuItemWithPath.click();
+			return ResultKind.SUCCESS.name();
+		} else {
+			return ResultKind.FAILURE.name();
+		}
+	}
 
 }

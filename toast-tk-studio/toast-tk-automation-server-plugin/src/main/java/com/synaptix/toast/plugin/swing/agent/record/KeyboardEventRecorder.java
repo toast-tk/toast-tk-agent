@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 
 import org.fest.swing.input.InputState;
 
-import com.synaptix.toast.core.agent.interpret.AWTEventCapturedObject;
+import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 import com.synaptix.toast.core.record.IEventRecorder;
 
 import static com.synaptix.toast.plugin.swing.agent.listener.InspectionUtils.*;
@@ -20,7 +20,7 @@ public class KeyboardEventRecorder extends AbstractEventRecorder {
 	public void processEvent(AWTEvent event) {
 		if (isKeyReleasedEvent(event)) {
 			final KeyEvent kEvent = (KeyEvent) event;
-			final AWTEventCapturedObject captureEvent = buildKeyboardEventCapturedObject(event, kEvent);
+			final AWTCapturedEvent captureEvent = buildKeyboardEventCapturedObject(event, kEvent);
 			if(isCapturedEventUninteresting(captureEvent)) {
 				return;
 			}
@@ -32,11 +32,11 @@ public class KeyboardEventRecorder extends AbstractEventRecorder {
 		return event.getID() == KeyEvent.KEY_RELEASED;
 	}
 
-	private AWTEventCapturedObject buildKeyboardEventCapturedObject(
+	private AWTCapturedEvent buildKeyboardEventCapturedObject(
 			final AWTEvent event, 
 			final KeyEvent kEvent
 	) {
-		final AWTEventCapturedObject captureEvent = new AWTEventCapturedObject();
+		final AWTCapturedEvent captureEvent = new AWTCapturedEvent();
 		captureEvent.businessValue = getEventValue(event);
 		captureEvent.componentLocator = getEventComponentLocator(event);
 		captureEvent.componentName = getEventComponentLabel(event);

@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.synaptix.toast.adapter.SentenceBuilder;
 import com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.Types;
-import com.synaptix.toast.core.agent.interpret.AWTEventCapturedObject;
+import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 import com.synaptix.toast.dao.domain.impl.repository.RepositoryImpl;
 
 
@@ -42,17 +42,17 @@ public class LiveRedPlayEventInterpreter extends DefaultEventInterpreter{
 	}
 
 	@Override
-	public String onWindowDisplay(AWTEventCapturedObject eventObject) {
+	public String onWindowDisplay(AWTCapturedEvent eventObject) {
 		return super.onWindowDisplay(eventObject);
 	}
 
 	@Override
-	public String onBringOnTop(AWTEventCapturedObject eventObject) {
+	public String onBringOnTop(AWTCapturedEvent eventObject) {
 		return super.onBringOnTop(eventObject);
 	}
 
 	@Override
-	public String onClick(AWTEventCapturedObject eventObject) {
+	public String onClick(AWTCapturedEvent eventObject) {
 		RepositoryImpl container = mongoRepoManager.findContainer(eventObject.container);
 		String label = mongoRepoManager.find(container, convertToKnowType(eventObject.componentType), eventObject.componentName);
 		return sentenceBuilder.ofType(Types.CLICK_ON)
@@ -61,19 +61,19 @@ public class LiveRedPlayEventInterpreter extends DefaultEventInterpreter{
 	}
 	
 	@Override
-	public String onCheckBoxClick(AWTEventCapturedObject eventObject) {
+	public String onCheckBoxClick(AWTCapturedEvent eventObject) {
 		eventObject.componentType = "checkbox";
 		return onClick(eventObject);
 	}
 	
 	@Override
-	public String onButtonClick(AWTEventCapturedObject eventObject) {
+	public String onButtonClick(AWTCapturedEvent eventObject) {
 		eventObject.componentType = "button";
 		return onClick(eventObject);
 	}
 	
 	@Override
-	public String onKeyInput(AWTEventCapturedObject eventObject) {
+	public String onKeyInput(AWTCapturedEvent eventObject) {
 		RepositoryImpl container = mongoRepoManager.findContainer(eventObject.container);
 		String label = mongoRepoManager.find(container, convertToKnowType(eventObject.componentType), eventObject.componentName);
 		return sentenceBuilder.ofType(Types.TYPE_IN_INPUT)
@@ -101,7 +101,7 @@ public class LiveRedPlayEventInterpreter extends DefaultEventInterpreter{
 	}
 
 	@Override
-	public String onTableClick(AWTEventCapturedObject eventObject) {
+	public String onTableClick(AWTCapturedEvent eventObject) {
 		RepositoryImpl container = mongoRepoManager.findContainer(eventObject.container);
 		String label = mongoRepoManager.find(container, convertToKnowType(eventObject.componentType), eventObject.componentLocator);
 		return sentenceBuilder.ofType(Types.SELECT_TABLE_ROW)
@@ -111,12 +111,12 @@ public class LiveRedPlayEventInterpreter extends DefaultEventInterpreter{
 	}
 
 	@Override
-	public String onMenuClick(AWTEventCapturedObject eventObject) {
+	public String onMenuClick(AWTCapturedEvent eventObject) {
 		return sentenceBuilder.ofType(Types.SELECT_SUB_MENU).withValue(eventObject.componentName).build(); 
 	}
 
 	@Override
-	public String onComboBoxClick(AWTEventCapturedObject eventObject) {
+	public String onComboBoxClick(AWTCapturedEvent eventObject) {
 		RepositoryImpl container = mongoRepoManager.findContainer(eventObject.container);
 		String label = mongoRepoManager.find(container, convertToKnowType(eventObject.componentType), eventObject.componentName);
 		return sentenceBuilder.ofType(Types.SELECT_VALUE_IN_LIST)
@@ -126,7 +126,7 @@ public class LiveRedPlayEventInterpreter extends DefaultEventInterpreter{
 	}
 
 	@Override
-	public String onPopupMenuClick(AWTEventCapturedObject eventObject) {
+	public String onPopupMenuClick(AWTCapturedEvent eventObject) {
 		return sentenceBuilder.ofType(Types.SELECT_CONTEXTUAL_MENU)
 				.withValue(eventObject.componentName).build();
 	}

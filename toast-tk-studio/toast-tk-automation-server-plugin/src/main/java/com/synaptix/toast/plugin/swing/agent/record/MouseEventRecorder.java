@@ -10,7 +10,7 @@ import javax.swing.JTable;
 
 import org.fest.swing.input.InputState;
 
-import com.synaptix.toast.core.agent.interpret.AWTEventCapturedObject;
+import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 import com.synaptix.toast.core.record.IEventRecorder;
 
 public class MouseEventRecorder extends AbstractEventRecorder {
@@ -26,7 +26,7 @@ public class MouseEventRecorder extends AbstractEventRecorder {
 	public void processEvent(final AWTEvent event) {
 		if(isReleasedMouseEvent(event)) {
 			final MouseEvent mEvent = (MouseEvent) event;
-			final AWTEventCapturedObject captureEvent = buildMouseEventCapturedObject(event);
+			final AWTCapturedEvent captureEvent = buildMouseEventCapturedObject(event);
 			if(isCapturedEventUninteresting(captureEvent)) {
 				return;
 			}
@@ -63,8 +63,8 @@ public class MouseEventRecorder extends AbstractEventRecorder {
 		return event.getID() == MouseEvent.MOUSE_RELEASED;
 	}
 
-	private AWTEventCapturedObject buildMouseEventCapturedObject(final AWTEvent event) {
-		final AWTEventCapturedObject captureEvent = new AWTEventCapturedObject();
+	private AWTCapturedEvent buildMouseEventCapturedObject(final AWTEvent event) {
+		final AWTCapturedEvent captureEvent = new AWTCapturedEvent();
 		captureEvent.eventLabel = event.getClass().getSimpleName();
 		captureEvent.componentLocator = getEventComponentLocator(event);
 		captureEvent.businessValue = getEventValue(event);

@@ -12,7 +12,7 @@ import com.synaptix.toast.core.net.request.IIdRequest;
  * @author Sallah Kokaina <sallah.kokaina@gmail.com>
  *
  */
-public interface ICustomFixtureHandler {
+public interface ICustomRequestHandler {
 	
 	/**
 	 * Method called to perform a given request (command) on the target Component
@@ -25,7 +25,7 @@ public interface ICustomFixtureHandler {
 
 	/**
 	 * Locate an element, the method should return the component (value) if it happens that it
-	 * is a component the fixture handler would like to process afterward through the {@link ICustomFixtureHandler#hanldeFixtureCall(Component, IIdRequest)}
+	 * is a component the fixture handler would like to process afterward through the {@link ICustomRequestHandler#hanldeFixtureCall(Component, IIdRequest)}
 	 * @param item
 	 * @param itemType
 	 * @param value

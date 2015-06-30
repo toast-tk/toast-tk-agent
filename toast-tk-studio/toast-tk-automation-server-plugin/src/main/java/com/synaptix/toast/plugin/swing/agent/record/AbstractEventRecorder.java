@@ -62,7 +62,7 @@ import org.apache.logging.log4j.Logger;
 import org.fest.swing.input.InputState;
 
 import com.synaptix.toast.constant.Property;
-import com.synaptix.toast.core.agent.interpret.AWTEventCapturedObject;
+import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 import com.synaptix.toast.core.guice.FilteredAWTEventListener;
 import com.synaptix.toast.core.record.AwtEventProcessor;
 import com.synaptix.toast.core.record.IEventRecorder;
@@ -254,33 +254,52 @@ public abstract class AbstractEventRecorder implements FilteredAWTEventListener,
 		if(ancestorOfClass != null) {
 			ancestorLocator = ((JDialog)ancestorOfClass).getTitle();
 		}
-		if(ancestorOfClass == null) {
-			ancestorOfClass = SwingUtilities.getAncestorOfClass(JLayeredPane.class, component);
-			if(ancestorOfClass != null){
-				ancestorLocator = ancestorOfClass.getClass().getSimpleName();
-			}
+		if(ancestorLocator == null) {
+			ancestorLocator = getJLayeredPaneAncestor(component);
+		}
+		if (ancestorLocator == null) {
+			ancestorLocator = getJTabbedPaneAncestor(component);
 		}
 		if (ancestorOfClass == null) {
-			ancestorOfClass = SwingUtilities.getAncestorOfClass(JTabbedPane.class, component);
-			if((ancestorOfClass instanceof JTabbedPane)){
-				ancestorLocator = ((JTabbedPane)ancestorOfClass).getTitleAt(((JTabbedPane)ancestorOfClass).getSelectedIndex());
-			}
-		}
-		if (ancestorOfClass == null) {
-			ancestorOfClass = SwingUtilities.getAncestorOfClass(JFrame.class, component);
-			if((ancestorOfClass instanceof JFrame)){
-				ancestorLocator = ((JFrame)ancestorOfClass).getTitle();
-			}
+			ancestorLocator = getJFrameAncestor(component);
 		}
 		return ancestorLocator;
 	}
 	
-	protected void appendEventRecord(final AWTEventCapturedObject captureEvent) {
+	
+	private static String getJFrameAncestor(Component component) {
+		Container ancestorOfClass = SwingUtilities.getAncestorOfClass(JFrame.class, component);
+		String ancestorLocator = null;
+		if(ancestorOfClass != null){
+			ancestorLocator = ((JFrame)ancestorOfClass).getTitle();
+		}
+		return ancestorLocator;
+	}
+
+	private static String getJTabbedPaneAncestor(Component component){
+		Container ancestorOfClass = SwingUtilities.getAncestorOfClass(JTabbedPane.class, component);
+		String ancestorLocator = null;
+		if(ancestorOfClass != null){
+			ancestorLocator = ((JTabbedPane)ancestorOfClass).getTitleAt(((JTabbedPane)ancestorOfClass).getSelectedIndex());
+		}
+		return ancestorLocator;
+	}
+	
+	private static String getJLayeredPaneAncestor(Component component) {
+		Container ancestorOfClass = SwingUtilities.getAncestorOfClass(JLayeredPane.class, component);
+		String ancestorLocator = null;
+		if(ancestorOfClass != null){
+			ancestorLocator = ancestorOfClass.getClass().getSimpleName();
+		}
+		return ancestorLocator;
+	}
+
+	protected void appendEventRecord(final AWTCapturedEvent captureEvent) {
 		LOG.info("New record event captured: {}", ToStringBuilder.reflectionToString(captureEvent, ToStringStyle.SIMPLE_STYLE));
 		eventRecorder.appendInfo(captureEvent);
 	}
 	
-	protected static boolean isCapturedEventUninteresting(final AWTEventCapturedObject captureEvent) {
+	protected static boolean isCapturedEventUninteresting(final AWTCapturedEvent captureEvent) {
 		return captureEvent.businessValue == null && captureEvent.componentLocator == null;
 	}
 

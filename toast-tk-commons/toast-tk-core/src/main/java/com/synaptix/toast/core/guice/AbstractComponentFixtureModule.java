@@ -8,13 +8,13 @@ import com.google.inject.multibindings.Multibinder;
 
 public abstract class AbstractComponentFixtureModule extends AbstractModule {
 
-	Multibinder<ICustomFixtureHandler> uriCustomFixtureHandlerBinder;
+	Multibinder<ICustomRequestHandler> uriCustomFixtureHandlerBinder;
 
 	Multibinder<FilteredAWTEventListener> uriAwtEventListenerBinder;
 
 	@Override
 	protected void configure() {
-		this.uriCustomFixtureHandlerBinder = Multibinder.newSetBinder(binder(), ICustomFixtureHandler.class);
+		this.uriCustomFixtureHandlerBinder = Multibinder.newSetBinder(binder(), ICustomRequestHandler.class);
 		this.uriAwtEventListenerBinder = Multibinder.newSetBinder(binder(), FilteredAWTEventListener.class);
 		configureModule();
 	}
@@ -26,13 +26,13 @@ public abstract class AbstractComponentFixtureModule extends AbstractModule {
 		uriAwtEventListenerBinder.addBinding().to(customFilteredAWTEventListenerClass);
 	}
 
-	protected final void addTypeHandler(Class<? extends ICustomFixtureHandler> typeHandlerClass) {
+	protected final void addTypeHandler(Class<? extends ICustomRequestHandler> typeHandlerClass) {
 		bind(typeHandlerClass).in(Singleton.class);
 		uriCustomFixtureHandlerBinder.addBinding().to(typeHandlerClass);
 	}
 	
 	protected final void addTypeHandler(
-			final Class<? extends ICustomFixtureHandler> typeHandlerClass,
+			final Class<? extends ICustomRequestHandler> typeHandlerClass,
 			final Class<? extends Annotation> annotationClass
 	) {
 		bind(typeHandlerClass).annotatedWith(annotationClass).in(Singleton.class);

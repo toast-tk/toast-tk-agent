@@ -10,7 +10,7 @@ import javax.swing.JTabbedPane;
 
 import org.fest.swing.input.InputState;
 
-import com.synaptix.toast.core.agent.interpret.AWTEventCapturedObject;
+import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 import com.synaptix.toast.core.record.IEventRecorder;
 
 public class FocusEventRecorder extends AbstractEventRecorder {
@@ -25,34 +25,34 @@ public class FocusEventRecorder extends AbstractEventRecorder {
 	@Override
 	public void processEvent(final AWTEvent event) {
 		if (isFocusGained(event)) {
-			final AWTEventCapturedObject captureEvent = buildFocusGainEventCapturedEventObject(event);
+			final AWTCapturedEvent captureEvent = buildFocusGainEventCapturedEventObject(event);
 			if(captureEvent != null) {
 				appendEventRecord(captureEvent);
 			}
 		} 
 		else if(isFocusLost(event)) {
-			final AWTEventCapturedObject captureEvent = buildFocusLostEventCapturedObject(event);
+			final AWTCapturedEvent captureEvent = buildFocusLostEventCapturedObject(event);
 			appendEventRecord(captureEvent);
 		}
 	}
 
-	private AWTEventCapturedObject buildFocusGainEventCapturedEventObject(final AWTEvent event) {
+	private AWTCapturedEvent buildFocusGainEventCapturedEventObject(final AWTEvent event) {
 		final FocusEvent wEvent = (FocusEvent) event;
 		final Component component = wEvent.getComponent();
 		if (interestingInstance(component)) {
 			final String container = getEventComponentContainer(event);
 			eventRecorder.scanUi(true);
 			String eventComponentName = getEventComponentName(component);
-			final AWTEventCapturedObject captureEvent = buildFocusGainEvent(event, component, eventComponentName, container);
+			final AWTCapturedEvent captureEvent = buildFocusGainEvent(event, component, eventComponentName, container);
 			return captureEvent;
 		}
 		return null;
 	}
 
-	private AWTEventCapturedObject buildFocusLostEventCapturedObject(final AWTEvent event) {
+	private AWTCapturedEvent buildFocusLostEventCapturedObject(final AWTEvent event) {
 		final FocusEvent wEvent = (FocusEvent) event;
 		final String container = getEventComponentContainer(event);
-		final AWTEventCapturedObject captureEvent = buildFocusLostEvent(event, wEvent, container);
+		final AWTCapturedEvent captureEvent = buildFocusLostEvent(event, wEvent, container);
 		return captureEvent;
 	}
 
@@ -64,13 +64,13 @@ public class FocusEventRecorder extends AbstractEventRecorder {
 		return event.getID() == FocusEvent.FOCUS_GAINED;
 	}
 
-	private AWTEventCapturedObject buildFocusGainEvent(
+	private AWTCapturedEvent buildFocusGainEvent(
 			final AWTEvent event,
 			final Component component, 
 			String eventComponentName,
 			final String container
 	) {
-		final AWTEventCapturedObject captureEvent = new AWTEventCapturedObject();
+		final AWTCapturedEvent captureEvent = new AWTCapturedEvent();
 		captureEvent.eventLabel = event.getClass().getSimpleName() + ">";
 		captureEvent.componentLocator = getEventComponentLocator(event);
 		captureEvent.componentType = component.getClass().getSimpleName();
@@ -81,12 +81,12 @@ public class FocusEventRecorder extends AbstractEventRecorder {
 		return captureEvent;
 	}
 
-	private AWTEventCapturedObject buildFocusLostEvent(
+	private AWTCapturedEvent buildFocusLostEvent(
 			final AWTEvent event,
 			final FocusEvent wEvent, 
 			final String container
 	) {
-		final AWTEventCapturedObject captureEvent = new AWTEventCapturedObject();
+		final AWTCapturedEvent captureEvent = new AWTCapturedEvent();
 		captureEvent.eventLabel = event.getClass().getSimpleName() + "<";
 		captureEvent.componentLocator = getEventComponentLocator(event);
 		captureEvent.componentType = wEvent.getComponent().getClass().getSimpleName();

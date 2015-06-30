@@ -22,29 +22,35 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Creation date: 16 févr. 2015
+Creation date: 29 juin 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
 
-package com.synaptix.toast.core.agent.inspection;
+package com.synaptix.toast.plugin.swing.agent.action.processor.menu;
 
-import java.awt.Component;
-import java.util.List;
-import java.util.Set;
+import javax.swing.JMenu;
 
-import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
+import org.fest.swing.core.Robot;
 
-public interface ISwingInspectionServer {
+import com.synaptix.toast.adapter.swing.utils.FestRobotInstance;
+import com.synaptix.toast.core.net.request.CommandRequest;
+import com.synaptix.toast.core.report.TestResult.ResultKind;
+import com.synaptix.toast.plugin.swing.agent.action.processor.ActionProcessor;
 
-	void highlight(String selectedValue);
 
-	String getComponentLocator(Component component);
+/**
+ * Click on a JMenu 
+ * Select a sub menu item from there.
+ *
+ */
+class JMenuClickActionProcessor implements ActionProcessor<JMenu>{
 
-	void publishRecordEvent(AWTCapturedEvent eventObject);
+	@Override
+	public String processCommandOnComponent(CommandRequest command, JMenu target) {
+		Robot robot = FestRobotInstance.getRobot();
+		robot.click(target);
+		return ResultKind.SUCCESS.name();
+	}
 	
-	void publishInterpretedEvent(String sentence);
-
-	Set<String> scan(boolean b);
-
 }

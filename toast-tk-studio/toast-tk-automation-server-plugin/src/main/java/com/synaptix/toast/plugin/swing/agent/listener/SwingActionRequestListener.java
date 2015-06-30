@@ -18,14 +18,11 @@ import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.SwingUtilities;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
-import org.fest.swing.fixture.JComboBoxFixture;
 import org.fest.swing.fixture.JMenuItemFixture;
 import org.fest.swing.fixture.JPopupMenuFixture;
 
@@ -39,6 +36,9 @@ import com.synaptix.toast.core.net.response.ErrorResponse;
 import com.synaptix.toast.core.net.response.ExistsResponse;
 import com.synaptix.toast.core.net.response.ValueResponse;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
+import com.synaptix.toast.plugin.swing.agent.action.processor.ActionProcessor;
+import com.synaptix.toast.plugin.swing.agent.action.processor.ActionProcessorFactory;
+import com.synaptix.toast.plugin.swing.agent.action.processor.ActionProcessorFactoryProvider;
 
 /**
  * Created by Sallah Kokaina on 13/11/2014.
@@ -155,37 +155,51 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 
 	private void processComponentRequest(Connection connection, CommandRequest command) throws InterruptedException {
 		final Component target = getTarget(command.item, command.itemType);
-		ResultKind result = null;
 		LOG.info("Found target command " + ToStringBuilder.reflectionToString(target, ToStringStyle.SHORT_PREFIX_STYLE));
-
 		boolean componentFound = target != null;
 		if (command.isExists()) {
-			connection.sendTCP(new ExistsResponse(command.getId(), componentFound));
+			replyToComponentExistRequest(connection, command, componentFound);
 		} else if (componentFound) {
-			if (isToRunOutsideEDT(target)) {
-				handleActionOutsideEdt(target, command);
-			} else {
-				actionRequestQueue.put(new ActionRequestWrapper(command, target, connection));
-				SwingUtilities.invokeLater(SwingActionRequestListener.this);
-			}
+			doActionOnComponent(connection, command, target);
 		} else if (command.itemType.equals(AutoSwingType.menu.name())) {
-			result = handlePopupMenuItem(command);
-			if (command.getId() != null) {
-				if(result != null){
-					if(result.equals(ResultKind.ERROR) || result.equals(ResultKind.FAILURE)){
-						failSafeAndReportSceenshot(connection, "", command);
-					}else{
-						connection.sendTCP(new ValueResponse(command.getId(), result != null ? result.name() : null));
-					}
-				}else{
-					connection.sendTCP(new ValueResponse(command.getId(), null));
-				}
-			}
+			doActionOnMenuByNameLocator(connection, command);
 		} else {
 			LOG.error("No target found for command: " + ToStringBuilder.reflectionToString(command, ToStringStyle.SHORT_PREFIX_STYLE));
 			failSafeAndReportSceenshot(connection, "No target found !", command);
 		}
+	}
 
+	private void doActionOnMenuByNameLocator(Connection connection, CommandRequest command) {
+		ResultKind result;
+		result = handlePopupMenuItem(command);
+		if (command.getId() != null) {
+			if(result != null){
+				if(result.equals(ResultKind.ERROR) || result.equals(ResultKind.FAILURE)){
+					failSafeAndReportSceenshot(connection, "", command);
+				}else{
+					connection.sendTCP(new ValueResponse(command.getId(), result != null ? result.name() : null));
+				}
+			}else{
+				connection.sendTCP(new ValueResponse(command.getId(), null));
+			}
+		}
+	}
+
+	private void replyToComponentExistRequest(Connection connection, CommandRequest command, boolean componentFound) {
+		connection.sendTCP(new ExistsResponse(command.getId(), componentFound));
+	}
+
+	private void doActionOnComponent(Connection connection, CommandRequest command, final Component target) throws InterruptedException {
+		if (isToRunOutsideEdt(target)) {
+			handleActionOutsideEdt(target, command);
+		} else {
+			queueAndHandleInsideEdt(connection, command, target);
+		}
+	}
+
+	private void queueAndHandleInsideEdt(Connection connection, CommandRequest command, final Component target) throws InterruptedException {
+		actionRequestQueue.put(new ActionRequestWrapper(command, target, connection));
+		SwingUtilities.invokeLater(SwingActionRequestListener.this);
 	}
 
 	private Component getTarget(String item, String itemType) {
@@ -212,61 +226,64 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 	}
 
 	private Component findComponent(String item, String itemType) {
-		Map<String, Component> repository = repositoryHolder.getRepo();
-		Component target = repository.get(item);
+		final Component target = repositoryHolder.getRepo().get(item);
 		if (target == null) {
-			for (Map.Entry<String, Component> entrySet : repository.entrySet()) {
-				Component value = entrySet.getValue();
-				if (value.getClass().getSimpleName().toLowerCase().contains(itemType)) {
-					if (value instanceof AbstractButton) {
-						String buttonLabel = ((AbstractButton) value).getText();
-						if (buttonLabel != null && buttonLabel.toLowerCase().equals(item.toLowerCase())) {
-							target = value;
-							break;
-						}
-					} else if (value instanceof JDialog) {
-						String dialogTitle = ((JDialog) value).getTitle();
-						if (dialogTitle != null && dialogTitle.toLowerCase().equals(item.toLowerCase())) {
-							target = value;
-							break;
-						}
-					} else {
-						target = fixtureHandlerProvider.locateComponentTarget(item, itemType, value);
-						if (target != null) {
-							return target;
-						}
-					}
+			for (Map.Entry<String, Component> entrySet : repositoryHolder.getRepo().entrySet()) {
+				final Component component = entrySet.getValue();
+				if (isComponentTypeMatching(itemType, component)) {
+					findComponentByItemName(item, itemType, component);
 				}
 			}
 		}
 		return target;
 	}
 
-	private ResultKind handleActionOutsideEdt(Component target, CommandRequest command) {
-		if (target instanceof JComboBox) {
-			handle((JComboBox) target, command);
-		} else if (target instanceof JMenu) {
-			return handle((JMenu) target, command);
+	private Component findComponentByItemName(String item, String itemType, final Component component) {
+		Component foundComponent = null;
+		if (component instanceof AbstractButton) {
+			String buttonLabel = ((AbstractButton) component).getText();
+			if (buttonLabel != null && buttonLabel.toLowerCase().equals(item.toLowerCase())) {
+				foundComponent = component;
+			}
+		} else if (component instanceof JDialog) {
+			String dialogTitle = ((JDialog) component).getTitle();
+			if (dialogTitle != null && dialogTitle.toLowerCase().equals(item.toLowerCase())) {
+				foundComponent = component;
+			}
+		} else {
+			final Component locatedTargetComponent = fixtureHandlerProvider.locateComponentTarget(item, itemType, component);
+			if (locatedTargetComponent != null) {
+				foundComponent = locatedTargetComponent;
+			}
 		}
-		return null;
+		return foundComponent;
 	}
 
-	private boolean isToRunOutsideEDT(Component target) {
-		return (target instanceof JComboBox) || (target instanceof JMenu) /*
-																		 * ||
-																		 * (target
-																		 * instanceof
-																		 * JTextArea
-																		 * )
-																		 */;
+	private boolean isComponentTypeMatching(String itemType, Component value) {
+		return value.getClass().getSimpleName().toLowerCase().contains(itemType);
+	}
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	private ResultKind handleActionOutsideEdt(Component target, CommandRequest command) {
+		ActionProcessorFactory factory = ActionProcessorFactoryProvider.getFactory(target);
+		ActionProcessor actionProcessor = factory.getProcessor(command);
+		if(actionProcessor == null){
+			throw new IllegalArgumentException(String.format("Command not supported for %s: " + command.action.name(), target.getClass().getName()));
+		}
+		String output = actionProcessor.processCommandOnComponent(command, target);
+		return output == null ? null : ResultKind.valueOf(output);
+	}
+
+	private boolean isToRunOutsideEdt(Component target) {
+		return (target instanceof JComboBox) || (target instanceof JMenu);
 	}
 
 	private ResultKind handlePopupMenuItem(CommandRequest command) {
 		switch (command.action) {
 		case SELECT:
 			Robot robot = FestRobotInstance.getRobot();
-			JPopupMenuFixture pFixture = new JPopupMenuFixture(robot, robot.findActivePopupMenu());
-			JMenuItemFixture menuItemWithPath = pFixture.menuItemWithPath(command.value);
+			JPopupMenuFixture popupFixture = new JPopupMenuFixture(robot, robot.findActivePopupMenu());
+			JMenuItemFixture menuItemWithPath = popupFixture.menuItemWithPath(command.value);
 			if (menuItemWithPath != null && menuItemWithPath.component().isEnabled()) {
 				menuItemWithPath.click();
 				return ResultKind.SUCCESS;
@@ -276,56 +293,6 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 		default:
 			throw new IllegalArgumentException("Unsupported command for JMenu: " + command.action.name());
 		}
-	}
-
-	private String handle(JComboBox target, final CommandRequest command) {
-		JComboBoxFixture fixture = new JComboBoxFixture(FestRobotInstance.getRobot(), target);
-		switch (command.action) {
-		case SET:
-			fixture.focus().enterText(command.value);
-			break;
-		case GET:
-			int selectedIndex = fixture.component().getSelectedIndex();
-			return fixture.selectItem(selectedIndex).toString();
-		case SELECT:
-			if (StringUtils.isNumeric(command.value)) {
-				fixture.selectItem(Integer.parseInt(command.value));
-			} else {
-				fixture.selectItem(command.value);
-			}
-			break;
-		default:
-			throw new IllegalArgumentException("Unsupported command for JComboBox: " + command.action.name());
-		}
-		return null;
-	}
-
-	private ResultKind handle(JMenu target, CommandRequest command) {
-		Robot robot = FestRobotInstance.getRobot();
-		switch (command.action) {
-		case CLICK:
-			robot.click(target);
-			LOG.info(String.format("Request id: %s, Clicked on menu (%s)", command.getId(), command.value));
-			break;
-		case SELECT:
-			if (target == null) {
-				robot.pressMouse(MouseButton.RIGHT_BUTTON);
-			} else {
-				robot.click(target);
-			}
-			JPopupMenuFixture pFixture = new JPopupMenuFixture(robot, robot.findActivePopupMenu());
-			JMenuItemFixture menuItemWithPath = pFixture.menuItemWithPath(command.value);
-			if (menuItemWithPath != null && menuItemWithPath.component().isEnabled()) {
-				menuItemWithPath.click();
-				LOG.info(String.format("Request id: %s, Selected menu (%s)", command.getId(), command.value));
-				return ResultKind.SUCCESS;
-			} else {
-				return ResultKind.FAILURE;
-			}
-		default:
-			throw new IllegalArgumentException("Unsupported command for JMenu: " + command.action.name());
-		}
-		return null;
 	}
 
 	@Override

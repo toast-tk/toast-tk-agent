@@ -6,6 +6,7 @@ import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.Window;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -23,20 +24,21 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JViewport;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.google.inject.Inject;
 import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.core.net.request.InitInspectionRequest;
-import com.synaptix.toast.core.net.response.InitResponse;
 import com.synaptix.toast.plugin.swing.server.SwingInspectionManager;
 
 @FixMe(todo = "review hard coded values")
 public class InitRequestListener extends Listener {
-
-	private Map<String, Component> repository;
+	private static final Logger LOG = LogManager.getLogger(InitRequestListener.class);
 	private final RepositoryHolder repositoryHolder;
-	static java.util.List<Class> autorizedComponents = new ArrayList<Class>();
+	static java.util.List<Class<?>> autorizedComponents = new ArrayList<Class<?>>();
 	static java.util.List<String> autorizedPackages = new ArrayList<String>();
 
 	static {
@@ -69,27 +71,27 @@ public class InitRequestListener extends Listener {
 			if (object instanceof InitInspectionRequest) {
 				SwingInspectionManager.getInstance().clearContainers();
 				mutateJDialogsModalityType();
-
-				InitResponse response = new InitResponse();
-				java.util.List<Component> allComponents = SwingInspectionManager.getInstance().getAllComponents();
-				Map<Object, String> allInstances = SwingInspectionManager.getInstance().getAllInstances();
-
+				final List<Component> allComponents = SwingInspectionManager.getInstance().getAllComponents();
+				final Map<Object, String> allInstances = SwingInspectionManager.getInstance().getAllInstances();
 				repositoryHolder.getRepo().clear();
 				for (Component component : allComponents) {
-					String componentName = allInstances.get(component);
-					String componentId = component.getName();
-					String componentLocator = componentName != null ? componentName : componentId;
-					componentLocator = componentLocator != null ? componentLocator : component.getClass() + ":" + System.identityHashCode(component);
+					String componentLocator = computeLocator(allInstances, component);
 					if (isAutorizedComponent(component)) {
-						response.items.add(componentLocator);
 						repositoryHolder.getRepo().put(componentLocator, component);
 					}
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
+	}
 
+	private String computeLocator(Map<Object, String> allInstances, Component component) {
+		String componentName = allInstances.get(component);
+		String componentId = component.getName();
+		String componentLocator = componentName != null ? componentName : componentId;	
+		componentLocator = componentLocator != null ? componentLocator : component.getClass() + ":" + System.identityHashCode(component);
+		return componentLocator;
 	}
 
 	private void mutateJDialogsModalityType() {
@@ -119,7 +121,7 @@ public class InitRequestListener extends Listener {
 		return false;
 	}
 
-	public static Container[] getWindows() {
+	private static Container[] getWindows() {
 		Window[] allWindows = Window.getWindows();
 
 		int frameCount = 0;
@@ -144,10 +146,6 @@ public class InitRequestListener extends Listener {
 		boolean scopable = !w.getClass().getPackage().getName().startsWith("fr.synaptix");
 		boolean acceptable = scopable && (w instanceof Frame || w instanceof JDialog) && w.isVisible();
 		return acceptable;
-	}
-
-	public void setRepository(Map<String, Component> repository2) {
-		this.repository = repository2;
 	}
 
 }

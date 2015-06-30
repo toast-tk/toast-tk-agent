@@ -1,6 +1,6 @@
 package com.synaptix.toast.core.net.response;
 
-import com.synaptix.toast.core.agent.interpret.AWTEventCapturedObject;
+import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 import com.synaptix.toast.core.net.request.IIdRequest;
 
 
@@ -9,7 +9,7 @@ import com.synaptix.toast.core.net.request.IIdRequest;
  */
 public class RecordResponse implements IIdRequest{
 	private String id;
-	public AWTEventCapturedObject value;
+	public AWTCapturedEvent value;
 	private String sentence;
 
 	/**
@@ -19,7 +19,7 @@ public class RecordResponse implements IIdRequest{
 		
 	}
 	
-	public RecordResponse(AWTEventCapturedObject eventObject) {
+	public RecordResponse(AWTCapturedEvent eventObject) {
 		this.value = eventObject;
 	}
 
@@ -32,7 +32,7 @@ public class RecordResponse implements IIdRequest{
 		return id;
 	}
 	
-	public AWTEventCapturedObject getEvent() {
+	public AWTCapturedEvent getEvent() {
 		return value;
 	}
 
