@@ -66,13 +66,13 @@ public abstract class AbstractTestManagerImpl implements ITestManager {
 	public void saveEntity(Object object) throws Exception {
 	}
 
+	
+	@Override
+	public void saveEntity(Class<?> entityClass, Map<String, Object> valueMap) throws Exception {
+		
+	}
 	@Override
 	public Object findObject(String entityName, String propertyName, String propertyValue) {
 		return null;
-	}
-
-	@Override
-	public void saveEntity(Class<?> entityClass, Map<String, Object> valueMap) throws Exception {
-
 	}
 }

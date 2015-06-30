@@ -237,7 +237,13 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 								runner = new DefaultScriptRunner(AgentBoot.injector);
 							}
 							String wikiScenario = toWikiScenario(test);
-							runner.runRemoteScript(wikiScenario);
+							try {
+								runner.runRemoteScript(wikiScenario);
+							} catch (IllegalAccessException e) {
+								e.printStackTrace();
+							} catch (ClassNotFoundException e) {
+								e.printStackTrace();
+							}
 						} else {
 							JOptionPane.showMessageDialog(null, "Script Text Area is Empty !");
 						}

@@ -30,7 +30,6 @@ Creation date: 26 mars 2015
 package com.synaptix.toast.test.runtime;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 import java.util.List;
 

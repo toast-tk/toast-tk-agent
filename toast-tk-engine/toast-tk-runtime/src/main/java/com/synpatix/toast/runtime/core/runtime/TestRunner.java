@@ -505,7 +505,6 @@ public class TestRunner {
 //				serviceClasses.add(serviceClass);
 //			}
 //		}
-		
 		//round1 - hard match: based on type and name
 		if(serviceClasses.size() == 0){
 			for (FixtureService fixtureService : fixtureApiServices) {
@@ -517,7 +516,6 @@ public class TestRunner {
 				}
 			}
 		}
-		
 		//round2 - soft match: based on type only
 		for (FixtureService fixtureService : fixtureApiServices) {
 			if(fixtureService.fixtureKind.equals(fixtureKind)){
@@ -527,7 +525,6 @@ public class TestRunner {
 				}
 			}
 		}
-		
 		if (serviceClasses.size() == 0) {
 			LOG.error("No Connector found for command: " + command);
 			return null;

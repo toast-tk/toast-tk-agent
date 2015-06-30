@@ -26,7 +26,6 @@ public class RunUtils {
 				System.out.println("- " + string);
 			}
 		}
-
 		System.out.println("Technical errors: " + totalTechnical);
 		System.out.println("Failures: " + totalErrors);
 		System.out.println("Success: " + totalSuccess);

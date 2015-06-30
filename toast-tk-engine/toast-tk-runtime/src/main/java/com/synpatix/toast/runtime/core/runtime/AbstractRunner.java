@@ -40,29 +40,12 @@ public abstract class AbstractRunner {
 		this.injector = injector;
 	}
 
-	public final void run(String... scenarios) {
+	public final void run(String... scenarios) throws IllegalAccessException, ClassNotFoundException {
 		this.presetRepoFromWebApp = false;
-		run(testEnvManager, scenarios);
+		run(this.testEnvManager, scenarios);
 	}
 
-	public final void runRemote(String... scenarios) {
-		this.presetRepoFromWebApp = true;
-		run(testEnvManager, scenarios);
-	}
-	
-	public final void runRemoteScript(String script) {
-		this.presetRepoFromWebApp = true;
-		runScript(testEnvManager, null, script);
-	}
-	
-	public void runLocalScript(String wikiScenario, String repoWiki, IReportUpdateCallBack iReportUpdateCallBack) {
-		this.reportUpdateCallBack = iReportUpdateCallBack;
-		TestParser parser = new TestParser();
-		localRepositoryTestPage = parser.readString(repoWiki, "");
-		runScript(testEnvManager, null, wikiScenario);
-	}
-
-	public final void run(ITestManager testEnvManager, String... scenarios) {
+	public final void run(ITestManager testEnvManager, String... scenarios) throws IllegalAccessException, ClassNotFoundException {
 		List<ITestPage> testPages = new ArrayList<ITestPage>();
 		initEnvironment();
 		for (String fileName : scenarios) {
@@ -79,58 +62,60 @@ public abstract class AbstractRunner {
 		RunUtils.printResult(testPages);
 	}
 
+	public final void runRemote(String... scenarios) throws IllegalAccessException, ClassNotFoundException {
+		this.presetRepoFromWebApp = true;
+		run(testEnvManager, scenarios);
+	}
+
+	public final void runRemoteScript(String script) throws IllegalAccessException, ClassNotFoundException {
+		this.presetRepoFromWebApp = true;
+		runScript(testEnvManager, null, script);
+	}
+
+	public void runLocalScript(String wikiScenario, String repoWiki, IReportUpdateCallBack iReportUpdateCallBack) throws IllegalAccessException, ClassNotFoundException {
+		this.reportUpdateCallBack = iReportUpdateCallBack;
+		TestParser parser = new TestParser();
+		this.localRepositoryTestPage = parser.readString(repoWiki, "");
+		runScript(this.testEnvManager, null, wikiScenario);
+	}
+
 	private File readTestFile(String fileName) {
 		try {
 			return new File(this.getClass().getClassLoader().getResource(fileName).getFile());
-		}
-		catch(final Exception e) {
+		} catch (final Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
 		return null;
 	}
 
-	private ITestPage runScript(ITestManager testEnvManager, File file, String script) {
+	private ITestPage runScript(ITestManager testEnvManager, File file, String script) throws IllegalAccessException, ClassNotFoundException {
 		TestParser testParser = new TestParser();
 		ITestPage result = file == null ? testParser.parseString(script) : testParser.parse(file);
-		
-		// Run test
 		URL defaultSettings = this.getClass().getClassLoader().getResource(Property.REDPEPPER_AUTOMATION_SETTINGS_DEFAULT_DIR);
 		TestRunner runner = new TestRunner(testEnvManager, injector, defaultSettings, reportUpdateCallBack);
-
-		try {
-			if (presetRepoFromWebApp) {
-				String repoWiki = RestUtils.downloadRepositoyAsWiki();
-				TestParser parser = new TestParser();
-				TestPage repoAsTestPageForConveniency = parser.readString(repoWiki, "");
-				runner.run(repoAsTestPageForConveniency, false);
-				if (LOG.isDebugEnabled()) {
-					LOG.debug("Preset repository from webapp rest api...");
-				}
-			}
-			else if(localRepositoryTestPage != null){
-				runner.run(localRepositoryTestPage, false);
-			}
-			beginTest();
-			result = runner.run(result, true);
-			createAndOpenReport(result);
-			endTest();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+		if (this.presetRepoFromWebApp) {
+			String repoWiki = RestUtils.downloadRepositoyAsWiki();
+			TestParser parser = new TestParser();
+			TestPage repoAsTestPageForConveniency = parser.readString(repoWiki, "");
+			runner.run(repoAsTestPageForConveniency, false);
+		} else if (this.localRepositoryTestPage != null) {
+			runner.run(this.localRepositoryTestPage, false);
 		}
+		beginTest();
+		result = runner.run(result, true);
+		createAndOpenReport(result);
+		endTest();
 		return result;
 	}
-	
 
 	private void createAndOpenReport(ITestPage testPage) {
 		String generatePageHtml = htmlReportGenerator.generatePageHtml(testPage);
 		URL resource = this.getClass().getClassLoader() != null ? this.getClass().getClassLoader().getResource("TestResult") : null;
-		if(resource != null){
+		if (resource != null) {
 			try {
-				if(!Boolean.getBoolean("java.awt.headless")){
+				if (!Boolean.getBoolean("java.awt.headless")) {
 					final String pageName = testPage.getPageName();
-					htmlReportGenerator.writeFile(generatePageHtml, pageName, resource.getPath());
+					this.htmlReportGenerator.writeFile(generatePageHtml, pageName, resource.getPath());
 					File htmlFile = new File(resource.getPath() + "\\" + pageName + ".html");
 					Desktop.getDesktop().browse(htmlFile.toURI());
 				}
@@ -139,12 +124,12 @@ public abstract class AbstractRunner {
 			}
 		}
 	}
-	
+
 	public abstract void tearDownEnvironment();
 
 	public abstract void beginTest();
-	
+
 	public abstract void endTest();
-	
+
 	public abstract void initEnvironment();
 }

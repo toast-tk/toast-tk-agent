@@ -1,10 +1,7 @@
 package com.synpatix.toast.runtime.core.runtime;
 
-import com.google.inject.Inject;
-import com.synaptix.toast.adapter.utils.ActionAdapterHelper;
-import com.synaptix.toast.core.runtime.IRepositorySetup;
-import com.synaptix.toast.core.runtime.ITestManager;
-import com.synpatix.toast.runtime.guice.IRepositoryTypeParser;
+import java.io.Serializable;
+import java.math.BigDecimal;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,13 +10,15 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
+import com.google.inject.Inject;
+import com.synaptix.toast.adapter.utils.ActionAdapterHelper;
+import com.synaptix.toast.core.runtime.IRepositorySetup;
+import com.synpatix.toast.runtime.guice.IRepositoryTypeParser;
 
 
 public class DefaultRespositoryTypeParser implements IRepositoryTypeParser {
 
-	private final static Log LOG = LogFactory.getLog(DefaultRespositoryTypeParser.class);
+	private static final  Log LOG = LogFactory.getLog(DefaultRespositoryTypeParser.class);
 
 	
 	@Inject

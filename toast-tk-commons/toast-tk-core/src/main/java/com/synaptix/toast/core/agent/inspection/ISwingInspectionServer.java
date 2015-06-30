@@ -30,7 +30,6 @@ Creation date: 16 févr. 2015
 package com.synaptix.toast.core.agent.inspection;
 
 import java.awt.Component;
-import java.util.List;
 import java.util.Set;
 
 import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;

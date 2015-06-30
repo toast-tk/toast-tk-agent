@@ -2,9 +2,6 @@ package com.synaptix.toast.automation.report;
 
 /**
  * web action result from a test case execution
- * 
- * @author skokaina
- * 
  */
 public class WebActionResult {
 

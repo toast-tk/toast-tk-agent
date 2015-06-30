@@ -51,11 +51,12 @@ public class JavaTestRunner {
 	 * @param scripts
 	 * @param chained
 	 *            chain the tests without closing the browser between each test case
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
 	 */
-	public void launch(List<Class<?>> scripts, boolean chained) {
+	public void launch(List<Class<?>> scripts, boolean chained) throws InstantiationException, IllegalAccessException {
 		TestScriptBase<?, ?> lastExecutable = null;
 		for (Class<?> script : scripts) {
-			try {
 				TestScriptBase<?, ?> executable = (TestScriptBase<?, ?>) script.newInstance();
 				executable.setReporter(reporter);
 				executable.init();
@@ -65,9 +66,6 @@ public class JavaTestRunner {
 				} else {
 					lastExecutable = executable;
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 		if (chained && lastExecutable != null) {
 			lastExecutable.end();

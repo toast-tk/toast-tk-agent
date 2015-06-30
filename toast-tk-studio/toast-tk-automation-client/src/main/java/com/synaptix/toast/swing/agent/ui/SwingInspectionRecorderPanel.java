@@ -272,18 +272,24 @@ public class SwingInspectionRecorderPanel extends JPanel{
 							SwingUtilities.invokeLater(new Runnable() {
 								@Override
 								public void run() {
-									runner.runLocalScript(wikiScenario, mongoRepoManager.getWikiFiedRepo(),new IReportUpdateCallBack() {
-										@Override
-										public void onUpdate(final String report) {
-											swingbox.setText(report);		
-											swingbox.revalidate();
-										}
+									try {
+										runner.runLocalScript(wikiScenario, mongoRepoManager.getWikiFiedRepo(),new IReportUpdateCallBack() {
+											@Override
+											public void onUpdate(final String report) {
+												swingbox.setText(report);		
+												swingbox.revalidate();
+											}
 
-										@Override
-										public void onFatalStepError(String message) {
-											JOptionPane.showMessageDialog(null, message);
-										}
-									});
+											@Override
+											public void onFatalStepError(String message) {
+												JOptionPane.showMessageDialog(null, message);
+											}
+										});
+									} catch (IllegalAccessException e) {
+										e.printStackTrace();
+									} catch (ClassNotFoundException e) {
+										e.printStackTrace();
+									}
 								}
 							});
 						} 

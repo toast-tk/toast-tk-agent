@@ -1,9 +1,9 @@
 package com.synpatix.toast.runtime.core.runtime;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.commons.attributes.Attributes;
 import org.apache.commons.beanutils.BeanUtils;
 
 public class ClassHelper {
@@ -37,7 +37,17 @@ public class ClassHelper {
 				return true;
 			}
 		}
-		return Attributes.hasAttribute(clazz, property);
+		return inspect(clazz, property);
+	}
+
+	static boolean inspect(Class<?> klazz, String property) {
+		Field[] fields = klazz.getDeclaredFields();
+		for (Field field : fields) {
+			if(field.getName().equalsIgnoreCase(property)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static Class<?> getPropertyClass(Class<?> clazz, String propertyName) {

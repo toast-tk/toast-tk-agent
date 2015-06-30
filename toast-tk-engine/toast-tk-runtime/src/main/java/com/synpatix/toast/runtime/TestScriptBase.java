@@ -31,13 +31,9 @@ public abstract class TestScriptBase<D extends SynchronizedDriver, R extends Web
 	public abstract void run();
 
 	@SuppressWarnings("unchecked")
-	public void init() {
-		@SuppressWarnings("unchecked")
+	public void init() throws InstantiationException, IllegalAccessException {
 		Class<D> driverClass = (Class<D>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-		@SuppressWarnings("unchecked")
 		Class<R> repoClass = (Class<R>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
-
-		try {
 			repo = repoClass.newInstance();
 			driver = driverClass.newInstance();
 			for (Field f : getClass().getDeclaredFields()) {
@@ -47,20 +43,6 @@ public abstract class TestScriptBase<D extends SynchronizedDriver, R extends Web
 					AbstractSynaptixWebPage webPage = PageProvider.in(repo).getWebPage((Class<AbstractSynaptixWebPage>) pageClass);
 					f.set(this, webPage);
 					System.out.println("Setting field: " + f.getName() + " => " + f);
-
-					// this is the right moment to override the autoElements initialized from the repo, if we have a debug id !
-					// for (Field pageField : webPage.getClass().getFields()) {
-					// pageField.setAccessible(true);
-					// String name = pageField.getName();
-					// if (webPage.getDebugIdMap().containsKey(name)) { // we have a debug for override !
-					// AutoWebType classAutoType = ElementFactory.getClassAutoType(pageField.getType());
-					// String locatorId = webPage.getDebugIdMap().get(name);
-					// if (classAutoType != null) {
-					// DefaultWebElement debugIdElement = new DefaultWebElement(name, classAutoType, locatorId, LocationMethod.ID, 0);
-					// webPage.initElement(debugIdElement); // override previous field description
-					// }
-					// }
-					// }
 					webPage.setDriver(driver);
 				} else if (SeleniumTestScriptBase.class.isAssignableFrom(pageClass)) {
 					SeleniumTestScriptBase<D, R> classBlock = ((Class<SeleniumTestScriptBase<D, R>>) pageClass).newInstance();
@@ -68,10 +50,6 @@ public abstract class TestScriptBase<D extends SynchronizedDriver, R extends Web
 					f.set(this, classBlock);
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			end();
-		}
 	}
 
 	public void setReporter(IReporter reporter) {

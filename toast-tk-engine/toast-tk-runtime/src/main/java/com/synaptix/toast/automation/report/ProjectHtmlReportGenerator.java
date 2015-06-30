@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.synaptix.toast.automation.report;
 
 import java.io.BufferedWriter;
@@ -10,9 +7,7 @@ import java.util.List;
 import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.core.dao.ICampaign;
 import com.synaptix.toast.core.dao.ITestPage;
-import com.synaptix.toast.dao.domain.impl.report.Campaign;
 import com.synaptix.toast.dao.domain.impl.report.Project;
-import com.synaptix.toast.dao.domain.impl.test.TestPage;
 
 @FixMe(todo = "replace Project by an interface in order to move the generator within the runtime module")
 public class ProjectHtmlReportGenerator {

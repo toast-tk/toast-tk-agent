@@ -23,7 +23,7 @@ import com.synpatix.toast.runtime.guice.IRepositoryTypeParser;
 
 public class RepositorySetup implements IRepositorySetup{
 
-	private final static Log LOG = LogFactory.getLog(RepositorySetup.class);
+	private static final Log LOG = LogFactory.getLog(RepositorySetup.class);
 
 	private ITestManager manager;
 
