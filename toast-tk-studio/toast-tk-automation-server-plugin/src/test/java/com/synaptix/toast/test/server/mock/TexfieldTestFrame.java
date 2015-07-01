@@ -1,3 +1,4 @@
+
 package com.synaptix.toast.test.server.mock;
 
 import javax.swing.JFrame;

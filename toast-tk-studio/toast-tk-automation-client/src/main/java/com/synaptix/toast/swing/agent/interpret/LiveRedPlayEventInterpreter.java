@@ -1,12 +1,7 @@
 package com.synaptix.toast.swing.agent.interpret;
 
-
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import org.slf4j.LoggerFactory;
-
 import com.synaptix.toast.adapter.SentenceBuilder;
 import com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.Types;
 import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;

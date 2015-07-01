@@ -1,3 +1,4 @@
+
 package com.synpatix.toast.runtime;
 
 import com.synaptix.toast.automation.report.ConsoleReporter;

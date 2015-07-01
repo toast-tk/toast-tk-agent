@@ -4,9 +4,6 @@ import java.awt.image.BufferedImage;
 
 import com.synaptix.toast.core.net.request.IIdRequest;
 
-/**
- * Created by skokaina on 07/11/2014.
- */
 public class ErrorResponse implements IIdRequest {
 	private String id;
 	private String message;

@@ -1,3 +1,4 @@
+
 package com.synaptix.toast.swing.agent.ui;
 
 import java.awt.BorderLayout;

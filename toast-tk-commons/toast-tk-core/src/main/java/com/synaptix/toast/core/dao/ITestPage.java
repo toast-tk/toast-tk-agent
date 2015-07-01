@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package com.synaptix.toast.core.dao;
 
 import java.util.List;

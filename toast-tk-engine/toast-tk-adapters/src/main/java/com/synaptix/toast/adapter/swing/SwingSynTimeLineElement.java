@@ -1,7 +1,7 @@
+
 package com.synaptix.toast.adapter.swing;
 
 import com.synaptix.toast.core.driver.IRemoteSwingAgentDriver;
-import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.runtime.ISwingElement;
 
 /**
@@ -20,5 +20,4 @@ public class SwingSynTimeLineElement extends SwingAutoElement  {
 		super(element);
 	}
 
-	
 }

@@ -38,4 +38,5 @@ public abstract class AbstractComponentFixtureModule extends AbstractModule {
 		bind(typeHandlerClass).annotatedWith(annotationClass).in(Singleton.class);
 		uriCustomFixtureHandlerBinder.addBinding().to(typeHandlerClass);
 	}
+
 }

@@ -149,23 +149,14 @@ public class SutRunnerAsExec {
 				return null;
 			}
 		});
-		cancelProcessingIfJnlpFileIsMissing(jnlpXmlF);
-		Document doc = builder.parse(FileUtils.openInputStream(jnlpXmlF));
-		String rootNodeName = doc.getDocumentElement().getNodeName();
-		cancelProcessingIfNotJnlpFile(rootNodeName);
-		return doc;
-	}
-
-	private void cancelProcessingIfNotJnlpFile(String rootNodeName) throws IllegalAccessException {
-		if (!"jnlp".equals(rootNodeName)) {
-			throw new IllegalAccessException(String.format("Unsupported root node: %s (expected jnlp)", rootNodeName));
-		}
-	}
-
-	private void cancelProcessingIfJnlpFileIsMissing(File jnlpXmlF) throws IllegalAccessException {
 		if (!jnlpXmlF.exists()) {
 			throw new IllegalAccessException(String.format("JNLP File not available: %s ", jnlpXmlF.getAbsoluteFile()));
 		}
+		Document doc = builder.parse(FileUtils.openInputStream(jnlpXmlF));
+		if (!"jnlp".equals(doc.getDocumentElement().getNodeName())) {
+			throw new IllegalAccessException(String.format("Unsupported root node: %s (expected jnlp)", doc.getDocumentElement().getNodeName()));
+		}
+		return doc;
 	}
 
 	@FixMe(todo="link java home to installed jre")

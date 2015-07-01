@@ -24,9 +24,6 @@ import com.synaptix.toast.core.net.response.RecordResponse;
 import com.synaptix.toast.core.net.response.ScanResponse;
 import com.synaptix.toast.core.net.response.ValueResponse;
 
-/**
- * Created by Sallah Kokaina on 12/11/2014.
- */
 public class CommonIOUtils {
     public static final int TCP_PORT = 1470;
 

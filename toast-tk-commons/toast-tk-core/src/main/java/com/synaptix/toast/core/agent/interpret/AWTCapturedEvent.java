@@ -1,8 +1,5 @@
 package com.synaptix.toast.core.agent.interpret;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-
 import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
 import com.synaptix.toast.core.annotation.craft.FixMe;
 
@@ -40,8 +37,5 @@ public class AWTCapturedEvent {
 	public void setEventType(EventType eventType) {
 		this.eventType = eventType;
 	}
-
-
-
 	
 }

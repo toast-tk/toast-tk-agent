@@ -1,3 +1,4 @@
+
 package com.synaptix.toast.adapter.swing;
 
 import java.util.List;

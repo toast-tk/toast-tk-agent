@@ -495,5 +495,4 @@ public class RepositorySetup implements IRepositorySetup{
 		swingpages.clear();
 	}
 
-
 }

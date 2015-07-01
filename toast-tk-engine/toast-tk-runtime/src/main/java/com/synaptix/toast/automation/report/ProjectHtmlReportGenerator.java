@@ -1,3 +1,4 @@
+
 package com.synaptix.toast.automation.report;
 
 import java.io.BufferedWriter;

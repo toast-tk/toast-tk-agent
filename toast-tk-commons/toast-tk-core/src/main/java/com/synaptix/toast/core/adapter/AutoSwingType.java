@@ -14,3 +14,4 @@ public enum AutoSwingType {
 	dialog,
 	other
 }
+

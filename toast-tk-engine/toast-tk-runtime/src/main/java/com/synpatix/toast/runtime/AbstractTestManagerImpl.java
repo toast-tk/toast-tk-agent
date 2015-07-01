@@ -1,3 +1,4 @@
+
 package com.synpatix.toast.runtime;
 
 import java.io.Serializable;

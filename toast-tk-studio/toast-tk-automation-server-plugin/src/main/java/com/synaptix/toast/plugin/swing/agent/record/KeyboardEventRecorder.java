@@ -51,4 +51,5 @@ public class KeyboardEventRecorder extends AbstractEventRecorder {
 	public long getEventMask() {
 		return AWTEvent.KEY_EVENT_MASK;
 	}
+
 }

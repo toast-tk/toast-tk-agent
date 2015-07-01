@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.synpatix.toast.runtime.core.runtime;
 
 import java.util.regex.Matcher;
@@ -12,14 +9,15 @@ import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 
 public class TestLineDescriptor {
 
-	private String regex = "@(" + ActionAdapterKind.swing.name()+ "|" + ActionAdapterKind.web.name() + "|" +  ActionAdapterKind.service.name() + "):?([\\w]*) ([\\w\\W]+)"; 
-	
+	private String regex = "@(" + ActionAdapterKind.swing.name() + "|" + ActionAdapterKind.web.name() + "|" + ActionAdapterKind.service.name()
+			+ "):?([\\w]*) ([\\w\\W]+)";
+
 	public final TestLine testLine;
 	private String testLineAction;
 	private String testLineFixtureName;
 	private ActionAdapterKind testLineFixtureKind;
-	
-	public TestLineDescriptor(TestBlock testBlock, TestLine testLine){
+
+	public TestLineDescriptor(TestBlock testBlock, TestLine testLine) {
 		this.testLine = testLine;
 		initServiceKind(testBlock, testLine);
 	}
@@ -27,12 +25,14 @@ public class TestLineDescriptor {
 	private void initServiceKind(TestBlock testBlock, TestLine testLine) {
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(testLine.getTest());
-		if(matcher.find()){
+		if (matcher.find()) {
 			setTestLineFixtureKind(ActionAdapterKind.valueOf(matcher.group(1)));
 			setTestLineFixtureName(matcher.group(2));
 			setTestLineAction(matcher.group(3));
-		}else{
-			setTestLineFixtureKind(ActionAdapterKind.valueOf(testBlock.getFixtureName())); // exception otherwise !!
+		} else {
+			setTestLineFixtureKind(ActionAdapterKind.valueOf(testBlock.getFixtureName())); // exception
+																							// otherwise
+																							// !!
 			setTestLineAction(testLine.getTest());
 		}
 	}
@@ -40,7 +40,6 @@ public class TestLineDescriptor {
 	private void setTestLineFixtureName(String testLineFixtureName) {
 		this.testLineFixtureName = testLineFixtureName;
 	}
-	
 
 	public String getTestLineFixtureName() {
 		return testLineFixtureName == null ? "" : testLineFixtureName;
@@ -62,20 +61,20 @@ public class TestLineDescriptor {
 		this.testLineFixtureKind = testLineFixtureKind;
 	}
 
-	public boolean isSynchronizedCommand(){
+	public boolean isSynchronizedCommand() {
 		return testLineAction.endsWith(" !");
 	}
-	
-	public boolean isFailFatalCommand(){
+
+	public boolean isFailFatalCommand() {
 		return testLineAction.startsWith("* ");
 	}
-	
-	public String getCommand(){
+
+	public String getCommand() {
 		String command = testLineAction;
-		if(isFailFatalCommand()){
+		if (isFailFatalCommand()) {
 			command = command.substring(2);
 		}
-		//command = command.trim().replace("*", "");
+		// command = command.trim().replace("*", "");
 		return command;
 	}
 

@@ -1,3 +1,4 @@
+
 package com.synaptix.toast.test.server;
 
 import static org.junit.Assert.assertEquals;

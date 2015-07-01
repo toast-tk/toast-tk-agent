@@ -77,4 +77,5 @@ public class MouseEventRecorder extends AbstractEventRecorder {
 	public long getEventMask() {
 		return AWTEvent.MOUSE_EVENT_MASK;
 	}
+
 }

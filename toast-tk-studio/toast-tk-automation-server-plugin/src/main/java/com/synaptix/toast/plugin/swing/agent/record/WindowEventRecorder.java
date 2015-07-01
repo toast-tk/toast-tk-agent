@@ -1,3 +1,4 @@
+
 package com.synaptix.toast.plugin.swing.agent.record;
 
 import java.awt.AWTEvent;
@@ -60,4 +61,5 @@ public class WindowEventRecorder extends AbstractEventRecorder {
 	public long getEventMask() {
 		return AWTEvent.WINDOW_EVENT_MASK;
 	}
+
 }

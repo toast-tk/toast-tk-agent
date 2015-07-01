@@ -1,3 +1,4 @@
+
 package com.synaptix.toast.adapter.swing.guice;
 
 import java.awt.Component;
