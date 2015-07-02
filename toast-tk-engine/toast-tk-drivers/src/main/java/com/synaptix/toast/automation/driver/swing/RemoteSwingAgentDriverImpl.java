@@ -61,7 +61,8 @@ public class RemoteSwingAgentDriverImpl implements IRemoteSwingAgentDriver {
 				}
 				else if (object instanceof ErrorResponse){
 					ErrorResponse response = (ErrorResponse) object;
-					TestResult testResult = new TestResult(response.getMessage(), response.getScreenshot());
+					TestResult testResult = new TestResult(response.getMessage(), null);
+					//TODO: manage screenshots
 					if(valueResponseMap.keySet().contains(response.getId())){
 						valueResponseMap.put(response.getId(), testResult);
 					}
@@ -163,7 +164,7 @@ public class RemoteSwingAgentDriverImpl implements IRemoteSwingAgentDriver {
 					Thread.sleep(500);
 					countTimeOut = countTimeOut - incOffset;
 					if(countTimeOut <= 0){
-						valueResponseMap.remove(reqId);
+						existsResponseMap.remove(reqId);
 						throw new TimeoutException("No Response received for request: " + reqId + " after " + (WAIT_TIMEOUT/1000) +  "s !");
 					}
 				} catch (InterruptedException e) {

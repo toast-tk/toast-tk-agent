@@ -1,4 +1,3 @@
-
 package com.synaptix.toast.automation.report;
 
 import java.io.BufferedWriter;
@@ -16,15 +15,8 @@ import com.synaptix.toast.core.dao.ITestPage;
 /**
  * http://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html
  * 
- * @author Sallah Kokaina <sallah.kokaina@gmail.com>
- *
  */
 public class ThymeLeafHTMLReporter implements IHTMLReportGenerator{
-
-	public static void main(String[] args) {
-	}
-	
-
 	
 	@Override
 	public void writeFile(String report, String pageName, String reportFolderPath) {

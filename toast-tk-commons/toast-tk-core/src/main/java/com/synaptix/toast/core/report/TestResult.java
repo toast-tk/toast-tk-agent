@@ -2,7 +2,10 @@ package com.synaptix.toast.core.report;
 
 import java.awt.image.BufferedImage;
 
+import com.synaptix.toast.core.annotation.craft.FixMe;
 
+
+@FixMe(todo = "split into different objects")
 public class TestResult {
 	private final boolean isSuccess;
 	private String message;
@@ -10,11 +13,6 @@ public class TestResult {
 	private BufferedImage screenShot;
 	// expected to add
 	private ResultKind resultKind;
-
-	/**
-	 * Used for Show tests, to return an object or a list of objects. Then, the reporter can display its content properly.
-	 */
-	private Object resultObject;
 
 	/**
 	 * This constructor can be used in case of success.
@@ -32,11 +30,10 @@ public class TestResult {
 		this(failureMessage, ResultKind.FAILURE);
 	}
 	
-	public TestResult(String failureMessage, BufferedImage img) {
-		this(failureMessage, ResultKind.FAILURE, img);
-	}
-
-	
+//	public TestResult(String failureMessage, BufferedImage img) {
+//		this(failureMessage, ResultKind.FAILURE, img);
+//	}
+//	
 	public TestResult(String message, ResultKind resultKind, BufferedImage img) {
 		this.message = message;
 		this.isSuccess = resultKind.equals(ResultKind.SUCCESS) || resultKind.equals(ResultKind.INFO);

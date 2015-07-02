@@ -1,4 +1,3 @@
-
 package com.synaptix.toast.test.server;
 
 import java.util.List;

@@ -86,7 +86,7 @@ public class TestParserTestCase_2 {
 		BufferedImage capture;
 		try {
 			capture = new java.awt.Robot().createScreenCapture(screenRect);
-			TestResult result = new TestResult("failure", capture);
+			TestResult result = new TestResult("failure", null);
 			result.setContextualTestSentence("test");
 			
 			TestBlock block = new TestBlock();

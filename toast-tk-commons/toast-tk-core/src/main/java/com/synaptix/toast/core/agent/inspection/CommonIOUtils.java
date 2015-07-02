@@ -1,6 +1,7 @@
 package com.synaptix.toast.core.agent.inspection;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.DirectColorModel;
 import java.util.ArrayList;
 
 import com.esotericsoftware.kryo.Kryo;
@@ -29,6 +30,7 @@ public class CommonIOUtils {
 
     public static void initSerialization(Kryo kryo) {
         kryo.register(ArrayList.class);
+        kryo.register(DirectColorModel.class);
         kryo.register(BufferedImage.class);
         
         kryo.register(COMMAND_TYPE.class);

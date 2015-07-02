@@ -35,7 +35,7 @@ import com.synaptix.toast.core.adapter.ActionAdapterKind;
 import com.synaptix.toast.core.adapter.AutoSwingType;
 import com.synaptix.toast.core.annotation.Action;
 import com.synaptix.toast.core.annotation.ActionAdapter;
-import com.synaptix.toast.core.driver.IClientDriver;
+import com.synaptix.toast.core.driver.IRemoteSwingAgentDriver;
 import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.net.request.TableCommandRequestQueryCriteria;
 import com.synaptix.toast.core.report.TestResult;
@@ -47,9 +47,9 @@ import com.synaptix.toast.core.runtime.IRepositorySetup;
 @ActionAdapter(value = ActionAdapterKind.swing, name = "")
 public abstract class ToastSwingActionAdapter {
 	protected IRepositorySetup repo;
-	protected IClientDriver driver;
+	protected IRemoteSwingAgentDriver driver;
 
-	public ToastSwingActionAdapter(IRepositorySetup repo, IClientDriver driver) {
+	public ToastSwingActionAdapter(IRepositorySetup repo, IRemoteSwingAgentDriver driver) {
 		this.repo = repo;
 		this.driver = driver;
 		try {

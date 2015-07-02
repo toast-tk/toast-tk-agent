@@ -23,4 +23,5 @@
 		<module>toast-tk-studio-agent</module>
 		<module>toast-tk-automation-client</module>
 	</modules>
+
 </project>

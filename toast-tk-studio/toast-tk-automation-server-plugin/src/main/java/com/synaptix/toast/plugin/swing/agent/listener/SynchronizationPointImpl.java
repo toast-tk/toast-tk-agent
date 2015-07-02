@@ -1,4 +1,3 @@
-
 package com.synaptix.toast.plugin.swing.agent.listener;
 
 import java.awt.Window;

@@ -59,4 +59,8 @@ public class TemplateHelper {
 		String contextualTestSentence = line.getTestResult() != null ? line.getTestResult().getContextualTestSentence() : null;
 		return contextualTestSentence == null ? line.getTest() : contextualTestSentence;
 	}
+	
+	public static boolean hasScreenShot(TestResult testResult){
+		return testResult != null && testResult.getScreenShot() != null;
+	}
 }

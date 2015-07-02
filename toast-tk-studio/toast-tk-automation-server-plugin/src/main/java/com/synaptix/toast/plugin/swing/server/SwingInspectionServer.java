@@ -1,4 +1,3 @@
-
 package com.synaptix.toast.plugin.swing.server;
 
 import java.awt.Color;

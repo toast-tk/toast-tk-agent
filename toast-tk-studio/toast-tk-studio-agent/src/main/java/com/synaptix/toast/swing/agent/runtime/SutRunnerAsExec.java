@@ -175,7 +175,7 @@ public class SutRunnerAsExec {
 				+ Property.TOAST_PLUGIN_DIR_PROP + "=\""
 				+ Property.TOAST_PLUGIN_DIR + "\"";
 		final String debugRemoteArgs = " " + configuration.getDebugArgs() + " ";
-		String javaHome = System.getenv("JAVA_HOME");
+		String javaHome = System.getenv("TOAST_JRE_HOME");
 		final String command = "\"" + javaHome + "\\bin\\java.exe\" " + agentPathProperty + " " + pluginDirProperty + " " + jvmArgs
 				+ debugRemoteArgs + " -cp \"" + homeDir.getAbsolutePath() + "\\*\" " + mainClass + " " + AppArgsDesc;
 		return command;

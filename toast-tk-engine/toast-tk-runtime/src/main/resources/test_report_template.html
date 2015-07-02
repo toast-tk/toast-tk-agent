@@ -124,7 +124,7 @@
 						<td><span
 							th:text="${line.testCommentString} == null ? '&nbsp;' : ${line.testCommentString}">&nbsp;</span>
 							<span class="btn btn-link btn-xs"
-							th:if="${line.testResult.screenShot} != null"
+							th:if="${@com.synaptix.toast.automation.report.TemplateHelper@hasScreenShot(line.testResult)} == true"
 							th:onclick="'javascript:displayImage(\''+${@com.synaptix.toast.automation.report.TemplateHelper@getResultScreenshotAsBase64(line.testResult)}+'\');'">détails</span>
 						</td>
 						<td><span th:text="${line.executionTime}"> 0 </span> ms</td>

@@ -36,6 +36,43 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.3.1</version>
+				<executions>
+					<execution>
+						<id>add_vertx_core</id>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<phase>validate</phase>
+						<configuration>
+							<file>${basedir}\lib\vertx-core-2.1.5.jar</file>
+							<groupId>io.vertx</groupId>
+							<artifactId>vertx-core</artifactId>
+							<version>2.1.5</version>
+							<packaging>jar</packaging>
+							<localRepositoryPath>${settings.localRepository}</localRepositoryPath>
+						</configuration>
+					</execution>
+					<execution>
+						<id>add_vertx_platform</id>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<phase>validate</phase>
+						<configuration>
+							<file>${basedir}\lib\vertx-platform-2.1.5.jar</file>
+							<groupId>io.vertx</groupId>
+							<artifactId>vertx-platform</artifactId>
+							<version>2.1.5</version>
+							<packaging>jar</packaging>
+							<localRepositoryPath>${settings.localRepository}</localRepositoryPath>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 

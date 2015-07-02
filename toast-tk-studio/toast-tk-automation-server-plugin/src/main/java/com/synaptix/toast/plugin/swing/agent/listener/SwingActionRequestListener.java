@@ -1,4 +1,3 @@
-
 package com.synaptix.toast.plugin.swing.agent.listener;
 
 import java.awt.AWTException;
@@ -41,9 +40,6 @@ import com.synaptix.toast.plugin.swing.agent.action.processor.ActionProcessor;
 import com.synaptix.toast.plugin.swing.agent.action.processor.ActionProcessorFactory;
 import com.synaptix.toast.plugin.swing.agent.action.processor.ActionProcessorFactoryProvider;
 
-/**
- * Created by Sallah Kokaina on 13/11/2014.
- */
 public class SwingActionRequestListener extends Listener implements Runnable {
 
 	private static final Logger LOG = LogManager.getLogger(SwingActionRequestListener.class);
@@ -86,9 +82,9 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
-			if (object instanceof CommandRequest) {
-				failSafeAndReportSceenshot(connection, e.getMessage(), (CommandRequest) object);
-			}
+//			if (object instanceof CommandRequest) {
+//				failSafeAndReportSceenshot(connection, e.getMessage(), (CommandRequest) object);
+//			}
 		}
 	}
 
@@ -104,7 +100,7 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 		}
 	}
 
-	private void processReceivedCommand(Connection connection, Object object) throws InterruptedException {
+	private void processReceivedCommand(Connection connection, Object object) throws InterruptedException, AWTException {
 		CommandRequest command = (CommandRequest) object;
 		if (command.isCustom()) {
 			processCustomRequest(connection, object, command);
@@ -115,29 +111,36 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 		}
 	}
 
-	private void processCustomRequest(Connection connection, Object object, CommandRequest command) {
+	private void processCustomRequest(Connection connection, Object object, CommandRequest command) throws AWTException {
 		LOG.info("Processing custom command {}", object);
 		try {
 			String result = fixtureHandlerProvider.processCustomCall(command);
 			if (command.getId() != null) {
+				BufferedImage capture = getDesktopScreenShot();
 				connection.sendTCP(new ValueResponse(command.getId(), result));
 			}
 		} catch (NotFoundException nfe) {
 			// FixMe send ErrorResponse
+			BufferedImage capture = getDesktopScreenShot();
 			connection.sendTCP(new ValueResponse(command.getId(), "No Inplementation found"));
 			LOG.error(nfe.getMessage(), nfe);
 		}
 	}
 
-	private void failSafeAndReportSceenshot(Connection connection, String message, CommandRequest command) {
-		try {
-			Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-			BufferedImage capture = new java.awt.Robot().createScreenCapture(screenRect);
-			connection.sendTCP(new ErrorResponse(command.getId(), message, capture));
-		} catch (AWTException e) {
-			LOG.error(e.getMessage(), e);
-			connection.sendTCP(new ErrorResponse(command.getId(), message, null));
-		}
+//	private void failSafeAndReportSceenshot(Connection connection, String message, CommandRequest command) {
+//		try {
+//			BufferedImage capture = getDesktopScreenShot();
+//			connection.sendTCP(new ErrorResponse(command.getId(), message, capture));
+//		} catch (AWTException e) {
+//			LOG.error(e.getMessage(), e);
+//			connection.sendTCP(new ErrorResponse(command.getId(), message, null));
+//		}
+//	}
+
+	private BufferedImage getDesktopScreenShot() throws AWTException {
+		Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+		BufferedImage capture = new java.awt.Robot().createScreenCapture(screenRect);
+		return capture;
 	}
 
 	private void processComponentLessRequest(CommandRequest command) {
@@ -154,7 +157,7 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 		return command.item == null && command.itemType == null;
 	}
 
-	private void processComponentRequest(Connection connection, CommandRequest command) throws InterruptedException {
+	private void processComponentRequest(Connection connection, CommandRequest command) throws InterruptedException, AWTException {
 		final Component target = getTarget(command.item, command.itemType);
 		LOG.info("Found target command " + ToStringBuilder.reflectionToString(target, ToStringStyle.SHORT_PREFIX_STYLE));
 		boolean componentFound = target != null;
@@ -166,21 +169,23 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 			doActionOnMenuByNameLocator(connection, command);
 		} else {
 			LOG.error("No target found for command: " + ToStringBuilder.reflectionToString(command, ToStringStyle.SHORT_PREFIX_STYLE));
-			failSafeAndReportSceenshot(connection, "No target found !", command);
+			//failSafeAndReportSceenshot(connection, "No target found !", command);
 		}
 	}
 
-	private void doActionOnMenuByNameLocator(Connection connection, CommandRequest command) {
+	private void doActionOnMenuByNameLocator(Connection connection, CommandRequest command) throws AWTException {
 		ResultKind result;
 		result = handlePopupMenuItem(command);
 		if (command.getId() != null) {
 			if(result != null){
 				if(result.equals(ResultKind.ERROR) || result.equals(ResultKind.FAILURE)){
-					failSafeAndReportSceenshot(connection, "", command);
+					//failSafeAndReportSceenshot(connection, "", command);
 				}else{
-					connection.sendTCP(new ValueResponse(command.getId(), result != null ? result.name() : null));
 				}
+				BufferedImage capture = getDesktopScreenShot();
+				connection.sendTCP(new ValueResponse(command.getId(), result != null ? result.name() : null));
 			}else{
+				BufferedImage capture = getDesktopScreenShot();
 				connection.sendTCP(new ValueResponse(command.getId(), null));
 			}
 		}
@@ -227,12 +232,15 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 	}
 
 	private Component findComponent(String item, String itemType) {
-		final Component target = repositoryHolder.getRepo().get(item);
+		Component target = repositoryHolder.getRepo().get(item);
 		if (target == null) {
 			for (Map.Entry<String, Component> entrySet : repositoryHolder.getRepo().entrySet()) {
 				final Component component = entrySet.getValue();
 				if (isComponentTypeMatching(itemType, component)) {
-					findComponentByItemName(item, itemType, component);
+					target = findComponentByItemName(item, itemType, component);
+					if(target != null){
+						return target;
+					}
 				}
 			}
 		}
@@ -310,8 +318,8 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 				LOG.debug(String.format("No response for request id: (%s)", command.getId()));
 			}
 		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+			LOG.error(e.getMessage(), e);
+		} 
 	}
 
 }
