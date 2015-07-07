@@ -20,16 +20,18 @@ import com.synaptix.toast.test.server.mock.FakeConnection;
 import com.synaptix.toast.test.server.mock.TableTestFrame;
 
 public class TestRequestHandlersForJTable {
+
 	static String FRAME_TABLE_FIELD_NAME = "table";
+
 	static TableTestFrame tableTestFrame;
-	
+
 	@BeforeClass
-	public static void init(){
-		tableTestFrame = new TableTestFrame(); 
+	public static void init() {
+		tableTestFrame = new TableTestFrame();
 	}
-	
+
 	@Before
-	public void initGuiRepository(){
+	public void initGuiRepository() {
 		InitRequestListener initRequestHandler = TestSuiteHelper.getInjector().getInstance(InitRequestListener.class);
 		initRequestHandler.received(new FakeConnection(), new InitInspectionRequest());
 	}
@@ -38,29 +40,33 @@ public class TestRequestHandlersForJTable {
 	public void testGettingInputValue() {
 		String idRequest = "fake-id";
 		String expectedRow = "2";
-		String locator = TableTestFrame.class.getName()+":"+FRAME_TABLE_FIELD_NAME;
-    	List<TableCommandRequestQueryCriteria> tableCriteria = new ArrayList<TableCommandRequestQueryCriteria>();
-    	tableCriteria.add(new TableCommandRequestQueryCriteria("Column One", "Row2-Column1"));
-    	tableCriteria.add(new TableCommandRequestQueryCriteria("Column Three", "Row2-Column3"));
+		String locator = TableTestFrame.class.getName() + ":" + FRAME_TABLE_FIELD_NAME;
+		List<TableCommandRequestQueryCriteria> tableCriteria = new ArrayList<TableCommandRequestQueryCriteria>();
+		tableCriteria.add(new TableCommandRequestQueryCriteria("Column One", "Row2-Column1"));
+		tableCriteria.add(new TableCommandRequestQueryCriteria("Column Three", "Row2-Column3"));
 		TableCommandRequest buildGetInputValueRequest = buildMultiCriteriaRequest(tableCriteria, locator, idRequest);
-		SwingActionRequestListener requestHandler = TestSuiteHelper.getInjector().getInstance(SwingActionRequestListener.class);
+		SwingActionRequestListener requestHandler = TestSuiteHelper.getInjector().getInstance(
+			SwingActionRequestListener.class);
 		FakeConnection connection = new FakeConnection();
 		requestHandler.received(connection, buildGetInputValueRequest);
 		try {
 			Thread.sleep(2000);
-		} catch (InterruptedException e) {
+		}
+		catch(InterruptedException e) {
 			e.printStackTrace();
 		}
-		assertEquals(expectedRow, ((ValueResponse)connection.result).value);
+		assertEquals(expectedRow, ((ValueResponse) connection.result).value);
 	}
-	
-	public static TableCommandRequest buildMultiCriteriaRequest(List<TableCommandRequestQueryCriteria> tableCriteria, String locator, String idRequest) {
+
+	public static TableCommandRequest buildMultiCriteriaRequest(
+		List<TableCommandRequestQueryCriteria> tableCriteria,
+		String locator,
+		String idRequest) {
 		return new TableCommandRequest.TableCommandRequestBuilder(idRequest).find(tableCriteria).with(locator).build();
 	}
 
-	
 	@AfterClass
-	public static void end(){
-		tableTestFrame.dispose(); 
+	public static void end() {
+		tableTestFrame.dispose();
 	}
 }

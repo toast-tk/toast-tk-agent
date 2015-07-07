@@ -7,10 +7,12 @@ package com.synaptix.toast.automation.report;
  */
 public interface IReporter {
 
-	public void reportResult(WebTestResult<?> result);
+	public void reportResult(
+		WebTestResult<?> result);
 
-	public void reportAction(WebActionResult result);
+	public void reportAction(
+		WebActionResult result);
 
-	public void reportSimple(String toReport);
-
+	public void reportSimple(
+		String toReport);
 }

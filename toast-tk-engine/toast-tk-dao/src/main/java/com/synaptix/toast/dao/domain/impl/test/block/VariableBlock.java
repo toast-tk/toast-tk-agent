@@ -24,7 +24,8 @@ public class VariableBlock implements IBlock {
 		return blockLines;
 	}
 
-	public void setBlockLines(List<BlockLine> blockLines) {
+	public void setBlockLines(
+		List<BlockLine> blockLines) {
 		this.blockLines = blockLines;
 	}
 
@@ -32,12 +33,13 @@ public class VariableBlock implements IBlock {
 		return columns;
 	}
 
-	public void setColumns(BlockLine columns) {
+	public void setColumns(
+		BlockLine columns) {
 		this.columns = columns;
 	}
 
-
-	public void addline(BlockLine line) {
+	public void addline(
+		BlockLine line) {
 		blockLines.add(line);
 	}
 

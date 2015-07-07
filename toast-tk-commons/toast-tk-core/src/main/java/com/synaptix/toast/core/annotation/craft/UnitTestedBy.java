@@ -10,5 +10,6 @@ import junit.framework.TestCase;
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 public @interface UnitTestedBy {
+
 	Class<?> value();
 }

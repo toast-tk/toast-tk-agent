@@ -19,7 +19,6 @@ import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.TypeValue
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.TypeVarIn;
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.VALUE_REGEX;
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.VAR_IN_REGEX;
-import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.VAR_OR_VALUE_REGEX;
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.Wait;
 
 import java.util.ArrayList;
@@ -46,56 +45,80 @@ import com.synaptix.toast.core.runtime.IRepositorySetup;
 
 @ActionAdapter(value = ActionAdapterKind.swing, name = "")
 public abstract class AbstractSwingActionAdapter {
+
 	protected IRepositorySetup repo;
+
 	protected IRemoteSwingAgentDriver driver;
 
-	public AbstractSwingActionAdapter(IRepositorySetup repo, IRemoteSwingAgentDriver driver) {
+	public AbstractSwingActionAdapter(
+		IRepositorySetup repo,
+		IRemoteSwingAgentDriver driver) {
 		this.repo = repo;
 		this.driver = driver;
 		try {
-			for (IFeedableSwingPage page : repo.getSwingPages()) {
+			for(IFeedableSwingPage page : repo.getSwingPages()) {
 				((DefaultSwingPage) page).setDriver(driver);
 			}
-		} catch (Exception e) {
+		}
+		catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	protected SwingAutoElement getPageField(String pageName, String fieldName) throws IllegalAccessException {
-		if (repo.getSwingPage(pageName) == null) {
+	protected SwingAutoElement getPageField(
+		String pageName,
+		String fieldName)
+		throws IllegalAccessException {
+		if(repo.getSwingPage(pageName) == null) {
 			throw new IllegalAccessException(pageName + " swing page not found in repository !");
 		}
 		DefaultSwingPage page = (DefaultSwingPage) repo.getSwingPage(pageName);
 		SwingAutoElement autoElement = page.getAutoElement(fieldName);
-		if (autoElement == null) {
+		if(autoElement == null) {
 			throw new IllegalAccessException(pageName + "." + fieldName + " not found in repository !");
 		}
 		return autoElement;
 	}
 
 	@Action(action = TypeValue, description = "Saisir une chaine de caractère au clavier")
-	public TestResult typeValue(String text) throws Exception {
+	public TestResult typeValue(
+		String text)
+		throws Exception {
 		driver.process(new CommandRequest.CommandRequestBuilder(null).with(null).ofType(null).sendKeys(text).build());
 		return new TestResult();
 	}
 
 	@Action(action = TypeValueInInput, description = "Saisir une valeur dans un composant graphique")
-	public TestResult typeIn(String text, String pageName, String widgetName) throws Exception {
+	public TestResult typeIn(
+		String text,
+		String pageName,
+		String widgetName)
+		throws Exception {
 		SwingAutoElement pageField = getPageField(pageName, widgetName);
-		if (pageField instanceof SwingInputElement) {
+		if(pageField instanceof SwingInputElement) {
 			SwingInputElement input = (SwingInputElement) pageField;
 			input.setInput(text);
-		} else if (pageField instanceof SwingDateElement) {
+		}
+		else if(pageField instanceof SwingDateElement) {
 			SwingDateElement input = (SwingDateElement) pageField;
 			input.setDateText(text);
-		} else {
-			throw new IllegalAccessException(String.format("%s.%s is not handled to type values in !", pageName, pageField));
+		}
+		else {
+			throw new IllegalAccessException(String.format(
+				"%s.%s is not handled to type values in !",
+				pageName,
+				pageField));
 		}
 		return new TestResult();
 	}
 
 	@Action(action = ClickOnIn, description = "Cliquer sur un composant présent dans un contenant de composant")
-	public TestResult clickOnIn(String pageName, String widgetName, String parentPage, String parentWidgetName) throws Exception {
+	public TestResult clickOnIn(
+		String pageName,
+		String widgetName,
+		String parentPage,
+		String parentWidgetName)
+		throws Exception {
 		HasSubItems input = (HasSubItems) getPageField(parentPage, parentWidgetName);
 		SwingAutoElement subElement = (SwingAutoElement) getPageField(pageName, widgetName);
 		input.clickOn(subElement.getWrappedElement().getLocator());
@@ -103,38 +126,55 @@ public abstract class AbstractSwingActionAdapter {
 	}
 
 	@Action(action = ClickOn, description = "Cliquer sur un composant graphique")
-	public TestResult clickOn(String pageName, String widgetName) throws Exception {
+	public TestResult clickOn(
+		String pageName,
+		String widgetName)
+		throws Exception {
 		HasClickAction input = (HasClickAction) getPageField(pageName, widgetName);
 		boolean click = input.click();
 		return new TestResult(String.valueOf(click), click ? ResultKind.SUCCESS : ResultKind.ERROR);
 	}
 
 	@Action(action = "(\\w+).(\\w+) exists", description = "Verifier qu'un composant graphique existe")
-	public TestResult exists(String pageName, String widgetName) throws Exception {
+	public TestResult exists(
+		String pageName,
+		String widgetName)
+		throws Exception {
 		SwingAutoElement input = getPageField(pageName, widgetName);
-		if (input.exists()) {
+		if(input.exists()) {
 			return new TestResult("true", ResultKind.SUCCESS);
-		} else {
+		}
+		else {
 			return new TestResult("false", ResultKind.ERROR);
 		}
 	}
 
 	@Action(action = "Count (\\w+).(\\w+) results", description = "Compter le nombre de ligne dans un tableau")
-	public TestResult count(String pageName, String widgetName) throws Exception {
+	public TestResult count(
+		String pageName,
+		String widgetName)
+		throws Exception {
 		SwingTableElement table = (SwingTableElement) getPageField(pageName, widgetName);
 		return new TestResult(table.count());
 	}
 
 	@Action(action = TypeVarIn, description = "Saisir la valeur d'une variable dans un champs graphique de type input")
-	public TestResult typeVarIn(String variable, String pageName, String widgetName) throws Exception {
+	public TestResult typeVarIn(
+		String variable,
+		String pageName,
+		String widgetName)
+		throws Exception {
 		typeIn(variable, pageName, widgetName);
 		return new TestResult();
 	}
 
 	@Action(action = GetComponentValue, description = "Lire la valeur d'un composant graphique")
-	public TestResult getComponentValue(String pageName, String widgetName) throws Exception {
+	public TestResult getComponentValue(
+		String pageName,
+		String widgetName)
+		throws Exception {
 		SwingAutoElement pageField = getPageField(pageName, widgetName);
-		if (!(pageField instanceof HasStringValue)) {
+		if(!(pageField instanceof HasStringValue)) {
 			throw new IllegalAccessException(pageName + "." + widgetName + " isn't supporting value fetching !");
 		}
 		HasStringValue stringValueProvider = (HasStringValue) pageField;
@@ -142,10 +182,16 @@ public abstract class AbstractSwingActionAdapter {
 		return new TestResult(value, ResultKind.SUCCESS);
 	}
 
-	@Action(action = StoreComponentValueInVar, description = "Lire la valeur d'un composant graphique et la stocker dans une variable")
-	public TestResult selectComponentValue(String pageName, String widgetName, String variable) throws Exception {
+	@Action(
+		action = StoreComponentValueInVar,
+		description = "Lire la valeur d'un composant graphique et la stocker dans une variable")
+	public TestResult selectComponentValue(
+		String pageName,
+		String widgetName,
+		String variable)
+		throws Exception {
 		SwingAutoElement pageField = getPageField(pageName, widgetName);
-		if (!(pageField instanceof HasStringValue)) {
+		if(!(pageField instanceof HasStringValue)) {
 			throw new IllegalAccessException(pageName + "." + widgetName + " isn't supporting value fetching !");
 		}
 		HasStringValue stringValueProvider = (HasStringValue) pageField;
@@ -155,185 +201,255 @@ public abstract class AbstractSwingActionAdapter {
 	}
 
 	@Action(action = Wait, description = "Attendre n secondes avant la prochaine action")
-	public TestResult wait(String time) throws Exception {
+	public TestResult wait(
+		String time)
+		throws Exception {
 		Thread.sleep(Integer.valueOf(time) * 1000);
 		return new TestResult();
 	}
 
 	@Action(action = SelectMenuPath, description = "Selectionner un menu, avec / comme séparateur")
-	public TestResult selectPath(String menu) throws Exception {
+	public TestResult selectPath(
+		String menu)
+		throws Exception {
 		String[] locator = menu.split(" / ");
 		SwingAutoUtils.confirmExist(driver, locator[0], AutoSwingType.menu.name());
-		CommandRequest request = new CommandRequest.CommandRequestBuilder(UUID.randomUUID().toString()).with(locator[0])
-				.ofType(AutoSwingType.menu.name()).select(locator[1]).build();
+		CommandRequest request = new CommandRequest.CommandRequestBuilder(UUID.randomUUID().toString())
+			.with(locator[0])
+			.ofType(AutoSwingType.menu.name()).select(locator[1]).build();
 		String waitForValue = driver.processAndWaitForValue(request);
-		return ResultKind.FAILURE.name().equals(waitForValue) ? new TestResult("Menu {" + menu + "} not found !", ResultKind.FAILURE)
-				: new TestResult("", ResultKind.SUCCESS);
+		return ResultKind.FAILURE.name().equals(waitForValue) ? new TestResult("Menu {" + menu + "} not found !",
+			ResultKind.FAILURE)
+			: new TestResult("", ResultKind.SUCCESS);
 	}
 
 	@Action(action = SelectSubMenu, description = "Selectionner un sous menu")
-	public TestResult select(String pageName, String widgetName, String parentPage, String parentWidgetName) throws Exception {
+	public TestResult select(
+		String pageName,
+		String widgetName,
+		String parentPage,
+		String parentWidgetName)
+		throws Exception {
 		return clickOnIn(pageName, widgetName, parentPage, parentWidgetName);
 	}
 
 	@Action(action = SelectValueInList, description = "Selectionner une valeur dans une liste")
-	public TestResult selectIn(String value, String pageName, String widgetName) throws Exception {
+	public TestResult selectIn(
+		String value,
+		String pageName,
+		String widgetName)
+		throws Exception {
 		SwingListElement list = (SwingListElement) getPageField(pageName, widgetName);
 		list.select(value);
 		return new TestResult();
 	}
 
 	@Action(action = SelectTableRow, description = "Selectionner une ligne de tableau avec critères")
-	public TestResult selectMission(String pageName, String widgetName, String tableColumnFinder) throws IllegalAccessException, TimeoutException,
-			ErrorResultReceivedException {
+	public TestResult selectMission(
+		String pageName,
+		String widgetName,
+		String tableColumnFinder)
+		throws IllegalAccessException, TimeoutException,
+		ErrorResultReceivedException {
 		SwingTableElement table = (SwingTableElement) getPageField(pageName, widgetName);
-
 		String[] criteria = tableColumnFinder.split(Property.TABLE_CRITERIA_SEPARATOR);
 		List<TableCommandRequestQueryCriteria> tableCriteria = new ArrayList<TableCommandRequestQueryCriteria>();
-		if (criteria.length > 0) {
-			for (String criterion : criteria) {
+		if(criteria.length > 0) {
+			for(String criterion : criteria) {
 				String col = criterion.split(Property.TABLE_KEY_VALUE_SEPARATOR)[0];
 				String val = criterion.split(Property.TABLE_KEY_VALUE_SEPARATOR)[1];
 				TableCommandRequestQueryCriteria tableCriterion = new TableCommandRequestQueryCriteria(col, val);
 				tableCriteria.add(tableCriterion);
 			}
-		} else {
+		}
+		else {
 			String col = tableColumnFinder.split(Property.TABLE_KEY_VALUE_SEPARATOR)[0];
 			String val = tableColumnFinder.split(Property.TABLE_KEY_VALUE_SEPARATOR)[1];
 			TableCommandRequestQueryCriteria tableCriterion = new TableCommandRequestQueryCriteria(col, val);
 			tableCriteria.add(tableCriterion);
 		}
-
 		String outputVal = table.find(tableCriteria);
 		return new TestResult(outputVal, ResultKind.SUCCESS);
 	}
 
 	@Action(action = SelectContectualMenu, description = "selectionner un menu dans une popup contextuelle")
-	public TestResult selectCtxMenu(String menu) throws Exception {
-		driver.process(new CommandRequest.CommandRequestBuilder(null).with(menu).ofType(AutoSwingType.menu.name()).select(menu).build());
+	public TestResult selectCtxMenu(
+		String menu)
+		throws Exception {
+		driver.process(new CommandRequest.CommandRequestBuilder(null).with(menu).ofType(AutoSwingType.menu.name())
+			.select(menu).build());
 		return new TestResult();
 	}
 
 	@Action(action = "Affichage dialogue \'([\\w\\W]+)\'", description = "Afichage d'une dialogue")
-	public TestResult waitForDialogDisplay(String dialogName) throws Exception {
-		CommandRequest request = new CommandRequest.CommandRequestBuilder(UUID.randomUUID().toString()).ofType(AutoSwingType.dialog.name())
-				.with(dialogName).exists().build();
+	public TestResult waitForDialogDisplay(
+		String dialogName)
+		throws Exception {
+		CommandRequest request = new CommandRequest.CommandRequestBuilder(UUID.randomUUID().toString())
+			.ofType(AutoSwingType.dialog.name())
+			.with(dialogName).exists().build();
 		driver.process(request);
 		boolean waitForExist = driver.waitForExist(request.getId());
-		return waitForExist ? new TestResult("", ResultKind.SUCCESS) : new TestResult("Dialogue " + dialogName + " pas disponible !",
-				ResultKind.ERROR);
+		return waitForExist ? new TestResult("", ResultKind.SUCCESS) : new TestResult("Dialogue " + dialogName
+			+ " pas disponible !",
+			ResultKind.ERROR);
 	}
 
 	// ///////////////////////////////////////
 	// TO MOVE IN A DRIVER AGNOSTIC FIXUTRE
 	// ////////////////////////////////////////
 	@Action(action = AddValueInVar, description = "Additionner deux valeurs numériques")
-	public TestResult addValueToVar(String value, String var) throws Exception {
+	public TestResult addValueToVar(
+		String value,
+		String var)
+		throws Exception {
 		Object object = repo.getUserVariables().get(var);
-		if (object == null) {
+		if(object == null) {
 			throw new IllegalAccessException("Variable not defined !");
 		}
-		if (object instanceof String) { // for the time being we store only
+		if(object instanceof String) { // for the time being we store only
 										// strings !!
 			Double v = Double.valueOf(value);
 			Double d = Double.valueOf((String) object);
 			d = d + v;
 			repo.getUserVariables().put(var, d.toString());
 			return new TestResult(d.toString(), ResultKind.SUCCESS);
-		} else {
-			throw new IllegalAccessException("Variable not in a proper format: current -> " + object.getClass().getSimpleName());
+		}
+		else {
+			throw new IllegalAccessException("Variable not in a proper format: current -> "
+				+ object.getClass().getSimpleName());
 		}
 	}
 
 	@Action(action = SubstractValueFromVar, description = "Soustraire deux valeurs numériques")
-	public TestResult substractValueToVar(String value, String var) throws Exception {
+	public TestResult substractValueToVar(
+		String value,
+		String var)
+		throws Exception {
 		Object object = repo.getUserVariables().get(var);
-		if (object == null) {
+		if(object == null) {
 			throw new IllegalAccessException("Variable not defined !");
 		}
-		if (object instanceof String) { // for the time being we store only
+		if(object instanceof String) { // for the time being we store only
 										// strings !!
 			Double v = Double.valueOf(value);
 			Double d = Double.valueOf((String) object);
 			d = d - v;
 			repo.getUserVariables().put(var, d.toString());
 			return new TestResult(d.toString(), ResultKind.SUCCESS);
-		} else {
-			throw new IllegalAccessException("Variable not in a proper format: current -> " + object.getClass().getSimpleName());
+		}
+		else {
+			throw new IllegalAccessException("Variable not in a proper format: current -> "
+				+ object.getClass().getSimpleName());
 		}
 	}
 
 	@Action(action = MultiplyVarByValue, description = "Multiplier deux valeurs")
-	public TestResult multiplyVarByBal(String var, String value) throws Exception {
-		if (var == null) {
+	public TestResult multiplyVarByBal(
+		String var,
+		String value)
+		throws Exception {
+		if(var == null) {
 			throw new IllegalAccessException("Variable not defined !");
 		}
-		if (var instanceof String) { // for the time being we store only
-										// strings !!
+		if(var instanceof String) { // for the time being we store only
+									// strings !!
 			Double v = Double.valueOf(value);
 			Double d = Double.valueOf((String) var);
 			d = d * v;
 			return new TestResult(d.toString(), ResultKind.SUCCESS);
-		} else {
+		}
+		else {
 			throw new IllegalAccessException("Variable not in a proper format: current -> " + var);
 		}
 	}
 
 	@Action(action = DiviserVarByValue, description = "Diviseur le premier argument par le deuxième")
-	public TestResult divideVarByValue(String var, String value) throws Exception {
-		if (var == null) {
+	public TestResult divideVarByValue(
+		String var,
+		String value)
+		throws Exception {
+		if(var == null) {
 			throw new IllegalAccessException("Variable not defined !");
 		}
-		if (var instanceof String) { // for the time being we store only
-										// strings !!
+		if(var instanceof String) { // for the time being we store only
+									// strings !!
 			Double v = Double.valueOf(value);
 			Double d = Double.valueOf(var);
 			d = d / v;
 			return new TestResult(d.toString(), ResultKind.SUCCESS);
-		} else {
+		}
+		else {
 			throw new IllegalAccessException("Variable not in a proper format: current -> " + var);
 		}
 	}
 
 	@Action(action = RemplacerVarParValue, description = "Assigner une valeur à une variable")
-	public TestResult replaceVarByVal(String var, String value) throws Exception {
+	public TestResult replaceVarByVal(
+		String var,
+		String value)
+		throws Exception {
 		repo.getUserVariables().put(var, value);
 		return new TestResult();
 	}
 
-	@Action(action = "Ajuster date (\\w+).(\\w+) à plus (\\w+) jours", description = "Rajouter n Jours à au composant graphique de date")
-	public TestResult setDate(String pageName, String widgetName, String days) throws Exception {
+	@Action(
+		action = "Ajuster date (\\w+).(\\w+) à plus (\\w+) jours",
+		description = "Rajouter n Jours à au composant graphique de date")
+	public TestResult setDate(
+		String pageName,
+		String widgetName,
+		String days)
+		throws Exception {
 		SwingDateElement input = (SwingDateElement) getPageField(pageName, widgetName);
 		input.setInput(days);
 		return new TestResult();
 	}
 
-	@Action(action = VAR_OR_VALUE_REGEX + " == " + VAR_OR_VALUE_REGEX, description = "Comparer deux variables")
-	public TestResult VarEqVar(String var1, String var2) throws Exception {
-		if (var1.equals(var2)) {
+	@Action(action = VAR_IN_REGEX + " == " + VAR_IN_REGEX, description = "Comparer deux variables")
+	public TestResult VarEqVar(
+		String var1,
+		String var2)
+		throws Exception {
+		if(var1.equals(var2)) {
 			return new TestResult(Boolean.TRUE.toString(), ResultKind.SUCCESS);
-		} else {
-			return new TestResult(String.format("%s == %s => %s", var1, var2, Boolean.FALSE.toString()), ResultKind.FAILURE);
+		}
+		else {
+			return new TestResult(String.format("%s == %s => %s", var1, var2, Boolean.FALSE.toString()),
+				ResultKind.FAILURE);
 		}
 	}
 
-	@Action(action = VAR_OR_VALUE_REGEX + " égale à " + VAR_OR_VALUE_REGEX, description = "Comparer une valeur à une variable")
-	public TestResult ValueEqVar(String value, String var) throws Exception {
-		if (value.equals(var)) {
+	@Action(
+		action = VAR_IN_REGEX + " égale à " + VAR_IN_REGEX,
+		description = "Comparer une valeur à une variable")
+	public TestResult ValueEqVar(
+		String value,
+		String var)
+		throws Exception {
+		if(value.equals(var)) {
 			return new TestResult(Boolean.TRUE.toString(), ResultKind.SUCCESS);
-		} else {
-			return new TestResult(String.format("%s == %s => %s", value, var, Boolean.FALSE.toString()), ResultKind.FAILURE);
+		}
+		else {
+			return new TestResult(String.format("%s == %s => %s", value, var, Boolean.FALSE.toString()),
+				ResultKind.FAILURE);
 		}
 	}
 
 	@Action(action = "Assigner " + VALUE_REGEX + " à " + VAR_IN_REGEX, description = "Assigner valeur à variable")
-	public TestResult setValToVar(String value, String var) throws Exception {
+	public TestResult setValToVar(
+		String value,
+		String var)
+		throws Exception {
 		repo.getUserVariables().put(var, value);
 		return new TestResult();
 	}
 
 	@Action(action = "Clear (\\w+).(\\w+)", description = "Effacer le contenu d'un composant input graphique")
-	public TestResult clear(String pageName, String widgetName) throws Exception {
+	public TestResult clear(
+		String pageName,
+		String widgetName)
+		throws Exception {
 		SwingInputElement input = (SwingInputElement) getPageField(pageName, widgetName);
 		input.clear();
 		return new TestResult();

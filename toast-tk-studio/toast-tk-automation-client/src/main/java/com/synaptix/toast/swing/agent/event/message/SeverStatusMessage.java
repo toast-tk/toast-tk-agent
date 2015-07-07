@@ -26,20 +26,18 @@ Creation date: 6 mars 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
-
 package com.synaptix.toast.swing.agent.event.message;
 
 public class SeverStatusMessage {
 
 	public final State state;
-	
-	public enum State{
+
+	public enum State {
 		CONNECTED, DISCONNECTED
-		
 	}
-	
-	public SeverStatusMessage(State state){
+
+	public SeverStatusMessage(
+		State state) {
 		this.state = state;
 	}
-	
 }

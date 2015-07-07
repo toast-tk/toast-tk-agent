@@ -6,9 +6,12 @@ package com.synaptix.toast.automation.report;
 public class WebActionResult {
 
 	private String title;
+
 	private String action;
 
-	public WebActionResult(String title, String action) {
+	public WebActionResult(
+		String title,
+		String action) {
 		this.title = title;
 		this.action = action;
 	}
@@ -17,7 +20,8 @@ public class WebActionResult {
 		return title;
 	}
 
-	public void setTitle(String title) {
+	public void setTitle(
+		String title) {
 		this.title = title;
 	}
 
@@ -25,8 +29,8 @@ public class WebActionResult {
 		return action;
 	}
 
-	public void setAction(String action) {
+	public void setAction(
+		String action) {
 		this.action = action;
 	}
-
 }

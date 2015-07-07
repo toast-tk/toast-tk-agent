@@ -26,18 +26,20 @@ Creation date: 17 mars 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
-
 package com.synaptix.toast.core.dao.adapter;
 
 import java.util.List;
 
 public class ActionAdapterDescriptor {
+
 	public final String name;
+
 	public final List<ActionAdapterDescriptorLine> sentences;
-	
-	public ActionAdapterDescriptor(String name, List<ActionAdapterDescriptorLine> sentences){
+
+	public ActionAdapterDescriptor(
+		String name,
+		List<ActionAdapterDescriptorLine> sentences) {
 		this.name = name;
 		this.sentences = sentences;
 	}
-	
 }

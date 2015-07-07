@@ -26,12 +26,11 @@ Creation date: 17 mars 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
  */
-
 package com.synaptix.toast.core.adapter;
 
 import com.synaptix.toast.core.annotation.craft.FixMe;
 
-@FixMe(todo="see if the driverLess kind shouldn't be replaced by an annotation @DriverLessActionAdapter")
+@FixMe(todo = "see if the driverLess kind shouldn't be replaced by an annotation @DriverLessActionAdapter")
 public enum ActionAdapterKind {
 	swing, web, service, driverLess
 }

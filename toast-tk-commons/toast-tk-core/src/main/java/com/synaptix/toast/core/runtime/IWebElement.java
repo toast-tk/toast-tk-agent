@@ -2,7 +2,6 @@ package com.synaptix.toast.core.runtime;
 
 import com.synaptix.toast.core.adapter.AutoWebType;
 
-
 /**
  * 
  * @author skokaina
@@ -20,23 +19,28 @@ public interface IWebElement {
 		XPATH
 	}
 
-	public void setName(String name);
+	public void setName(
+		String name);
 
 	public String getName();
 
 	public String getLocator();
 
-	public void setLocator(String locator);
+	public void setLocator(
+		String locator);
 
 	public LocationMethod getMethod();
 
-	public void setMethod(LocationMethod method);
+	public void setMethod(
+		LocationMethod method);
 
 	public int getPosition();
 
-	public void setPosition(int position);
+	public void setPosition(
+		int position);
 
 	public AutoWebType getType();
 
-	public void setType(AutoWebType type);
+	public void setType(
+		AutoWebType type);
 }

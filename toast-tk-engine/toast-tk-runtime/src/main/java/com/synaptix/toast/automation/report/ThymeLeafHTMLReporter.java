@@ -16,22 +16,27 @@ import com.synaptix.toast.core.dao.ITestPage;
  * http://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html
  * 
  */
-public class ThymeLeafHTMLReporter implements IHTMLReportGenerator{
-	
+public class ThymeLeafHTMLReporter implements IHTMLReportGenerator {
+
 	@Override
-	public void writeFile(String report, String pageName, String reportFolderPath) {
+	public void writeFile(
+		String report,
+		String pageName,
+		String reportFolderPath) {
 		try {
 			FileWriter fstream = new FileWriter(reportFolderPath + "\\" + pageName + ".html");
 			BufferedWriter out = new BufferedWriter(fstream);
 			out.write(report);
 			out.close();
-		} catch (Exception e) {
+		}
+		catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public String generatePageHtml(ITestPage test) {
+	public String generatePageHtml(
+		ITestPage test) {
 		TemplateResolver templateResolver = new ClassLoaderTemplateResolver();
 		templateResolver.setTemplateMode("HTML5");
 		templateResolver.setCharacterEncoding("UTF-8");
@@ -43,5 +48,4 @@ public class ThymeLeafHTMLReporter implements IHTMLReportGenerator{
 		String htmlOutput = templateEngine.process("test_report_template.html", ctx);
 		return htmlOutput;
 	}
-
 }

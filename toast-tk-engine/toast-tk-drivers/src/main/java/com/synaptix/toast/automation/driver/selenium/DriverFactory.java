@@ -35,7 +35,6 @@ public class DriverFactory {
 	private FirefoxDriver driver;
 
 	private DriverFactory() {
-
 	}
 
 	public static DriverFactory getFactory() {
@@ -56,20 +55,25 @@ public class DriverFactory {
 
 	public FirefoxDriver getFirefoxDriver() {
 		// a configurer dans le wiki d'initialisation d'environement !!
-		//System.setProperty("webdriver.firefox.bin", "C:\\Users\\E413544\\Apps\\Firefox25\\firefox.exe");
-		if (driver == null) {
+		// System.setProperty("webdriver.firefox.bin",
+// "C:\\Users\\E413544\\Apps\\Firefox25\\firefox.exe");
+		if(driver == null) {
 			driver = new FirefoxDriver();
 			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		}
 		return driver;
 	}
 
-	public RemoteWebDriver getRemoteDriver(boolean canTakeScreenShots) throws MalformedURLException {
-		RemoteWebDriver driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), DesiredCapabilities.firefox());
+	public RemoteWebDriver getRemoteDriver(
+		boolean canTakeScreenShots)
+		throws MalformedURLException {
+		RemoteWebDriver driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"),
+			DesiredCapabilities.firefox());
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		// if(canTakeScreenShots){
 		// WebDriver augmentedDriver = new Augmenter().augment(driver);
-		// File screenshot = ((TakesScreenshot) augmentedDriver).getScreenshotAs(OutputType.FILE);
+		// File screenshot = ((TakesScreenshot)
+// augmentedDriver).getScreenshotAs(OutputType.FILE);
 		// }
 		return driver;
 	}
@@ -81,20 +85,23 @@ public class DriverFactory {
 		return driver;
 	}
 
-	public Selenium getUnwrappedRemoteSelenium(String baseUrl) {
+	public Selenium getUnwrappedRemoteSelenium(
+		String baseUrl) {
 		Selenium selenium = new DefaultSelenium("localhost", 4444, "*firefox", baseUrl);
 		selenium.start();
 		return selenium;
 	}
 
 	static class MyHtmlDriver extends HtmlUnitDriver {
+
 		WebClient myClient;
 
 		public MyHtmlDriver() {
 			super();
 		}
 
-		public MyHtmlDriver(BrowserVersion verion) {
+		public MyHtmlDriver(
+			BrowserVersion verion) {
 			super(verion);
 		}
 
@@ -103,12 +110,14 @@ public class DriverFactory {
 		}
 
 		@Override
-		protected void get(URL fullUrl) {
+		protected void get(
+			URL fullUrl) {
 			super.get(fullUrl);
 		}
 
 		@Override
-		protected WebClient modifyWebClient(WebClient client) {
+		protected WebClient modifyWebClient(
+			WebClient client) {
 			myClient = client;
 			client.getCookieManager().setCookiesEnabled(true);
 			client.getOptions().setJavaScriptEnabled(true);
@@ -117,9 +126,7 @@ public class DriverFactory {
 			client.setIncorrectnessListener(new SilentIncorrectnessListener());
 			client.setCssErrorHandler(new QuietCssErrorHandler());
 			client.setAjaxController(new NicelyResynchronizingAjaxController());
-
 			return client;
 		}
 	}
-
 }

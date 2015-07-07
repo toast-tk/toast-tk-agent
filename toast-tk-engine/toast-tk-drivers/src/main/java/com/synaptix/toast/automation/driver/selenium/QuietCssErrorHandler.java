@@ -11,16 +11,22 @@ import com.gargoylesoftware.htmlunit.DefaultCssErrorHandler;
 public class QuietCssErrorHandler extends DefaultCssErrorHandler {
 
 	@Override
-	public void error(CSSParseException e) throws CSSException {
+	public void error(
+		CSSParseException e)
+		throws CSSException {
 		super.error(e);
 	}
 
 	@Override
-	public void fatalError(CSSParseException e) throws CSSException {
+	public void fatalError(
+		CSSParseException e)
+		throws CSSException {
 		super.fatalError(e);
 	}
 
 	@Override
-	public void warning(CSSParseException e) throws CSSException {
+	public void warning(
+		CSSParseException e)
+		throws CSSException {
 	}
 }

@@ -10,12 +10,16 @@ import com.synaptix.toast.dao.service.init.DbStarter;
 public class UserDaoService extends AbstractMongoDaoService<UserImpl> {
 
 	public interface Factory {
-		UserDaoService create(@Assisted String dbName);
+
+		UserDaoService create(
+			@Assisted String dbName);
 	}
 
 	@Inject
-	public UserDaoService(DbStarter starter, CommonMongoDaoService cService, @Assisted String dbName) {
+	public UserDaoService(
+		DbStarter starter,
+		CommonMongoDaoService cService,
+		@Assisted String dbName) {
 		super(UserImpl.class, starter.getDatabaseByName(dbName), cService);
 	}
-
 }

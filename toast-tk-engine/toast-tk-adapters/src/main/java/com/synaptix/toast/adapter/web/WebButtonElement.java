@@ -15,11 +15,14 @@ import com.synaptix.toast.core.runtime.IWebElement;
  */
 public class WebButtonElement extends WebAutoElement implements HasClickAction {
 
-	public WebButtonElement(IWebElement element, SynchronizedDriver driver) {
+	public WebButtonElement(
+		IWebElement element,
+		SynchronizedDriver driver) {
 		super(element, driver);
 	}
 
-	public WebButtonElement(IWebElement element) {
+	public WebButtonElement(
+		IWebElement element) {
 		super(element);
 	}
 
@@ -37,5 +40,4 @@ public class WebButtonElement extends WebAutoElement implements HasClickAction {
 		Action doubleClick = action.doubleClick(find).build();
 		doubleClick.perform();
 	}
-
 }

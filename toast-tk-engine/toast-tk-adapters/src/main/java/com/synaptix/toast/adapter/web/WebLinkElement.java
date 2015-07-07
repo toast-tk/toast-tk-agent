@@ -14,19 +14,24 @@ import com.synaptix.toast.core.runtime.IWebElement;
  */
 public class WebLinkElement extends WebAutoElement implements HasClickAction {
 
-	public WebLinkElement(IWebElement element, SynchronizedDriver driver) {
+	public WebLinkElement(
+		IWebElement element,
+		SynchronizedDriver driver) {
 		super(element, driver);
 	}
 
-	public WebLinkElement(IWebElement element) {
+	public WebLinkElement(
+		IWebElement element) {
 		super(element);
 	}
 
 	@Override
 	public boolean click() {
 		safeAction(new ISyncCall() {
+
 			@Override
-			public void execute(WebElement e) {
+			public void execute(
+				WebElement e) {
 				e.click();
 			}
 		});
@@ -36,8 +41,10 @@ public class WebLinkElement extends WebAutoElement implements HasClickAction {
 	@Override
 	public void dbClick() {
 		safeAction(new ISyncCall() {
+
 			@Override
-			public void execute(WebElement e) {
+			public void execute(
+				WebElement e) {
 				Actions action = new Actions(frontEndDriver.getWebDriver());
 				action.doubleClick(e);
 				action.perform();
@@ -45,5 +52,4 @@ public class WebLinkElement extends WebAutoElement implements HasClickAction {
 			}
 		});
 	}
-
 }

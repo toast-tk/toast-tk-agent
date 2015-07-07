@@ -48,7 +48,8 @@ public class SwingInspectionRecorder implements IEventRecorder {
 	private Set<FilteredAWTEventListener> customAwtListeners;
 
 	@Inject
-	private SwingInspectionRecorder(Set<FilteredAWTEventListener> customAwtListeners) {
+	private SwingInspectionRecorder(
+		Set<FilteredAWTEventListener> customAwtListeners) {
 		this.customAwtListeners = customAwtListeners;
 		this.state = new InputState(DEFAULT_TOOLKIT);
 		this.listeners = new ArrayList<FilteredAWTEventListener>();
@@ -56,7 +57,8 @@ public class SwingInspectionRecorder implements IEventRecorder {
 	}
 
 	@Override
-	public void startRecording() throws Exception {
+	public void startRecording()
+		throws Exception {
 		assertListenersIsEmpty();
 		fillListeners();
 		registerListeners();
@@ -75,42 +77,46 @@ public class SwingInspectionRecorder implements IEventRecorder {
 	}
 
 	private void fillCustomListeners() {
-		if (customAwtListeners != null) {
+		if(customAwtListeners != null) {
 			listeners.addAll(customAwtListeners);
-		} else {
+		}
+		else {
 			LOG.info("No custom listeners have been defined");
 		}
 	}
 
 	private void registerListeners() {
-		for (final FilteredAWTEventListener listener : listeners) {
+		for(final FilteredAWTEventListener listener : listeners) {
 			registerListener(listener);
 		}
 	}
 
-	private static void registerListener(final FilteredAWTEventListener listener) {
+	private static void registerListener(
+		final FilteredAWTEventListener listener) {
 		DEFAULT_TOOLKIT.addAWTEventListener(listener, listener.getEventMask());
 	}
 
 	private void assertListenersIsEmpty() {
-		if (!listeners.isEmpty()) {
+		if(!listeners.isEmpty()) {
 			throw new IllegalStateException("listeners already active, stop recording first !");
 		}
 	}
 
 	@Override
-	public void stopRecording() throws Exception {
+	public void stopRecording()
+		throws Exception {
 		unregisterListeners();
 		clearListeners();
 	}
 
 	private void unregisterListeners() {
-		for (final AWTEventListener listener : listeners) {
+		for(final AWTEventListener listener : listeners) {
 			unregisterListener(listener);
 		}
 	}
 
-	private static void unregisterListener(final AWTEventListener listener) {
+	private static void unregisterListener(
+		final AWTEventListener listener) {
 		DEFAULT_TOOLKIT.removeAWTEventListener(listener);
 	}
 
@@ -118,29 +124,33 @@ public class SwingInspectionRecorder implements IEventRecorder {
 		listeners.clear();
 	}
 
-
-	public void liveExplore(final List<AWTCapturedEvent> capturedEvents) {
+	public void liveExplore(
+		final List<AWTCapturedEvent> capturedEvents) {
 		final List<AWTCapturedEvent> immutableLineList = ImmutableList.copyOf(capturedEvents);
-		for (final AWTCapturedEvent capturedEvent : immutableLineList) {
-			if (this.currentEventStackGobbler == null) {
+		for(final AWTCapturedEvent capturedEvent : immutableLineList) {
+			if(this.currentEventStackGobbler == null) {
 				this.currentEventStackGobbler = EventStackGobblerProvider.get(capturedEvent);
 			}
-			if (currentEventStackGobbler.isLooper()) {
-				if (this.currentEventStackGobbler.digest(capturedEvent).isCompleted()) {
+			if(currentEventStackGobbler.isLooper()) {
+				if(this.currentEventStackGobbler.digest(capturedEvent).isCompleted()) {
 					EventType interpretedEventType = currentEventStackGobbler.getInterpretedEventType(capturedEvent);
 					AWTCapturedEvent adjustedEvent = currentEventStackGobbler.getAdjustedEvent();
 					_process(interpretedEventType, adjustedEvent);
-				} else {
+				}
+				else {
 					continue;
 				}
-			} else {
+			}
+			else {
 				EventType interpretedEventType = currentEventStackGobbler.getInterpretedEventType(capturedEvent);
 				_process(interpretedEventType, capturedEvent);
 			}
 		}
 	}
 
-	private synchronized void _process(EventType eventType, AWTCapturedEvent event) {
+	private synchronized void _process(
+		EventType eventType,
+		AWTCapturedEvent event) {
 		event.setEventType(eventType);
 		cmdServer.publishRecordEvent(event);
 		liveRecordedStepsBuffer.clear();
@@ -164,23 +174,26 @@ public class SwingInspectionRecorder implements IEventRecorder {
 	}
 
 	@Override
-	public synchronized void appendInfo(final AWTCapturedEvent eventData) {
+	public synchronized void appendInfo(
+		final AWTCapturedEvent eventData) {
 		try {
 			liveRecordedStepsBuffer.add(eventData);
 			liveExplore(liveRecordedStepsBuffer);
-		} catch (Exception e) {
+		}
+		catch(Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
 	}
 
 	@Override
-	public String getComponentLocator(Component component) {
+	public String getComponentLocator(
+		Component component) {
 		return cmdServer.getComponentLocator(component);
 	}
 
 	@Override
-	public void scanUi(boolean debug) {
+	public void scanUi(
+		boolean debug) {
 		cmdServer.scan(debug);
 	}
-
 }

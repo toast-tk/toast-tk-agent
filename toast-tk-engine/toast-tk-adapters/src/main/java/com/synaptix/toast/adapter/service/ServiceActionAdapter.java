@@ -24,71 +24,95 @@ public class ServiceActionAdapter extends AbstractServiceActionAdapter {
 		super();
 	}
 
-	@Action( action = "\\$?(\\w+).([.|\\w|\\[|\\]|=]+) is ([.|\\w|\\[|\\]|=| |/|:]+)", description = "")
-	public TestResult getOperationProperty(String componentName, String propertyName, String expected) {
+	@Action(action = "\\$?(\\w+).([.|\\w|\\[|\\]|=]+) is ([.|\\w|\\[|\\]|=| |/|:]+)", description = "")
+	public TestResult getOperationProperty(
+		String componentName,
+		String propertyName,
+		String expected) {
 		String value = getProperty(componentName, propertyName);
-		if (value == null) {
+		if(value == null) {
 			return new TestResult(propertyName + " is null", ResultKind.FAILURE);
-		} else if (value.equals(expected)) {
+		}
+		else if(value.equals(expected)) {
 			return new TestResult();
-		} else {
+		}
+		else {
 			return new TestResult(propertyName + " is " + value + " (should be: " + expected + ")");
 		}
 	}
 
-	@Action( action = "\\$?(\\w+).([.|\\w|\\[|\\]|=]+) is \\$([.|\\w|\\[|\\]|=| |/|:]+)", description = "")
-	public TestResult getOperationPropertyWithVariable(String componentName, String propertyName, String userVariable) {
+	@Action(action = "\\$?(\\w+).([.|\\w|\\[|\\]|=]+) is \\$([.|\\w|\\[|\\]|=| |/|:]+)", description = "")
+	public TestResult getOperationPropertyWithVariable(
+		String componentName,
+		String propertyName,
+		String userVariable) {
 		String expected = (String) getUserVariables().get(userVariable);
 		return getOperationProperty(componentName, propertyName, expected);
 	}
 
-	@Action( action = "Save \\$?(\\w+).([.|\\w|\\[|\\]|=]+) as \\$(\\w+)", description = "")
-	public TestResult saveVariable(String componentName, String propertyName, String variableName) {
+	@Action(action = "Save \\$?(\\w+).([.|\\w|\\[|\\]|=]+) as \\$(\\w+)", description = "")
+	public TestResult saveVariable(
+		String componentName,
+		String propertyName,
+		String variableName) {
 		String value = getProperty(componentName, propertyName);
-		if (value == null) {
+		if(value == null) {
 			return new TestResult(propertyName + " is null", ResultKind.ERROR);
-		} else {
+		}
+		else {
 			getUserVariables().put(variableName, value);
 			return new TestResult(value, ResultKind.INFO);
 		}
 	}
 
-	@Action( action = "\\$?(\\w+).([.|\\w|\\[|\\]|=]+) null", description = "")
-	public TestResult checkOperationPropertyNull(String componentName, String propertyName) {
+	@Action(action = "\\$?(\\w+).([.|\\w|\\[|\\]|=]+) null", description = "")
+	public TestResult checkOperationPropertyNull(
+		String componentName,
+		String propertyName) {
 		String value = getProperty(componentName, propertyName);
-		if (value == null || value.equals("null")) {
+		if(value == null || value.equals("null")) {
 			return new TestResult(propertyName + " is null", ResultKind.SUCCESS);
-		} else {
+		}
+		else {
 			return new TestResult(propertyName + " is " + value);
 		}
 	}
 
-	@Action( action = "\\$?(\\w+).([.|\\w|\\[|\\]|=]+) not null", description = "")
-	public TestResult checkOperationPropertyNotNull(String componentName, String propertyName) {
+	@Action(action = "\\$?(\\w+).([.|\\w|\\[|\\]|=]+) not null", description = "")
+	public TestResult checkOperationPropertyNotNull(
+		String componentName,
+		String propertyName) {
 		String value = getProperty(componentName, propertyName);
-		if (value == null || value.equals("null")) {
+		if(value == null || value.equals("null")) {
 			return new TestResult(propertyName + " is " + value);
-		} else {
+		}
+		else {
 			return new TestResult(propertyName + " is not null", ResultKind.SUCCESS);
 		}
 	}
 
-	@Action( action = "\\$?(\\w+).([.|\\w|\\[|\\]|=]+) empty", description = "")
-	public TestResult checkOperationPropertyempty(String componentName, String propertyName) {
+	@Action(action = "\\$?(\\w+).([.|\\w|\\[|\\]|=]+) empty", description = "")
+	public TestResult checkOperationPropertyempty(
+		String componentName,
+		String propertyName) {
 		String value = getProperty(componentName, propertyName);
-		if (value == null || value.equals("[]")) {
+		if(value == null || value.equals("[]")) {
 			return new TestResult(propertyName + " is empty", ResultKind.SUCCESS);
-		} else {
+		}
+		else {
 			return new TestResult(propertyName + " is " + value);
 		}
 	}
 
-	@Action( action = "(\\w+).([.|\\w|\\[|\\]|=]+) not empty", description = "")
-	public TestResult checkOperationPropertyNotEmpty(String componentName, String propertyName) {
+	@Action(action = "(\\w+).([.|\\w|\\[|\\]|=]+) not empty", description = "")
+	public TestResult checkOperationPropertyNotEmpty(
+		String componentName,
+		String propertyName) {
 		String value = getProperty(componentName, propertyName);
-		if (value == null || value.equals("[]")) {
+		if(value == null || value.equals("[]")) {
 			return new TestResult(propertyName + " is " + value);
-		} else {
+		}
+		else {
 			return new TestResult(propertyName + " is not empty", ResultKind.SUCCESS);
 		}
 	}
@@ -100,11 +124,14 @@ public class ServiceActionAdapter extends AbstractServiceActionAdapter {
 	}
 
 	@Action(action = "Show \\$?(\\w+)\\.([.|\\w]+)", description = "", display = true)
-	public TestResult displayOperationProperty(String componentName, String propertyName) {
+	public TestResult displayOperationProperty(
+		String componentName,
+		String propertyName) {
 		String value = getProperty(componentName, propertyName);
-		if (value == null) {
+		if(value == null) {
 			return new TestResult(propertyName + " is null", ResultKind.ERROR);
-		} else {
+		}
+		else {
 			TestResult testResult = new TestResult();
 			testResult.setMessage(value);
 			testResult.setResultKind(ResultKind.INFO);
@@ -113,11 +140,13 @@ public class ServiceActionAdapter extends AbstractServiceActionAdapter {
 	}
 
 	@Action(action = "Show \\$(\\w+)", description = "", display = true)
-	public TestResult displayOperationProperty(String variableName) {
+	public TestResult displayOperationProperty(
+		String variableName) {
 		Object value = getUserVariables().get(variableName);
-		if (value == null) {
+		if(value == null) {
 			return new TestResult("$" + variableName + " is null", ResultKind.ERROR);
-		} else {
+		}
+		else {
 			TestResult testResult = new TestResult();
 			testResult.setMessage(value.toString());
 			testResult.setResultKind(ResultKind.INFO);
@@ -126,24 +155,35 @@ public class ServiceActionAdapter extends AbstractServiceActionAdapter {
 	}
 
 	@Action(action = "Select ([\\w| ]+) : (\\w+) as \\$?(\\w+)", description = "", display = true)
-	public TestResult getComponent(String componentName, String idValue, String variableName) {
+	public TestResult getComponent(
+		String componentName,
+		String idValue,
+		String variableName) {
 		Object component = findComponent(componentName, idValue, variableName);
 		return component != null ? new TestResult() : new TestResult("Object not found");
 	}
 
 	@Action(action = "Select ([\\w| ]+) : \\$(\\w+) as \\$?(\\w+)", description = "", display = true)
-	public TestResult getComponentFromVariable(String componentName, String idValue, String variableName) {
+	public TestResult getComponentFromVariable(
+		String componentName,
+		String idValue,
+		String variableName) {
 		Object component = findComponent(componentName, (String) getUserVariables().get(idValue), variableName);
 		return component != null ? new TestResult() : new TestResult("Object not found");
 	}
 
 	@Action(action = "Select ([\\w| ]+) where (\\w+) = ([\\w|$]+) as \\$?(\\w+)", description = "", display = true)
-	public TestResult selectWhere(String objectType, String propertyName, String value, String variable) {
-		if (StringUtils.startsWith(value, "$")) {
+	public TestResult selectWhere(
+		String objectType,
+		String propertyName,
+		String value,
+		String variable) {
+		if(StringUtils.startsWith(value, "$")) {
 			Object object = getUserVariables().get(value);
-			if (object != null && object instanceof String) {
+			if(object != null && object instanceof String) {
 				value = (String) object;
-			} else {
+			}
+			else {
 				return new TestResult("Could not parse value " + value, ResultKind.ERROR);
 			}
 		}
@@ -151,30 +191,35 @@ public class ServiceActionAdapter extends AbstractServiceActionAdapter {
 		return component != null ? new TestResult() : new TestResult("Object not found");
 	}
 
-	@Action( action = "Set system date time ()", description = "")
-	public TestResult setSystemDateTime(String dateTime) {
+	@Action(action = "Set system date time ()", description = "")
+	public TestResult setSystemDateTime(
+		String dateTime) {
 		LocalDateTime dt = ActionAdapterHelper.parseLocalDateTimeFromString(dateTime);
 		DateTimeUtils.setCurrentMillisFixed(dt.toDateTime().getMillis());
 		return new TestResult();
 	}
 
-	@Action( action = "Reset system date time", description = "")
-	public TestResult customerOrderRouting(String dateTime) {
+	@Action(action = "Reset system date time", description = "")
+	public TestResult customerOrderRouting(
+		String dateTime) {
 		DateTimeUtils.setCurrentMillisSystem();
 		return new TestResult();
 	}
 
-	@Action( action = "\\$(\\w+) contains (\\w+)=([.|\\w|\\[|\\]|=| |/|:]+)", description = "")
-	public TestResult checkList(String componentName, String propertyName, String expected) {
+	@Action(action = "\\$(\\w+) contains (\\w+)=([.|\\w|\\[|\\]|=| |/|:]+)", description = "")
+	public TestResult checkList(
+		String componentName,
+		String propertyName,
+		String expected) {
 		Object component = getComponent(componentName);
-		if (component instanceof Collection) {
+		if(component instanceof Collection) {
 			Collection<?> collection = (Collection<?>) component;
-			for (Object object : collection) {
+			for(Object object : collection) {
 				Object value = getValue(object, propertyName);
-				if (value == null) {
+				if(value == null) {
 					continue;
 				}
-				if (value.toString().equals(expected)) {
+				if(value.toString().equals(expected)) {
 					return new TestResult();
 				}
 			}
@@ -182,19 +227,22 @@ public class ServiceActionAdapter extends AbstractServiceActionAdapter {
 		return new TestResult("Not found in list", ResultKind.FAILURE);
 	}
 
-	@Action( action = "\\$(\\w+) size is (\\d+)", description = "")
-	public TestResult checkList(String componentName, String expectedSize) {
+	@Action(action = "\\$(\\w+) size is (\\d+)", description = "")
+	public TestResult checkList(
+		String componentName,
+		String expectedSize) {
 		Object component = getComponent(componentName);
-		if (component instanceof Collection) {
+		if(component instanceof Collection) {
 			int size = ((Collection<?>) component).size();
-			if (size == Integer.parseInt(expectedSize)) {
+			if(size == Integer.parseInt(expectedSize)) {
 				return new TestResult();
-			} else {
+			}
+			else {
 				return new TestResult("Size is " + size, ResultKind.FAILURE);
 			}
-		} else {
+		}
+		else {
 			return new TestResult("Variable $" + componentName + " not found", ResultKind.FAILURE);
 		}
 	}
-
 }

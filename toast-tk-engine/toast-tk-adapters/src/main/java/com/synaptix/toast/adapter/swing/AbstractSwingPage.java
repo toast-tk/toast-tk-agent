@@ -23,8 +23,11 @@ import com.synaptix.toast.core.runtime.ISwingElement;
 public abstract class AbstractSwingPage implements IFeedableSwingPage {
 
 	public String beanClassName; // the bean class name
+
 	Map<String, ISwingElement> elements = new HashMap<String, ISwingElement>();
+
 	protected Map<String, SwingAutoElement> autoElements = new HashMap<String, SwingAutoElement>();
+
 	private String pageName;
 
 	/**
@@ -32,7 +35,8 @@ public abstract class AbstractSwingPage implements IFeedableSwingPage {
 	 * @param elementDefinition
 	 */
 	@Override
-	public void initElement(ISwingElement e) {
+	public void initElement(
+		ISwingElement e) {
 		initElement(e.getName(), e.getType().name(), e.getLocator());
 	}
 
@@ -44,38 +48,43 @@ public abstract class AbstractSwingPage implements IFeedableSwingPage {
 	 * @param locator
 	 * @param position
 	 */
-	protected void initElement(String name, String type,  String locator) {
+	protected void initElement(
+		String name,
+		String type,
+		String locator) {
 		/**
 		 * used to locate an element
 		 */
 		DefaultSwingElement defaultWebElement = new DefaultSwingElement(name, AutoSwingType.valueOf(type), locator);
 		elements.put(name, defaultWebElement);
-
 		/**
 		 * selenium wrapper field initalizarion when it comes to greenpepper
 		 */
 		try {
 			ISwingElement iWebElement = elements.get(name);
-			if (iWebElement != null) {
+			if(iWebElement != null) {
 				SwingAutoElement execAutoClass = ElementFactory.getElement(iWebElement);
 				// for this abstract page, init fields (for java classes only
-				for (Field f : this.getClass().getFields()) {
+				for(Field f : this.getClass().getFields()) {
 					Class<?> automationClass = f.getType();
-					if (SwingAutoElement.class.isAssignableFrom(automationClass)) {
-						if (f.getName().equals(name)) {
+					if(SwingAutoElement.class.isAssignableFrom(automationClass)) {
+						if(f.getName().equals(name)) {
 							try {
 								BeanUtils.setProperty(this, name, execAutoClass);
-							} catch (Exception e) {
+							}
+							catch(Exception e) {
 								e.printStackTrace();
 							}
 						}
 					}
 				}
 				autoElements.put(name, execAutoClass);
-			} else {
+			}
+			else {
 				// throw something
 			}
-		} catch (Exception e) {
+		}
+		catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -83,14 +92,16 @@ public abstract class AbstractSwingPage implements IFeedableSwingPage {
 	/**
 	 * Convenient method to call an element based on the page enclosed fields' enum
 	 */
-	public ISwingElement getElement(String token) {
+	public ISwingElement getElement(
+		String token) {
 		return elements.get(token);
 	}
 
 	/**
 	 * Convenient method to call an element based on the page enclosed fields' enum
 	 */
-	public SwingAutoElement getAutoElement(String token) {
+	public SwingAutoElement getAutoElement(
+		String token) {
 		return autoElements.get(token);
 	}
 
@@ -98,7 +109,8 @@ public abstract class AbstractSwingPage implements IFeedableSwingPage {
 		return beanClassName;
 	}
 
-	public void setBeanClassName(String beanClassName) {
+	public void setBeanClassName(
+		String beanClassName) {
 		this.beanClassName = beanClassName;
 	}
 
@@ -106,7 +118,8 @@ public abstract class AbstractSwingPage implements IFeedableSwingPage {
 		return pageName;
 	}
 
-	public void setPageName(String pageName) {
+	public void setPageName(
+		String pageName) {
 		this.pageName = pageName;
 	}
 
@@ -117,10 +130,10 @@ public abstract class AbstractSwingPage implements IFeedableSwingPage {
 	/**
 	 * set the driver that will be used by the automation elements
 	 */
-	public void setDriver(IRemoteSwingAgentDriver sDvr) {
-		for (SwingAutoElement el : autoElements.values()) {
+	public void setDriver(
+		IRemoteSwingAgentDriver sDvr) {
+		for(SwingAutoElement el : autoElements.values()) {
 			el.setFrontEndDriver(sDvr);
 		}
 	}
-
 }

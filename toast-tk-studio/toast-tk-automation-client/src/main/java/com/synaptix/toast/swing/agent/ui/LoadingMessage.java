@@ -26,21 +26,24 @@ Creation date: 2 mars 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
-
 package com.synaptix.toast.swing.agent.ui;
 
 public class LoadingMessage {
 
 	public final String msg;
+
 	public final int progress;
-	
-	public LoadingMessage(final String msg){
+
+	public LoadingMessage(
+		final String msg) {
 		this.msg = msg;
 		this.progress = 0;
 	}
-	
-	public LoadingMessage(final String msg, final int progress){
+
+	public LoadingMessage(
+		final String msg,
+		final int progress) {
 		this.msg = msg;
-		this.progress= progress;
+		this.progress = progress;
 	}
 }

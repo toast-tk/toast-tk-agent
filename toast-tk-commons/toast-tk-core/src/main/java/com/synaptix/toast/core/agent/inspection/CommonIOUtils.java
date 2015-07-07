@@ -26,35 +26,32 @@ import com.synaptix.toast.core.net.response.ScanResponse;
 import com.synaptix.toast.core.net.response.ValueResponse;
 
 public class CommonIOUtils {
-    public static final int TCP_PORT = 1470;
 
-    public static void initSerialization(Kryo kryo) {
-        kryo.register(ArrayList.class);
-        kryo.register(DirectColorModel.class);
-        kryo.register(BufferedImage.class);
-        
-        kryo.register(COMMAND_TYPE.class);
-        kryo.register(InitInspectionRequest.class);
-        kryo.register(CommandRequest.class);
-        kryo.register(TableCommandRequestQueryCriteria.class);
-        kryo.register(TableCommandRequestQuery.class);
-        kryo.register(TableCommandRequest.class);
+	public static final int TCP_PORT = 1470;
 
-        kryo.register(EventType.class);
-        kryo.register(AWTCapturedEvent.class);
-        kryo.register(IIdRequest.class);
-        kryo.register(ScanRequest.class);
-        kryo.register(RecordRequest.class);
-        kryo.register(HighLightRequest.class);
-        
-        kryo.register(ExistsResponse.class);
-        kryo.register(ErrorResponse.class);
-        kryo.register(ValueResponse.class);
-        kryo.register(InitResponse.class);
-        kryo.register(ScanResponse.class);
-        kryo.register(RecordResponse.class);
-        
-        kryo.register(PoisonPill.class);
-
-    }
+	public static void initSerialization(
+		Kryo kryo) {
+		kryo.register(ArrayList.class);
+		kryo.register(DirectColorModel.class);
+		kryo.register(BufferedImage.class);
+		kryo.register(COMMAND_TYPE.class);
+		kryo.register(InitInspectionRequest.class);
+		kryo.register(CommandRequest.class);
+		kryo.register(TableCommandRequestQueryCriteria.class);
+		kryo.register(TableCommandRequestQuery.class);
+		kryo.register(TableCommandRequest.class);
+		kryo.register(EventType.class);
+		kryo.register(AWTCapturedEvent.class);
+		kryo.register(IIdRequest.class);
+		kryo.register(ScanRequest.class);
+		kryo.register(RecordRequest.class);
+		kryo.register(HighLightRequest.class);
+		kryo.register(ExistsResponse.class);
+		kryo.register(ErrorResponse.class);
+		kryo.register(ValueResponse.class);
+		kryo.register(InitResponse.class);
+		kryo.register(ScanResponse.class);
+		kryo.register(RecordResponse.class);
+		kryo.register(PoisonPill.class);
+	}
 }

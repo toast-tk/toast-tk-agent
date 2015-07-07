@@ -12,10 +12,15 @@ import com.synaptix.toast.core.runtime.ISwingElement;
 public class DefaultSwingElement implements ISwingElement {
 
 	public String locator;
+
 	private AutoSwingType type;
+
 	private String name;
 
-	public DefaultSwingElement(String name, AutoSwingType type, String locator) {
+	public DefaultSwingElement(
+		String name,
+		AutoSwingType type,
+		String locator) {
 		this.locator = locator;
 		this.type = type;
 		this.name = name;
@@ -27,14 +32,14 @@ public class DefaultSwingElement implements ISwingElement {
 	}
 
 	@Override
-	public void setLocator(String locator) {
+	public void setLocator(
+		String locator) {
 		this.locator = locator;
 	}
 
-
-
 	@Override
-	public void setName(String name) {
+	public void setName(
+		String name) {
 		this.name = name;
 	}
 
@@ -49,8 +54,8 @@ public class DefaultSwingElement implements ISwingElement {
 	}
 
 	@Override
-	public void setType(AutoSwingType type) {
+	public void setType(
+		AutoSwingType type) {
 		this.type = type;
 	}
-
 }

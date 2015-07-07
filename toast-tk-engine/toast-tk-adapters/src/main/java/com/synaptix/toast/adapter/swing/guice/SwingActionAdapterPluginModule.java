@@ -8,5 +8,4 @@ public class SwingActionAdapterPluginModule extends AbstractComponentFixtureModu
 	protected void configureModule() {
 		addTypeHandler(DefaultSwingCustomWidgetHandler.class);
 	}
-
 }

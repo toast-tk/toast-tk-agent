@@ -26,33 +26,36 @@ Creation date: 18 févr. 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
-
 package com.synaptix.toast.core.net.request;
 
-
 public class RecordRequest implements IIdRequest {
-	private boolean start;	
+
+	private boolean start;
+
 	private boolean modeChange;
+
 	private int mode;
 
 	/**
 	 * for serialization purpose only
 	 */
-	public RecordRequest(){
+	public RecordRequest() {
 	}
-	
-	public RecordRequest(boolean start){
+
+	public RecordRequest(
+		boolean start) {
 		this.setStart(start);
 	}
-	
-	public RecordRequest(int mode){
+
+	public RecordRequest(
+		int mode) {
 		this.setStart(true);
 		this.setModeChange(true);
 		this.mode = mode;
 	}
 
-
-	private void setModeChange(boolean modeChange) {
+	private void setModeChange(
+		boolean modeChange) {
 		this.modeChange = modeChange;
 	}
 
@@ -65,15 +68,16 @@ public class RecordRequest implements IIdRequest {
 		return start;
 	}
 
-	private void setStart(boolean start) {
+	private void setStart(
+		boolean start) {
 		this.start = start;
 	}
 
 	public boolean isModeChange() {
 		return modeChange;
 	}
-	
-	public int getMode(){
+
+	public int getMode() {
 		return mode;
 	}
 }

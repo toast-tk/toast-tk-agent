@@ -1,4 +1,3 @@
-
 package com.synaptix.toast.automation.repository.source.svn;
 
 import java.io.ByteArrayInputStream;
@@ -36,26 +35,31 @@ import com.synaptix.toast.automation.repository.source.ISourceConnector;
 public class SVNConnector implements ISourceConnector {
 
 	public static final String SVNURI = "http://10.61.128.222/svn/psc/trunk/";
+
 	public static final String SVNTESTREPO = "test-repository";
+
 	private static final SVNConnector INSTANCE = new SVNConnector();
+
 	SVNRepository repository = null;
 
 	private SVNConnector() {
-
 	}
 
 	public static SVNConnector getInstance() {
 		return INSTANCE;
 	}
 
-	public SVNConnector build(String login, String pass) {
-		if (repository == null) {
+	public SVNConnector build(
+		String login,
+		String pass) {
+		if(repository == null) {
 			DAVRepositoryFactory.setup();
 			SVNURL url;
 			try {
 				url = SVNURL.parseURIDecoded(SVNURI + SVNTESTREPO);
 				repository = SVNRepositoryFactory.create(url, null);
-			} catch (SVNException e1) {
+			}
+			catch(SVNException e1) {
 				e1.printStackTrace();
 			}
 		}
@@ -70,27 +74,33 @@ public class SVNConnector implements ISourceConnector {
 	 * @param path
 	 * @throws SVNException
 	 */
-	public List<String> listEntries(List<String> res, String path) throws SVNException {
+	public List<String> listEntries(
+		List<String> res,
+		String path)
+		throws SVNException {
 		Collection<?> entries = repository.getDir(path, -1, null, (Collection<?>) null);
 		Iterator<?> iterator = entries.iterator();
-		while (iterator.hasNext()) {
+		while(iterator.hasNext()) {
 			SVNDirEntry entry = (SVNDirEntry) iterator.next();
-			// System.out.println("/" + (path.equals("") ? "" : path + "/") + entry.getName());
-			if (entry.getKind() == SVNNodeKind.FILE) {
+			// System.out.println("/" + (path.equals("") ? "" : path + "/") +
+// entry.getName());
+			if(entry.getKind() == SVNNodeKind.FILE) {
 				res.add(entry.getName());
 			}
-			if (entry.getKind() == SVNNodeKind.DIR) {
+			if(entry.getKind() == SVNNodeKind.DIR) {
 				listEntries(res, (path.equals("")) ? entry.getName() : path + "/" + entry.getName());
 			}
 		}
-
 		return res;
 	}
 
-	public long getFileRevision(String filePath) throws SVNException {
+	public long getFileRevision(
+		String filePath)
+		throws SVNException {
 		long rev = -1;
-		if (isFile(filePath)) {
-			rev = repository.getFile(filePath, -1, null, null); // stream not needed
+		if(isFile(filePath)) {
+			rev = repository.getFile(filePath, -1, null, null); // stream not
+// needed
 		}
 		return rev;
 	}
@@ -102,13 +112,16 @@ public class SVNConnector implements ISourceConnector {
 	 * @return
 	 * @throws SVNException
 	 */
-	public boolean isFile(String filePath) throws SVNException {
+	public boolean isFile(
+		String filePath)
+		throws SVNException {
 		SVNNodeKind nodeKind = repository.checkPath(filePath, -1);
 		boolean isFile = true;
-		if (nodeKind == SVNNodeKind.NONE) {
+		if(nodeKind == SVNNodeKind.NONE) {
 			System.err.println("There is no entry ");
 			isFile = false;
-		} else if (nodeKind == SVNNodeKind.DIR) {
+		}
+		else if(nodeKind == SVNNodeKind.DIR) {
 			isFile = false;
 			System.err.println("The entry is a directory while a file was expected.");
 		}
@@ -122,20 +135,26 @@ public class SVNConnector implements ISourceConnector {
 	 * @return
 	 * @throws SVNException
 	 */
-	public String readFile(String path) throws SVNException {
-		@SuppressWarnings("rawtypes")
-		Map<?, ?> fileProperties = new HashMap();
+	public String readFile(
+		String path)
+		throws SVNException {
+		@SuppressWarnings("rawtypes") Map<?, ?> fileProperties = new HashMap();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		repository.getFile(path, -1, fileProperties, baos);
 		return baos.toString();
 	}
 
-	public boolean commitFileChangeOnLatestRevision(String newContent, String dirPath, String fileName) throws SVNException {
+	public boolean commitFileChangeOnLatestRevision(
+		String newContent,
+		String dirPath,
+		String fileName)
+		throws SVNException {
 		String logMessage = "log message";
 		boolean success = true;
-		if (repository != null) {
+		if(repository != null) {
 			String filePath = dirPath + "/" + fileName;
-			ISVNEditor editor = repository.getCommitEditor(logMessage, null /* locks */, true /* keepLocks */, null /* mediator */);
+			ISVNEditor editor = repository
+				.getCommitEditor(logMessage, null /* locks */, true /* keepLocks */, null /* mediator */);
 			editor.openRoot(-1);
 			editor.addDir(dirPath, null, -1);
 			editor.addFile(filePath, null, -1);
@@ -148,7 +167,12 @@ public class SVNConnector implements ISourceConnector {
 		return success;
 	}
 
-	private boolean compareAndCommit(String filePath, ISVNEditor editor, long fileRevision, byte[] bytesUtf8) throws SVNException {
+	private boolean compareAndCommit(
+		String filePath,
+		ISVNEditor editor,
+		long fileRevision,
+		byte[] bytesUtf8)
+		throws SVNException {
 		boolean success;
 		SVNDeltaGenerator deltaGenerator = new SVNDeltaGenerator();
 		String checksum = deltaGenerator.sendDelta(filePath, new ByteArrayInputStream(bytesUtf8), editor, true);
@@ -161,24 +185,28 @@ public class SVNConnector implements ISourceConnector {
 	}
 
 	@Override
-	public String[] getResourceListing(String path) {
+	public String[] getResourceListing(
+		String path) {
 		ArrayList<String> res = new ArrayList<String>();
 		try {
 			return listEntries(res, path).toArray(new String[res.size()]);
-		} catch (SVNException e) {
+		}
+		catch(SVNException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
 	@Override
-	public InputStream getFileStream(String filePath) {
+	public InputStream getFileStream(
+		String filePath) {
 		String stringRepr;
 		try {
 			stringRepr = readFile(filePath);
 			InputStream in = new ByteArrayInputStream(stringRepr.getBytes());
 			return in;
-		} catch (SVNException e) {
+		}
+		catch(SVNException e) {
 			e.printStackTrace();
 		}
 		return null;

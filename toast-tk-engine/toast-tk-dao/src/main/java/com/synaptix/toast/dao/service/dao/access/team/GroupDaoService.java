@@ -10,12 +10,16 @@ import com.synaptix.toast.dao.service.init.DbStarter;
 public class GroupDaoService extends AbstractMongoDaoService<GroupImpl> {
 
 	public interface Factory {
-		GroupDaoService create(@Assisted String dbName);
+
+		GroupDaoService create(
+			@Assisted String dbName);
 	}
 
 	@Inject
-	public GroupDaoService(DbStarter starter, CommonMongoDaoService cService, @Assisted String dbName) {
+	public GroupDaoService(
+		DbStarter starter,
+		CommonMongoDaoService cService,
+		@Assisted String dbName) {
 		super(GroupImpl.class, starter.getDatabaseByName(dbName), cService);
 	}
-
 }

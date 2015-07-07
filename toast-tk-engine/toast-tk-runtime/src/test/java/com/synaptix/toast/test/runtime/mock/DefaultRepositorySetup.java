@@ -26,7 +26,6 @@ Creation date: 15 avr. 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
-
 package com.synaptix.toast.test.runtime.mock;
 
 import java.util.Collection;
@@ -38,12 +37,13 @@ import com.synaptix.toast.core.runtime.IFeedableWebPage;
 import com.synaptix.toast.core.runtime.IRepositorySetup;
 import com.synaptix.toast.core.runtime.ITestManager;
 
-public class DefaultRepositorySetup implements IRepositorySetup{
+public class DefaultRepositorySetup implements IRepositorySetup {
 
 	private Map<String, Object> userVariables;
 
 	@Override
-	public IFeedableSwingPage getSwingPage(String entityName) {
+	public IFeedableSwingPage getSwingPage(
+		String entityName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -61,67 +61,83 @@ public class DefaultRepositorySetup implements IRepositorySetup{
 	}
 
 	@Override
-	public void addSwingPage(String fixtureName) {
+	public void addSwingPage(
+		String fixtureName) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
-	public void addPage(String fixtureName) {
+	public void addPage(
+		String fixtureName) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
-	public TestResult addClass(String className, String testName, String searchBy) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public TestResult addService(String testName, String className) {
+	public TestResult addClass(
+		String className,
+		String testName,
+		String searchBy) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public TestResult addDomain(String domainClassName, String domainTestName, String tableName) {
+	public TestResult addService(
+		String testName,
+		String className) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public TestResult addProperty(String componentName, String testName, String systemName, String componentAssociation) {
+	public TestResult addDomain(
+		String domainClassName,
+		String domainTestName,
+		String tableName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public TestResult insertComponent(String entityName2, Map<String, String> values2) {
+	public TestResult addProperty(
+		String componentName,
+		String testName,
+		String systemName,
+		String componentAssociation) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Class<?> getService(String fixtureName) {
+	public TestResult insertComponent(
+		String entityName2,
+		Map<String, String> values2) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public IFeedableWebPage getPage(String fixtureName) {
+	public Class<?> getService(
+		String fixtureName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void setUserVariables(Map<String, Object> userVariables) {
-		this.userVariables= userVariables;
+	public IFeedableWebPage getPage(
+		String fixtureName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setUserVariables(
+		Map<String, Object> userVariables) {
+		this.userVariables = userVariables;
 	}
 
 	@Override
 	public Map<String, Object> getUserVariables() {
 		return userVariables;
 	}
-
 }

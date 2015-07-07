@@ -3,14 +3,17 @@ package com.synaptix.toast.core.agent.interpret;
 public class InterpretedEvent {
 
 	private String eventData;
+
 	private Long timeStamp;
 
-
-	public InterpretedEvent(String eventData) {
+	public InterpretedEvent(
+		String eventData) {
 		this.setEventData(eventData);
 	}
-	
-	public InterpretedEvent(String eventData, Long timeStamp) {
+
+	public InterpretedEvent(
+		String eventData,
+		Long timeStamp) {
 		this.setEventData(eventData);
 		this.setTimeStamp(timeStamp);
 	}
@@ -19,7 +22,8 @@ public class InterpretedEvent {
 		return eventData;
 	}
 
-	private void setEventData(String eventData) {
+	private void setEventData(
+		String eventData) {
 		this.eventData = eventData;
 	}
 
@@ -27,7 +31,8 @@ public class InterpretedEvent {
 		return timeStamp;
 	}
 
-	private void setTimeStamp(Long timeStamp) {
+	private void setTimeStamp(
+		Long timeStamp) {
 		this.timeStamp = timeStamp;
 	}
 }

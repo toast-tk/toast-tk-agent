@@ -26,23 +26,27 @@ Creation date: 2 mars 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
-
 package com.synaptix.toast.swing.agent;
 
 import com.synaptix.toast.swing.agent.config.Config;
 
 public interface IToastClientApp {
 
-	public void updateStatusMessage(String msg);
-	
-	public void startProgress(String msg);
-	
-	public void updateProgress(String msg, int progress);
-	
-	public void stopProgress(String msg);
+	public void updateStatusMessage(
+		String msg);
+
+	public void startProgress(
+		String msg);
+
+	public void updateProgress(
+		String msg,
+		int progress);
+
+	public void stopProgress(
+		String msg);
 
 	public boolean isConnected();
-	
+
 	public Config getConfig();
 
 	public String getRuntimeType();
@@ -54,5 +58,4 @@ public interface IToastClientApp {
 	public String getAgentType();
 
 	public void initProperties();
-	
 }

@@ -19,29 +19,39 @@ import com.synaptix.toast.core.runtime.IWebElement;
 public class WebTableElement extends WebAutoElement implements ITableElement {
 
 	List<String> cols;
+
 	List<WebElement> rows;
 
 	static String rowSelector = "tbody[style=''] tr"; // specific to psc
+
 	static String colHeadhSelector = "thead th";// specific to psc
 
-	public WebTableElement(IWebElement element, SynchronizedDriver driver) {
+	public WebTableElement(
+		IWebElement element,
+		SynchronizedDriver driver) {
 		super(element, driver);
 	}
 
-	public WebTableElement(IWebElement element) {
+	public WebTableElement(
+		IWebElement element) {
 		super(element);
 	}
 
 	@Override
-	public void dbClickAtRow(final int index) {
+	public void dbClickAtRow(
+		final int index) {
 		safeAction(new ISyncCall() {
+
 			@Override
-			public void execute(WebElement find) {
+			public void execute(
+				WebElement find) {
 				List<WebElement> findElements = find.findElements(By.cssSelector(rowSelector));
-				if (index > 0 && index < findElements.size()) {
-					// Actions action = new Actions(frontEndDriver.getWebDriver());
+				if(index > 0 && index < findElements.size()) {
+					// Actions action = new
+// Actions(frontEndDriver.getWebDriver());
 					WebElement onElement = findElements.get(index);
-					// Action doubleClick = action.doubleClick(onElement).build();
+					// Action doubleClick =
+// action.doubleClick(onElement).build();
 					// doubleClick.perform();
 					onElement.click();
 					SeleniumHelper.wait(1000);
@@ -53,11 +63,11 @@ public class WebTableElement extends WebAutoElement implements ITableElement {
 
 	@Override
 	public int getNbRows() {
-		if (rows == null) {
+		if(rows == null) {
 			WebElement webElement = getWebElement();
-			if (webElement != null) {
+			if(webElement != null) {
 				List<WebElement> findElements = webElement.findElements(By.cssSelector(rowSelector));
-				if (findElements != null) {
+				if(findElements != null) {
 					rows = findElements;
 				}
 			}
@@ -67,13 +77,13 @@ public class WebTableElement extends WebAutoElement implements ITableElement {
 
 	@Override
 	public List<String> getColumns() {
-		if (cols == null) {
+		if(cols == null) {
 			WebElement webElement = getWebElement();
-			if (webElement != null) {
+			if(webElement != null) {
 				List<WebElement> colElements = webElement.findElements(By.cssSelector(colHeadhSelector));
-				if (colElements != null && colElements.size() > 0) {
+				if(colElements != null && colElements.size() > 0) {
 					cols = new ArrayList<String>();
-					for (WebElement e : colElements) {
+					for(WebElement e : colElements) {
 						cols.add(e.getText());
 					}
 				}
@@ -83,14 +93,16 @@ public class WebTableElement extends WebAutoElement implements ITableElement {
 	}
 
 	@Override
-	public String getValue(String columnName, int indexRow) {
+	public String getValue(
+		String columnName,
+		int indexRow) {
 		String val = null;
-		if (cols == null) {
+		if(cols == null) {
 			getColumns();
 		}
-		if (cols.contains(columnName)) {
+		if(cols.contains(columnName)) {
 			int i = cols.indexOf(columnName);
-			if (indexRow > 0 && indexRow < getNbRows()) {
+			if(indexRow > 0 && indexRow < getNbRows()) {
 				WebElement row = rows.get(indexRow);
 				List<WebElement> colElements = row.findElements(By.cssSelector("td"));
 				val = colElements.get(i).getText();
@@ -100,12 +112,14 @@ public class WebTableElement extends WebAutoElement implements ITableElement {
 	}
 
 	@Override
-	public String getValue(int indexCol, int indexRow) {
+	public String getValue(
+		int indexCol,
+		int indexRow) {
 		String val = null;
-		if (cols == null) {
+		if(cols == null) {
 			getColumns();
 		}
-		if (indexRow > 0 && indexRow < getNbRows()) {
+		if(indexRow > 0 && indexRow < getNbRows()) {
 			WebElement row = rows.get(indexRow);
 			List<WebElement> colElements = row.findElements(By.cssSelector("td"));
 			val = colElements.get(indexCol).getText();
@@ -114,8 +128,8 @@ public class WebTableElement extends WebAutoElement implements ITableElement {
 	}
 
 	@Override
-	public boolean containsText(String text) {
+	public boolean containsText(
+		String text) {
 		return false;
 	}
-
 }

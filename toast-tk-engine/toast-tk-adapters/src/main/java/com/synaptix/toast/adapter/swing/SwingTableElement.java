@@ -1,4 +1,3 @@
-
 package com.synaptix.toast.adapter.swing;
 
 import java.util.List;
@@ -21,38 +20,47 @@ import com.synaptix.toast.core.runtime.ISwingElement;
  */
 public class SwingTableElement extends SwingAutoElement implements HasClickAction {
 
-	public SwingTableElement(ISwingElement element, IRemoteSwingAgentDriver driver) {
+	public SwingTableElement(
+		ISwingElement element,
+		IRemoteSwingAgentDriver driver) {
 		super(element, driver);
 	}
 
-	public SwingTableElement(ISwingElement element) {
+	public SwingTableElement(
+		ISwingElement element) {
 		super(element);
 	}
 
-	
-	public String find(List<TableCommandRequestQueryCriteria> criteria) throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
+	public String find(
+		List<TableCommandRequestQueryCriteria> criteria)
+		throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
 		exists();
 		final String requestId = UUID.randomUUID().toString();
 		CommandRequest request = new TableCommandRequest.TableCommandRequestBuilder(requestId)
-				.find(criteria)
-				.with(wrappedElement.getLocator())
-				.ofType(wrappedElement.getType().name()).build();
+			.find(criteria)
+			.with(wrappedElement.getLocator())
+			.ofType(wrappedElement.getType().name()).build();
 		return frontEndDriver.processAndWaitForValue(request);
 	}
-	
-	public String find(String lookUpColumn, String lookUpValue, String outputColumn) throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
+
+	public String find(
+		String lookUpColumn,
+		String lookUpValue,
+		String outputColumn)
+		throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
 		outputColumn = outputColumn == null ? lookUpColumn : outputColumn;
 		exists();
 		final String requestId = UUID.randomUUID().toString();
 		CommandRequest request = new TableCommandRequest.TableCommandRequestBuilder(requestId)
-				.find(lookUpColumn, lookUpValue, outputColumn)
-				.with(wrappedElement.getLocator())
-				.ofType(wrappedElement.getType().name()).build();
+			.find(lookUpColumn, lookUpValue, outputColumn)
+			.with(wrappedElement.getLocator())
+			.ofType(wrappedElement.getType().name()).build();
 		frontEndDriver.process(request);
 		return frontEndDriver.processAndWaitForValue(request);
 	}
 
-	public String count() throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
+	public String count()
+		throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
 		exists();
 		final String requestId = UUID.randomUUID().toString();
 		CommandRequest request = new TableCommandRequest.TableCommandRequestBuilder(requestId)
@@ -63,12 +71,13 @@ public class SwingTableElement extends SwingAutoElement implements HasClickActio
 	}
 
 	@Override
-	public boolean click() throws TimeoutException, ErrorResultReceivedException {
+	public boolean click()
+		throws TimeoutException, ErrorResultReceivedException {
 		boolean res = exists();
 		frontEndDriver.process(new TableCommandRequest.TableCommandRequestBuilder(null)
-		.with(wrappedElement.getLocator())
-		.ofType(wrappedElement.getType().name())
-		.click().build());
+			.with(wrappedElement.getLocator())
+			.ofType(wrappedElement.getType().name())
+			.click().build());
 		return res;
 	}
 
@@ -77,21 +86,26 @@ public class SwingTableElement extends SwingAutoElement implements HasClickActio
 		throw new IllegalAccessError("Method not implemented !");
 	}
 
-	public String doubleClick(String column, String value) throws TimeoutException, ErrorResultReceivedException {
+	public String doubleClick(
+		String column,
+		String value)
+		throws TimeoutException, ErrorResultReceivedException {
 		exists();
 		frontEndDriver.process(new TableCommandRequest.TableCommandRequestBuilder(null)
-				.doubleClick(column, value).with(wrappedElement.getLocator())
-				.ofType(wrappedElement.getType().name()).build());
+			.doubleClick(column, value).with(wrappedElement.getLocator())
+			.ofType(wrappedElement.getType().name()).build());
 		return null;
 	}
 
-	public String selectMenu(String menu, String column, String value) throws TimeoutException, ErrorResultReceivedException {
+	public String selectMenu(
+		String menu,
+		String column,
+		String value)
+		throws TimeoutException, ErrorResultReceivedException {
 		exists();
 		frontEndDriver.process(new TableCommandRequest.TableCommandRequestBuilder(null)
 			.selectMenu(menu, column, value).with(wrappedElement.getLocator())
 			.ofType(wrappedElement.getType().name()).build());
 		return null;
 	}
-
-
 }

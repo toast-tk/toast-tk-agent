@@ -16,13 +16,14 @@ public class TestSuiteHelper {
 		b.boot();
 		injector = Guice.createInjector(b.getModules());
 	}
-	
-	public static void initInjector(List<Module> modules) {
+
+	public static void initInjector(
+		List<Module> modules) {
 		injector = Guice.createInjector(modules);
 	}
-	
+
 	public static Injector getInjector() {
-		if(injector == null){
+		if(injector == null) {
 			initInjector();
 		}
 		return injector;

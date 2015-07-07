@@ -8,10 +8,15 @@ package com.synaptix.toast.adapter.web;
  * 
  */
 public abstract class AbstractGreenpepperWebPage extends AbstractWebPage {
+
 	public String name;
+
 	public String type;
+
 	public String locator;
+
 	public String method;
+
 	public Integer position;
 
 	/**
@@ -20,5 +25,4 @@ public abstract class AbstractGreenpepperWebPage extends AbstractWebPage {
 	public void enterRow() {
 		super.initElement(name, type, method, locator, position);
 	}
-
 }

@@ -14,7 +14,8 @@ public abstract class BasicTaggableMongoBean extends BasicMongoBean implements I
 		return tags;
 	}
 
-	public void setTags(List<TagImpl> tags) {
+	public void setTags(
+		List<TagImpl> tags) {
 		this.tags = tags;
 	}
 }

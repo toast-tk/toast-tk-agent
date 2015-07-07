@@ -4,21 +4,23 @@ import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.EventStackGobbler;
 
-
-public class TableClickEventStackGobbler extends EventStackGobbler{
+public class TableClickEventStackGobbler extends EventStackGobbler {
 
 	@Override
-	public boolean isInterestedIn(AWTCapturedEvent capturedEvent) {
-		return isMouseClick(capturedEvent.eventLabel) && 
-				isTableType(capturedEvent.componentType);
+	public boolean isInterestedIn(
+		AWTCapturedEvent capturedEvent) {
+		return isMouseClick(capturedEvent.eventLabel) &&
+			isTableType(capturedEvent.componentType);
 	}
-	
-	public static boolean isTableType(String targetType) {
+
+	public static boolean isTableType(
+		String targetType) {
 		return "JTable".equals(targetType) || "JSyTable".equals(targetType);
 	}
-	
+
 	@Override
-	public EventType getInterpretedEventType(AWTCapturedEvent capturedEvent) {
+	public EventType getInterpretedEventType(
+		AWTCapturedEvent capturedEvent) {
 		return EventType.TABLE_CLICK;
 	}
 
@@ -28,7 +30,8 @@ public class TableClickEventStackGobbler extends EventStackGobbler{
 	}
 
 	@Override
-	public EventStackGobbler digest(AWTCapturedEvent capturedEvent) {
+	public EventStackGobbler digest(
+		AWTCapturedEvent capturedEvent) {
 		return this;
 	}
 
@@ -42,5 +45,4 @@ public class TableClickEventStackGobbler extends EventStackGobbler{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

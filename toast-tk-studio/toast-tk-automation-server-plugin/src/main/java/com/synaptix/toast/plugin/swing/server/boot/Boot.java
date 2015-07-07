@@ -11,7 +11,7 @@ import com.synaptix.toast.plugin.swing.server.guice.SwingServerModule;
 public class Boot implements ToastPluginBoot {
 
 	private static List<Module> modules;
-	
+
 	@Override
 	public void boot() {
 		modules = new ArrayList<Module>();
@@ -24,7 +24,8 @@ public class Boot implements ToastPluginBoot {
 		return modules;
 	}
 
-	public static void main(String[] args) {
+	public static void main(
+		String[] args) {
 		Boot b = new Boot();
 		b.boot();
 	}

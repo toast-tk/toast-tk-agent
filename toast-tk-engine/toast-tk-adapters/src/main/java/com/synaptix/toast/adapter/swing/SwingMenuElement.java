@@ -1,6 +1,4 @@
-
 package com.synaptix.toast.adapter.swing;
-
 
 import java.util.concurrent.TimeoutException;
 
@@ -19,30 +17,36 @@ import com.synaptix.toast.core.runtime.ISwingElement;
  */
 public class SwingMenuElement extends SwingAutoElement implements HasClickAction, HasSubItems {
 
-	public SwingMenuElement(ISwingElement element, IRemoteSwingAgentDriver driver) {
+	public SwingMenuElement(
+		ISwingElement element,
+		IRemoteSwingAgentDriver driver) {
 		super(element, driver);
 	}
 
-	public SwingMenuElement(ISwingElement element) {
+	public SwingMenuElement(
+		ISwingElement element) {
 		super(element);
 	}
 
 	@Override
-	public boolean click() throws TimeoutException, ErrorResultReceivedException {
+	public boolean click()
+		throws TimeoutException, ErrorResultReceivedException {
 		boolean res = exists();
-		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).click().build());
+		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator())
+			.ofType(wrappedElement.getType().name()).click().build());
 		return res;
 	}
-
 
 	@Override
 	public void dbClick() {
 	}
 
 	@Override
-	public void clickOn(String itemName) throws TimeoutException, ErrorResultReceivedException {
+	public void clickOn(
+		String itemName)
+		throws TimeoutException, ErrorResultReceivedException {
 		exists();
-		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).select(itemName).build());
+		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator())
+			.ofType(wrappedElement.getType().name()).select(itemName).build());
 	}
-	
 }

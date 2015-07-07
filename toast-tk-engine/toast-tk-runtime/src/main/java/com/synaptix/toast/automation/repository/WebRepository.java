@@ -17,11 +17,14 @@ public abstract class WebRepository<W extends AbstractWebPage> {
 		pageMap = new HashMap<String, W>();
 	}
 
-	protected W getPage(String name) {
+	protected W getPage(
+		String name) {
 		return pageMap.get(name);
 	}
 
-	protected void addPage(String name, W page) {
+	protected void addPage(
+		String name,
+		W page) {
 		pageMap.put(name, page);
 	}
 
@@ -32,5 +35,4 @@ public abstract class WebRepository<W extends AbstractWebPage> {
 	public void printPages() {
 		System.out.println(StringUtils.join(pageMap.keySet(), ","));
 	}
-
 }

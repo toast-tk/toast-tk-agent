@@ -34,38 +34,47 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 	IEventInterpreter interpreter;
 
 	private static final Logger LOG = LogManager.getLogger(StudioRemoteSwingAgentDriverImpl.class);
-	
-	public StudioRemoteSwingAgentDriverImpl(String host) throws IOException {
+
+	public StudioRemoteSwingAgentDriverImpl(
+		String host)
+		throws IOException {
 		super(host);
 	}
 
 	@Inject
-	public StudioRemoteSwingAgentDriverImpl(final EventBus eventBus, final MongoRepositoryCacheWrapper mongoRepoManager) throws IOException {
+	public StudioRemoteSwingAgentDriverImpl(
+		final EventBus eventBus,
+		final MongoRepositoryCacheWrapper mongoRepoManager)
+		throws IOException {
 		this("localhost");
 		this.eventBus = eventBus;
-		client.addConnectionHandler(new ITCPResponseReceivedHandler(){
+		client.addConnectionHandler(new ITCPResponseReceivedHandler() {
+
 			@Override
-			public void onResponseReceived(Object object) {
+			public void onResponseReceived(
+				Object object) {
 				eventBus.post(new SeverStatusMessage(SeverStatusMessage.State.CONNECTED));
 			}
 		});
-		client.addDisconnectionHandler(new ITCPResponseReceivedHandler(){
+		client.addDisconnectionHandler(new ITCPResponseReceivedHandler() {
+
 			@Override
-			public void onResponseReceived(Object object) {
+			public void onResponseReceived(
+				Object object) {
 				eventBus.post(new SeverStatusMessage(SeverStatusMessage.State.DISCONNECTED));
-				startConnectionDeamon();					
+				startConnectionDeamon();
 			}
 		});
-
 		this.interpreter = new LiveRedPlayEventInterpreter(mongoRepoManager);
 		startConnectionDeamon();
 	}
 
 	private void startConnectionDeamon() {
 		Thread connectionDeamon = new Thread(new Runnable() {
+
 			@Override
 			public void run() {
-				start(host);				
+				start(host);
 			}
 		});
 		connectionDeamon.setName("Connection Deamon");
@@ -74,30 +83,34 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 	}
 
 	@Override
-	public void highlight(String selectedValue) {
+	public void highlight(
+		String selectedValue) {
 		process(new HighLightRequest(selectedValue));
 	}
 
 	@Override
-	public void scanUi(final boolean selected) {
+	public void scanUi(
+		final boolean selected) {
 		final String requestId = UUID.randomUUID().toString();
 		ScanRequest scanRequest = new ScanRequest(requestId, selected);
 		client.sendRequest(scanRequest);
 	}
 
 	@Override
-	protected void handleResponse(IIdRequest response) {
-		if (response instanceof ScanResponse) {
+	protected void handleResponse(
+		IIdRequest response) {
+		if(response instanceof ScanResponse) {
 			eventBus.post((ScanResponse) response);
-		} else if (response instanceof RecordResponse) {
+		}
+		else if(response instanceof RecordResponse) {
 			RecordResponse result = (RecordResponse) response;
-			if (result.getSentence() != null) {
+			if(result.getSentence() != null) {
 				eventBus.post(new InterpretedEvent(result.getSentence()));
-			} 
-			else 
+			}
+			else
 			{
 				String command = buildFormat(result);
-				if (command != null && !command.equals(previousInput)) {
+				if(command != null && !command.equals(previousInput)) {
 					eventBus.post(new InterpretedEvent(command, result.value.timeStamp));
 				}
 				previousInput = command;
@@ -116,48 +129,52 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 	}
 
 	@Override
-	public void setMode(int mode) {
-//		if (mode == 0) {
-//			this.interpreter = new LiveRedPlayEventInterpreter();
-//		} else {
-//			this.interpreter = new DefaultEventInterpreter();
-//		}
+	public void setMode(
+		int mode) {
+// if (mode == 0) {
+// this.interpreter = new LiveRedPlayEventInterpreter();
+// } else {
+// this.interpreter = new DefaultEventInterpreter();
+// }
 	}
 
-	private String buildFormat(RecordResponse response) {
-		switch (response.value.getEventType()) {
-		case BUTTON_CLICK:
-			return interpreter.onButtonClick(response.value);
-		case CHECKBOX_CLICK:
-			return interpreter.onCheckBoxClick(response.value);
-		case CLICK:
-			return interpreter.onClick(response.value);
-		case TABLE_CLICK:
-			return interpreter.onTableClick(response.value);
-		case MENU_CLICK:
-			return interpreter.onMenuClick(response.value);
-		case COMBOBOX_CLICK:
-			return interpreter.onComboBoxClick(response.value);
-		case WINDOW_DISPLAY:
-			return interpreter.onWindowDisplay(response.value);
-		case KEY_INPUT:
-			return interpreter.onKeyInput(response.value);
-		case BRING_ON_TOP_DISPLAY:
-			return interpreter.onBringOnTop(response.value);
-		case POPUP_MENU_CLICK:
-			return interpreter.onPopupMenuClick(response.value);
-		default:
-			return "unhandled event interpretation !";
+	private String buildFormat(
+		RecordResponse response) {
+		switch(response.value.getEventType()) {
+			case BUTTON_CLICK :
+				return interpreter.onButtonClick(response.value);
+			case CHECKBOX_CLICK :
+				return interpreter.onCheckBoxClick(response.value);
+			case CLICK :
+				return interpreter.onClick(response.value);
+			case TABLE_CLICK :
+				return interpreter.onTableClick(response.value);
+			case MENU_CLICK :
+				return interpreter.onMenuClick(response.value);
+			case COMBOBOX_CLICK :
+				return interpreter.onComboBoxClick(response.value);
+			case WINDOW_DISPLAY :
+				return interpreter.onWindowDisplay(response.value);
+			case KEY_INPUT :
+				return interpreter.onKeyInput(response.value);
+			case BRING_ON_TOP_DISPLAY :
+				return interpreter.onBringOnTop(response.value);
+			case POPUP_MENU_CLICK :
+				return interpreter.onPopupMenuClick(response.value);
+			default :
+				return "unhandled event interpretation !";
 		}
 	}
 
 	@Override
-	public void processCustomCommand(String command) {
+	public void processCustomCommand(
+		String command) {
 		CommandRequest request = new CommandRequest.CommandRequestBuilder(null).asCustomCommand(command).build();
 		client.sendRequest(request);
 	}
 
-	public void processCustomCommand(CommandRequest request) {
+	public void processCustomCommand(
+		CommandRequest request) {
 		client.sendRequest(request);
 	}
 
@@ -169,10 +186,12 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 
 	@Override
 	public boolean saveObjectsToRepository() {
-		if(interpreter instanceof LiveRedPlayEventInterpreter){
-			return ((LiveRedPlayEventInterpreter)interpreter).saveObjectsToRepository();
-		}else{
-			LOG.info("Current interpreter doesn't support repository update operation: " + interpreter.getClass().getSimpleName());
+		if(interpreter instanceof LiveRedPlayEventInterpreter) {
+			return ((LiveRedPlayEventInterpreter) interpreter).saveObjectsToRepository();
+		}
+		else {
+			LOG.info("Current interpreter doesn't support repository update operation: "
+				+ interpreter.getClass().getSimpleName());
 			return false;
 		}
 	}
@@ -186,5 +205,4 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 	public boolean isConnectedToWebApp() {
 		return interpreter.isConnectedToWebApp();
 	}
-
 }

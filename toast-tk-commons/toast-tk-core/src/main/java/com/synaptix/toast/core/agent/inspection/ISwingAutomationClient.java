@@ -4,22 +4,27 @@ import com.synaptix.toast.core.net.request.CommandRequest;
 
 public interface ISwingAutomationClient {
 
-	void highlight(String selectedValue);
+	void highlight(
+		String selectedValue);
 
-	void scanUi(boolean selected);
+	void scanUi(
+		boolean selected);
 
 	void startRecording();
 
 	void stopRecording();
 
-	void setMode(int i);
+	void setMode(
+		int i);
 
-	void processCustomCommand(String command);
+	void processCustomCommand(
+		String command);
 
-	void processCustomCommand(final CommandRequest commandRequest);
+	void processCustomCommand(
+		final CommandRequest commandRequest);
 
 	void killServer();
-	
+
 	boolean saveObjectsToRepository();
 
 	/**
@@ -28,7 +33,7 @@ public interface ISwingAutomationClient {
 	 * @return
 	 */
 	boolean isConnected();
-	
+
 	/**
 	 * Check connection WebApp Host
 	 * @return

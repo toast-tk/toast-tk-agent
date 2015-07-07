@@ -3,7 +3,7 @@ package com.synaptix.toast.swing.agent.config;
 public class Config {
 
 	private String mongoServer;
-	
+
 	private String runtimeType;
 
 	private int mongoPort;
@@ -15,7 +15,7 @@ public class Config {
 	private String runtimeCommand;
 
 	private String jnlpRuntimeHost;
-	
+
 	private String jnlpRuntimeFile;
 
 	private String debugArgs;
@@ -24,7 +24,8 @@ public class Config {
 		return mongoServer;
 	}
 
-	public void setMongoServer(String mongoServer) {
+	public void setMongoServer(
+		String mongoServer) {
 		this.mongoServer = mongoServer;
 	}
 
@@ -32,52 +33,57 @@ public class Config {
 		return mongoPort;
 	}
 
-	public void setMongoPort(int mongoPort) {
+	public void setMongoPort(
+		int mongoPort) {
 		this.mongoPort = mongoPort;
 	}
 
-	public void setRuntimeType(String runtimeType) {
+	public void setRuntimeType(
+		String runtimeType) {
 		this.runtimeType = runtimeType;
 	}
-	
-	public String getUserHome(){
+
+	public String getUserHome() {
 		return System.getProperty("user.home");
 	}
 
-	public String getWorkSpaceDir(){
+	public String getWorkSpaceDir() {
 		return getUserHome() + "/.toast/";
 	}
-	
-	public String getLogDir(){
+
+	public String getLogDir() {
 		return getWorkSpaceDir() + "log/";
 	}
-	
-	public String getPluginDir(){
+
+	public String getPluginDir() {
 		return getWorkSpaceDir() + "plugins/";
 	}
-	
-	public void setWebAppAddr(String webAppAddr) {
-		this.webAppAddr = webAppAddr;		
+
+	public void setWebAppAddr(
+		String webAppAddr) {
+		this.webAppAddr = webAppAddr;
 	}
 
-	public void setWebAppPort(String webAppPort) {
-		this.webAppPort = webAppPort;			
+	public void setWebAppPort(
+		String webAppPort) {
+		this.webAppPort = webAppPort;
 	}
 
-	public void setRuntimeCommand(String runtimeCommand) {
-		this.runtimeCommand =  runtimeCommand;
+	public void setRuntimeCommand(
+		String runtimeCommand) {
+		this.runtimeCommand = runtimeCommand;
 	}
-	
+
 	public String getWebAppAddr() {
-		return this.webAppAddr;		
+		return this.webAppAddr;
 	}
 
 	public String getWebAppPort() {
-		return this.webAppPort;			
+		return this.webAppPort;
 	}
 
 	public String getRuntimeCommand() {
-		return this.runtimeCommand;			
+		return this.runtimeCommand;
 	}
 
 	public String getRuntimeType() {
@@ -87,27 +93,27 @@ public class Config {
 	public String getJnlpRuntimeHost() {
 		return this.jnlpRuntimeHost;
 	}
-	
-	public void setJnlpRuntimeHost(String runtimeHost){
+
+	public void setJnlpRuntimeHost(
+		String runtimeHost) {
 		this.jnlpRuntimeHost = runtimeHost;
 	}
-	
-	public void setJnlpRuntimeFile(String runtimeFile){
+
+	public void setJnlpRuntimeFile(
+		String runtimeFile) {
 		this.jnlpRuntimeFile = runtimeFile;
 	}
-	
+
 	public String getJnlpRuntimeFile() {
 		return this.jnlpRuntimeFile;
 	}
 
-	public void setDebugArgs(String debugArgs){
+	public void setDebugArgs(
+		String debugArgs) {
 		this.debugArgs = debugArgs;
 	}
-	
+
 	public String getDebugArgs() {
 		return debugArgs;
 	}
-	
-
-
 }

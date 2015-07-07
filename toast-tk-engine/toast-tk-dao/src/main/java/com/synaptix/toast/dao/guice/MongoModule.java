@@ -10,22 +10,25 @@ import com.synaptix.toast.dao.service.init.DbStarter;
 import com.synaptix.toast.dao.service.init.MongoDefaultStarterImpl;
 
 public class MongoModule extends AbstractModule {
-	
+
 	private final String mongoHost;
+
 	private final int mongoPort;
-	
-	public MongoModule(){
+
+	public MongoModule() {
 		super();
 		this.mongoHost = "";
 		this.mongoPort = -1;
 	}
-	
-	public MongoModule(String mongoHost, int mongoPort){
+
+	public MongoModule(
+		String mongoHost,
+		int mongoPort) {
 		super();
 		this.mongoHost = mongoHost;
 		this.mongoPort = mongoPort;
 	}
-	
+
 	@Override
 	protected void configure() {
 		bindConstant().annotatedWith(Names.named("MongoHost")).to(mongoHost);

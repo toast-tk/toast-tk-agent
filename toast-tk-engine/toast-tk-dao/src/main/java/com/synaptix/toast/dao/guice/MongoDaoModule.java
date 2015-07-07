@@ -21,21 +21,16 @@ public class MongoDaoModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bind(CommonMongoDaoService.class).in(Singleton.class);
-
 		install(new FactoryModuleBuilder().build(RepositoryDaoService.Factory.class));
-
 		install(new FactoryModuleBuilder().build(TestPageDaoService.Factory.class));
 		install(new FactoryModuleBuilder().build(CampaignDaoService.Factory.class));
 		install(new FactoryModuleBuilder().build(ProjectDaoService.Factory.class));
-
 		install(new FactoryModuleBuilder().build(GroupDaoService.Factory.class));
 		install(new FactoryModuleBuilder().build(UserDaoService.Factory.class));
-
 		install(new FactoryModuleBuilder().build(CommentBlockDaoService.Factory.class));
 		install(new FactoryModuleBuilder().build(ConfigBlockDaoService.Factory.class));
 		install(new FactoryModuleBuilder().build(InsertBlockDaoService.Factory.class));
 		install(new FactoryModuleBuilder().build(SetupBlockDaoService.Factory.class));
 		install(new FactoryModuleBuilder().build(TestBlockDaoService.Factory.class));
 	}
-
 }

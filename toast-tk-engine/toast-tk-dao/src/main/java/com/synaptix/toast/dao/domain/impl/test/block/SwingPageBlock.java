@@ -34,7 +34,8 @@ public class SwingPageBlock implements IBlock {
 		return blockLines;
 	}
 
-	public void setBlockLines(List<SwingPageConfigLine> blockLines) {
+	public void setBlockLines(
+		List<SwingPageConfigLine> blockLines) {
 		this.blockLines = blockLines;
 	}
 
@@ -42,7 +43,8 @@ public class SwingPageBlock implements IBlock {
 		return columns;
 	}
 
-	public void setColumns(BlockLine columns) {
+	public void setColumns(
+		BlockLine columns) {
 		this.columns = columns;
 	}
 
@@ -50,11 +52,13 @@ public class SwingPageBlock implements IBlock {
 		return fixtureName;
 	}
 
-	public void setFixtureName(String fixtureName) {
+	public void setFixtureName(
+		String fixtureName) {
 		this.fixtureName = fixtureName;
 	}
 
-	public void addLine(SwingPageConfigLine line) {
+	public void addLine(
+		SwingPageConfigLine line) {
 		blockLines.add(line);
 	}
 
@@ -62,7 +66,8 @@ public class SwingPageBlock implements IBlock {
 		return testResult;
 	}
 
-	public void setTestResult(TestResult testResult) {
+	public void setTestResult(
+		TestResult testResult) {
 		this.testResult = testResult;
 	}
 

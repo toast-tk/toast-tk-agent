@@ -15,23 +15,31 @@ import com.synaptix.toast.dao.service.init.DbStarter;
 public class TestPageDaoService extends AbstractMongoDaoService<TestPage> {
 
 	public interface Factory {
-		TestPageDaoService create(@Nullable @Assisted String dbName);
+
+		TestPageDaoService create(
+			@Nullable @Assisted String dbName);
 	}
 
 	@Inject
-	public TestPageDaoService(DbStarter starter, CommonMongoDaoService cService, @Nullable @Assisted String dbName, @Named("default_db") String default_db) {
+	public TestPageDaoService(
+		DbStarter starter,
+		CommonMongoDaoService cService,
+		@Nullable @Assisted String dbName,
+		@Named("default_db") String default_db) {
 		super(TestPage.class, starter.getDatabaseByName((dbName == null ? default_db : dbName)), cService);
 	}
 
-	public ITestPage getByName(String name) {
+	public ITestPage getByName(
+		String name) {
 		Query<TestPage> query = createQuery();
 		query.field("pageName").equals(name);
 		return query.get();
 	}
 
-	public ITestPage saveAsNewIteration(ITestPage t) {
+	public ITestPage saveAsNewIteration(
+		ITestPage t) {
 		t.setId(null);
-		save((TestPage)t);
+		save((TestPage) t);
 		return t;
 	}
 }

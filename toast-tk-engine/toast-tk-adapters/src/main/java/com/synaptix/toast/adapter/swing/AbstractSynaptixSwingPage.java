@@ -14,10 +14,10 @@ import com.synaptix.toast.core.runtime.IWebElement;
 public abstract class AbstractSynaptixSwingPage extends AbstractSwingPage {
 
 	@Override
-	public void initElement(ISwingElement webElement) {
+	public void initElement(
+		ISwingElement webElement) {
 		super.initElement(webElement);
 	}
 
 	public abstract Map<String, String> getDebugIdMap();
-
 }

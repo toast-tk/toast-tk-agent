@@ -9,19 +9,19 @@ import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
 import com.synaptix.toast.plugin.swing.agent.action.processor.ActionProcessor;
 
-
 /**
  * Click on a JMenu 
  * Select a sub menu item from there.
  *
  */
-class JMenuClickActionProcessor implements ActionProcessor<JMenu>{
+class JMenuClickActionProcessor implements ActionProcessor<JMenu> {
 
 	@Override
-	public String processCommandOnComponent(CommandRequest command, JMenu target) {
+	public String processCommandOnComponent(
+		CommandRequest command,
+		JMenu target) {
 		Robot robot = FestRobotInstance.getRobot();
 		robot.click(target);
 		return ResultKind.SUCCESS.name();
 	}
-	
 }

@@ -15,28 +15,34 @@ public abstract class AbstractMongoDaoService<E extends ITaggable> extends Basic
 
 	@Inject
 	protected EntityCollectionManager entityManager;
+
 	protected CommonMongoDaoService commonService;
+
 	Class<E> clazz;
 
 	@Inject
-	protected AbstractMongoDaoService(Class<E> clazz, Datastore ds, CommonMongoDaoService service) {
+	protected AbstractMongoDaoService(
+		Class<E> clazz,
+		Datastore ds,
+		CommonMongoDaoService service) {
 		super(ds);
 		this.commonService = service;
 		this.clazz = clazz;
 	}
 
-	public List<E> getByTag(TagImpl tag) {
+	public List<E> getByTag(
+		TagImpl tag) {
 		return commonService.getTaggedItems(getDatastore(), clazz, tag);
 	}
 
 	@Override
-	public Key<E> saveAndIndex(E entity) {
+	public Key<E> saveAndIndex(
+		E entity) {
 		Key<E> save = super.save(entity);
 		String collection = entityManager.getCollection(clazz);
-		if (collection != null) {
+		if(collection != null) {
 			commonService.indexEntity(ds, save.getKind(), save.getId().toString(), entity);
 		}
 		return save;
 	}
-
 }

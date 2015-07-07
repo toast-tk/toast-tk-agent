@@ -9,17 +9,17 @@ import com.synaptix.toast.plugin.swing.agent.action.processor.ActionProcessorFac
 public class JComboBoxActionProcessorFactory extends ActionProcessorFactory {
 
 	@Override
-	public ActionProcessor<JComboBox> getProcessor(CommandRequest command) {
-		switch (command.action) {
-		case SET:
-			return new JComboBoxSetActionProcessor();
-		case GET:
-			return new JComboBoxGetActionProcessor();
-		case SELECT:
-			return new JComboBoxSelectActionProcessor();
-		default:
-			return null;
+	public ActionProcessor<JComboBox> getProcessor(
+		CommandRequest command) {
+		switch(command.action) {
+			case SET :
+				return new JComboBoxSetActionProcessor();
+			case GET :
+				return new JComboBoxGetActionProcessor();
+			case SELECT :
+				return new JComboBoxSelectActionProcessor();
+			default :
+				return null;
 		}
 	}
-
 }

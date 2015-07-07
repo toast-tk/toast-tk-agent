@@ -18,9 +18,11 @@ import com.synaptix.toast.dao.domain.impl.common.BasicTaggableMongoBean;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
 
 @Entity(value = "report.campaigns")
-@Indexes({ @Index(value = "name, -iteration"), @Index("iteration") })
+@Indexes({
+		@Index(value = "name, -iteration"), @Index("iteration")
+})
 public class Campaign extends BasicTaggableMongoBean implements ICampaign {
-	
+
 	@Id
 	private ObjectId id;
 
@@ -34,22 +36,24 @@ public class Campaign extends BasicTaggableMongoBean implements ICampaign {
 	private List<ITestPage> testCases;
 
 	@Override
-	public void setId(Object object) {
-		if(object == null){
+	public void setId(
+		Object object) {
+		if(object == null) {
 			this.id = null;
 		}
 	}
-	
+
 	@Override
 	public String getIdAsString() {
-		return id != null ? id.toString(): null;
+		return id != null ? id.toString() : null;
 	}
 
 	public ObjectId getId() {
 		return id;
 	}
 
-	public void setId(ObjectId id) {
+	public void setId(
+		ObjectId id) {
 		this.id = id;
 	}
 
@@ -57,7 +61,8 @@ public class Campaign extends BasicTaggableMongoBean implements ICampaign {
 		return iteration;
 	}
 
-	public void setIteration(short iteration) {
+	public void setIteration(
+		short iteration) {
 		this.iteration = iteration;
 	}
 
@@ -65,7 +70,8 @@ public class Campaign extends BasicTaggableMongoBean implements ICampaign {
 		return execDay;
 	}
 
-	public void setExecDay(Date execDay) {
+	public void setExecDay(
+		Date execDay) {
 		this.execDay = execDay;
 	}
 
@@ -73,17 +79,20 @@ public class Campaign extends BasicTaggableMongoBean implements ICampaign {
 		return testCases;
 	}
 
-	public void setTestCases(List<ITestPage> testCases) {
+	public void setTestCases(
+		List<ITestPage> testCases) {
 		this.testCases = testCases;
 	}
-	
-	public void setTestCasesImpl(List<TestPage> testCases) {
-		if(testCases != null){
+
+	public void setTestCasesImpl(
+		List<TestPage> testCases) {
+		if(testCases != null) {
 			this.testCases = new ArrayList<ITestPage>();
-			for (TestPage testPage : testCases) {
+			for(TestPage testPage : testCases) {
 				this.testCases.add(testPage);
 			}
-		}else {
+		}
+		else {
 			this.testCases = null;
 		}
 	}
@@ -95,12 +104,12 @@ public class Campaign extends BasicTaggableMongoBean implements ICampaign {
 		iteration++;
 	}
 
-	public void setHadINTDb(boolean hasDB) {
+	public void setHadINTDb(
+		boolean hasDB) {
 		this.hasINTDb = hasDB;
 	}
 
 	public boolean isHasINTDb() {
 		return hasINTDb;
 	}
-
 }

@@ -1,4 +1,3 @@
-
 package com.synaptix.toast.adapter.web;
 
 import java.util.concurrent.TimeoutException;
@@ -17,11 +16,11 @@ public interface HasClickAction {
 	 * @throws TimeoutException 
 	 * @throws ErrorResultReceivedException 
 	 */
-	public boolean click() throws TimeoutException, ErrorResultReceivedException;
+	public boolean click()
+		throws TimeoutException, ErrorResultReceivedException;
 
 	/**
 	 * represents a double click action
 	 */
 	public void dbClick();
-
 }

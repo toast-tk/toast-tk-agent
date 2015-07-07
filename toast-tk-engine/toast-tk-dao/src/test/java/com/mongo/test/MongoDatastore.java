@@ -16,12 +16,14 @@ public class MongoDatastore {
 
 	DB db;
 
-	public MongoDatastore() throws UnknownHostException, MongoException {
+	public MongoDatastore()
+		throws UnknownHostException, MongoException {
 		Mongo m = new Mongo("localhost", 27017);
 		db = m.getDB("mongotextsearch");
 	}
 
-	private DBCollection getCollection(String name) {
+	private DBCollection getCollection(
+		String name) {
 		return db.getCollection(name);
 	}
 
@@ -29,31 +31,37 @@ public class MongoDatastore {
 		db.dropDatabase();
 	}
 
-	public void ensureIndex(String col, String field) {
+	public void ensureIndex(
+		String col,
+		String field) {
 		getCollection(col).createIndex(new BasicDBObject(field, new Integer(1)));
 	}
 
-	public void save(DBObject object, String col) {
+	public void save(
+		DBObject object,
+		String col) {
 		getCollection(col).save(object);
 	}
 
-	public DBObject get(DBObject query, String col) {
+	public DBObject get(
+		DBObject query,
+		String col) {
 		return getCollection(col).findOne(query);
 	}
 
-	public List<DBObject> find(DBObject query, String col) {
-
+	public List<DBObject> find(
+		DBObject query,
+		String col) {
 		DBCursor cursor = getCollection(col).find(query);
-
 		List<DBObject> dbObjects = new ArrayList<DBObject>();
-		while (cursor.hasNext()) {
+		while(cursor.hasNext()) {
 			dbObjects.add(cursor.next());
 		}
 		return dbObjects;
 	}
 
-	public long cnt(String col) {
+	public long cnt(
+		String col) {
 		return getCollection(col).count();
 	}
-
 }

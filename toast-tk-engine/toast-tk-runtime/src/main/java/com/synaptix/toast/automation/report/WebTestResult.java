@@ -10,11 +10,18 @@ package com.synaptix.toast.automation.report;
 public class WebTestResult<E> implements ITestResult {
 
 	private boolean success;
+
 	private String title;
+
 	private E expected;
+
 	private E current;
 
-	public WebTestResult(boolean success, String title, E expected, E current) {
+	public WebTestResult(
+		boolean success,
+		String title,
+		E expected,
+		E current) {
 		this.success = success;
 		this.title = title;
 		this.expected = expected;
@@ -28,7 +35,8 @@ public class WebTestResult<E> implements ITestResult {
 		return success;
 	}
 
-	public void setSuccess(boolean success) {
+	public void setSuccess(
+		boolean success) {
 		this.success = success;
 	}
 
@@ -36,7 +44,8 @@ public class WebTestResult<E> implements ITestResult {
 		return title;
 	}
 
-	public void setTitle(String title) {
+	public void setTitle(
+		String title) {
 		this.title = title;
 	}
 
@@ -44,7 +53,8 @@ public class WebTestResult<E> implements ITestResult {
 		return expected;
 	}
 
-	public void setExpected(E expected) {
+	public void setExpected(
+		E expected) {
 		this.expected = expected;
 	}
 
@@ -52,8 +62,8 @@ public class WebTestResult<E> implements ITestResult {
 		return current;
 	}
 
-	public void setCurrent(E current) {
+	public void setCurrent(
+		E current) {
 		this.current = current;
 	}
-
 }

@@ -17,11 +17,14 @@ public class WebSuggestElement extends WebAutoElement {
 
 	List<WebElement> suggestions;
 
-	public WebSuggestElement(IWebElement element, SynchronizedDriver driver) {
+	public WebSuggestElement(
+		IWebElement element,
+		SynchronizedDriver driver) {
 		super(element, driver);
 	}
 
-	public WebSuggestElement(IWebElement element) {
+	public WebSuggestElement(
+		IWebElement element) {
 		super(element);
 	}
 
@@ -29,12 +32,12 @@ public class WebSuggestElement extends WebAutoElement {
 		return null;
 	}
 
-	public void selectSuggestion(int index) {
-
+	public void selectSuggestion(
+		int index) {
 	}
 
-	public boolean hasSuggestionForKey(String key) {
+	public boolean hasSuggestionForKey(
+		String key) {
 		return false;
 	}
-
 }

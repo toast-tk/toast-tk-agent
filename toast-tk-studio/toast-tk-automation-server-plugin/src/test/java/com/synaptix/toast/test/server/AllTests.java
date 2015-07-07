@@ -10,7 +10,9 @@ import com.synaptix.toast.plugin.swing.server.SwingInspectionServer;
 import com.synaptix.toast.plugin.swing.server.boot.Boot;
 
 @RunWith(Suite.class)
-@SuiteClasses({ TestRequestHandlersForJTable.class, TestRequestHandlersForTextField.class })
+@SuiteClasses({
+		TestRequestHandlersForJTable.class, TestRequestHandlersForTextField.class
+})
 public class AllTests {
 
 	@BeforeClass
@@ -25,5 +27,4 @@ public class AllTests {
 		SwingInspectionServer instance = TestSuiteHelper.getInjector().getInstance(SwingInspectionServer.class);
 		instance.close();
 	}
-
 }

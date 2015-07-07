@@ -14,7 +14,6 @@ public class ConfigProvider implements Provider<Config> {
 
 	public ConfigProvider() {
 		super();
-
 		initConfig();
 	}
 
@@ -23,13 +22,12 @@ public class ConfigProvider implements Provider<Config> {
 		try {
 			URL resource = ConfigProvider.class.getClassLoader().getResource("config.properties");
 			p.load(new FileReader(resource.getFile()));
-		} catch (IOException e) {
+		}
+		catch(IOException e) {
 		}
 		config = new Config();
-		
 		String mongDbPortProperty = p.getProperty("config.mongo.port", "27017");
 		config.setMongoPort(Integer.valueOf(27017));
-		
 		String mongDbHostProperty = p.getProperty("config.mongo.host", "localhost");
 		config.setMongoServer("localhost");
 	}

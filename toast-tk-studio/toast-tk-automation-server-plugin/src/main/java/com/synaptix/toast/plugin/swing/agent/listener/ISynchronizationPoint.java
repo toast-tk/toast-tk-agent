@@ -8,5 +8,4 @@ public interface ISynchronizationPoint {
 	 * @return
 	 */
 	public boolean hasToWait();
-	
 }

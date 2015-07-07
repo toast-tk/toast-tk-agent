@@ -14,6 +14,7 @@ import com.synaptix.toast.plugin.swing.server.SwingInspectionRecorder;
 import com.synaptix.toast.plugin.swing.server.SwingInspectionServer;
 
 public class SwingServerModule extends AbstractModule {
+
 	@Override
 	protected void configure() {
 		bind(RepositoryHolder.class).in(Singleton.class);

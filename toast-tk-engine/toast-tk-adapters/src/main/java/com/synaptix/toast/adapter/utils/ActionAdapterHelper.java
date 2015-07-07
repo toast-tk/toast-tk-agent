@@ -19,17 +19,20 @@ public class ActionAdapterHelper {
 	 * Format pattern for LocalTime
 	 */
 	public static final String TimePattern = "HH:mm:ss";
+
 	/**
 	 * Format pattern for LocalDate
 	 */
 	public static final String DatePattern = "dd/MM/yyyy";
+
 	/**
 	 * Format pattern for LocalDateTime
 	 */
 	public static final String DateTimePattern = "dd/MM/yyyy HH:mm:ss";
 
-	public static boolean isEmptyOrNull(String str) {
-		if (StringUtils.isEmpty(str) || str.equals("null") || str.equals("ï¿½") || str.equals("�")) {
+	public static boolean isEmptyOrNull(
+		String str) {
+		if(StringUtils.isEmpty(str) || str.equals("null") || str.equals("ï¿½") || str.equals("�")) {
 			return true;
 		}
 		return false;
@@ -38,18 +41,21 @@ public class ActionAdapterHelper {
 	/**
 	 * Returns a LocalDateTime from a string in format "dd/MM/yyyy HH:mm:ss"
 	 */
-	public static LocalDateTime parseLocalDateTimeFromString(String dateTime) {
-		if (isEmptyOrNull(dateTime)) {
+	public static LocalDateTime parseLocalDateTimeFromString(
+		String dateTime) {
+		if(isEmptyOrNull(dateTime)) {
 			return null;
 		}
-		return LocalDateTime.parse(dateTime, new DateTimeFormatterBuilder().appendPattern(DateTimePattern).toFormatter());
+		return LocalDateTime.parse(dateTime, new DateTimeFormatterBuilder().appendPattern(DateTimePattern)
+			.toFormatter());
 	}
 
 	/**
 	 * Returns a LocalDate from a string in format "dd/MM/yyyy"
 	 */
-	public static LocalDate parseDateFromString(String date) {
-		if (isEmptyOrNull(date)) {
+	public static LocalDate parseDateFromString(
+		String date) {
+		if(isEmptyOrNull(date)) {
 			return null;
 		}
 		return LocalDate.parse(date, new DateTimeFormatterBuilder().appendPattern(DatePattern).toFormatter());
@@ -58,21 +64,24 @@ public class ActionAdapterHelper {
 	/**
 	 * Returns a LocalTime from a string in format "HH:mm:ss"
 	 */
-	public static LocalTime parseTimeFromString(String time) {
-		if (isEmptyOrNull(time)) {
+	public static LocalTime parseTimeFromString(
+		String time) {
+		if(isEmptyOrNull(time)) {
 			return null;
 		}
 		return LocalTime.parse(time, new DateTimeFormatterBuilder().appendPattern(TimePattern).toFormatter());
 	}
 
-	public static Double parseDouble(String str) {
-		if (isEmptyOrNull(str)) {
+	public static Double parseDouble(
+		String str) {
+		if(isEmptyOrNull(str)) {
 			return null;
 		}
 		return Double.parseDouble(str);
 	}
 
-	public static boolean isNotEmptyOrNull(String str) {
+	public static boolean isNotEmptyOrNull(
+		String str) {
 		return !isEmptyOrNull(str);
 	}
 
@@ -82,30 +91,30 @@ public class ActionAdapterHelper {
 	 * @param str
 	 * @return
 	 */
-	public static String getString(String str) {
+	public static String getString(
+		String str) {
 		return isEmptyOrNull(str) ? null : str;
 	}
 
-
-
-	public static String stringToHexString(String str) {
+	public static String stringToHexString(
+		String str) {
 		Pattern p = Pattern.compile("ID\\(([0-9A-F]+)\\)");
 		Matcher m = p.matcher(str);
-		if (m.matches()) {
+		if(m.matches()) {
 			return m.group(1);
 		}
-		if (str.length() <= 16) {
+		if(str.length() <= 16) {
 			str = StringUtils.rightPad(str, 16);
-		} else {
+		}
+		else {
 			str.substring(0, 16);
 		}
 		StringBuilder builder = new StringBuilder(str.length() * 2);
-		for (int i = 0; i < str.length(); i++) {
+		for(int i = 0; i < str.length(); i++) {
 			builder.append(Integer.toHexString(str.charAt(i)).toUpperCase());
 		}
 		return builder.toString();
 	}
-
 
 	/**
 	 * Parse boolean
@@ -114,10 +123,12 @@ public class ActionAdapterHelper {
 	 *            , if null then false
 	 * @return
 	 */
-	public static boolean parseBoolean(String str) {
-		if (isEmptyOrNull(str)) {
+	public static boolean parseBoolean(
+		String str) {
+		if(isEmptyOrNull(str)) {
 			return false;
-		} else {
+		}
+		else {
 			return Boolean.parseBoolean(str);
 		}
 	}
@@ -129,39 +140,50 @@ public class ActionAdapterHelper {
 	 * @param enumType
 	 * @return
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static Enum<?> parseEnum(Class<? extends Enum> enumType, String str) {
-		if (isEmptyOrNull(str)) {
+	@SuppressWarnings({
+			"unchecked", "rawtypes"
+	})
+	public static Enum<?> parseEnum(
+		Class<? extends Enum> enumType,
+		String str) {
+		if(isEmptyOrNull(str)) {
 			return null;
-		} else {
-			if (isNumeric(str)) {
+		}
+		else {
+			if(isNumeric(str)) {
 				str = '_' + str;
 			}
 			return Enum.valueOf(enumType, str);
 		}
 	}
 
-	public static boolean isNumeric(String str) {
-		return str.matches("\\d+"); // match a number with optional '-' and decimal.
+	public static boolean isNumeric(
+		String str) {
+		return str.matches("\\d+"); // match a number with optional '-' and
+// decimal.
 	}
 
-	public static BigDecimal parseBigDecimal(String str) {
-		if (isEmptyOrNull(str)) {
+	public static BigDecimal parseBigDecimal(
+		String str) {
+		if(isEmptyOrNull(str)) {
 			return null;
 		}
 		return new BigDecimal(str);
 	}
 
-	public static Class<?> loadClass(String nameClass) {
+	public static Class<?> loadClass(
+		String nameClass) {
 		try {
 			return ActionAdapterHelper.class.getClassLoader().loadClass(nameClass);
-		} catch (ClassNotFoundException e) {
+		}
+		catch(ClassNotFoundException e) {
 			return null;
 		}
 	}
 
-	public static Integer parseInteger(String str) {
-		if (isEmptyOrNull(str)) {
+	public static Integer parseInteger(
+		String str) {
+		if(isEmptyOrNull(str)) {
 			return null;
 		}
 		return new Integer(str);
@@ -171,44 +193,50 @@ public class ActionAdapterHelper {
 	 * @param propertyValue
 	 * @return
 	 */
-	public static Duration parseDuration(String str) {
+	public static Duration parseDuration(
+		String str) {
 		return new Duration(parseLong(str));
 	}
 
-	public static Duration parseDurationFromTime(String time) {
-		if (StringUtils.isEmpty(time)) {
+	public static Duration parseDurationFromTime(
+		String time) {
+		if(StringUtils.isEmpty(time)) {
 			return null;
 		}
-		return Duration.millis(LocalTime.parse(time, new DateTimeFormatterBuilder().appendPattern(TimePattern).toFormatter()).getMillisOfDay());
+		return Duration.millis(LocalTime.parse(
+			time,
+			new DateTimeFormatterBuilder().appendPattern(TimePattern).toFormatter()).getMillisOfDay());
 	}
 
 	/**
 	 * @param propertyValue
 	 * @return
 	 */
-	public static Long parseLong(String str) {
-		if (isEmptyOrNull(str)) {
+	public static Long parseLong(
+		String str) {
+		if(isEmptyOrNull(str)) {
 			return null;
 		}
 		return Long.parseLong(str);
 	}
 
-	public static String parseTestString(String text) {
-		if (text == null) {
+	public static String parseTestString(
+		String text) {
+		if(text == null) {
 			return null;
 		}
 		text = text.trim().replaceAll(" +", " ");
-		if (text.contains(" ")) {
+		if(text.contains(" ")) {
 			text = text.toLowerCase().replace(" ", "_");
 			text = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, text);
 		}
-		if (text.contains("_")) {
+		if(text.contains("_")) {
 			text = text.toLowerCase();
 			text = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, text);
-		} else {
+		}
+		else {
 			text = StringUtils.uncapitalize(text);
 		}
-
 		return text;
 	}
 
@@ -219,18 +247,20 @@ public class ActionAdapterHelper {
 	 *            Hexadecimal string
 	 * @return String
 	 */
-	public static String decodeId(String str) {
+	public static String decodeId(
+		String str) {
 		return isEmptyOrNull(str) ? null : hexStringToString(str);
 	}
 
-	private static String hexStringToString(String hex) {
-		if (hex.length() % 2 != 0) {
+	private static String hexStringToString(
+		String hex) {
+		if(hex.length() % 2 != 0) {
 			System.err.println("requires EVEN number of chars");
 			return null;
 		}
 		StringBuilder sb = new StringBuilder();
 		// Convert Hex 0232343536AB into two characters stream.
-		for (int i = 0; i < hex.length() - 1; i += 2) {
+		for(int i = 0; i < hex.length() - 1; i += 2) {
 			// Grab the hex in pairs
 			String output = hex.substring(i, (i + 2));
 			// Convert Hex to Decimal

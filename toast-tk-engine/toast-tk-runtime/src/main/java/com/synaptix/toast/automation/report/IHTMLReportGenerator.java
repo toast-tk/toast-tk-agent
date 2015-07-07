@@ -26,13 +26,17 @@ Creation date: 10 juin 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
-
 package com.synaptix.toast.automation.report;
 
 import com.synaptix.toast.core.dao.ITestPage;
 
 public interface IHTMLReportGenerator {
-	public String generatePageHtml(ITestPage testPage);
 
-	public void writeFile(String generatePageHtml, String pageName, String path);
+	public String generatePageHtml(
+		ITestPage testPage);
+
+	public void writeFile(
+		String generatePageHtml,
+		String pageName,
+		String path);
 }

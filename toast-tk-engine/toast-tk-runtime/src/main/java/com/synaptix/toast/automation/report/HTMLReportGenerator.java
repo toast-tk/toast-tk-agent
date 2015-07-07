@@ -22,21 +22,23 @@ import com.synaptix.toast.dao.domain.impl.test.block.SetupBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 
 @FixMe(todo = "Use thymeleaf and move the report generator within the runtime module")
-public class HTMLReportGenerator implements IHTMLReportGenerator{
-	
-	public String getEmbeddedStyle(){
+public class HTMLReportGenerator implements IHTMLReportGenerator {
+
+	public String getEmbeddedStyle() {
 		InputStream resourceAsStream = HTMLReportGenerator.class.getClassLoader().getResourceAsStream("style.css");
 		String styleAsString = "";
 		try {
 			styleAsString = IOUtils.toString(resourceAsStream);
-		} catch (IOException e) {
+		}
+		catch(IOException e) {
 			e.printStackTrace();
 		}
 		return styleAsString.replaceAll("\n", "").replaceAll("\r", "").replaceAll("\t", "");
 	}
-	
+
 	@Override
-	public String generatePageHtml(ITestPage testPage) {
+	public String generatePageHtml(
+		ITestPage testPage) {
 		StringBuilder report = new StringBuilder();
 		report.append("<html>");
 		report.append("<head>");
@@ -56,28 +58,31 @@ public class HTMLReportGenerator implements IHTMLReportGenerator{
 		report.append("Success: " + testPage.getTestSuccessNumber() + "<br>");
 		report.append("</div>");
 		report.append("<br>");
-
-		for (IBlock block : testPage.getBlocks()) {
-			if (block instanceof CommentBlock) {
-				//partially implemented with Thymeleaf
+		for(IBlock block : testPage.getBlocks()) {
+			if(block instanceof CommentBlock) {
+				// partially implemented with Thymeleaf
 				reportCommentBlock((CommentBlock) block, report);
-			} else if (block instanceof TestBlock) {
-				//partially implemented with Thymeleaf
+			}
+			else if(block instanceof TestBlock) {
+				// partially implemented with Thymeleaf
 				reportTestBlock((TestBlock) block, report);
-			} else if (block instanceof TestPage) {
+			}
+			else if(block instanceof TestPage) {
 				reportTestPage((TestPage) block, report);
-			} else if (block instanceof SetupBlock) {
+			}
+			else if(block instanceof SetupBlock) {
 				reportSetupBlock((SetupBlock) block, report);
-			} else if (block instanceof ConfigBlock) {
+			}
+			else if(block instanceof ConfigBlock) {
 				reportConfigBlock((ConfigBlock) block, report);
-			} else if (block instanceof InsertBlock) {
+			}
+			else if(block instanceof InsertBlock) {
 				reportInsertBlock((InsertBlock) block, report);
 			}
 		}
-
-		report.append("<script language=\"javascript\"> function toggle(text) { var ele = document.getElementById(text);if(ele.style.display == \"block\") { "
+		report
+			.append("<script language=\"javascript\"> function toggle(text) { var ele = document.getElementById(text);if(ele.style.display == \"block\") { "
 				+ "ele.style.display = \"none\";}else {ele.style.display = \"block\";}}</script>");
-
 		report.append("</body>");
 		report.append("</html>");
 		return report.toString();
@@ -87,22 +92,24 @@ public class HTMLReportGenerator implements IHTMLReportGenerator{
 	 * @param block
 	 * @param report
 	 */
-	private void reportInsertBlock(InsertBlock block, StringBuilder report) {
+	private void reportInsertBlock(
+		InsertBlock block,
+		StringBuilder report) {
 		report.append("<table><thead>");
 		// report.append(newRowWithResult(block));
 		report.append("<th> Insert </th>");
 		report.append("<th> " + block.getComponentName() + " </th></tr></thead>");
 		// Print columns names
 		report.append("<tr>");
-		for (String cell : block.getColumns().getCells()) {
+		for(String cell : block.getColumns().getCells()) {
 			report.append("<td>");
 			report.append(cell);
 			report.append("</td>");
 		}
 		report.append("</tr>");
-		for (BlockLine line : block.getBlockLines()) {
+		for(BlockLine line : block.getBlockLines()) {
 			report.append(newRowWithResult(line.getTestResult()));
-			for (String cell : line.getCells()) {
+			for(String cell : line.getCells()) {
 				report.append("<td>");
 				report.append(cell);
 				report.append("</td>");
@@ -117,11 +124,13 @@ public class HTMLReportGenerator implements IHTMLReportGenerator{
 	 * @param block
 	 * @param report
 	 */
-	private void reportConfigBlock(ConfigBlock block, StringBuilder report) {
+	private void reportConfigBlock(
+		ConfigBlock block,
+		StringBuilder report) {
 		report.append("<table><tr>");
 		report.append("<th> Configuration </th>");
 		report.append("<th> " + block.getComponentName() + " </th></tr>");
-		for (ComponentConfigLine line : block.getLines()) {
+		for(ComponentConfigLine line : block.getLines()) {
 			TestResult testResult = line.getTestResult();
 			report.append(newRowWithResult(testResult));
 			report.append("<td>");
@@ -139,8 +148,10 @@ public class HTMLReportGenerator implements IHTMLReportGenerator{
 		report.append("</table>");
 	}
 
-	public void addResultMessageCell(StringBuilder report, TestResult testResult) {
-		if (testResult != null && !testResult.isSuccess()) {
+	public void addResultMessageCell(
+		StringBuilder report,
+		TestResult testResult) {
+		if(testResult != null && !testResult.isSuccess()) {
 			report.append("<td class=\"message\">");
 			report.append(testResult.getMessage());
 			report.append("</td>");
@@ -151,25 +162,25 @@ public class HTMLReportGenerator implements IHTMLReportGenerator{
 	 * @param block
 	 * @param report
 	 */
-	private void reportSetupBlock(SetupBlock block, StringBuilder report) {
+	private void reportSetupBlock(
+		SetupBlock block,
+		StringBuilder report) {
 		report.append("<table>");
 		report.append(newRowWithResult(block.getTestResult()));
 		report.append("<th> Setup </th>");
 		report.append("<th> " + block.getFixtureName() + " </th>");
 		report.append("</tr>");
-
 		// Print columns names
 		report.append("<tr>");
-		for (String cell : block.getColumns().getCells()) {
+		for(String cell : block.getColumns().getCells()) {
 			report.append("<td>");
 			report.append(cell);
 			report.append("</td>");
 		}
 		report.append("</tr>");
-
-		for (BlockLine line : block.getBlockLines()) {
+		for(BlockLine line : block.getBlockLines()) {
 			report.append(newRowWithResult(line.getTestResult()));
-			for (String cell : line.getCells()) {
+			for(String cell : line.getCells()) {
 				report.append("<td>");
 				report.append(cell);
 				report.append("</td>");
@@ -180,28 +191,35 @@ public class HTMLReportGenerator implements IHTMLReportGenerator{
 		report.append("</table>");
 	}
 
-	public String newRowWithResult(TestResult testResult) {
+	public String newRowWithResult(
+		TestResult testResult) {
 		return "<tr class=\"" + TemplateHelper.getResultKindAsString(testResult) + "\">";
 	}
 
-	public void reportTestPage(TestPage block, StringBuilder report) {
+	public void reportTestPage(
+		TestPage block,
+		StringBuilder report) {
 		report.append("<table><tr>");
 		report.append("<th> Include </th>");
 		report.append("<th> Success </th>");
 		report.append("<th> Failure </th>");
 		report.append("<th> Error </th>");
 		report.append("</tr>");
-		if (block.getTechnicalErrorNumber() > 0) {
+		if(block.getTechnicalErrorNumber() > 0) {
 			report.append("<tr class=\"resultError\">");
-		} else if (block.getTestFailureNumber() > 0) {
+		}
+		else if(block.getTestFailureNumber() > 0) {
 			report.append("<tr class=\"resultFailure\">");
-		} else if (block.getTestSuccessNumber() > 0) {
+		}
+		else if(block.getTestSuccessNumber() > 0) {
 			report.append("<tr class=\"resultSuccess\">");
-		} else {
+		}
+		else {
 			report.append("<tr class=\"resultInfo\">");
 		}
 		report.append("<td>");
-		report.append("<button  onclick=\"javascript:toggle('" + block.getPageName() + "');\">" + block.getPageName() + "</button>");
+		report.append("<button  onclick=\"javascript:toggle('" + block.getPageName() + "');\">" + block.getPageName()
+			+ "</button>");
 		report.append("</td><td>");
 		report.append(block.getTestSuccessNumber());
 		report.append("</td><td>");
@@ -210,7 +228,8 @@ public class HTMLReportGenerator implements IHTMLReportGenerator{
 		report.append(block.getTechnicalErrorNumber());
 		report.append("</td>");
 		report.append("</tr></table> ");
-		report.append("<div style=\"border-color: black;border-style: solid;display: none;\" id=\"" + block.getPageName() + "\">");
+		report.append("<div style=\"border-color: black;border-style: solid;display: none;\" id=\""
+			+ block.getPageName() + "\">");
 		report.append(this.generatePageHtml(block));
 		report.append("</div>");
 	}
@@ -219,7 +238,9 @@ public class HTMLReportGenerator implements IHTMLReportGenerator{
 	 * @param block
 	 * @param report
 	 */
-	private void reportTestBlock(TestBlock block, StringBuilder report) {
+	private void reportTestBlock(
+		TestBlock block,
+		StringBuilder report) {
 		report.append("<div class=\"test\">");
 		report.append("<table>");
 		report.append("<thead>");
@@ -232,7 +253,6 @@ public class HTMLReportGenerator implements IHTMLReportGenerator{
 		report.append("</th>");
 		report.append("</tr>");
 		report.append("</thead>");
-
 		report.append("<tr>");
 		report.append("<td>");
 		report.append("Step");
@@ -250,8 +270,7 @@ public class HTMLReportGenerator implements IHTMLReportGenerator{
 		report.append("Time");
 		report.append("</td>");
 		report.append("</tr>");
-
-		for (TestLine line : block.getBlockLines()) {
+		for(TestLine line : block.getBlockLines()) {
 			report.append("<tr>");
 			report.append(newRowWithResult(line.getTestResult()));
 			report.append("<td>");
@@ -275,28 +294,31 @@ public class HTMLReportGenerator implements IHTMLReportGenerator{
 		report.append("</div>");
 	}
 
-
-
 	/**
 	 * @param block
 	 * @return
 	 */
-	private void reportCommentBlock(CommentBlock block, StringBuilder report) {
+	private void reportCommentBlock(
+		CommentBlock block,
+		StringBuilder report) {
 		report.append("<div class=\"comment\">");
-		for (String line : block.getLines()) {
-			if (line.startsWith("h3. ")) {
+		for(String line : block.getLines()) {
+			if(line.startsWith("h3. ")) {
 				report.append("<h3>");
 				report.append(line.replace("h3. ", ""));
 				report.append("</h3>");
-			} else if (line.startsWith("h2. ")) {
+			}
+			else if(line.startsWith("h2. ")) {
 				report.append("<h2>");
 				report.append(line.replace("h2. ", ""));
 				report.append("</h2>");
-			} else if (line.startsWith("h1. ")) {
+			}
+			else if(line.startsWith("h1. ")) {
 				report.append("<h1>");
 				report.append(line.replace("h1. ", ""));
 				report.append("</h1>");
-			} else {
+			}
+			else {
 				report.append(line);
 				report.append("<br>");
 			}
@@ -305,13 +327,17 @@ public class HTMLReportGenerator implements IHTMLReportGenerator{
 	}
 
 	@Override
-	public void writeFile(String report, String pageName, String reportFolderPath) {
+	public void writeFile(
+		String report,
+		String pageName,
+		String reportFolderPath) {
 		try {
 			FileWriter fstream = new FileWriter(reportFolderPath + "\\" + pageName + ".html");
 			BufferedWriter out = new BufferedWriter(fstream);
 			out.write(report);
 			out.close();
-		} catch (Exception e) {
+		}
+		catch(Exception e) {
 			e.printStackTrace();
 		}
 	}

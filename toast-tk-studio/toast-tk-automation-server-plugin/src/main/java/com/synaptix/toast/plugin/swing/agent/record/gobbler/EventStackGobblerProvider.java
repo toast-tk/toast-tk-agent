@@ -14,7 +14,6 @@ import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.WindowFocusEv
 public class EventStackGobblerProvider {
 
 	static List<EventStackGobbler> gobblers = new ArrayList<EventStackGobbler>();
-	
 	static {
 		gobblers.add(new ButtonClickEventStackGobbler());
 		gobblers.add(new CheckBoxClickEventStackGobbler());
@@ -24,11 +23,12 @@ public class EventStackGobblerProvider {
 		gobblers.add(new PanelFocusEventStackGobbler());
 	}
 
-	public static final EventStackGobbler get(AWTCapturedEvent awtCapturedEvent) {
+	public static final EventStackGobbler get(
+		AWTCapturedEvent awtCapturedEvent) {
 		EventStackGobbler firstGobblerInterestedInEvent = null;
-		for (EventStackGobbler gobbler : gobblers) {
-			if(gobbler.isInterestedIn(awtCapturedEvent)){
-				firstGobblerInterestedInEvent = gobbler; 
+		for(EventStackGobbler gobbler : gobblers) {
+			if(gobbler.isInterestedIn(awtCapturedEvent)) {
+				firstGobblerInterestedInEvent = gobbler;
 			}
 		}
 		return firstGobblerInterestedInEvent;

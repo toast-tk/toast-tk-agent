@@ -23,24 +23,33 @@ import com.synaptix.toast.dao.service.init.DbStarter;
 public class ProjectDaoService extends AbstractMongoDaoService<Project> {
 
 	public interface Factory {
-		ProjectDaoService create(@Assisted String dbName);
+
+		ProjectDaoService create(
+			@Assisted String dbName);
 	}
 
 	private final CampaignDaoService cDaoService;
 
 	@Inject
-	public ProjectDaoService(DbStarter starter, CommonMongoDaoService cService, @Assisted String dbName, @Named("default_db") String default_db, CampaignDaoService.Factory cDaoServiceFactory) {
+	public ProjectDaoService(
+		DbStarter starter,
+		CommonMongoDaoService cService,
+		@Assisted String dbName,
+		@Named("default_db") String default_db,
+		CampaignDaoService.Factory cDaoServiceFactory) {
 		super(Project.class, starter.getDatabaseByName((dbName == null ? default_db : dbName)), cService);
 		this.cDaoService = cDaoServiceFactory.create(dbName);
 	}
 
-	public Project getByName(String name) {
+	public Project getByName(
+		String name) {
 		Query<Project> query = createQuery();
 		query.field("name").equal(name);
 		return query.get();
 	}
 
-	public List<Project> getProjectHistory(Project project) {
+	public List<Project> getProjectHistory(
+		Project project) {
 		Query<Project> query = createQuery();
 		Criteria nameCriteria = query.criteria("name").equal(project.getName());
 		Criteria versionCriteria = query.criteria("version").equal(project.getVersion());
@@ -50,28 +59,28 @@ public class ProjectDaoService extends AbstractMongoDaoService<Project> {
 		Collections.sort(projectHistory, new Comparator<Project>() {
 
 			@Override
-			public int compare(Project o1, Project o2) {
+			public int compare(
+				Project o1,
+				Project o2) {
 				return o1.getIteration() - o2.getIteration();
 			}
-
 		});
-
 		return projectHistory;
 	}
 
-	public Key<Project> saveNewIteration(Project newEntry) {
-		//update previous entry
+	public Key<Project> saveNewIteration(
+		Project newEntry) {
+		// update previous entry
 		Project previousEntry = getLastByName(newEntry.getName());
-		if(previousEntry != null){
+		if(previousEntry != null) {
 			previousEntry.setLast(false);
 			newEntry.setIteration((short) (previousEntry.getIteration() + 1));
 			save(previousEntry);
 		}
-		
 		newEntry.setId(null);
 		newEntry.setLast(true);
-		for (ICampaign c : newEntry.getCampaigns()) {
-			cDaoService.saveAsNewIteration((Campaign)c);
+		for(ICampaign c : newEntry.getCampaigns()) {
+			cDaoService.saveAsNewIteration((Campaign) c);
 		}
 		return save(newEntry);
 	}
@@ -81,26 +90,30 @@ public class ProjectDaoService extends AbstractMongoDaoService<Project> {
 		query.field("last").equal(true);
 		return query.asList();
 	}
-	
-	public List<Project> findAllIterationsByProjectName(String pName, String version) {
+
+	public List<Project> findAllIterationsByProjectName(
+		String pName,
+		String version) {
 		Query<Project> query = createQuery();
 		CriteriaContainerImpl equal2 = query.criteria("version").equal(version);
 		query.criteria("name").equal(pName).and(equal2);
 		return find(query).asList();
 	}
 
-	public Project getLastByName(String name) {
+	public Project getLastByName(
+		String name) {
 		Query<Project> query = createQuery();
 		query.field("name").equal(name).order("-iteration");
 		return query.get();
 	}
 
-	public Project getByNameAndIteration(String pName, String iter) {
+	public Project getByNameAndIteration(
+		String pName,
+		String iter) {
 		Query<Project> query = createQuery();
 		Criteria nameCriteria = query.criteria("name").equal(pName);
 		Criteria iterationCriteria = query.criteria("iteration").equal(Short.valueOf(iter));
 		query.and(nameCriteria, iterationCriteria);
 		return find(query).get();
 	}
-	
 }

@@ -12,43 +12,50 @@ import java.io.PrintWriter;
  * 
  */
 public class FileReporter implements IReporter {
+
 	PrintWriter w;
 
 	public PrintWriter getW() {
 		return w;
 	}
 
-	public void setW(PrintWriter w) {
+	public void setW(
+		PrintWriter w) {
 		this.w = w;
 	}
 
-	public FileReporter(String file) {
+	public FileReporter(
+		String file) {
 		File f = new File(file);
 		try {
 			w = new PrintWriter(f);
-		} catch (FileNotFoundException e) {
+		}
+		catch(FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void reportResult(WebTestResult<?> result) {
+	public void reportResult(
+		WebTestResult<?> result) {
 		PrintStream stream = System.out;
-		if (!result.isSuccess()) {
+		if(!result.isSuccess()) {
 			stream = System.err;
 		}
-		w.write("[+] Result: " + result.getTitle() + " -> Expected: " + result.getExpected() + ", Current:" + result.getCurrent());
+		w.write("[+] Result: " + result.getTitle() + " -> Expected: " + result.getExpected() + ", Current:"
+			+ result.getCurrent());
 	}
 
 	@Override
-	public void reportAction(WebActionResult result) {
+	public void reportAction(
+		WebActionResult result) {
 		w.write("[+] Action: " + result.getTitle() + " -> " + result.getAction());
 	}
 
 	@Override
-	public void reportSimple(String toReport) {
+	public void reportSimple(
+		String toReport) {
 		w.write(toReport);
 	}
-
 }

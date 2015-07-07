@@ -26,7 +26,6 @@ Creation date: 18 févr. 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
-
 package com.synaptix.toast.core.guice.plugin;
 
 import java.util.List;
@@ -34,9 +33,8 @@ import java.util.List;
 import com.google.inject.Module;
 
 public interface ToastPluginBoot {
-	
-	void boot();
-	
-	List<Module> getModules();
 
+	void boot();
+
+	List<Module> getModules();
 }

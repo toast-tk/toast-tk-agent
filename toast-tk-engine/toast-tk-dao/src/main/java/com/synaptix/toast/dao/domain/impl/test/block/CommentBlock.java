@@ -31,7 +31,8 @@ public class CommentBlock implements IBlock {
 	 * @param cellsContent
 	 * @param comment
 	 */
-	public void addLine(String line) {
+	public void addLine(
+		String line) {
 		this.getLines().add(line);
 	}
 
@@ -39,7 +40,8 @@ public class CommentBlock implements IBlock {
 		return lines;
 	}
 
-	public void setLines(List<String> lines) {
+	public void setLines(
+		List<String> lines) {
 		this.lines = lines;
 	}
 

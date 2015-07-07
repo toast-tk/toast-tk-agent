@@ -24,8 +24,11 @@ import com.synaptix.toast.core.runtime.IWebElement.LocationMethod;
 public abstract class AbstractWebPage implements IFeedableWebPage {
 
 	public String beanClassName; // the bean class name
+
 	Map<String, IWebElement> elements = new HashMap<String, IWebElement>();
+
 	protected Map<String, WebAutoElement> autoElements = new HashMap<String, WebAutoElement>();
+
 	private String pageName;
 
 	/**
@@ -33,7 +36,8 @@ public abstract class AbstractWebPage implements IFeedableWebPage {
 	 * @param elementDefinition
 	 */
 	@Override
-	public void initElement(IWebElement e) {
+	public void initElement(
+		IWebElement e) {
 		initElement(e.getName(), e.getType().name(), e.getMethod().name(), e.getLocator(), e.getPosition());
 	}
 
@@ -45,38 +49,46 @@ public abstract class AbstractWebPage implements IFeedableWebPage {
 	 * @param locator
 	 * @param position
 	 */
-	protected void initElement(String name, String type, String method, String locator, Integer position) {
+	protected void initElement(
+		String name,
+		String type,
+		String method,
+		String locator,
+		Integer position) {
 		/**
 		 * used to locate an element
 		 */
-		DefaultWebElement defaultWebElement = new DefaultWebElement(name, AutoWebType.valueOf(type), locator, method == null ? LocationMethod.CSS : LocationMethod.valueOf(method), position);
+		DefaultWebElement defaultWebElement = new DefaultWebElement(name, AutoWebType.valueOf(type), locator,
+			method == null ? LocationMethod.CSS : LocationMethod.valueOf(method), position);
 		elements.put(name, defaultWebElement);
-
 		/**
 		 * selenium wrapper field initalizarion when it comes to greenpepper
 		 */
 		try {
 			IWebElement iWebElement = elements.get(name);
-			if (iWebElement != null) {
+			if(iWebElement != null) {
 				WebAutoElement execAutoClass = ElementFactory.getElement(iWebElement);
 				// for this abstract page, init fields (for java classes only
-				for (Field f : this.getClass().getFields()) {
+				for(Field f : this.getClass().getFields()) {
 					Class<?> automationClass = f.getType();
-					if (WebAutoElement.class.isAssignableFrom(automationClass)) {
-						if (f.getName().equals(name)) {
+					if(WebAutoElement.class.isAssignableFrom(automationClass)) {
+						if(f.getName().equals(name)) {
 							try {
 								BeanUtils.setProperty(this, name, execAutoClass);
-							} catch (Exception e) {
+							}
+							catch(Exception e) {
 								e.printStackTrace();
 							}
 						}
 					}
 				}
 				autoElements.put(name, execAutoClass);
-			} else {
+			}
+			else {
 				// throw something
 			}
-		} catch (Exception e) {
+		}
+		catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -84,14 +96,16 @@ public abstract class AbstractWebPage implements IFeedableWebPage {
 	/**
 	 * Convenient method to call an element based on the page enclosed fields' enum
 	 */
-	public IWebElement getElement(String token) {
+	public IWebElement getElement(
+		String token) {
 		return elements.get(token);
 	}
 
 	/**
 	 * Convenient method to call an element based on the page enclosed fields' enum
 	 */
-	public WebAutoElement getAutoElement(String token) {
+	public WebAutoElement getAutoElement(
+		String token) {
 		return autoElements.get(token);
 	}
 
@@ -99,7 +113,8 @@ public abstract class AbstractWebPage implements IFeedableWebPage {
 		return beanClassName;
 	}
 
-	public void setBeanClassName(String beanClassName) {
+	public void setBeanClassName(
+		String beanClassName) {
 		this.beanClassName = beanClassName;
 	}
 
@@ -107,7 +122,8 @@ public abstract class AbstractWebPage implements IFeedableWebPage {
 		return pageName;
 	}
 
-	public void setPageName(String pageName) {
+	public void setPageName(
+		String pageName) {
 		this.pageName = pageName;
 	}
 
@@ -118,10 +134,10 @@ public abstract class AbstractWebPage implements IFeedableWebPage {
 	/**
 	 * set the driver that will be used by the automation elements
 	 */
-	public void setDriver(SynchronizedDriver sDvr) {
-		for (WebAutoElement el : autoElements.values()) {
+	public void setDriver(
+		SynchronizedDriver sDvr) {
+		for(WebAutoElement el : autoElements.values()) {
 			el.setFrontEndDriver(sDvr);
 		}
 	}
-
 }

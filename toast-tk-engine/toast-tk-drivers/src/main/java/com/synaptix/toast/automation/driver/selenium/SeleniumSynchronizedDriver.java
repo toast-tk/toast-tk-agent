@@ -17,7 +17,9 @@ import com.synaptix.toast.core.runtime.IWebElement;
 public class SeleniumSynchronizedDriver implements SynchronizedDriver {
 
 	private final WebDriver driver;
+
 	private int defaultRepeat = 5;
+
 	private int defaultTimeout = 1000;
 
 	public SeleniumSynchronizedDriver() {
@@ -25,22 +27,28 @@ public class SeleniumSynchronizedDriver implements SynchronizedDriver {
 		// GetEval("selenium.browserbot.setShouldHighlightElement(true)");
 	}
 
-	public SeleniumSynchronizedDriver(WebDriver driver, int defaultRepeat, int defaultTimeout) {
+	public SeleniumSynchronizedDriver(
+		WebDriver driver,
+		int defaultRepeat,
+		int defaultTimeout) {
 		this.driver = driver;
-		if (defaultRepeat > -1) {
+		if(defaultRepeat > -1) {
 			this.defaultRepeat = defaultRepeat;
 		}
-		if (defaultTimeout > -1) {
+		if(defaultTimeout > -1) {
 			this.defaultTimeout = defaultTimeout;
 		}
 	}
 
-	public SeleniumSynchronizedDriver(WebDriver driver) {
+	public SeleniumSynchronizedDriver(
+		WebDriver driver) {
 		this.driver = driver;
 	}
 
-	public WebElement doSynchronizedSelection(final IWebElement element) {
+	public WebElement doSynchronizedSelection(
+		final IWebElement element) {
 		SeleniumHelper.waitCondition(defaultRepeat, defaultTimeout, new IMiniResult() {
+
 			@Override
 			public boolean result() {
 				return SeleniumHelper.positionSelect(driver, element) != null;
@@ -50,7 +58,8 @@ public class SeleniumSynchronizedDriver implements SynchronizedDriver {
 		return positionSelect;
 	}
 
-	public void open(String demoLoginUrl) {
+	public void open(
+		String demoLoginUrl) {
 		driver.get(demoLoginUrl);
 	}
 
@@ -59,8 +68,10 @@ public class SeleniumSynchronizedDriver implements SynchronizedDriver {
 		return driver;
 	}
 
-	public void doSynchronizedOnUrl(final String urlFragment) {
+	public void doSynchronizedOnUrl(
+		final String urlFragment) {
 		SeleniumHelper.waitCondition(defaultRepeat, defaultTimeout, new IMiniResult() {
+
 			@Override
 			public boolean result() {
 				return driver.getCurrentUrl().contains(urlFragment);
@@ -70,12 +81,14 @@ public class SeleniumSynchronizedDriver implements SynchronizedDriver {
 
 	// In Selenium RC, you can use Highlight(locator),
 	// which will locate the element and highlight it,
-	// or you can use GetEval("selenium.browserbot.setShouldHighlightElement(true)"),
-	// which turns on the automatic highlighting every time an element is located
+	// or you can use
+// GetEval("selenium.browserbot.setShouldHighlightElement(true)"),
+	// which turns on the automatic highlighting every time an element is
+// located
 	// (the behavior you know from Selenium IDE).
-
 	@Override
-	public WebElement find(IWebElement element) {
+	public WebElement find(
+		IWebElement element) {
 		WebElement doSynchronizedSelection = doSynchronizedSelection(element);
 		return doSynchronizedSelection;
 	}

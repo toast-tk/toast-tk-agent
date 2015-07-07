@@ -6,36 +6,36 @@ import com.synaptix.toast.core.net.request.IIdRequest;
  * Created by skokaina on 07/11/2014.
  */
 public class ValueResponse implements IIdRequest {
+
 	private String id;
+
 	public String value;
-	//private BufferedImage screenshot;
-	
+
+	// private BufferedImage screenshot;
 	/**
 	 * serialization only
 	 */
 	public ValueResponse() {
-
 	}
 
-	public ValueResponse(String id, String value) {
+	public ValueResponse(
+		String id,
+		String value) {
 		this.id = id;
 		this.value = value;
 	}
-	
-//	public ValueResponse(String id, String value, BufferedImage screenshot) {
-//		this.id = id;
-//		this.value = value;
-//		this.screenshot = screenshot;
-//	}
-//	
-//	public BufferedImage getScreenshot() {
-//		return screenshot;
-//	}
 
-
+// public ValueResponse(String id, String value, BufferedImage screenshot) {
+// this.id = id;
+// this.value = value;
+// this.screenshot = screenshot;
+// }
+//
+// public BufferedImage getScreenshot() {
+// return screenshot;
+// }
 	@Override
 	public String getId() {
 		return id;
 	}
-
 }

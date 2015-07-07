@@ -1,4 +1,3 @@
-
 /**
  * 
  */
@@ -31,7 +30,9 @@ import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
  * 
  */
 @Entity(value = "test")
-@Indexes({ @Index(value = "pageName, -runDateTime"), @Index("runDateTime"), @Index("isTemplate") })
+@Indexes({
+		@Index(value = "pageName, -runDateTime"), @Index("runDateTime"), @Index("isTemplate")
+})
 public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, ITestPage {
 
 	@Embedded
@@ -68,17 +69,19 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 	}
 
 	@Override
-	public void setId(Object object) {
-		if(object == null){
+	public void setId(
+		Object object) {
+		if(object == null) {
 			this.id = null;
 		}
 	}
-	
+
 	public int getTechnicalErrorNumber() {
 		return technicalErrorNumber;
 	}
 
-	public void setTechnicalErrorNumber(int technicalErrorNumber) {
+	public void setTechnicalErrorNumber(
+		int technicalErrorNumber) {
 		this.technicalErrorNumber = technicalErrorNumber;
 	}
 
@@ -86,7 +89,8 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 		return testSuccessNumber;
 	}
 
-	public void setTestSuccessNumber(int testSuccessNumber) {
+	public void setTestSuccessNumber(
+		int testSuccessNumber) {
 		this.testSuccessNumber = testSuccessNumber;
 	}
 
@@ -94,7 +98,8 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 		return testFailureNumber;
 	}
 
-	public void setTestFailureNumber(int testFailureNumber) {
+	public void setTestFailureNumber(
+		int testFailureNumber) {
 		this.testFailureNumber = testFailureNumber;
 	}
 
@@ -102,14 +107,16 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 		return pageName;
 	}
 
-	public void setPageName(String pageName) {
+	public void setPageName(
+		String pageName) {
 		this.pageName = pageName;
 	}
 
 	/**
 	 * @param currentTestBlock
 	 */
-	public void addBlock(IBlock testBlock) {
+	public void addBlock(
+		IBlock testBlock) {
 		blocks.add(testBlock);
 	}
 
@@ -117,7 +124,8 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 		return parsingErrorMessage;
 	}
 
-	public void setParsingErrorMessage(String parsingErrorMessage) {
+	public void setParsingErrorMessage(
+		String parsingErrorMessage) {
 		this.parsingErrorMessage = parsingErrorMessage;
 	}
 
@@ -126,7 +134,8 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 		return executionTime;
 	}
 
-	public void setExecutionTime(long executionTime) {
+	public void setExecutionTime(
+		long executionTime) {
 		this.executionTime = executionTime;
 	}
 
@@ -134,7 +143,8 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 		return file;
 	}
 
-	public void setFile(File file) {
+	public void setFile(
+		File file) {
 		this.file = file;
 	}
 
@@ -149,7 +159,8 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 	}
 
 	@Override
-	public void setTestResult(TestResult testResult) {
+	public void setTestResult(
+		TestResult testResult) {
 		this.testResult = testResult;
 	}
 
@@ -174,7 +185,8 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 		return blocks;
 	}
 
-	public void setBlocks(List<IBlock> blocks) {
+	public void setBlocks(
+		List<IBlock> blocks) {
 		this.blocks = blocks;
 	}
 
@@ -193,7 +205,8 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 		return previousExecutionTime;
 	}
 
-	public void setPreviousExecutionTime(long previousExecutionTime) {
+	public void setPreviousExecutionTime(
+		long previousExecutionTime) {
 		this.previousExecutionTime = previousExecutionTime;
 	}
 
@@ -201,11 +214,13 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 		return previousIsSuccess;
 	}
 
-	public void setPreviousIsSuccess(boolean previousIsSuccess) {
+	public void setPreviousIsSuccess(
+		boolean previousIsSuccess) {
 		this.previousIsSuccess = previousIsSuccess;
 	}
 
-	public void setIsTemplate(boolean b) {
+	public void setIsTemplate(
+		boolean b) {
 		this.isTemplate = true;
 	}
 
@@ -215,8 +230,8 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 
 	@Override
 	public IBlock getVarBlock() {
-		for(IBlock block: blocks){
-			if(block instanceof VariableBlock){
+		for(IBlock block : blocks) {
+			if(block instanceof VariableBlock) {
 				return block;
 			}
 		}
@@ -227,5 +242,4 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 	public String getBlockType() {
 		return "testPageBlock";
 	}
-
 }

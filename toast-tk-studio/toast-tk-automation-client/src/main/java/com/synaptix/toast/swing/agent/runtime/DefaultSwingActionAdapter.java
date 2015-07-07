@@ -8,12 +8,12 @@ import com.synaptix.toast.core.annotation.ActionAdapter;
 import com.synaptix.toast.core.runtime.IRepositorySetup;
 
 @ActionAdapter(value = ActionAdapterKind.swing, name = "ToastSwingClientAdapter")
-public class DefaultSwingActionAdapter extends AbstractSwingActionAdapter{
+public class DefaultSwingActionAdapter extends AbstractSwingActionAdapter {
 
 	@Inject
-	public DefaultSwingActionAdapter(IRepositorySetup repo, RemoteSwingAgentDriverImpl driver) {
+	public DefaultSwingActionAdapter(
+		IRepositorySetup repo,
+		RemoteSwingAgentDriverImpl driver) {
 		super(repo, driver);
 	}
-
-
 }

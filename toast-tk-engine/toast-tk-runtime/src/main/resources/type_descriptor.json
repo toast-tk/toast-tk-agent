@@ -1,0 +1,50 @@
+[
+	{
+		"id": "1",
+		"name" : "Value",
+		"kind":"string",	
+		"category" : "value",
+		"regex" : "\\*([\\w\\W]+)\\*",
+		"replacement" : "@[[1:string:Value]]"
+	},
+	{
+		"id": "2",
+		"name" : "Variable",
+		"kind":"string",	
+		"category" : "variable",
+		"regex" : "\\$(\\w+)",
+		"replacement" : "@[[2:variable ($name):Variable]]"
+	},
+	{
+		"id": "3",
+		"name" : "Service",
+		"type" : "service",
+		"category": "component",
+		"regex": "",
+		"replacement" : "undefined"
+	},
+	{
+		"id": "4",
+		"name" : "WebPageItem",
+		"type" : "web",
+		"category": "component",
+		"regex": "\\*(\\w+).(\\w+)\\*",
+		"replacement" : "@[[4:reference:WebPageItem]]"
+	},
+	{
+		"id": "5",
+		"name" : "WebPageItem",
+		"type" : "entity",
+		"category": "component",
+		"regex": "",
+		"replacement" : "undefined"
+	},
+	{
+		"id": "6",
+		"name" : "SwingComponent",
+		"type" : "swing",
+		"category": "component",
+		"regex": "\\*(\\w+).(\\w+)\\*",
+		"replacement" : "@[[6:reference:SwingComponent]]"
+	}
+]

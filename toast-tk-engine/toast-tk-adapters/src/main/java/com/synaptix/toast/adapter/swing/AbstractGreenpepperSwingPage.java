@@ -1,15 +1,11 @@
 package com.synaptix.toast.adapter.swing;
 
-/**
- * 
- * Abstraction for greenpepper
- * 
- * @author skokaina
- * 
- */
 public abstract class AbstractGreenpepperSwingPage extends AbstractSwingPage {
+
 	public String name;
+
 	public String type;
+
 	public String locator;
 
 	/**
@@ -18,5 +14,4 @@ public abstract class AbstractGreenpepperSwingPage extends AbstractSwingPage {
 	public void enterRow() {
 		super.initElement(name, type, locator);
 	}
-
 }

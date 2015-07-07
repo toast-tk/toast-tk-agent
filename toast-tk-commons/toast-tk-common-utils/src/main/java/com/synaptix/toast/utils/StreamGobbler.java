@@ -26,7 +26,6 @@ Creation date: 9 mars 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
  */
-
 package com.synaptix.toast.utils;
 
 import java.io.BufferedReader;
@@ -36,20 +35,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-
 public class StreamGobbler extends Thread {
+
 	InputStream is;
+
 	String type;
+
 	private File outputFile;
-	
-	public StreamGobbler(InputStream is, String type, String outputFile) {
+
+	public StreamGobbler(
+		InputStream is,
+		String type,
+		String outputFile) {
 		this.is = is;
 		this.type = type;
 		this.setName("StreamGobbler - " + type);
 		this.setPriority(MAX_PRIORITY);
 		this.setDaemon(true);
 		this.outputFile = new File(outputFile);
-		if(this.outputFile.exists()){
+		if(this.outputFile.exists()) {
 			this.outputFile.mkdirs();
 		}
 	}
@@ -61,15 +65,18 @@ public class StreamGobbler extends Thread {
 			BufferedReader br = new BufferedReader(isr);
 			String line = null;
 			w = new FileWriter(this.outputFile);
-			while ((line = br.readLine()) != null)
+			while((line = br.readLine()) != null)
 				w.append(line + "\n");
-		} catch (IOException ioe) {
+		}
+		catch(IOException ioe) {
 			ioe.printStackTrace();
-		}finally{
-			if(w != null){
+		}
+		finally {
+			if(w != null) {
 				try {
 					w.close();
-				} catch (IOException e) {
+				}
+				catch(IOException e) {
 					e.printStackTrace();
 				}
 			}

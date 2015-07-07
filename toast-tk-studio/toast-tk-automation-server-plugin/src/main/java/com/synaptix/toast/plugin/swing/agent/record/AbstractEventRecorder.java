@@ -47,82 +47,90 @@ import com.synaptix.toast.core.record.IEventRecorder;
 public abstract class AbstractEventRecorder implements FilteredAWTEventListener, AwtEventProcessor {
 
 	private static final Logger LOG = LogManager.getLogger(AbstractEventRecorder.class);
-	
+
 	private InputState state;
 
 	protected IEventRecorder eventRecorder;
 
 	AbstractEventRecorder(
-			final InputState state, 
-			final IEventRecorder eventRecorder
-	) {
+		final InputState state,
+		final IEventRecorder eventRecorder) {
 		this.state = state;
 		this.eventRecorder = eventRecorder;
 	}
 
 	@Override
-	public void eventDispatched(final AWTEvent event) {
+	public void eventDispatched(
+		final AWTEvent event) {
 		processEvent(event);
 	}
 
-	protected String getEventComponentLocator(AWTEvent awtEvent) {
+	protected String getEventComponentLocator(
+		AWTEvent awtEvent) {
 		final Component component = getEventComponent(awtEvent);
 		return eventRecorder.getComponentLocator(component);
 	}
 
-	private Component getEventComponent(final AWTEvent awtEvent) {
+	private Component getEventComponent(
+		final AWTEvent awtEvent) {
 		Component component = awtEvent instanceof ComponentEvent ? ((ComponentEvent) awtEvent).getComponent() : null;
-		if (component == null) {
+		if(component == null) {
 			component = state.deepestComponentUnderMousePointer();
 		}
 		return component;
 	}
 
-	protected static String getEventValue(final AWTEvent awtEvent) {
-		if (awtEvent instanceof KeyEvent) {
+	protected static String getEventValue(
+		final AWTEvent awtEvent) {
+		if(awtEvent instanceof KeyEvent) {
 			return getKeyEvent(awtEvent);
 		}
-		else if (awtEvent instanceof MouseEvent) {
+		else if(awtEvent instanceof MouseEvent) {
 			return getMouseEvent(awtEvent);
 		}
-		else if (awtEvent instanceof FocusEvent) {
+		else if(awtEvent instanceof FocusEvent) {
 			return getFocusEvent(awtEvent);
-		} 
+		}
 		return null;
 	}
 
-	private static String getFocusEvent(final AWTEvent awtEvent) {
+	private static String getFocusEvent(
+		final AWTEvent awtEvent) {
 		final FocusEvent fEvent = (FocusEvent) awtEvent;
-		if (fEvent.getComponent() instanceof JCheckBox) {
+		if(fEvent.getComponent() instanceof JCheckBox) {
 			return getCheckBoxFocusEvent(fEvent);
 		}
-		if (fEvent.getComponent() instanceof JTextField) {
+		if(fEvent.getComponent() instanceof JTextField) {
 			return getTextFieldFocusEvent(fEvent);
 		}
-		if (fEvent.getComponent() instanceof JTextComponent) {
+		if(fEvent.getComponent() instanceof JTextComponent) {
 			return getTextComponentFocusEvent(fEvent);
 		}
-		if (fEvent.getComponent() instanceof JComboBox) {
+		if(fEvent.getComponent() instanceof JComboBox) {
 			return getComboBoxFocusEvent(fEvent);
 		}
 		return null;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static String getComboBoxFocusEvent(final FocusEvent focusEvent) {
+	@SuppressWarnings({
+			"unchecked", "rawtypes"
+	})
+	private static String getComboBoxFocusEvent(
+		final FocusEvent focusEvent) {
 		final Object selectedItem = ((JComboBox) focusEvent.getComponent()).getSelectedItem();
 		final JList list = new JList(((JComboBox) focusEvent.getComponent()).getModel());
-		final Component listCellRendererComponent = ((JComboBox) focusEvent.getComponent()).getRenderer().getListCellRendererComponent(list, selectedItem, 0, false, false);
-		if (selectedItem != null) {
-			if (listCellRendererComponent instanceof JTextField) {
+		final Component listCellRendererComponent = ((JComboBox) focusEvent.getComponent()).getRenderer()
+			.getListCellRendererComponent(list, selectedItem, 0, false, false);
+		if(selectedItem != null) {
+			if(listCellRendererComponent instanceof JTextField) {
 				return ((JTextField) listCellRendererComponent).getText();
-			} 
-			else if (listCellRendererComponent instanceof JLabel) {
+			}
+			else if(listCellRendererComponent instanceof JLabel) {
 				return ((JLabel) listCellRendererComponent).getText();
-			} 
-			else if (selectedItem instanceof String) {
+			}
+			else if(selectedItem instanceof String) {
 				return selectedItem.toString();
-			} 
+			}
 			else {
 				return "unknowObjectType";
 			}
@@ -130,38 +138,44 @@ public abstract class AbstractEventRecorder implements FilteredAWTEventListener,
 		return null;
 	}
 
-	private static String getTextComponentFocusEvent(final FocusEvent focusEvent) {
+	private static String getTextComponentFocusEvent(
+		final FocusEvent focusEvent) {
 		return ((JTextComponent) focusEvent.getComponent()).getText();
 	}
 
-	private static String getTextFieldFocusEvent(final FocusEvent focusEvent) {
+	private static String getTextFieldFocusEvent(
+		final FocusEvent focusEvent) {
 		return ((JTextField) focusEvent.getComponent()).getText();
 	}
 
-	private static String getCheckBoxFocusEvent(final FocusEvent focusEvent) {
+	private static String getCheckBoxFocusEvent(
+		final FocusEvent focusEvent) {
 		return Boolean.toString(((JCheckBox) focusEvent.getComponent()).isSelected());
 	}
 
-	private static String getMouseEvent(final AWTEvent awtEvent) {
+	private static String getMouseEvent(
+		final AWTEvent awtEvent) {
 		final MouseEvent mEvent = (MouseEvent) awtEvent;
 		final Component componentEvent = mEvent.getComponent();
-		if (componentEvent instanceof JTextField) {
+		if(componentEvent instanceof JTextField) {
 			return getTextFieldMouseEvent(mEvent);
-		} 
-		else if (componentEvent instanceof JTable) {
+		}
+		else if(componentEvent instanceof JTable) {
 			return getJTableMouseEvent(mEvent);
 		}
-		else if (componentEvent instanceof JList) {
+		else if(componentEvent instanceof JList) {
 			return getJListMouseEvent(mEvent);
 		}
 		return null;
 	}
 
-	private static String getTextFieldMouseEvent(final MouseEvent mouseEvent) {
+	private static String getTextFieldMouseEvent(
+		final MouseEvent mouseEvent) {
 		return ((JTextField) mouseEvent.getComponent()).getText();
 	}
 
-	private static String getJTableMouseEvent(final MouseEvent mouseEvent) {
+	private static String getJTableMouseEvent(
+		final MouseEvent mouseEvent) {
 		final JTable jSyTable = (JTable) mouseEvent.getComponent();
 		final int selectedRowIndex = jSyTable.getSelectedRow();
 		final int[] selectedColumns = jSyTable.getSelectedColumns();
@@ -172,9 +186,12 @@ public abstract class AbstractEventRecorder implements FilteredAWTEventListener,
 		return "No Cell Selected";
 	}
 
-	private static List<String> collectTableSelectionCriteria(final JTable table, final int selectedRowIndex, final int[] selectedColumns) {
+	private static List<String> collectTableSelectionCriteria(
+		final JTable table,
+		final int selectedRowIndex,
+		final int[] selectedColumns) {
 		final List<String> criteria = new ArrayList<String>();
-		for(int columnIndex: selectedColumns) {
+		for(int columnIndex : selectedColumns) {
 			final TableModel jTableModel = table.getModel();
 			final String columnName = jTableModel.getColumnName(columnIndex);
 			final Object cellValue = jTableModel.getValueAt(selectedRowIndex, columnIndex);
@@ -183,12 +200,13 @@ public abstract class AbstractEventRecorder implements FilteredAWTEventListener,
 		return criteria;
 	}
 
-	private static String getJListMouseEvent(final MouseEvent event) {
+	private static String getJListMouseEvent(
+		final MouseEvent event) {
 		final JList jList = (JList) event.getComponent();
 		final int[] indices = jList.getSelectedIndices();
 		final int lenght = indices != null ? indices.length : 0;
 		if(lenght > 0) {
-			final StringBuilder criteria = new StringBuilder(); 
+			final StringBuilder criteria = new StringBuilder();
 			for(int index : indices) {
 				criteria.append(index).append(Property.JLIST_CRITERIA_SEPARATOR);
 			}
@@ -196,82 +214,92 @@ public abstract class AbstractEventRecorder implements FilteredAWTEventListener,
 		}
 		return "No Index Selected";
 	}
-	
-	private static String getKeyEvent(final AWTEvent awtEvent) {
+
+	private static String getKeyEvent(
+		final AWTEvent awtEvent) {
 		final KeyEvent event = (KeyEvent) awtEvent;
-		if (event.getID() == KeyEvent.KEY_RELEASED) {
+		if(event.getID() == KeyEvent.KEY_RELEASED) {
 			return Character.toString(event.getKeyChar());
 		}
 		return null;
 	}
 
-	protected String getEventComponentLabel(AWTEvent awtEvent) {
+	protected String getEventComponentLabel(
+		AWTEvent awtEvent) {
 		Component component = getEventComponent(awtEvent);
 		return getComponentName(component);
 	}
 
-	protected static String getComponentName(Component component) {
-		if (component instanceof AbstractButton) {
+	protected static String getComponentName(
+		Component component) {
+		if(component instanceof AbstractButton) {
 			final AbstractButton b = (AbstractButton) component;
 			return b.getText();
-		} 
+		}
 		return component != null ? component.getName() : null;
 	}
-	
-	protected static String getEventComponentContainer(final AWTEvent event) {
+
+	protected static String getEventComponentContainer(
+		final AWTEvent event) {
 		Component component = (Component) event.getSource();
 		Container ancestorOfClass = SwingUtilities.getAncestorOfClass(JDialog.class, component);
 		String ancestorLocator = null;
 		if(ancestorOfClass != null) {
-			ancestorLocator = ((JDialog)ancestorOfClass).getTitle();
+			ancestorLocator = ((JDialog) ancestorOfClass).getTitle();
 		}
 		if(ancestorLocator == null) {
 			ancestorLocator = getJLayeredPaneAncestor(component);
 		}
-		if (ancestorLocator == null) {
+		if(ancestorLocator == null) {
 			ancestorLocator = getJTabbedPaneAncestor(component);
 		}
-		if (ancestorOfClass == null) {
+		if(ancestorOfClass == null) {
 			ancestorLocator = getJFrameAncestor(component);
 		}
 		return ancestorLocator;
 	}
-	
-	
-	private static String getJFrameAncestor(Component component) {
+
+	private static String getJFrameAncestor(
+		Component component) {
 		Container ancestorOfClass = SwingUtilities.getAncestorOfClass(JFrame.class, component);
 		String ancestorLocator = null;
-		if(ancestorOfClass != null){
-			ancestorLocator = ((JFrame)ancestorOfClass).getTitle();
+		if(ancestorOfClass != null) {
+			ancestorLocator = ((JFrame) ancestorOfClass).getTitle();
 		}
 		return ancestorLocator;
 	}
 
-	private static String getJTabbedPaneAncestor(Component component){
+	private static String getJTabbedPaneAncestor(
+		Component component) {
 		Container ancestorOfClass = SwingUtilities.getAncestorOfClass(JTabbedPane.class, component);
 		String ancestorLocator = null;
-		if(ancestorOfClass != null){
-			ancestorLocator = ((JTabbedPane)ancestorOfClass).getTitleAt(((JTabbedPane)ancestorOfClass).getSelectedIndex());
+		if(ancestorOfClass != null) {
+			ancestorLocator = ((JTabbedPane) ancestorOfClass).getTitleAt(((JTabbedPane) ancestorOfClass)
+				.getSelectedIndex());
 		}
 		return ancestorLocator;
 	}
-	
-	private static String getJLayeredPaneAncestor(Component component) {
+
+	private static String getJLayeredPaneAncestor(
+		Component component) {
 		Container ancestorOfClass = SwingUtilities.getAncestorOfClass(JLayeredPane.class, component);
 		String ancestorLocator = null;
-		if(ancestorOfClass != null){
+		if(ancestorOfClass != null) {
 			ancestorLocator = ancestorOfClass.getClass().getSimpleName();
 		}
 		return ancestorLocator;
 	}
 
-	protected void appendEventRecord(final AWTCapturedEvent captureEvent) {
-		LOG.info("New record event captured: {}", ToStringBuilder.reflectionToString(captureEvent, ToStringStyle.SIMPLE_STYLE));
+	protected void appendEventRecord(
+		final AWTCapturedEvent captureEvent) {
+		LOG.info(
+			"New record event captured: {}",
+			ToStringBuilder.reflectionToString(captureEvent, ToStringStyle.SIMPLE_STYLE));
 		eventRecorder.appendInfo(captureEvent);
 	}
-	
-	protected static boolean isCapturedEventUninteresting(final AWTCapturedEvent captureEvent) {
+
+	protected static boolean isCapturedEventUninteresting(
+		final AWTCapturedEvent captureEvent) {
 		return captureEvent.businessValue == null && captureEvent.componentLocator == null;
 	}
-
 }

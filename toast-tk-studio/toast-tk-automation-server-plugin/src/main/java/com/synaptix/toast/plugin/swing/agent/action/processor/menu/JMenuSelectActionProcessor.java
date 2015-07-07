@@ -12,24 +12,27 @@ import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
 import com.synaptix.toast.plugin.swing.agent.action.processor.ActionProcessor;
 
-class JMenuSelectActionProcessor  implements ActionProcessor<JMenu>{
+class JMenuSelectActionProcessor implements ActionProcessor<JMenu> {
 
 	@Override
-	public String processCommandOnComponent(CommandRequest command, JMenu target) {
+	public String processCommandOnComponent(
+		CommandRequest command,
+		JMenu target) {
 		Robot robot = FestRobotInstance.getRobot();
-		if (target == null) {
+		if(target == null) {
 			robot.pressMouse(MouseButton.RIGHT_BUTTON);
-		} else {
+		}
+		else {
 			robot.click(target);
 		}
 		JPopupMenuFixture popupFixture = new JPopupMenuFixture(robot, robot.findActivePopupMenu());
 		JMenuItemFixture menuItemWithPath = popupFixture.menuItemWithPath(command.value);
-		if (menuItemWithPath != null && menuItemWithPath.component().isEnabled()) {
+		if(menuItemWithPath != null && menuItemWithPath.component().isEnabled()) {
 			menuItemWithPath.click();
 			return ResultKind.SUCCESS.name();
-		} else {
+		}
+		else {
 			return ResultKind.FAILURE.name();
 		}
 	}
-
 }

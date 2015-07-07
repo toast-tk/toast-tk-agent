@@ -12,12 +12,21 @@ import com.synaptix.toast.core.runtime.IWebElement.LocationMethod;
 public class DefaultWebElement implements IWebElement {
 
 	public String locator;
+
 	public LocationMethod method;
+
 	public int position;
+
 	private AutoWebType type;
+
 	private String name;
 
-	public DefaultWebElement(String name, AutoWebType type, String locator, LocationMethod method, int position) {
+	public DefaultWebElement(
+		String name,
+		AutoWebType type,
+		String locator,
+		LocationMethod method,
+		int position) {
 		this.locator = locator;
 		this.method = method;
 		this.position = position;
@@ -31,7 +40,8 @@ public class DefaultWebElement implements IWebElement {
 	}
 
 	@Override
-	public void setLocator(String locator) {
+	public void setLocator(
+		String locator) {
 		this.locator = locator;
 	}
 
@@ -41,7 +51,8 @@ public class DefaultWebElement implements IWebElement {
 	}
 
 	@Override
-	public void setMethod(LocationMethod method) {
+	public void setMethod(
+		LocationMethod method) {
 		this.method = method;
 	}
 
@@ -51,12 +62,14 @@ public class DefaultWebElement implements IWebElement {
 	}
 
 	@Override
-	public void setPosition(int position) {
+	public void setPosition(
+		int position) {
 		this.position = position;
 	}
 
 	@Override
-	public void setName(String name) {
+	public void setName(
+		String name) {
 		this.name = name;
 	}
 
@@ -71,8 +84,8 @@ public class DefaultWebElement implements IWebElement {
 	}
 
 	@Override
-	public void setType(AutoWebType type) {
+	public void setType(
+		AutoWebType type) {
 		this.type = type;
 	}
-
 }

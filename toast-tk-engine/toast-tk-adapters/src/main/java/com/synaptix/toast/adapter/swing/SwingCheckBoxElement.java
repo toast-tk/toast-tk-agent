@@ -1,4 +1,3 @@
-
 package com.synaptix.toast.adapter.swing;
 
 import java.util.UUID;
@@ -19,41 +18,51 @@ import com.synaptix.toast.core.runtime.ISwingElement;
  */
 public class SwingCheckBoxElement extends SwingAutoElement implements HasClickAction, HasStringValue {
 
-	public SwingCheckBoxElement(ISwingElement element, IRemoteSwingAgentDriver driver) {
+	public SwingCheckBoxElement(
+		ISwingElement element,
+		IRemoteSwingAgentDriver driver) {
 		super(element, driver);
 	}
 
-	public SwingCheckBoxElement(ISwingElement element) {
+	public SwingCheckBoxElement(
+		ISwingElement element) {
 		super(element);
 	}
 
-	public void select() throws TimeoutException, ErrorResultReceivedException {
+	public void select()
+		throws TimeoutException, ErrorResultReceivedException {
 		exists();
-		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).sendKeys("true").build());
+		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator())
+			.ofType(wrappedElement.getType().name()).sendKeys("true").build());
 	}
-	
-	public void deselect() throws TimeoutException, ErrorResultReceivedException {
+
+	public void deselect()
+		throws TimeoutException, ErrorResultReceivedException {
 		exists();
-		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).sendKeys("false").build());
+		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator())
+			.ofType(wrappedElement.getType().name()).sendKeys("false").build());
 	}
-	
+
 	@Override
-	public boolean click() throws TimeoutException, ErrorResultReceivedException {
+	public boolean click()
+		throws TimeoutException, ErrorResultReceivedException {
 		boolean res = exists();
-		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).click().build());
+		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator())
+			.ofType(wrappedElement.getType().name()).click().build());
 		return res;
 	}
 
 	@Override
 	public void dbClick() {
-		
 	}
 
 	@Override
-	public String getValue() throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
+	public String getValue()
+		throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
 		exists();
 		final String requestId = UUID.randomUUID().toString();
-		CommandRequest request = new CommandRequest.CommandRequestBuilder(requestId).with(wrappedElement.getLocator()).ofType(wrappedElement.getType().name()).getValue().build();
+		CommandRequest request = new CommandRequest.CommandRequestBuilder(requestId).with(wrappedElement.getLocator())
+			.ofType(wrappedElement.getType().name()).getValue().build();
 		return frontEndDriver.processAndWaitForValue(request);
 	}
 }

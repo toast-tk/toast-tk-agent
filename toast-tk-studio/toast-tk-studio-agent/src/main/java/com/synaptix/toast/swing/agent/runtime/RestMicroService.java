@@ -14,47 +14,55 @@ public class RestMicroService extends Verticle {
 	@Override
 	public void start() {
 		RouteMatcher matcher = new RouteMatcher();
-		
 		initRouteMatcher(matcher);
-		
 		vertx.createHttpServer().requestHandler(matcher).listen(Property.TOAST_AGENT_PORT);
 	}
 
-	private void initRouteMatcher(RouteMatcher matcher) {
+	private void initRouteMatcher(
+		RouteMatcher matcher) {
 		includeRusInitCommand(matcher);
 		includeRusStartCommand(matcher);
 		includeRusStopCommand(matcher);
 	}
 
-	private void includeRusStopCommand(RouteMatcher matcher) {
+	private void includeRusStopCommand(
+		RouteMatcher matcher) {
 		matcher.get("/rus/stop", new Handler<HttpServerRequest>() {
+
 			@Override
-			public void handle(HttpServerRequest req) {
+			public void handle(
+				HttpServerRequest req) {
 				COMMAND_HANDLER.stop();
-				req.response().setStatusCode(200).end();				
+				req.response().setStatusCode(200).end();
 			}
 		});
 	}
 
-	private void includeRusStartCommand(RouteMatcher matcher) {
+	private void includeRusStartCommand(
+		RouteMatcher matcher) {
 		matcher.get("/rus/start", new Handler<HttpServerRequest>() {
+
 			@Override
-			public void handle(HttpServerRequest req) {
+			public void handle(
+				HttpServerRequest req) {
 				COMMAND_HANDLER.start();
-				req.response().setStatusCode(200).end();				
+				req.response().setStatusCode(200).end();
 			}
-			
 		});
 	}
 
-	private void includeRusInitCommand(RouteMatcher matcher) {
+	private void includeRusInitCommand(
+		RouteMatcher matcher) {
 		matcher.get("/rus/init", new Handler<HttpServerRequest>() {
+
 			@Override
-			public void handle(HttpServerRequest req) {
+			public void handle(
+				HttpServerRequest req) {
 				boolean ok = COMMAND_HANDLER.init();
-				if(ok){
+				if(ok) {
 					req.response().setStatusCode(200).end();
-				}else{
+				}
+				else {
 					req.response().setStatusCode(404).end();
 				}
 			}

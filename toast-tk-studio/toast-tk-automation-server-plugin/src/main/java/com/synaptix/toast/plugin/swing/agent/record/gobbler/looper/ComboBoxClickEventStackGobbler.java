@@ -4,23 +4,25 @@ import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.EventStackGobbler;
 
-
-public class ComboBoxClickEventStackGobbler extends EventStackGobbler{
+public class ComboBoxClickEventStackGobbler extends EventStackGobbler {
 
 	AWTCapturedEvent finalEvent = null;
-	
+
 	@Override
-	public boolean isInterestedIn(AWTCapturedEvent capturedEvent) {
-		return isMouseClick(capturedEvent.eventLabel) && 
-				isComboBoxType(capturedEvent.componentType);
+	public boolean isInterestedIn(
+		AWTCapturedEvent capturedEvent) {
+		return isMouseClick(capturedEvent.eventLabel) &&
+			isComboBoxType(capturedEvent.componentType);
 	}
-	
-	public static boolean isComboBoxType(String targetType) {
+
+	public static boolean isComboBoxType(
+		String targetType) {
 		return "JComboBox".equals(targetType) || "ComboBox.list".equals(targetType);
 	}
 
 	@Override
-	public EventType getInterpretedEventType(AWTCapturedEvent capturedEvent) {
+	public EventType getInterpretedEventType(
+		AWTCapturedEvent capturedEvent) {
 		return EventType.COMBOBOX_CLICK;
 	}
 
@@ -30,8 +32,9 @@ public class ComboBoxClickEventStackGobbler extends EventStackGobbler{
 	}
 
 	@Override
-	public EventStackGobbler digest(AWTCapturedEvent capturedEvent) {
-		if (isFocusLostEvent(capturedEvent.eventLabel)) {
+	public EventStackGobbler digest(
+		AWTCapturedEvent capturedEvent) {
+		if(isFocusLostEvent(capturedEvent.eventLabel)) {
 			finalEvent = cloneEvent(capturedEvent);
 			String name = finalEvent.componentName;
 			finalEvent.componentLocator = capturedEvent.componentLocator;
@@ -50,5 +53,4 @@ public class ComboBoxClickEventStackGobbler extends EventStackGobbler{
 	public AWTCapturedEvent getAdjustedEvent() {
 		return finalEvent;
 	}
-
 }

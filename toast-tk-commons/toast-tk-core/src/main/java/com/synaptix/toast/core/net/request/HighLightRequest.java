@@ -26,29 +26,29 @@ Creation date: 18 févr. 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
-
 package com.synaptix.toast.core.net.request;
 
-
 public class HighLightRequest implements IIdRequest {
+
 	private String locator;
 
 	/**
 	 * for serialization purpose only
-	 */    
-	public HighLightRequest(){
+	 */
+	public HighLightRequest() {
 	}
-	
-	public HighLightRequest(String locator){
+
+	public HighLightRequest(
+		String locator) {
 		this.setLocator(locator);
-		
 	}
 
 	public String getLocator() {
 		return locator;
 	}
 
-	private void setLocator(String locator) {
+	private void setLocator(
+		String locator) {
 		this.locator = locator;
 	}
 

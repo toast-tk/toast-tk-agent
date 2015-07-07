@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Row {
+
 	private List<Cell> cells;
+
 	private CellColor color;
 
 	public Row() {
@@ -12,18 +14,21 @@ class Row {
 		cells = new ArrayList<Cell>();
 	}
 
-	public Row(List<String> cells) {
+	public Row(
+		List<String> cells) {
 		this();
 		setCells(cells);
 	}
 
-	public Row(Cell cell) {
+	public Row(
+		Cell cell) {
 		this();
 		cells.add(cell);
 	}
 
-	public void setCells(List<String> cells) {
-		for (String string : cells) {
+	public void setCells(
+		List<String> cells) {
+		for(String string : cells) {
 			this.cells.add(new Cell(string));
 		}
 	}
@@ -36,7 +41,7 @@ class Row {
 	public String toString() {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("|");
-		for (Cell cell : cells) {
+		for(Cell cell : cells) {
 			stringBuilder.append(cell.toString());
 			stringBuilder.append("|");
 		}
@@ -48,19 +53,24 @@ class Row {
 		return color;
 	}
 
-	public void setColor(CellColor color) {
+	public void setColor(
+		CellColor color) {
 		this.color = color;
 	}
 
-	public Cell getCellAt(int i) {
+	public Cell getCellAt(
+		int i) {
 		return cells.get(i);
 	}
 
-	public void addCell(String string, CellColor color) {
+	public void addCell(
+		String string,
+		CellColor color) {
 		cells.add(new Cell(string, color));
 	}
 
-	public void addCell(String string) {
+	public void addCell(
+		String string) {
 		cells.add(new Cell(string, CellColor.NONE));
 	}
 }

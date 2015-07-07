@@ -1,4 +1,3 @@
-
 package com.synaptix.toast.dao.domain.impl.report;
 
 import java.util.ArrayList;
@@ -19,13 +18,16 @@ import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.dao.domain.impl.common.BasicTaggableMongoBean;
 
 @Entity(value = "report.projects")
-@Indexes({ @Index(value = "name"), @Index("version") })
+@Indexes({
+		@Index(value = "name"), @Index("version")
+})
 public class Project extends BasicTaggableMongoBean implements IProject {
 
 	@Id
 	private ObjectId id;
+
 	private short iteration;
-	
+
 	@Reference
 	private List<ICampaign> campaigns;
 
@@ -36,14 +38,15 @@ public class Project extends BasicTaggableMongoBean implements IProject {
 	private Date demoDate;
 
 	private Date prodDate;
-	
+
 	private boolean last;
 
 	public ObjectId getId() {
 		return id;
 	}
 
-	public void setId(ObjectId id) {
+	public void setId(
+		ObjectId id) {
 		this.id = id;
 	}
 
@@ -51,25 +54,30 @@ public class Project extends BasicTaggableMongoBean implements IProject {
 		return campaigns;
 	}
 
-	public void setCampaigns(List<ICampaign> campaigns) {
+	public void setCampaigns(
+		List<ICampaign> campaigns) {
 		this.campaigns = campaigns;
 	}
 
-	public void setCampaignsImpl(List<Campaign> campaigns) {
-		if(campaigns != null){
+	public void setCampaignsImpl(
+		List<Campaign> campaigns) {
+		if(campaigns != null) {
 			this.campaigns = new ArrayList<ICampaign>();
-			for (Campaign campaign : campaigns) {
+			for(Campaign campaign : campaigns) {
 				this.campaigns.add(campaign);
 			}
-		}else {
+		}
+		else {
 			this.campaigns = null;
 		}
 	}
+
 	public Date getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(
+		Date startDate) {
 		this.startDate = startDate;
 	}
 
@@ -77,7 +85,8 @@ public class Project extends BasicTaggableMongoBean implements IProject {
 		return demoDate;
 	}
 
-	public void setDemoDate(Date demoDate) {
+	public void setDemoDate(
+		Date demoDate) {
 		this.demoDate = demoDate;
 	}
 
@@ -85,7 +94,8 @@ public class Project extends BasicTaggableMongoBean implements IProject {
 		return prodDate;
 	}
 
-	public void setProdDate(Date prodDate) {
+	public void setProdDate(
+		Date prodDate) {
 		this.prodDate = prodDate;
 	}
 
@@ -93,7 +103,8 @@ public class Project extends BasicTaggableMongoBean implements IProject {
 		return version;
 	}
 
-	public void setVersion(String version) {
+	public void setVersion(
+		String version) {
 		this.version = version;
 	}
 
@@ -101,15 +112,16 @@ public class Project extends BasicTaggableMongoBean implements IProject {
 		return iteration;
 	}
 
-	public void setIteration(short iteration) {
+	public void setIteration(
+		short iteration) {
 		this.iteration = iteration;
 	}
 
 	public int getTotalOk() {
 		int total = 0;
-		for (ICampaign campaign : getCampaigns()) {
-			for (ITestPage testPage : campaign.getTestCases()) {
-				if (testPage.isSuccess()) {
+		for(ICampaign campaign : getCampaigns()) {
+			for(ITestPage testPage : campaign.getTestCases()) {
+				if(testPage.isSuccess()) {
 					total++;
 				}
 			}
@@ -119,9 +131,9 @@ public class Project extends BasicTaggableMongoBean implements IProject {
 
 	public int getTotalKo() {
 		int total = 0;
-		for (ICampaign campaign : getCampaigns()) {
-			for (ITestPage testPage : campaign.getTestCases()) {
-				if (!testPage.isSuccess()) {
+		for(ICampaign campaign : getCampaigns()) {
+			for(ITestPage testPage : campaign.getTestCases()) {
+				if(!testPage.isSuccess()) {
 					total++;
 				}
 			}
@@ -139,8 +151,8 @@ public class Project extends BasicTaggableMongoBean implements IProject {
 		return last;
 	}
 
-	public void setLast(boolean last) {
+	public void setLast(
+		boolean last) {
 		this.last = last;
 	}
-
 }

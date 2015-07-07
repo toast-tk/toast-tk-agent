@@ -14,9 +14,11 @@ import com.synaptix.toast.core.runtime.IWebElement;
 public abstract class WebAutoElement {
 
 	protected IWebElement wrappedElement;
+
 	protected SynchronizedDriver frontEndDriver;
 
-	protected void setWrappedElement(IWebElement wrappedElement) {
+	protected void setWrappedElement(
+		IWebElement wrappedElement) {
 		this.wrappedElement = wrappedElement;
 	}
 
@@ -24,21 +26,24 @@ public abstract class WebAutoElement {
 		return frontEndDriver;
 	}
 
-	protected void setFrontEndDriver(SynchronizedDriver frontEndDriver) {
+	protected void setFrontEndDriver(
+		SynchronizedDriver frontEndDriver) {
 		this.frontEndDriver = frontEndDriver;
 	}
 
-	public WebAutoElement(IWebElement element, SynchronizedDriver driver) {
+	public WebAutoElement(
+		IWebElement element,
+		SynchronizedDriver driver) {
 		this.wrappedElement = element;
 		this.frontEndDriver = driver;
 	}
 
-	public WebAutoElement(IWebElement element) {
+	public WebAutoElement(
+		IWebElement element) {
 		this.wrappedElement = element;
 	}
 
 	public WebAutoElement() {
-
 	}
 
 	public boolean exists() {
@@ -49,9 +54,10 @@ public abstract class WebAutoElement {
 		return frontEndDriver.find(wrappedElement);
 	}
 
-	protected void safeAction(ISyncCall res) {
+	protected void safeAction(
+		ISyncCall res) {
 		WebElement find = frontEndDriver.find(wrappedElement);
-		if (find != null) {
+		if(find != null) {
 			res.execute(find);
 		}
 	}

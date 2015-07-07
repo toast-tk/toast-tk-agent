@@ -46,8 +46,7 @@
 									todir="${project.build.directory}/jnlp/agent" />
 								<copy file="${basedir}/../${toast.tk.autopluginpath}"
 									todir="${project.build.directory}/jnlp/agent-lib" />
-								<copy file="${basedir}/src/main/resources/toast.png" 
-									todir="${project.build.directory}/jnlp/images" />
+								<copy file="${basedir}/src/main/resources/toast.png" todir="${project.build.directory}/jnlp/images" />
 								<copy file="${basedir}/src/main/resources/Spalsh.png"
 									todir="${project.build.directory}/jnlp/images" />
 							</tasks>
@@ -71,61 +70,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>webstart-maven-plugin</artifactId>
-				<version>1.0-beta-6</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>jnlp-inline</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<templateDirectory>${project.build.directory}/classes/jnlp</templateDirectory>
-					<excludeTransitive>false</excludeTransitive>
-					<libPath>lib</libPath>
-					<codebase>${jnlp.host}/${jnlp.host.uri}/</codebase>
-					<jnlp>
-						<inputTemplate>template.vm</inputTemplate>
-						<outputFile>app.jnlp</outputFile>
-						<mainClass>com.synaptix.toast.swing.agent.AgentBoot</mainClass>
-					</jnlp>
-					<unsignAlreadySignedJars>true</unsignAlreadySignedJars>
-					<canUnsign>true</canUnsign>
-					<updateManifestEntries>
-						<Permissions>all-permissions</Permissions>
-						<Codebase>*</Codebase>
-					</updateManifestEntries>
-					<sign>
-						<keystore>${basedir}/keystore</keystore>
-						<keypass>password</keypass>
-						<storepass>password</storepass>
-						<alias>EmbeddedRedpepperClientInTomcat</alias>
 
-						<dnameCn>EmbeddedRedpepperClientInTomcat</dnameCn>
-						<dnameOu>Synaptix Labs</dnameOu>
-						<dnameO>Synaptix Labs</dnameO>
-						<dnameL>Euler</dnameL>
-						<dnameSt>France</dnameSt>
-						<dnameC>France</dnameC>
-
-						<verify>true</verify>
-
-						<!-- KEYSTORE MANAGEMENT -->
-						<keystoreConfig>
-							<delete>false</delete> <!-- delete the keystore -->
-							<gen>false</gen>       <!-- optional shortcut to generate the store. -->
-						</keystoreConfig>
-					</sign>
-					<!-- BUILDING PROCESS -->
-					<gzip>false</gzip>
-					<outputJarVersions>false</outputJarVersions>
-					<verbose>true</verbose>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
@@ -169,6 +114,73 @@
 
 	</dependencies>
 	<profiles>
+
+
+		<profile>
+			<id>ADD_JNLP</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>webstart-maven-plugin</artifactId>
+						<version>1.0-beta-6</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>jnlp-inline</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<templateDirectory>${project.build.directory}/classes/jnlp</templateDirectory>
+							<excludeTransitive>false</excludeTransitive>
+							<libPath>lib</libPath>
+							<codebase>${jnlp.host}/${jnlp.host.uri}/</codebase>
+							<jnlp>
+								<inputTemplate>template.vm</inputTemplate>
+								<outputFile>app.jnlp</outputFile>
+								<mainClass>com.synaptix.toast.swing.agent.AgentBoot</mainClass>
+							</jnlp>
+							<unsignAlreadySignedJars>true</unsignAlreadySignedJars>
+							<canUnsign>true</canUnsign>
+							<updateManifestEntries>
+								<Permissions>all-permissions</Permissions>
+								<Codebase>*</Codebase>
+							</updateManifestEntries>
+							<sign>
+								<keystore>${basedir}/keystore</keystore>
+								<keypass>password</keypass>
+								<storepass>password</storepass>
+								<alias>EmbeddedRedpepperClientInTomcat</alias>
+
+								<dnameCn>EmbeddedRedpepperClientInTomcat</dnameCn>
+								<dnameOu>Synaptix Labs</dnameOu>
+								<dnameO>Synaptix Labs</dnameO>
+								<dnameL>Euler</dnameL>
+								<dnameSt>France</dnameSt>
+								<dnameC>France</dnameC>
+
+								<verify>true</verify>
+
+								<!-- KEYSTORE MANAGEMENT -->
+								<keystoreConfig>
+									<delete>false</delete> <!-- delete the keystore -->
+									<gen>false</gen>       <!-- optional shortcut to generate the store. -->
+								</keystoreConfig>
+							</sign>
+							<!-- BUILDING PROCESS -->
+							<gzip>false</gzip>
+							<outputJarVersions>false</outputJarVersions>
+							<verbose>true</verbose>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 		<profile>
 			<id>DEPLOY_SNCF_VM</id>
 			<activation>

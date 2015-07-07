@@ -25,7 +25,8 @@ public class BlockLine {
 	public BlockLine() {
 	}
 
-	public BlockLine(List<String> cells) {
+	public BlockLine(
+		List<String> cells) {
 		this.setCells(cells);
 	}
 
@@ -33,7 +34,8 @@ public class BlockLine {
 		return cells;
 	}
 
-	public void setCells(List<String> cells) {
+	public void setCells(
+		List<String> cells) {
 		this.cells = cells;
 	}
 
@@ -43,8 +45,9 @@ public class BlockLine {
 	 * @param index
 	 * @return
 	 */
-	public String getCellAt(int index) {
-		if (index < 0 || index >= cells.size()) {
+	public String getCellAt(
+		int index) {
+		if(index < 0 || index >= cells.size()) {
 			return null;
 		}
 		return cells.get(index);
@@ -54,7 +57,8 @@ public class BlockLine {
 		return testResult;
 	}
 
-	public void setTestResult(TestResult testResult) {
+	public void setTestResult(
+		TestResult testResult) {
 		this.testResult = testResult;
 	}
 }

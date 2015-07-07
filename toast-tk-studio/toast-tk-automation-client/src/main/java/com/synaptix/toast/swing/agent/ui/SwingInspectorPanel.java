@@ -1,4 +1,3 @@
-
 /**Copyright (c) 2013-2015, Synaptix Labs
 All rights reserved.
 
@@ -27,7 +26,6 @@ Creation date: 6 févr. 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
  */
-
 package com.synaptix.toast.swing.agent.ui;
 
 import java.awt.BorderLayout;
@@ -63,43 +61,49 @@ import com.synaptix.toast.swing.agent.config.Config;
 import com.synaptix.toast.swing.agent.constant.Resource;
 
 public class SwingInspectorPanel extends JPanel {
+
 	private static final long serialVersionUID = 4749771836758704761L;
+
 	private DefaultListModel listModel;
-	
+
 	private final JList list;
-	
+
 	private final JTextField pageName = new JTextField(15);
+
 	private final JTextField itemFilter = new JTextField(15);
-	
+
 	private final JButton search;
+
 	private final JButton scanButton;
+
 	private final JButton saveButton;
+
 	private final JButton clear;
+
 	private final Config config;
-	
+
 	private List<String> oldList = new ArrayList<String>();
+
 	private final ISwingAutomationClient cmdServer;
+
 	private final JPanel toolPanel = new JPanel();
-    
-    @Inject
-	public SwingInspectorPanel(ISwingAutomationClient cmdServer, EventBus evenBus, Config config) {
-    	this.cmdServer = cmdServer;
-    	
-    	this.config = config;
-    	
-    	this.search = new JButton("Filter", new ImageIcon(Resource.ICON_FILTER_16PX_IMG));
-    	this.search.setToolTipText("Filter the items not containig the filter term..");
-    	
-    	this.scanButton = new JButton("Scan", new ImageIcon(Resource.ICON_SCAN_16PX_IMG)); 
-    	this.scanButton.setToolTipText("List the widgets currently displayed on the SUT user interface..");
-    	
-    	this.saveButton = new JButton("Save...", new ImageIcon(Resource.ICON_SAVE_16PX_IMG));
-    	this.saveButton.setToolTipText("Save selected items within the object repository as a new page..");
-    	
-    	this.clear = new JButton("Clear", new ImageIcon(Resource.ICON_CLEAR_16PX_IMG));
-    	this.clear.setToolTipText("Clear result list..");
-    	   
-    	evenBus.register(this);
+
+	@Inject
+	public SwingInspectorPanel(
+		ISwingAutomationClient cmdServer,
+		EventBus evenBus,
+		Config config) {
+		this.cmdServer = cmdServer;
+		this.config = config;
+		this.search = new JButton("Filter", new ImageIcon(Resource.ICON_FILTER_16PX_IMG));
+		this.search.setToolTipText("Filter the items not containig the filter term..");
+		this.scanButton = new JButton("Scan", new ImageIcon(Resource.ICON_SCAN_16PX_IMG));
+		this.scanButton.setToolTipText("List the widgets currently displayed on the SUT user interface..");
+		this.saveButton = new JButton("Save...", new ImageIcon(Resource.ICON_SAVE_16PX_IMG));
+		this.saveButton.setToolTipText("Save selected items within the object repository as a new page..");
+		this.clear = new JButton("Clear", new ImageIcon(Resource.ICON_CLEAR_16PX_IMG));
+		this.clear.setToolTipText("Clear result list..");
+		evenBus.register(this);
 		toolPanel.setAlignmentX(RIGHT_ALIGNMENT);
 		toolPanel.add(new JLabel("Page Name:"));
 		toolPanel.add(pageName);
@@ -111,108 +115,121 @@ public class SwingInspectorPanel extends JPanel {
 		toolPanel.add(itemFilter);
 		toolPanel.add(search);
 		toolPanel.setAlignmentX(LEFT_ALIGNMENT);
-
 		listModel = new DefaultListModel();
 		list = new JList(listModel);
 		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		list.setVisibleRowCount(-1);
-
 		JScrollPane listScroller = new JScrollPane(list);
 		listScroller.setPreferredSize(new Dimension(250, 500));
 		setLayout(new BorderLayout());
 		add(toolPanel, BorderLayout.PAGE_START);
 		add(listScroller, BorderLayout.CENTER);
-		
 		initActions();
 	}
 
 	private void initActions() {
 		list.addListSelectionListener(new ListSelectionListener() {
+
 			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				if (list.getSelectedValues() != null && list.getSelectedIndices().length == 1) {
+			public void valueChanged(
+				ListSelectionEvent e) {
+				if(list.getSelectedValues() != null && list.getSelectedIndices().length == 1) {
 					cmdServer.highlight((String) list.getSelectedValue());
 				}
 			}
 		});
-		 search.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					String text = itemFilter.getText();
-					listModel.clear();
-					if(text.isEmpty()){
-						for(int i =0; i<oldList.size(); i++){
-					        listModel.addElement(oldList.get(i));
-						}
-					}else{
-						Set<String> newList = new HashSet<String>();
-						for(int i = 0; i < oldList.size(); i++){
-							String item = (String)oldList.get(i);
-							if(item.contains(text)){
-						        listModel.addElement(item);
-							}
-						}
-						addInspectComponents(newList);
-					}				
-				}
-			});
+		search.addActionListener(new ActionListener() {
 
-	        clear.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					flush();
+			@Override
+			public void actionPerformed(
+				ActionEvent e) {
+				String text = itemFilter.getText();
+				listModel.clear();
+				if(text.isEmpty()) {
+					for(int i = 0; i < oldList.size(); i++) {
+						listModel.addElement(oldList.get(i));
+					}
 				}
-			});
-	        
-	        saveButton.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					saveButton.setEnabled(false);
-					RestUtils.postPage(config.getWebAppAddr(), config.getWebAppPort(), pageName.getText(), list.getSelectedValues());
-					saveButton.setEnabled(true);
+				else {
+					Set<String> newList = new HashSet<String>();
+					for(int i = 0; i < oldList.size(); i++) {
+						String item = (String) oldList.get(i);
+						if(item.contains(text)) {
+							listModel.addElement(item);
+						}
+					}
+					addInspectComponents(newList);
 				}
-			});
-	        
-	        scanButton.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					cmdServer.scanUi(true);
-				}
-			});
+			}
+		});
+		clear.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(
+				ActionEvent e) {
+				flush();
+			}
+		});
+		saveButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(
+				ActionEvent e) {
+				saveButton.setEnabled(false);
+				RestUtils.postPage(
+					config.getWebAppAddr(),
+					config.getWebAppPort(),
+					pageName.getText(),
+					list.getSelectedValues());
+				saveButton.setEnabled(true);
+			}
+		});
+		scanButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(
+				ActionEvent e) {
+				cmdServer.scanUi(true);
+			}
+		});
 	}
 
-    public void addInspectComponents(final Set<String> s) {
-    	for(final String s_: s){
-    		addInspectComponent(s_);
-    	}
-    }
+	public void addInspectComponents(
+		final Set<String> s) {
+		for(final String s_ : s) {
+			addInspectComponent(s_);
+		}
+	}
 
-    public void addInspectComponent(final String s) {
-    	SwingUtilities.invokeLater(new Runnable() {
+	public void addInspectComponent(
+		final String s) {
+		SwingUtilities.invokeLater(new Runnable() {
+
 			@Override
 			public void run() {
 				oldList.add(s);
-		        listModel.addElement(s);
+				listModel.addElement(s);
 			}
 		});
-    }
-    
-    @Subscribe
-    public void handleScanResponseEvent(final ScanResponse event){
-    	SwingUtilities.invokeLater(new Runnable() {
+	}
+
+	@Subscribe
+	public void handleScanResponseEvent(
+		final ScanResponse event) {
+		SwingUtilities.invokeLater(new Runnable() {
+
 			@Override
 			public void run() {
 				flush();
 				addInspectComponents(event.getComponents());
 			}
 		});
-    }
-    
+	}
 
-    public void flush(){
+	public void flush() {
 		SwingUtilities.invokeLater(new Runnable() {
+
 			@Override
 			public void run() {
 				pageName.setText("");
@@ -220,5 +237,5 @@ public class SwingInspectorPanel extends JPanel {
 				oldList.clear();
 			}
 		});
-    } 
+	}
 }

@@ -39,7 +39,8 @@ public class SetupBlock implements IBlock {
 		return blockLines;
 	}
 
-	public void setBlockLines(List<BlockLine> blockLines) {
+	public void setBlockLines(
+		List<BlockLine> blockLines) {
 		this.blockLines = blockLines;
 	}
 
@@ -47,7 +48,8 @@ public class SetupBlock implements IBlock {
 		return columns;
 	}
 
-	public void setColumns(BlockLine columns) {
+	public void setColumns(
+		BlockLine columns) {
 		this.columns = columns;
 	}
 
@@ -55,15 +57,18 @@ public class SetupBlock implements IBlock {
 		return fixtureName;
 	}
 
-	public void setFixtureName(String fixtureName) {
+	public void setFixtureName(
+		String fixtureName) {
 		this.fixtureName = fixtureName;
 	}
 
-	public void addLine(List<String> cells) {
+	public void addLine(
+		List<String> cells) {
 		blockLines.add(new BlockLine(cells));
 	}
 
-	public void addLine(BlockLine line) {
+	public void addLine(
+		BlockLine line) {
 		blockLines.add(line);
 	}
 
@@ -71,7 +76,8 @@ public class SetupBlock implements IBlock {
 		return testResult;
 	}
 
-	public void setTestResult(TestResult testResult) {
+	public void setTestResult(
+		TestResult testResult) {
 		this.testResult = testResult;
 	}
 

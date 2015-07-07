@@ -11,8 +11,7 @@ import com.synaptix.toast.dao.domain.impl.common.BasicEntityBean;
 public class RepositoryImpl extends BasicEntityBean {
 
 	public String type;
-	
+
 	@Reference(ignoreMissing = true)
 	public List<ElementImpl> rows = new ArrayList<ElementImpl>();
-	
 }

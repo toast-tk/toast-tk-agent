@@ -4,7 +4,9 @@ import java.io.InputStream;
 
 public interface ISourceConnector {
 
-	public String[] getResourceListing(String path);
+	public String[] getResourceListing(
+		String path);
 
-	public InputStream getFileStream(String filePath);
+	public InputStream getFileStream(
+		String filePath);
 }

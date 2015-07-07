@@ -4,6 +4,6 @@ import com.synaptix.toast.core.net.request.CommandRequest;
 
 public abstract class ActionProcessorFactory {
 
-	public abstract ActionProcessor getProcessor(CommandRequest command);
-
+	public abstract ActionProcessor getProcessor(
+		CommandRequest command);
 }

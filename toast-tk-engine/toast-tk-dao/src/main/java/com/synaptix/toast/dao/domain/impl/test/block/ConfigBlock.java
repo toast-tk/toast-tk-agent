@@ -33,7 +33,8 @@ public class ConfigBlock implements IBlock {
 		return lines;
 	}
 
-	public void setLines(List<ComponentConfigLine> lines) {
+	public void setLines(
+		List<ComponentConfigLine> lines) {
 		this.lines = lines;
 	}
 
@@ -41,12 +42,15 @@ public class ConfigBlock implements IBlock {
 		return componentName;
 	}
 
-	public void setComponentName(String componentName) {
+	public void setComponentName(
+		String componentName) {
 		this.componentName = componentName;
 	}
 
-
-	public void addLine(String testName, String systemName, String componentAssociation) {
+	public void addLine(
+		String testName,
+		String systemName,
+		String componentAssociation) {
 		lines.add(new ComponentConfigLine(testName, systemName, componentAssociation));
 	}
 
@@ -54,5 +58,4 @@ public class ConfigBlock implements IBlock {
 	public String getBlockType() {
 		return "config";
 	}
-
 }

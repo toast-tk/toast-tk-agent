@@ -22,7 +22,7 @@ public class TestBlock implements IBlock {
 
 	@Embedded
 	private List<TestLine> blockLines;
-	
+
 	private String fixtureName;
 
 	public TestBlock() {
@@ -33,7 +33,8 @@ public class TestBlock implements IBlock {
 		return blockLines;
 	}
 
-	public void setBlockLines(List<TestLine> blockLines) {
+	public void setBlockLines(
+		List<TestLine> blockLines) {
 		this.blockLines = blockLines;
 	}
 
@@ -43,7 +44,10 @@ public class TestBlock implements IBlock {
 	 * @param cellsContent
 	 * @param comment
 	 */
-	public void addLine(String test, String expected, String comment) {
+	public void addLine(
+		String test,
+		String expected,
+		String comment) {
 		TestLine blockLine = new TestLine(test, expected, comment);
 		blockLine.setTestCommentString(comment);
 		this.blockLines.add(blockLine);
@@ -53,7 +57,8 @@ public class TestBlock implements IBlock {
 		return fixtureName;
 	}
 
-	public void setFixtureName(String fixtureName) {
+	public void setFixtureName(
+		String fixtureName) {
 		this.fixtureName = fixtureName;
 	}
 

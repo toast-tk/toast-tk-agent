@@ -5,7 +5,6 @@ import org.openqa.selenium.WebElement;
 
 import com.synaptix.toast.core.runtime.IWebElement;
 
-
 /**
  * 
  * @author skokaina
@@ -20,7 +19,8 @@ public interface SynchronizedDriver {
 	 *            locator description
 	 * @return
 	 */
-	public WebElement find(IWebElement element);
+	public WebElement find(
+		IWebElement element);
 
 	/**
 	 * selenium driver
@@ -28,5 +28,4 @@ public interface SynchronizedDriver {
 	 * @return
 	 */
 	public WebDriver getWebDriver();
-
 }

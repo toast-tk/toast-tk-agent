@@ -8,6 +8,7 @@ import com.synaptix.toast.dao.domain.impl.common.BasicTaggableMongoBean;
 
 @Entity(value = "teams", noClassnameStored = true)
 public class GroupImpl extends BasicTaggableMongoBean {
+
 	@Id
 	ObjectId id = new ObjectId();
 }

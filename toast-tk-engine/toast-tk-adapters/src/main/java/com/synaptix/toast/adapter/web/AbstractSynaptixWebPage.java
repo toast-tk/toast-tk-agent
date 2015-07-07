@@ -16,10 +16,10 @@ public abstract class AbstractSynaptixWebPage extends AbstractWebPage {
 	 * greenpepper Only, to manage via annotation processing => AbstractGreenPepperWebPage //<E extends Enum<E>>
 	 */
 	@Override
-	public void initElement(IWebElement webElement) {
+	public void initElement(
+		IWebElement webElement) {
 		super.initElement(webElement);
 	}
 
 	public abstract Map<String, String> getDebugIdMap();
-
 }

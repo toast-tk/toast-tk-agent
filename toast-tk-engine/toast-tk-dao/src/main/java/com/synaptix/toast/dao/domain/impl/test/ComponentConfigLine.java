@@ -16,8 +16,11 @@ import com.synaptix.toast.core.report.TestResult;
 public class ComponentConfigLine {
 
 	private String testName;
+
 	private String systemName;
+
 	private String componentAssociation;
+
 	private TestResult result;
 
 	public TestResult getTestResult() {
@@ -27,7 +30,10 @@ public class ComponentConfigLine {
 	public ComponentConfigLine() {
 	}
 
-	public ComponentConfigLine(String testName, String systemName, String componentAssociation) {
+	public ComponentConfigLine(
+		String testName,
+		String systemName,
+		String componentAssociation) {
 		this.testName = testName;
 		this.systemName = systemName;
 		this.componentAssociation = componentAssociation;
@@ -37,7 +43,8 @@ public class ComponentConfigLine {
 		return testName;
 	}
 
-	public void setTestName(String testName) {
+	public void setTestName(
+		String testName) {
 		this.testName = testName;
 	}
 
@@ -45,7 +52,8 @@ public class ComponentConfigLine {
 		return systemName;
 	}
 
-	public void setSystemName(String systemName) {
+	public void setSystemName(
+		String systemName) {
 		this.systemName = systemName;
 	}
 
@@ -53,15 +61,16 @@ public class ComponentConfigLine {
 		return componentAssociation;
 	}
 
-	public void setComponentAssociation(String componentAssociation) {
+	public void setComponentAssociation(
+		String componentAssociation) {
 		this.componentAssociation = componentAssociation;
 	}
 
 	/**
 	 * @param result
 	 */
-	public void setResult(TestResult result) {
+	public void setResult(
+		TestResult result) {
 		this.result = result;
 	}
-
 }

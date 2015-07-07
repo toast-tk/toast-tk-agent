@@ -16,15 +16,21 @@ import com.synaptix.toast.core.report.TestResult;
 public class SwingPageConfigLine {
 
 	private String elementName;
+
 	private String type;
+
 	private String locator;
+
 	private TestResult result;
 
 	public TestResult getTestResult() {
 		return result;
 	}
 
-	public SwingPageConfigLine(String name, String type,  String locator) {
+	public SwingPageConfigLine(
+		String name,
+		String type,
+		String locator) {
 		this.elementName = name;
 		this.type = type;
 		this.locator = locator;
@@ -36,7 +42,8 @@ public class SwingPageConfigLine {
 	/**
 	 * @param result
 	 */
-	public void setResult(TestResult result) {
+	public void setResult(
+		TestResult result) {
 		this.result = result;
 	}
 
@@ -48,28 +55,26 @@ public class SwingPageConfigLine {
 		return type;
 	}
 
-
 	public String getLocator() {
 		return locator;
 	}
-
 
 	public TestResult getResult() {
 		return result;
 	}
 
-	public void setElementName(String elementName) {
+	public void setElementName(
+		String elementName) {
 		this.elementName = elementName;
 	}
 
-	public void setType(String type) {
+	public void setType(
+		String type) {
 		this.type = type;
 	}
 
-
-	public void setLocator(String locator) {
+	public void setLocator(
+		String locator) {
 		this.locator = locator;
 	}
-
-
 }
