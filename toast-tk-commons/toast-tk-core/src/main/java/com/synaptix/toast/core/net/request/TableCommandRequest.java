@@ -5,9 +5,6 @@ import java.util.List;
 
 import com.synaptix.toast.core.adapter.AutoSwingType;
 
-/**
- * Created by skokaina on 07/11/2014.
- */
 public class TableCommandRequest extends CommandRequest {
 
 	public final TableCommandRequestQuery query;

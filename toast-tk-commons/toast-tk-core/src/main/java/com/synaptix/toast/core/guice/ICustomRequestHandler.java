@@ -20,10 +20,11 @@ public interface ICustomRequestHandler {
 	 * @param target Component
 	 * @param request to indicate which action we need to perform on the target Component
 	 * @return any response
+	 * @throws IllegalAccessException 
 	 */
 	public String hanldeFixtureCall(
 		Component target,
-		IIdRequest request);
+		IIdRequest request) throws IllegalAccessException;
 
 	/**
 	 * Locate an element, the method should return the component (value) if it happens that it

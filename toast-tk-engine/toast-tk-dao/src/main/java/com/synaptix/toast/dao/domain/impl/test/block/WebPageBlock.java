@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.synaptix.toast.dao.domain.impl.test.block;
 
 import java.util.ArrayList;
@@ -11,10 +8,6 @@ import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.dao.domain.impl.test.WebPageConfigLine;
 
-/**
- * A web page block.
- * 
- */
 @Embedded
 public class WebPageBlock implements IBlock {
 

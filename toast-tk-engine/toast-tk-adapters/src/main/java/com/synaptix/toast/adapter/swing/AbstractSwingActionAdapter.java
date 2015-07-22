@@ -18,7 +18,6 @@ import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.TypeValue
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.TypeValueInInput;
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.TypeVarIn;
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.VALUE_REGEX;
-import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.VAR_IN_REGEX;
 import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.Wait;
 
 import java.util.ArrayList;
@@ -249,27 +248,30 @@ public abstract class AbstractSwingActionAdapter {
 		String pageName,
 		String widgetName,
 		String tableColumnFinder)
-		throws IllegalAccessException, TimeoutException,
-		ErrorResultReceivedException {
+		throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
 		SwingTableElement table = (SwingTableElement) getPageField(pageName, widgetName);
-		String[] criteria = tableColumnFinder.split(Property.TABLE_CRITERIA_SEPARATOR);
 		List<TableCommandRequestQueryCriteria> tableCriteria = new ArrayList<TableCommandRequestQueryCriteria>();
+		String[] criteria = tableColumnFinder.split(Property.TABLE_CRITERIA_SEPARATOR);
 		if(criteria.length > 0) {
 			for(String criterion : criteria) {
-				String col = criterion.split(Property.TABLE_KEY_VALUE_SEPARATOR)[0];
-				String val = criterion.split(Property.TABLE_KEY_VALUE_SEPARATOR)[1];
-				TableCommandRequestQueryCriteria tableCriterion = new TableCommandRequestQueryCriteria(col, val);
+				TableCommandRequestQueryCriteria tableCriterion = buildTableCriterion(criterion);
 				tableCriteria.add(tableCriterion);
 			}
 		}
 		else {
-			String col = tableColumnFinder.split(Property.TABLE_KEY_VALUE_SEPARATOR)[0];
-			String val = tableColumnFinder.split(Property.TABLE_KEY_VALUE_SEPARATOR)[1];
-			TableCommandRequestQueryCriteria tableCriterion = new TableCommandRequestQueryCriteria(col, val);
+			TableCommandRequestQueryCriteria tableCriterion = buildTableCriterion(tableColumnFinder);
 			tableCriteria.add(tableCriterion);
 		}
 		String outputVal = table.find(tableCriteria);
 		return new TestResult(outputVal, ResultKind.SUCCESS);
+	}
+
+	private TableCommandRequestQueryCriteria buildTableCriterion(
+		String criterion) {
+		String col = criterion.split(Property.TABLE_KEY_VALUE_SEPARATOR)[0];
+		String val = criterion.split(Property.TABLE_KEY_VALUE_SEPARATOR)[1];
+		TableCommandRequestQueryCriteria tableCriterion = new TableCommandRequestQueryCriteria(col, val);
+		return tableCriterion;
 	}
 
 	@Action(action = SelectContectualMenu, description = "selectionner un menu dans une popup contextuelle")
@@ -406,7 +408,7 @@ public abstract class AbstractSwingActionAdapter {
 		return new TestResult();
 	}
 
-	@Action(action = VAR_IN_REGEX + " == " + VAR_IN_REGEX, description = "Comparer deux variables")
+	@Action(action = VALUE_REGEX + " == " + VALUE_REGEX, description = "Comparer deux variables")
 	public TestResult VarEqVar(
 		String var1,
 		String var2)
@@ -421,7 +423,7 @@ public abstract class AbstractSwingActionAdapter {
 	}
 
 	@Action(
-		action = VAR_IN_REGEX + " égale à " + VAR_IN_REGEX,
+		action = VALUE_REGEX + " égale à " + VALUE_REGEX,
 		description = "Comparer une valeur à une variable")
 	public TestResult ValueEqVar(
 		String value,
@@ -436,7 +438,7 @@ public abstract class AbstractSwingActionAdapter {
 		}
 	}
 
-	@Action(action = "Assigner " + VALUE_REGEX + " à " + VAR_IN_REGEX, description = "Assigner valeur à variable")
+	@Action(action = "Assigner " + VALUE_REGEX + " à " + VALUE_REGEX, description = "Assigner valeur à variable")
 	public TestResult setValToVar(
 		String value,
 		String var)
@@ -445,7 +447,7 @@ public abstract class AbstractSwingActionAdapter {
 		return new TestResult();
 	}
 
-	@Action(action = "Clear (\\w+).(\\w+)", description = "Effacer le contenu d'un composant input graphique")
+	@Action(action = "Clear {{input:component:swing}}", description = "Effacer le contenu d'un composant input graphique")
 	public TestResult clear(
 		String pageName,
 		String widgetName)

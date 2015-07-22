@@ -1,7 +1,6 @@
 package com.synaptix.toast.adapter.swing;
 
 import com.synaptix.toast.core.adapter.AutoSwingType;
-import com.synaptix.toast.core.adapter.AutoWebType;
 import com.synaptix.toast.core.runtime.ISwingElement;
 
 /**

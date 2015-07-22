@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.AfterClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.synaptix.toast.core.annotation.Action;
@@ -57,10 +56,8 @@ public class TestRunnerTestCase {
 		assertEquals(buildArgument, "200");
 		buildArgument = ArgumentHelper.buildActionAdapterArgument(repo, "*$variable*");
 		assertEquals(buildArgument, "200");
-		buildArgument = ArgumentHelper.buildActionAdapterArgument(repo, "$vaiable");
-		assertNull(buildArgument);
-		buildArgument = ArgumentHelper.buildActionAdapterArgument(repo, "$$variable");
-		assertEquals(buildArgument, "$variable");
+		buildArgument = ArgumentHelper.buildActionAdapterArgument(repo, "$variables");
+		assertEquals(buildArgument, "$variables");
 		buildArgument = ArgumentHelper.buildActionAdapterArgument(repo, "*variable*");
 		assertEquals(buildArgument, "variable");
 	}
@@ -94,15 +91,15 @@ public class TestRunnerTestCase {
 		throws IOException {
 		String convertActionSentenceToRegex = ArgumentHelper
 			.convertActionSentenceToRegex("Faire action sur {{champ:variable:string}}");
-		assertEquals("Faire action sur $(w+)", convertActionSentenceToRegex);
+		assertEquals("Faire action sur {{champ:variable:string}}", convertActionSentenceToRegex);
 	}
 
 	@Test
 	public void testActionItemVariableDefaultReplacement()
 		throws IOException {
 		String convertActionSentenceToRegex = ArgumentHelper
-			.convertActionSentenceToRegex("Faire action sur {{variable}}");
-		assertEquals("Faire action sur $(w+)", convertActionSentenceToRegex);
+			.convertActionSentenceToRegex("Faire action sur {{value}}");
+		assertEquals("Faire action sur \\*([\\$?\\w\\W]+)\\*", convertActionSentenceToRegex);
 	}
 
 	@AfterClass

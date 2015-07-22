@@ -38,9 +38,43 @@ public abstract class AbstractProjectRunner {
 		String projectName,
 		boolean overrideRepoFromWebApp)
 		throws Exception {
-		Project project = DAOManager.getInstance().getLastProjectByName(projectName);
-		execute(project, overrideRepoFromWebApp);
-		DAOManager.getInstance().saveProject(project);
+		Project lastProject = DAOManager.getInstance().getLastProjectByName(projectName);
+		Project referenceProject = DAOManager.getInstance().getReferenceProjectByName(projectName);
+		if(referenceProject == null){
+			throw new IllegalAccessException("No reference project name found for: " + projectName);
+		}
+		Project newIterationProject = mergeToNewIteration(lastProject, referenceProject);
+		execute(newIterationProject, overrideRepoFromWebApp);
+		DAOManager.getInstance().saveProject(newIterationProject);
+	}
+
+	private Project mergeToNewIteration(
+		Project lastIterationProject,
+		Project newIterationProject) {
+		if(lastIterationProject.getIteration() == newIterationProject.getIteration()){
+			return newIterationProject;
+		}
+		
+		//creating a new iteration from history
+		newIterationProject.setId(null);
+		newIterationProject.setIteration(lastIterationProject.getIteration());
+		
+		for(ICampaign newCampaign: newIterationProject.getCampaigns()){
+			for(ICampaign lastCampaign: lastIterationProject.getCampaigns()){
+				if(newCampaign.getIdAsString().equals(lastCampaign.getIdAsString())){
+					for(ITestPage newPage: newCampaign.getTestCases()){
+						for(ITestPage lastPage: lastCampaign.getTestCases()){
+							if(newPage.getIdAsString().equals(lastPage.getIdAsString())){
+								newPage.setPreviousIsSuccess(lastPage.isPreviousIsSuccess());
+								newPage.setPreviousExecutionTime(lastPage.getPreviousExecutionTime());
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return newIterationProject;
 	}
 
 	private void execute(

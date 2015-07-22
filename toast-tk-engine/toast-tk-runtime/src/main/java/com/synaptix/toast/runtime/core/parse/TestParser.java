@@ -406,7 +406,9 @@ public class TestParser {
 		if(line != null) {
 			do {
 				line = br.readLine();
-				varValue += line.replace("\n", " ").replace("\t", " ") + " ";
+				if(!line.startsWith("\"\"\"")){
+					varValue += line.replace("\n", " ").replace("\t", " ") + " ";
+				}
 			}
 			while(line != null && !line.trim().contains("\"\"\""));
 		}

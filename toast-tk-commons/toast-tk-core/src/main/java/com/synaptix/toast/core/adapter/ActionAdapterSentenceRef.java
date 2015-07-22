@@ -6,10 +6,6 @@ public class ActionAdapterSentenceRef {
 
 	public static final String VALUE_REGEX = "{{value:string}}";
 
-	public static final String VAR_IN_REGEX = "{{variable:string}}";
-
-	public static final String VAR_OUT_REGEX = "(\\$\\$[\\w]+)";
-
 	public static final String TypeValue = "Saisir " + VALUE_REGEX;
 
 	public static final String TypeValueInInput = "Type " + VALUE_REGEX + " in " + SWING_COMPONENT_REGEX;
@@ -18,7 +14,7 @@ public class ActionAdapterSentenceRef {
 
 	public static final String ClickOn = "Click on " + SWING_COMPONENT_REGEX;
 
-	public static final String TypeVarIn = "Type " + VAR_IN_REGEX + " in " + SWING_COMPONENT_REGEX;
+	public static final String TypeVarIn = "Type " + VALUE_REGEX + " in " + SWING_COMPONENT_REGEX;
 
 	public static final String Wait = "wait for (\\w+) sec";
 
@@ -28,7 +24,7 @@ public class ActionAdapterSentenceRef {
 	public static final String SelectMenuPath = "Selectionner menu " + VALUE_REGEX;
 
 	public static final String StoreComponentValueInVar = "Récupérer la valeur de " + SWING_COMPONENT_REGEX + " dans "
-		+ VAR_IN_REGEX;
+		+ VALUE_REGEX;
 
 	public static final String GetComponentValue = "Récupérer la valeur de " + SWING_COMPONENT_REGEX;
 
@@ -39,20 +35,18 @@ public class ActionAdapterSentenceRef {
 	public static final String SelectTableRow = "Dans " + SWING_COMPONENT_REGEX + " selectionner la ligne ayant "
 		+ VALUE_REGEX;
 
-	public static final String AddValueInVar = "Ajouter " + VALUE_REGEX + " à " + VAR_IN_REGEX;
+	public static final String AddValueInVar = "Ajouter " + VALUE_REGEX + " à " + VALUE_REGEX;
 
-	public static final String SubstractValueFromVar = "Retrancher " + VALUE_REGEX + " à " + VAR_IN_REGEX;
+	public static final String SubstractValueFromVar = "Retrancher " + VALUE_REGEX + " à " + VALUE_REGEX;
 
-	public static final String MultiplyVarByValue = "Multiplier " + VAR_IN_REGEX + " par " + VALUE_REGEX;
+	public static final String MultiplyVarByValue = "Multiplier " + VALUE_REGEX + " par " + VALUE_REGEX;
 
-	public static final String DiviserVarByValue = "Diviser " + VAR_IN_REGEX + " par " + VALUE_REGEX;
+	public static final String DiviserVarByValue = "Diviser " + VALUE_REGEX + " par " + VALUE_REGEX;
 
-	public static final String RemplacerVarParValue = "Enregister " + VALUE_REGEX + " dans " + VAR_IN_REGEX;
+	public static final String RemplacerVarParValue = "Enregister " + VALUE_REGEX + " dans " + VALUE_REGEX;
 
 	public static enum Params {
-		VALUE(VALUE_REGEX, "@Value"), COMPONENT(SWING_COMPONENT_REGEX, "@Page.@Item"), VARIABLE(
-			VAR_IN_REGEX,
-			"@Variable");
+		VALUE(VALUE_REGEX, "@Value"), COMPONENT(SWING_COMPONENT_REGEX, "@Page.@Item");
 
 		public final String regex;
 
@@ -83,8 +77,7 @@ public class ActionAdapterSentenceRef {
 
 		public String metaValue() {
 			return regex.replace(Params.VALUE.regex, Params.VALUE.metaInfo)
-				.replace(Params.COMPONENT.regex, Params.COMPONENT.metaInfo)
-				.replace(Params.VARIABLE.regex, Params.VARIABLE.metaInfo);
+				.replace(Params.COMPONENT.regex, Params.COMPONENT.metaInfo);
 		}
 	}
 

@@ -40,7 +40,7 @@ public class ActionAdapterCollector {
 			else {
 				fixtureKind = "undefined";
 			}
-			out.add(new FixtureDescriptor(declaringClass.getSimpleName(), fixtureKind, annotation.action()));
+			out.add(new FixtureDescriptor(declaringClass.getSimpleName(), fixtureKind, annotation.action(), annotation.description()));
 		}
 		return out;
 	}

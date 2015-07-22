@@ -15,8 +15,11 @@ public class InputEventStackGobbler extends EventStackGobbler {
 	@Override
 	public boolean isInterestedIn(
 		AWTCapturedEvent capturedEvent) {
-		this.inputTypeUnderCapture = capturedEvent.componentType;
-		return isInputEvent(capturedEvent.eventLabel);
+		boolean isInputEvent = isInputEvent(capturedEvent.eventLabel);
+		if(isInputEvent && this.inputTypeUnderCapture == null){
+			this.inputTypeUnderCapture = capturedEvent.componentType;
+		}
+		return isInputEvent(capturedEvent.eventLabel) || capturedEvent.componentType.equals(inputTypeUnderCapture);
 	}
 
 	public boolean isInputEvent(
@@ -26,16 +29,12 @@ public class InputEventStackGobbler extends EventStackGobbler {
 
 	@Override
 	public boolean isLooper() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public EventStackGobbler digest(
 		AWTCapturedEvent capturedEvent) {
-// if (isInputEvent(capturedEvent.eventLabel) ||
-// isMouseClick(capturedEvent.eventLabel)) {
-// return this;
-// }
 		if(isFocusLostEvent(capturedEvent.eventLabel)) {
 			String inputCapturedType = capturedEvent.componentType;
 			if(inputCapturedType.equals(inputTypeUnderCapture)) {
@@ -65,13 +64,10 @@ public class InputEventStackGobbler extends EventStackGobbler {
 		return EventType.KEY_INPUT;
 	}
 
-	private static boolean isMenuType(
-		String targetType) {
-		return "JMenu".equals(targetType);
+	@Override
+	public void reset() {
+		this.inputTypeUnderCapture = null;
+		this.finalEvent = null;
 	}
 
-	private static boolean isMenuItemType(
-		String targetType) {
-		return "JMenuItem".equals(targetType);
-	}
 }

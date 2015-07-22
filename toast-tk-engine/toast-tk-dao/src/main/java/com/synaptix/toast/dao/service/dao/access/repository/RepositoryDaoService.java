@@ -86,7 +86,7 @@ public class RepositoryDaoService extends AbstractMongoDaoService<RepositoryImpl
 		}
 		catch(Exception e) {
 			LOG.error("Couldn't save json representation to mongo instance", e);
-			return false;
 		}
+		return false;
 	}
 }

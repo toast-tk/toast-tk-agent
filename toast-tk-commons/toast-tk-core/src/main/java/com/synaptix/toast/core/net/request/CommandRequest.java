@@ -3,9 +3,6 @@ package com.synaptix.toast.core.net.request;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-/**
- * Created by skokaina on 07/11/2014.
- */
 public class CommandRequest implements IIdRequest {
 
 	public boolean isCustom;

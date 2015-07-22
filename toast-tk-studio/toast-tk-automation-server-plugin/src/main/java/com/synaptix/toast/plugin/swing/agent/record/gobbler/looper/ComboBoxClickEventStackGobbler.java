@@ -28,7 +28,7 @@ public class ComboBoxClickEventStackGobbler extends EventStackGobbler {
 
 	@Override
 	public boolean isLooper() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -52,5 +52,10 @@ public class ComboBoxClickEventStackGobbler extends EventStackGobbler {
 	@Override
 	public AWTCapturedEvent getAdjustedEvent() {
 		return finalEvent;
+	}
+	
+	@Override
+	public void reset() {
+		this.finalEvent = null;
 	}
 }

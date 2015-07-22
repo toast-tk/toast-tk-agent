@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
+import com.synaptix.toast.plugin.swing.agent.record.gobbler.looper.ComboBoxClickEventStackGobbler;
+import com.synaptix.toast.plugin.swing.agent.record.gobbler.looper.InputEventStackGobbler;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.ButtonClickEventStackGobbler;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.CheckBoxClickEventStackGobbler;
+import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.MenuClickEventStackGobbler;
+import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.MenuItemClickEventStackGobbler;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.PanelFocusEventStackGobbler;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.PopupClickEventStackGobbler;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.TableClickEventStackGobbler;
@@ -15,6 +19,10 @@ public class EventStackGobblerProvider {
 
 	static List<EventStackGobbler> gobblers = new ArrayList<EventStackGobbler>();
 	static {
+		gobblers.add(new ComboBoxClickEventStackGobbler());
+		gobblers.add(new InputEventStackGobbler());
+		gobblers.add(new MenuClickEventStackGobbler());
+		gobblers.add(new MenuItemClickEventStackGobbler());
 		gobblers.add(new ButtonClickEventStackGobbler());
 		gobblers.add(new CheckBoxClickEventStackGobbler());
 		gobblers.add(new TableClickEventStackGobbler());

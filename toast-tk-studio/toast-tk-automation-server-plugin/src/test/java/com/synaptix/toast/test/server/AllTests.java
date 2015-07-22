@@ -8,6 +8,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import com.synaptix.toast.plugin.swing.server.SwingInspectionServer;
 import com.synaptix.toast.plugin.swing.server.boot.Boot;
+import com.synaptix.toast.test.TestSuiteHelper;
 
 @RunWith(Suite.class)
 @SuiteClasses({

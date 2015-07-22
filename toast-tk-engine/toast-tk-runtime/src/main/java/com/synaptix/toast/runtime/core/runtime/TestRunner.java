@@ -1,6 +1,5 @@
 package com.synaptix.toast.runtime.core.runtime;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -14,13 +13,11 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.common.base.CaseFormat;
-import com.google.gson.Gson;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
 import com.synaptix.toast.adapter.ActionAdapterCollector;
@@ -70,7 +67,6 @@ public class TestRunner {
 	private IReportUpdateCallBack reportUpdateCallBack;
 
 	private List<FixtureService> fixtureApiServices;
-
 
 	public TestRunner(
 		ITestManager testManager,
@@ -396,7 +392,7 @@ public class TestRunner {
 			line.startExecution();
 			// override with test line call
 			TestLineDescriptor descriptor = new TestLineDescriptor(block, line);
-			TestResult result = parseServiceCall(descriptor);
+			TestResult result = findActionAdapterAndInvokeAction(descriptor);
 			line.stopExecution();
 			if("KO".equals(line.getExpected()) && ResultKind.FAILURE.equals(result.getResultKind())) {
 				result.setResultKind(ResultKind.SUCCESS);
@@ -452,29 +448,28 @@ public class TestRunner {
 	 * @throws IllegalAccessException
 	 * @throws ClassNotFoundException
 	 */
-	private TestResult parseServiceCall(
+	private TestResult findActionAdapterAndInvokeAction(
 		TestLineDescriptor descriptor)
 		throws IllegalAccessException, ClassNotFoundException {
 		TestResult result = null;
-		String command = descriptor.getCommand();
+		final String command = descriptor.getCommand();
 		// Locating service class ////////////////////////////////////
-		final String studyCommand = command.replace("$$", "$");
 		Class<?> localFixtureClass = locateFixtureClass(
 			descriptor.getTestLineFixtureKind(),
 			descriptor.getTestLineFixtureName(),
-			studyCommand);
+			command);
 		if(localFixtureClass != null) {
 			Object connector = getClassInstance(localFixtureClass);
 			FixtureExecCommandDescriptor commandMethodImpl = findMethodInClass(command, localFixtureClass);
 			if(commandMethodImpl == null) {
-				commandMethodImpl = findMethodInClass(studyCommand, localFixtureClass);
+				commandMethodImpl = findMethodInClass(command, localFixtureClass);
 			}
-			result = doLocalFixtureCall(command, connector, commandMethodImpl);
+			result = doLocalActionCall(command, connector, commandMethodImpl);
 		}
 		else if(getClassInstance(ISwingAutomationClient.class) != null) {
 			// If no class is implementing the command then
 			// process it as a custom command sent through Kryo
-			result = doRemoteFixtureCall(command, descriptor);
+			result = doRemoteActionCall(command, descriptor);
 			result.setContextualTestSentence(command);
 		}
 		else {
@@ -488,7 +483,7 @@ public class TestRunner {
 		return result;
 	}
 
-	private TestResult doRemoteFixtureCall(
+	private TestResult doRemoteActionCall(
 		String command,
 		TestLineDescriptor descriptor) {
 		TestResult result;
@@ -501,7 +496,8 @@ public class TestRunner {
 		return result;
 	}
 
-	private TestResult doLocalFixtureCall(
+	//FIXME: replace object by interface implementation
+	private TestResult doLocalActionCall(
 		String command,
 		Object instance,
 		FixtureExecCommandDescriptor fixtureExecDescriptor) {
@@ -513,16 +509,8 @@ public class TestRunner {
 		for(int i = 0; i < groupCount; i++) {
 			String group = matcher.group(i + 1);
 			args[i] = ArgumentHelper.buildActionAdapterArgument(repoSetup, group);
-			if(group.startsWith("$$")) {
-				// nothing
-			}
-			else if(group.startsWith("$")
-				&& args[i] != null
-				&& !group.contains(Property.DEFAULT_PARAM_SEPARATOR)) {
-				command = command.replaceFirst("\\" + group + "\\b", (String) args[i]);
-			}
-			else {
-				// nothing
+			if(isVariable(args, i, group)) {
+				command = command.replaceFirst("\\" + group + "\\b", ((String) args[i]).replace("$", "\\$"));
 			}
 		}
 		try {
@@ -539,6 +527,15 @@ public class TestRunner {
 		}
 		result.setContextualTestSentence(command);
 		return result;
+	}
+
+	private boolean isVariable(
+		Object[] args,
+		int i,
+		String group) {
+		return group.startsWith("$")
+			&& args[i] != null
+			&& !group.contains(Property.DEFAULT_PARAM_SEPARATOR);
 	}
 
 	private CommandRequest buildCommandRequest(
@@ -606,37 +603,6 @@ public class TestRunner {
 	/**
 	 * DOCUMENT
 	 * 
-	 * @param file
-	 * @param serviceType
-	 * @return
-	 * @throws ClassNotFoundException
-	 */
-	private Class<?> getServiceClassFromSettings(
-		String file,
-		String serviceType)
-		throws ClassNotFoundException {
-		File f = new File(file);
-		try {
-			String readFileToString = FileUtils.readFileToString(f);
-			Gson gson = new Gson();
-			ConfigProvider provider = gson.fromJson(readFileToString, ConfigProvider.class);
-			if(provider != null) {
-				for(Settings setting : provider.settings) {
-					if(setting.type.equals(serviceType)) {
-						return Class.forName(setting.className);
-					}
-				}
-			}
-		}
-		catch(IOException e) {
-			LOG.error(e.getMessage(), e);
-		}
-		return null;
-	}
-
-	/**
-	 * DOCUMENT
-	 * 
 	 * @param command
 	 * @param serviceClass
 	 * @return
@@ -698,4 +664,5 @@ public class TestRunner {
 			this.matcher = matcher;
 		}
 	}
+	
 }

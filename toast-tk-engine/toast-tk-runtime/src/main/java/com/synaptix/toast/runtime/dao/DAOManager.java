@@ -18,6 +18,7 @@ public class DAOManager {
 
 	private static DAOManager instance;
 
+	//FIXME add configuration in property file
 	private DAOManager() {
 		mongoServiceInjector = Guice.createInjector(new MongoModule("10.23.252.131", 27017));
 		pfactory = mongoServiceInjector.getInstance(ProjectDaoService.Factory.class);
@@ -36,6 +37,12 @@ public class DAOManager {
 		return service.getLastByName(projectName);
 	}
 
+	public Project getReferenceProjectByName(
+		String projectName){
+		return service.getReferenceProjectByName(projectName);
+	}
+	
+	
 	public void saveProject(
 		Project project) {
 		service.saveNewIteration(project);

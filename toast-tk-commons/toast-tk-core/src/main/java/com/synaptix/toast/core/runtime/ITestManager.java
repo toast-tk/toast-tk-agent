@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.synaptix.toast.core.runtime;
 
 import java.io.Serializable;
@@ -8,10 +5,6 @@ import java.util.Map;
 
 import com.synaptix.toast.core.annotation.craft.FixMe;
 
-/**
- * @author E413544
- * 
- */
 @FixMe(todo = "should be a service adapter interface ? keep in core, runtime or move in specific plugin module ?")
 public interface ITestManager {
 

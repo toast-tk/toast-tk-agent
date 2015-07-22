@@ -15,7 +15,6 @@ import com.synaptix.toast.dao.service.init.DbStarter;
 public class TestPageDaoService extends AbstractMongoDaoService<TestPage> {
 
 	public interface Factory {
-
 		TestPageDaoService create(
 			@Nullable @Assisted String dbName);
 	}
@@ -41,5 +40,11 @@ public class TestPageDaoService extends AbstractMongoDaoService<TestPage> {
 		t.setId(null);
 		save((TestPage) t);
 		return t;
+	}
+
+	public ITestPage saveReference(
+		ITestPage t) {
+		save((TestPage) t);
+		return t;		
 	}
 }

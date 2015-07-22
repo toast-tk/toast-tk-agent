@@ -1,12 +1,10 @@
-/**
- * 
- */
 package com.synaptix.toast.dao.domain.impl.test;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.joda.time.LocalDateTime;
 
 import com.github.jmkgreen.morphia.annotations.Embedded;
@@ -18,17 +16,10 @@ import com.github.jmkgreen.morphia.annotations.Transient;
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.report.TestResult;
-import com.synaptix.toast.core.report.TestResult.ResultKind;
 import com.synaptix.toast.dao.domain.def.test.IRunnableTest;
 import com.synaptix.toast.dao.domain.impl.common.BasicEntityBean;
 import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
 
-/**
- * Full Test Page contains test blocks
- * 
- * @author E413544
- * 
- */
 @Entity(value = "test")
 @Indexes({
 		@Index(value = "pageName, -runDateTime"), @Index("runDateTime"), @Index("isTemplate")
@@ -67,12 +58,19 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 	public TestPage() {
 		blocks = new ArrayList<IBlock>();
 	}
-
+	
+	@Override
+	public String getIdAsString() {
+		return id != null ? id.toString() : null;
+	}
+	
 	@Override
 	public void setId(
-		Object object) {
-		if(object == null) {
+		String id) {
+		if(id == null) {
 			this.id = null;
+		}else{
+			this.id = new ObjectId(id);
 		}
 	}
 
@@ -205,15 +203,18 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 		return previousExecutionTime;
 	}
 
+	@Override
 	public void setPreviousExecutionTime(
 		long previousExecutionTime) {
 		this.previousExecutionTime = previousExecutionTime;
 	}
 
+	@Override
 	public boolean isPreviousIsSuccess() {
 		return previousIsSuccess;
 	}
 
+	@Override
 	public void setPreviousIsSuccess(
 		boolean previousIsSuccess) {
 		this.previousIsSuccess = previousIsSuccess;
@@ -221,7 +222,7 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 
 	public void setIsTemplate(
 		boolean b) {
-		this.isTemplate = true;
+		this.isTemplate = b;
 	}
 
 	public boolean getIsTemplate() {

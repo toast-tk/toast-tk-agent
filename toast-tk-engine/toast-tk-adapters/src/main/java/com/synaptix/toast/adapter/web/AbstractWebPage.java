@@ -55,33 +55,14 @@ public abstract class AbstractWebPage implements IFeedableWebPage {
 		String method,
 		String locator,
 		Integer position) {
-		/**
-		 * used to locate an element
-		 */
 		DefaultWebElement defaultWebElement = new DefaultWebElement(name, AutoWebType.valueOf(type), locator,
 			method == null ? LocationMethod.CSS : LocationMethod.valueOf(method), position);
 		elements.put(name, defaultWebElement);
-		/**
-		 * selenium wrapper field initalizarion when it comes to greenpepper
-		 */
 		try {
 			IWebElement iWebElement = elements.get(name);
 			if(iWebElement != null) {
 				WebAutoElement execAutoClass = ElementFactory.getElement(iWebElement);
-				// for this abstract page, init fields (for java classes only
-				for(Field f : this.getClass().getFields()) {
-					Class<?> automationClass = f.getType();
-					if(WebAutoElement.class.isAssignableFrom(automationClass)) {
-						if(f.getName().equals(name)) {
-							try {
-								BeanUtils.setProperty(this, name, execAutoClass);
-							}
-							catch(Exception e) {
-								e.printStackTrace();
-							}
-						}
-					}
-				}
+				initBeanFields(name, execAutoClass);
 				autoElements.put(name, execAutoClass);
 			}
 			else {
@@ -90,6 +71,24 @@ public abstract class AbstractWebPage implements IFeedableWebPage {
 		}
 		catch(Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void initBeanFields(
+		String name,
+		WebAutoElement execAutoClass) {
+		for(Field f : this.getClass().getFields()) {
+			Class<?> automationClass = f.getType();
+			if(WebAutoElement.class.isAssignableFrom(automationClass)) {
+				if(f.getName().equals(name)) {
+					try {
+						BeanUtils.setProperty(this, name, execAutoClass);
+					}
+					catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 	}
 

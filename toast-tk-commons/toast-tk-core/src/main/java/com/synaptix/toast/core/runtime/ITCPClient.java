@@ -2,7 +2,6 @@ package com.synaptix.toast.core.runtime;
 
 import java.io.IOException;
 
-import com.esotericsoftware.kryonet.FrameworkMessage.KeepAlive;
 import com.synaptix.toast.core.net.request.IIdRequest;
 
 public interface ITCPClient {

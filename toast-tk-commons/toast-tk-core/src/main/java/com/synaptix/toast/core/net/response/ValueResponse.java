@@ -2,9 +2,6 @@ package com.synaptix.toast.core.net.response;
 
 import com.synaptix.toast.core.net.request.IIdRequest;
 
-/**
- * Created by skokaina on 07/11/2014.
- */
 public class ValueResponse implements IIdRequest {
 
 	private String id;

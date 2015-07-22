@@ -13,7 +13,6 @@ import com.synaptix.toast.dao.service.init.DbStarter;
 public class CommentBlockDaoService extends AbstractMongoDaoService<CommentBlock> {
 
 	public interface Factory {
-
 		CommentBlockDaoService create(
 			@Nullable @Assisted String dbName);
 	}

@@ -36,10 +36,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -51,13 +48,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.fit.cssbox.swingbox.BrowserPane;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
-import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.core.agent.interpret.InterpretedEvent;
 import com.synaptix.toast.core.rest.ImportedScenario;
@@ -88,12 +83,9 @@ public class SwingInspectionRecorderPanel extends JPanel {
 
 	private final Config config;
 
-	private ITestManager testEnvManager;
-
 	private final JComboBox comboBox;
 
-	private final static long WAIT_THRESHOLD = 15; // in sec, TODO: link with
-// fixture exist timeout
+	private static final long WAIT_THRESHOLD = 15; // in sec, TODO: link with fixture exist timeout
 
 	private static final String stopRecordingLabel = "Stop recording";
 
@@ -118,13 +110,11 @@ public class SwingInspectionRecorderPanel extends JPanel {
 		ISwingAutomationClient recorder,
 		EventBus eventBus,
 		Config config,
-		ITestManager testEnvManager,
 		final MongoRepositoryCacheWrapper mongoRepoManager) {
 		super(new BorderLayout());
 		eventBus.register(this);
 		this.recorder = recorder;
 		this.config = config;
-		this.testEnvManager = testEnvManager;
 		this.interpretedOutputArea = new JTextArea();
 		this.mongoRepoManager = mongoRepoManager;
 		this.comboBox = new JComboBox(new String[]{

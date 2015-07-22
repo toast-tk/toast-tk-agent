@@ -15,7 +15,6 @@ import com.synaptix.toast.dao.service.init.DbStarter;
 public class ConfigBlockDaoService extends AbstractMongoDaoService<ConfigBlock> {
 
 	public interface Factory {
-
 		ConfigBlockDaoService create(
 			@Nullable @Assisted String dbName);
 	}

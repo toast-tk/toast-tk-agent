@@ -28,8 +28,6 @@ public class MongoDefaultStarterImpl implements DbStarter {
 
 	private MongoClient mClient;
 
-	private final Config config;
-
 	private Map<String, Datastore> dsMap;
 
 	private final EntityCollectionManager enitityManager;
@@ -45,7 +43,6 @@ public class MongoDefaultStarterImpl implements DbStarter {
 		@Named("MongoHost") String mongoHost,
 		@Named("MongoPort") int mongoPort)
 	{
-		this.config = config;
 		this.enitityManager = enitityManager;
 		this.mongoHost = mongoHost == null ? config.getMongoServer() : mongoHost;
 		this.mongoPort = mongoPort == -1 ? config.getMongoPort() : mongoPort;

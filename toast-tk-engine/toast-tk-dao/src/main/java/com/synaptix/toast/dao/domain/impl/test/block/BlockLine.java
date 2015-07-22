@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.synaptix.toast.dao.domain.impl.test.block;
 
 import java.util.List;
@@ -8,13 +5,6 @@ import java.util.List;
 import com.github.jmkgreen.morphia.annotations.Embedded;
 import com.synaptix.toast.core.report.TestResult;
 
-/**
- * Standard block line, contains strings.
- * 
- * @author E413544
- * 
- */
-// @Entity(value = "blocks")
 @Embedded
 public class BlockLine {
 

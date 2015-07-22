@@ -1,5 +1,7 @@
 package com.mongo.test;
 
+import java.util.List;
+
 import javax.ws.rs.core.MediaType;
 
 import com.google.inject.Guice;
@@ -8,9 +10,9 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.synaptix.toast.core.rest.RestUtils;
+import com.synaptix.toast.dao.domain.impl.report.Project;
 import com.synaptix.toast.dao.guice.MongoModule;
 import com.synaptix.toast.dao.service.dao.access.project.ProjectDaoService;
-import com.synaptix.toast.dao.service.dao.access.repository.RepositoryDaoService;
 
 public class TestMongo {
 
@@ -19,7 +21,7 @@ public class TestMongo {
 		Injector in = Guice.createInjector(new MongoModule("10.23.252.131", 27017));
 		ProjectDaoService.Factory repoFactory = in.getInstance(ProjectDaoService.Factory.class);
 		ProjectDaoService service = repoFactory.create("play_db");
-		service.findAllLastProjects();
+		List<Project> findAllReferenceProjects = service.findAllReferenceProjects();
 	}
 
 	/**

@@ -1,8 +1,5 @@
 package com.synaptix.toast.core.net.response;
 
-/**
- * Created by skokaina on 07/11/2014.
- */
 public class ExistsResponse {
 
 	public final String id;

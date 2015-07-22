@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.joda.time.LocalDateTime;
 
-import com.synaptix.toast.core.report.TestResult;
-
 public interface ITestPage extends ITaggable {
 
 	public IBlock getVarBlock();
@@ -39,9 +37,11 @@ public interface ITestPage extends ITaggable {
 	public String getName();
 
 	public void setId(
-		Object object);
+		String id);
 
 	public boolean isPreviousIsSuccess();
+	
+	public void setPreviousIsSuccess(boolean isSuccess);
 
 	public long getPreviousExecutionTime();
 
@@ -50,4 +50,9 @@ public interface ITestPage extends ITaggable {
 	public void stopExecution();
 
 	public Object getParsingErrorMessage();
+
+	public String getIdAsString();
+
+	void setPreviousExecutionTime(
+		long previousExecutionTime);
 }

@@ -57,4 +57,8 @@ public class Property {
 	public static final String DEFAULT_PARAM_INPUT_SEPARATOR = "<-";
 
 	public static final int TOAST_AGENT_PORT = 7676;
+	
+	public static final String ACTION_ITEM_VAR_REGEX = "(\\$\\w+)";
+	
+	public static final String ACTION_ITEM_REGEX = "\\{\\{([\\w:]+)\\}\\}";
 }

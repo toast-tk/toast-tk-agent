@@ -48,13 +48,15 @@ public class FixtureHandlerProvider {
 	public String processFixtureCall(
 		Component target,
 		CommandRequest request) {
-		ICustomRequestHandler handlerInterestedIn = getHandlerInterestedIn(request);
 		String response = null;
+		ICustomRequestHandler handlerInterestedIn = getHandlerInterestedIn(request);
 		if(handlerInterestedIn != null) {
-			response = handlerInterestedIn.hanldeFixtureCall(target, request);
-		}
-		else {
-			LOG.info("No CustomFixtureHandler finded");
+			try {
+				response = handlerInterestedIn.hanldeFixtureCall(target, request);
+			}
+			catch(IllegalAccessException e) {
+				LOG.error(e.getMessage(), e);
+			}
 		}
 		return response;
 	}

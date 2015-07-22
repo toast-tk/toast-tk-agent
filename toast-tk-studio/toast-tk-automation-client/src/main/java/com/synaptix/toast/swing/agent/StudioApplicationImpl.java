@@ -216,6 +216,16 @@ public class StudioApplicationImpl implements IStudioApplication {
 		throws IOException {
 		properties.load(FileUtils.openInputStream(toastProperties));
 	}
+	
+	@Override
+	public void initProperties() {
+		try {
+			initProperties(toastPropertiesFile);
+		}
+		catch(IOException e) {
+			LOG.error(e.getMessage(), e);
+		}
+	}
 
 	@Override
 	public String getRuntimeType() {
@@ -233,13 +243,5 @@ public class StudioApplicationImpl implements IStudioApplication {
 		}
 	}
 
-	@Override
-	public void initProperties() {
-		try {
-			initProperties(toastPropertiesFile);
-		}
-		catch(IOException e) {
-			LOG.error(e.getMessage(), e);
-		}
-	}
+
 }

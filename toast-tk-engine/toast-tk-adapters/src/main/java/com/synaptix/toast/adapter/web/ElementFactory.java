@@ -22,12 +22,8 @@ public class ElementFactory {
 				return new WebSelectElement(e);
 			case link :
 				return new WebLinkElement(e);
-			case gwt_table :
-				return new WebTableElement(e);
 			case suggest :
 				return new WebSelectElement(e);
-			case dual_suggest :
-				return new WebDualSuggestElement(e);
 			default :
 				return null;
 		}
@@ -36,22 +32,12 @@ public class ElementFactory {
 	public static Class<? extends WebAutoElement> getTypeClass(
 		AutoWebType e) {
 		switch(e) {
-			case button :
-				return WebButtonElement.class;
-			case input :
-				return WebInputElement.class;
-			case list :
-				return WebSelectElement.class;
-			case select :
-				return WebSelectElement.class;
-			case link :
-				return WebLinkElement.class;
-			case gwt_table :
-				return WebTableElement.class;
-			case suggest :
-				return WebSuggestElement.class;
-			case dual_suggest :
-				return WebDualSuggestElement.class;
+			case button : return WebButtonElement.class;
+			case input : return WebInputElement.class;
+			case list : return WebSelectElement.class;
+			case select : return WebSelectElement.class;
+			case link :	return WebLinkElement.class;
+			case suggest : return WebSuggestElement.class;
 			default :
 				return null;
 		}
@@ -71,14 +57,8 @@ public class ElementFactory {
 		else if(e.equals(WebLinkElement.class)) {
 			return AutoWebType.link;
 		}
-		else if(e.equals(WebTableElement.class)) {
-			return AutoWebType.gwt_table;
-		}
 		else if(e.equals(WebSuggestElement.class)) {
 			return AutoWebType.suggest;
-		}
-		else if(e.equals(WebDualSuggestElement.class)) {
-			return AutoWebType.dual_suggest;
 		}
 		else {
 			return null;

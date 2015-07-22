@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.synaptix.toast.dao.domain.impl.test.block;
 
 import java.util.ArrayList;
@@ -10,13 +7,6 @@ import com.github.jmkgreen.morphia.annotations.Embedded;
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.dao.domain.impl.test.TestLine;
 
-/**
- * A test block.
- * 
- * @author E413544
- * 
- */
-// @Entity(value = "blocks")
 @Embedded
 public class TestBlock implements IBlock {
 

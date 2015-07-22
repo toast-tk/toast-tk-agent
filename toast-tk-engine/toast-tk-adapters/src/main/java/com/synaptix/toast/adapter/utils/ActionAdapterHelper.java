@@ -18,17 +18,17 @@ public class ActionAdapterHelper {
 	/**
 	 * Format pattern for LocalTime
 	 */
-	public static final String TimePattern = "HH:mm:ss";
+	public static final String TIME_PATTERN = "HH:mm:ss";
 
 	/**
 	 * Format pattern for LocalDate
 	 */
-	public static final String DatePattern = "dd/MM/yyyy";
+	public static final String DATE_PATTERN = "dd/MM/yyyy";
 
 	/**
 	 * Format pattern for LocalDateTime
 	 */
-	public static final String DateTimePattern = "dd/MM/yyyy HH:mm:ss";
+	public static final String DATETIME_PATTERN = "dd/MM/yyyy HH:mm:ss";
 
 	public static boolean isEmptyOrNull(
 		String str) {
@@ -46,7 +46,7 @@ public class ActionAdapterHelper {
 		if(isEmptyOrNull(dateTime)) {
 			return null;
 		}
-		return LocalDateTime.parse(dateTime, new DateTimeFormatterBuilder().appendPattern(DateTimePattern)
+		return LocalDateTime.parse(dateTime, new DateTimeFormatterBuilder().appendPattern(DATETIME_PATTERN)
 			.toFormatter());
 	}
 
@@ -58,7 +58,7 @@ public class ActionAdapterHelper {
 		if(isEmptyOrNull(date)) {
 			return null;
 		}
-		return LocalDate.parse(date, new DateTimeFormatterBuilder().appendPattern(DatePattern).toFormatter());
+		return LocalDate.parse(date, new DateTimeFormatterBuilder().appendPattern(DATE_PATTERN).toFormatter());
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class ActionAdapterHelper {
 		if(isEmptyOrNull(time)) {
 			return null;
 		}
-		return LocalTime.parse(time, new DateTimeFormatterBuilder().appendPattern(TimePattern).toFormatter());
+		return LocalTime.parse(time, new DateTimeFormatterBuilder().appendPattern(TIME_PATTERN).toFormatter());
 	}
 
 	public static Double parseDouble(
@@ -205,7 +205,7 @@ public class ActionAdapterHelper {
 		}
 		return Duration.millis(LocalTime.parse(
 			time,
-			new DateTimeFormatterBuilder().appendPattern(TimePattern).toFormatter()).getMillisOfDay());
+			new DateTimeFormatterBuilder().appendPattern(TIME_PATTERN).toFormatter()).getMillisOfDay());
 	}
 
 	/**

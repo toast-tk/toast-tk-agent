@@ -45,4 +45,8 @@ public class PopupClickEventStackGobbler extends EventStackGobbler {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public void reset() {
+	}
 }

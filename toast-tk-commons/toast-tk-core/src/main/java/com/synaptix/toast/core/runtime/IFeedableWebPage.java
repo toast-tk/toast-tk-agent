@@ -1,10 +1,5 @@
 package com.synaptix.toast.core.runtime;
 
-/**
- * 
- * @author skokaina
- * 
- */
 public interface IFeedableWebPage {
 
 	/**

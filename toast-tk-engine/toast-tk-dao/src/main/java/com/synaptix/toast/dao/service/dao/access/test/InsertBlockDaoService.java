@@ -13,7 +13,6 @@ import com.synaptix.toast.dao.service.init.DbStarter;
 public class InsertBlockDaoService extends AbstractMongoDaoService<InsertBlock> {
 
 	public interface Factory {
-
 		InsertBlockDaoService create(
 			@Nullable @Assisted String dbName);
 	}

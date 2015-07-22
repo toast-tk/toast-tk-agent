@@ -124,37 +124,44 @@ public class SwingInspectionRecorder implements IEventRecorder {
 		listeners.clear();
 	}
 
-	public void liveExplore(
+	public AWTCapturedEvent liveExplore(
 		final List<AWTCapturedEvent> capturedEvents) {
 		final List<AWTCapturedEvent> immutableLineList = ImmutableList.copyOf(capturedEvents);
 		for(final AWTCapturedEvent capturedEvent : immutableLineList) {
 			if(this.currentEventStackGobbler == null) {
 				this.currentEventStackGobbler = EventStackGobblerProvider.get(capturedEvent);
 			}
-			if(currentEventStackGobbler.isLooper()) {
-				if(this.currentEventStackGobbler.digest(capturedEvent).isCompleted()) {
-					EventType interpretedEventType = currentEventStackGobbler.getInterpretedEventType(capturedEvent);
-					AWTCapturedEvent adjustedEvent = currentEventStackGobbler.getAdjustedEvent();
-					_process(interpretedEventType, adjustedEvent);
+			if(currentEventStackGobbler != null){
+				if(currentEventStackGobbler.isLooper()) {
+					if(this.currentEventStackGobbler.digest(capturedEvent).isCompleted()) {
+						EventType interpretedEventType = currentEventStackGobbler.getInterpretedEventType(capturedEvent);
+						AWTCapturedEvent adjustedEvent = currentEventStackGobbler.getAdjustedEvent();
+						currentEventStackGobbler.reset();
+						return _process(interpretedEventType, adjustedEvent);
+					}
+					else {
+						continue;
+					}
 				}
 				else {
-					continue;
+					EventType interpretedEventType = currentEventStackGobbler.getInterpretedEventType(capturedEvent);
+					return _process(interpretedEventType, capturedEvent);
 				}
-			}
-			else {
-				EventType interpretedEventType = currentEventStackGobbler.getInterpretedEventType(capturedEvent);
-				_process(interpretedEventType, capturedEvent);
+			}else{
+				LOG.info("No EventStackGobler for event: " + capturedEvent);
 			}
 		}
+		return null;
 	}
 
-	private synchronized void _process(
+	private synchronized AWTCapturedEvent _process(
 		EventType eventType,
 		AWTCapturedEvent event) {
 		event.setEventType(eventType);
 		cmdServer.publishRecordEvent(event);
 		liveRecordedStepsBuffer.clear();
 		this.currentEventStackGobbler = null;
+		return event;
 	}
 
 	private FilteredAWTEventListener recordFocusEvents() {

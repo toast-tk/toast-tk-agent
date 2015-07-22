@@ -49,4 +49,14 @@ public class CampaignDaoService extends AbstractMongoDaoService<Campaign> {
 		save(c);
 		return c;
 	}
+
+	public ICampaign saveReference(
+		Campaign c) {
+		for(ITestPage t : c.getTestCases()) {
+			tService.saveReference(t);
+		}
+		save(c);
+		return c;
+	}
+
 }

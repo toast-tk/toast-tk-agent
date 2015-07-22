@@ -1,4 +1,4 @@
-package com.synaptix.toast.test.server;
+package com.synaptix.toast.test;
 
 import java.util.List;
 

@@ -65,19 +65,7 @@ public abstract class AbstractSwingPage implements IFeedableSwingPage {
 			if(iWebElement != null) {
 				SwingAutoElement execAutoClass = ElementFactory.getElement(iWebElement);
 				// for this abstract page, init fields (for java classes only
-				for(Field f : this.getClass().getFields()) {
-					Class<?> automationClass = f.getType();
-					if(SwingAutoElement.class.isAssignableFrom(automationClass)) {
-						if(f.getName().equals(name)) {
-							try {
-								BeanUtils.setProperty(this, name, execAutoClass);
-							}
-							catch(Exception e) {
-								e.printStackTrace();
-							}
-						}
-					}
-				}
+				initBeanFields(name, execAutoClass);
 				autoElements.put(name, execAutoClass);
 			}
 			else {
@@ -86,6 +74,24 @@ public abstract class AbstractSwingPage implements IFeedableSwingPage {
 		}
 		catch(Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void initBeanFields(
+		String name,
+		SwingAutoElement execAutoClass) {
+		for(Field f : this.getClass().getFields()) {
+			Class<?> automationClass = f.getType();
+			if(SwingAutoElement.class.isAssignableFrom(automationClass)) {
+				if(f.getName().equals(name)) {
+					try {
+						BeanUtils.setProperty(this, name, execAutoClass);
+					}
+					catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 	}
 

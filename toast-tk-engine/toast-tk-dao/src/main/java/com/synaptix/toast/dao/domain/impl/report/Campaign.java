@@ -42,6 +42,11 @@ public class Campaign extends BasicTaggableMongoBean implements ICampaign {
 			this.id = null;
 		}
 	}
+	
+	public void setId(
+		ObjectId id) {
+		this.id = id;
+	}
 
 	@Override
 	public String getIdAsString() {
@@ -50,11 +55,6 @@ public class Campaign extends BasicTaggableMongoBean implements ICampaign {
 
 	public ObjectId getId() {
 		return id;
-	}
-
-	public void setId(
-		ObjectId id) {
-		this.id = id;
 	}
 
 	public short getIteration() {

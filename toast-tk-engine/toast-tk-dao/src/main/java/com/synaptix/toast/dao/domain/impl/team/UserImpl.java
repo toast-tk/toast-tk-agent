@@ -9,7 +9,7 @@ import com.github.jmkgreen.morphia.annotations.Id;
 import com.github.jmkgreen.morphia.annotations.Reference;
 import com.synaptix.toast.dao.domain.impl.common.BasicTaggableMongoBean;
 
-@Entity(value = "teams", noClassnameStored = true)
+@Entity(value = "teams.users", noClassnameStored = true)
 public class UserImpl extends BasicTaggableMongoBean {
 
 	@Id

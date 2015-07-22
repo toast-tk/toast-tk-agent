@@ -13,7 +13,6 @@ import com.synaptix.toast.dao.service.init.DbStarter;
 public class SetupBlockDaoService extends AbstractMongoDaoService<SetupBlock> {
 
 	public interface Factory {
-
 		SetupBlockDaoService create(
 			@Nullable @Assisted String dbName);
 	}

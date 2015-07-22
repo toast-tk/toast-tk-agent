@@ -11,6 +11,7 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.LoaderClassPath;
+import javassist.Modifier;
 import javassist.NotFoundException;
 
 import org.apache.commons.io.FileUtils;
@@ -92,7 +93,7 @@ public class DeployConnectorMojo extends AbstractMojo {
 		final List<ActionAdapterDescriptorLine> sentences = new ArrayList<ActionAdapterDescriptorLine>();
 		String className = buildClassName(iterateFiles);
 		CtClass cc = cp.get(className);
-		if(cc.hasAnnotation(ActionAdapter.class)) {
+		if(cc.hasAnnotation(ActionAdapter.class) && !Modifier.isAbstract( cc.getModifiers() )) {
 			ActionAdapter adapter = (ActionAdapter) cc.getAnnotation(ActionAdapter.class);
 			String adapterKind = adapter.value().name();
 			String adapterName = adapter.name();

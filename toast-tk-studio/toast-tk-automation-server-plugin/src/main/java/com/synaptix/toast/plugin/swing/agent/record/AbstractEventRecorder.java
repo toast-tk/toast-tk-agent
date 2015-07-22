@@ -8,6 +8,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.AbstractButton;
@@ -18,6 +19,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -230,9 +234,34 @@ public abstract class AbstractEventRecorder implements FilteredAWTEventListener,
 		return getComponentName(component);
 	}
 
+	private static String computeMenuItemPath(List<String> namePath, JMenuItem menuItem){
+		if(menuItem.getParent() instanceof JPopupMenu){
+			JPopupMenu fromParent = (JPopupMenu)menuItem.getParent();
+			JMenu menu = (JMenu)fromParent.getInvoker();
+			if(menu != null){
+				namePath.add(menu.getText());
+			}
+			Collections.reverse(namePath);
+			return StringUtils.join(namePath, " / ");
+		}
+		else if(menuItem.getParent() instanceof JMenuItem){
+			namePath.add(((JMenuItem)menuItem.getParent()).getText());
+			return computeMenuItemPath(namePath, (JMenuItem) menuItem.getParent());
+		}else{
+			Collections.reverse(namePath);
+			return StringUtils.join(namePath, " / ");
+		}
+	}
+	
 	protected static String getComponentName(
 		Component component) {
-		if(component instanceof AbstractButton) {
+		if (component instanceof JMenuItem){
+			final JMenuItem menuItem = (JMenuItem) component;
+			final List<String> namePath = new ArrayList<String>();
+			namePath.add(((JMenuItem)menuItem).getText());
+			return computeMenuItemPath(namePath, menuItem);
+		}
+		else if(component instanceof AbstractButton) {
 			final AbstractButton b = (AbstractButton) component;
 			return b.getText();
 		}

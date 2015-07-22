@@ -6,7 +6,6 @@ import java.net.URL;
 import java.util.Properties;
 
 import com.google.inject.Provider;
-import com.synaptix.toast.constant.Property;
 
 public class ConfigProvider implements Provider<Config> {
 

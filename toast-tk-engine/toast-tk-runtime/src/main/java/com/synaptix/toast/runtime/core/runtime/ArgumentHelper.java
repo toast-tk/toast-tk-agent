@@ -5,25 +5,22 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.synaptix.toast.constant.Property;
-import com.synaptix.toast.core.adapter.ActionAdapterSentenceRef;
 import com.synaptix.toast.core.runtime.IRepositorySetup;
 import com.synaptix.toast.runtime.core.runtime.ActionItem.ActionCategoryEnum;
 import com.synaptix.toast.runtime.core.runtime.ActionItem.ActionTypeEnum;
 
 public class ArgumentHelper {
 	
-	private static final String ACTION_ITEM_REGEX = "\\{\\{([\\w:]+)\\}\\}";
-	private static final List<ActionItem> actionItems = ActionItemDescriptionCollector.initActionItems();
+	private static final List<ActionItem> ACTION_ITEMS = ActionItemDescriptionCollector.initActionItems();
 	
 	public static String convertActionSentenceToRegex(
 		String actionSentence) {
 		String convertedSentence = actionSentence;
-		Pattern regexPattern = Pattern.compile(ACTION_ITEM_REGEX);
+		Pattern regexPattern = Pattern.compile(Property.ACTION_ITEM_REGEX);
 		Matcher matcher = regexPattern.matcher(actionSentence);
-		int index = 1;
 		while(matcher.find()) {
-			String group = matcher.group(index++);
-			String[] groupArray = group.split(":");
+			String actionItemDefinition = matcher.group(1);
+			String[] groupArray = actionItemDefinition.split(":");
 			String regex = null;
 			if(hasOnlyDeclaredActionItemCategory(groupArray)) {
 				String category = groupArray[0];
@@ -45,7 +42,8 @@ public class ArgumentHelper {
 				regex = getActionItemRegex(categoryEnum, typeEnum);
 			}
 			if(regex != null) {
-				convertedSentence = matcher.replaceFirst(regex);
+				convertedSentence = matcher.replaceFirst(regex.replace("\\", "\\\\\\"));
+				matcher = regexPattern.matcher(convertedSentence);
 			}
 		}
 		return convertedSentence;
@@ -54,7 +52,7 @@ public class ArgumentHelper {
 	private static String getActionItemRegex(
 		ActionCategoryEnum categoryEnum,
 		ActionTypeEnum typeEnum) {
-		for(ActionItem actionItem : actionItems) {
+		for(ActionItem actionItem : ACTION_ITEMS) {
 			if(actionItem.category.equals(categoryEnum)) {
 				if(actionItem.kind.equals(typeEnum)) {
 					return actionItem.regex;
@@ -83,17 +81,16 @@ public class ArgumentHelper {
 		IRepositorySetup repoSetup,
 		String group) {
 		group = group.replaceAll("\\*", "");
-		if(isOutputVariable(group)) {
-			return group.substring(1);
-		}
-		else if(isInputVariable(group)) {
-			Object object = repoSetup.getUserVariables().get(group);
-			if(object != null && object instanceof String) {
-				String value = (String) object;
-				value = handleValueWithNestedVars(repoSetup, value);
-				object = value;
+		if(repoSetup.getUserVariables().containsKey(group)){
+			if(isInputVariable(group)) {
+				Object object = repoSetup.getUserVariables().get(group);
+				if(object != null && object instanceof String) {
+					String value = (String) object;
+					value = handleValueWithNestedVars(repoSetup, value);
+					object = value;
+				}
+				return object;
 			}
-			return object;
 		}
 		return group;
 	}
@@ -101,8 +98,7 @@ public class ArgumentHelper {
 	private static String handleValueWithNestedVars(
 		IRepositorySetup repoSetup,
 		String value) {
-		String variableRegex = "(\\$\\w+)";
-		Pattern p = Pattern.compile(variableRegex, Pattern.MULTILINE);
+		Pattern p = Pattern.compile(Property.ACTION_ITEM_VAR_REGEX, Pattern.MULTILINE);
 		Matcher m = p.matcher(value);
 		int pos = 0;
 		while(m.find()) {
@@ -121,9 +117,5 @@ public class ArgumentHelper {
 			&& !group.substring(1).contains("$")
 			&& !group.substring(1).contains(Property.DEFAULT_PARAM_SEPARATOR);
 	}
-
-	private static boolean isOutputVariable(
-		String group) {
-		return group.startsWith("$$");
-	}
+	
 }

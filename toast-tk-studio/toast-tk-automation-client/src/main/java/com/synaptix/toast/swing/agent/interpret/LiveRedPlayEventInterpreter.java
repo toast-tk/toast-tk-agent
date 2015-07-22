@@ -31,6 +31,7 @@ public class LiveRedPlayEventInterpreter extends DefaultEventInterpreter {
 			isConnected = true;
 		}
 		catch(Exception e) {
+			LOG.error(e.getMessage(), e);
 		}
 	}
 
@@ -103,16 +104,21 @@ public class LiveRedPlayEventInterpreter extends DefaultEventInterpreter {
 	 */
 	private String convertToKnowType(
 		String type) {
-		if(type.toLowerCase().contains("button"))
+		if(type.toLowerCase().contains("button")){
 			return "button";
-		if(type.toLowerCase().contains("checkbox"))
+		}
+		if(type.toLowerCase().contains("checkbox")){
 			return "checkbox";
-		if(type.toLowerCase().contains("text"))
+		}
+		if(type.toLowerCase().contains("text")){
 			return "input";
-		if(type.toLowerCase().contains("table"))
+		}
+		if(type.toLowerCase().contains("table")){
 			return "table";
-		if(type.toLowerCase().contains("combo"))
+		}
+		if(type.toLowerCase().contains("combo")){
 			return "list";
+		}
 		return "other";
 	}
 

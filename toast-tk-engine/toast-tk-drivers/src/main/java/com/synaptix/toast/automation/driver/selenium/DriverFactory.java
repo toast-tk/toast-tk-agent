@@ -28,17 +28,17 @@ import com.thoughtworks.selenium.Selenium;
  */
 public class DriverFactory {
 
-	private static final DriverFactory instance = new DriverFactory();
+	private static final DriverFactory INSTANCE = new DriverFactory();
 
 	private static final Log LOG = LogFactory.getLog(DriverFactory.class);
 
-	private FirefoxDriver driver;
+	private FirefoxDriver firefoxDriver;
 
 	private DriverFactory() {
 	}
 
 	public static DriverFactory getFactory() {
-		return instance;
+		return INSTANCE;
 	}
 
 	public InternetExplorerDriver getInternetExplorerDriver() {
@@ -57,11 +57,11 @@ public class DriverFactory {
 		// a configurer dans le wiki d'initialisation d'environement !!
 		// System.setProperty("webdriver.firefox.bin",
 // "C:\\Users\\E413544\\Apps\\Firefox25\\firefox.exe");
-		if(driver == null) {
-			driver = new FirefoxDriver();
-			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		if(firefoxDriver == null) {
+			firefoxDriver = new FirefoxDriver();
+			firefoxDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		}
-		return driver;
+		return firefoxDriver;
 	}
 
 	public RemoteWebDriver getRemoteDriver(

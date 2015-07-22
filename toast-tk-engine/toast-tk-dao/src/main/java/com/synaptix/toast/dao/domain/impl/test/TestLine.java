@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.synaptix.toast.dao.domain.impl.test;
 
 import org.joda.time.LocalDateTime;
@@ -10,10 +7,6 @@ import com.github.jmkgreen.morphia.annotations.Entity;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.dao.domain.def.test.IRunnableTest;
 
-/**
- * @author E413544
- * 
- */
 @Entity(value = "test", noClassnameStored = true)
 @Embedded
 public class TestLine implements IRunnableTest {

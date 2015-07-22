@@ -4,8 +4,8 @@
 		<mkdir dir="install/lib" />
 		<mkdir dir="install/plugins" />
 
-		<copydir dest="install/lib" src="target/toast-studio-1.3-rc3/lib"></copydir>
-		<copydir dest="install/plugins" src="target/toast-studio-1.3-rc3/agent-lib"></copydir>
+		<copydir dest="install/lib" src="target/toast-studio-1.3-rc4/lib"></copydir>
+		<copydir dest="install/plugins" src="target/toast-studio-1.3-rc4/agent-lib"></copydir>
 
 		<!-- Création du fichier Bienvenue.exe avec Launch4j -->
 		<exec executable="C:\Program Files\Launch4j\launch4jc.exe">

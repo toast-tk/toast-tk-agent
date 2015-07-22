@@ -57,46 +57,23 @@ public class RemoteSwingAgentDriverImpl implements IRemoteSwingAgentDriver {
 
 	private void initListeners() {
 		client.addResponseHandler(new ITCPResponseReceivedHandler() {
-
 			@Override
 			public void onResponseReceived(
 				Object object) {
 				if(object instanceof ExistsResponse) {
-					ExistsResponse response = (ExistsResponse) object;
-					existsResponseMap.put(response.id, response.exists);
+					handleExistsResponse(object);
 				}
 				else if(object instanceof ValueResponse) {
-					ValueResponse response = (ValueResponse) object;
-					valueResponseMap.put(response.getId(), response.value);
+					handleValueResponse(object);
 				}
 				else if(object instanceof ErrorResponse) {
-					ErrorResponse response = (ErrorResponse) object;
-					TestResult testResult = new TestResult(response.getMessage(), null);
-					// TODO: manage screenshots
-					if(valueResponseMap.keySet().contains(response.getId())) {
-						valueResponseMap.put(response.getId(), testResult);
-					}
-					else if(existsResponseMap.keySet().contains(response.getId())) {
-						existsResponseMap.put(response.getId(), testResult);
-					}
-					else {
-						// notify runner
-						LOG.error("Error result received {}", response.getMessage());
-					}
+					handleErrorResponse(object);
 				}
 				if(object instanceof InitResponse) {
-					if(LOG.isDebugEnabled()) {
-						InitResponse response = (InitResponse) object;
-						LOG.debug(response);
-					}
+					handleInitResponse(object);
 				}
 				else {
-					if(object instanceof IIdRequest) {
-						handleResponse((IIdRequest) object);
-					}
-					else if(!(object instanceof KeepAlive)) {
-						LOG.warn(String.format("Unhandled response: %s", object));
-					}
+					handleRemainingResponse(object);
 				}
 			}
 		});
@@ -123,6 +100,53 @@ public class RemoteSwingAgentDriverImpl implements IRemoteSwingAgentDriver {
 			catch(InterruptedException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	private void handleRemainingResponse(
+		Object object) {
+		if(object instanceof IIdRequest) {
+			handleResponse((IIdRequest) object);
+		}
+		else if(!(object instanceof KeepAlive)) {
+			LOG.warn(String.format("Unhandled response: %s", object));
+		}
+	}
+
+	private void handleExistsResponse(
+		Object object) {
+		ExistsResponse response = (ExistsResponse) object;
+		existsResponseMap.put(response.id, response.exists);
+	}
+
+	private void handleValueResponse(
+		Object object) {
+		ValueResponse response = (ValueResponse) object;
+		valueResponseMap.put(response.getId(), response.value);
+	}
+
+	private void handleInitResponse(
+		Object object) {
+		if(LOG.isDebugEnabled()) {
+			InitResponse response = (InitResponse) object;
+			LOG.debug(response);
+		}
+	}
+
+	private void handleErrorResponse(
+		Object object) {
+		ErrorResponse response = (ErrorResponse) object;
+		TestResult testResult = new TestResult(response.getMessage(), null);
+		// TODO: manage screenshots
+		if(valueResponseMap.keySet().contains(response.getId())) {
+			valueResponseMap.put(response.getId(), testResult);
+		}
+		else if(existsResponseMap.keySet().contains(response.getId())) {
+			existsResponseMap.put(response.getId(), testResult);
+		}
+		else {
+			// notify runner
+			LOG.error("Error result received {}", response.getMessage());
 		}
 	}
 

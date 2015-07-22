@@ -232,7 +232,7 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 
 	private static boolean acceptableContainer(
 		Window w) {
-		boolean scopable = !w.getClass().getPackage().getName().contains(".redpepper.");
+		boolean scopable = !w.getClass().getPackage().getName().contains(".toast.");
 		boolean acceptable = scopable && (w instanceof Frame || w instanceof JDialog) && w.isVisible();
 		return acceptable;
 	}

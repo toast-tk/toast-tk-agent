@@ -2,11 +2,6 @@ package com.synaptix.toast.core.runtime;
 
 import com.synaptix.toast.core.adapter.AutoWebType;
 
-/**
- * 
- * @author skokaina
- * 
- */
 public interface IWebElement {
 
 	/**

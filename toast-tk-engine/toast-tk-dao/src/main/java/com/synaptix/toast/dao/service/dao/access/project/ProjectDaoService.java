@@ -23,7 +23,6 @@ import com.synaptix.toast.dao.service.init.DbStarter;
 public class ProjectDaoService extends AbstractMongoDaoService<Project> {
 
 	public interface Factory {
-
 		ProjectDaoService create(
 			@Assisted String dbName);
 	}
@@ -68,6 +67,17 @@ public class ProjectDaoService extends AbstractMongoDaoService<Project> {
 		return projectHistory;
 	}
 
+	public Key<Project> saveReferenceProject(
+		Project project) {
+		short iteration = 0;
+		project.setLast(false);
+		project.setIteration(iteration);
+		for(ICampaign c : project.getCampaigns()) {
+			cDaoService.saveReference((Campaign) c);
+		}
+		return save(project);
+	}
+	
 	public Key<Project> saveNewIteration(
 		Project newEntry) {
 		// update previous entry
@@ -83,6 +93,11 @@ public class ProjectDaoService extends AbstractMongoDaoService<Project> {
 			cDaoService.saveAsNewIteration((Campaign) c);
 		}
 		return save(newEntry);
+	}
+	public List<Project> findAllReferenceProjects() {
+		Query<Project> query = createQuery();
+		query.criteria("iteration").equal((short)0);
+		return query.asList();
 	}
 
 	public List<Project> findAllLastProjects() {
@@ -104,7 +119,7 @@ public class ProjectDaoService extends AbstractMongoDaoService<Project> {
 		String name) {
 		Query<Project> query = createQuery();
 		query.field("name").equal(name).order("-iteration");
-		return query.get();
+		return find(query).get();
 	}
 
 	public Project getByNameAndIteration(
@@ -113,6 +128,15 @@ public class ProjectDaoService extends AbstractMongoDaoService<Project> {
 		Query<Project> query = createQuery();
 		Criteria nameCriteria = query.criteria("name").equal(pName);
 		Criteria iterationCriteria = query.criteria("iteration").equal(Short.valueOf(iter));
+		query.and(nameCriteria, iterationCriteria);
+		return find(query).get();
+	}
+
+	public Project getReferenceProjectByName(
+		String projectName) {
+		Query<Project> query = createQuery();
+		Criteria nameCriteria = query.criteria("name").equal(projectName);
+		Criteria iterationCriteria = query.criteria("iteration").equal((short)0);
 		query.and(nameCriteria, iterationCriteria);
 		return find(query).get();
 	}

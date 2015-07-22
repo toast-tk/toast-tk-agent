@@ -42,4 +42,6 @@ public abstract class EventStackGobbler {
 	}
 
 	public abstract AWTCapturedEvent getAdjustedEvent();
+	
+	public abstract void reset();
 }
