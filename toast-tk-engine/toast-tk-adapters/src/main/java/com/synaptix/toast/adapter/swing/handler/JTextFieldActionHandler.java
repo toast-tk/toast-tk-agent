@@ -20,31 +20,7 @@ public class JTextFieldActionHandler implements ISwingwidgetActionHandler<JTextF
 		final CommandRequest command) {
 		switch(command.action) {
 			case SET :
-				if("date".equals(command.itemType)) {
-					SwingUtilities.invokeLater(new Runnable() {
-
-						@Override
-						public void run() {
-							int value = Integer.parseInt(command.value);
-							LocalDate date = LocalDate.now().plusDays(value);
-							DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yy");
-							String formattedDate = formatter.print(date);
-							textField.setText(formattedDate);
-						}
-					});
-				}
-				else if("date_text".equals(command.itemType)) {
-					SwingUtilities.invokeLater(new Runnable() {
-
-						@Override
-						public void run() {
-							textField.setText(command.value);
-						}
-					});
-				}
-				else {
-					textField.setText(command.value);
-				}
+				handleSetText(textField, command);
 				break;
 			case CLICK :
 				FestRobotInstance.getRobot().click(textField);
@@ -55,5 +31,35 @@ public class JTextFieldActionHandler implements ISwingwidgetActionHandler<JTextF
 				throw new IllegalArgumentException("Unsupported command for JTextField: " + command.action.name());
 		}
 		return null;
+	}
+
+	private void handleSetText(
+		final JTextField textField,
+		final CommandRequest command) {
+		if("date".equals(command.itemType)) {
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					int value = Integer.parseInt(command.value);
+					LocalDate date = LocalDate.now().plusDays(value);
+					DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yy");
+					String formattedDate = formatter.print(date);
+					textField.setText(formattedDate);
+				}
+			});
+		}
+		else if("date_text".equals(command.itemType)) {
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					textField.setText(command.value);
+				}
+			});
+		}
+		else {
+			textField.setText(command.value);
+		}
 	}
 }

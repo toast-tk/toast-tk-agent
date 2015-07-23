@@ -12,34 +12,34 @@ import com.synaptix.toast.core.runtime.ISwingElement;
 public class ElementFactory {
 
 	public static SwingAutoElement getElement(
-		ISwingElement e) {
-		switch(e.getType()) {
+		ISwingElement element) {
+		switch(element.getType()) {
 			case button :
-				return new SwingButtonElement(e);
+				return new SwingButtonElement(element);
 			case input :
-				return new SwingInputElement(e);
+				return new SwingInputElement(element);
 			case menu :
-				return new SwingMenuElement(e);
+				return new SwingMenuElement(element);
 			case menuitem :
-				return new SwingMenuItemElement(e);
+				return new SwingMenuItemElement(element);
 			case table :
-				return new SwingTableElement(e);
+				return new SwingTableElement(element);
 			case date :
-				return new SwingDateElement(e);
+				return new SwingDateElement(element);
 			case timeline :
-				return new SwingSynTimeLineElement(e);
+				return new SwingSynTimeLineElement(element);
 			case list :
-				return new SwingListElement(e);
+				return new SwingListElement(element);
 			case checkbox :
-				return new SwingCheckBoxElement(e);
+				return new SwingCheckBoxElement(element);
 			default :
-				return new DefaultSwingAutoElement(e);
+				return new DefaultSwingAutoElement(element);
 		}
 	}
 
 	public static Class<? extends SwingAutoElement> getTypeClass(
-		AutoSwingType e) {
-		switch(e) {
+		AutoSwingType element) {
+		switch(element) {
 			case button :
 				return SwingButtonElement.class;
 			case input :
@@ -64,32 +64,32 @@ public class ElementFactory {
 	}
 
 	public static AutoSwingType getClassAutoType(
-		Class<?> e) {
-		if(e.equals(SwingButtonElement.class)) {
+		Class<?> element) {
+		if(element.equals(SwingButtonElement.class)) {
 			return AutoSwingType.button;
 		}
-		else if(e.equals(SwingInputElement.class)) {
+		else if(element.equals(SwingInputElement.class)) {
 			return AutoSwingType.input;
 		}
-		else if(e.equals(SwingSynTimeLineElement.class)) {
+		else if(element.equals(SwingSynTimeLineElement.class)) {
 			return AutoSwingType.timeline;
 		}
-		else if(e.equals(SwingMenuElement.class)) {
+		else if(element.equals(SwingMenuElement.class)) {
 			return AutoSwingType.menu;
 		}
-		else if(e.equals(SwingMenuItemElement.class)) {
+		else if(element.equals(SwingMenuItemElement.class)) {
 			return AutoSwingType.menuitem;
 		}
-		else if(e.equals(SwingTableElement.class)) {
+		else if(element.equals(SwingTableElement.class)) {
 			return AutoSwingType.table;
 		}
-		else if(e.equals(SwingListElement.class)) {
+		else if(element.equals(SwingListElement.class)) {
 			return AutoSwingType.list;
 		}
-		else if(e.equals(SwingDateElement.class)) {
+		else if(element.equals(SwingDateElement.class)) {
 			return AutoSwingType.date;
 		}
-		else if(e.equals(SwingCheckBoxElement.class)) {
+		else if(element.equals(SwingCheckBoxElement.class)) {
 			return AutoSwingType.checkbox;
 		}
 		else {
