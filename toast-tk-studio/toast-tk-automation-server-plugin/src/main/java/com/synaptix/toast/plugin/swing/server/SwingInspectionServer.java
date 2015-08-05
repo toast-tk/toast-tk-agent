@@ -62,9 +62,9 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 		try {
 			CommonIOUtils.initSerialization(server.getKryo());
 			this.server.start();
-			this.server.bind(CommonIOUtils.TCP_PORT);
+			this.server.bind(CommonIOUtils.DRIVER_TCP_PORT);
 			initListeners(commandRequestListener, initRequestListener);
-			LOG.info("Toast Inspection Server listening on port : " + CommonIOUtils.TCP_PORT);
+			LOG.info("Toast Inspection Server listening on port : " + CommonIOUtils.DRIVER_TCP_PORT);
 		}
 		catch(Exception e) {
 			LOG.error("Server initialization error: " + e.getCause(), e);

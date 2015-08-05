@@ -15,8 +15,8 @@ import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
 import com.synaptix.toast.swing.agent.runtime.StudioRemoteSwingAgentDriverImpl;
 import com.synaptix.toast.swing.agent.ui.SwingAgentScriptRunnerPanel;
 import com.synaptix.toast.swing.agent.ui.SwingInspectionFrame;
-import com.synaptix.toast.swing.agent.ui.SwingInspectionRecorderPanel;
 import com.synaptix.toast.swing.agent.ui.SwingInspectorPanel;
+import com.synaptix.toast.swing.agent.ui.record.SwingInspectionRecorderPanel;
 
 public class SwingModule extends AbstractModule {
 

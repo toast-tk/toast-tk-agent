@@ -1,0 +1,1 @@
+D:\Apps\vert.x-2.1.5\bin\vertx.bat run java:com.synaptix.toast.swing.agent.web.RestRecorderService -cp "../addons/agent/toast-tk-studio-agent-standalone.jar"

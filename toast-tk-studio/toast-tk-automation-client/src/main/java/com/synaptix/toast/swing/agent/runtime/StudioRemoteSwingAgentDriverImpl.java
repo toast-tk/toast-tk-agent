@@ -15,26 +15,30 @@ import com.synaptix.toast.core.agent.interpret.InterpretedEvent;
 import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.net.request.HighLightRequest;
 import com.synaptix.toast.core.net.request.IIdRequest;
+import com.synaptix.toast.core.net.request.InitInspectionRequest;
 import com.synaptix.toast.core.net.request.PoisonPill;
 import com.synaptix.toast.core.net.request.RecordRequest;
 import com.synaptix.toast.core.net.request.ScanRequest;
 import com.synaptix.toast.core.net.response.RecordResponse;
 import com.synaptix.toast.core.net.response.ScanResponse;
 import com.synaptix.toast.core.runtime.ITCPResponseReceivedHandler;
+import com.synaptix.toast.swing.agent.WebAgentBoot;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
 import com.synaptix.toast.swing.agent.interpret.LiveRedPlayEventInterpreter;
 import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
 
 public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl implements ISwingAutomationClient {
 
+	private static final Logger LOG = LogManager.getLogger(StudioRemoteSwingAgentDriverImpl.class);
+
 	private EventBus eventBus;
 
 	private String previousInput;
 
-	IEventInterpreter interpreter;
-
-	private static final Logger LOG = LogManager.getLogger(StudioRemoteSwingAgentDriverImpl.class);
-
+	private IEventInterpreter interpreter;
+	
+	private RemoteWebAgentDriverImpl driver;
+		
 	public StudioRemoteSwingAgentDriverImpl(
 		String host)
 		throws IOException {
@@ -116,6 +120,7 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 				previousInput = command;
 			}
 		}
+
 	}
 
 	@Override
@@ -125,17 +130,16 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 
 	@Override
 	public void stopRecording() {
-		client.sendRequest(new RecordRequest(false));
+		if(driver != null){
+			driver.stop();
+		}else{
+			client.sendRequest(new RecordRequest(false));
+		}
 	}
 
 	@Override
 	public void setMode(
 		int mode) {
-// if (mode == 0) {
-// this.interpreter = new LiveRedPlayEventInterpreter();
-// } else {
-// this.interpreter = new DefaultEventInterpreter();
-// }
 	}
 
 	private String buildFormat(
@@ -198,11 +202,50 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 
 	@Override
 	public boolean isConnected() {
+		if(driver != null){
+			return client.isConnected() || driver.isConnected();
+		}
 		return client.isConnected();
 	}
 
 	@Override
 	public boolean isConnectedToWebApp() {
 		return interpreter.isConnectedToWebApp();
+	}
+
+	@Override
+	public void switchToSwingRecordingMode() {
+		System.out.println("swing recording mode");
+	}
+
+	@Override
+	public void switchToWebRecordingMode() {
+		if(!isWebMode()){
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					driver = new RemoteWebAgentDriverImpl("localhost", eventBus);
+					driver.start("localhost");
+				}
+			}).start();
+			WebAgentBoot.boot(eventBus);
+		}else{
+			LOG.info("Not switching to web recording mode, already activated !");
+		}
+	}
+
+	@Override
+	public boolean isWebMode() {
+		return this.driver != null && this.driver.isConnected();
+	}
+
+	@Override
+	public void startRecording(
+		String url) {
+		if(driver != null){
+			InitInspectionRequest request = new InitInspectionRequest();
+			request.text = url;
+			driver.process(request);
+		}
 	}
 }

@@ -8,11 +8,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.xml.sax.SAXException;
 
-import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.swing.agent.config.Config;
 import com.synaptix.toast.swing.agent.config.ConfigProvider;
 
-@FixMe(todo = "replace sysout with a logger")
 public class StartCommandHandler {
 
 	private static final Logger LOG = LogManager.getLogger(StartCommandHandler.class);

@@ -55,6 +55,7 @@ import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
 import com.synaptix.toast.swing.agent.event.message.StatusMessage;
 import com.synaptix.toast.swing.agent.event.message.StopLoadingMessage;
 import com.synaptix.toast.swing.agent.runtime.SutRunnerAsExec;
+import com.synaptix.toast.swing.agent.ui.record.SwingInspectionRecorderPanel;
 
 /**
  * Created by Sallah Kokaina on 12/11/2014.

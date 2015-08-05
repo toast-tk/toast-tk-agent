@@ -39,4 +39,18 @@ public interface ISwingAutomationClient {
 	 * @return
 	 */
 	boolean isConnectedToWebApp();
+
+	/**
+	 * Start Swing Recording Mode
+	 * */
+	void switchToSwingRecordingMode();
+
+	/**
+	 * Start Web Recording Mode
+	 * */
+	void switchToWebRecordingMode();
+
+	boolean isWebMode();
+
+	void startRecording(String url);
 }

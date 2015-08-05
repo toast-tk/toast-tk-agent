@@ -29,6 +29,7 @@
 			</resource>
 		</resources>
 		<plugins>
+			<!-- move in plugin -->
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
@@ -43,10 +44,11 @@
 								<copy file="${project.basedir}/../${toast.tk.pluginLoaderPath}"
 									todir="${project.build.directory}/jnlp/agent-lib" />
 								<copy file="${project.basedir}/../${toast.tk.studioAgentPath}"
-									todir="${project.build.directory}/jnlp/agent" />
+									todir="${project.build.directory}/../../addons/agent" />
 								<copy file="${basedir}/../${toast.tk.autopluginpath}"
 									todir="${project.build.directory}/jnlp/agent-lib" />
-								<copy file="${basedir}/src/main/resources/toast.png" todir="${project.build.directory}/jnlp/images" />
+								<copy file="${basedir}/src/main/resources/toast.png"
+									todir="${project.build.directory}/jnlp/images" />
 								<copy file="${basedir}/src/main/resources/Spalsh.png"
 									todir="${project.build.directory}/jnlp/images" />
 							</tasks>
@@ -70,7 +72,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 		</plugins>
 	</build>
 	<dependencies>

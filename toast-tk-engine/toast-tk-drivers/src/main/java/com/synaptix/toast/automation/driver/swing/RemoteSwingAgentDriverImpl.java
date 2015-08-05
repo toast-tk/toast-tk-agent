@@ -83,7 +83,7 @@ public class RemoteSwingAgentDriverImpl implements IRemoteSwingAgentDriver {
 	public void start(
 		String host) {
 		try {
-			client.connect(300000, host, CommonIOUtils.TCP_PORT);
+			client.connect(300000, host, CommonIOUtils.DRIVER_TCP_PORT);
 			this.started = true;
 		}
 		catch(IOException e) {
