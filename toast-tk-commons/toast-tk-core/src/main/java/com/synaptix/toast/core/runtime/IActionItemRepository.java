@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.synaptix.toast.core.report.TestResult;
 
-public interface IRepositorySetup {
+public interface IActionItemRepository {
 
 	public IFeedableSwingPage getSwingPage(
 		String entityName);
@@ -13,8 +13,6 @@ public interface IRepositorySetup {
 	public Collection<IFeedableSwingPage> getSwingPages();
 
 	public Collection<IFeedableWebPage> getWebPages();
-
-	public ITestManager getTestManager();
 
 	public void addSwingPage(
 		String fixtureName);
@@ -27,24 +25,6 @@ public interface IRepositorySetup {
 		String testName,
 		String searchBy);
 
-	public TestResult addService(
-		String testName,
-		String className);
-
-	public TestResult addDomain(
-		String domainClassName,
-		String domainTestName,
-		String tableName);
-
-	public TestResult addProperty(
-		String componentName,
-		String testName,
-		String systemName,
-		String componentAssociation);
-
-	public TestResult insertComponent(
-		String entityName2,
-		Map<String, String> values2);
 
 	public Class<?> getService(
 		String fixtureName);

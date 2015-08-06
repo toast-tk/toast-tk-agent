@@ -27,7 +27,7 @@ import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
 import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
-import com.synaptix.toast.core.runtime.IRepositorySetup;
+import com.synaptix.toast.core.runtime.IActionItemRepository;
 import com.synaptix.toast.dao.domain.impl.test.TestLine;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 import com.synaptix.toast.runtime.core.runtime.TestLineDescriptor;
@@ -38,7 +38,7 @@ public class TestBlockRunner implements IBlockRunner<TestBlock> {
 	private static final Logger LOG = LogManager.getLogger(BlockRunnerProvider.class);
 
 	@Inject
-	private IRepositorySetup objectRepository;
+	private IActionItemRepository objectRepository;
 	private Injector injector;
 	private List<FixtureService> fixtureApiServices;
 

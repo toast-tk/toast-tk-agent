@@ -40,17 +40,17 @@ import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
 import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.IFeedableSwingPage;
-import com.synaptix.toast.core.runtime.IRepositorySetup;
+import com.synaptix.toast.core.runtime.IActionItemRepository;
 
 @ActionAdapter(value = ActionAdapterKind.swing, name = "")
 public abstract class AbstractSwingActionAdapter {
 
-	protected IRepositorySetup repo;
+	protected IActionItemRepository repo;
 
 	protected IRemoteSwingAgentDriver driver;
 
 	public AbstractSwingActionAdapter(
-		IRepositorySetup repo,
+		IActionItemRepository repo,
 		IRemoteSwingAgentDriver driver) {
 		this.repo = repo;
 		this.driver = driver;

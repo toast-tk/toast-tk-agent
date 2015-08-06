@@ -34,10 +34,10 @@ import java.util.Map;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.runtime.IFeedableSwingPage;
 import com.synaptix.toast.core.runtime.IFeedableWebPage;
-import com.synaptix.toast.core.runtime.IRepositorySetup;
+import com.synaptix.toast.core.runtime.IActionItemRepository;
 import com.synaptix.toast.core.runtime.ITestManager;
 
-public class DefaultRepositorySetup implements IRepositorySetup {
+public class DefaultRepositorySetup implements IActionItemRepository {
 
 	private Map<String, Object> userVariables;
 
@@ -50,12 +50,6 @@ public class DefaultRepositorySetup implements IRepositorySetup {
 
 	@Override
 	public Collection<IFeedableSwingPage> getSwingPages() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ITestManager getTestManager() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -81,40 +75,6 @@ public class DefaultRepositorySetup implements IRepositorySetup {
 		return null;
 	}
 
-	@Override
-	public TestResult addService(
-		String testName,
-		String className) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public TestResult addDomain(
-		String domainClassName,
-		String domainTestName,
-		String tableName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public TestResult addProperty(
-		String componentName,
-		String testName,
-		String systemName,
-		String componentAssociation) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public TestResult insertComponent(
-		String entityName2,
-		Map<String, String> values2) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public Class<?> getService(

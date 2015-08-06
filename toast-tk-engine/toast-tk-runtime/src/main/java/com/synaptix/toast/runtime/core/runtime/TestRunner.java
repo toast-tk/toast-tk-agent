@@ -33,7 +33,7 @@ import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
 import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.IFeedableSwingPage;
-import com.synaptix.toast.core.runtime.IRepositorySetup;
+import com.synaptix.toast.core.runtime.IActionItemRepository;
 import com.synaptix.toast.core.runtime.ITestManager;
 import com.synaptix.toast.dao.domain.impl.test.SwingPageConfigLine;
 import com.synaptix.toast.dao.domain.impl.test.TestLine;
@@ -51,14 +51,14 @@ import com.synaptix.toast.runtime.core.runtime.utils.ArgumentHelper;
 public class TestRunner {
 
 	private static final Logger LOG = LogManager.getLogger(TestRunner.class);
-	private final IRepositorySetup objectRepository;
+	private final IActionItemRepository objectRepository;
 	private Injector injector;
 	private IReportUpdateCallBack reportUpdateCallBack;
 	private IHTMLReportGenerator htmlReportGenerator;
 	private BlockRunnerProvider blockRunnerProvider;
 
 	public TestRunner(
-		IRepositorySetup repoSetup)
+		IActionItemRepository repoSetup)
 		throws IOException {
 		this.objectRepository = repoSetup;
 	}
@@ -66,7 +66,7 @@ public class TestRunner {
 	public static TestRunner FromInjector(
 		Injector injector)
 		throws IOException {
-		TestRunner runner = new TestRunner(injector.getInstance(IRepositorySetup.class));
+		TestRunner runner = new TestRunner(injector.getInstance(IActionItemRepository.class));
 		runner.setInjector(injector);
 		return runner;
 	}
@@ -75,7 +75,7 @@ public class TestRunner {
 		Injector injector,
 		IReportUpdateCallBack reportUpdateCallBack)
 		throws IOException {
-		TestRunner runner = new TestRunner(injector.getInstance(IRepositorySetup.class));
+		TestRunner runner = new TestRunner(injector.getInstance(IActionItemRepository.class));
 		runner.setInjector(injector);
 		runner.setReportCallBack(reportUpdateCallBack);
 		return runner;

@@ -14,7 +14,7 @@ import org.joda.time.LocalTime;
 
 import com.google.inject.Inject;
 import com.synaptix.toast.adapter.utils.ActionAdapterHelper;
-import com.synaptix.toast.core.runtime.IRepositorySetup;
+import com.synaptix.toast.core.runtime.IActionItemRepository;
 
 public abstract class AbstractServiceActionAdapter {
 
@@ -28,7 +28,7 @@ public abstract class AbstractServiceActionAdapter {
 	}
 
 	@Inject
-	private IRepositorySetup repositorySetup;
+	private IActionItemRepository repositorySetup;
 
 	public AbstractServiceActionAdapter() {
 		super();

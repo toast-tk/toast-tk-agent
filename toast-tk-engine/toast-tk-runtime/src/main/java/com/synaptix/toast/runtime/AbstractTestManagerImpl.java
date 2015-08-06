@@ -6,7 +6,7 @@ import java.util.Map;
 import com.google.inject.Inject;
 import com.synaptix.toast.core.runtime.ITestManager;
 import com.synaptix.toast.runtime.core.runtime.ClassConfigProvider;
-import com.synaptix.toast.runtime.core.runtime.RepositorySetup;
+import com.synaptix.toast.runtime.core.runtime.ActionItemRepository;
 
 public abstract class AbstractTestManagerImpl implements ITestManager {
 
@@ -14,7 +14,7 @@ public abstract class AbstractTestManagerImpl implements ITestManager {
 	private ClassConfigProvider classConfigProvider;
 
 	@Inject
-	private RepositorySetup autoSetup;
+	private ActionItemRepository autoSetup;
 
 	@Override
 	public void initDb() {
@@ -33,7 +33,7 @@ public abstract class AbstractTestManagerImpl implements ITestManager {
 
 	@Inject
 	public void setAutoSetup(
-		RepositorySetup autoSetup) {
+		ActionItemRepository autoSetup) {
 		this.autoSetup = autoSetup;
 	}
 

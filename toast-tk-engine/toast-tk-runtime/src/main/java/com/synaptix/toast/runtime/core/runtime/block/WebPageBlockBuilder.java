@@ -4,14 +4,14 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.synaptix.toast.adapter.web.DefaultWebPage;
 import com.synaptix.toast.core.dao.ITestPage;
-import com.synaptix.toast.core.runtime.IRepositorySetup;
+import com.synaptix.toast.core.runtime.IActionItemRepository;
 import com.synaptix.toast.dao.domain.impl.test.WebPageConfigLine;
 import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 
 public  class WebPageBlockBuilder implements IBlockRunner<WebPageBlock>{
 	
 	@Inject
-	IRepositorySetup objectRepository;
+	IActionItemRepository objectRepository;
 	
 	@Override
 	public void run(ITestPage page, WebPageBlock block) {

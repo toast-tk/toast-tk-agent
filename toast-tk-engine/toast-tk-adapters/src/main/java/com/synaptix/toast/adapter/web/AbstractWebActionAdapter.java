@@ -14,16 +14,16 @@ import com.synaptix.toast.core.annotation.ActionAdapter;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
 import com.synaptix.toast.core.runtime.IFeedableWebPage;
-import com.synaptix.toast.core.runtime.IRepositorySetup;
+import com.synaptix.toast.core.runtime.IActionItemRepository;
 
 @ActionAdapter(name="default-web-driver", value= ActionAdapterKind.web)
 public class AbstractWebActionAdapter {
 
 	private final SynchronizedDriver driver;
-	private final IRepositorySetup repo;
+	private final IActionItemRepository repo;
 
 	@Inject
-	public AbstractWebActionAdapter(IRepositorySetup repo) {
+	public AbstractWebActionAdapter(IActionItemRepository repo) {
 		this.repo = repo;
 		driver = new SeleniumSynchronizedDriver(DriverFactory.getFactory().getFirefoxDriver());
 		for (IFeedableWebPage page : repo.getWebPages()) {

@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.synaptix.toast.constant.Property;
-import com.synaptix.toast.core.runtime.IRepositorySetup;
+import com.synaptix.toast.core.runtime.IActionItemRepository;
 import com.synaptix.toast.runtime.core.ActionItem;
 import com.synaptix.toast.runtime.core.ActionItemDescriptionCollector;
 import com.synaptix.toast.runtime.core.ActionItem.ActionCategoryEnum;
@@ -80,7 +80,7 @@ public class ArgumentHelper {
 	}
 	
 	public static Object buildActionAdapterArgument(
-		IRepositorySetup repoSetup,
+		IActionItemRepository repoSetup,
 		String group) {
 		group = group.replaceAll("\\*", "");
 		if(repoSetup.getUserVariables().containsKey(group)){
@@ -98,7 +98,7 @@ public class ArgumentHelper {
 	}
 
 	private static String handleValueWithNestedVars(
-		IRepositorySetup repoSetup,
+		IActionItemRepository repoSetup,
 		String value) {
 		Pattern p = Pattern.compile(Property.ACTION_ITEM_VAR_REGEX, Pattern.MULTILINE);
 		Matcher m = p.matcher(value);

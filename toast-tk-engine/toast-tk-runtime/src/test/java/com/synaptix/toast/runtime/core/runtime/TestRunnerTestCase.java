@@ -12,7 +12,7 @@ import org.junit.AfterClass;
 import org.junit.Test;
 
 import com.synaptix.toast.core.annotation.Action;
-import com.synaptix.toast.core.runtime.IRepositorySetup;
+import com.synaptix.toast.core.runtime.IActionItemRepository;
 import com.synaptix.toast.runtime.core.runtime.block.ActionCommandDescriptor;
 import com.synaptix.toast.runtime.core.runtime.block.TestBlockRunner;
 import com.synaptix.toast.runtime.core.runtime.utils.ArgumentHelper;
@@ -50,7 +50,7 @@ public class TestRunnerTestCase {
 
 	@Test
 	public void testArgumentBuild() {
-		IRepositorySetup repo = new DefaultRepositorySetup();
+		IActionItemRepository repo = new DefaultRepositorySetup();
 		Map<String, Object> userVarMap = new HashMap<String, Object>();
 		userVarMap.put("$variable", "200");
 		repo.setUserVariables(userVarMap);
@@ -66,7 +66,7 @@ public class TestRunnerTestCase {
 
 	@Test
 	public void testComplexArgumentBuild() {
-		IRepositorySetup repo = new DefaultRepositorySetup();
+		IActionItemRepository repo = new DefaultRepositorySetup();
 		Map<String, Object> userVarMap = new HashMap<String, Object>();
 		userVarMap.put("$var", "value");
 		userVarMap.put("$variable", "nested $var replacement");
@@ -77,7 +77,7 @@ public class TestRunnerTestCase {
 
 	@Test
 	public void testComplexMultipleArgumentBuild() {
-		IRepositorySetup repo = new DefaultRepositorySetup();
+		IActionItemRepository repo = new DefaultRepositorySetup();
 		Map<String, Object> userVarMap = new HashMap<String, Object>();
 		userVarMap.put("$var", "value");
 		userVarMap.put("$vari", "value");
