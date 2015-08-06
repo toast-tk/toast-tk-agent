@@ -26,7 +26,7 @@ Creation date: 10 juin 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
-package com.synaptix.toast.automation.report;
+package com.synaptix.toast.automation.report.test;
 
 import com.synaptix.toast.core.dao.ITestPage;
 

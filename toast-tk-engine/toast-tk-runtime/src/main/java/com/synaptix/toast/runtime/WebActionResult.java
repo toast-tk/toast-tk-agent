@@ -1,4 +1,4 @@
-package com.synaptix.toast.automation.report;
+package com.synaptix.toast.runtime;
 
 /**
  * web action result from a test case execution

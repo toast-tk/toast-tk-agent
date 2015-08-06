@@ -11,7 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Injector;
-import com.synaptix.toast.automation.report.IHTMLReportGenerator;
+import com.synaptix.toast.automation.report.test.IHTMLReportGenerator;
 import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.rest.RestUtils;
 import com.synaptix.toast.core.runtime.ITestManager;

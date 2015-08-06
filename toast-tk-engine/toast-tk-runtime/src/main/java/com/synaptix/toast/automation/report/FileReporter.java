@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 
+import com.synaptix.toast.runtime.WebActionResult;
+import com.synaptix.toast.runtime.WebTestResult;
+
 /**
  * console reporter, print results and actions to standard output
  * 

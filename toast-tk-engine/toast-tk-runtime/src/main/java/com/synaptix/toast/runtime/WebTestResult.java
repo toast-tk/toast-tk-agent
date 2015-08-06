@@ -1,12 +1,5 @@
-package com.synaptix.toast.automation.report;
+package com.synaptix.toast.runtime;
 
-/**
- * Web result from a test case execution
- * 
- * @author skokaina
- * 
- * @param <E>
- */
 public class WebTestResult<E> implements ITestResult {
 
 	private boolean success;

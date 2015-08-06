@@ -1,4 +1,4 @@
-package com.synaptix.toast.automation.report;
+package com.synaptix.toast.automation.report.test;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -7,6 +7,7 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 
+import com.synaptix.toast.automation.report.TemplateHelper;
 import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.core.dao.ITestPage;

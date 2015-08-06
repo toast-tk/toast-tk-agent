@@ -8,8 +8,6 @@ import com.synaptix.toast.adapter.web.WebAutoElement;
 import com.synaptix.toast.automation.api.SynchronizedDriver;
 import com.synaptix.toast.automation.driver.selenium.SeleniumHelper;
 import com.synaptix.toast.automation.report.IReporter;
-import com.synaptix.toast.automation.report.WebActionResult;
-import com.synaptix.toast.automation.report.WebTestResult;
 import com.synaptix.toast.automation.repository.PageProvider;
 import com.synaptix.toast.automation.repository.WebRepository;
 import com.synaptix.toast.core.runtime.IWebElement;

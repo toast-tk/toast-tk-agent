@@ -2,6 +2,9 @@ package com.synaptix.toast.automation.report;
 
 import java.io.PrintStream;
 
+import com.synaptix.toast.runtime.WebActionResult;
+import com.synaptix.toast.runtime.WebTestResult;
+
 /**
  * console reporter, print results and actions to standard output
  * 
