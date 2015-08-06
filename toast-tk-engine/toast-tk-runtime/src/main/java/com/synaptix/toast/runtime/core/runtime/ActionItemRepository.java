@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -13,10 +14,9 @@ import com.synaptix.toast.adapter.utils.ActionAdapterHelper;
 import com.synaptix.toast.adapter.web.DefaultWebPage;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
+import com.synaptix.toast.core.runtime.IActionItemRepository;
 import com.synaptix.toast.core.runtime.IFeedableSwingPage;
 import com.synaptix.toast.core.runtime.IFeedableWebPage;
-import com.synaptix.toast.core.runtime.IActionItemRepository;
-import com.synaptix.toast.runtime.core.runtime.utils.ClassHelper;
 import com.synaptix.toast.runtime.guice.IRepositoryTypeParser;
 
 public class ActionItemRepository implements IActionItemRepository {

@@ -18,19 +18,11 @@ public abstract class AbstractProjectRunner {
 
 	private static final Logger LOG = LogManager.getLogger(AbstractProjectRunner.class);
 
-	private ITestManager testEnvManager;
-
 	private Injector injector;
 
 	protected AbstractProjectRunner(
 		Injector injector)
 		throws Exception {
-		try {
-			this.testEnvManager = injector.getInstance(ITestManager.class);
-		}
-		catch(ConfigurationException e) {
-			System.out.println("No Test Environement Manager defined !");
-		}
 		this.injector = injector;
 	}
 
