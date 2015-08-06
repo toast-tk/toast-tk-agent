@@ -1,4 +1,4 @@
-package com.synaptix.toast.runtime.guice;
+package com.synaptix.toast.runtime.core;
 
 public interface IRepositoryTypeParser {
 

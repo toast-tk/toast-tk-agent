@@ -17,7 +17,7 @@ import com.synaptix.toast.core.report.TestResult.ResultKind;
 import com.synaptix.toast.core.runtime.IActionItemRepository;
 import com.synaptix.toast.core.runtime.IFeedableSwingPage;
 import com.synaptix.toast.core.runtime.IFeedableWebPage;
-import com.synaptix.toast.runtime.guice.IRepositoryTypeParser;
+import com.synaptix.toast.runtime.core.IRepositoryTypeParser;
 
 public class ActionItemRepository implements IActionItemRepository {
 
