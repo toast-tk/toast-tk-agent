@@ -17,6 +17,7 @@ import com.synaptix.toast.adapter.web.DefaultWebPage;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
 import com.synaptix.toast.core.runtime.IFeedableSwingPage;
+import com.synaptix.toast.core.runtime.IFeedableWebPage;
 import com.synaptix.toast.core.runtime.IRepositorySetup;
 import com.synaptix.toast.core.runtime.ITestManager;
 import com.synaptix.toast.runtime.core.runtime.utils.ClassHelper;
@@ -30,7 +31,7 @@ public class RepositorySetup implements IRepositorySetup {
 
 	private final Map<String, TestComponentConfig> classesConfig;
 
-	HashMap<String, DefaultWebPage> pages = new HashMap<String, DefaultWebPage>();
+	HashMap<String, IFeedableWebPage> pages = new HashMap<String, IFeedableWebPage>();
 
 	HashMap<String, IFeedableSwingPage> swingpages = new HashMap<String, IFeedableSwingPage>();
 
@@ -519,7 +520,7 @@ public class RepositorySetup implements IRepositorySetup {
 		return swingpages.get(entityName);
 	}
 
-	public DefaultWebPage getPage(
+	public IFeedableWebPage getPage(
 		String entityName) {
 		return pages.get(entityName);
 	}
@@ -529,7 +530,8 @@ public class RepositorySetup implements IRepositorySetup {
 		return swingpages.values();
 	}
 
-	public Collection<DefaultWebPage> getWebPages() {
+	@Override
+	public Collection<IFeedableWebPage> getWebPages() {
 		return pages.values();
 	}
 

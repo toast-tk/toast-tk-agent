@@ -12,6 +12,8 @@ public interface IRepositorySetup {
 
 	public Collection<IFeedableSwingPage> getSwingPages();
 
+	public Collection<IFeedableWebPage> getWebPages();
+
 	public ITestManager getTestManager();
 
 	public void addSwingPage(

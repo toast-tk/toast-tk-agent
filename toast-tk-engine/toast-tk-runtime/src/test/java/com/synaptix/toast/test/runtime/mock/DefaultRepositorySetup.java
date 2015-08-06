@@ -140,4 +140,10 @@ public class DefaultRepositorySetup implements IRepositorySetup {
 	public Map<String, Object> getUserVariables() {
 		return userVariables;
 	}
+
+	@Override
+	public Collection<IFeedableWebPage> getWebPages() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

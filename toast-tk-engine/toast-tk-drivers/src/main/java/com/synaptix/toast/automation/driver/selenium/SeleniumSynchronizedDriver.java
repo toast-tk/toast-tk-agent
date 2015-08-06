@@ -7,13 +7,6 @@ import com.synaptix.toast.automation.api.IMiniResult;
 import com.synaptix.toast.automation.api.SynchronizedDriver;
 import com.synaptix.toast.core.runtime.IWebElement;
 
-/**
- * 
- * Synchronized driver over selenium drivers
- * 
- * @author skokaina
- * 
- */
 public class SeleniumSynchronizedDriver implements SynchronizedDriver {
 
 	private final WebDriver driver;
