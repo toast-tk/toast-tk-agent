@@ -10,20 +10,20 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
 import com.synaptix.toast.automation.report.IHTMLReportGenerator;
 import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.rest.RestUtils;
 import com.synaptix.toast.core.runtime.ITestManager;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
+import com.synaptix.toast.runtime.core.IReportUpdateCallBack;
 import com.synaptix.toast.runtime.core.parse.TestParser;
+import com.synaptix.toast.runtime.core.runtime.utils.RunUtils;
 
 public abstract class AbstractRunner {
 
 	private static final Logger LOG = LogManager.getLogger(AbstractRunner.class);
 
-	private ITestManager testEnvManager;
 
 	private Injector injector;
 
@@ -37,12 +37,6 @@ public abstract class AbstractRunner {
 
 	protected AbstractRunner(
 		Injector injector) {
-		try {
-			this.testEnvManager = injector.getInstance(ITestManager.class);
-		}
-		catch(ConfigurationException e) {
-			LOG.error("No Test Environement Manager defined !", e);
-		}
 		this.htmlReportGenerator = injector.getInstance(IHTMLReportGenerator.class);
 		this.injector = injector;
 	}
@@ -51,7 +45,7 @@ public abstract class AbstractRunner {
 		String... scenarios)
 		throws IllegalAccessException, ClassNotFoundException, IOException {
 		this.presetRepoFromWebApp = false;
-		run(this.testEnvManager, scenarios);
+		run(scenarios);
 	}
 
 	public final void run(
@@ -64,7 +58,7 @@ public abstract class AbstractRunner {
 			System.out.println("Start main test parser: " + fileName);
 			// Read test file
 			File file = readTestFile(fileName);
-			ITestPage result = runScript(testEnvManager, file, fileName);
+			ITestPage result = runScript(file, fileName);
 			testPages.add(result);
 		}
 		tearDownEnvironment();
@@ -76,14 +70,14 @@ public abstract class AbstractRunner {
 		String... scenarios)
 		throws IllegalAccessException, ClassNotFoundException, IOException {
 		this.presetRepoFromWebApp = true;
-		run(testEnvManager, scenarios);
+		run(scenarios);
 	}
 
 	public final void runRemoteScript(
 		String script)
 		throws IllegalAccessException, ClassNotFoundException, IOException {
 		this.presetRepoFromWebApp = true;
-		runScript(testEnvManager, null, script);
+		runScript(null, script);
 	}
 
 	public void runLocalScript(
@@ -94,7 +88,7 @@ public abstract class AbstractRunner {
 		this.reportUpdateCallBack = iReportUpdateCallBack;
 		TestParser parser = new TestParser();
 		this.localRepositoryTestPage = parser.readString(repoWiki, "");
-		runScript(this.testEnvManager, null, wikiScenario);
+		runScript(null, wikiScenario);
 	}
 
 	private File readTestFile(
@@ -109,13 +103,12 @@ public abstract class AbstractRunner {
 	}
 
 	private ITestPage runScript(
-		ITestManager testEnvManager,
 		File file,
 		String script)
 		throws IllegalAccessException, ClassNotFoundException, IOException {
 		TestParser testParser = new TestParser();
 		ITestPage result = file == null ? testParser.parseString(script) : testParser.parse(file);
-		TestRunner runner = TestRunner.FromInjectorWithReportCallBack(testEnvManager, injector, reportUpdateCallBack);
+		TestRunner runner = TestRunner.FromInjectorWithReportCallBack(injector, reportUpdateCallBack);
 		if(this.presetRepoFromWebApp) {
 			String repoWiki = RestUtils.downloadRepositoyAsWiki();
 			TestParser parser = new TestParser();

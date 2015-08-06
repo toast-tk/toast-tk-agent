@@ -13,7 +13,9 @@ import org.junit.Test;
 
 import com.synaptix.toast.core.annotation.Action;
 import com.synaptix.toast.core.runtime.IRepositorySetup;
-import com.synaptix.toast.runtime.core.runtime.TestRunner.FixtureExecCommandDescriptor;
+import com.synaptix.toast.runtime.core.runtime.block.ActionCommandDescriptor;
+import com.synaptix.toast.runtime.core.runtime.block.TestBlockRunner;
+import com.synaptix.toast.runtime.core.runtime.utils.ArgumentHelper;
 import com.synaptix.toast.test.runtime.mock.DefaultRepositorySetup;
 
 public class TestRunnerTestCase {
@@ -33,16 +35,16 @@ public class TestRunnerTestCase {
 	@Test
 	public void testEmptyResult()
 		throws IOException {
-		TestRunner runner = new TestRunner(null, null);
-		FixtureExecCommandDescriptor findMethodInClass = runner.findMethodInClass("Titi", Toto.class);
+		TestBlockRunner runner = new TestBlockRunner();
+		ActionCommandDescriptor findMethodInClass = runner.findMethodInClass("Titi", Toto.class);
 		assertNull(findMethodInClass);
 	}
 
 	@Test
 	public void testNonEmptyResult()
 		throws IOException {
-		TestRunner runner = new TestRunner(null, null);
-		FixtureExecCommandDescriptor findMethodInClass = runner.findMethodInClass("Titi", Titi.class);
+		TestBlockRunner runner = new TestBlockRunner();
+		ActionCommandDescriptor findMethodInClass = runner.findMethodInClass("Titi", Titi.class);
 		assertNotNull(findMethodInClass);
 	}
 

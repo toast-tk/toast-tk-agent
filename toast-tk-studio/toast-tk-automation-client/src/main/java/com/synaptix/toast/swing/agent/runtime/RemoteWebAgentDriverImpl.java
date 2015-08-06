@@ -51,7 +51,7 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 			public void onResponseReceived(
 				Object object) {
 				if(object instanceof WebRecordResponse) {
-					WebRecordResponse result = new WebRecordResponse();
+					WebRecordResponse result = (WebRecordResponse) object;
 					String command = buildFormat(result);
 					eventBus.post(new InterpretedEvent(command, 0L));
 					System.out.println("Received: " + object);

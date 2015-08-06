@@ -81,7 +81,7 @@ public abstract class AbstractProjectRunner {
 		Project project,
 		boolean presetRepoFromWebApp)
 		throws Exception {
-		TestRunner runner = TestRunner.FromInjector(testEnvManager, injector);
+		TestRunner runner = TestRunner.FromInjector(injector);
 		if(presetRepoFromWebApp) {
 			String repoWiki = RestUtils.downloadRepositoyAsWiki();
 			TestParser parser = new TestParser();

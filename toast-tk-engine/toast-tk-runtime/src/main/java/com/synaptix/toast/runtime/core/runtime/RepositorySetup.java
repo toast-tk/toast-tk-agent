@@ -19,6 +19,7 @@ import com.synaptix.toast.core.report.TestResult.ResultKind;
 import com.synaptix.toast.core.runtime.IFeedableSwingPage;
 import com.synaptix.toast.core.runtime.IRepositorySetup;
 import com.synaptix.toast.core.runtime.ITestManager;
+import com.synaptix.toast.runtime.core.runtime.utils.ClassHelper;
 import com.synaptix.toast.runtime.guice.IRepositoryTypeParser;
 
 public class RepositorySetup implements IRepositorySetup {

@@ -16,6 +16,7 @@ public class EngineModule extends AbstractModule {
 		bind(IRepositorySetup.class).to(RepositorySetup.class).in(Singleton.class);
 		bind(IHTMLReportGenerator.class).to(ThymeLeafHTMLReporter.class);
 		bind(ServiceActionAdapter.class).in(Singleton.class);
+		install(new RunnerModule());
 		install(new DefaultRepositoryTypeHandler());
 	}
 }
