@@ -1,4 +1,4 @@
-package com.synaptix.toast.adapter.swing.guice;
+package com.synaptix.toast.adapter.swing.handler;
 
 import java.awt.Component;
 import java.util.Arrays;

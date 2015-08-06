@@ -1,4 +1,4 @@
-package com.synaptix.toast.adapter.swing.guice;
+package com.synaptix.toast.adapter.swing.handler;
 
 import java.awt.Component;
 import java.util.HashMap;
@@ -11,14 +11,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
-import com.synaptix.toast.adapter.swing.handler.JButtonActionHandler;
-import com.synaptix.toast.adapter.swing.handler.JCheckBoxActionHandler;
-import com.synaptix.toast.adapter.swing.handler.JLabelActionHandler;
-import com.synaptix.toast.adapter.swing.handler.JPasswordFieldActionHandler;
-import com.synaptix.toast.adapter.swing.handler.JTableActionHandler;
-import com.synaptix.toast.adapter.swing.handler.JTextAreaActionHandler;
-import com.synaptix.toast.adapter.swing.handler.JTextFieldActionHandler;
 
 
 public class SwingWidgetActionHandlerFactory {

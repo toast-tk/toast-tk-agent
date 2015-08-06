@@ -4,7 +4,6 @@ import javax.swing.JTextArea;
 
 import org.fest.swing.fixture.JTextComponentFixture;
 
-import com.synaptix.toast.adapter.swing.guice.ISwingwidgetActionHandler;
 import com.synaptix.toast.adapter.swing.utils.FestRobotInstance;
 import com.synaptix.toast.core.net.request.CommandRequest;
 
