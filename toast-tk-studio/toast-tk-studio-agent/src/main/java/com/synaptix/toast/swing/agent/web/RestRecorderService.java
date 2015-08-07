@@ -14,6 +14,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.http.HttpServerRequest;
@@ -148,7 +149,7 @@ public class RestRecorderService extends Verticle {
 		throws IOException {
 		JavascriptExecutor executor = ((JavascriptExecutor) driver);
 		// includeJQuery(executor);
-		final FileInputStream resourceAsStream = FileUtils.openInputStream(new File("C:/temp/recorder.js"));
+		final FileInputStream resourceAsStream = FileUtils.openInputStream(new File("../addons/agent/recorder.js"));
 		String script = IOUtils.toString(resourceAsStream);
 		String subscript = "var script = window.document.createElement('script'); script.innerHTML=\"" + script
 			.replace("\r\n", "\\\r\n") + "\";window.document.head.appendChild(script);";
@@ -169,8 +170,8 @@ public class RestRecorderService extends Verticle {
 	private static WebDriver launchBrowser(
 		String host) {
 		LOG.info("launching browser and injecting js recorder ! -> " + CHROME_DRIVER);
-		System.setProperty("webdriver.chrome.driver", CHROME_DRIVER);
-		WebDriver driver = new ChromeDriver();
+		//System.setProperty("webdriver.chrome.driver", CHROME_DRIVER);
+		WebDriver driver = new FirefoxDriver();
 		driver.get(host);
 		return driver;
 	}
@@ -196,7 +197,7 @@ public class RestRecorderService extends Verticle {
 	public static void main(
 		String[] args)
 		throws IOException {
-		InputStream resourceAsStream = RestRecorderService.class.getResourceAsStream("./recorder.js");
+		final FileInputStream resourceAsStream = FileUtils.openInputStream(new File("../addons/agent/recorder.js"));
 		String script = IOUtils.toString(resourceAsStream);
 		LOG.info(script);
 	}

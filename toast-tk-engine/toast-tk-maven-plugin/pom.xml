@@ -22,8 +22,8 @@
 				<version>3.0</version>
 				<configuration>
 					<encoding>UTF-8</encoding>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 					<fork>true</fork>
 					<verbose>true</verbose>
 				</configuration>
@@ -87,5 +87,11 @@
 			<groupId>org.reflections</groupId>
 			<version>0.9.9-RC1</version>
 		</dependency>
+		<dependency>
+			<groupId>javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.12.1.GA</version>
+		</dependency>
+				
 	</dependencies>
 </project>

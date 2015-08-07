@@ -1,5 +1,8 @@
 package com.synaptix.toast.automation.report;
 
+import com.synaptix.toast.runtime.WebActionResult;
+import com.synaptix.toast.runtime.WebTestResult;
+
 /**
  * 
  * @author skokaina

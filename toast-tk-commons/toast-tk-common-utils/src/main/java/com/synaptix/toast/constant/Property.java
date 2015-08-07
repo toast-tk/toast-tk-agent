@@ -22,7 +22,7 @@ public class Property {
 
 	public static final String TOAST_HOME_DIR_NAME = ".toast";
 
-	public static final String TOAST_HOME_DIR = System.getProperty("user.home") + "\\" + TOAST_HOME_DIR_NAME + "\\";
+	public static final String TOAST_HOME_DIR = System.getProperty("user.home") + "/" + TOAST_HOME_DIR_NAME + "/";
 
 	public static final String TOAST_PLUGIN_DIR = System.getProperty("user.home") + "\\" + TOAST_HOME_DIR_NAME
 		+ "\\plugins";
@@ -61,4 +61,6 @@ public class Property {
 	public static final String ACTION_ITEM_VAR_REGEX = "(\\$\\w+)";
 	
 	public static final String ACTION_ITEM_REGEX = "\\{\\{([\\w:]+)\\}\\}";
+	
+	public static final String RESULT_FOLDER = "TestResult";
 }

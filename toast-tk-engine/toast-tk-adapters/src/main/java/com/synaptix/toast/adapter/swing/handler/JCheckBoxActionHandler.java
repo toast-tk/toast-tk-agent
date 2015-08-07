@@ -4,7 +4,6 @@ import javax.swing.JCheckBox;
 
 import org.fest.swing.fixture.JCheckBoxFixture;
 
-import com.synaptix.toast.adapter.swing.guice.ISwingwidgetActionHandler;
 import com.synaptix.toast.adapter.swing.utils.FestRobotInstance;
 import com.synaptix.toast.core.net.request.CommandRequest;
 

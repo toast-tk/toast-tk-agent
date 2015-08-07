@@ -2,6 +2,9 @@ package com.synaptix.toast.automation.report;
 
 import java.util.List;
 
+import com.synaptix.toast.automation.report.project.IProjectHtmlReportGenerator;
+import com.synaptix.toast.automation.report.project.ThymeLeafProjectHTMLReporter;
+import com.synaptix.toast.automation.report.test.ThymeLeafHTMLReporter;
 import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.dao.domain.impl.report.Project;
 import com.synaptix.toast.runtime.dao.DAOManager;

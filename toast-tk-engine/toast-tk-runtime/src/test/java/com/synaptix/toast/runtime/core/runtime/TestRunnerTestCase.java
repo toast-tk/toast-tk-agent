@@ -12,8 +12,10 @@ import org.junit.AfterClass;
 import org.junit.Test;
 
 import com.synaptix.toast.core.annotation.Action;
-import com.synaptix.toast.core.runtime.IRepositorySetup;
-import com.synaptix.toast.runtime.core.runtime.TestRunner.FixtureExecCommandDescriptor;
+import com.synaptix.toast.core.runtime.IActionItemRepository;
+import com.synaptix.toast.runtime.core.runtime.block.ActionCommandDescriptor;
+import com.synaptix.toast.runtime.core.runtime.block.TestBlockRunner;
+import com.synaptix.toast.runtime.core.runtime.utils.ArgumentHelper;
 import com.synaptix.toast.test.runtime.mock.DefaultRepositorySetup;
 
 public class TestRunnerTestCase {
@@ -33,22 +35,22 @@ public class TestRunnerTestCase {
 	@Test
 	public void testEmptyResult()
 		throws IOException {
-		TestRunner runner = new TestRunner(null, null);
-		FixtureExecCommandDescriptor findMethodInClass = runner.findMethodInClass("Titi", Toto.class);
+		TestBlockRunner runner = new TestBlockRunner();
+		ActionCommandDescriptor findMethodInClass = runner.findMethodInClass("Titi", Toto.class);
 		assertNull(findMethodInClass);
 	}
 
 	@Test
 	public void testNonEmptyResult()
 		throws IOException {
-		TestRunner runner = new TestRunner(null, null);
-		FixtureExecCommandDescriptor findMethodInClass = runner.findMethodInClass("Titi", Titi.class);
+		TestBlockRunner runner = new TestBlockRunner();
+		ActionCommandDescriptor findMethodInClass = runner.findMethodInClass("Titi", Titi.class);
 		assertNotNull(findMethodInClass);
 	}
 
 	@Test
 	public void testArgumentBuild() {
-		IRepositorySetup repo = new DefaultRepositorySetup();
+		IActionItemRepository repo = new DefaultRepositorySetup();
 		Map<String, Object> userVarMap = new HashMap<String, Object>();
 		userVarMap.put("$variable", "200");
 		repo.setUserVariables(userVarMap);
@@ -64,7 +66,7 @@ public class TestRunnerTestCase {
 
 	@Test
 	public void testComplexArgumentBuild() {
-		IRepositorySetup repo = new DefaultRepositorySetup();
+		IActionItemRepository repo = new DefaultRepositorySetup();
 		Map<String, Object> userVarMap = new HashMap<String, Object>();
 		userVarMap.put("$var", "value");
 		userVarMap.put("$variable", "nested $var replacement");
@@ -75,7 +77,7 @@ public class TestRunnerTestCase {
 
 	@Test
 	public void testComplexMultipleArgumentBuild() {
-		IRepositorySetup repo = new DefaultRepositorySetup();
+		IActionItemRepository repo = new DefaultRepositorySetup();
 		Map<String, Object> userVarMap = new HashMap<String, Object>();
 		userVarMap.put("$var", "value");
 		userVarMap.put("$vari", "value");

@@ -5,8 +5,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
-import com.synaptix.toast.core.runtime.ITestManager;
-import com.synaptix.toast.runtime.AbstractTestManagerImpl;
 import com.synaptix.toast.swing.agent.IStudioApplication;
 import com.synaptix.toast.swing.agent.StudioApplicationImpl;
 import com.synaptix.toast.swing.agent.config.Config;
@@ -32,15 +30,6 @@ public class SwingModule extends AbstractModule {
 		bind(ISwingAutomationClient.class).to(StudioRemoteSwingAgentDriverImpl.class).in(Singleton.class);
 		bind(MongoRepositoryCacheWrapper.class).in(Singleton.class);
 		bind(EventBus.class).in(Singleton.class);
-		bind(ITestManager.class).to(NotAbstractTestManagerImpl.class);
 	}
 
-	public static class NotAbstractTestManagerImpl extends AbstractTestManagerImpl {
-
-		@Override
-		public <T> T getClassInstance(
-			Class<T> serviceClass) {
-			return null;
-		}
-	}
 }

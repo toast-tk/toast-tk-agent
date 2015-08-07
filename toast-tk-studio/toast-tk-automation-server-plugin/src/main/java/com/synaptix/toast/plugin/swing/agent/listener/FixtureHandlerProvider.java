@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import javassist.NotFoundException;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.logging.log4j.LogManager;
@@ -36,10 +34,10 @@ public class FixtureHandlerProvider {
 
 	public String processCustomCall(
 		final CommandRequest request)
-		throws NotFoundException {
+		throws IllegalAccessException {
 		ICustomRequestHandler handlerInterestedIn = getHandlerInterestedIn(request);
 		if(handlerInterestedIn == null) {
-			throw new NotFoundException("No Fixture Handler found for request id: " + request.getId());
+			throw new IllegalAccessException("No Fixture Handler found for request id: " + request.getId());
 		}
 		LOG.info("found CustomFixtureHandler : {} ", handlerInterestedIn.getName());
 		return handlerInterestedIn.processCustomCall(request);

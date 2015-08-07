@@ -127,8 +127,7 @@ public class TestParser {
 		else if(isTextEqual(type, ConfigType.SWING_PAGE.value)) {
 			readSwingPageBlock(testPage, block);
 		}
-		else if(isTextEqual(type, "insert")) { // TODO: check if we still need
-// to parse such blocks
+		else if(isTextEqual(type, "insert")) { // TODO: check if we still need to parse such blocks
 			readInsertBlock(testPage, block);
 		}
 	}
@@ -162,8 +161,7 @@ public class TestParser {
 		TestPageBlock block) {
 		String fileName = block.getLineAt(1).getCellAt(0);
 		String variableName = block.getLineAt(1).getCellAt(1);
-		File file = new File(sourceFolder + "/" + fileName); // possible null
-// pointer
+		File file = new File(sourceFolder + "/" + fileName); // possible null pointer
 		if(variableName == null) {
 			TestParser testParser = new TestParser();
 			testPage.addBlock(testParser.parse(file));

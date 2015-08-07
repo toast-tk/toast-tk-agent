@@ -226,9 +226,11 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 				public void run() {
 					driver = new RemoteWebAgentDriverImpl("localhost", eventBus);
 					driver.start("localhost");
+					if(!driver.isConnected()){
+						WebAgentBoot.boot(eventBus);
+					}
 				}
 			}).start();
-			WebAgentBoot.boot(eventBus);
 		}else{
 			LOG.info("Not switching to web recording mode, already activated !");
 		}

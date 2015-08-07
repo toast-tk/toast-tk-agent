@@ -100,8 +100,8 @@ public class StudioApplicationImpl implements IStudioApplication {
 					isNewEnv = true;
 					toastProperties.createNewFile();
 				}
-				downloadPlugins(config);
 				initAndStoreProperties(config, toastProperties);
+				downloadPlugins(config);
 				if(isNewEnv) {
 					openConfigDialog();
 				}
