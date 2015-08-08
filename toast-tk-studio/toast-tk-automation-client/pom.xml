@@ -47,8 +47,7 @@
 									todir="${project.build.directory}/../../addons/agent" />
 								<copy file="${basedir}/../${toast.tk.autopluginpath}"
 									todir="${project.build.directory}/jnlp/agent-lib" />
-								<copy file="${basedir}/src/main/resources/toast.png"
-									todir="${project.build.directory}/jnlp/images" />
+								<copy file="${basedir}/src/main/resources/toast.png" todir="${project.build.directory}/jnlp/images" />
 								<copy file="${basedir}/src/main/resources/Spalsh.png"
 									todir="${project.build.directory}/jnlp/images" />
 							</tasks>
@@ -93,7 +92,7 @@
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
-			<version>3.0-rc2</version>
+			<version>${guice.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jsoup</groupId>
@@ -178,6 +177,13 @@
 							<outputJarVersions>false</outputJarVersions>
 							<verbose>true</verbose>
 						</configuration>
+						<dependencies>
+							<dependency>
+								<groupId>org.codehaus.mojo</groupId>
+								<artifactId>keytool-maven-plugin</artifactId>
+								<version>1.5</version>
+							</dependency>
+						</dependencies>
 					</plugin>
 				</plugins>
 			</build>

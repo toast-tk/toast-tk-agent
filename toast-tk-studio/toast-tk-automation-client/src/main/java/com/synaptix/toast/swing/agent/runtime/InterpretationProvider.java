@@ -8,11 +8,11 @@ public class InterpretationProvider {
 	
 	private static InterpretationProvider INSTANCE = new InterpretationProvider();
 	
-	private static final Map<String, IActionInterpret> map = new HashMap<String, IActionInterpret>();
+	private static Map<String, IActionInterpret> map;
 	
 	{
+		map = new HashMap<String, IActionInterpret>();
 		map.put("click", new WebClickInterpret());
-		map.put("input", new WebClickInterpret());
 	}
 	
 	public static InterpretationProvider getInstance(){

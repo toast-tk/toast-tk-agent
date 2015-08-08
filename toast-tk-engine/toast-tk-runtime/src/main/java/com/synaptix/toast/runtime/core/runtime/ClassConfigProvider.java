@@ -5,8 +5,6 @@ import java.util.Map;
 
 import com.google.inject.Singleton;
 import com.synaptix.toast.adapter.utils.ActionAdapterHelper;
-import com.synaptix.toast.runtime.core.runtime.RepositorySetup.TestComponentConfig;
-import com.synaptix.toast.runtime.core.runtime.RepositorySetup.TestEntityProperty;
 
 @Singleton
 public class ClassConfigProvider {

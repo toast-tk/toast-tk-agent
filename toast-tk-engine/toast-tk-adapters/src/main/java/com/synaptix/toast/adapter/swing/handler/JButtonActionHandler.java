@@ -3,7 +3,6 @@ package com.synaptix.toast.adapter.swing.handler;
 import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 
-import com.synaptix.toast.adapter.swing.guice.ISwingwidgetActionHandler;
 import com.synaptix.toast.core.net.request.CommandRequest;
 
 

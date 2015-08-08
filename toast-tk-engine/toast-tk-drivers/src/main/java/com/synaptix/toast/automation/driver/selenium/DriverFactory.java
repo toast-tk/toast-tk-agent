@@ -4,8 +4,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -20,17 +20,10 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.Selenium;
 
-/**
- * utility factory to build appropriate selenium drivers
- * 
- * @author skokaina
- * 
- */
 public class DriverFactory {
 
+	private static final Logger LOG = LogManager.getLogger(DriverFactory.class);
 	private static final DriverFactory INSTANCE = new DriverFactory();
-
-	private static final Log LOG = LogFactory.getLog(DriverFactory.class);
 
 	private FirefoxDriver firefoxDriver;
 
@@ -54,9 +47,6 @@ public class DriverFactory {
 	}
 
 	public FirefoxDriver getFirefoxDriver() {
-		// a configurer dans le wiki d'initialisation d'environement !!
-		// System.setProperty("webdriver.firefox.bin",
-// "C:\\Users\\E413544\\Apps\\Firefox25\\firefox.exe");
 		if(firefoxDriver == null) {
 			firefoxDriver = new FirefoxDriver();
 			firefoxDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -79,7 +69,7 @@ public class DriverFactory {
 	}
 
 	public WebDriver getUiLessWebDriver() {
-		MyHtmlDriver driver = new MyHtmlDriver(BrowserVersion.FIREFOX_10);
+		MyHtmlDriver driver = new MyHtmlDriver(BrowserVersion.FIREFOX_38);
 		driver.setJavascriptEnabled(true);
 		driver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS);
 		return driver;

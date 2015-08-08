@@ -2,6 +2,7 @@ package com.synaptix.toast.swing.agent.interpret;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import com.synaptix.toast.adapter.SentenceBuilder;
 import com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.Types;
 import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
@@ -9,13 +10,14 @@ import com.synaptix.toast.dao.domain.impl.repository.RepositoryImpl;
 
 /**
  * 1. Connect to MongoDB throught toast web app api and check for existing types
- * 2. store or update repository with new objects
- * 3. query known syntax to build and record automation sentence
+ * 2. store or update repository with new objects 3. query known syntax to build
+ * and record automation sentence
  * 
  */
 public class LiveRedPlayEventInterpreter extends DefaultEventInterpreter {
 
-	private static final Logger LOG = LogManager.getLogger(LiveRedPlayEventInterpreter.class);
+	private static final Logger LOG = LogManager
+			.getLogger(LiveRedPlayEventInterpreter.class);
 
 	SentenceBuilder sentenceBuilder = new SentenceBuilder();
 
@@ -24,15 +26,15 @@ public class LiveRedPlayEventInterpreter extends DefaultEventInterpreter {
 	private boolean isConnected = false;
 
 	public LiveRedPlayEventInterpreter(
-		MongoRepositoryCacheWrapper mongoRepoManager) {
+			final MongoRepositoryCacheWrapper mongoRepoManager) {
 		this.mongoRepoManager = mongoRepoManager;
 		try {
 			mongoRepoManager.initCache();
 			isConnected = true;
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
+
 	}
 
 	@Override
@@ -41,126 +43,111 @@ public class LiveRedPlayEventInterpreter extends DefaultEventInterpreter {
 	}
 
 	@Override
-	public String onWindowDisplay(
-		AWTCapturedEvent eventObject) {
+	public String onWindowDisplay(AWTCapturedEvent eventObject) {
 		return super.onWindowDisplay(eventObject);
 	}
 
 	@Override
-	public String onBringOnTop(
-		AWTCapturedEvent eventObject) {
+	public String onBringOnTop(AWTCapturedEvent eventObject) {
 		return super.onBringOnTop(eventObject);
 	}
 
 	@Override
-	public String onClick(
-		AWTCapturedEvent eventObject) {
-		RepositoryImpl container = mongoRepoManager.findContainer(eventObject.container);
-		String label = mongoRepoManager.find(
-			container,
-			convertToKnowType(eventObject.componentType),
-			eventObject.componentName);
+	public String onClick(AWTCapturedEvent eventObject) {
+		RepositoryImpl container = mongoRepoManager
+				.findContainer(eventObject.container);
+		String label = mongoRepoManager.find(container,
+				convertToKnowType(eventObject.componentType),
+				eventObject.componentName);
 		return sentenceBuilder.ofType(Types.CLICK_ON)
-			.withPage(container.getName())
-			.withComponent(label).build();
+				.withPage(container.getName()).withComponent(label).build();
 	}
 
 	@Override
-	public String onCheckBoxClick(
-		AWTCapturedEvent eventObject) {
+	public String onCheckBoxClick(AWTCapturedEvent eventObject) {
 		eventObject.componentType = "checkbox";
 		return onClick(eventObject);
 	}
 
 	@Override
-	public String onButtonClick(
-		AWTCapturedEvent eventObject) {
+	public String onButtonClick(AWTCapturedEvent eventObject) {
 		eventObject.componentType = "button";
 		return onClick(eventObject);
 	}
 
 	@Override
-	public String onKeyInput(
-		AWTCapturedEvent eventObject) {
-		RepositoryImpl container = mongoRepoManager.findContainer(eventObject.container);
-		String label = mongoRepoManager.find(
-			container,
-			convertToKnowType(eventObject.componentType),
-			eventObject.componentName);
+	public String onKeyInput(AWTCapturedEvent eventObject) {
+		RepositoryImpl container = mongoRepoManager
+				.findContainer(eventObject.container);
+		String label = mongoRepoManager.find(container,
+				convertToKnowType(eventObject.componentType),
+				eventObject.componentName);
 		return sentenceBuilder.ofType(Types.TYPE_IN_INPUT)
-			.withPage(container.getName())
-			.withComponent(label)
-			.withValue(eventObject.businessValue).build();
+				.withPage(container.getName()).withComponent(label)
+				.withValue(eventObject.businessValue).build();
 	}
 
 	/**
-	 * Convert the type to a known type 
-	 * (currently hosted on webapp side:
-	 * "button", "input", "menu", "table", "timeline", "date", "list", "checkbox", "other"
-	 * To expose through webservice
+	 * Convert the type to a known type (currently hosted on webapp side:
+	 * "button", "input", "menu", "table", "timeline", "date", "list",
+	 * "checkbox", "other" To expose through webservice
 	 * 
 	 * @param type
 	 * @return
 	 */
-	private String convertToKnowType(
-		String type) {
-		if(type.toLowerCase().contains("button")){
+	private String convertToKnowType(String type) {
+		if (type.toLowerCase().contains("button")) {
 			return "button";
 		}
-		if(type.toLowerCase().contains("checkbox")){
+		if (type.toLowerCase().contains("checkbox")) {
 			return "checkbox";
 		}
-		if(type.toLowerCase().contains("text")){
+		if (type.toLowerCase().contains("text")) {
 			return "input";
 		}
-		if(type.toLowerCase().contains("table")){
+		if (type.toLowerCase().contains("table")) {
 			return "table";
 		}
-		if(type.toLowerCase().contains("combo")){
+		if (type.toLowerCase().contains("combo")) {
 			return "list";
 		}
 		return "other";
 	}
 
 	@Override
-	public String onTableClick(
-		AWTCapturedEvent eventObject) {
-		RepositoryImpl container = mongoRepoManager.findContainer(eventObject.container);
-		String label = mongoRepoManager.find(
-			container,
-			convertToKnowType(eventObject.componentType),
-			eventObject.componentLocator);
+	public String onTableClick(AWTCapturedEvent eventObject) {
+		RepositoryImpl container = mongoRepoManager
+				.findContainer(eventObject.container);
+		String label = mongoRepoManager.find(container,
+				convertToKnowType(eventObject.componentType),
+				eventObject.componentLocator);
 		return sentenceBuilder.ofType(Types.SELECT_TABLE_ROW)
-			.withPage(container.getName())
-			.withComponent(label)
-			.withValue(eventObject.businessValue).build();
+				.withPage(container.getName()).withComponent(label)
+				.withValue(eventObject.businessValue).build();
 	}
 
 	@Override
-	public String onMenuClick(
-		AWTCapturedEvent eventObject) {
-		return sentenceBuilder.ofType(Types.SELECT_SUB_MENU).withValue(eventObject.componentName).build();
+	public String onMenuClick(AWTCapturedEvent eventObject) {
+		return sentenceBuilder.ofType(Types.SELECT_SUB_MENU)
+				.withValue(eventObject.componentName).build();
 	}
 
 	@Override
-	public String onComboBoxClick(
-		AWTCapturedEvent eventObject) {
-		RepositoryImpl container = mongoRepoManager.findContainer(eventObject.container);
-		String label = mongoRepoManager.find(
-			container,
-			convertToKnowType(eventObject.componentType),
-			eventObject.componentName);
+	public String onComboBoxClick(AWTCapturedEvent eventObject) {
+		RepositoryImpl container = mongoRepoManager
+				.findContainer(eventObject.container);
+		String label = mongoRepoManager.find(container,
+				convertToKnowType(eventObject.componentType),
+				eventObject.componentName);
 		return sentenceBuilder.ofType(Types.SELECT_VALUE_IN_LIST)
-			.withPage(container.getName())
-			.withComponent(label)
-			.withValue(eventObject.businessValue).build();
+				.withPage(container.getName()).withComponent(label)
+				.withValue(eventObject.businessValue).build();
 	}
 
 	@Override
-	public String onPopupMenuClick(
-		AWTCapturedEvent eventObject) {
+	public String onPopupMenuClick(AWTCapturedEvent eventObject) {
 		return sentenceBuilder.ofType(Types.SELECT_CONTEXTUAL_MENU)
-			.withValue(eventObject.componentName).build();
+				.withValue(eventObject.componentName).build();
 	}
 
 	public boolean saveObjectsToRepository() {

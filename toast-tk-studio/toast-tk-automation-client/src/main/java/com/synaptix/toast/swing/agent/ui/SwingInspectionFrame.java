@@ -104,12 +104,12 @@ public class SwingInspectionFrame extends JFrame {
 		this.app = app;
 		eventBus.register(this);
 		try {
-			for(LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-				if("Nimbus".equals(info.getName())) {
-					UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
+//			for(LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+//				if("Nimbus".equals(info.getName())) {
+//					UIManager.setLookAndFeel(info.getClassName());
+//					break;
+//				}
+//			}
 			showSplashScreen();
 			launchProgressBar();
 		}

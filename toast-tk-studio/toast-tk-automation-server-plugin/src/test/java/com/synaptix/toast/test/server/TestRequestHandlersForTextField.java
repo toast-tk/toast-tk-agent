@@ -59,7 +59,7 @@ public class TestRequestHandlersForTextField {
 		SwingActionRequestListener requestHandler = TestSuiteHelper.getInjector().getInstance(
 			SwingActionRequestListener.class);
 		FakeConnection connection = new FakeConnection();
-		String value = "typed_value";
+		String value = "type";
 		textFieldFrame.setTextFocus();
 		typeValueInTexfield(requestHandler, connection, value);
 		readValueFromTextfield(connection);

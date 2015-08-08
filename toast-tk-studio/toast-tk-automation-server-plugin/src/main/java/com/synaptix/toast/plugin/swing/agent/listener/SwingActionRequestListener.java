@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import javassist.NotFoundException;
 
 import javax.swing.AbstractButton;
 import javax.swing.JComboBox;
@@ -146,7 +145,7 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 				connection.sendTCP(new ValueResponse(command.getId(), result));
 			}
 		}
-		catch(NotFoundException nfe) {
+		catch(IllegalAccessException nfe) {
 			// FixMe send ErrorResponse
 			BufferedImage capture = getDesktopScreenShot();
 			connection.sendTCP(new ValueResponse(command.getId(), "No Inplementation found"));

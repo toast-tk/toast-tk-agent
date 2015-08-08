@@ -9,7 +9,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.synaptix.toast.automation.report.ThymeLeafHTMLReporter;
+import com.synaptix.toast.automation.report.test.ThymeLeafHTMLReporter;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;

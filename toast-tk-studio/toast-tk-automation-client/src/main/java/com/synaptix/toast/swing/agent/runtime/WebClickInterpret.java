@@ -8,6 +8,6 @@ public class WebClickInterpret implements IActionInterpret{
 	@Override
 	public String getSentence(
 		WebEventRecord event) {
-		return null;
+		return "Click on " + event.target;
 	}
 }

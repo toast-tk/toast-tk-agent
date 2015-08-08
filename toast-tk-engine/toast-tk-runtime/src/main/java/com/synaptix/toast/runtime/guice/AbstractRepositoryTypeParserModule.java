@@ -3,6 +3,7 @@ package com.synaptix.toast.runtime.guice;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.multibindings.Multibinder;
+import com.synaptix.toast.runtime.core.IRepositoryTypeParser;
 
 public abstract class AbstractRepositoryTypeParserModule extends AbstractModule {
 
