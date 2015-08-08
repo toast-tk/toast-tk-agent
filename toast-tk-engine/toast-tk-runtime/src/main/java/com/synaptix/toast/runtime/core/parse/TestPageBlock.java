@@ -37,7 +37,7 @@ import com.synaptix.toast.dao.domain.impl.test.block.BlockLine;
 public class TestPageBlock {
 
 	protected enum BlockType {
-		TEST, COMMENT, VARIABLE
+		TEST, COMMENT, VARIABLE, INCLUDE
 	}
 
 	public final List<BlockLine> lines;

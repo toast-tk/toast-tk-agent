@@ -45,6 +45,6 @@ public class VariableBlock implements IBlock {
 
 	@Override
 	public String getBlockType() {
-		return "variableBlock";
+		return "variable";
 	}
 }

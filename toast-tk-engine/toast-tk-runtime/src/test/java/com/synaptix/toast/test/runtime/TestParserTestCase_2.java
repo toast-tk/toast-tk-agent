@@ -39,19 +39,19 @@ public class TestParserTestCase_2 {
 		Assert.assertNotNull(testPage.getVarBlock());
 	}
 
-	@Test
-	public void testParserVarBlock() {
-		TestParser parser = new TestParser();
-		TestPageBlock varLine = parser.handleVarLine("$var:=select 1 from dual", null);
-		Assert.assertNotNull(varLine);
-	}
-
-	@Test
-	public void testParserVarBlockVarName() {
-		TestParser parser = new TestParser();
-		TestPageBlock varLine = parser.handleVarLine("$var := select 1 from dual", null);
-		Assert.assertEquals(varLine.getLineAt(0).getCellAt(0), "$var");
-	}
+//	@Test
+//	public void testParserVarBlock() {
+//		TestParser parser = new TestParser();
+//		TestPageBlock varLine = parser.handleVarLine("$var:=select 1 from dual", null);
+//		Assert.assertNotNull(varLine);
+//	}
+//
+//	@Test
+//	public void testParserVarBlockVarName() {
+//		TestParser parser = new TestParser();
+//		TestPageBlock varLine = parser.handleVarLine("$var := select 1 from dual", null);
+//		Assert.assertEquals(varLine.getLineAt(0).getCellAt(0), "$var");
+//	}
 
 // @Test
 // public void testParserMultiLineVarBlock() throws IOException {
@@ -71,13 +71,13 @@ public class TestParserTestCase_2 {
 // Assert.assertEquals(varLine.getLineAt(0).getCellAt(1),varValueBuilder.toString());
 // }
 //
-	@Test
-	public void testParserVarBlockVarValue() {
-		TestParser parser = new TestParser();
-		String varValue = "select 1 from dual";
-		TestPageBlock varLine = parser.handleVarLine("$var:=" + varValue, null);
-		Assert.assertEquals(varLine.getLineAt(0).getCellAt(1), varValue);
-	}
+//	@Test
+//	public void testParserVarBlockVarValue() {
+//		TestParser parser = new TestParser();
+//		String varValue = "select 1 from dual";
+//		TestPageBlock varLine = parser.handleVarLine("$var:=" + varValue, null);
+//		Assert.assertEquals(varLine.getLineAt(0).getCellAt(1), varValue);
+//	}
 
 	// static check only
 	private void testReportImageDisplay() {
