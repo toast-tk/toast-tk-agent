@@ -11,18 +11,18 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Injector;
+import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.rest.RestUtils;
-import com.synaptix.toast.core.runtime.ITestManager;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
 import com.synaptix.toast.runtime.parse.TestParser;
 import com.synaptix.toast.runtime.report.test.IHTMLReportGenerator;
 import com.synaptix.toast.runtime.utils.RunUtils;
 
-public abstract class AbstractRunner {
+@FixMe(todo="make the runner generic")
+public abstract class AbstractScenarioRunner extends AbstractRunner{
 
-	private static final Logger LOG = LogManager.getLogger(AbstractRunner.class);
-
+	private static final Logger LOG = LogManager.getLogger(AbstractScenarioRunner.class);
 
 	private Injector injector;
 
@@ -34,7 +34,7 @@ public abstract class AbstractRunner {
 
 	private IHTMLReportGenerator htmlReportGenerator;
 
-	protected AbstractRunner(
+	protected AbstractScenarioRunner(
 		Injector injector) {
 		this.htmlReportGenerator = injector.getInstance(IHTMLReportGenerator.class);
 		this.injector = injector;
@@ -53,8 +53,7 @@ public abstract class AbstractRunner {
 		List<ITestPage> testPages = new ArrayList<ITestPage>();
 		initEnvironment();
 		for(String fileName : scenarios) {
-			System.out.println("Start main test parser: " + fileName);
-			// Read test file
+			LOG.info("Start main test parser: " + fileName);
 			File file = readTestFile(fileName);
 			ITestPage result = runScript(file, fileName);
 			testPages.add(result);
@@ -143,11 +142,4 @@ public abstract class AbstractRunner {
 		}
 	}
 
-	public abstract void tearDownEnvironment();
-
-	public abstract void beginTest();
-
-	public abstract void endTest();
-
-	public abstract void initEnvironment();
 }

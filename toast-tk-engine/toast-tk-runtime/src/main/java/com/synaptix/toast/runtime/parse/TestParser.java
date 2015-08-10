@@ -27,10 +27,11 @@ import com.synaptix.toast.dao.domain.impl.test.block.InsertBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.SetupBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.SwingPageBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.TestPageBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.TestPageBlock.BlockType;
 import com.synaptix.toast.runtime.core.TestRunner;
-import com.synaptix.toast.runtime.parse.TestPageBlock.BlockType;
 
 public class TestParser {
 

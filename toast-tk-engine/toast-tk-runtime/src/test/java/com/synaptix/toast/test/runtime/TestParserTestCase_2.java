@@ -12,7 +12,7 @@ import org.junit.Test;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
-import com.synaptix.toast.runtime.parse.TestPageBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.TestPageBlock;
 import com.synaptix.toast.runtime.parse.TestParser;
 import com.synaptix.toast.runtime.report.test.ThymeLeafHTMLReporter;
 

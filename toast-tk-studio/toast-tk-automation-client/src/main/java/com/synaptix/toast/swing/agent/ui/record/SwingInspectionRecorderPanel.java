@@ -22,10 +22,10 @@ import com.google.inject.Inject;
 import com.synaptix.toast.core.agent.config.Config;
 import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.core.agent.interpret.InterpretedEvent;
-import com.synaptix.toast.runtime.core.DefaultScriptRunner;
 import com.synaptix.toast.swing.agent.constant.Resource;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
 import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
+import com.synaptix.toast.swing.agent.runtime.StudioScriptRunner;
 import com.synaptix.toast.swing.agent.ui.record.listener.OpenScenarioListener;
 import com.synaptix.toast.swing.agent.ui.record.listener.RunScriptActionListener;
 import com.synaptix.toast.swing.agent.ui.record.listener.ShareScenarioListener;
@@ -57,7 +57,7 @@ public class SwingInspectionRecorderPanel extends JPanel {
 
 	private ISwingAutomationClient recorder;
 
-	private DefaultScriptRunner runner;
+	private StudioScriptRunner runner;
 
 	private Long previousTimeStamp;
 	

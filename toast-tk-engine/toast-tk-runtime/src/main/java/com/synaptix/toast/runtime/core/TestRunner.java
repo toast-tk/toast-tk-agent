@@ -22,17 +22,28 @@ public class TestRunner {
 
 	private static final Logger LOG = LogManager.getLogger(TestRunner.class);
 	private final IActionItemRepository objectRepository;
-	private Injector injector;
 	private IReportUpdateCallBack reportUpdateCallBack;
 	private IHTMLReportGenerator htmlReportGenerator;
 	private BlockRunnerProvider blockRunnerProvider;
+	private Injector injector;
 
+	/**
+	 * 
+	 * @param repoSetup
+	 * @throws IOException
+	 */
 	public TestRunner(
 		IActionItemRepository repoSetup)
 		throws IOException {
 		this.objectRepository = repoSetup;
 	}
 
+	/**
+	 * 
+	 * @param injector
+	 * @return
+	 * @throws IOException
+	 */
 	public static TestRunner FromInjector(
 		Injector injector)
 		throws IOException {
@@ -41,6 +52,13 @@ public class TestRunner {
 		return runner;
 	}
 
+	/**
+	 * 
+	 * @param injector
+	 * @param reportUpdateCallBack
+	 * @return
+	 * @throws IOException
+	 */
 	public static TestRunner FromInjectorWithReportCallBack(
 		Injector injector,
 		IReportUpdateCallBack reportUpdateCallBack)
@@ -51,11 +69,19 @@ public class TestRunner {
 		return runner;
 	}
 
+	/**
+	 * 
+	 * @param reportUpdateCallBack
+	 */
 	private void setReportCallBack(
 		IReportUpdateCallBack reportUpdateCallBack) {
 		this.reportUpdateCallBack = reportUpdateCallBack;
 	}
 
+	/**
+	 * 
+	 * @param injector
+	 */
 	private void setInjector(
 		Injector injector) {
 		this.injector = injector;
@@ -95,6 +121,12 @@ public class TestRunner {
 		return testPage;
 	}
 
+	/**
+	 * 
+	 * @param testPage
+	 * @param inlineReport
+	 * @throws IllegalAccessException
+	 */
 	private void handleInlineReport(ITestPage testPage, boolean inlineReport)
 			throws IllegalAccessException {
 		if (inlineReport) {
@@ -112,6 +144,12 @@ public class TestRunner {
 		}
 	}
 
+	/**
+	 * 
+	 * init variable values 
+	 * 
+	 * @param testPage
+	 */
 	private void initTestPageVariables(
 		ITestPage testPage) {
 		VariableBlock varBlock = (VariableBlock) testPage.getVarBlock();

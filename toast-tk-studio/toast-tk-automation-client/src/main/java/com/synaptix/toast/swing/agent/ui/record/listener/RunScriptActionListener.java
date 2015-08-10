@@ -14,14 +14,14 @@ import javax.swing.SwingUtilities;
 import org.fit.cssbox.swingbox.BrowserPane;
 
 import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
-import com.synaptix.toast.runtime.core.DefaultScriptRunner;
 import com.synaptix.toast.runtime.core.IReportUpdateCallBack;
 import com.synaptix.toast.swing.agent.AgentBoot;
 import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
+import com.synaptix.toast.swing.agent.runtime.StudioScriptRunner;
 
 public class RunScriptActionListener implements ActionListener {
 
-	private DefaultScriptRunner runner;
+	private StudioScriptRunner runner;
 
 	private ISwingAutomationClient recorder;
 
@@ -32,7 +32,7 @@ public class RunScriptActionListener implements ActionListener {
 	public RunScriptActionListener(
 		ISwingAutomationClient recorder,
 		JTextArea interpretedOutputArea,
-		DefaultScriptRunner runner,
+		StudioScriptRunner runner,
 		MongoRepositoryCacheWrapper mongoRepoManager) {
 		this.runner = runner;
 		this.recorder = recorder;
@@ -55,7 +55,7 @@ public class RunScriptActionListener implements ActionListener {
 				}
 				else if(test != null && !test.isEmpty()) {
 					if(runner == null) {
-						runner = new DefaultScriptRunner(AgentBoot.injector);
+						runner = new StudioScriptRunner(AgentBoot.injector);
 					}
 					final String wikiScenario = toWikiScenario(test);
 					final BrowserPane swingbox = new BrowserPane();

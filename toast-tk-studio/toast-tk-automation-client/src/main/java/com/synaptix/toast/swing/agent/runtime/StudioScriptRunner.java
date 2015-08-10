@@ -1,10 +1,11 @@
-package com.synaptix.toast.runtime.core;
+package com.synaptix.toast.swing.agent.runtime;
 
 import com.google.inject.Injector;
+import com.synaptix.toast.runtime.core.AbstractScenarioRunner;
 
-public class DefaultScriptRunner extends AbstractRunner {
+public class StudioScriptRunner extends AbstractScenarioRunner {
 
-	public DefaultScriptRunner(
+	public StudioScriptRunner(
 		Injector injector) {
 		super(injector);
 	}

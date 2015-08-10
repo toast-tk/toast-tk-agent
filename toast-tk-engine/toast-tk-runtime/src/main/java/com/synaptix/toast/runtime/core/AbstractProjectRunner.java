@@ -3,21 +3,20 @@ package com.synaptix.toast.runtime.core;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
+import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.core.dao.ICampaign;
 import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.rest.RestUtils;
-import com.synaptix.toast.core.runtime.ITestManager;
 import com.synaptix.toast.dao.domain.impl.report.Project;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
 import com.synaptix.toast.runtime.dao.DAOManager;
 import com.synaptix.toast.runtime.parse.TestParser;
 
-public abstract class AbstractProjectRunner {
+@FixMe(todo="make the runner generic")
+public abstract class AbstractProjectRunner extends AbstractRunner {
 
 	private static final Logger LOG = LogManager.getLogger(AbstractProjectRunner.class);
-
 	private Injector injector;
 
 	protected AbstractProjectRunner(
@@ -50,7 +49,6 @@ public abstract class AbstractProjectRunner {
 		//creating a new iteration from history
 		newIterationProject.setId(null);
 		newIterationProject.setIteration(lastIterationProject.getIteration());
-		
 		for(ICampaign newCampaign: newIterationProject.getCampaigns()){
 			for(ICampaign lastCampaign: lastIterationProject.getCampaigns()){
 				if(newCampaign.getIdAsString().equals(lastCampaign.getIdAsString())){
@@ -65,7 +63,6 @@ public abstract class AbstractProjectRunner {
 				}
 			}
 		}
-		
 		return newIterationProject;
 	}
 
@@ -75,13 +72,13 @@ public abstract class AbstractProjectRunner {
 		throws Exception {
 		TestRunner runner = TestRunner.FromInjector(injector);
 		if(presetRepoFromWebApp) {
+			if(LOG.isDebugEnabled()) {
+				LOG.debug("Preset repository from webapp rest api...");
+			}
 			String repoWiki = RestUtils.downloadRepositoyAsWiki();
 			TestParser parser = new TestParser();
 			TestPage repoAsTestPageForConveniency = parser.readString(repoWiki, "");
 			runner.run(repoAsTestPageForConveniency, false);
-			if(LOG.isDebugEnabled()) {
-				LOG.debug("Preset repository from webapp rest api...");
-			}
 		}
 		execute(project, runner);
 	}
@@ -99,18 +96,10 @@ public abstract class AbstractProjectRunner {
 					endTest();
 				}
 				catch(IllegalAccessException e) {
-					e.printStackTrace();
+					LOG.error(e.getMessage(), e);
 				}
 			}
 		}
 		tearDownEnvironment();
 	}
-
-	public abstract void tearDownEnvironment();
-
-	public abstract void beginTest();
-
-	public abstract void endTest();
-
-	public abstract void initEnvironment();
 }

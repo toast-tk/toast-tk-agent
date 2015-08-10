@@ -61,10 +61,10 @@ import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.agent.IStudioApplication;
-import com.synaptix.toast.runtime.core.DefaultScriptRunner;
 import com.synaptix.toast.swing.agent.AgentBoot;
 import com.synaptix.toast.swing.agent.constant.Resource;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
+import com.synaptix.toast.swing.agent.runtime.StudioScriptRunner;
 import com.synaptix.toast.swing.agent.runtime.SutRunnerAsExec;
 
 @Deprecated
@@ -89,7 +89,7 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 
 	private final File toastPropertiesFile;
 
-	private DefaultScriptRunner runner;
+	private StudioScriptRunner runner;
 
 	private final SutRunnerAsExec runtime;
 
@@ -245,7 +245,7 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 						if(test != null) {
 							// TODO: check if client is connected !
 							if(runner == null) {
-								runner = new DefaultScriptRunner(AgentBoot.injector);
+								runner = new StudioScriptRunner(AgentBoot.injector);
 							}
 							String wikiScenario = toWikiScenario(test);
 							try {

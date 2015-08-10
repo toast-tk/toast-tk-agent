@@ -9,9 +9,11 @@ import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 
 public class TestLineDescriptor {
 
-	private String regex = "@(" + ActionAdapterKind.swing.name() + "|" + ActionAdapterKind.web.name() + "|"
-		+ ActionAdapterKind.service.name()
-		+ "):?([\\w]*) ([\\w\\W]+)";
+	private static String KINDS = ActionAdapterKind.swing.name() + "|" 
+						 + ActionAdapterKind.web.name() + "|"
+						 + ActionAdapterKind.service.name();
+	
+	private static String REGEX = "@(" + KINDS + "):?([\\w]*) ([\\w\\W]+)";
 
 	public final TestLine testLine;
 
@@ -31,7 +33,7 @@ public class TestLineDescriptor {
 	private void initServiceKind(
 		TestBlock testBlock,
 		TestLine testLine) {
-		Pattern pattern = Pattern.compile(regex);
+		Pattern pattern = Pattern.compile(REGEX);
 		Matcher matcher = pattern.matcher(testLine.getTest());
 		if(matcher.find()) {
 			setTestLineFixtureKind(ActionAdapterKind.valueOf(matcher.group(1)));
@@ -39,9 +41,7 @@ public class TestLineDescriptor {
 			setTestLineAction(matcher.group(3));
 		}
 		else {
-			setTestLineFixtureKind(ActionAdapterKind.valueOf(testBlock.getFixtureName())); // exception
-																							// otherwise
-																							// !!
+			setTestLineFixtureKind(ActionAdapterKind.valueOf(testBlock.getFixtureName())); 
 			setTestLineAction(testLine.getTest());
 		}
 	}
@@ -86,7 +86,6 @@ public class TestLineDescriptor {
 		if(isFailFatalCommand()) {
 			command = command.substring(2);
 		}
-		// command = command.trim().replace("*", "");
 		return command;
 	}
 }
