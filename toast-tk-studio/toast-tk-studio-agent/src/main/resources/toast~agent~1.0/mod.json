@@ -1,0 +1,9 @@
+{
+  "main": "com.synaptix.toast.swing.agent.web.RestRecorderService",
+  "auto-redeploy": true,
+  "description":"Web Action Record micro service",
+  "licenses": ["The Apache Software License Version 2.0"],
+  "author": "Sallah Kokaina",
+  "developers": [],
+  "keywords": ["vert.x", "module", "java", "record", "web"]
+}

@@ -8,10 +8,10 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.sun.jersey.api.client.ClientHandlerException;
+import com.synaptix.toast.core.agent.config.Config;
 import com.synaptix.toast.dao.RestMongoWrapper;
 import com.synaptix.toast.dao.domain.impl.repository.ElementImpl;
 import com.synaptix.toast.dao.domain.impl.repository.RepositoryImpl;
-import com.synaptix.toast.swing.agent.config.Config;
 
 public class MongoRepositoryCacheWrapper {
 

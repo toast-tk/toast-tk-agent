@@ -14,8 +14,8 @@ import javax.swing.SwingUtilities;
 import org.fit.cssbox.swingbox.BrowserPane;
 
 import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
+import com.synaptix.toast.runtime.core.DefaultScriptRunner;
 import com.synaptix.toast.runtime.core.IReportUpdateCallBack;
-import com.synaptix.toast.runtime.core.runtime.DefaultScriptRunner;
 import com.synaptix.toast.swing.agent.AgentBoot;
 import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
 

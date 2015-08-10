@@ -10,12 +10,15 @@
 	<packaging>pom</packaging>
 	<artifactId>toast-tk-studio</artifactId>
 	<name>Toast Toolkit - Studio - POM Module</name>
+	<properties>
+		<toast.vertx.module>toast~agent~1.0</toast.vertx.module>
+	</properties>
 	<description>
 	    Toast TK Studio Parent Module.
 	    This module is the parent module for the studio, featuring:
-	    - Adapters Plugin Loader
-	    - Swing Action Adapter Plugin
-	    - Swing Agent (the Studio)
+	    	- Adapters Plugin Loader
+	    	- Swing Action Adapter Plugin
+	    	- Swing Agent (the Studio)
 	</description>
 	<modules>
 		<module>toast-tk-automation-plugin-loader</module>
@@ -23,5 +26,4 @@
 		<module>toast-tk-studio-agent</module>
 		<module>toast-tk-automation-client</module>
 	</modules>
-
 </project>

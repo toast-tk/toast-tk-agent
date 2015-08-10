@@ -8,8 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.xml.sax.SAXException;
 
-import com.synaptix.toast.swing.agent.config.Config;
-import com.synaptix.toast.swing.agent.config.ConfigProvider;
+import com.synaptix.toast.core.agent.config.Config;
+import com.synaptix.toast.core.agent.config.ConfigProvider;
 
 public class StartCommandHandler {
 

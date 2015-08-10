@@ -8,12 +8,6 @@ import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.ISwingElement;
 
-/**
- * Automation super class
- * 
- * @author skokaina
- * 
- */
 public abstract class SwingAutoElement {
 
 	protected ISwingElement wrappedElement;

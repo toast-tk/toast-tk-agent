@@ -2,10 +2,10 @@ package com.synaptix.toast.runtime.guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
-import com.synaptix.toast.automation.report.test.IHTMLReportGenerator;
-import com.synaptix.toast.automation.report.test.ThymeLeafHTMLReporter;
 import com.synaptix.toast.core.runtime.IActionItemRepository;
-import com.synaptix.toast.runtime.core.runtime.ActionItemRepository;
+import com.synaptix.toast.runtime.core.ActionItemRepository;
+import com.synaptix.toast.runtime.report.test.IHTMLReportGenerator;
+import com.synaptix.toast.runtime.report.test.ThymeLeafHTMLReporter;
 
 public class EngineModule extends AbstractModule {
 
