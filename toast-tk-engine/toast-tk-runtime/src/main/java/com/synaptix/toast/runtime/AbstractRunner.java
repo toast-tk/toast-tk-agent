@@ -1,4 +1,4 @@
-package com.synaptix.toast.runtime.core;
+package com.synaptix.toast.runtime;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

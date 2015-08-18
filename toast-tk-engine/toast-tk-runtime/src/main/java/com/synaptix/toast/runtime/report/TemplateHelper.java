@@ -3,6 +3,7 @@ package com.synaptix.toast.runtime.report;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -10,6 +11,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.joda.time.LocalDateTime;
 
 import com.synaptix.toast.core.dao.IBlock;
+import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
 import com.synaptix.toast.dao.domain.impl.test.TestLine;
@@ -118,5 +120,23 @@ public class TemplateHelper {
 	public static boolean hasScreenShot(
 		TestResult testResult) {
 		return testResult != null && testResult.getScreenShot() != null;
+	}
+	
+	
+	//FIXME add in template
+	private void setExecStatistics(ITestPage testPage, List<TestResult> results) {
+		testPage.setTechnicalErrorNumber(getTotal(results, ResultKind.ERROR));
+		testPage.setTestSuccessNumber(getTotal(results, ResultKind.SUCCESS));
+		testPage.setTestFailureNumber(getTotal(results, ResultKind.FAILURE));
+	}
+	
+	private int getTotal(List<TestResult> results, ResultKind resultKindFilter) {
+		int count = 0;
+		for (TestResult testResult : results) {
+			if (resultKindFilter.equals(testResult.getResultKind())) {
+				count++;
+			}
+		}
+		return count;
 	}
 }

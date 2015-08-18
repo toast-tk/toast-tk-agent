@@ -30,10 +30,10 @@ public class BlockRunnerProvider {
 		
 	public IBlockRunner<? extends IBlock> getBlockRunner(Class<? extends IBlock> clazz, Injector injector) throws IllegalAccessException{
 		IBlockRunner<? extends IBlock> runner = map.get(clazz);
-		if(runner == null){
-			LOG.info("No runner found for : " + clazz.getSimpleName());
-		}else{
+		if(runner != null){
 			runner.setInjector(injector);
+		}else{
+			LOG.warn("No runner found for : " + clazz.getSimpleName());
 		}
 		return runner;
 	}

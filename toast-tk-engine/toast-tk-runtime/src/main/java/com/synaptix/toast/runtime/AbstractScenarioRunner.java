@@ -1,4 +1,4 @@
-package com.synaptix.toast.runtime.core;
+package com.synaptix.toast.runtime;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -10,13 +10,17 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.synaptix.toast.core.annotation.EngineEventBus;
 import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.rest.RestUtils;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
 import com.synaptix.toast.runtime.parse.TestParser;
-import com.synaptix.toast.runtime.report.test.IHTMLReportGenerator;
+import com.synaptix.toast.runtime.report.DefaultTestProgressReporter;
+import com.synaptix.toast.runtime.report.IHTMLReportGenerator;
 import com.synaptix.toast.runtime.utils.RunUtils;
 
 @FixMe(todo="make the runner generic")
@@ -28,16 +32,20 @@ public abstract class AbstractScenarioRunner extends AbstractRunner{
 
 	private boolean presetRepoFromWebApp = false;
 
-	private IReportUpdateCallBack reportUpdateCallBack;
-
 	private TestPage localRepositoryTestPage;
 
 	private IHTMLReportGenerator htmlReportGenerator;
+
+	private EventBus eventBus;
+
+	private DefaultTestProgressReporter progressReporter;
 
 	protected AbstractScenarioRunner(
 		Injector injector) {
 		this.htmlReportGenerator = injector.getInstance(IHTMLReportGenerator.class);
 		this.injector = injector;
+		this.eventBus = injector.getInstance(Key.get(EventBus.class, EngineEventBus.class));
+		this.progressReporter = new DefaultTestProgressReporter(eventBus, htmlReportGenerator);
 	}
 
 	public final void run(
@@ -80,23 +88,17 @@ public abstract class AbstractScenarioRunner extends AbstractRunner{
 	public void runLocalScript(
 		String wikiScenario,
 		String repoWiki,
-		IReportUpdateCallBack iReportUpdateCallBack)
+		IReportUpdateCallBack callback)
 		throws IllegalAccessException, ClassNotFoundException, IOException {
-		this.reportUpdateCallBack = iReportUpdateCallBack;
+		this.progressReporter.setReportCallBack(callback);
 		TestParser parser = new TestParser();
 		this.localRepositoryTestPage = parser.readString(repoWiki, "");
 		runScript(null, wikiScenario);
 	}
 
 	private File readTestFile(
-		String fileName) {
-		try {
-			return new File(this.getClass().getClassLoader().getResource(fileName).getFile());
-		}
-		catch(final Exception e) {
-			LOG.error(e.getMessage(), e);
-		}
-		return null;
+		String fileName) throws IOException {
+		return new File(this.getClass().getClassLoader().getResource(fileName).getFile());
 	}
 
 	private ITestPage runScript(
@@ -105,7 +107,7 @@ public abstract class AbstractScenarioRunner extends AbstractRunner{
 		throws IllegalAccessException, ClassNotFoundException, IOException {
 		TestParser testParser = new TestParser();
 		ITestPage result = file == null ? testParser.parseString(script) : testParser.parse(file);
-		TestRunner runner = TestRunner.FromInjectorWithReportCallBack(injector, reportUpdateCallBack);
+		TestRunner runner = new TestRunner(injector);
 		if(this.presetRepoFromWebApp) {
 			String repoWiki = RestUtils.downloadRepositoyAsWiki();
 			TestParser parser = new TestParser();
@@ -137,7 +139,7 @@ public abstract class AbstractScenarioRunner extends AbstractRunner{
 				}
 			}
 			catch(IOException e) {
-				e.printStackTrace();
+				LOG.error(e.getMessage(), e);
 			}
 		}
 	}

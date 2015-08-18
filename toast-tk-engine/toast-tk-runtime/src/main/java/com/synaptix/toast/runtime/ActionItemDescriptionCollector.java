@@ -1,4 +1,4 @@
-package com.synaptix.toast.runtime.core;
+package com.synaptix.toast.runtime;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.synaptix.toast.runtime.bean.ActionItem;
 
 
 public class ActionItemDescriptionCollector {

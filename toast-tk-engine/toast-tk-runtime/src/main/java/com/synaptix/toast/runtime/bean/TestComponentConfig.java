@@ -1,11 +1,11 @@
-package com.synaptix.toast.runtime.core;
+package com.synaptix.toast.runtime.bean;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.synaptix.toast.runtime.utils.ClassHelper;
 
-class TestComponentConfig {
+public class TestComponentConfig {
 
 	public Class<?> componentClass;
 
