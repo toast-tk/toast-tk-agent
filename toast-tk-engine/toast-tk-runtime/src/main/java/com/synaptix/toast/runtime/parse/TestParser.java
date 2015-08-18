@@ -2,7 +2,6 @@ package com.synaptix.toast.runtime.parse;
 
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
-import com.synaptix.toast.runtime.core.TestRunner;
 import com.synaptix.toast.runtime.core.parse.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -19,7 +18,7 @@ import java.util.stream.Stream;
 
 public class TestParser {
 
-    private static final Logger LOG = LogManager.getLogger(TestRunner.class);
+    private static final Logger LOG = LogManager.getLogger(TestParser.class);
 
     private static String VARIABLE_ASSIGNATION_SEPARATOR = ":=";
 

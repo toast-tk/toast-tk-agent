@@ -2,23 +2,22 @@ package com.synaptix.toast.runtime.core;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Injector;
 import com.synaptix.toast.constant.Property;
+import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.runtime.IActionItemRepository;
-import com.synaptix.toast.dao.domain.impl.test.block.BlockLine;
-import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
 import com.synaptix.toast.runtime.block.BlockRunnerProvider;
 import com.synaptix.toast.runtime.block.IBlockRunner;
 import com.synaptix.toast.runtime.report.test.IHTMLReportGenerator;
 
-public class TestRunner {
+@FixMe(todo="deplacer l'inline report dans le bus d'evenement")
+class TestRunner {
 
 	private static final Logger LOG = LogManager.getLogger(TestRunner.class);
 	private final IActionItemRepository objectRepository;
@@ -27,18 +26,14 @@ public class TestRunner {
 	private BlockRunnerProvider blockRunnerProvider;
 	private Injector injector;
 
-	/**
-	 * 
-	 * @param repoSetup
-	 * @throws IOException
-	 */
 	public TestRunner(
-		IActionItemRepository repoSetup)
+		IActionItemRepository objectRepository)
 		throws IOException {
-		this.objectRepository = repoSetup;
+		this.objectRepository = objectRepository;
 	}
 
 	/**
+	 * Build a runner from an injector
 	 * 
 	 * @param injector
 	 * @return
@@ -53,6 +48,7 @@ public class TestRunner {
 	}
 
 	/**
+	 * Build a runner from an injector and set a callback to propagate report progress
 	 * 
 	 * @param injector
 	 * @param reportUpdateCallBack
@@ -63,25 +59,16 @@ public class TestRunner {
 		Injector injector,
 		IReportUpdateCallBack reportUpdateCallBack)
 		throws IOException {
-		TestRunner runner = new TestRunner(injector.getInstance(IActionItemRepository.class));
-		runner.setInjector(injector);
+		TestRunner runner = FromInjector(injector);
 		runner.setReportCallBack(reportUpdateCallBack);
 		return runner;
 	}
 
-	/**
-	 * 
-	 * @param reportUpdateCallBack
-	 */
 	private void setReportCallBack(
 		IReportUpdateCallBack reportUpdateCallBack) {
 		this.reportUpdateCallBack = reportUpdateCallBack;
 	}
 
-	/**
-	 * 
-	 * @param injector
-	 */
 	private void setInjector(
 		Injector injector) {
 		this.injector = injector;
@@ -97,12 +84,12 @@ public class TestRunner {
 	 * @throws IllegalAccessException
 	 * @throws ClassNotFoundException 
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ITestPage run(
 		ITestPage testPage,
 		boolean inlineReport)
 		throws IllegalAccessException, ClassNotFoundException {
 		testPage.startExecution();
-		initTestPageVariables(testPage);
 		for(IBlock block : testPage.getBlocks()) {
 			if(block instanceof ITestPage){
 				run((ITestPage)block, inlineReport);
@@ -122,6 +109,7 @@ public class TestRunner {
 	}
 
 	/**
+	 * Generate a test report during the test execution
 	 * 
 	 * @param testPage
 	 * @param inlineReport
@@ -144,22 +132,4 @@ public class TestRunner {
 		}
 	}
 
-	/**
-	 * 
-	 * init variable values 
-	 * 
-	 * @param testPage
-	 */
-	private void initTestPageVariables(
-		ITestPage testPage) {
-		VariableBlock varBlock = (VariableBlock) testPage.getVarBlock();
-		if(varBlock != null) {
-			List<BlockLine> blockLines = varBlock.getBlockLines();
-			for(BlockLine blockLine : blockLines) {
-				String varName = blockLine.getCellAt(0);
-				String varValue = blockLine.getCellAt(1);
-				objectRepository.getUserVariables().put(varName, varValue);
-			}
-		}
-	}
 }

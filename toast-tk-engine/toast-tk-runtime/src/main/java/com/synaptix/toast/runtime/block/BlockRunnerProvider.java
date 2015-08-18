@@ -11,6 +11,7 @@ import com.google.inject.Injector;
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.SwingPageBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
 
 public class BlockRunnerProvider {
@@ -24,6 +25,7 @@ public class BlockRunnerProvider {
 		map.put(WebPageBlock.class, new WebPageBlockBuilder());
 		map.put(TestBlock.class, new TestBlockRunner());
 		map.put(SwingPageBlock.class, new SwingPageBlockBuilder());
+		map.put(VariableBlock.class, new VariableBlockBuilder());
 	}
 		
 	public IBlockRunner<? extends IBlock> getBlockRunner(Class<? extends IBlock> clazz, Injector injector) throws IllegalAccessException{
