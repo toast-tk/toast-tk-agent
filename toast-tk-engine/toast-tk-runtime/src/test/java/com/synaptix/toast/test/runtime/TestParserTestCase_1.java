@@ -1,19 +1,18 @@
 package com.synaptix.toast.test.runtime;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import com.synaptix.toast.core.adapter.ActionAdapterKind;
 import com.synaptix.toast.dao.domain.impl.test.TestLine;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
-import com.synaptix.toast.runtime.core.TestLineDescriptor;
+import com.synaptix.toast.runtime.bean.TestLineDescriptor;
 import com.synaptix.toast.runtime.parse.TestParser;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class TestParserTestCase_1 {
 

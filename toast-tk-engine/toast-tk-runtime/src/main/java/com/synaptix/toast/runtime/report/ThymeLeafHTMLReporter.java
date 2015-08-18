@@ -1,4 +1,4 @@
-package com.synaptix.toast.runtime.report.test;
+package com.synaptix.toast.runtime.report;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

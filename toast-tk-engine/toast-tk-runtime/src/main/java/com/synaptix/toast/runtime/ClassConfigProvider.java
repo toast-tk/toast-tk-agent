@@ -1,10 +1,12 @@
-package com.synaptix.toast.runtime.core;
+package com.synaptix.toast.runtime;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.google.inject.Singleton;
 import com.synaptix.toast.adapter.utils.ActionAdapterHelper;
+import com.synaptix.toast.runtime.bean.TestComponentConfig;
+import com.synaptix.toast.runtime.bean.TestEntityProperty;
 
 @Singleton
 public class ClassConfigProvider {

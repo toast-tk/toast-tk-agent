@@ -1,4 +1,4 @@
-package com.synaptix.toast.runtime.report.project;
+package com.synaptix.toast.runtime.report;
 
 import java.util.List;
 

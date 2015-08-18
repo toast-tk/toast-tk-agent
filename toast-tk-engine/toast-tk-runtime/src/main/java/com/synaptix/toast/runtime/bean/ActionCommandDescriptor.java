@@ -1,4 +1,4 @@
-package com.synaptix.toast.runtime.block;
+package com.synaptix.toast.runtime.bean;
 
 import java.lang.reflect.Method;
 import java.util.regex.Matcher;

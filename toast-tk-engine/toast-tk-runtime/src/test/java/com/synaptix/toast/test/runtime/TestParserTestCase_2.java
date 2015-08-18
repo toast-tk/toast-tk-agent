@@ -4,7 +4,7 @@ import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 import com.synaptix.toast.runtime.parse.TestParser;
-import com.synaptix.toast.runtime.report.test.ThymeLeafHTMLReporter;
+import com.synaptix.toast.runtime.report.ThymeLeafHTMLReporter;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
