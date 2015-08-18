@@ -2,11 +2,17 @@ package com.synaptix.toast.runtime.core.parse;
 
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.BlockType;
+import com.synaptix.toast.runtime.parse.TestParser;
+import org.apache.commons.lang3.StringUtils;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
- * Created by Nico on 06/08/2015.
+ * Parse an include block.
+ *
+ * Created by Nicolas Sauvage on 06/08/2015.
  */
 public class IncludeBlockParser implements IBlockParser {
     @Override
@@ -15,11 +21,11 @@ public class IncludeBlockParser implements IBlockParser {
     }
 
     @Override
-    public IBlock digest(List<String> strings) {
-        //File file = new File(sourceFolder + "/" + fileName); TODO find file
-//        TestPage testPage = new TestParser().parse(file);
-//        return testPage;
-        return null;
+    public IBlock digest(List<String> strings, String path) {
+        String string = strings.remove(0);
+        String pathName = StringUtils.removeStart(string, "#include").trim();
+        Path newPath = Paths.get(path).resolveSibling(pathName);
+        return new TestParser().parse(newPath.toString());
     }
 
     @Override

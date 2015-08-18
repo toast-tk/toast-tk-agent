@@ -16,9 +16,6 @@ public class TestParserTestCase_3 {
     @BeforeClass
     public static void init() {
         b.append(
-//				"#include toto.txt\n" +
-//				"#include titi.txt\n" +
-//				"\n" +
                 "$valeur:=variable\n" +
                         "$valeur2:=\"\"\"\n" +
                         "SELECT * T_TABLE\n" +
@@ -55,7 +52,6 @@ public class TestParserTestCase_3 {
 
     @Test
     public void testParserBlocks() {
-
         TestParser par = new TestParser();
         TestPage testPage = par.parseString(b.toString());
         Assert.assertNotNull(testPage);
@@ -69,7 +65,6 @@ public class TestParserTestCase_3 {
         Assert.assertNotNull(testPage.getBlocks().get(i));
         Assert.assertEquals("comment", testPage.getBlocks().get(i).getBlockType());
         String commentLine = ((CommentBlock) testPage.getBlocks().get(i)).getLines().get(0);
-        System.out.println("commentLine = " + commentLine);
         Assert.assertTrue(commentLine.startsWith("Ceci est une ligne de commentaire."));
         i++;
         Assert.assertEquals("test", testPage.getBlocks().get(i).getBlockType());

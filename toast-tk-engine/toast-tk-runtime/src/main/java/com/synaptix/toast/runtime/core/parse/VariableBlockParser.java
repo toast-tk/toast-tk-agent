@@ -24,7 +24,7 @@ public class VariableBlockParser implements IBlockParser {
     }
 
     @Override
-    public IBlock digest(List<String> strings) {
+    public IBlock digest(List<String> strings, String path) {
         VariableBlock variableBlock = new VariableBlock();
 
         for (Iterator<String> iterator = strings.iterator(); iterator.hasNext(); ) {

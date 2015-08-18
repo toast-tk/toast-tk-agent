@@ -1,15 +1,5 @@
 package com.synaptix.toast.runtime;
 
-import java.awt.Desktop;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -22,6 +12,15 @@ import com.synaptix.toast.runtime.parse.TestParser;
 import com.synaptix.toast.runtime.report.DefaultTestProgressReporter;
 import com.synaptix.toast.runtime.report.IHTMLReportGenerator;
 import com.synaptix.toast.runtime.utils.RunUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 @FixMe(todo="make the runner generic")
 public abstract class AbstractScenarioRunner extends AbstractRunner{
@@ -106,7 +105,7 @@ public abstract class AbstractScenarioRunner extends AbstractRunner{
 		String script)
 		throws IllegalAccessException, ClassNotFoundException, IOException {
 		TestParser testParser = new TestParser();
-		ITestPage result = file == null ? testParser.parseString(script) : testParser.parse(file);
+		ITestPage result = file == null ? testParser.parseString(script) : testParser.parse(file.getPath());
 		TestRunner runner = new TestRunner(injector);
 		if(this.presetRepoFromWebApp) {
 			String repoWiki = RestUtils.downloadRepositoyAsWiki();

@@ -20,7 +20,7 @@ public class TestBlockParser implements IBlockParser {
     }
 
     @Override
-    public IBlock digest(List<String> strings) throws Exception {
+    public IBlock digest(List<String> strings, String path) throws Exception {
         String firstLine = strings.get(0);
         if (!firstLine.startsWith("||")) {
             throw new Exception("Test block does not have a title: " + firstLine);

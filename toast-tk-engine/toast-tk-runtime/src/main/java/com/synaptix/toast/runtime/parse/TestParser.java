@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -22,9 +21,6 @@ public class TestParser {
 
     private static final Logger LOG = LogManager.getLogger(TestParser.class);
 
-    private static String VARIABLE_ASSIGNATION_SEPARATOR = ":=";
-
-    private String sourceFolder;
     private BlockParserProvider blockParserProvider;
 
     public TestParser() {
@@ -32,23 +28,13 @@ public class TestParser {
         blockParserProvider = new BlockParserProvider();
     }
 
-    public TestPage parse(File file) {
-        sourceFolder = file.getParent();
-        return readFile(file);
-    }
-
-    public TestPage readFile(File file) {
-        if (!file.isFile()) {
-            System.err.println("Could not open file.");
-        }
-
+    public TestPage parse(String path) {
         TestPage testPage = null;
 
         try {
-            Stream<String> lines = Files.lines(Paths.get("c:/temp", "data.txt")); // TODO
+            Stream<String> lines = Files.lines(Paths.get(path));
             List<String> list = lines.collect(Collectors.toList());
-
-            testPage = readStringList(list);
+            testPage = readStringList(list, path);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -56,17 +42,17 @@ public class TestParser {
         return testPage;
     }
 
-    private TestPage readStringList(List<String> list) throws Exception {
+    private TestPage readStringList(List<String> list, String path) throws Exception {
         TestPage testPage = new TestPage();
-        IBlock block = readBlock(list);
+        IBlock block = readBlock(list, path);
         while (block != null) {
             testPage.addBlock(block);
-            block = readBlock(list);
+            block = readBlock(list, path);
         }
         return testPage;
     }
 
-    private IBlock readBlock(List<String> list) throws Exception {
+    private IBlock readBlock(List<String> list, String path) throws Exception {
         if (list.isEmpty()) {
             return null;
         }
@@ -76,7 +62,7 @@ public class TestParser {
         if (blockParser == null) {
             throw new Exception("Could not parse line");
         }
-        return blockParser.digest(list);
+        return blockParser.digest(list, path);
     }
 
     public TestPage readString(String string, String fileName) {
@@ -84,7 +70,7 @@ public class TestParser {
         ArrayList<String> list = new ArrayList<>(Arrays.asList(split));
         TestPage testPage = null;
         try {
-            testPage = readStringList(list);
+            testPage = readStringList(list, null);
             testPage.setPageName(fileName);
         } catch (Exception e) {
             e.printStackTrace();

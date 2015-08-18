@@ -19,7 +19,7 @@ public class CommentBlockParser implements IBlockParser {
     }
 
     @Override
-    public IBlock digest(List<String> strings) {
+    public IBlock digest(List<String> strings, String path) {
         CommentBlock commentBlock = new CommentBlock();
         for (Iterator<String> iterator = strings.iterator(); iterator.hasNext(); ) {
             String string = iterator.next();
