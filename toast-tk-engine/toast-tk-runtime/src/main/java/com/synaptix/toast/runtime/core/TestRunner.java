@@ -18,7 +18,7 @@ import com.synaptix.toast.runtime.block.BlockRunnerProvider;
 import com.synaptix.toast.runtime.block.IBlockRunner;
 import com.synaptix.toast.runtime.report.test.IHTMLReportGenerator;
 
-public class TestRunner {
+class TestRunner {
 
 	private static final Logger LOG = LogManager.getLogger(TestRunner.class);
 	private final IActionItemRepository objectRepository;
@@ -91,7 +91,6 @@ public class TestRunner {
 		boolean inlineReport)
 		throws IllegalAccessException, ClassNotFoundException {
 		testPage.startExecution();
-		initTestPageVariables(testPage);
 		for(IBlock block : testPage.getBlocks()) {
 			if(block instanceof ITestPage){
 				run((ITestPage)block, inlineReport);
@@ -130,25 +129,6 @@ public class TestRunner {
 			}
 			if (reportUpdateCallBack != null) {
 				reportUpdateCallBack.onUpdate(generatePageHtml);
-			}
-		}
-	}
-
-	/**
-	 * 
-	 * init variable values 
-	 * 
-	 * @param testPage
-	 */
-	private void initTestPageVariables(
-		ITestPage testPage) {
-		VariableBlock varBlock = (VariableBlock) testPage.getVarBlock();
-		if(varBlock != null) {
-			List<BlockLine> blockLines = varBlock.getBlockLines();
-			for(BlockLine blockLine : blockLines) {
-				String varName = blockLine.getCellAt(0);
-				String varValue = blockLine.getCellAt(1);
-				objectRepository.getUserVariables().put(varName, varValue);
 			}
 		}
 	}
