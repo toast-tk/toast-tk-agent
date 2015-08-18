@@ -6,10 +6,8 @@ public enum AutoWebType {
 	button,
 	select,
 	link,
-	suggest,
+	table,
 	list,
 	checkbox,
-	datetime_picker,
-	time_picker,
 	other
 }

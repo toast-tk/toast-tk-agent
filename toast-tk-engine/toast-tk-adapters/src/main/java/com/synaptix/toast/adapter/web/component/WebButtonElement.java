@@ -8,12 +8,6 @@ import com.synaptix.toast.adapter.web.HasClickAction;
 import com.synaptix.toast.automation.driver.web.SynchronizedDriver;
 import com.synaptix.toast.core.runtime.IWebElement;
 
-/**
- * button element
- * 
- * @author skokaina
- * 
- */
 public class WebButtonElement extends WebAutoElement implements HasClickAction {
 
 	public WebButtonElement(
