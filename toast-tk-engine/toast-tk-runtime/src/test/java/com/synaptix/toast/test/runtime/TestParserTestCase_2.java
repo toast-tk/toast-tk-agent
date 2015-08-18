@@ -1,20 +1,16 @@
 package com.synaptix.toast.test.runtime;
 
-import java.awt.AWTException;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-
+import com.synaptix.toast.core.report.TestResult;
+import com.synaptix.toast.dao.domain.impl.test.TestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
+import com.synaptix.toast.runtime.parse.TestParser;
+import com.synaptix.toast.runtime.report.test.ThymeLeafHTMLReporter;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.synaptix.toast.core.report.TestResult;
-import com.synaptix.toast.dao.domain.impl.test.TestPage;
-import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
-import com.synaptix.toast.dao.domain.impl.test.block.TestPageBlock;
-import com.synaptix.toast.runtime.parse.TestParser;
-import com.synaptix.toast.runtime.report.test.ThymeLeafHTMLReporter;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class TestParserTestCase_2 {
 

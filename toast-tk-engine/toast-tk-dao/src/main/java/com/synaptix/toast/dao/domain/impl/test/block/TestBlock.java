@@ -1,11 +1,11 @@
 package com.synaptix.toast.dao.domain.impl.test.block;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.github.jmkgreen.morphia.annotations.Embedded;
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.dao.domain.impl.test.TestLine;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Embedded
 public class TestBlock implements IBlock {
@@ -30,9 +30,6 @@ public class TestBlock implements IBlock {
 
 	/**
 	 * Add a test line
-	 * 
-	 * @param cellsContent
-	 * @param comment
 	 */
 	public void addLine(
 		String test,
@@ -54,6 +51,6 @@ public class TestBlock implements IBlock {
 
 	@Override
 	public String getBlockType() {
-		return "testBlock";
+		return "test";
 	}
 }
