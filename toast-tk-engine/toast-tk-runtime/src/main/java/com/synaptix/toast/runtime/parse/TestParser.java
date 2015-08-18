@@ -28,14 +28,13 @@ import com.synaptix.toast.dao.domain.impl.test.block.SetupBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.SwingPageBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.TestPageBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.TestPageBlock.BlockType;
 import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
-import com.synaptix.toast.dao.domain.impl.test.block.TestPageBlock.BlockType;
-import com.synaptix.toast.runtime.core.TestRunner;
 
 public class TestParser {
 
-	private static final Logger LOG = LogManager.getLogger(TestRunner.class);
+	private static final Logger LOG = LogManager.getLogger(TestParser.class);
 
 	private static String VARIABLE_ASSIGNATION_SEPARATOR = ":=";
 

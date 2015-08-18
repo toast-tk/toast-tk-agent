@@ -2,22 +2,21 @@ package com.synaptix.toast.runtime.core;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Injector;
 import com.synaptix.toast.constant.Property;
+import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.runtime.IActionItemRepository;
-import com.synaptix.toast.dao.domain.impl.test.block.BlockLine;
-import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
 import com.synaptix.toast.runtime.block.BlockRunnerProvider;
 import com.synaptix.toast.runtime.block.IBlockRunner;
 import com.synaptix.toast.runtime.report.test.IHTMLReportGenerator;
 
+@FixMe(todo="deplacer l'inline report dans le bus d'evenement")
 class TestRunner {
 
 	private static final Logger LOG = LogManager.getLogger(TestRunner.class);
@@ -132,4 +131,5 @@ class TestRunner {
 			}
 		}
 	}
+
 }
