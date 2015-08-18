@@ -2,6 +2,9 @@ package com.synaptix.toast.core.adapter;
 
 public class ActionAdapterSentenceRef {
 
+
+	public static final String WEB_COMPONENT = "{{component:web}}";
+	
 	public static final String SWING_COMPONENT_REGEX = "{{component:swing}}";
 
 	public static final String VALUE_REGEX = "{{value:string}}";

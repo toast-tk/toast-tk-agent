@@ -8,12 +8,6 @@ import com.synaptix.toast.adapter.web.ISyncCall;
 import com.synaptix.toast.automation.driver.web.SynchronizedDriver;
 import com.synaptix.toast.core.runtime.IWebElement;
 
-/**
- * link element
- * 
- * @author skokaina
- * 
- */
 public class WebLinkElement extends WebAutoElement implements HasClickAction {
 
 	public WebLinkElement(

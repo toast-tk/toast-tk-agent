@@ -6,12 +6,6 @@ import com.synaptix.toast.adapter.web.ISyncCall;
 import com.synaptix.toast.automation.driver.web.SynchronizedDriver;
 import com.synaptix.toast.core.runtime.IWebElement;
 
-/**
- * Automation super class
- * 
- * @author skokaina
- * 
- */
 public abstract class WebAutoElement {
 
 	protected IWebElement wrappedElement;

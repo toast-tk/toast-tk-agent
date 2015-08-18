@@ -5,7 +5,7 @@ import com.synaptix.toast.adapter.web.component.WebButtonElement;
 import com.synaptix.toast.adapter.web.component.WebInputElement;
 import com.synaptix.toast.adapter.web.component.WebLinkElement;
 import com.synaptix.toast.adapter.web.component.WebSelectElement;
-import com.synaptix.toast.adapter.web.component.WebSuggestElement;
+import com.synaptix.toast.adapter.web.component.WebTableElement;
 import com.synaptix.toast.core.adapter.AutoWebType;
 import com.synaptix.toast.core.runtime.IWebElement;
 
@@ -22,8 +22,8 @@ public class WebElementFactory {
 				return new WebSelectElement(e);
 			case link :
 				return new WebLinkElement(e);
-			case suggest :
-				return new WebSelectElement(e);
+			case table:
+				return new WebTableElement(e);
 			default :
 				return null;
 		}
@@ -37,7 +37,7 @@ public class WebElementFactory {
 			case list : return WebSelectElement.class;
 			case select : return WebSelectElement.class;
 			case link :	return WebLinkElement.class;
-			case suggest : return WebSuggestElement.class;
+			case table : return WebTableElement.class;
 			default :
 				return null;
 		}
@@ -57,8 +57,8 @@ public class WebElementFactory {
 		else if(e.equals(WebLinkElement.class)) {
 			return AutoWebType.link;
 		}
-		else if(e.equals(WebSuggestElement.class)) {
-			return AutoWebType.suggest;
+		else if(e.equals(WebTableElement.class)) {
+			return AutoWebType.table;
 		}
 		else {
 			return null;

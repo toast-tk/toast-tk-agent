@@ -1,6 +1,8 @@
 package com.synaptix.toast.adapter.web;
 
-import org.openqa.selenium.By;
+import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.VALUE_REGEX;
+import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.WEB_COMPONENT;
+
 import org.openqa.selenium.WebElement;
 
 import com.google.inject.Inject;
@@ -11,13 +13,12 @@ import com.synaptix.toast.automation.driver.web.DriverFactory;
 import com.synaptix.toast.automation.driver.web.SeleniumSynchronizedDriver;
 import com.synaptix.toast.automation.driver.web.SynchronizedDriver;
 import com.synaptix.toast.core.adapter.ActionAdapterKind;
-import com.synaptix.toast.core.adapter.ActionAdapterSentenceRef;
 import com.synaptix.toast.core.annotation.Action;
 import com.synaptix.toast.core.annotation.ActionAdapter;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
-import com.synaptix.toast.core.runtime.IFeedableWebPage;
 import com.synaptix.toast.core.runtime.IActionItemRepository;
+import com.synaptix.toast.core.runtime.IFeedableWebPage;
 
 @ActionAdapter(name="default-web-driver", value= ActionAdapterKind.web)
 public class AbstractWebActionAdapter {
@@ -26,92 +27,46 @@ public class AbstractWebActionAdapter {
 	private final IActionItemRepository repo;
 
 	@Inject
-	public AbstractWebActionAdapter(IActionItemRepository repo) {
-		this.repo = repo;
+	public AbstractWebActionAdapter(IActionItemRepository repository) {
+		this.repo = repository;
 		driver = new SeleniumSynchronizedDriver(DriverFactory.getFactory().getFirefoxDriver());
-		for (IFeedableWebPage page : repo.getWebPages()) {
+		for (IFeedableWebPage page : repository.getWebPages()) {
 			((DefaultWebPage)page).setDriver(driver);
 		}
 	}
 
-	@Action(action = "Close browser", description = "")
-	public TestResult closeBrowser() {
-		try {
-			driver.getWebDriver().quit();
-		} catch (Exception e) {
-			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
-		}
-		return new TestResult();
-	}
-
-	@Action(action = "Open browser at "+ ActionAdapterSentenceRef.VALUE_REGEX, description = "")
+	@Action(action = "Open browser at "+ VALUE_REGEX, description = "")
 	public TestResult openBrowserIn(String url) {
-		try {
-			driver.getWebDriver().get(url);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
+		if(!url.startsWith("http")){
+			url = "http://" + url;
 		}
+		driver.getWebDriver().get(url);
 		return new TestResult();
 	}
 
-	@Action(action = "Type " + ActionAdapterSentenceRef.VALUE_REGEX + " in {{component:web}}", description = "")
+	@Action(action = "Type " + VALUE_REGEX + " in " + WEB_COMPONENT, description = "")
 	public TestResult typeIn(String text, String pageName, String widgetName) throws Exception {
-		try {
-			WebElement pageField = getPageField(pageName, widgetName);
-			pageField.sendKeys(text);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
-		}
+		WebElement pageField = getPageField(pageName, widgetName);
+		pageField.sendKeys(text);
 		return new TestResult();
 	}
 
-	@Action(action = "Type {{value:string}} in {{component:web}}", description = "")
-	public TestResult typeVariableIn(String variableName, String pageName, String widgetName) throws Exception {
-		String text = (String) repo.getUserVariables().get(variableName);
-		return typeIn(text, pageName, widgetName);
-	}
-
-	@Action(action = "Suggest {{value:string}} in {{component:web}}", description = "")
-	public TestResult typeInStraight(String text, String pageName, String widgetName) throws Exception {
-		try {
-			WebElement pageField = getPageField(pageName, widgetName);
-			pageField.sendKeys(text);
-			driver.getWebDriver().findElements(By.cssSelector("div.typeahead .item")).get(0).click();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
-		}
-		return new TestResult();
-	}
-
-	@Action(action = "Click on {{component:web}}", description = "")
+	@Action(action = "Click on " + WEB_COMPONENT, description = "")
 	public TestResult ClickOn(String pageName, String widgetName) throws Exception {
-		try {
-			WebElement pageField = getPageField(pageName, widgetName);
-			pageField.click();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
-		}
+		WebElement pageField = getPageField(pageName, widgetName);
+		pageField.click();
 		return new TestResult();
 	}
 
-	@Action(action = "Select {{value:string}} in {{component:web}}", description = "")
+	@Action(action = "Select " + VALUE_REGEX + " in " + WEB_COMPONENT, description = "")
 	public TestResult SelectAtPos(String pos, String pageName, String widgetName) throws Exception {
-		try {
-			WebAutoElement pageFieldAuto = getPageFieldAuto(pageName, widgetName);
-			WebSelectElement pageField = (WebSelectElement) pageFieldAuto;
-			pageField.selectByIndex(Integer.valueOf(pos));
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new TestResult(e.getCause().getMessage(), ResultKind.ERROR);
-		}
+		WebAutoElement pageFieldAuto = getPageFieldAuto(pageName, widgetName);
+		WebSelectElement pageField = (WebSelectElement) pageFieldAuto;
+		pageField.selectByIndex(Integer.valueOf(pos));
 		return new TestResult();
 	}
 
-	@Action(action = "{{component:web}} exists", description = "")
+	@Action(action = WEB_COMPONENT + " exists", description = "")
 	public TestResult checkExist(String pageName, String widgetName) {
 		WebElement element = getPageField(pageName, widgetName);
 		if (element != null) {
@@ -122,6 +77,12 @@ public class AbstractWebActionAdapter {
 			}
 		}
 		return null;
+	}
+	
+	@Action(action = "Close browser", description = "")
+	public TestResult closeBrowser() {
+		driver.getWebDriver().quit();
+		return new TestResult();
 	}
 
 	private WebAutoElement getPageFieldAuto(String pageName, String widgetName) {
