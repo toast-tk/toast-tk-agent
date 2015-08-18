@@ -12,8 +12,8 @@ import com.synaptix.toast.core.adapter.ActionAdapterKind;
 import com.synaptix.toast.dao.domain.impl.test.TestLine;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
-import com.synaptix.toast.runtime.core.parse.TestParser;
-import com.synaptix.toast.runtime.core.runtime.TestLineDescriptor;
+import com.synaptix.toast.runtime.core.TestLineDescriptor;
+import com.synaptix.toast.runtime.parse.TestParser;
 
 public class TestParserTestCase_1 {
 

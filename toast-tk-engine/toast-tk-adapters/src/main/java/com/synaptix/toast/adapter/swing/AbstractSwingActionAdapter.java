@@ -25,6 +25,12 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
+import com.synaptix.toast.adapter.swing.component.DefaultSwingPage;
+import com.synaptix.toast.adapter.swing.component.SwingDateElement;
+import com.synaptix.toast.adapter.swing.component.SwingInputElement;
+import com.synaptix.toast.adapter.swing.component.SwingListElement;
+import com.synaptix.toast.adapter.swing.component.SwingTableElement;
+import com.synaptix.toast.adapter.swing.utils.SwingAutoUtils;
 import com.synaptix.toast.adapter.web.HasClickAction;
 import com.synaptix.toast.adapter.web.HasStringValue;
 import com.synaptix.toast.adapter.web.HasSubItems;

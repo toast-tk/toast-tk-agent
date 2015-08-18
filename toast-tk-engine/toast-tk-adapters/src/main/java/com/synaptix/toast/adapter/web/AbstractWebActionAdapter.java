@@ -4,9 +4,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import com.google.inject.Inject;
-import com.synaptix.toast.automation.api.SynchronizedDriver;
-import com.synaptix.toast.automation.driver.selenium.DriverFactory;
-import com.synaptix.toast.automation.driver.selenium.SeleniumSynchronizedDriver;
+import com.synaptix.toast.adapter.web.component.DefaultWebPage;
+import com.synaptix.toast.adapter.web.component.WebAutoElement;
+import com.synaptix.toast.adapter.web.component.WebSelectElement;
+import com.synaptix.toast.automation.driver.web.DriverFactory;
+import com.synaptix.toast.automation.driver.web.SeleniumSynchronizedDriver;
+import com.synaptix.toast.automation.driver.web.SynchronizedDriver;
 import com.synaptix.toast.core.adapter.ActionAdapterKind;
 import com.synaptix.toast.core.adapter.ActionAdapterSentenceRef;
 import com.synaptix.toast.core.annotation.Action;

@@ -54,10 +54,10 @@ import javax.swing.event.ListSelectionListener;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
+import com.synaptix.toast.core.agent.config.Config;
 import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.core.net.response.ScanResponse;
 import com.synaptix.toast.core.rest.RestUtils;
-import com.synaptix.toast.swing.agent.config.Config;
 import com.synaptix.toast.swing.agent.constant.Resource;
 
 public class SwingInspectorPanel extends JPanel {

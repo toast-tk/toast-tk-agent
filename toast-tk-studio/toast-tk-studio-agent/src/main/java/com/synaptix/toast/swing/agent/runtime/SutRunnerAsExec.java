@@ -24,9 +24,9 @@ import org.xml.sax.SAXException;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.synaptix.toast.constant.Property;
+import com.synaptix.toast.core.agent.IStudioApplication;
+import com.synaptix.toast.core.agent.config.Config;
 import com.synaptix.toast.core.annotation.craft.FixMe;
-import com.synaptix.toast.swing.agent.IStudioApplication;
-import com.synaptix.toast.swing.agent.config.Config;
 import com.synaptix.toast.utils.DownloadUtils;
 import com.synaptix.toast.utils.StreamGobbler;
 

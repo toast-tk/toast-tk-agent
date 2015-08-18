@@ -9,14 +9,9 @@
 	</parent>
 	<name>Toast Toolkit - Agent</name>
 	<artifactId>toast-tk-studio-agent</artifactId>
-
-	<repositories>
-		<repository>
-			<id>my-local-repo</id>
-			<url>file://${project.build.directory}/../lib</url>
-		</repository>
-	</repositories>
-
+	<properties>
+		<toast.tk.studioAgentPath>toast-tk-studio-agent-standalone.jar</toast.tk.studioAgentPath>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>
@@ -37,60 +32,54 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-install-plugin</artifactId>
-				<version>2.3.1</version>
+				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>add_vertx_core</id>
+						<id>copy-lib-dependencies</id>
+						<phase>package</phase>
 						<goals>
-							<goal>install-file</goal>
+							<goal>run</goal>
 						</goals>
-						<phase>validate</phase>
 						<configuration>
-							<file>${basedir}\lib\vertx-core-2.1.5.jar</file>
-							<groupId>io.vertx</groupId>
-							<artifactId>vertx-core</artifactId>
-							<version>2.1.5</version>
-							<packaging>jar</packaging>
-							<localRepositoryPath>${settings.localRepository}</localRepositoryPath>
+							<tasks>
+								<copy file="${project.build.directory}/${toast.tk.studioAgentPath}"
+									todir="${project.build.directory}/classes/${toast.vertx.module}/lib" />
+							</tasks>
 						</configuration>
 					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>io.vertx</groupId>
+				<artifactId>vertx-maven-plugin</artifactId>
+				<version>2.0.12-final</version>
+				<configuration>
+					<createFatJar>true</createFatJar>
+					<modsDir>${project.build.directory}\classes</modsDir>
+					<moduleName>${toast.vertx.module}</moduleName>
+				</configuration>
+				<executions>
 					<execution>
-						<id>add_vertx_platform</id>
+						<id>assemble</id>
+						<phase>install</phase>
 						<goals>
-							<goal>install-file</goal>
+							<goal>fatJar</goal>
 						</goals>
-						<phase>validate</phase>
-						<configuration>
-							<file>${basedir}\lib\vertx-platform-2.1.5.jar</file>
-							<groupId>io.vertx</groupId>
-							<artifactId>vertx-platform</artifactId>
-							<version>2.1.5</version>
-							<packaging>jar</packaging>
-							<localRepositoryPath>${settings.localRepository}</localRepositoryPath>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 	</build>
-
 	<dependencies>
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-core</artifactId>
-			<version>2.1.5</version>
+			<version>2.1.6</version>
 		</dependency>
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-platform</artifactId>
-			<version>2.1.5</version>
-		</dependency>
-		<dependency>
-			<groupId>io.vertx</groupId>
-			<artifactId>vertx-web</artifactId>
-			<version>3.0.0-milestone6</version>
+			<version>2.1.6</version>
 		</dependency>
 		<dependency>
 			<groupId>com.synaptix.toast</groupId>
@@ -102,19 +91,15 @@
 			<artifactId>toast-tk-common-utils</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>2.46.0</version>
+			<version>[2.46.0,)</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-chrome-driver</artifactId>
-			<version>2.46.0</version>
+			<version>[2.46.0,)</version>
 		</dependency>
-		
-
 	</dependencies>
 </project>

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
 
+import com.synaptix.toast.adapter.swing.component.DefaultSwingElement;
 import com.synaptix.toast.core.adapter.AutoSwingType;
 import com.synaptix.toast.core.driver.IRemoteSwingAgentDriver;
 import com.synaptix.toast.core.runtime.IFeedableSwingPage;
@@ -63,7 +64,7 @@ public abstract class AbstractSwingPage implements IFeedableSwingPage {
 		try {
 			ISwingElement iWebElement = elements.get(name);
 			if(iWebElement != null) {
-				SwingAutoElement execAutoClass = ElementFactory.getElement(iWebElement);
+				SwingAutoElement execAutoClass = SwingComponentFactory.getElement(iWebElement);
 				// for this abstract page, init fields (for java classes only
 				initBeanFields(name, execAutoClass);
 				autoElements.put(name, execAutoClass);

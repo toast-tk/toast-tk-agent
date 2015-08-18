@@ -9,12 +9,12 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.synaptix.toast.automation.report.test.ThymeLeafHTMLReporter;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
-import com.synaptix.toast.runtime.core.parse.TestPageBlock;
-import com.synaptix.toast.runtime.core.parse.TestParser;
+import com.synaptix.toast.dao.domain.impl.test.block.TestPageBlock;
+import com.synaptix.toast.runtime.parse.TestParser;
+import com.synaptix.toast.runtime.report.test.ThymeLeafHTMLReporter;
 
 public class TestParserTestCase_2 {
 

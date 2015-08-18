@@ -2,10 +2,10 @@ package com.synaptix.toast.runtime.guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
-import com.synaptix.toast.runtime.core.runtime.block.BlockRunnerProvider;
-import com.synaptix.toast.runtime.core.runtime.block.SwingPageBlockBuilder;
-import com.synaptix.toast.runtime.core.runtime.block.TestBlockRunner;
-import com.synaptix.toast.runtime.core.runtime.block.WebPageBlockBuilder;
+import com.synaptix.toast.runtime.block.BlockRunnerProvider;
+import com.synaptix.toast.runtime.block.SwingPageBlockBuilder;
+import com.synaptix.toast.runtime.block.TestBlockRunner;
+import com.synaptix.toast.runtime.block.WebPageBlockBuilder;
 
 public class RunnerModule extends AbstractModule {
 

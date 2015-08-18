@@ -8,7 +8,9 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
 
-import com.synaptix.toast.automation.api.SynchronizedDriver;
+import com.synaptix.toast.adapter.web.component.DefaultWebElement;
+import com.synaptix.toast.adapter.web.component.WebAutoElement;
+import com.synaptix.toast.automation.driver.web.SynchronizedDriver;
 import com.synaptix.toast.core.adapter.AutoWebType;
 import com.synaptix.toast.core.runtime.IFeedableWebPage;
 import com.synaptix.toast.core.runtime.IWebElement;
@@ -61,7 +63,7 @@ public abstract class AbstractWebPage implements IFeedableWebPage {
 		try {
 			IWebElement iWebElement = elements.get(name);
 			if(iWebElement != null) {
-				WebAutoElement execAutoClass = ElementFactory.getElement(iWebElement);
+				WebAutoElement execAutoClass = WebElementFactory.getElement(iWebElement);
 				initBeanFields(name, execAutoClass);
 				autoElements.put(name, execAutoClass);
 			}

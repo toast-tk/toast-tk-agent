@@ -29,6 +29,24 @@
 			</resource>
 		</resources>
 		<plugins>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-lib-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<copy file="${project.build.directory}/../../toast-tk-studio-agent/target/agent-1.0-fat.jar"
+									todir="${project.build.directory}/../../addons" />
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<!-- move in plugin -->
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>

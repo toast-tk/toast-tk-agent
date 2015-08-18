@@ -12,6 +12,14 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import com.synaptix.toast.adapter.swing.handler.button.JButtonActionHandler;
+import com.synaptix.toast.adapter.swing.handler.button.JCheckBoxActionHandler;
+import com.synaptix.toast.adapter.swing.handler.input.JLabelActionHandler;
+import com.synaptix.toast.adapter.swing.handler.input.JPasswordFieldActionHandler;
+import com.synaptix.toast.adapter.swing.handler.input.JTextAreaActionHandler;
+import com.synaptix.toast.adapter.swing.handler.input.JTextFieldActionHandler;
+import com.synaptix.toast.adapter.swing.handler.table.JTableActionHandler;
+
 
 public class SwingWidgetActionHandlerFactory {
 	

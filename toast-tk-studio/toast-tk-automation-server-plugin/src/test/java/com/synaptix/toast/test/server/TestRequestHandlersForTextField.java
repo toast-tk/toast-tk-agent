@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.synaptix.toast.adapter.swing.SwingInputElement;
+import com.synaptix.toast.adapter.swing.component.SwingInputElement;
 import com.synaptix.toast.core.adapter.AutoSwingType;
 import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.net.request.InitInspectionRequest;

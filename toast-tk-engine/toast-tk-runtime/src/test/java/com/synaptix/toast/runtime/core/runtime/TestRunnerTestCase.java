@@ -13,9 +13,9 @@ import org.junit.Test;
 
 import com.synaptix.toast.core.annotation.Action;
 import com.synaptix.toast.core.runtime.IActionItemRepository;
-import com.synaptix.toast.runtime.core.runtime.block.ActionCommandDescriptor;
-import com.synaptix.toast.runtime.core.runtime.block.TestBlockRunner;
-import com.synaptix.toast.runtime.core.runtime.utils.ArgumentHelper;
+import com.synaptix.toast.runtime.block.ActionCommandDescriptor;
+import com.synaptix.toast.runtime.block.TestBlockRunner;
+import com.synaptix.toast.runtime.utils.ArgumentHelper;
 import com.synaptix.toast.test.runtime.mock.DefaultRepositorySetup;
 
 public class TestRunnerTestCase {

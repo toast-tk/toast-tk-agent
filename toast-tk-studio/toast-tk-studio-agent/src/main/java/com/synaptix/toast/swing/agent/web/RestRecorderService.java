@@ -3,7 +3,6 @@ package com.synaptix.toast.swing.agent.web;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -13,7 +12,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.buffer.Buffer;
@@ -23,7 +21,9 @@ import org.vertx.java.platform.Verticle;
 
 import com.google.gson.Gson;
 import com.synaptix.toast.core.agent.interpret.WebEventRecord;
+import com.synaptix.toast.core.annotation.craft.FixMe;
 
+@FixMe(todo = "ensure we have firefow browser installed, use a factory")
 public class RestRecorderService extends Verticle {
 
 	private static final Logger LOG = LogManager.getLogger(RestRecorderService.class);
@@ -31,8 +31,6 @@ public class RestRecorderService extends Verticle {
 	private WebDriver driver;
 
 	private boolean isStarted;
-
-	private static final String CHROME_DRIVER = "C:/temp/chromedriver.exe";
 
 	private static final String PATH = "/record";
 
@@ -148,7 +146,6 @@ public class RestRecorderService extends Verticle {
 	private void injectRecordScript()
 		throws IOException {
 		JavascriptExecutor executor = ((JavascriptExecutor) driver);
-		// includeJQuery(executor);
 		final FileInputStream resourceAsStream = FileUtils.openInputStream(new File("../addons/agent/recorder.js"));
 		String script = IOUtils.toString(resourceAsStream);
 		String subscript = "var script = window.document.createElement('script'); script.innerHTML=\"" + script
@@ -159,18 +156,8 @@ public class RestRecorderService extends Verticle {
 		LOG.info("Recorder injected !");
 	}
 
-	private void includeJQuery(
-		JavascriptExecutor executor) {
-		final String currentUrl = driver.getCurrentUrl();
-		final String protocol = currentUrl.split(":")[0];
-		String jqueryScript = "var script = window.document.createElement('script'); script.setAttribute('src', '" + protocol + "://code.jquery.com/jquery-2.1.4.js'); window.document.head.appendChild(script);";
-		executor.executeScript(jqueryScript);
-	}
-
 	private static WebDriver launchBrowser(
 		String host) {
-		LOG.info("launching browser and injecting js recorder ! -> " + CHROME_DRIVER);
-		//System.setProperty("webdriver.chrome.driver", CHROME_DRIVER);
 		WebDriver driver = new FirefoxDriver();
 		driver.get(host);
 		return driver;

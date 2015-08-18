@@ -86,6 +86,23 @@ h3 {
 	<br />
 	<div th:each="block : ${test.blocks}">
 		<div th:switch="${block.getBlockType()}">
+			<div class="test" th:case="'testPageBlock'">
+				<div class="summary">
+					<span th:text=${@com.synaptix.toast.automation.report.TemplateHelper@getBlockName(block)}"> Test TNR_RUSA_PREV_v2015-05-19.script </span> <br /> 
+					Effectué le <span th:text="${@com.synaptix.toast.automation.report.TemplateHelper@getStartTime(block)}"> 2015-06-10T13:55:18.433 </span> 
+					<br />
+					Temps d'execution <span th:text="${@com.synaptix.toast.automation.report.TemplateHelper@getExecutionTime(block)}"> 0 </span> ms
+					<br />
+					<br /> 
+					Errors: <span th:text="${@com.synaptix.toast.automation.report.TemplateHelper@getTechnicalErrorNumber(block)}">0</span>
+					<br /> 
+					Failures: <span th:text="${@com.synaptix.toast.automation.report.TemplateHelper@getTestFailureNumber(block)}">0</span>
+					<br /> 
+					Success: <span th:text="${@com.synaptix.toast.automation.report.TemplateHelper@getTestSuccessNumber(block)}">0</span>
+					<br/>
+					<button class="btn btn-md btn-success" disabled>details</button>
+				</div>
+			</div>
 			<div class="comment" th:case="'comment'">
 				<p th:each="line : ${block.lines}" th:text="${line}">
 					# Données communes<br /> #<br /> # BLOC 0 : Connexion et accès à

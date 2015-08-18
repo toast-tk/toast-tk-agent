@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-
 import javax.swing.AbstractButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -28,16 +27,15 @@ import org.fest.swing.fixture.JPopupMenuFixture;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.google.inject.Inject;
+import com.synaptix.toast.adapter.swing.handler.ActionProcessor;
+import com.synaptix.toast.adapter.swing.handler.ActionProcessorFactory;
+import com.synaptix.toast.adapter.swing.handler.ActionProcessorFactoryProvider;
 import com.synaptix.toast.adapter.swing.utils.FestRobotInstance;
 import com.synaptix.toast.core.adapter.AutoSwingType;
 import com.synaptix.toast.core.net.request.CommandRequest;
-import com.synaptix.toast.core.net.response.ErrorResponse;
 import com.synaptix.toast.core.net.response.ExistsResponse;
 import com.synaptix.toast.core.net.response.ValueResponse;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
-import com.synaptix.toast.plugin.swing.agent.action.processor.ActionProcessor;
-import com.synaptix.toast.plugin.swing.agent.action.processor.ActionProcessorFactory;
-import com.synaptix.toast.plugin.swing.agent.action.processor.ActionProcessorFactoryProvider;
 
 public class SwingActionRequestListener extends Listener implements Runnable {
 
