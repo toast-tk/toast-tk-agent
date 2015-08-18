@@ -27,18 +27,14 @@ public class TestRunner {
 	private BlockRunnerProvider blockRunnerProvider;
 	private Injector injector;
 
-	/**
-	 * 
-	 * @param repoSetup
-	 * @throws IOException
-	 */
 	public TestRunner(
-		IActionItemRepository repoSetup)
+		IActionItemRepository objectRepository)
 		throws IOException {
-		this.objectRepository = repoSetup;
+		this.objectRepository = objectRepository;
 	}
 
 	/**
+	 * Build a runner from an injector
 	 * 
 	 * @param injector
 	 * @return
@@ -53,6 +49,7 @@ public class TestRunner {
 	}
 
 	/**
+	 * Build a runner from an injector and set a callback to propagate report progress
 	 * 
 	 * @param injector
 	 * @param reportUpdateCallBack
@@ -63,25 +60,16 @@ public class TestRunner {
 		Injector injector,
 		IReportUpdateCallBack reportUpdateCallBack)
 		throws IOException {
-		TestRunner runner = new TestRunner(injector.getInstance(IActionItemRepository.class));
-		runner.setInjector(injector);
+		TestRunner runner = FromInjector(injector);
 		runner.setReportCallBack(reportUpdateCallBack);
 		return runner;
 	}
 
-	/**
-	 * 
-	 * @param reportUpdateCallBack
-	 */
 	private void setReportCallBack(
 		IReportUpdateCallBack reportUpdateCallBack) {
 		this.reportUpdateCallBack = reportUpdateCallBack;
 	}
 
-	/**
-	 * 
-	 * @param injector
-	 */
 	private void setInjector(
 		Injector injector) {
 		this.injector = injector;
@@ -97,6 +85,7 @@ public class TestRunner {
 	 * @throws IllegalAccessException
 	 * @throws ClassNotFoundException 
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ITestPage run(
 		ITestPage testPage,
 		boolean inlineReport)
@@ -122,6 +111,7 @@ public class TestRunner {
 	}
 
 	/**
+	 * Generate a test report during the test execution
 	 * 
 	 * @param testPage
 	 * @param inlineReport
