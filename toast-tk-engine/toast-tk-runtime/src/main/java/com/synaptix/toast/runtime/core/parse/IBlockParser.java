@@ -20,7 +20,7 @@ public interface IBlockParser {
      *
      * @param path Path of the test text file.
      */
-    IBlock digest(List<String> strings, String path) throws Exception;
+    IBlock digest(List<String> strings, String path);
 
     /**
      * Return true if this string should be parsed with this parser.

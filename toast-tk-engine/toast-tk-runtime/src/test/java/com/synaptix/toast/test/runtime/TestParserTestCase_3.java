@@ -53,7 +53,7 @@ public class TestParserTestCase_3 {
     @Test
     public void testParserBlocks() {
         TestParser par = new TestParser();
-        TestPage testPage = par.parseString(b.toString());
+        TestPage testPage = par.buildFromString(b.toString());
         Assert.assertNotNull(testPage);
         Assert.assertNotNull(testPage.getBlocks());
         int i = 0;
