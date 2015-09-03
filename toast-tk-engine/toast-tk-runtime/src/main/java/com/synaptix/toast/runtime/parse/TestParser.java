@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -28,61 +29,47 @@ public class TestParser {
         blockParserProvider = new BlockParserProvider();
     }
 
-    public TestPage parse(String path) {
-        TestPage testPage = null;
-
-        try {
-            Stream<String> lines = Files.lines(Paths.get(path));
-            List<String> list = lines.collect(Collectors.toList());
-            testPage = readStringList(list, path);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return testPage;
-    }
-
-    private TestPage readStringList(List<String> list, String path) throws Exception {
-        TestPage testPage = new TestPage();
-        IBlock block = readBlock(list, path);
-        while (block != null) {
-            testPage.addBlock(block);
-            block = readBlock(list, path);
-        }
-        return testPage;
-    }
-
-    private IBlock readBlock(List<String> list, String path) throws Exception {
+    public TestPage parse(String path) throws IOException, IllegalAccessException {
+        Stream<String> lines = Files.lines(Paths.get(path));
+        List<String> list = lines.collect(Collectors.toList());
         if (list.isEmpty()) {
-            return null;
+            throw new IllegalAccessException("File empty at path: " + path);
         }
-        BlockType blockType = getBlockType(list.get(0));
-        IBlockParser blockParser = blockParserProvider.getBlockParser(blockType);
+        return buildTestPage(list, path);
+    }
 
+    private TestPage buildTestPage(List<String> list, String path) throws IllegalAccessException {
+        TestPage testPage = new TestPage();
+        testPage.setPath(path);
+        IBlock block;
+        while ((block = readBlock(list, path)) != null) {
+            testPage.addBlock(block);
+            list = list.subList(block.numberOfLines(), list.size());
+        }
+        return testPage;
+    }
+
+    private IBlock readBlock(List<String> list, String path) throws IllegalAccessException {
+        String firstLine = list.get(0);
+        BlockType blockType = getBlockType(firstLine);
+        IBlockParser blockParser = blockParserProvider.getBlockParser(blockType);
         if (blockParser == null) {
-            throw new Exception("Could not parse line");
+            throw new IllegalAccessException("Could not parse line: " + firstLine);
         }
         return blockParser.digest(list, path);
     }
 
-    public TestPage readString(String string, String fileName) {
+    protected TestPage readString(String string) {
         String[] split = StringUtils.split(string, "\n");
         ArrayList<String> list = new ArrayList<>(Arrays.asList(split));
-        TestPage testPage = null;
-        try {
-            testPage = readStringList(list, null);
-            testPage.setPageName(fileName);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return testPage;
+        return buildTestPage(list, null);
     }
 
-    public TestPage parseString(String input) {
-        return readString(input, "new"); // TODO
+    public TestPage buildFromString(String input) {
+        return readString(input);
     }
 
-    private BlockType getBlockType(String line) throws Exception {
+    private BlockType getBlockType(String line) throws IllegalAccessException {
         Collection<IBlockParser> allBlockParsers = blockParserProvider.getAllBlockParsers();
 
         List<BlockType> blockTypes = allBlockParsers.stream()
@@ -92,9 +79,10 @@ public class TestParser {
 
         if (blockTypes.size() == 1) {
             return blockTypes.get(0);
-        } else {
+        } else if (blockTypes.size() == 0) {
             return BlockType.COMMENT;
         }
+        String join = StringUtils.join(blockTypes, "; ");
+        throw new IllegalAccessException("Too many parsers for line [" + line + "] : " + join);
     }
-
 }

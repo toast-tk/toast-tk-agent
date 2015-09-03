@@ -101,12 +101,12 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 		this.testFailureNumber = testFailureNumber;
 	}
 
-	public String getPageName() {
+	public String getPath() {
 		return pageName;
 	}
 
-	public void setPageName(
-		String pageName) {
+	public void setPath(
+			String pageName) {
 		this.pageName = pageName;
 	}
 
