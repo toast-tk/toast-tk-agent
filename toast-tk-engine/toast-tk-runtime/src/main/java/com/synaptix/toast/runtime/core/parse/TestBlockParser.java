@@ -1,16 +1,27 @@
 package com.synaptix.toast.runtime.core.parse;
 
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.BlockType;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Parse a test block.
  * <p>
+ * A test block starts with a title, which defines the block type. Each test line starts with a pipe '|'
+ * <p>
+ *
+ * Example : <br>
+ *
+ * || Scenario || Swing || <br>
+ * | do something | <br>
+ * | check something | <br>
+ * | check something 2 | <br>
+ * | do something 2 | <br>
+ *
  * Created by Nicolas Sauvage on 06/08/2015.
  */
 public class TestBlockParser implements IBlockParser {
@@ -20,10 +31,10 @@ public class TestBlockParser implements IBlockParser {
     }
 
     @Override
-    public IBlock digest(List<String> strings, String path) throws Exception {
+    public IBlock digest(List<String> strings, String path)  {
         String firstLine = strings.get(0);
         if (!firstLine.startsWith("||")) {
-            throw new Exception("Test block does not have a title: " + firstLine);
+            throw new IllegalArgumentException("Test block does not have a title: " + firstLine);
         }
 
         TestBlock testBlock = new TestBlock();
@@ -33,17 +44,14 @@ public class TestBlockParser implements IBlockParser {
         if (title.length >= 2) {
             testBlock.setFixtureName(title[1]);
         }
-        strings.remove(0);
 
         // Add test lines to block
-        for (Iterator<String> iterator = strings.iterator(); iterator.hasNext(); ) {
-            String string = iterator.next();
+        for (String string : strings.subList(1,strings.size())) {
             if (!string.startsWith("|")) {
                 return testBlock;
             }
             String[] split = StringUtils.split(string, "|");
             testBlock.addLine(split[0], split.length > 1 ? split[1] : null, split.length > 2 ? split[2] : null);
-            iterator.remove();
         }
 
         return testBlock;

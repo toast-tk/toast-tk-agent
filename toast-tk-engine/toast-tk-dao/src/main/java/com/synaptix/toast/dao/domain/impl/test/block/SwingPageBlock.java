@@ -68,4 +68,9 @@ public class SwingPageBlock implements IBlock {
 	public String getBlockType() {
 		return "swingPageBlock";
 	}
+
+	@Override
+	public int getNumberOfLines() {
+		return 0;
+	}
 }

@@ -1,9 +1,9 @@
 package com.synaptix.toast.runtime.core.parse;
 
+import java.util.List;
+
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.BlockType;
-
-import java.util.List;
 
 /**
  * Block parsers must implement this interface. A block parser can read a list of strings, and create an IBlock. See digest method.
@@ -16,7 +16,6 @@ public interface IBlockParser {
 
     /**
      * Create a block from the list of strings.
-     * Must remove all parsed lines from list in parameter.
      *
      * @param path Path of the test text file.
      */

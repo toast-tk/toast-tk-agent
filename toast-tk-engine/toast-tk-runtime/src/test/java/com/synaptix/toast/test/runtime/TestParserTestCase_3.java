@@ -1,13 +1,15 @@
 package com.synaptix.toast.test.runtime;
 
-import com.synaptix.toast.core.dao.IBlock;
-import com.synaptix.toast.dao.domain.impl.test.TestPage;
-import com.synaptix.toast.dao.domain.impl.test.block.CommentBlock;
-import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
-import com.synaptix.toast.runtime.parse.TestParser;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.synaptix.toast.core.dao.IBlock;
+import com.synaptix.toast.dao.domain.impl.test.TestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.CommentBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
+import com.synaptix.toast.runtime.parse.TestParser;
 
 public class TestParserTestCase_3 {
 
@@ -53,7 +55,7 @@ public class TestParserTestCase_3 {
     @Test
     public void testParserBlocks() {
         TestParser par = new TestParser();
-        TestPage testPage = par.buildFromString(b.toString());
+        TestPage testPage = par.readString(b.toString());
         Assert.assertNotNull(testPage);
         Assert.assertNotNull(testPage.getBlocks());
         int i = 0;
@@ -78,6 +80,8 @@ public class TestParserTestCase_3 {
         Assert.assertTrue(commentLine.startsWith("Toujours des commentaires"));
         i++;
         Assert.assertEquals("test", testPage.getBlocks().get(i).getBlockType());
+        TestBlock testBlock = (TestBlock) testPage.getBlocks().get(i);
+        Assert.assertEquals("Last scenario has 6 test lines", 6, testBlock.getBlockLines().size());
     }
 
 }

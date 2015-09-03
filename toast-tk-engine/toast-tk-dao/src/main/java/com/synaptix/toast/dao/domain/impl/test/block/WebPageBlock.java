@@ -9,6 +9,7 @@ import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.dao.domain.impl.test.WebPageConfigLine;
 
 @Embedded
+@Deprecated
 public class WebPageBlock implements IBlock {
 
 	private List<WebPageConfigLine> blockLines;
@@ -70,5 +71,10 @@ public class WebPageBlock implements IBlock {
 	@Override
 	public String getBlockType() {
 		return "webPageBlock";
+	}
+
+	@Override
+	public int getNumberOfLines() {
+		return 0;
 	}
 }

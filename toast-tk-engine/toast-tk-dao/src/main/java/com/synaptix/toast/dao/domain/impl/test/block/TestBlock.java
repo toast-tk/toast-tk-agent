@@ -1,11 +1,11 @@
 package com.synaptix.toast.dao.domain.impl.test.block;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.jmkgreen.morphia.annotations.Embedded;
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.dao.domain.impl.test.TestLine;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Embedded
 public class TestBlock implements IBlock {
@@ -24,7 +24,7 @@ public class TestBlock implements IBlock {
 	}
 
 	public void setBlockLines(
-		List<TestLine> blockLines) {
+			List<TestLine> blockLines) {
 		this.blockLines = blockLines;
 	}
 
@@ -32,11 +32,11 @@ public class TestBlock implements IBlock {
 	 * Add a test line
 	 */
 	public void addLine(
-		String test,
-		String expected,
-		String comment) {
+			String test,
+			String expected,
+			String comment) {
 		TestLine blockLine = new TestLine(test, expected, comment);
-		blockLine.setTestCommentString(comment);
+		blockLine.setComment(comment);
 		this.blockLines.add(blockLine);
 	}
 
@@ -45,12 +45,17 @@ public class TestBlock implements IBlock {
 	}
 
 	public void setFixtureName(
-		String fixtureName) {
-		this.fixtureName = fixtureName;
+			String fixtureName) {
+		this.fixtureName = fixtureName != null ? fixtureName.trim() : null;
 	}
 
 	@Override
 	public String getBlockType() {
 		return "test";
+	}
+
+	@Override
+	public int getNumberOfLines() {
+		return blockLines.size() + 1;
 	}
 }

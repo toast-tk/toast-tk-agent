@@ -75,4 +75,9 @@ public class SetupBlock implements IBlock {
 	public String getBlockType() {
 		return "setup";
 	}
+
+	@Override
+	public int getNumberOfLines() {
+		return 0;
+	}
 }

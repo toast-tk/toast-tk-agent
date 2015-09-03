@@ -77,7 +77,7 @@ public abstract class AbstractProjectRunner extends AbstractRunner {
 			}
 			String repoWiki = RestUtils.downloadRepositoyAsWiki();
 			TestParser parser = new TestParser();
-			TestPage repoAsTestPageForConveniency = parser.readString(repoWiki, "");
+			TestPage repoAsTestPageForConveniency = parser.readString(repoWiki);
 			runner.run(repoAsTestPageForConveniency, false);
 		}
 		execute(project, runner);

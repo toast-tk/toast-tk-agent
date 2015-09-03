@@ -32,21 +32,21 @@ public class TestParserTestCase_1 {
 	@Test
 	public void testParserBlocks() {
 		TestParser par = new TestParser();
-		TestPage testPage = par.buildFromString(b.toString());
+		TestPage testPage = par.readString(b.toString());
 		assertEquals(1, testPage.getBlocks().size());
 	}
 
 	@Test
 	public void testParserBlockType() {
 		TestParser par = new TestParser();
-		TestPage testPage = par.buildFromString(b.toString());
+		TestPage testPage = par.readString(b.toString());
 		assertEquals(true, testPage.getBlocks().get(0) instanceof TestBlock);
 	}
 
 	@Test
 	public void testParserBlockServiceNameParsing() {
 		TestParser par = new TestParser();
-		TestPage testPage = par.buildFromString(b.toString());
+		TestPage testPage = par.readString(b.toString());
 		TestBlock testBlock = (TestBlock) testPage.getBlocks().get(0);
 		assertEquals("swing", testBlock.getFixtureName());
 	}
@@ -54,7 +54,7 @@ public class TestParserTestCase_1 {
 	@Test
 	public void testDefaultParserLineFixtureKind() {
 		TestParser par = new TestParser();
-		TestPage testPage = par.buildFromString(b.toString());
+		TestPage testPage = par.readString(b.toString());
 		TestBlock testBlock = (TestBlock) testPage.getBlocks().get(0);
 		List<TestLine> blockLines = testBlock.getBlockLines();
 		TestLine testLine = blockLines.get(4);
@@ -66,7 +66,7 @@ public class TestParserTestCase_1 {
 	@Test
 	public void testServiceParserLineFixtureKind() {
 		TestParser par = new TestParser();
-		TestPage testPage = par.buildFromString(b.toString());
+		TestPage testPage = par.readString(b.toString());
 		TestBlock testBlock = (TestBlock) testPage.getBlocks().get(0);
 		List<TestLine> blockLines = testBlock.getBlockLines();
 		TestLine testLine = blockLines.get(1);
@@ -78,7 +78,7 @@ public class TestParserTestCase_1 {
 	@Test
 	public void testSwingParserLineFixtureKind() {
 		TestParser par = new TestParser();
-		TestPage testPage = par.buildFromString(b.toString());
+		TestPage testPage = par.readString(b.toString());
 		TestBlock testBlock = (TestBlock) testPage.getBlocks().get(0);
 		List<TestLine> blockLines = testBlock.getBlockLines();
 		assertEquals("@swing Saisir *valeur* dans *ChooseApplicationRusDialog.applicationBox*", blockLines.get(0)
@@ -90,7 +90,7 @@ public class TestParserTestCase_1 {
 	@Test
 	public void testSwingParserLineFixtureName() {
 		TestParser par = new TestParser();
-		TestPage testPage = par.buildFromString(b.toString());
+		TestPage testPage = par.readString(b.toString());
 		TestBlock testBlock = (TestBlock) testPage.getBlocks().get(0);
 		List<TestLine> blockLines = testBlock.getBlockLines();
 		assertEquals("@swing:connector Saisir *valeur* dans *ChooseApplicationRusDialog.applicationBox*", blockLines

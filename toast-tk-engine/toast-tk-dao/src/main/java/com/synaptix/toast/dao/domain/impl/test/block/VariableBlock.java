@@ -17,8 +17,15 @@ public class VariableBlock implements IBlock {
 		return blockLines;
 	}
 
+	int number0fLines;
+
+	public VariableBlock() {
+		blockLines = new ArrayList<BlockLine>();
+		number0fLines = 0;
+	}
+
 	public void setBlockLines(
-		List<BlockLine> blockLines) {
+			List<BlockLine> blockLines) {
 		this.blockLines = blockLines;
 	}
 
@@ -27,24 +34,26 @@ public class VariableBlock implements IBlock {
 	}
 
 	public void setColumns(
-		BlockLine columns) {
+			BlockLine columns) {
 		this.columns = columns;
 	}
 
 	public void addline(
-		BlockLine line) {
+			BlockLine line) {
 		blockLines.add(line);
-	}
-
-	/**
-	 * 
-	 */
-	public VariableBlock() {
-		blockLines = new ArrayList<BlockLine>();
 	}
 
 	@Override
 	public String getBlockType() {
 		return "variable";
+	}
+
+	@Override
+	public int getNumberOfLines() {
+		return number0fLines;
+	}
+
+	public void setNumber0fLines(int number0fLines){
+		this.number0fLines = number0fLines;
 	}
 }

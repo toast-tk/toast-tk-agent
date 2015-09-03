@@ -7,5 +7,5 @@ public interface IBlock extends ITaggable {
 	/**
 	 * Number of lines in the text file.
 	 */
-	int numberOfLines();
+	int getNumberOfLines();
 }

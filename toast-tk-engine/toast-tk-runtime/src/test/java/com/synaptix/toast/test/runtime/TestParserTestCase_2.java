@@ -31,7 +31,7 @@ public class TestParserTestCase_2 {
 	@Test
 	public void testParserBlocks() {
 		TestParser par = new TestParser();
-		TestPage testPage = par.buildFromString(b.toString());
+		TestPage testPage = par.readString(b.toString());
 		Assert.assertNotNull(testPage.getVarBlock());
 	}
 

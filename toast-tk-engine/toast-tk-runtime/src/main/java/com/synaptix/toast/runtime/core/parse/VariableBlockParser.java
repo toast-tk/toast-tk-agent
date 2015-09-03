@@ -1,13 +1,13 @@
 package com.synaptix.toast.runtime.core.parse;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.BlockLine;
 import com.synaptix.toast.dao.domain.impl.test.block.BlockType;
 import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Parser for vaiable blocks.
@@ -27,14 +27,17 @@ public class VariableBlockParser implements IBlockParser {
     public IBlock digest(List<String> strings, String path) {
         VariableBlock variableBlock = new VariableBlock();
 
+        int parsedLines = 0;
+
         for (Iterator<String> iterator = strings.iterator(); iterator.hasNext(); ) {
             String string = iterator.next();
 
             if (!isLineParsable(string)) {
+                variableBlock.setNumber0fLines(parsedLines);
                 return variableBlock;
             }
 
-            iterator.remove();
+            parsedLines++;
 
             String[] split = string.split(VARIABLE_ASSIGNATION_SEPARATOR);
 
@@ -46,7 +49,7 @@ public class VariableBlockParser implements IBlockParser {
 
                 while (iterator.hasNext()) {
                     string = iterator.next();
-                    iterator.remove();
+                    parsedLines++;
 
                     if (!string.startsWith("\"\"\"")) {
                         stringBuilder.append(string.replace("\n", " ").replace("\t", " ")).append(" ");
@@ -66,6 +69,7 @@ public class VariableBlockParser implements IBlockParser {
             variableBlock.addline(line);
         }
 
+        variableBlock.setNumber0fLines(parsedLines);
         return variableBlock;
     }
 

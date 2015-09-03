@@ -243,4 +243,9 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 	public String getBlockType() {
 		return "testPageBlock";
 	}
+
+	@Override
+	public int getNumberOfLines() {
+		return 0;
+	}
 }

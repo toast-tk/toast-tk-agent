@@ -7,6 +7,7 @@ import com.github.jmkgreen.morphia.annotations.Embedded;
 import com.synaptix.toast.core.dao.IBlock;
 
 @Embedded
+@Deprecated
 public class InsertBlock implements IBlock {
 
 	private List<BlockLine> blockLines;
@@ -14,6 +15,13 @@ public class InsertBlock implements IBlock {
 	private BlockLine columns;
 
 	private String componentString;
+
+	private int numberOfLines;
+
+	public InsertBlock() {
+		blockLines = new ArrayList<BlockLine>();
+		numberOfLines = 0;
+	}
 
 	public List<BlockLine> getBlockLines() {
 		return blockLines;
@@ -47,15 +55,13 @@ public class InsertBlock implements IBlock {
 		blockLines.add(line);
 	}
 
-	/**
-	 * 
-	 */
-	public InsertBlock() {
-		blockLines = new ArrayList<BlockLine>();
-	}
-
 	@Override
 	public String getBlockType() {
 		return "insert";
+	}
+
+	@Override
+	public int getNumberOfLines() {
+		return numberOfLines;
 	}
 }
