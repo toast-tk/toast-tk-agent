@@ -23,7 +23,6 @@ import com.synaptix.toast.core.adapter.ActionAdapterKind;
 import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.core.annotation.Action;
 import com.synaptix.toast.core.annotation.craft.FixMe;
-import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
@@ -31,7 +30,8 @@ import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.IActionItemRepository;
 import com.synaptix.toast.dao.domain.impl.test.TestLine;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
-import com.synaptix.toast.runtime.core.TestLineDescriptor;
+import com.synaptix.toast.runtime.bean.ActionCommandDescriptor;
+import com.synaptix.toast.runtime.bean.TestLineDescriptor;
 import com.synaptix.toast.runtime.utils.ArgumentHelper;
 
 public class TestBlockRunner implements IBlockRunner<TestBlock> {
@@ -44,8 +44,7 @@ public class TestBlockRunner implements IBlockRunner<TestBlock> {
 	private List<FixtureService> fixtureApiServices;
 
 	@Override
-	public void run(ITestPage testPage, TestBlock block) throws IllegalAccessException, ClassNotFoundException {
-		List<TestResult> results = new ArrayList<TestResult>();
+	public void run(TestBlock block) throws IllegalAccessException, ClassNotFoundException {
 		for (TestLine line : block.getBlockLines()) {
 			line.startExecution();
 			TestLineDescriptor descriptor = new TestLineDescriptor(block, line);
@@ -56,17 +55,9 @@ public class TestBlockRunner implements IBlockRunner<TestBlock> {
 			}
 			finaliseResultKind(line, result);
 			line.setTestResult(result);
-			results.add(result);
-			
 		}
-		setExecStatistics(testPage, results);
 	}
 
-	private void setExecStatistics(ITestPage testPage, List<TestResult> results) {
-		testPage.setTechnicalErrorNumber(getTotal(results, ResultKind.ERROR));
-		testPage.setTestSuccessNumber(getTotal(results, ResultKind.SUCCESS));
-		testPage.setTestFailureNumber(getTotal(results, ResultKind.FAILURE));
-	}
 
 	private void finaliseResultKind(TestLine line, TestResult result) {
 		if (isFailureExpected(line, result)) {
@@ -337,15 +328,7 @@ public class TestBlockRunner implements IBlockRunner<TestBlock> {
 		return commandRequest;
 	}
 
-	private int getTotal(List<TestResult> results, ResultKind resultKindFilter) {
-		int count = 0;
-		for (TestResult testResult : results) {
-			if (resultKindFilter.equals(testResult.getResultKind())) {
-				count++;
-			}
-		}
-		return count;
-	}
+
 
 	private Object getClassInstance(Class<?> clz) {
 		if (injector != null) {

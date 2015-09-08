@@ -4,12 +4,6 @@ import com.synaptix.toast.adapter.web.HasTextInput;
 import com.synaptix.toast.automation.driver.web.SynchronizedDriver;
 import com.synaptix.toast.core.runtime.IWebElement;
 
-/**
- * input element
- * 
- * @author skokaina
- * 
- */
 public class WebInputElement extends WebAutoElement implements HasTextInput {
 
 	public WebInputElement(

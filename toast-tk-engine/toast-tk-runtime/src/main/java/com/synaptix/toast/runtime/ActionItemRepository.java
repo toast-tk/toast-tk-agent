@@ -1,9 +1,8 @@
-package com.synaptix.toast.runtime.core;
+package com.synaptix.toast.runtime;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -17,6 +16,8 @@ import com.synaptix.toast.core.report.TestResult.ResultKind;
 import com.synaptix.toast.core.runtime.IActionItemRepository;
 import com.synaptix.toast.core.runtime.IFeedableSwingPage;
 import com.synaptix.toast.core.runtime.IFeedableWebPage;
+import com.synaptix.toast.runtime.bean.TestComponentConfig;
+import com.synaptix.toast.runtime.bean.TestEntityProperty;
 
 public class ActionItemRepository implements IActionItemRepository {
 

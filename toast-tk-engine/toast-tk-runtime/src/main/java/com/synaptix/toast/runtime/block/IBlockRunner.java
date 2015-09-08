@@ -6,7 +6,7 @@ import com.synaptix.toast.core.dao.ITestPage;
 
 public interface IBlockRunner<E extends IBlock> {
 	
-	public void run(ITestPage page, E block) throws IllegalAccessException, ClassNotFoundException;
+	public void run(E block) throws IllegalAccessException, ClassNotFoundException;
 
 	public void setInjector(Injector injector);
 

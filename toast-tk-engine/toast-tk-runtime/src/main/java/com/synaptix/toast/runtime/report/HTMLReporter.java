@@ -5,9 +5,6 @@ import java.util.List;
 import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.dao.domain.impl.report.Project;
 import com.synaptix.toast.runtime.dao.DAOManager;
-import com.synaptix.toast.runtime.report.project.IProjectHtmlReportGenerator;
-import com.synaptix.toast.runtime.report.project.ThymeLeafProjectHTMLReporter;
-import com.synaptix.toast.runtime.report.test.ThymeLeafHTMLReporter;
 
 public class HTMLReporter {
 

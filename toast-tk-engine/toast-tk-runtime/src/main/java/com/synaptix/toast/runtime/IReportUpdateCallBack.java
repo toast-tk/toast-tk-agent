@@ -22,21 +22,17 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Creation date: 10 juin 2015
+Creation date: 24 mars 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
-package com.synaptix.toast.runtime.report.test;
+package com.synaptix.toast.runtime;
 
-import com.synaptix.toast.core.dao.ITestPage;
+public interface IReportUpdateCallBack {
 
-public interface IHTMLReportGenerator {
+	public void onUpdate(
+		String report);
 
-	public String generatePageHtml(
-		ITestPage testPage);
-
-	public void writeFile(
-		String generatePageHtml,
-		String pageName,
-		String path);
+	public void onFatalStepError(
+		String message);
 }

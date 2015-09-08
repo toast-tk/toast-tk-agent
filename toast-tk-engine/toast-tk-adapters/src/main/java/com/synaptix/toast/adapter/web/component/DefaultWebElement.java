@@ -4,11 +4,6 @@ import com.synaptix.toast.core.adapter.AutoWebType;
 import com.synaptix.toast.core.runtime.IWebElement;
 import com.synaptix.toast.core.runtime.IWebElement.LocationMethod;
 
-/**
- * 
- * @author skokaina
- * 
- */
 public class DefaultWebElement implements IWebElement {
 
 	public String locator;

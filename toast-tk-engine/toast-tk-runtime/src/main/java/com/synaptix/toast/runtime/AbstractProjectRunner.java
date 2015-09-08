@@ -1,4 +1,4 @@
-package com.synaptix.toast.runtime.core;
+package com.synaptix.toast.runtime;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -70,7 +70,7 @@ public abstract class AbstractProjectRunner extends AbstractRunner {
 		Project project,
 		boolean presetRepoFromWebApp)
 		throws Exception {
-		TestRunner runner = TestRunner.FromInjector(injector);
+		TestRunner runner = new TestRunner(injector);
 		if(presetRepoFromWebApp) {
 			if(LOG.isDebugEnabled()) {
 				LOG.debug("Preset repository from webapp rest api...");

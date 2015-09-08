@@ -6,10 +6,10 @@ import java.util.regex.Pattern;
 
 import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.runtime.IActionItemRepository;
-import com.synaptix.toast.runtime.core.ActionItem;
-import com.synaptix.toast.runtime.core.ActionItemDescriptionCollector;
-import com.synaptix.toast.runtime.core.ActionItem.ActionCategoryEnum;
-import com.synaptix.toast.runtime.core.ActionItem.ActionTypeEnum;
+import com.synaptix.toast.runtime.ActionItemDescriptionCollector;
+import com.synaptix.toast.runtime.bean.ActionItem;
+import com.synaptix.toast.runtime.bean.ActionItem.ActionCategoryEnum;
+import com.synaptix.toast.runtime.bean.ActionItem.ActionTypeEnum;
 
 public class ArgumentHelper {
 	

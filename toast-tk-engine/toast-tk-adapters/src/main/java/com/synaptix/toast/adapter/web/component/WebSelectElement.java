@@ -7,12 +7,6 @@ import com.synaptix.toast.adapter.web.HasSelect;
 import com.synaptix.toast.automation.driver.web.SynchronizedDriver;
 import com.synaptix.toast.core.runtime.IWebElement;
 
-/**
- * select element
- * 
- * @author skokaina
- * 
- */
 public class WebSelectElement extends WebAutoElement implements HasSelect {
 
 	public WebSelectElement(

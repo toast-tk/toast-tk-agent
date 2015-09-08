@@ -1,4 +1,4 @@
-package com.synaptix.toast.runtime.block;
+package com.synaptix.toast.runtime.bean;
 
 public class Settings {
 	public String driver;
