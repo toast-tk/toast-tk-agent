@@ -104,6 +104,7 @@ public class SwingInspectorPanel extends JPanel {
 		this.clear = new JButton("Clear", new ImageIcon(Resource.ICON_CLEAR_16PX_IMG));
 		this.clear.setToolTipText("Clear result list..");
 		evenBus.register(this);
+		
 		toolPanel.setAlignmentX(RIGHT_ALIGNMENT);
 		toolPanel.add(new JLabel("Page Name:"));
 		toolPanel.add(pageName);
@@ -115,6 +116,7 @@ public class SwingInspectorPanel extends JPanel {
 		toolPanel.add(itemFilter);
 		toolPanel.add(search);
 		toolPanel.setAlignmentX(LEFT_ALIGNMENT);
+		
 		listModel = new DefaultListModel();
 		list = new JList(listModel);
 		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);

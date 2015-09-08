@@ -4,9 +4,10 @@ import org.bson.types.ObjectId;
 
 import com.github.jmkgreen.morphia.annotations.Entity;
 import com.github.jmkgreen.morphia.annotations.Id;
+import com.synaptix.toast.core.dao.ITaggable;
 
 @Entity(value = "tags", noClassnameStored = true)
-public class TagImpl {
+public class TagImpl  implements ITaggable{
 
 	@Id
 	public ObjectId id = new ObjectId();

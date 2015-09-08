@@ -13,13 +13,25 @@
 	<packaging>maven-plugin</packaging>
 	<name>Toast Toolkit - Maven Mojo Plugin</name>
 	<url>http://maven.apache.org</url>
+	
+	<properties>
+		<javassit.version>3.18.1-GA</javassit.version>
+		<reflexion.version>0.9.9-RC1</reflexion.version>
+		<maven-plugin-api.version>3.1.0</maven-plugin-api.version>
+		<maven-project.version>2.2.1</maven-project.version>
+		<maven-compiler-plugin>3.0</maven-compiler-plugin>
+		<maven-compiler-plugin.version>3.0</maven-compiler-plugin.version>
+		<maven-plugin-plugin.version>3.2</maven-plugin-plugin.version>
+		<maven-resources-plugin.version>2.6</maven-resources-plugin.version>
+		<maven-plugin-annotations.version>3.2</maven-plugin-annotations.version>
+	</properties>
 
 	<build>
 		<plugins>
 			<!-- plugin dependencies -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
+				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
 					<encoding>UTF-8</encoding>
 					<source>1.8</source>
@@ -31,7 +43,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-plugin-plugin</artifactId>
-				<version>3.2</version>
+				<version>${maven-plugin-plugin.version}</version>
 				<configuration>
 					<skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
 				</configuration>
@@ -47,7 +59,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.6</version>
+				<version>${maven-resources-plugin.version}</version>
 				<configuration>
 					<encoding>UTF-8</encoding>
 				</configuration>
@@ -59,19 +71,31 @@
 		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-plugin-api</artifactId>
-			<version>3.1.0</version>
+			<version>${maven-plugin-api.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-project</artifactId>
-			<version>2.2.1</version>
+			<version>${maven-project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven.plugin-tools</groupId>
 			<artifactId>maven-plugin-annotations</artifactId>
-			<version>3.2</version>
+			<version>${maven-plugin-annotations.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<artifactId>reflections</artifactId>
+			<groupId>org.reflections</groupId>
+			<version>${reflexion.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>${javassit.version}</version>
+		</dependency>
+				
+		<!-- Toast Dependencies -->
 		<dependency>
 			<groupId>com.synaptix.toast</groupId>
 			<artifactId>toast-tk-core</artifactId>
@@ -82,16 +106,5 @@
 			<artifactId>toast-tk-rest-utils</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<artifactId>reflections</artifactId>
-			<groupId>org.reflections</groupId>
-			<version>0.9.9-RC1</version>
-		</dependency>
-		<dependency>
-			<groupId>javassist</groupId>
-			<artifactId>javassist</artifactId>
-			<version>3.12.1.GA</version>
-		</dependency>
-				
 	</dependencies>
 </project>

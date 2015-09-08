@@ -11,6 +11,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
@@ -37,7 +38,9 @@ public class SutRunnerAsExec {
 
 	private static final String WINDOWS_SHELL = "C:\\Windows\\System32\\cmd.exe";
 
-	private static String STREAMGOBBLER_OUTPUT_FILEPATH = Property.TOAST_LOG_DIR + "\\process.log";
+	private static String STREAMGOBBLER_OUTPUT_FILEPATH = Property.TOAST_LOG_DIR + "\\process.out.log";
+	
+	private static String STREAMGOBBLER_ERROR_FILEPATH = Property.TOAST_LOG_DIR + "\\process.err.log";
 
 	private static String SUT_AGENT_PATH = "\\toast-tk-agent-standalone.jar";
 
@@ -67,35 +70,56 @@ public class SutRunnerAsExec {
 		this.configuration = config;
 	}
 
-	public Process executeSutBat() {
-		Process proc = null;
-		StreamGobbler outGobbler = null;
+	public Process executeSutBat() throws IllegalAccessException {
 		final String sutBatPath = Property.TOAST_HOME_DIR + Property.TOAST_SUT_RUNNER_BAT;
-		LOG.info(String.format("Processing command %s !", sutBatPath));
-		try {
-			proc = createSutProcess(sutBatPath);
-			outGobbler = createStreamWriter(proc);
-		}
-		catch(Exception e) {
-			String out = String.format("Failed to execute cmd: %s", sutBatPath);
-			LOG.error(out, e);
-			if(outGobbler != null) {
-				outGobbler.interrupt();
+		return executeSutBat(sutBatPath);
+	}
+	
+	public Process executeSutBat(String command) throws IllegalAccessException {
+		if(SystemUtils.IS_OS_WINDOWS){
+			Process proc = null;
+			StreamGobbler outGobbler = null;
+			StreamGobbler errGobbler = null;
+			LOG.info(String.format("Processing command %s !", command));
+			try {
+				proc = createSutProcess(command);
+				outGobbler = createOutputStreamWriter(proc);
+				errGobbler = createErrorStreamWriter(proc);
 			}
-			if(proc != null) {
-				proc.destroy();
+			catch(Exception e) {
+				String out = String.format("Failed to execute cmd: %s", command);
+				LOG.error(out, e);
+				if(outGobbler != null) {
+					outGobbler.interrupt();
+				}
+				if(errGobbler != null) {
+					errGobbler.interrupt();
+				}
+				if(proc != null) {
+					proc.destroy();
+				}
 			}
+			return proc;
 		}
-		return proc;
+		throw new IllegalAccessException("Only Windows is supported !");
 	}
 
-	private StreamGobbler createStreamWriter(
+	private StreamGobbler createOutputStreamWriter(
 		Process proc) {
 		StreamGobbler outGobbler;
 		outGobbler = new StreamGobbler(proc.getInputStream(), "OUT", STREAMGOBBLER_OUTPUT_FILEPATH);
 		outGobbler.start();
 		return outGobbler;
 	}
+	
+	private StreamGobbler createErrorStreamWriter(
+			Process proc) {
+			StreamGobbler outGobbler;
+			outGobbler = new StreamGobbler(proc.getInputStream(), "ERR", STREAMGOBBLER_ERROR_FILEPATH);
+			outGobbler.start();
+			return outGobbler;
+		}
+
 
 	private Process createSutProcess(
 		String command)
@@ -136,8 +160,7 @@ public class SutRunnerAsExec {
 		throws SAXException, IOException, IllegalAccessException, ParserConfigurationException {
 		final File homeDir = new File(Property.TOAST_RUNTIME_DIR);
 		final String baseUri = configuration.getJnlpRuntimeHost();
-		final String agentPathProperty = "-javaagent:\"" + configuration.getPluginDir()
-			+ SUT_AGENT_PATH.replace("/", "\\") + "\"";
+		final String agentPathProperty = getAgentPathProperty();
 		if(homeDir.exists()) {
 			FileUtils.deleteDirectory(homeDir);
 		}
@@ -150,6 +173,11 @@ public class SutRunnerAsExec {
 		NodeList nList = doc.getElementsByTagName("jar");
 		downloadDependencies(homeDir, baseUri, nList);
 		return createShellCommand(homeDir, agentPathProperty, doc);
+	}
+
+	private String getAgentPathProperty() {
+		return "-javaagent:\"" + configuration.getPluginDir()
+			+ SUT_AGENT_PATH.replace("/", "\\") + "\"";
 	}
 
 	private Document parseJnlp(
@@ -252,5 +280,15 @@ public class SutRunnerAsExec {
 			}
 		}
 		return res;
+	}
+
+	public void launchJarInspection(File selectedFile) throws IllegalAccessException {
+		String javaHome = System.getenv("TOAST_JRE_HOME");
+		String javaBin = "\"" + javaHome + "\\bin\\java.exe\" ";
+		javaBin = "java";
+		String plugins = "-D" + Property.TOAST_PLUGIN_DIR_PROP + "=\"" + Property.TOAST_PLUGIN_DIR + "\"";
+		String command = javaBin+ " " + getAgentPathProperty() + " " + plugins + " -jar \"" + selectedFile.getAbsolutePath() + "\"";
+		System.out.println(javaBin+ " " + getAgentPathProperty() + " " + plugins + " -jar \"" + selectedFile.getAbsolutePath() + "\"");
+		executeSutBat(command);
 	}
 }

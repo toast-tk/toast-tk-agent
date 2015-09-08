@@ -9,6 +9,11 @@
 	</parent>
 	<artifactId>toast-tk-dao</artifactId>
 	<name>Toast Toolkit - DAO Module</name>
+	<properties>
+		<morphia.version>1.2.3</morphia.version>
+		<findbugs.version>3.0.0</findbugs.version>
+		<thymeleaf.version>2.1.4.RELEASE</thymeleaf.version>
+	</properties>
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<resources>
@@ -20,22 +25,12 @@
 				</includes>
 			</resource>
 		</resources>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
-				<configuration>
-					<source />
-					<target />
-				</configuration>
-			</plugin>
-		</plugins>
 	</build>
 	<dependencies>
 		<dependency>
 			<groupId>com.github.jmkgreen.morphia</groupId>
 			<artifactId>morphia</artifactId>
-			<version>1.2.3</version>
+			<version>${morphia.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.reflections</groupId>
@@ -45,7 +40,7 @@
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>
 			<artifactId>jsr305</artifactId>
-			<version>3.0.0</version>
+			<version>${findbugs.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.inject</groupId>

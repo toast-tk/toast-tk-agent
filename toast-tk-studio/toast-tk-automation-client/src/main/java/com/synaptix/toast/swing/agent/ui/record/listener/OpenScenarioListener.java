@@ -19,7 +19,7 @@ public class OpenScenarioListener implements ActionListener {
 	private JTextArea interpretedOutputArea;
 
 	public OpenScenarioListener(JTextArea interpretedOutputArea){
-		this.interpretedOutputArea= interpretedOutputArea;
+		this.interpretedOutputArea = interpretedOutputArea;
 	}
 
 	@Override
