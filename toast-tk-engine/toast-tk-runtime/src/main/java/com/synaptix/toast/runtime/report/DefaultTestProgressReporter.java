@@ -45,7 +45,7 @@ public class DefaultTestProgressReporter {
 				: null;
 		if (resource != null) {
 			this.htmlReportGenerator.writeFile(generatePageHtml,
-					testPage.getPageName(), resource.getPath());
+					testPage.getPath(), resource.getPath());
 		}
 		if (this.reportUpdateCallBack != null) {
 			this.reportUpdateCallBack.onUpdate(generatePageHtml);

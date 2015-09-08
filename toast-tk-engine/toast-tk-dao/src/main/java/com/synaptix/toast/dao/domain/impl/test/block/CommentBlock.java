@@ -12,14 +12,11 @@ public class CommentBlock implements IBlock {
 	private List<String> lines;
 
 	public CommentBlock() {
-		setLines(new ArrayList<String>());
+		setLines(new ArrayList<>());
 	}
 
 	/**
 	 * Add a test line
-	 * 
-	 * @param cellsContent
-	 * @param comment
 	 */
 	public void addLine(
 		String line) {
@@ -38,5 +35,10 @@ public class CommentBlock implements IBlock {
 	@Override
 	public String getBlockType() {
 		return "comment";
+	}
+
+	@Override
+	public int getNumberOfLines() {
+		return lines.size();
 	}
 }

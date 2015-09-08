@@ -1,19 +1,18 @@
 package com.synaptix.toast.test.runtime;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import com.synaptix.toast.core.adapter.ActionAdapterKind;
 import com.synaptix.toast.dao.domain.impl.test.TestLine;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 import com.synaptix.toast.runtime.bean.TestLineDescriptor;
 import com.synaptix.toast.runtime.parse.TestParser;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class TestParserTestCase_1 {
 
@@ -33,21 +32,21 @@ public class TestParserTestCase_1 {
 	@Test
 	public void testParserBlocks() {
 		TestParser par = new TestParser();
-		TestPage testPage = par.parseString(b.toString());
+		TestPage testPage = par.readString(b.toString());
 		assertEquals(1, testPage.getBlocks().size());
 	}
 
 	@Test
 	public void testParserBlockType() {
 		TestParser par = new TestParser();
-		TestPage testPage = par.parseString(b.toString());
+		TestPage testPage = par.readString(b.toString());
 		assertEquals(true, testPage.getBlocks().get(0) instanceof TestBlock);
 	}
 
 	@Test
 	public void testParserBlockServiceNameParsing() {
 		TestParser par = new TestParser();
-		TestPage testPage = par.parseString(b.toString());
+		TestPage testPage = par.readString(b.toString());
 		TestBlock testBlock = (TestBlock) testPage.getBlocks().get(0);
 		assertEquals("swing", testBlock.getFixtureName());
 	}
@@ -55,7 +54,7 @@ public class TestParserTestCase_1 {
 	@Test
 	public void testDefaultParserLineFixtureKind() {
 		TestParser par = new TestParser();
-		TestPage testPage = par.parseString(b.toString());
+		TestPage testPage = par.readString(b.toString());
 		TestBlock testBlock = (TestBlock) testPage.getBlocks().get(0);
 		List<TestLine> blockLines = testBlock.getBlockLines();
 		TestLine testLine = blockLines.get(4);
@@ -67,7 +66,7 @@ public class TestParserTestCase_1 {
 	@Test
 	public void testServiceParserLineFixtureKind() {
 		TestParser par = new TestParser();
-		TestPage testPage = par.parseString(b.toString());
+		TestPage testPage = par.readString(b.toString());
 		TestBlock testBlock = (TestBlock) testPage.getBlocks().get(0);
 		List<TestLine> blockLines = testBlock.getBlockLines();
 		TestLine testLine = blockLines.get(1);
@@ -79,7 +78,7 @@ public class TestParserTestCase_1 {
 	@Test
 	public void testSwingParserLineFixtureKind() {
 		TestParser par = new TestParser();
-		TestPage testPage = par.parseString(b.toString());
+		TestPage testPage = par.readString(b.toString());
 		TestBlock testBlock = (TestBlock) testPage.getBlocks().get(0);
 		List<TestLine> blockLines = testBlock.getBlockLines();
 		assertEquals("@swing Saisir *valeur* dans *ChooseApplicationRusDialog.applicationBox*", blockLines.get(0)
@@ -91,7 +90,7 @@ public class TestParserTestCase_1 {
 	@Test
 	public void testSwingParserLineFixtureName() {
 		TestParser par = new TestParser();
-		TestPage testPage = par.parseString(b.toString());
+		TestPage testPage = par.readString(b.toString());
 		TestBlock testBlock = (TestBlock) testPage.getBlocks().get(0);
 		List<TestLine> blockLines = testBlock.getBlockLines();
 		assertEquals("@swing:connector Saisir *valeur* dans *ChooseApplicationRusDialog.applicationBox*", blockLines
