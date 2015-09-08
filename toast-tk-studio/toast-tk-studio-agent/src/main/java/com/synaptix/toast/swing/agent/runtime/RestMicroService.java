@@ -5,6 +5,7 @@ import org.vertx.java.core.http.HttpServerRequest;
 import org.vertx.java.core.http.RouteMatcher;
 import org.vertx.java.platform.Verticle;
 
+import com.esotericsoftware.minlog.Log;
 import com.synaptix.toast.constant.Property;
 
 public class RestMicroService extends Verticle {
@@ -45,8 +46,13 @@ public class RestMicroService extends Verticle {
 			@Override
 			public void handle(
 				HttpServerRequest req) {
-				COMMAND_HANDLER.start();
-				req.response().setStatusCode(200).end();
+				try {
+					COMMAND_HANDLER.start();
+					req.response().setStatusCode(200).end();
+				} catch (IllegalAccessException e) {
+					Log.error(e.getMessage(), e);
+					req.response().setStatusCode(501).end();
+				}
 			}
 		});
 	}

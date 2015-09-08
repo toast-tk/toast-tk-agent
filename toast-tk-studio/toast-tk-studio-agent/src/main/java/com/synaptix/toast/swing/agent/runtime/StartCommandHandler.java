@@ -21,7 +21,7 @@ public class StartCommandHandler {
 
 	private SutRunnerAsExec runner;
 
-	public void start() {
+	public void start() throws IllegalAccessException {
 		LOG.info("start command received !");
 		if(process != null) {
 			stop();

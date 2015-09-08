@@ -43,7 +43,6 @@ public abstract class AbstractScenarioRunner extends AbstractRunner{
 	public final void run(
 		String... scenarios)
 		throws IllegalAccessException, ClassNotFoundException, IOException {
-		this.presetRepoFromWebApp = false;
 		runScenario(scenarios);
 	}
 

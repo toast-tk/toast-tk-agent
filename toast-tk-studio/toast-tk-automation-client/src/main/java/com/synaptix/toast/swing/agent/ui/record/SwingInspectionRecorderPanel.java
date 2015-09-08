@@ -2,18 +2,24 @@ package com.synaptix.toast.swing.agent.ui.record;
 
 import java.awt.BorderLayout;
 import java.awt.Dialog.ModalityType;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.fit.cssbox.swingbox.BrowserPane;
 
 import com.google.common.eventbus.EventBus;
@@ -26,6 +32,7 @@ import com.synaptix.toast.swing.agent.constant.Resource;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
 import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
 import com.synaptix.toast.swing.agent.runtime.StudioScriptRunner;
+import com.synaptix.toast.swing.agent.runtime.SutRunnerAsExec;
 import com.synaptix.toast.swing.agent.ui.record.listener.OpenScenarioListener;
 import com.synaptix.toast.swing.agent.ui.record.listener.RunScriptActionListener;
 import com.synaptix.toast.swing.agent.ui.record.listener.ShareScenarioListener;
@@ -33,9 +40,9 @@ import com.synaptix.toast.swing.agent.ui.record.listener.StartStopRecordListener
 
 public class SwingInspectionRecorderPanel extends JPanel {
 
-	private static final long serialVersionUID = -8096917642917989626L;
+	private static final Logger LOG = LogManager.getLogger(SwingInspectionRecorderPanel.class);
 
-	private final JTextArea interpretedOutputArea;
+	private static final long serialVersionUID = -8096917642917989626L;
 
 	private final JButton openScenarioButton;
 
@@ -44,8 +51,12 @@ public class SwingInspectionRecorderPanel extends JPanel {
 	private final JButton saveScenarioButton;
 
 	private final JButton runButton;
+	
+	private final JButton openJar;
 
 	private final Config config;
+
+	private final JTextArea interpretedOutputArea;
 
 	private final JComboBox recordTypeComboBox;
 
@@ -85,6 +96,7 @@ public class SwingInspectionRecorderPanel extends JPanel {
 		this.openScenarioButton = new JButton("Open Scenario");
 		this.runButton = new JButton("Run Test", new ImageIcon(Resource.ICON_RUN_16PX_IMG));
 		this.runButton.setToolTipText("Execute current scenario..");
+		this.openJar = new JButton("Open Jar");
 		this.interpretedOutputArea.setText("");
 		JScrollPane scrollPanelRight = new JScrollPane(this.interpretedOutputArea);
 		final JPanel commandPanel = buildCommandPanel();
@@ -95,6 +107,7 @@ public class SwingInspectionRecorderPanel extends JPanel {
 
 	private JPanel buildCommandPanel() {
 		final JPanel commandPanel = new JPanel();
+		commandPanel.add(this.openJar);
 		commandPanel.add(this.openScenarioButton);
 		commandPanel.add(this.startStopRecordButton);
 		commandPanel.add(this.saveScenarioButton);
@@ -105,10 +118,12 @@ public class SwingInspectionRecorderPanel extends JPanel {
 
 	private void enableRecording() {
 		this.startStopRecordButton.setEnabled(true);
+		this.startStopRecordButton.setText("Stop");
 	}
 
 	private void disableRecording() {
 		this.startStopRecordButton.setEnabled(false);
+		this.startStopRecordButton.setText("Start");
 	}
 
 	private void initActions() {
@@ -118,7 +133,6 @@ public class SwingInspectionRecorderPanel extends JPanel {
 		else {
 			disableRecording();
 		}
-		
 		this.openScenarioButton.addActionListener(new OpenScenarioListener(interpretedOutputArea));
 		this.startStopRecordButton.addActionListener(new StartStopRecordListener(recorder, startStopRecordButton));
 		this.saveScenarioButton.addActionListener(new  ShareScenarioListener(recorder, config, interpretedOutputArea, saveScenarioButton));
@@ -133,6 +147,26 @@ public class SwingInspectionRecorderPanel extends JPanel {
 				}else{
 					recorder.switchToWebRecordingMode();
 				}
+			}
+		});
+		this.openJar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.showOpenDialog(SwingInspectionRecorderPanel.this);
+				final File selectedFile = chooser.getSelectedFile();
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						SutRunnerAsExec runner = SutRunnerAsExec.FromLocalConfiguration(config);
+						try {
+							runner.launchJarInspection(selectedFile);
+						} catch (IllegalAccessException e) {
+							LOG.error(e.getMessage(), e);
+						}
+					}
+				}).start();
+				
 			}
 		});
 	}
