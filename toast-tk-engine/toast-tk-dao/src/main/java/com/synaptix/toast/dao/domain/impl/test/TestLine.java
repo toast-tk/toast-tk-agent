@@ -31,12 +31,12 @@ public class TestLine implements IRunnableTest {
 	}
 
 	public TestLine(
-		String test,
-		String expected,
-		String comment) {
+			String test,
+			String expected,
+			String comment) {
 		this.setTest(test);
 		this.setExpected(expected);
-		this.setTestCommentString(comment);
+		this.setComment(comment);
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class TestLine implements IRunnableTest {
 
 	@Override
 	public void setTestResult(
-		TestResult testResult) {
+			TestResult testResult) {
 		this.testResult = testResult;
 	}
 
@@ -55,8 +55,8 @@ public class TestLine implements IRunnableTest {
 	}
 
 	public void setTest(
-		String test) {
-		this.test = test;
+			String test) {
+		this.test = test != null ? test.trim() : null;
 	}
 
 	public String getExpected() {
@@ -64,8 +64,8 @@ public class TestLine implements IRunnableTest {
 	}
 
 	public void setExpected(
-		String expected) {
-		this.expected = expected;
+			String expected) {
+		this.expected = expected != null ? expected.trim() : null;
 	}
 
 	public String getComment() {
@@ -73,17 +73,8 @@ public class TestLine implements IRunnableTest {
 	}
 
 	public void setComment(
-		String comment) {
-		this.comment = comment;
-	}
-
-	public String getTestCommentString() {
-		return comment;
-	}
-
-	public void setTestCommentString(
-		String testCommentString) {
-		this.comment = testCommentString;
+			String comment) {
+		this.comment = comment != null ? comment.trim() : null;
 	}
 
 	/*

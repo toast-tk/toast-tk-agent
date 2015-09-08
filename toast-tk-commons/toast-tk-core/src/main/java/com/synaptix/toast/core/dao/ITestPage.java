@@ -10,7 +10,7 @@ public interface ITestPage extends ITaggable {
 
 	public List<IBlock> getBlocks();
 
-	public String getPageName();
+	public String getPath();
 
 	public LocalDateTime getStartDateTime();
 

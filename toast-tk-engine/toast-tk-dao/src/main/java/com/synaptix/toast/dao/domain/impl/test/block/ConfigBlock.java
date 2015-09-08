@@ -8,6 +8,7 @@ import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.dao.domain.impl.test.ComponentConfigLine;
 
 @Embedded
+@Deprecated
 public class ConfigBlock implements IBlock {
 
 	private String componentName;
@@ -47,5 +48,10 @@ public class ConfigBlock implements IBlock {
 	@Override
 	public String getBlockType() {
 		return "config";
+	}
+
+	@Override
+	public int getNumberOfLines() {
+		return 0;
 	}
 }

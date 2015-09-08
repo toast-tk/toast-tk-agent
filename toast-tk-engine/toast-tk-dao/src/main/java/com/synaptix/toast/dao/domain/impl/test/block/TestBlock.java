@@ -24,22 +24,19 @@ public class TestBlock implements IBlock {
 	}
 
 	public void setBlockLines(
-		List<TestLine> blockLines) {
+			List<TestLine> blockLines) {
 		this.blockLines = blockLines;
 	}
 
 	/**
 	 * Add a test line
-	 * 
-	 * @param cellsContent
-	 * @param comment
 	 */
 	public void addLine(
-		String test,
-		String expected,
-		String comment) {
+			String test,
+			String expected,
+			String comment) {
 		TestLine blockLine = new TestLine(test, expected, comment);
-		blockLine.setTestCommentString(comment);
+		blockLine.setComment(comment);
 		this.blockLines.add(blockLine);
 	}
 
@@ -48,12 +45,17 @@ public class TestBlock implements IBlock {
 	}
 
 	public void setFixtureName(
-		String fixtureName) {
-		this.fixtureName = fixtureName;
+			String fixtureName) {
+		this.fixtureName = fixtureName != null ? fixtureName.trim() : null;
 	}
 
 	@Override
 	public String getBlockType() {
-		return "testBlock";
+		return "test";
+	}
+
+	@Override
+	public int getNumberOfLines() {
+		return blockLines.size() + 1;
 	}
 }

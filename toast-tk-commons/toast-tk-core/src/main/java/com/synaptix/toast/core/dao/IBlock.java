@@ -2,5 +2,10 @@ package com.synaptix.toast.core.dao;
 
 public interface IBlock extends ITaggable {
 
-	public String getBlockType();
+	String getBlockType();
+
+	/**
+	 * Number of lines in the text file.
+	 */
+	int getNumberOfLines();
 }

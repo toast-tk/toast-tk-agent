@@ -91,7 +91,7 @@ public abstract class AbstractScenarioRunner extends AbstractRunner{
 		throws IllegalAccessException, ClassNotFoundException, IOException {
 		this.progressReporter.setReportCallBack(callback);
 		TestParser parser = new TestParser();
-		this.localRepositoryTestPage = parser.readString(repoWiki, "");
+		this.localRepositoryTestPage = parser.readString(repoWiki);
 		runScript(null, wikiScenario);
 	}
 
@@ -105,12 +105,12 @@ public abstract class AbstractScenarioRunner extends AbstractRunner{
 		String script)
 		throws IllegalAccessException, ClassNotFoundException, IOException {
 		TestParser testParser = new TestParser();
-		ITestPage result = file == null ? testParser.parseString(script) : testParser.parse(file);
+		ITestPage result = file == null ? testParser.readString(script) : testParser.parse(file.getPath());
 		TestRunner runner = new TestRunner(injector);
 		if(this.presetRepoFromWebApp) {
 			String repoWiki = RestUtils.downloadRepositoyAsWiki();
 			TestParser parser = new TestParser();
-			TestPage repoAsTestPageForConveniency = parser.readString(repoWiki, "");
+			TestPage repoAsTestPageForConveniency = parser.readString(repoWiki);
 			runner.run(repoAsTestPageForConveniency, false);
 		}
 		else if(this.localRepositoryTestPage != null) {
@@ -131,7 +131,7 @@ public abstract class AbstractScenarioRunner extends AbstractRunner{
 		if(resource != null) {
 			try {
 				if(!Boolean.getBoolean("java.awt.headless")) {
-					final String pageName = testPage.getPageName();
+					final String pageName = testPage.getPath();
 					this.htmlReportGenerator.writeFile(generatePageHtml, pageName, resource.getPath());
 					File htmlFile = new File(resource.getPath() + "\\" + pageName + ".html");
 					Desktop.getDesktop().browse(htmlFile.toURI());
