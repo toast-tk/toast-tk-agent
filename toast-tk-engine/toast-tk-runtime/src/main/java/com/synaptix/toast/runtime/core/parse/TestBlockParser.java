@@ -1,27 +1,26 @@
 package com.synaptix.toast.runtime.core.parse;
 
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.BlockType;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
 
 /**
  * Parse a test block.
  * <p>
  * A test block starts with a title, which defines the block type. Each test line starts with a pipe '|'
  * <p>
- *
+ * <p>
  * Example : <br>
- *
+ * <p>
  * || Scenario || Swing || <br>
  * | do something | <br>
  * | check something | <br>
  * | check something 2 | <br>
  * | do something 2 | <br>
- *
+ * <p>
  * Created by Nicolas Sauvage on 06/08/2015.
  */
 public class TestBlockParser implements IBlockParser {
@@ -31,7 +30,7 @@ public class TestBlockParser implements IBlockParser {
     }
 
     @Override
-    public IBlock digest(List<String> strings, String path)  {
+    public IBlock digest(List<String> strings, String path) {
         String firstLine = strings.get(0);
         if (!firstLine.startsWith("||")) {
             throw new IllegalArgumentException("Test block does not have a title: " + firstLine);
@@ -46,7 +45,7 @@ public class TestBlockParser implements IBlockParser {
         }
 
         // Add test lines to block
-        for (String string : strings.subList(1,strings.size())) {
+        for (String string : strings.subList(1, strings.size())) {
             if (!string.startsWith("|")) {
                 return testBlock;
             }
@@ -58,7 +57,15 @@ public class TestBlockParser implements IBlockParser {
     }
 
     @Override
-    public boolean isLineParsable(String line) {
-        return line != null && line.contains("|");
+    public boolean isFirstLineOfBlock(String line) {
+        String trimmedLine = line.trim();
+        if (trimmedLine.startsWith("||")) {
+            String[] split = StringUtils.split(trimmedLine,"||");
+
+            if (split.length >= 1 && split[0].contains("scenario")) {
+                return true;
+            }
+        }
+        return false;
     }
 }

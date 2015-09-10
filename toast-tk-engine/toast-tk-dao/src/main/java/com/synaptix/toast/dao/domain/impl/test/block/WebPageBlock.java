@@ -11,69 +11,69 @@ import java.util.List;
 @Embedded
 public class WebPageBlock implements IBlock {
 
-	private List<WebPageConfigLine> blockLines;
+    private List<WebPageConfigLine> blockLines;
 
-	private BlockLine columns;
+    private BlockLine columns;
 
-	private String fixtureName;
+    private String fixtureName;
 
-	private TestResult testResult;
+    private TestResult testResult;
 
-	/**
-	 * 
-	 */
-	public WebPageBlock() {
-		blockLines = new ArrayList<WebPageConfigLine>();
-	}
+    /**
+     *
+     */
+    public WebPageBlock() {
+        blockLines = new ArrayList<WebPageConfigLine>();
+    }
 
-	public List<WebPageConfigLine> getBlockLines() {
-		return blockLines;
-	}
+    public List<WebPageConfigLine> getBlockLines() {
+        return blockLines;
+    }
 
-	public void setBlockLines(
-		List<WebPageConfigLine> blockLines) {
-		this.blockLines = blockLines;
-	}
+    public void setBlockLines(
+            List<WebPageConfigLine> blockLines) {
+        this.blockLines = blockLines;
+    }
 
-	public BlockLine getColumns() {
-		return columns;
-	}
+    public BlockLine getColumns() {
+        return columns;
+    }
 
-	public void setColumns(
-		BlockLine columns) {
-		this.columns = columns;
-	}
+    public void setColumns(
+            BlockLine columns) {
+        this.columns = columns;
+    }
 
-	public String getFixtureName() {
-		return fixtureName;
-	}
+    public String getFixtureName() {
+        return fixtureName;
+    }
 
-	public void setFixtureName(
-		String fixtureName) {
-		this.fixtureName = fixtureName;
-	}
+    public void setFixtureName(
+            String fixtureName) {
+        this.fixtureName = fixtureName;
+    }
 
-	public void addLine(
-		WebPageConfigLine line) {
-		blockLines.add(line);
-	}
+    public void addLine(
+            WebPageConfigLine line) {
+        blockLines.add(line);
+    }
 
-	public TestResult getTestResult() {
-		return testResult;
-	}
+    public TestResult getTestResult() {
+        return testResult;
+    }
 
-	public void setTestResult(
-		TestResult testResult) {
-		this.testResult = testResult;
-	}
+    public void setTestResult(
+            TestResult testResult) {
+        this.testResult = testResult;
+    }
 
-	@Override
-	public String getBlockType() {
-		return "webPageBlock";
-	}
+    @Override
+    public String getBlockType() {
+        return "webPageBlock";
+    }
 
-	@Override
-	public int getNumberOfLines() {
-		return 0;
-	}
+    @Override
+    public int getNumberOfLines() {
+        return getBlockLines().size() + 2;
+    }
 }

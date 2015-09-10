@@ -1,18 +1,14 @@
 package com.synaptix.toast.runtime.parse;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.google.inject.Inject;
+import com.synaptix.toast.dao.domain.impl.test.block.BlockType;
+import com.synaptix.toast.runtime.core.parse.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.inject.Inject;
-import com.synaptix.toast.dao.domain.impl.test.block.BlockType;
-import com.synaptix.toast.runtime.core.parse.IBlockParser;
-import com.synaptix.toast.runtime.core.parse.IncludeBlockParser;
-import com.synaptix.toast.runtime.core.parse.TestBlockParser;
-import com.synaptix.toast.runtime.core.parse.VariableBlockParser;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BlockParserProvider {
 
@@ -25,6 +21,7 @@ public class BlockParserProvider {
 		map.put(BlockType.INCLUDE, new IncludeBlockParser());
 		map.put(BlockType.TEST, new TestBlockParser());
 		map.put(BlockType.VARIABLE, new VariableBlockParser());
+		map.put(BlockType.WEB_PAGE_SETUP, new WebPageSetupBlockParser());
 	}
 		
 	public IBlockParser getBlockParser(BlockType blockType) {

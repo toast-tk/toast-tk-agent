@@ -1,11 +1,11 @@
 package com.synaptix.toast.dao.domain.impl.test.block;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.github.jmkgreen.morphia.annotations.Embedded;
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.core.report.TestResult;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Embedded
 public class SetupBlock implements IBlock {
@@ -78,6 +78,6 @@ public class SetupBlock implements IBlock {
 
 	@Override
 	public int getNumberOfLines() {
-		return 0;
+		return blockLines.size() -1;
 	}
 }

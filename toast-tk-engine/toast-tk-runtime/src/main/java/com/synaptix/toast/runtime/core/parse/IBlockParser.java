@@ -24,5 +24,5 @@ public interface IBlockParser {
     /**
      * Return true if this string should be parsed with this parser.
      */
-    boolean isLineParsable(String line);
+    boolean isFirstLineOfBlock(String line);
 }

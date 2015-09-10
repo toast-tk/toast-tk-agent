@@ -1,13 +1,13 @@
 package com.synaptix.toast.runtime.core.parse;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.BlockLine;
 import com.synaptix.toast.dao.domain.impl.test.block.BlockType;
 import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Parser for vaiable blocks.
@@ -32,7 +32,7 @@ public class VariableBlockParser implements IBlockParser {
         for (Iterator<String> iterator = strings.iterator(); iterator.hasNext(); ) {
             String string = iterator.next();
 
-            if (!isLineParsable(string)) {
+            if (!isFirstLineOfBlock(string)) { // line is parsable
                 variableBlock.setNumber0fLines(parsedLines);
                 return variableBlock;
             }
@@ -74,7 +74,7 @@ public class VariableBlockParser implements IBlockParser {
     }
 
     @Override
-    public boolean isLineParsable(String line) {
+    public boolean isFirstLineOfBlock(String line) {
         return isVarLine(line) || isVarMultiLine(line);
     }
 
@@ -89,23 +89,4 @@ public class VariableBlockParser implements IBlockParser {
                 && line.contains(VARIABLE_ASSIGNATION_SEPARATOR)
                 && !line.contains("\"\"\"");
     }
-
 }
-
-
-//        if (varBlock == null) {
-//            varBlock = new TestPageBlock(BlockType.VARIABLE);
-//        }
-//        String[] split = line.split(VARIABLE_ASSIGNATION_SEPARATOR);
-//        String varName = split[0].trim();
-//        String varValue = "";
-//        do {
-//            line = br.readLine();
-//            if (!line.startsWith("\"\"\"")) {
-//                varValue += line.replace("\n", " ").replace("\t", " ") + " ";
-//            }
-//        }
-//        while (!line.trim().contains("\"\"\""));
-//        varBlock.addLine(Arrays.asList(varName, varValue));
-//        return varBlock;
-//    }

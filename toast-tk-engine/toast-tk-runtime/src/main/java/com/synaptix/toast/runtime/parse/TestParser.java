@@ -87,7 +87,7 @@ public class TestParser {
 		Collection<IBlockParser> allBlockParsers = blockParserProvider.getAllBlockParsers();
 
 		List<BlockType> blockTypes = allBlockParsers.stream()
-				.filter(iBlockParser -> iBlockParser.isLineParsable(line))
+				.filter(iBlockParser -> iBlockParser.isFirstLineOfBlock(line))
 				.map(IBlockParser::getBlockType)
 				.collect(Collectors.toList());
 

@@ -38,7 +38,7 @@ public class IncludeBlockParser implements IBlockParser {
 	}
 
 	@Override
-	public boolean isLineParsable(String line) {
+	public boolean isFirstLineOfBlock(String line) {
 		return line != null && line.startsWith("#include");
 	}
 }
