@@ -10,7 +10,7 @@ import com.google.inject.Singleton;
 import com.synaptix.toast.adapter.swing.guice.SwingActionAdapterPluginModule;
 import com.synaptix.toast.automation.driver.swing.RemoteSwingAgentDriverImpl;
 import com.synaptix.toast.core.guice.AbstractActionAdapterModule;
-import com.synaptix.toast.runtime.guice.EngineModule;
+import com.synaptix.toast.runtime.module.EngineModule;
 import com.synaptix.toast.swing.agent.guice.SwingModule;
 import com.synaptix.toast.swing.agent.runtime.DefaultSwingActionAdapter;
 

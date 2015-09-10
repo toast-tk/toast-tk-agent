@@ -42,6 +42,11 @@
 			<artifactId>toast-tk-dao</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.synaptix.toast</groupId>
+			<artifactId>toast-tk-runtime-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>
 

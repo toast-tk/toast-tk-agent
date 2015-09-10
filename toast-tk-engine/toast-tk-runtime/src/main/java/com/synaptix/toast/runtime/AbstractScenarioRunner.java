@@ -131,9 +131,9 @@ public abstract class AbstractScenarioRunner extends AbstractRunner{
 		if(resource != null) {
 			try {
 				if(!Boolean.getBoolean("java.awt.headless")) {
-					final String pageName = testPage.getPath();
+					final String pageName = testPage.getName();
 					this.htmlReportGenerator.writeFile(generatePageHtml, pageName, resource.getPath());
-					File htmlFile = new File(resource.getPath() + "\\" + pageName + ".html");
+					File htmlFile = new File(resource.getPath() + File.separatorChar + pageName + ".html");
 					Desktop.getDesktop().browse(htmlFile.toURI());
 				}
 			}

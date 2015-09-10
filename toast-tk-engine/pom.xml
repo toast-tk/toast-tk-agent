@@ -22,6 +22,7 @@
 		<module>toast-tk-dao</module>
 		<module>toast-tk-drivers</module>
 		<module>toast-tk-adapters</module>
+		<module>toast-tk-runtime-api</module>
 		<module>toast-tk-runtime</module>
 		<module>toast-tk-maven-plugin</module>
 	</modules>

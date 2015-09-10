@@ -21,7 +21,7 @@ import com.synaptix.toast.core.runtime.IActionItemRepository;
 import com.synaptix.toast.core.runtime.IFeedableWebPage;
 
 @ActionAdapter(name="default-web-driver", value= ActionAdapterKind.web)
-public class AbstractWebActionAdapter {
+public abstract class AbstractWebActionAdapter {
 
 	private final SynchronizedDriver driver;
 	private final IActionItemRepository repo;

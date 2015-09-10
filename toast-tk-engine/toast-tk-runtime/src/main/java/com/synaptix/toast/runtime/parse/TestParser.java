@@ -1,10 +1,9 @@
 package com.synaptix.toast.runtime.parse;
 
 import com.synaptix.toast.core.dao.IBlock;
+import com.synaptix.toast.dao.domain.BlockType;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
-import com.synaptix.toast.dao.domain.impl.test.block.BlockType;
 import com.synaptix.toast.dao.domain.impl.test.block.CommentBlock;
-import com.synaptix.toast.runtime.core.parse.IBlockParser;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;

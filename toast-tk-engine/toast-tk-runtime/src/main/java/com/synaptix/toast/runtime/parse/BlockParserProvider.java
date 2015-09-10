@@ -1,8 +1,11 @@
 package com.synaptix.toast.runtime.parse;
 
 import com.google.inject.Inject;
-import com.synaptix.toast.dao.domain.impl.test.block.BlockType;
-import com.synaptix.toast.runtime.core.parse.*;
+import com.synaptix.toast.dao.domain.BlockType;
+import com.synaptix.toast.runtime.core.parse.IncludeBlockParser;
+import com.synaptix.toast.runtime.core.parse.TestBlockParser;
+import com.synaptix.toast.runtime.core.parse.VariableBlockParser;
+import com.synaptix.toast.runtime.core.parse.WebPageSetupBlockParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

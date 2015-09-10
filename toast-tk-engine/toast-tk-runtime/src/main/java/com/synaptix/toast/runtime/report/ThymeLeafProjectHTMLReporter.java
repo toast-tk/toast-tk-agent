@@ -13,9 +13,11 @@ import org.thymeleaf.templateresolver.TemplateResolver;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.synaptix.toast.core.dao.IProject;
 import com.synaptix.toast.dao.domain.impl.report.Project;
 import com.synaptix.toast.dao.guice.MongoModule;
 import com.synaptix.toast.dao.service.dao.access.project.ProjectDaoService;
+import com.synaptix.toast.runtime.dao.DAOManager;
 
 /**
  * http://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html
@@ -54,21 +56,31 @@ public class ThymeLeafProjectHTMLReporter implements
 	}
 
 	@Override
-	public String generateProjectReportHtml(Project project,
-			List<Project> projectHistory) {
+	public String generateProjectReportHtml(String name) {
+		Project project = DAOManager.getInstance().getLastProjectByName(name);
+		List<Project> projectHistory = DAOManager.getInstance().getProjectHistory(project);
 		return generateHtmlReport(project, projectHistory);
 	}
 
 	@Override
-	public String generateProjectReportHtml(Project project,
-			List<Project> projectsHistory, String reportFolderPath) {
+	public String generateProjectReportHtml(IProject iProject) {
+		Project project = (Project) iProject;
+		List<Project> projectHistory = DAOManager.getInstance().getProjectHistory(project);
+		return generateHtmlReport(project, projectHistory);
+	}
+
+	@Override
+	public String generateProjectReportHtml(IProject iProject, String reportFolderPath) {
 		ThymeLeafProjectHTMLReporter reporter = new ThymeLeafProjectHTMLReporter();
+		Project project = (Project) iProject;
+		List<Project> projectHistory = DAOManager.getInstance().getProjectHistory(project);
 		String generateHtmlReport = reporter.generateHtmlReport(project,
-				projectsHistory);
+				projectHistory);
 		reporter.writeFile(generateHtmlReport, project.getName(),
 				reportFolderPath);
 		return generateHtmlReport;
 	}
+	
 
 	public static void main(String[] args) {
 		Injector in = Guice.createInjector(new MongoModule("10.23.252.131",
