@@ -1,5 +1,15 @@
 package com.synaptix.toast.runtime.parse;
 
+import com.synaptix.toast.core.dao.IBlock;
+import com.synaptix.toast.dao.domain.impl.test.TestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.BlockType;
+import com.synaptix.toast.dao.domain.impl.test.block.CommentBlock;
+import com.synaptix.toast.runtime.core.parse.IBlockParser;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,17 +19,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import com.synaptix.toast.core.dao.IBlock;
-import com.synaptix.toast.dao.domain.impl.test.TestPage;
-import com.synaptix.toast.dao.domain.impl.test.block.BlockType;
-import com.synaptix.toast.dao.domain.impl.test.block.CommentBlock;
-import com.synaptix.toast.runtime.core.parse.IBlockParser;
 
 public class TestParser {
 
@@ -42,8 +41,7 @@ public class TestParser {
 	}
 
 	private TestPage buildTestPage(List<String> list, String path) throws IllegalArgumentException {
-		TestPage testPage = new TestPage();
-		testPage.setPath(path);
+		TestPage testPage = new TestPage(path);
 
 		while (CollectionUtils.isNotEmpty(list)) {
 			IBlock block = readBlock(list, path);

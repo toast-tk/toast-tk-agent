@@ -1,15 +1,14 @@
 package com.synaptix.toast.dao.domain.impl.test.block;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.github.jmkgreen.morphia.annotations.Embedded;
 import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.dao.domain.impl.test.WebPageConfigLine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Embedded
-@Deprecated
 public class WebPageBlock implements IBlock {
 
 	private List<WebPageConfigLine> blockLines;
