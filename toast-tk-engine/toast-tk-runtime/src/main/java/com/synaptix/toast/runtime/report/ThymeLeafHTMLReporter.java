@@ -14,6 +14,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 
 import com.synaptix.toast.core.dao.ITestPage;
+import com.synaptix.toast.dao.domain.impl.test.TestPage;
 
 /**
  * http://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html
@@ -47,7 +48,7 @@ public class ThymeLeafHTMLReporter implements IHTMLReportGenerator {
 		templateEngine.setTemplateResolver(templateResolver);
 		Locale locale = LocaleUtils.toLocale("fr");
 		final Context ctx = new Context(locale);
-		ctx.setVariable("test", test);
+		ctx.setVariable("test", (TestPage)test);
 		String htmlOutput = templateEngine.process("test_report_template.html", ctx);
 		return htmlOutput;
 	}

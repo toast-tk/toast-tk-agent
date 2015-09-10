@@ -75,7 +75,7 @@ h3 {
 </head>
 <body class="container">
 	<div class="summary">
-		<span th:text="${test.name}"> Test
+		<span th:text="${test.getPath()}"> Test
 			TNR_RUSA_PREV_v2015-05-19.script </span> <br /> Effectué le <span
 			th:text="${test.startDateTime}"> 2015-06-10T13:55:18.433 </span> <br />
 		Temps d'execution <span th:text="${test.executionTime}"> 0 </span> ms<br />
@@ -84,7 +84,7 @@ h3 {
 		</span><br /> Success: <span th:text="${test.testSuccessNumber}"> 0 </span>
 	</div>
 	<br />
-	<div th:each="block : ${test.blocks}">
+	<div th:each="block : ${test.getBlocks()}">
 		<div th:switch="${block.getBlockType()}">
 			<div class="test" th:case="'testPageBlock'">
 				<div class="summary">
@@ -111,7 +111,7 @@ h3 {
 					#Connexion<br />
 				</p>
 			</div>
-			<div class="test" th:case="'testBlock'">
+			<div class="test" th:case="'test'">
 				<table class="table table-bordered table-hover">
 					<thead>
 						<tr>
@@ -139,7 +139,7 @@ h3 {
 							th:text="${@com.synaptix.toast.runtime.report.TemplateHelper@formatStringToHtml(line)}">
 							true</td>
 						<td><span
-							th:text="${line.testCommentString} == null ? '&nbsp;' : ${line.testCommentString}">&nbsp;</span>
+							th:text="${line.comment} == null ? '&nbsp;' : ${line.comment}">&nbsp;</span>
 							<span class="btn btn-link btn-xs"
 							th:if="${@com.synaptix.toast.runtime.report.TemplateHelper@hasScreenShot(line.testResult)} == true"
 							th:onclick="'javascript:displayImage(\''+${@com.synaptix.toast.runtime.report.TemplateHelper@getResultScreenshotAsBase64(line.testResult)}+'\');'">détails</span>
