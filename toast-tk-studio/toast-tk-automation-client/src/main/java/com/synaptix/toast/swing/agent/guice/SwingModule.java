@@ -32,7 +32,7 @@ public class SwingModule extends AbstractModule {
 		bind(SwingInspectionRecorderPanel.class).in(Singleton.class);
 		bind(ISwingAutomationClient.class).to(StudioRemoteSwingAgentDriverImpl.class).in(Singleton.class);
 		bind(MongoRepositoryCacheWrapper.class).in(Singleton.class);
-		bind(EventBus.class).annotatedWith(EngineEventBus.class).in(Singleton.class);
+		bind(EventBus.class).annotatedWith(EngineEventBus.class).to(EventBus.class).in(Singleton.class);
 	}
 
 }

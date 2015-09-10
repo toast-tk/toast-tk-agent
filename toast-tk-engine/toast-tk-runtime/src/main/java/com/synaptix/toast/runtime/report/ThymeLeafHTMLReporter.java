@@ -1,7 +1,10 @@
 package com.synaptix.toast.runtime.report;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.util.Locale;
 
 import org.apache.commons.lang.LocaleUtils;
@@ -24,7 +27,7 @@ public class ThymeLeafHTMLReporter implements IHTMLReportGenerator {
 		String pageName,
 		String reportFolderPath) {
 		try {
-			FileWriter fstream = new FileWriter(reportFolderPath + "\\" + pageName + ".html");
+			FileWriter fstream = new FileWriter(reportFolderPath + File.separatorChar + pageName + ".html");
 			BufferedWriter out = new BufferedWriter(fstream);
 			out.write(report);
 			out.close();

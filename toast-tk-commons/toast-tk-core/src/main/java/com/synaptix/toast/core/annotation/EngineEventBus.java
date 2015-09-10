@@ -5,10 +5,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Retention(RetentionPolicy.SOURCE)
+import com.google.inject.BindingAnnotation;
+
+@BindingAnnotation
 @Target({
 		ElementType.PARAMETER
 })
+@Retention(RetentionPolicy.RUNTIME)
 public @interface EngineEventBus {
 
 }

@@ -5,9 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.synaptix.toast.core.dao.IBlock;
+import com.synaptix.toast.dao.domain.BlockType;
 import com.synaptix.toast.dao.domain.impl.test.block.BlockLine;
-import com.synaptix.toast.dao.domain.impl.test.block.BlockType;
 import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
+import com.synaptix.toast.runtime.parse.IBlockParser;
 
 /**
  * Parser for vaiable blocks.

@@ -1,5 +1,7 @@
 package com.synaptix.toast.constant;
 
+import java.io.File;
+
 public class Property {
 
 	public static final String DEFAULT_WEBAPP_ADDR_PORT = "http://localhost:9000";
@@ -22,15 +24,15 @@ public class Property {
 
 	public static final String TOAST_HOME_DIR_NAME = ".toast";
 
-	public static final String TOAST_HOME_DIR = System.getProperty("user.home") + "/" + TOAST_HOME_DIR_NAME + "/";
+	public static final String TOAST_HOME_DIR = System.getProperty("user.home") + File.separatorChar + TOAST_HOME_DIR_NAME + File.separatorChar;
 
-	public static final String TOAST_PLUGIN_DIR = System.getProperty("user.home") + "\\" + TOAST_HOME_DIR_NAME
-		+ "\\plugins";
+	public static final String TOAST_PLUGIN_DIR = System.getProperty("user.home") + File.separatorChar + TOAST_HOME_DIR_NAME
+		+ File.separatorChar + "plugins";
 
-	public static final String TOAST_RUNTIME_DIR = System.getProperty("user.home") + "\\" + TOAST_HOME_DIR_NAME
-		+ "\\runtime";
+	public static final String TOAST_RUNTIME_DIR = System.getProperty("user.home") + File.separatorChar + TOAST_HOME_DIR_NAME
+		+ File.separatorChar + "runtime";
 
-	public static final String TOAST_LOG_DIR = System.getProperty("user.home") + "\\" + TOAST_HOME_DIR_NAME + "\\log";;
+	public static final String TOAST_LOG_DIR = System.getProperty("user.home") + File.separatorChar + TOAST_HOME_DIR_NAME + File.separatorChar +"log";;
 
 	public static final String TOAST_PROPERTIES_FILE = Property.TOAST_HOME_DIR + "toast.properties";
 

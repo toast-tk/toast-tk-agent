@@ -16,10 +16,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.synaptix.toast.core.dao.IBlock;
+import com.synaptix.toast.dao.domain.BlockType;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
-import com.synaptix.toast.dao.domain.impl.test.block.BlockType;
 import com.synaptix.toast.dao.domain.impl.test.block.CommentBlock;
-import com.synaptix.toast.runtime.core.parse.IBlockParser;
 
 public class TestParser {
 

@@ -1,4 +1,4 @@
-package com.synaptix.toast.runtime.guice;
+package com.synaptix.toast.runtime.module;
 
 import com.google.common.eventbus.EventBus;
 import com.google.inject.AbstractModule;
@@ -13,7 +13,7 @@ public class EngineModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		bind(EventBus.class).annotatedWith(EngineEventBus.class).in(Singleton.class);
+		bind(EventBus.class).annotatedWith(EngineEventBus.class).to(EventBus.class).in(Singleton.class);
 		bind(IActionItemRepository.class).to(ActionItemRepository.class).in(Singleton.class);
 		bind(IHTMLReportGenerator.class).to(ThymeLeafHTMLReporter.class);
 		install(new RunnerModule());

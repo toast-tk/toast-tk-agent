@@ -5,8 +5,9 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.synaptix.toast.core.dao.IBlock;
-import com.synaptix.toast.dao.domain.impl.test.block.BlockType;
+import com.synaptix.toast.dao.domain.BlockType;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
+import com.synaptix.toast.runtime.parse.IBlockParser;
 
 /**
  * Parse a test block.
