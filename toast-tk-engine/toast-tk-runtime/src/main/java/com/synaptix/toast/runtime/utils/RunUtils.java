@@ -1,5 +1,8 @@
 package com.synaptix.toast.runtime.utils;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +10,10 @@ import com.synaptix.toast.core.dao.ITestPage;
 
 public class RunUtils {
 
+	public static String readFileAsString(String path) throws IOException{
+		return new String(Files.readAllBytes(Paths.get(path)));
+	}
+	
 	public static void printResult(
 		List<ITestPage> testPages) {
 		int totalErrors = 0;

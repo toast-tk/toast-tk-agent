@@ -41,4 +41,9 @@ public class CommentBlock implements IBlock {
 	public int getNumberOfLines() {
 		return lines.size();
 	}
+
+	@Override
+	public int getOffset() {
+		return 0;
+	}
 }

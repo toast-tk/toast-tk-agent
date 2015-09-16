@@ -64,4 +64,9 @@ public class InsertBlock implements IBlock {
 	public int getNumberOfLines() {
 		return numberOfLines;
 	}
+
+	@Override
+	public int getOffset() {
+		return 0;
+	}
 }

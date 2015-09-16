@@ -80,4 +80,9 @@ public class SetupBlock implements IBlock {
 	public int getNumberOfLines() {
 		return blockLines.size() -1;
 	}
+
+	@Override
+	public int getOffset() {
+		return 0;
+	}
 }

@@ -53,7 +53,7 @@ public class SwingWidgetActionHandlerFactory {
 		Component component) {
 		if(map.get(component.getClass()) == null){
 			for(Class<? extends Component> c: map.keySet()){
-				if(c.isInstance(component)){
+				if(c.isInstance(component) || c.isAssignableFrom(component.getClass())){
 					return map.get(c);
 				}
 			}

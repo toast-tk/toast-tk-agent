@@ -74,6 +74,11 @@ public class WebPageBlock implements IBlock {
 
     @Override
     public int getNumberOfLines() {
-        return getBlockLines().size() + 2;
+        return getBlockLines().size();
     }
+
+	@Override
+	public int getOffset() {
+		return 2;
+	}
 }

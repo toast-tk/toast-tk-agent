@@ -56,4 +56,9 @@ public class VariableBlock implements IBlock {
 	public void setNumber0fLines(int number0fLines){
 		this.number0fLines = number0fLines;
 	}
+
+	@Override
+	public int getOffset() {
+		return 0;
+	}
 }

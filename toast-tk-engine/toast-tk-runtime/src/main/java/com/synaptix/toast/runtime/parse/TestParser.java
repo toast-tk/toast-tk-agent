@@ -4,6 +4,7 @@ import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.dao.domain.BlockType;
 import com.synaptix.toast.dao.domain.impl.test.TestPage;
 import com.synaptix.toast.dao.domain.impl.test.block.CommentBlock;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -45,7 +46,7 @@ public class TestParser {
 		while (CollectionUtils.isNotEmpty(list)) {
 			IBlock block = readBlock(list, path);
 			testPage.addBlock(block);
-			list = list.subList(block.getNumberOfLines(), list.size());
+			list = list.subList(block.getNumberOfLines() + block.getOffset(), list.size()); //FIXME index offset needs to be revised, check test case 5
 		}
 
 		return testPage;
@@ -65,15 +66,19 @@ public class TestParser {
 		}
 	}
 
-	private IBlock digestCommentBlock(List<String> strings) {
+	private IBlock digestCommentBlock(List<String> lines) {
 		CommentBlock commentBlock = new CommentBlock();
-		for (String string : strings) {
-			if (getBlockType(string) != BlockType.COMMENT) {
+		for (String line : lines) {
+			if (getBlockType(line) != BlockType.COMMENT) {
 				return commentBlock;
 			}
-			commentBlock.addLine(string);
+			commentBlock.addLine(line);
 		}
 		return commentBlock;
+	}
+
+	private boolean isValidCommentBlockLine(String line) {
+		return !StringUtils.isEmpty(line) && !line.trim().startsWith("||") && !line.trim().startsWith("|");
 	}
 
 	public TestPage readString(String string) {

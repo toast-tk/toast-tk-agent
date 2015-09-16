@@ -67,18 +67,7 @@ public class DownloadScriptsMojo extends AbstractMojo {
 			Client httpClient = Client.create();
 			Set<Driver> drivers = downloadScenarii(host + "/wikiScenarii", httpClient);
 			StringBuilder builder = new StringBuilder();
-			builder.append("{ \"settings\" : [");
-			for(Driver driver : drivers) {
-				List<Sentence> sentences = new ArrayList<DownloadScriptsMojo.Sentence>();
-				List<Sentence> dynamicSentences = downloadDynamicSentences(driver, httpClient);
-				if(includePatternSentences) {
-					List<Sentence> staticSentences = downloadSentences(driver, httpClient);
-					sentences.addAll(staticSentences);
-				}
-				sentences.addAll(dynamicSentences);
-				builder.append(writeDriverJson(driver, sentences)).append(",");
-			}
-			builder.append("]}");
+			//collectSentences(httpClient, drivers, builder);
 			try {
 				// common driver file
 				File driverJson = new File(outputResourceDirectory, settingFileName);
@@ -98,6 +87,22 @@ public class DownloadScriptsMojo extends AbstractMojo {
 			getLog().error("Toast Tk Maven Plugin - Update cancelled !");
 			getLog().error(e);
 		}
+	}
+
+	private void collectSentences(Client httpClient, Set<Driver> drivers,
+			StringBuilder builder) {
+		builder.append("{ \"settings\" : [");
+		for(Driver driver : drivers) {
+			List<Sentence> sentences = new ArrayList<DownloadScriptsMojo.Sentence>();
+			List<Sentence> dynamicSentences = downloadDynamicSentences(driver, httpClient);
+			if(includePatternSentences) {
+				List<Sentence> staticSentences = downloadSentences(driver, httpClient);
+				sentences.addAll(staticSentences);
+			}
+			sentences.addAll(dynamicSentences);
+			builder.append(writeDriverJson(driver, sentences)).append(",");
+		}
+		builder.append("]}");
 	}
 
 	/**
