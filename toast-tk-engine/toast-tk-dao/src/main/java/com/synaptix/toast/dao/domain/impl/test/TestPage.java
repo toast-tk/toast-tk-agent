@@ -261,4 +261,9 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
     public void setPageName(String pageName) {
         this.pageName = pageName;
     }
+
+	@Override
+	public int getOffset() {
+		return 0;
+	}
 }

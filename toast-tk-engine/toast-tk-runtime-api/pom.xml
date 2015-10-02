@@ -20,4 +20,5 @@
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
+	<name>Toast Toolkit - Action Runtime Api</name>
 </project>

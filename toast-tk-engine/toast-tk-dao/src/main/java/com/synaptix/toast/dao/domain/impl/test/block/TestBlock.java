@@ -56,6 +56,11 @@ public class TestBlock implements IBlock {
 
 	@Override
 	public int getNumberOfLines() {
-		return blockLines.size() + 1;
+		return blockLines.size();
+	}
+
+	@Override
+	public int getOffset() {
+		return 1;
 	}
 }

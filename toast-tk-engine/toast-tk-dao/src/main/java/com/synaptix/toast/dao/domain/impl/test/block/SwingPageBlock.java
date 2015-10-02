@@ -71,6 +71,11 @@ public class SwingPageBlock implements IBlock {
 
 	@Override
 	public int getNumberOfLines() {
-		return 0;
+		return blockLines.size();
+	}
+
+	@Override
+	public int getOffset() {
+		return 2;
 	}
 }

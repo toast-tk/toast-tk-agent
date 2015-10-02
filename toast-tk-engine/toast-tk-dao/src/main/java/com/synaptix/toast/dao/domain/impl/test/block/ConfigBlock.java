@@ -54,4 +54,9 @@ public class ConfigBlock implements IBlock {
 	public int getNumberOfLines() {
 		return 0;
 	}
+
+	@Override
+	public int getOffset() {
+		return 0;
+	}
 }

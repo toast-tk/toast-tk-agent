@@ -8,4 +8,9 @@ public interface IBlock extends ITaggable {
 	 * Number of lines in the text file.
 	 */
 	int getNumberOfLines();
+
+	/**
+	 * Number of lines to shift the parser reading.
+	 */
+	int getOffset();
 }
