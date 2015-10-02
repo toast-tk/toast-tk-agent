@@ -53,7 +53,7 @@
 		<common-lang.version>2.3</common-lang.version>
 		<common-io.version>2.4</common-io.version>
 		<commons-beanutils.version>1.8.3</commons-beanutils.version>
-		<guava.version>18.0</guava.version>
+		<guava.version>14.0</guava.version>
 		<junit.version>4.11</junit.version>
 	</properties>
 	<developers>
