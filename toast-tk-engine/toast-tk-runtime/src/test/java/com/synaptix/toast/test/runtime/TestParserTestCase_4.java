@@ -18,7 +18,7 @@ public class TestParserTestCase_4 {
         ClassLoader classLoader = getClass().getClassLoader();
         URL testFileUrl = classLoader.getResource("test_file_1.txt");
         Assert.assertNotNull(testFileUrl);
-        String path = testFileUrl.getPath().substring(1);
+        String path = testFileUrl.getPath();
         System.out.println("path = " + path);
         TestPage testPage = null;
         try {
