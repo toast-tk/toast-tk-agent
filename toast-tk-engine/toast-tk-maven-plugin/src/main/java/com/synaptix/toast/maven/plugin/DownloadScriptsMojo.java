@@ -29,7 +29,7 @@ import com.sun.jersey.api.client.Client;
 import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.rest.RestUtils;
 
-@Mojo(name = "generate", defaultPhase = LifecyclePhase.VALIDATE, requiresDependencyResolution = ResolutionScope.COMPILE)
+@Mojo(name = "generate", defaultPhase = LifecyclePhase.GENERATE_RESOURCES, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class DownloadScriptsMojo extends AbstractMojo {
 
 	@Parameter(defaultValue = "${basedir}/src/main/resources/settings", required = true)

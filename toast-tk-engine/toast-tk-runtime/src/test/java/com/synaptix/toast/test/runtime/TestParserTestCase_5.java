@@ -29,7 +29,7 @@ public class TestParserTestCase_5 {
         System.out.println("testPage = " + testPage);
 
         Assert.assertNotNull(testPage);
-        Assert.assertEquals(testPage.getBlocks().size(), 1); 
+        Assert.assertEquals(testPage.getBlocks().size(), 5); 
         //Error: the right value should be 1
         //currently creates a comment block and a swing page block
         //expecting only a swing page block

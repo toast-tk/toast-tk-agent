@@ -92,7 +92,8 @@ public class SwingTableElement extends SwingAutoElement implements HasClickActio
 		String value)
 		throws TimeoutException, ErrorResultReceivedException {
 		exists();
-		frontEndDriver.process(new TableCommandRequest.TableCommandRequestBuilder(null)
+		final String requestId = UUID.randomUUID().toString();
+		frontEndDriver.process(new TableCommandRequest.TableCommandRequestBuilder(requestId)
 			.doubleClick(column, value).with(wrappedElement.getLocator())
 			.ofType(wrappedElement.getType().name()).build());
 		return null;
@@ -102,11 +103,12 @@ public class SwingTableElement extends SwingAutoElement implements HasClickActio
 		String menu,
 		String column,
 		String value)
-		throws TimeoutException, ErrorResultReceivedException {
+		throws TimeoutException, ErrorResultReceivedException, IllegalAccessException {
 		exists();
-		frontEndDriver.process(new TableCommandRequest.TableCommandRequestBuilder(null)
+		final String requestId = UUID.randomUUID().toString();
+		CommandRequest request = new TableCommandRequest.TableCommandRequestBuilder(requestId)
 			.selectMenu(menu, column, value).with(wrappedElement.getLocator())
-			.ofType(wrappedElement.getType().name()).build());
-		return null;
+			.ofType(wrappedElement.getType().name()).build();
+		return frontEndDriver.processAndWaitForValue(request);
 	}
 }

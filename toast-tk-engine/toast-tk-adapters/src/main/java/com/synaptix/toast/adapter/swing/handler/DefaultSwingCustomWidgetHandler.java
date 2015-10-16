@@ -37,7 +37,7 @@ public class DefaultSwingCustomWidgetHandler implements ICustomRequestHandler {
 		String item,
 		String itemType,
 		Component value) {
-		return null;
+		return value;
 	}
 
 	@Override

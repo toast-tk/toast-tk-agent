@@ -51,19 +51,33 @@ public class SwingWidgetActionHandlerFactory {
 
 	public ISwingwidgetActionHandler getHandler(
 		Component component) {
-		if(map.get(component.getClass()) == null){
-			for(Class<? extends Component> c: map.keySet()){
-				if(c.isInstance(component) || c.isAssignableFrom(component.getClass())){
-					return map.get(c);
-				}
+		for(Map.Entry<Class<? extends Component>, ISwingwidgetActionHandler> entry: map.entrySet()){
+			/**entry.getKey().isInstance(component) |*/
+			if(entry.getKey().equals(component.getClass())){
+				return entry.getValue();
+			}
+			if(entry.getKey().isAssignableFrom(component.getClass())){
+				return entry.getValue();
 			}
 		}
-		return map.get(component.getClass());
+		return null;
 	}
 
 	public boolean hasHandlerFor(
-		Class<? extends Component> component) {
-		return map.containsKey(component.getClass());
+		Class<? extends Component> componentClass) {
+		if(map.get(componentClass) != null){
+			return true;
+		}
+		for(Map.Entry<Class<? extends Component>, ?> entry: map.entrySet()){
+			if(entry.getKey().isAssignableFrom(componentClass)){
+				return true;
+			}
+		}
+		return false;
 	}
+//	
+//	private isSupportedComponentClass(Class<? extends Component> componentClass){
+//		
+//	}
 	
 }

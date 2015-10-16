@@ -23,6 +23,10 @@ public final class FestRobotInstance {
 		this.rbt = BasicRobot.robotWithCurrentAwtHierarchy();
 		rbt.cleanUpWithoutDisposingWindows();
 	}
+	
+	public static void runOutsideEDT(Runnable runnable){
+		new Thread(runnable).start();
+	}
 
 	public void doubleClick(
 		final Point where) {
