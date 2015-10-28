@@ -1,8 +1,9 @@
 package com.synaptix.toast.dao.domain.impl.test.block;
 
 import com.github.jmkgreen.morphia.annotations.Embedded;
-import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.core.report.TestResult;
+import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.line.BlockLine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,13 +77,9 @@ public class SetupBlock implements IBlock {
 		return "setup";
 	}
 
-	@Override
-	public int getNumberOfLines() {
-		return blockLines.size() -1;
-	}
 
 	@Override
-	public int getOffset() {
+	public int getHeaderSize() {
 		return 0;
 	}
 }

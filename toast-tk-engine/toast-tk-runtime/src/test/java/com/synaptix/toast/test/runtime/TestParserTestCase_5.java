@@ -1,12 +1,13 @@
 package com.synaptix.toast.test.runtime;
 
-import com.synaptix.toast.dao.domain.impl.test.TestPage;
-import com.synaptix.toast.runtime.parse.TestParser;
+import java.io.IOException;
+import java.net.URL;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.net.URL;
+import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
+import com.synaptix.toast.runtime.parse.TestParser;
 
 /**
  * Test swing page files
@@ -20,7 +21,7 @@ public class TestParserTestCase_5 {
         Assert.assertNotNull(testFileUrl);
         String path = testFileUrl.getPath();
         System.out.println("path = " + path);
-        TestPage testPage = null;
+        ITestPage testPage = null;
         try {
             testPage = new TestParser().parse(path);
         } catch (IOException e) {

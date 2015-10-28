@@ -12,10 +12,10 @@ import com.github.jmkgreen.morphia.annotations.Index;
 import com.github.jmkgreen.morphia.annotations.Indexes;
 import com.github.jmkgreen.morphia.annotations.PrePersist;
 import com.github.jmkgreen.morphia.annotations.Reference;
-import com.synaptix.toast.core.dao.ICampaign;
-import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.dao.domain.impl.common.BasicTaggableMongoBean;
-import com.synaptix.toast.dao.domain.impl.test.TestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.ICampaign;
+import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.TestPage;
 
 @Entity(value = "report.campaigns")
 @Indexes({

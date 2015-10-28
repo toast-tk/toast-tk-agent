@@ -28,7 +28,7 @@ Creation date: 10 juin 2015
 */
 package com.synaptix.toast.runtime.report;
 
-import com.synaptix.toast.core.dao.ITestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
 
 public interface IHTMLReportGenerator {
 

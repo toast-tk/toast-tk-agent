@@ -1,4 +1,4 @@
-package com.synaptix.toast.dao.domain.impl.test.block;
+package com.synaptix.toast.dao.domain.impl.test.block.line;
 
 import java.util.List;
 
@@ -27,20 +27,6 @@ public class BlockLine {
 	public void setCells(
 		List<String> cells) {
 		this.cells = cells;
-	}
-
-	/**
-	 * Returns the cell at <code>index</code>, returns null if index is out of bounds.
-	 * 
-	 * @param index
-	 * @return
-	 */
-	public String getCellAt(
-		int index) {
-		if(index < 0 || index >= cells.size()) {
-			return null;
-		}
-		return cells.get(index);
 	}
 
 	public TestResult getTestResult() {

@@ -6,8 +6,8 @@ import com.github.jmkgreen.morphia.query.Query;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.name.Named;
-import com.synaptix.toast.core.dao.ITestPage;
-import com.synaptix.toast.dao.domain.impl.test.TestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.TestPage;
 import com.synaptix.toast.dao.service.dao.common.AbstractMongoDaoService;
 import com.synaptix.toast.dao.service.dao.common.CommonMongoDaoService;
 import com.synaptix.toast.dao.service.init.DbStarter;
@@ -31,7 +31,7 @@ public class TestPageDaoService extends AbstractMongoDaoService<TestPage> {
 	public ITestPage getByName(
 		String name) {
 		Query<TestPage> query = createQuery();
-		query.field("pageName").equals(name);
+		query.field("name").equals(name);
 		return query.get();
 	}
 

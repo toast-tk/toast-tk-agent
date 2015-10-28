@@ -1,4 +1,4 @@
-package com.synaptix.toast.dao.domain.impl.test;
+package com.synaptix.toast.dao.domain.impl.test.block.line;
 
 import com.github.jmkgreen.morphia.annotations.Embedded;
 import com.github.jmkgreen.morphia.annotations.Entity;
@@ -59,9 +59,6 @@ public class ComponentConfigLine {
 		this.componentAssociation = componentAssociation;
 	}
 
-	/**
-	 * @param result
-	 */
 	public void setResult(
 		TestResult result) {
 		this.result = result;

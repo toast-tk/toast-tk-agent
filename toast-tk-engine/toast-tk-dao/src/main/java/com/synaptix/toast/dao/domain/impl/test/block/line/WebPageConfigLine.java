@@ -1,4 +1,4 @@
-package com.synaptix.toast.dao.domain.impl.test;
+package com.synaptix.toast.dao.domain.impl.test.block.line;
 
 import com.github.jmkgreen.morphia.annotations.Embedded;
 import com.github.jmkgreen.morphia.annotations.Entity;
@@ -6,7 +6,7 @@ import com.synaptix.toast.core.report.TestResult;
 
 @Entity(value = "test", noClassnameStored = true)
 @Embedded
-public class WebPageConfigLine {
+public class WebPageConfigLine{
 
 	private String elementName;
 
@@ -16,7 +16,7 @@ public class WebPageConfigLine {
 
 	private String locator;
 
-	private Integer position = 0;
+	private int position;
 
 	private TestResult result;
 

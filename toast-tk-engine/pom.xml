@@ -26,5 +26,6 @@
 		<module>toast-tk-runtime-api</module>
 		<module>toast-tk-runtime</module>
 		<module>toast-tk-maven-plugin</module>
+		<module>toast-tk-dao-api</module>
 	</modules>
 </project>

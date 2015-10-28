@@ -5,11 +5,11 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Injector;
 import com.synaptix.toast.core.annotation.craft.FixMe;
-import com.synaptix.toast.core.dao.ICampaign;
-import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.rest.RestUtils;
 import com.synaptix.toast.dao.domain.impl.report.Project;
-import com.synaptix.toast.dao.domain.impl.test.TestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.ICampaign;
+import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.TestPage;
 import com.synaptix.toast.runtime.dao.DAOManager;
 import com.synaptix.toast.runtime.parse.TestParser;
 
@@ -77,7 +77,7 @@ public abstract class AbstractProjectRunner extends AbstractRunner {
 			}
 			String repoWiki = RestUtils.downloadRepositoyAsWiki();
 			TestParser parser = new TestParser();
-			TestPage repoAsTestPageForConveniency = parser.readString(repoWiki);
+			ITestPage repoAsTestPageForConveniency = parser.readString(repoWiki, null);
 			runner.run(repoAsTestPageForConveniency, false);
 		}
 		execute(project, runner);

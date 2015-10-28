@@ -1,17 +1,8 @@
 package com.synaptix.toast.runtime.parse;
 
-import com.synaptix.toast.core.dao.IBlock;
-import com.synaptix.toast.dao.domain.BlockType;
-import com.synaptix.toast.dao.domain.impl.test.TestPage;
-import com.synaptix.toast.dao.domain.impl.test.block.CommentBlock;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +10,17 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.synaptix.toast.dao.domain.BlockType;
+import com.synaptix.toast.dao.domain.DaoBeanFactory;
+import com.synaptix.toast.dao.domain.impl.test.block.CommentBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
 
 public class TestParser {
 
@@ -31,22 +33,26 @@ public class TestParser {
 		blockParserProvider = new BlockParserProvider();
 	}
 
-	public TestPage parse(String path) throws IOException, IllegalArgumentException {
-		Stream<String> lines = Files.lines(Paths.get(path));
+	public ITestPage parse(String path) throws IOException, IllegalArgumentException {
+		Path p = Paths.get(path);
+		Stream<String> lines = Files.lines(p);
 		List<String> list = lines.collect(Collectors.toList());
 		if (list.isEmpty()) {
 			throw new IllegalArgumentException("File empty at path: " + path);
 		}
-		return buildTestPage(list, path);
+		return buildTestPage(list, p.getFileName().toString(), path);
 	}
 
-	private TestPage buildTestPage(List<String> list, String path) throws IllegalArgumentException {
-		TestPage testPage = new TestPage(path);
-
-		while (CollectionUtils.isNotEmpty(list)) {
-			IBlock block = readBlock(list, path);
+	private ITestPage buildTestPage(List<String> lines, String pageName, String filePath) throws IllegalArgumentException {
+        LOG.info("Starting test page parsing: {}", pageName);
+        ITestPage testPage = DaoBeanFactory.getInstance().getBean(ITestPage.class);
+        testPage.setName(pageName);
+		while (CollectionUtils.isNotEmpty(lines)) {
+			IBlock block = readBlock(lines, filePath);
 			testPage.addBlock(block);
-			list = list.subList(block.getNumberOfLines() + block.getOffset(), list.size()); //FIXME index offset needs to be revised, check test case 5
+			int numberOfLines = TestParserHelper.getNumberOfBlockLines(block);
+			int numberOfLineIncludingHeaderSize = numberOfLines + block.getHeaderSize();
+			lines = lines.subList(numberOfLineIncludingHeaderSize, lines.size()); //FIXME index offset needs to be revised, check test case 5
 		}
 
 		return testPage;
@@ -77,14 +83,10 @@ public class TestParser {
 		return commentBlock;
 	}
 
-	private boolean isValidCommentBlockLine(String line) {
-		return !StringUtils.isEmpty(line) && !line.trim().startsWith("||") && !line.trim().startsWith("|");
-	}
-
-	public TestPage readString(String string) {
-		String[] split = StringUtils.split(string, "\n");
+	public ITestPage readString(String scenarioAsString, String scenarioName) {
+		String[] split = StringUtils.split(scenarioAsString, "\n");
 		ArrayList<String> list = new ArrayList<>(Arrays.asList(split));
-		return buildTestPage(list, null);
+		return buildTestPage(list, scenarioName, null);
 	}
 
 	public BlockType getBlockType(String line) throws IllegalArgumentException {

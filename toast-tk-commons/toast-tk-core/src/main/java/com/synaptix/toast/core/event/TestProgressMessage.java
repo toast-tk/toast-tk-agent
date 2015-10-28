@@ -1,6 +1,6 @@
 package com.synaptix.toast.core.event;
 
-import com.synaptix.toast.core.dao.ITestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
 
 public class TestProgressMessage {
 	

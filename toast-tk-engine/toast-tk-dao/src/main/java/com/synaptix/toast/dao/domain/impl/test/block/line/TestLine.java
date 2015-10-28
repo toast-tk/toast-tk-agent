@@ -1,6 +1,4 @@
-package com.synaptix.toast.dao.domain.impl.test;
-
-import org.joda.time.LocalDateTime;
+package com.synaptix.toast.dao.domain.impl.test.block.line;
 
 import com.github.jmkgreen.morphia.annotations.Embedded;
 import com.github.jmkgreen.morphia.annotations.Entity;
@@ -23,7 +21,6 @@ public class TestLine implements IRunnableTest {
 	 */
 	private String comment;
 
-	private long startTime = 0;
 
 	private long executionTime = 0;
 
@@ -56,7 +53,7 @@ public class TestLine implements IRunnableTest {
 
 	public void setTest(
 			String test) {
-		this.test = test != null ? test.trim() : null;
+		this.test = test;
 	}
 
 	public String getExpected() {
@@ -65,7 +62,7 @@ public class TestLine implements IRunnableTest {
 
 	public void setExpected(
 			String expected) {
-		this.expected = expected != null ? expected.trim() : null;
+		this.expected = expected;
 	}
 
 	public String getComment() {
@@ -74,46 +71,15 @@ public class TestLine implements IRunnableTest {
 
 	public void setComment(
 			String comment) {
-		this.comment = comment != null ? comment.trim() : null;
+		this.comment = comment;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.synpatix.redpepper.backend.core.IRunnableTest#startExecution()
-	 */
-	@Override
-	public void startExecution() {
-		startTime = System.currentTimeMillis();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.synpatix.redpepper.backend.core.IRunnableTest#stopExecution()
-	 */
-	@Override
-	public void stopExecution() {
-		executionTime = System.currentTimeMillis() - startTime;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.synpatix.redpepper.backend.core.IRunnableTest#getExecutionTime()
-	 */
 	@Override
 	public long getExecutionTime() {
 		return executionTime;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.synpatix.redpepper.backend.core.IRunnableTest#getStartDateTime()
-	 */
-	@Override
-	public LocalDateTime getStartDateTime() {
-		return new LocalDateTime(startTime);
+	public void setExcutionTime(long executionTime){
+		this.executionTime = executionTime;
 	}
 }

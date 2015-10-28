@@ -1,4 +1,4 @@
-package com.synaptix.toast.dao.domain.impl.test;
+package com.synaptix.toast.dao.domain.impl.test.block.line;
 
 import com.github.jmkgreen.morphia.annotations.Embedded;
 import com.github.jmkgreen.morphia.annotations.Entity;

@@ -1,11 +1,11 @@
 package com.synaptix.toast.runtime.core.parse;
 
-import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.dao.domain.BlockType;
-import com.synaptix.toast.dao.domain.impl.test.SwingPageConfigLine;
-import com.synaptix.toast.dao.domain.impl.test.WebPageConfigLine;
+import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.SwingPageBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.line.SwingPageConfigLine;
+import com.synaptix.toast.dao.domain.impl.test.block.line.WebPageConfigLine;
 import com.synaptix.toast.runtime.parse.IBlockParser;
 
 import org.apache.commons.lang3.StringUtils;
@@ -31,7 +31,8 @@ public class SwingPageSetupBlockParser implements IBlockParser {
         // Find web page name
         String[] title = StringUtils.split(firstLine, "||");
         if (title.length >= 2) {
-        	swingPageBlock.setFixtureName(title[2].trim());
+        	String fixtureName = title[2] != null ? title[2].trim() : null;
+        	swingPageBlock.setFixtureName(fixtureName);
         }
 
         // Add test lines to block

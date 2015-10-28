@@ -1,17 +1,18 @@
 package com.synaptix.toast.test.runtime;
 
-import com.synaptix.toast.core.dao.IBlock;
-import com.synaptix.toast.dao.domain.impl.test.TestPage;
-import com.synaptix.toast.dao.domain.impl.test.WebPageConfigLine;
-import com.synaptix.toast.dao.domain.impl.test.block.CommentBlock;
-import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
-import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
-import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
-import com.synaptix.toast.runtime.parse.TestParser;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.List;
+import com.synaptix.toast.dao.domain.impl.test.block.CommentBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.WebPageBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.line.WebPageConfigLine;
+import com.synaptix.toast.runtime.parse.TestParser;
 
 public class TestParserTestCase_3 {
 
@@ -51,7 +52,7 @@ public class TestParserTestCase_3 {
                 "| Cliquer sur *ChooseApplicationRusDialog.KO* |\n" +
                 "| @swing:connector Saisir *valeur* dans *ChooseApplicationRusDialog.applicationBox* |") + "\n";
 
-        TestPage testPage = par.readString(testString);
+        ITestPage testPage = par.readString(testString, null);
         Assert.assertNotNull(testPage);
         Assert.assertNotNull(testPage.getBlocks());
         int i = 0;
@@ -96,15 +97,17 @@ public class TestParserTestCase_3 {
                 "|Type *test* in *GoogleSearchPage.search*|\n" +
                 "\n";
 
-        TestPage testPage = par.readString(testString);
+        ITestPage testPage = par.readString(testString, null);
         Assert.assertNotNull(testPage);
         Assert.assertNotNull(testPage.getBlocks());
+        
         int i = 0;
         IBlock block = testPage.getBlocks().get(i);
         Assert.assertEquals("comment", block.getBlockType());
         CommentBlock commentBlock = (CommentBlock) block;
         Assert.assertEquals(1, commentBlock.getLines().size());
         i++;
+        
         Assert.assertNotNull(testPage.getBlocks().get(i));
         Assert.assertEquals("webPageBlock", testPage.getBlocks().get(i).getBlockType());
         WebPageBlock webPage = (WebPageBlock) testPage.getBlocks().get(i);
@@ -118,8 +121,10 @@ public class TestParserTestCase_3 {
         Assert.assertEquals("ID",configLine.getMethod());
         Assert.assertEquals(new Integer(0),configLine.getPosition());
         i++;
+        
         Assert.assertEquals("comment", testPage.getBlocks().get(i).getBlockType());
         i++;
+        
         Assert.assertEquals("test", testPage.getBlocks().get(i).getBlockType());
         i++;
     }

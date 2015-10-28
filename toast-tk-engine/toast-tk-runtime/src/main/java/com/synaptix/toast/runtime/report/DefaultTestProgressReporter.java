@@ -8,8 +8,8 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.synaptix.toast.constant.Property;
-import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.event.TestProgressMessage;
+import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
 import com.synaptix.toast.runtime.IReportUpdateCallBack;
 
 public class DefaultTestProgressReporter {
@@ -45,7 +45,7 @@ public class DefaultTestProgressReporter {
 				: null;
 		if (resource != null) {
 			this.htmlReportGenerator.writeFile(generatePageHtml,
-					testPage.getPath(), resource.getPath());
+					testPage.getName(), resource.getPath());
 		}
 		if (this.reportUpdateCallBack != null) {
 			this.reportUpdateCallBack.onUpdate(generatePageHtml);

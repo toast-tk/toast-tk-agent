@@ -15,9 +15,8 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.synaptix.toast.core.annotation.EngineEventBus;
 import com.synaptix.toast.core.annotation.craft.FixMe;
-import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.rest.RestUtils;
-import com.synaptix.toast.dao.domain.impl.test.TestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
 import com.synaptix.toast.runtime.parse.TestParser;
 import com.synaptix.toast.runtime.report.DefaultTestProgressReporter;
 import com.synaptix.toast.runtime.report.IHTMLReportGenerator;
@@ -32,7 +31,7 @@ public abstract class AbstractScenarioRunner extends AbstractRunner{
 
 	private boolean presetRepoFromWebApp = false;
 
-	private TestPage localRepositoryTestPage;
+	private ITestPage localRepositoryTestPage;
 
 	private IHTMLReportGenerator htmlReportGenerator;
 
@@ -91,7 +90,7 @@ public abstract class AbstractScenarioRunner extends AbstractRunner{
 		throws IllegalAccessException, ClassNotFoundException, IOException {
 		this.progressReporter.setReportCallBack(callback);
 		TestParser parser = new TestParser();
-		this.localRepositoryTestPage = parser.readString(repoWiki);
+		this.localRepositoryTestPage = parser.readString(repoWiki, null);
 		runScript(null, wikiScenario);
 	}
 
@@ -105,12 +104,12 @@ public abstract class AbstractScenarioRunner extends AbstractRunner{
 		String script)
 		throws IllegalAccessException, ClassNotFoundException, IOException {
 		TestParser testParser = new TestParser();
-		ITestPage result = file == null ? testParser.readString(script) : testParser.parse(file.getPath());
+		ITestPage result = file == null ? testParser.readString(script, null) : testParser.parse(file.getPath());
 		TestRunner runner = new TestRunner(injector);
 		if(this.presetRepoFromWebApp) {
 			String repoWiki = RestUtils.downloadRepositoyAsWiki();
 			TestParser parser = new TestParser();
-			TestPage repoAsTestPageForConveniency = parser.readString(repoWiki);
+			ITestPage repoAsTestPageForConveniency = parser.readString(repoWiki, null);
 			runner.run(repoAsTestPageForConveniency, false);
 		}
 		else if(this.localRepositoryTestPage != null) {

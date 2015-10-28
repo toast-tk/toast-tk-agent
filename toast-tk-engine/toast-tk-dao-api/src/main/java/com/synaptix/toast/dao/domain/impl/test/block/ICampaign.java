@@ -1,4 +1,4 @@
-package com.synaptix.toast.core.dao;
+package com.synaptix.toast.dao.domain.impl.test.block;
 
 import java.util.List;
 

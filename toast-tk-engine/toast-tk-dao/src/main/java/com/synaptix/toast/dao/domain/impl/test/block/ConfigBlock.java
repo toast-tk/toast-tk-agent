@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.jmkgreen.morphia.annotations.Embedded;
-import com.synaptix.toast.core.dao.IBlock;
-import com.synaptix.toast.dao.domain.impl.test.ComponentConfigLine;
+import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.line.ComponentConfigLine;
 
 @Embedded
 @Deprecated
@@ -50,13 +50,9 @@ public class ConfigBlock implements IBlock {
 		return "config";
 	}
 
-	@Override
-	public int getNumberOfLines() {
-		return 0;
-	}
 
 	@Override
-	public int getOffset() {
+	public int getHeaderSize() {
 		return 0;
 	}
 }

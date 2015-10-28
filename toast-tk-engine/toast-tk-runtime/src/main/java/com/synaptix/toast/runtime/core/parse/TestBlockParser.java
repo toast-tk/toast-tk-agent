@@ -1,7 +1,7 @@
 package com.synaptix.toast.runtime.core.parse;
 
-import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.dao.domain.BlockType;
+import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 import com.synaptix.toast.runtime.parse.IBlockParser;
 import org.apache.commons.lang3.StringUtils;
@@ -42,7 +42,8 @@ public class TestBlockParser implements IBlockParser {
         // Find default action type
         String[] title = StringUtils.split(firstLine, "||");
         if (title.length >= 2) {
-            testBlock.setFixtureName(title[1]);
+        	String fixtureName = title[1] != null ? title[1].trim() : null;
+            testBlock.setFixtureName(fixtureName);
         }
 
         // Add test lines to block
@@ -51,7 +52,10 @@ public class TestBlockParser implements IBlockParser {
                 return testBlock;
             }
             String[] split = StringUtils.split(string, "|");
-            testBlock.addLine(split[0], split.length > 1 ? split[1] : null, split.length > 2 ? split[2] : null);
+            String test = split[0] != null ? split[0].trim() : null;
+            String expected = split.length > 1 ? (split[1]  != null ? split[1].trim() : null ) : null;
+            String comment= split.length > 2 ? (split[2]  != null ? split[2].trim() : null ) : null;
+            testBlock.addLine(test, expected, comment);
         }
 
         return testBlock;

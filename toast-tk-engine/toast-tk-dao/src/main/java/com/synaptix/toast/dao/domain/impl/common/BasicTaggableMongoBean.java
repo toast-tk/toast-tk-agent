@@ -3,7 +3,7 @@ package com.synaptix.toast.dao.domain.impl.common;
 import java.util.List;
 
 import com.github.jmkgreen.morphia.annotations.Reference;
-import com.synaptix.toast.core.dao.ITaggable;
+import com.synaptix.toast.dao.domain.impl.test.block.ITaggable;
 
 public abstract class BasicTaggableMongoBean extends BasicMongoBean implements ITaggable {
 

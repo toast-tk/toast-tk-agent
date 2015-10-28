@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.jmkgreen.morphia.annotations.Embedded;
-import com.synaptix.toast.core.dao.IBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.line.BlockLine;
 
 @Embedded
 @Deprecated
@@ -16,11 +17,9 @@ public class InsertBlock implements IBlock {
 
 	private String componentString;
 
-	private int numberOfLines;
 
 	public InsertBlock() {
 		blockLines = new ArrayList<BlockLine>();
-		numberOfLines = 0;
 	}
 
 	public List<BlockLine> getBlockLines() {
@@ -60,13 +59,9 @@ public class InsertBlock implements IBlock {
 		return "insert";
 	}
 
-	@Override
-	public int getNumberOfLines() {
-		return numberOfLines;
-	}
 
 	@Override
-	public int getOffset() {
+	public int getHeaderSize() {
 		return 0;
 	}
 }

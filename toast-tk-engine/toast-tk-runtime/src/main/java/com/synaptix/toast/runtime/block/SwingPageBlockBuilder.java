@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.synaptix.toast.core.runtime.IActionItemRepository;
 import com.synaptix.toast.core.runtime.IFeedableSwingPage;
-import com.synaptix.toast.dao.domain.impl.test.SwingPageConfigLine;
 import com.synaptix.toast.dao.domain.impl.test.block.SwingPageBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.line.SwingPageConfigLine;
 
 public class SwingPageBlockBuilder implements IBlockRunner<SwingPageBlock>{
 

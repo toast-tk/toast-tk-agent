@@ -1,32 +1,29 @@
-package com.synaptix.toast.dao.domain.impl.test;
+package com.synaptix.toast.dao.domain.impl.test.block;
 
-import com.github.jmkgreen.morphia.annotations.*;
-import com.synaptix.toast.core.dao.IBlock;
-import com.synaptix.toast.core.dao.ITestPage;
-import com.synaptix.toast.core.report.TestResult;
-import com.synaptix.toast.dao.domain.api.test.IRunnableTest;
-import com.synaptix.toast.dao.domain.impl.common.BasicEntityBean;
-import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
-import org.bson.types.ObjectId;
-import org.joda.time.LocalDateTime;
-
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.jmkgreen.morphia.annotations.Embedded;
+import com.github.jmkgreen.morphia.annotations.Entity;
+import com.github.jmkgreen.morphia.annotations.Index;
+import com.github.jmkgreen.morphia.annotations.Indexes;
+import com.synaptix.toast.core.report.TestResult;
+import com.synaptix.toast.dao.domain.api.test.IRunnableTest;
+import com.synaptix.toast.dao.domain.impl.common.BasicEntityBean;
+import com.synaptix.toast.dao.domain.impl.repository.ReportHelper;
+import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
+
 @Entity(value = "test")
 @Indexes({
-        @Index(value = "pageName, -runDateTime"), @Index("runDateTime"), @Index("isTemplate")
+        @Index(value = "pageName, -runDateTime"), 
+        @Index("runDateTime"), 
+        @Index("isTemplate")
 })
-public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, ITestPage {
+public class TestPage extends BasicEntityBean implements IRunnableTest, ITestPage {
 
     @Embedded
     private TestResult testResult;
-
-    @Transient
-    private File file;
 
     @Embedded
     private List<IBlock> blocks;
@@ -36,10 +33,6 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
     private int testSuccessNumber;
 
     private int testFailureNumber;
-
-    private String pageName;
-
-    private String path;
 
     private String parsingErrorMessage;
 
@@ -53,33 +46,8 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
 
     private boolean isTemplate;
 
-
     public TestPage() {
-        blocks = new ArrayList<>();
-    }
-
-    public TestPage(String path) {
-        blocks = new ArrayList<>();
-        if (path != null) {
-            this.path = path;
-            Path p = Paths.get(path);
-            this.pageName = p.getFileName().toString();
-        }
-    }
-
-    @Override
-    public String getIdAsString() {
-        return id != null ? id.toString() : null;
-    }
-
-    @Override
-    public void setId(
-            String id) {
-        if (id == null) {
-            this.id = null;
-        } else {
-            this.id = new ObjectId(id);
-        }
+    	this.blocks = new ArrayList<>();
     }
 
     public int getTechnicalErrorNumber() {
@@ -109,15 +77,6 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
         this.testFailureNumber = testFailureNumber;
     }
 
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(
-            String path) {
-        this.path = path;
-    }
-
     public void addBlock(
             IBlock testBlock) {
         blocks.add(testBlock);
@@ -142,20 +101,6 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
         this.executionTime = executionTime;
     }
 
-    public File getFile() {
-        return file;
-    }
-
-    public void setFile(
-            File file) {
-        this.file = file;
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.synpatix.redpepper.backend.core.IRunnableTest#getTestResult()
-     */
     @Override
     public TestResult getTestResult() {
         return this.testResult;
@@ -170,7 +115,7 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
     @Override
     public void startExecution() {
         this.runDateTime = System.currentTimeMillis();
-        setPreviousIsSuccess(isSuccess());
+        setPreviousIsSuccess(ReportHelper.isSuccess(this));
         previousExecutionTime = executionTime;
     }
 
@@ -179,10 +124,6 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
         this.executionTime = System.currentTimeMillis() - runDateTime;
     }
 
-    @Override
-    public LocalDateTime getStartDateTime() {
-        return new LocalDateTime(this.runDateTime);
-    }
 
     public List<IBlock> getBlocks() {
         return blocks;
@@ -191,16 +132,6 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
     public void setBlocks(
             List<IBlock> blocks) {
         this.blocks = blocks;
-    }
-
-    @Override
-    @PrePersist
-    public void prePersist() {
-        this.name = this.pageName;
-    }
-
-    public boolean isSuccess() {
-        return (this.technicalErrorNumber + this.testFailureNumber) == 0;
     }
 
     @Override
@@ -226,8 +157,8 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
     }
 
     public void setIsTemplate(
-            boolean b) {
-        this.isTemplate = b;
+            boolean isTemplate) {
+        this.isTemplate = isTemplate;
     }
 
     public boolean getIsTemplate() {
@@ -235,35 +166,19 @@ public class TestPage extends BasicEntityBean implements IBlock, IRunnableTest, 
     }
 
     @Override
-    public IBlock getVarBlock() {
-        for (IBlock block : blocks) {
-            if (block instanceof VariableBlock) {
-                return block;
-            }
-        }
-        return null;
-    }
-
-    @Override
     public String getBlockType() {
         return "testPageBlock";
     }
 
-    @Override
-    public int getNumberOfLines() {
-        return 0;
-    }
-
-    public String getPageName() {
-        return pageName;
-    }
-
-    public void setPageName(String pageName) {
-        this.pageName = pageName;
-    }
 
 	@Override
-	public int getOffset() {
+	public long getStartDateTime() {
+		return runDateTime;
+	}
+
+	@Override
+	public int getHeaderSize() {
 		return 0;
 	}
+
 }

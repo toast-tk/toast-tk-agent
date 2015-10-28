@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.jmkgreen.morphia.annotations.Embedded;
-import com.synaptix.toast.core.dao.IBlock;
-import com.synaptix.toast.dao.domain.impl.test.TestLine;
+import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.line.TestLine;
 
 @Embedded
 public class TestBlock implements IBlock {
@@ -46,7 +46,7 @@ public class TestBlock implements IBlock {
 
 	public void setFixtureName(
 			String fixtureName) {
-		this.fixtureName = fixtureName != null ? fixtureName.trim() : null;
+		this.fixtureName = fixtureName;
 	}
 
 	@Override
@@ -55,12 +55,7 @@ public class TestBlock implements IBlock {
 	}
 
 	@Override
-	public int getNumberOfLines() {
-		return blockLines.size();
-	}
-
-	@Override
-	public int getOffset() {
+	public int getHeaderSize() {
 		return 1;
 	}
 }

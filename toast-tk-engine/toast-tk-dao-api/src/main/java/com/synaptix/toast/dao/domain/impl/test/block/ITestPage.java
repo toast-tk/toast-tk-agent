@@ -1,18 +1,10 @@
-package com.synaptix.toast.core.dao;
+package com.synaptix.toast.dao.domain.impl.test.block;
 
 import java.util.List;
 
-import org.joda.time.LocalDateTime;
-
-public interface ITestPage extends ITaggable {
-
-	public IBlock getVarBlock();
+public interface ITestPage extends ITaggable, IBlock {
 
 	public List<IBlock> getBlocks();
-
-	public String getPath();
-
-	public LocalDateTime getStartDateTime();
 
 	public long getExecutionTime();
 
@@ -30,9 +22,6 @@ public interface ITestPage extends ITaggable {
 
 	public void setTestSuccessNumber(
 		int testSuccessNumber);
-
-	// addResult (find a better way to report success/failure/error)
-	public boolean isSuccess();
 
 	public String getName();
 
@@ -55,4 +44,10 @@ public interface ITestPage extends ITaggable {
 
 	void setPreviousExecutionTime(
 		long previousExecutionTime);
+
+	long getStartDateTime();
+
+	public void setName(String name);
+
+	public void addBlock(IBlock block);
 }

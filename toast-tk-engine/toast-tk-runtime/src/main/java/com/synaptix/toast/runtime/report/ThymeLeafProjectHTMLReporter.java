@@ -13,8 +13,8 @@ import org.thymeleaf.templateresolver.TemplateResolver;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.synaptix.toast.core.dao.IProject;
 import com.synaptix.toast.dao.domain.impl.report.Project;
+import com.synaptix.toast.dao.domain.impl.test.block.IProject;
 import com.synaptix.toast.dao.guice.MongoModule;
 import com.synaptix.toast.dao.service.dao.access.project.ProjectDaoService;
 import com.synaptix.toast.runtime.dao.DAOManager;

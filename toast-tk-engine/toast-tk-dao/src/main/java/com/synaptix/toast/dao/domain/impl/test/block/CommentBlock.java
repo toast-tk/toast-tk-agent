@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.jmkgreen.morphia.annotations.Embedded;
-import com.synaptix.toast.core.dao.IBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
 
 @Embedded
 public class CommentBlock implements IBlock {
@@ -15,12 +15,9 @@ public class CommentBlock implements IBlock {
 		setLines(new ArrayList<>());
 	}
 
-	/**
-	 * Add a test line
-	 */
 	public void addLine(
 		String line) {
-		this.getLines().add(line);
+		lines.add(line);
 	}
 
 	public List<String> getLines() {
@@ -38,12 +35,7 @@ public class CommentBlock implements IBlock {
 	}
 
 	@Override
-	public int getNumberOfLines() {
-		return lines.size();
-	}
-
-	@Override
-	public int getOffset() {
+	public int getHeaderSize() {
 		return 0;
 	}
 }

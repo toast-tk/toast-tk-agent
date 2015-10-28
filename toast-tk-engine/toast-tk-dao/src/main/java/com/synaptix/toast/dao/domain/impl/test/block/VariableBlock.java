@@ -4,29 +4,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.jmkgreen.morphia.annotations.Embedded;
-import com.synaptix.toast.core.dao.IBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.line.BlockLine;
 
 @Embedded
 public class VariableBlock implements IBlock {
 
 	private List<BlockLine> blockLines;
-
+	
+	private List<String> textLines;
+	
 	private BlockLine columns;
 
-	public List<BlockLine> getBlockLines() {
-		return blockLines;
-	}
-
-	int number0fLines;
-
 	public VariableBlock() {
-		blockLines = new ArrayList<BlockLine>();
-		number0fLines = 0;
+		blockLines = new ArrayList<>();
+		textLines = new ArrayList<>();
 	}
 
 	public void setBlockLines(
 			List<BlockLine> blockLines) {
 		this.blockLines = blockLines;
+	}
+
+
+	public List<BlockLine> getBlockLines() {
+		return blockLines;
 	}
 
 	public BlockLine getColumns() {
@@ -49,16 +51,15 @@ public class VariableBlock implements IBlock {
 	}
 
 	@Override
-	public int getNumberOfLines() {
-		return number0fLines;
-	}
-
-	public void setNumber0fLines(int number0fLines){
-		this.number0fLines = number0fLines;
-	}
-
-	@Override
-	public int getOffset() {
+	public int getHeaderSize() {
 		return 0;
+	}
+
+	public void addTextLine(String line) {
+		textLines.add(line);
+	}
+	
+	public List<String> getTextLines() {
+		return textLines;
 	}
 }

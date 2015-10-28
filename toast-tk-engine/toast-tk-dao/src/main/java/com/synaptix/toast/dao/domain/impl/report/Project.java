@@ -10,12 +10,10 @@ import com.github.jmkgreen.morphia.annotations.Entity;
 import com.github.jmkgreen.morphia.annotations.Id;
 import com.github.jmkgreen.morphia.annotations.Index;
 import com.github.jmkgreen.morphia.annotations.Indexes;
-import com.github.jmkgreen.morphia.annotations.PrePersist;
 import com.github.jmkgreen.morphia.annotations.Reference;
-import com.synaptix.toast.core.dao.ICampaign;
-import com.synaptix.toast.core.dao.IProject;
-import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.dao.domain.impl.common.BasicTaggableMongoBean;
+import com.synaptix.toast.dao.domain.impl.test.block.ICampaign;
+import com.synaptix.toast.dao.domain.impl.test.block.IProject;
 
 @Entity(value = "report.projects")
 @Indexes({
@@ -115,36 +113,6 @@ public class Project extends BasicTaggableMongoBean implements IProject {
 	public void setIteration(
 		short iteration) {
 		this.iteration = iteration;
-	}
-
-	public int getTotalOk() {
-		int total = 0;
-		for(ICampaign campaign : getCampaigns()) {
-			for(ITestPage testPage : campaign.getTestCases()) {
-				if(testPage.isSuccess()) {
-					total++;
-				}
-			}
-		}
-		return total;
-	}
-
-	public int getTotalKo() {
-		int total = 0;
-		for(ICampaign campaign : getCampaigns()) {
-			for(ITestPage testPage : campaign.getTestCases()) {
-				if(!testPage.isSuccess()) {
-					total++;
-				}
-			}
-		}
-		return total;
-	}
-
-	@Override
-	@PrePersist
-	public void prePersist() {
-		// iteration++;
 	}
 
 	public boolean isLast() {

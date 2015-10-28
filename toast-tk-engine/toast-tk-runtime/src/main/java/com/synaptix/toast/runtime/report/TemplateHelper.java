@@ -10,53 +10,54 @@ import javax.imageio.ImageIO;
 import org.apache.commons.codec.binary.Base64;
 import org.joda.time.LocalDateTime;
 
-import com.synaptix.toast.core.dao.IBlock;
-import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
-import com.synaptix.toast.dao.domain.impl.test.TestLine;
-import com.synaptix.toast.dao.domain.impl.test.TestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.TestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.line.TestLine;
 
 public class TemplateHelper {
 
 	public static String getBlockName(IBlock block){
-		if(block instanceof TestPage){
-			return ((TestPage)block).getName();
+		if(block instanceof ITestPage){
+			return ((ITestPage)block).getName();
 		}
 		return null;
 	}
 	
 	public static LocalDateTime getStartTime(IBlock block){
-		if(block instanceof TestPage){
-			return ((TestPage)block).getStartDateTime();
+		if(block instanceof ITestPage){
+			long startTime =  ((ITestPage)block).getStartDateTime();
+			return new LocalDateTime(startTime);
 		}
 		return null;
 	}
 	
 	public static Long getExecutionTime(IBlock block){
-		if(block instanceof TestPage){
-			return ((TestPage)block).getExecutionTime();
+		if(block instanceof ITestPage){
+			return ((ITestPage)block).getExecutionTime();
 		}
 		return 0L;
 	}
 	
 	public static int getTechnicalErrorNumber(IBlock block){
-		if(block instanceof TestPage){
-			return ((TestPage)block).getTechnicalErrorNumber();
+		if(block instanceof ITestPage){
+			return ((ITestPage)block).getTechnicalErrorNumber();
 		}
 		return 0;
 	}
 
 	public static int getTestFailureNumber(IBlock block){
-		if(block instanceof TestPage){
-			return ((TestPage)block).getTestFailureNumber();
+		if(block instanceof ITestPage){
+			return ((ITestPage)block).getTestFailureNumber();
 		}
 		return 0;
 	}
 
 	public static int getTestSuccessNumber(IBlock block){
-		if(block instanceof TestPage){
-			return ((TestPage)block).getTestSuccessNumber();
+		if(block instanceof ITestPage){
+			return ((ITestPage)block).getTestSuccessNumber();
 		}
 		return 0;
 	}

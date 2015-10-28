@@ -1,9 +1,10 @@
 package com.synaptix.toast.dao.domain.impl.test.block;
 
 import com.github.jmkgreen.morphia.annotations.Embedded;
-import com.synaptix.toast.core.dao.IBlock;
 import com.synaptix.toast.core.report.TestResult;
-import com.synaptix.toast.dao.domain.impl.test.WebPageConfigLine;
+import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.line.BlockLine;
+import com.synaptix.toast.dao.domain.impl.test.block.line.WebPageConfigLine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,13 +73,8 @@ public class WebPageBlock implements IBlock {
         return "webPageBlock";
     }
 
-    @Override
-    public int getNumberOfLines() {
-        return getBlockLines().size();
-    }
-
 	@Override
-	public int getOffset() {
+	public int getHeaderSize() {
 		return 2;
 	}
 }

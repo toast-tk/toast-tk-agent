@@ -1,19 +1,18 @@
 package com.synaptix.toast.runtime.core.parse;
 
-import com.synaptix.toast.core.dao.IBlock;
-import com.synaptix.toast.dao.domain.BlockType;
-import com.synaptix.toast.dao.domain.impl.test.block.BlockLine;
-import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
-import com.synaptix.toast.runtime.parse.IBlockParser;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.synaptix.toast.dao.domain.BlockType;
+import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.line.BlockLine;
+import com.synaptix.toast.runtime.parse.IBlockParser;
+
 /**
- * Parser for vaiable blocks.
+ * Parser for variable blocks.
  * Parse all lines beginning with $
- * Created by Nicolas Sauvage on 06/08/2015.
  */
 public class VariableBlockParser implements IBlockParser {
 
@@ -28,49 +27,43 @@ public class VariableBlockParser implements IBlockParser {
     public IBlock digest(List<String> strings, String path) {
         VariableBlock variableBlock = new VariableBlock();
 
-        int parsedLines = 0;
-
         for (Iterator<String> iterator = strings.iterator(); iterator.hasNext(); ) {
-            String string = iterator.next();
+            final String line = iterator.next();
 
-            if (!isFirstLineOfBlock(string)) { // line is parsable
-                variableBlock.setNumber0fLines(parsedLines);
+            if (!isFirstLineOfBlock(line)) { // line is parsable
                 return variableBlock;
             }
 
-            parsedLines++;
 
-            String[] split = string.split(VARIABLE_ASSIGNATION_SEPARATOR);
+            String[] textLine = line.split(VARIABLE_ASSIGNATION_SEPARATOR);
+           
+            List<String> variableParts = new ArrayList<>();
+            String variableName = textLine[0].trim();
+            variableParts.add(variableName);
 
-            List<String> cells = new ArrayList<>();
-            cells.add(split[0].trim());
-
-            if (isVarMultiLine(string)) {
-                StringBuilder stringBuilder = new StringBuilder();
-
+            if (isVarMultiLine(line)) {
+                StringBuilder variableValue = new StringBuilder();
+                variableBlock.addTextLine(line);
                 while (iterator.hasNext()) {
-                    string = iterator.next();
-                    parsedLines++;
+                	final String nextLine = iterator.next();
+                	variableBlock.addTextLine(nextLine);
 
-                    if (!string.startsWith("\"\"\"")) {
-                        stringBuilder.append(string.replace("\n", " ").replace("\t", " ")).append(" ");
+                    if (!nextLine.startsWith("\"\"\"")) {
+                    	variableValue.append(nextLine.replace("\n", " ").replace("\t", " ")).append(" ");
                     } else {
                         break;
                     }
                 }
-
-                cells.add(stringBuilder.toString());
-            } else if (isVarLine(string)) {
-                cells.add(split[1].trim());
+                variableParts.add(variableValue.toString());
+            } else if (isVarLine(line)) {
+            	String variableValue = textLine[1].trim();
+            	variableParts.add(variableValue);
+            	variableBlock.addTextLine(line);
             }
-
-            BlockLine line = new BlockLine();
-            line.setCells(cells);
-
-            variableBlock.addline(line);
+            BlockLine blockLine = new BlockLine();
+            blockLine.setCells(variableParts);
+            variableBlock.addline(blockLine);
         }
-
-        variableBlock.setNumber0fLines(parsedLines);
         return variableBlock;
     }
 

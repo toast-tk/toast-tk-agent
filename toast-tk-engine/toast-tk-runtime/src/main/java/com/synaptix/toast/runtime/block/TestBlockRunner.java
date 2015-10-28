@@ -2,7 +2,6 @@ package com.synaptix.toast.runtime.block;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,8 +27,8 @@ import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
 import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.IActionItemRepository;
-import com.synaptix.toast.dao.domain.impl.test.TestLine;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.line.TestLine;
 import com.synaptix.toast.runtime.bean.ActionCommandDescriptor;
 import com.synaptix.toast.runtime.bean.TestLineDescriptor;
 import com.synaptix.toast.runtime.utils.ArgumentHelper;
@@ -46,10 +45,10 @@ public class TestBlockRunner implements IBlockRunner<TestBlock> {
 	@Override
 	public void run(TestBlock block) throws IllegalAccessException, ClassNotFoundException {
 		for (TestLine line : block.getBlockLines()) {
-			line.startExecution();
+			long startTime = System.currentTimeMillis();
 			TestLineDescriptor descriptor = new TestLineDescriptor(block, line);
 			TestResult result = invokeActionAdapterAction(descriptor);
-			line.stopExecution();
+			line.setExcutionTime(System.currentTimeMillis() - startTime);
 			if (ResultKind.FATAL.equals(result.getResultKind())) {
 				throw new IllegalAccessException("Test execution stopped, due to fail fatal error: "+ line + " - Failed !");
 			}

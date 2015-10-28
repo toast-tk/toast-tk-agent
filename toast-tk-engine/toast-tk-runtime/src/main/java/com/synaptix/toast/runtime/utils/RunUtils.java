@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.synaptix.toast.core.dao.ITestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
 
 public class RunUtils {
 

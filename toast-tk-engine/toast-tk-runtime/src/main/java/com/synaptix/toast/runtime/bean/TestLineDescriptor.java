@@ -4,8 +4,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.synaptix.toast.core.adapter.ActionAdapterKind;
-import com.synaptix.toast.dao.domain.impl.test.TestLine;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.line.TestLine;
 
 public class TestLineDescriptor {
 

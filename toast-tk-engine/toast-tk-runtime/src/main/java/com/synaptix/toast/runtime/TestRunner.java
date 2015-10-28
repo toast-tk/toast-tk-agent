@@ -7,9 +7,9 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.synaptix.toast.core.annotation.EngineEventBus;
-import com.synaptix.toast.core.dao.IBlock;
-import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.core.event.TestProgressMessage;
+import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
 import com.synaptix.toast.runtime.block.BlockRunnerProvider;
 import com.synaptix.toast.runtime.block.IBlockRunner;
 
