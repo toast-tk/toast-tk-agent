@@ -1,7 +1,5 @@
 #image: ubuntu:latest
 image: maven:3.3.3-jdk-8
-services:
-  - sminnee/selenium-xvfb
 stages:
   - build
   - test
@@ -17,6 +15,8 @@ build_job:
 #  script:
 #    - mvn --batch-mode verify sonar:sonar -Dsonar.host.url=$SONAR_URL -Dsonar.analysis.mode=incremental
 test_sonar_job:
+  services:
+    - sminnee/selenium-xvfb
   stage: test
 #  only:
 #    - master
