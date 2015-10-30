@@ -1,3 +1,4 @@
+#image: ubuntu:latest
 image: maven:3.3.3-jdk-8
 stages:
   - build
@@ -18,8 +19,10 @@ test_sonar_job:
 #  only:
 #    - master
   script:
+    - cat /etc/apt/sources.list
     - apt-get update
-    - apt-get install -y xvfb firefox
+#    - apt-get install -y git openjdk-8-jdk maven xvfb
+    - apt-get install -y xvfb
     - mvn --batch-mode verify sonar:sonar -Dsonar.host.url=$SONAR_URL -Dsonar.jdbc.url=$SONAR_DB -Dsonar.jdbc.username=$SONAR_USERNAME -Dsonar.jdbc.password=$SONAR_PASSWORD
 deploy_job:
   stage: deploy
