@@ -15,19 +15,16 @@ build_job:
 #  script:
 #    - mvn --batch-mode verify sonar:sonar -Dsonar.host.url=$SONAR_URL -Dsonar.analysis.mode=incremental
 test_sonar_job:
-  services:
-    - sminnee/selenium-xvfb
   stage: test
 #  only:
 #    - master
   script:
 #    - cat /etc/apt/sources.list
-#    - apt-get update
+    - apt-get update
 #    - apt-get install -y git openjdk-8-jdk maven xvfb
-#    - apt-get install -y xvfb
-#    - Xvfb :1 -screen 0 1024x768x24 &
-#    - export DISPLAY=:1
-    - export DISPLAY=sminnee_selenium-xvfb:0
+    - apt-get install -y xvfb
+    - Xvfb :1 -screen 0 1024x768x24 &
+    - export DISPLAY=:1
     - mvn --batch-mode verify sonar:sonar -Dsonar.host.url=$SONAR_URL -Dsonar.jdbc.url=$SONAR_DB -Dsonar.jdbc.username=$SONAR_USERNAME -Dsonar.jdbc.password=$SONAR_PASSWORD
 deploy_job:
   stage: deploy
