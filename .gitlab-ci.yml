@@ -18,6 +18,7 @@ test_sonar_job:
 #  only:
 #    - master
   script:
+    - apt-get update
     - apt-get install -y xvfb firefox
     - mvn --batch-mode verify sonar:sonar -Dsonar.host.url=$SONAR_URL -Dsonar.jdbc.url=$SONAR_DB -Dsonar.jdbc.username=$SONAR_USERNAME -Dsonar.jdbc.password=$SONAR_PASSWORD
 deploy_job:
