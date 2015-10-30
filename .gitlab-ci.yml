@@ -23,7 +23,7 @@ test_sonar_job:
     - apt-get update
 #    - apt-get install -y git openjdk-8-jdk maven xvfb
     - apt-get install -y xvfb
-    - xvfb :1 -screen 0 1024x768x24
+    - Xvfb :1 -screen 0 1024x768x24
     - mvn --batch-mode verify sonar:sonar -Dsonar.host.url=$SONAR_URL -Dsonar.jdbc.url=$SONAR_DB -Dsonar.jdbc.username=$SONAR_USERNAME -Dsonar.jdbc.password=$SONAR_PASSWORD
 deploy_job:
   stage: deploy
