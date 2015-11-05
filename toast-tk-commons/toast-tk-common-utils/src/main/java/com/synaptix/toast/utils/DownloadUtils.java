@@ -44,8 +44,12 @@ public class DownloadUtils {
 		}
 		finally {
 			try {
-				writeFile.close();
-				input.close();
+				if (writeFile != null) {
+					writeFile.close();
+				}
+				if (input != null) {
+					input.close();
+				}
 			}
 			catch(IOException e) {
 				e.printStackTrace();
