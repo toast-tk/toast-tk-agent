@@ -30,3 +30,4 @@ deploy_job:
     - master
   script:
 #    - mvn --batch-mode deploy -Dmaven.test.skip=true -Djacoco.skip=true
+    - echo "Deploy"
