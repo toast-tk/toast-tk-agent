@@ -12,6 +12,7 @@
 	<name>Toast Toolkit - Studio - POM Module</name>
 	<properties>
 		<toast.vertx.module>toast~agent~1.0</toast.vertx.module>
+		<sonar.skip>true</sonar.skip>
 	</properties>
 	<description>
 	    Toast TK Studio Parent Module.
