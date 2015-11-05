@@ -26,4 +26,8 @@
 		<module>toast-tk-studio-agent</module>
 		<module>toast-tk-automation-client</module>
 	</modules>
+	<properties>
+		<sonar.skip>true</sonar.skip>
+	</properties>
+
 </project>
