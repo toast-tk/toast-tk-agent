@@ -14,23 +14,25 @@ import com.synaptix.toast.core.net.request.TableCommandRequest;
 import com.synaptix.toast.core.net.request.TableCommandRequestQueryCriteria;
 import com.synaptix.toast.plugin.swing.agent.listener.InitRequestListener;
 import com.synaptix.toast.plugin.swing.agent.listener.SwingActionRequestListener;
+import com.synaptix.toast.test.TestSuiteHelper;
 import com.synaptix.toast.test.server.mock.FakeConnection;
 import com.synaptix.toast.test.server.mock.JListTestFrame;
 
 public class TestRequestHandlersForJList {
-	
+
 	static String JLIST_TABLE_FIELD_NAME = "jlist";
-	
+
 	static JListTestFrame jlistTestFrame;
-	
+
 	@BeforeClass
-	public static void init(){
-		jlistTestFrame = new JListTestFrame(); 
+	public static void init() {
+		jlistTestFrame = new JListTestFrame();
 	}
-	
+
 	@Before
 	public void initGuiRepository() {
-		final InitRequestListener initRequestHandler = TestSuiteHelper.getInjector().getInstance(InitRequestListener.class);
+		final InitRequestListener initRequestHandler = TestSuiteHelper.getInjector().getInstance(
+			InitRequestListener.class);
 		initRequestHandler.received(new FakeConnection(), new InitInspectionRequest());
 	}
 
@@ -38,34 +40,39 @@ public class TestRequestHandlersForJList {
 	public void testGettingInputValue() {
 		String idRequest = "fake-id";
 		String expectedIndice = "2";
-		String locator = JListTestFrame.class.getName()+":"+JLIST_TABLE_FIELD_NAME;
-    	List<TableCommandRequestQueryCriteria> tableCriteria = new ArrayList<TableCommandRequestQueryCriteria>();
-    	tableCriteria.add(new TableCommandRequestQueryCriteria("Column One", "Row2-Column1"));
-    	tableCriteria.add(new TableCommandRequestQueryCriteria("Column Three", "Row2-Column3"));
+		String locator = JListTestFrame.class.getName() + ":" + JLIST_TABLE_FIELD_NAME;
+		List<TableCommandRequestQueryCriteria> tableCriteria = new ArrayList<TableCommandRequestQueryCriteria>();
+		tableCriteria.add(new TableCommandRequestQueryCriteria("Column One", "Row2-Column1"));
+		tableCriteria.add(new TableCommandRequestQueryCriteria("Column Three", "Row2-Column3"));
 		TableCommandRequest buildGetInputValueRequest = buildMultiCriteriaRequest(tableCriteria, locator, idRequest);
-		SwingActionRequestListener requestHandler = TestSuiteHelper.getInjector().getInstance(SwingActionRequestListener.class);
+		SwingActionRequestListener requestHandler = TestSuiteHelper.getInjector().getInstance(
+			SwingActionRequestListener.class);
 		FakeConnection connection = new FakeConnection();
 		requestHandler.received(connection, buildGetInputValueRequest);
 		try {
 			Thread.sleep(2000);
-		} 
-		catch (InterruptedException e) {
+		}
+		catch(InterruptedException e) {
 			e.printStackTrace();
 		}
-		//assertEquals(expectedIndice, ((ValueResponse)connection.result).value); TODO FIXME, Issue #16 - null pointer
+		// assertEquals(expectedIndice,
+// ((ValueResponse)connection.result).value); TODO FIXME, Issue #16 - null
+// pointer
 	}
-	
+
 	public static CommandRequest buildJListCommandRequest() {
-		return null;//for now
+		return null;// for now
 	}
-	
-	public static TableCommandRequest buildMultiCriteriaRequest(List<TableCommandRequestQueryCriteria> tableCriteria, String locator, String idRequest) {
+
+	public static TableCommandRequest buildMultiCriteriaRequest(
+		List<TableCommandRequestQueryCriteria> tableCriteria,
+		String locator,
+		String idRequest) {
 		return new TableCommandRequest.TableCommandRequestBuilder(idRequest).find(tableCriteria).with(locator).build();
 	}
 
-	
 	@AfterClass
-	public static void end(){
-		jlistTestFrame.dispose(); 
+	public static void end() {
+		jlistTestFrame.dispose();
 	}
 }

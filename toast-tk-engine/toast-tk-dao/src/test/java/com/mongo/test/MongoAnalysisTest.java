@@ -67,4 +67,4 @@
 //		result = mongo.get(new AnalyzedDBObject(analyzer).createQuery(INDEXED_FIELD, "MonGoDBs wouldd search ", Condition.IN), COLLECTION_NAME);
 //		assertEquals(TEXT, result.get(TEXT_FIELD));
 //	}
-//}
+// }

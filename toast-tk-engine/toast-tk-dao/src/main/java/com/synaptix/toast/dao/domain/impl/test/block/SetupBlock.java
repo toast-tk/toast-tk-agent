@@ -1,22 +1,13 @@
-/**
- * 
- */
 package com.synaptix.toast.dao.domain.impl.test.block;
+
+import com.github.jmkgreen.morphia.annotations.Embedded;
+import com.synaptix.toast.core.report.TestResult;
+import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.line.BlockLine;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.jmkgreen.morphia.annotations.Embedded;
-import com.synaptix.toast.core.dao.IBlock;
-import com.synaptix.toast.core.report.TestResult;
-
-/**
- * A setup block.
- * 
- * @author E413544
- * 
- */
-// @Entity(value = "blocks")
 @Embedded
 public class SetupBlock implements IBlock {
 
@@ -39,7 +30,8 @@ public class SetupBlock implements IBlock {
 		return blockLines;
 	}
 
-	public void setBlockLines(List<BlockLine> blockLines) {
+	public void setBlockLines(
+		List<BlockLine> blockLines) {
 		this.blockLines = blockLines;
 	}
 
@@ -47,7 +39,8 @@ public class SetupBlock implements IBlock {
 		return columns;
 	}
 
-	public void setColumns(BlockLine columns) {
+	public void setColumns(
+		BlockLine columns) {
 		this.columns = columns;
 	}
 
@@ -55,15 +48,18 @@ public class SetupBlock implements IBlock {
 		return fixtureName;
 	}
 
-	public void setFixtureName(String fixtureName) {
+	public void setFixtureName(
+		String fixtureName) {
 		this.fixtureName = fixtureName;
 	}
 
-	public void addLine(List<String> cells) {
+	public void addLine(
+		List<String> cells) {
 		blockLines.add(new BlockLine(cells));
 	}
 
-	public void addLine(BlockLine line) {
+	public void addLine(
+		BlockLine line) {
 		blockLines.add(line);
 	}
 
@@ -71,12 +67,19 @@ public class SetupBlock implements IBlock {
 		return testResult;
 	}
 
-	public void setTestResult(TestResult testResult) {
+	public void setTestResult(
+		TestResult testResult) {
 		this.testResult = testResult;
 	}
 
 	@Override
 	public String getBlockType() {
 		return "setup";
+	}
+
+
+	@Override
+	public int getHeaderSize() {
+		return 0;
 	}
 }

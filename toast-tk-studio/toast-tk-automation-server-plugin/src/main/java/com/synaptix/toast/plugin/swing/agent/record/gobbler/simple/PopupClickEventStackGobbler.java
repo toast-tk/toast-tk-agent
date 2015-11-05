@@ -4,21 +4,23 @@ import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.EventStackGobbler;
 
-
-public class PopupClickEventStackGobbler extends EventStackGobbler{
+public class PopupClickEventStackGobbler extends EventStackGobbler {
 
 	@Override
-	public boolean isInterestedIn(AWTCapturedEvent capturedEvent) {
-		return isMouseClick(capturedEvent.eventLabel) && 
-				isPopupMenuType(capturedEvent.componentType);
+	public boolean isInterestedIn(
+		AWTCapturedEvent capturedEvent) {
+		return isMouseClick(capturedEvent.eventLabel) &&
+			isPopupMenuType(capturedEvent.componentType);
 	}
-	
-	public static boolean isPopupMenuType(String targetType) {
+
+	public static boolean isPopupMenuType(
+		String targetType) {
 		return targetType.contains("JPopupMenu");
 	}
-	
+
 	@Override
-	public EventType getInterpretedEventType(AWTCapturedEvent capturedEvent) {
+	public EventType getInterpretedEventType(
+		AWTCapturedEvent capturedEvent) {
 		return EventType.POPUP_MENU_CLICK;
 	}
 
@@ -28,7 +30,8 @@ public class PopupClickEventStackGobbler extends EventStackGobbler{
 	}
 
 	@Override
-	public EventStackGobbler digest(AWTCapturedEvent capturedEvent) {
+	public EventStackGobbler digest(
+		AWTCapturedEvent capturedEvent) {
 		return this;
 	}
 
@@ -42,5 +45,8 @@ public class PopupClickEventStackGobbler extends EventStackGobbler{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	@Override
+	public void reset() {
+	}
 }

@@ -10,7 +10,10 @@ import com.synaptix.toast.core.adapter.ActionAdapterKind;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface ActionAdapter {
+
 	ActionAdapterKind value();
+
 	String name();
+
 	String description() default "";
 }

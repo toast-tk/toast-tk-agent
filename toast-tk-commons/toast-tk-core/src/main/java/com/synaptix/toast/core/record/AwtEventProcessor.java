@@ -4,5 +4,6 @@ import java.awt.AWTEvent;
 
 public interface AwtEventProcessor {
 
-	void processEvent(final AWTEvent event);	
+	void processEvent(
+		final AWTEvent event);
 }

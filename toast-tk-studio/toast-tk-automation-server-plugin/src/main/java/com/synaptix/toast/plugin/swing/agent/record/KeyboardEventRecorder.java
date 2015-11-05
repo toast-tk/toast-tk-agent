@@ -8,17 +8,18 @@ import org.fest.swing.input.InputState;
 import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 import com.synaptix.toast.core.record.IEventRecorder;
 
-import static com.synaptix.toast.plugin.swing.agent.listener.InspectionUtils.*;
-
 public class KeyboardEventRecorder extends AbstractEventRecorder {
 
-	public KeyboardEventRecorder(InputState state, IEventRecorder eventRecorder) {
+	public KeyboardEventRecorder(
+		InputState state,
+		IEventRecorder eventRecorder) {
 		super(state, eventRecorder);
 	}
-	
+
 	@Override
-	public void processEvent(AWTEvent event) {
-		if (isKeyReleasedEvent(event)) {
+	public void processEvent(
+		AWTEvent event) {
+		if(isKeyReleasedEvent(event)) {
 			final KeyEvent kEvent = (KeyEvent) event;
 			final AWTCapturedEvent captureEvent = buildKeyboardEventCapturedObject(event, kEvent);
 			if(isCapturedEventUninteresting(captureEvent)) {
@@ -28,14 +29,14 @@ public class KeyboardEventRecorder extends AbstractEventRecorder {
 		}
 	}
 
-	private static boolean isKeyReleasedEvent(final AWTEvent event) {
+	private static boolean isKeyReleasedEvent(
+		final AWTEvent event) {
 		return event.getID() == KeyEvent.KEY_RELEASED;
 	}
 
 	private AWTCapturedEvent buildKeyboardEventCapturedObject(
-			final AWTEvent event, 
-			final KeyEvent kEvent
-	) {
+		final AWTEvent event,
+		final KeyEvent kEvent) {
 		final AWTCapturedEvent captureEvent = new AWTCapturedEvent();
 		captureEvent.businessValue = getEventValue(event);
 		captureEvent.componentLocator = getEventComponentLocator(event);
@@ -46,10 +47,9 @@ public class KeyboardEventRecorder extends AbstractEventRecorder {
 		captureEvent.timeStamp = System.nanoTime();
 		return captureEvent;
 	}
-	
+
 	@Override
 	public long getEventMask() {
 		return AWTEvent.KEY_EVENT_MASK;
 	}
-
 }

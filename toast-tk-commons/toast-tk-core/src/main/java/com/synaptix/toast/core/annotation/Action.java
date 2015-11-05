@@ -8,8 +8,12 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Action {
+
 	String action();
+
 	String description();
+
 	String[] examples() default {};
+
 	boolean display() default false;
 }

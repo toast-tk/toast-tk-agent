@@ -6,38 +6,38 @@ import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.EventStackGobbler;
 
-
-public class InputEventStackGobbler extends EventStackGobbler{
+public class InputEventStackGobbler extends EventStackGobbler {
 
 	AWTCapturedEvent finalEvent = null;
+
 	String inputTypeUnderCapture = null;
-	
+
 	@Override
-	public boolean isInterestedIn(AWTCapturedEvent capturedEvent) {
-		this.inputTypeUnderCapture = capturedEvent.componentType;
-		return isInputEvent(capturedEvent.eventLabel);
+	public boolean isInterestedIn(
+		AWTCapturedEvent capturedEvent) {
+		boolean isInputEvent = isInputEvent(capturedEvent.eventLabel);
+		if(isInputEvent && this.inputTypeUnderCapture == null){
+			this.inputTypeUnderCapture = capturedEvent.componentType;
+		}
+		return isInputEvent(capturedEvent.eventLabel) || capturedEvent.componentType.equals(inputTypeUnderCapture);
 	}
-	
 
-
-	public boolean isInputEvent(String eventLabel) {
+	public boolean isInputEvent(
+		String eventLabel) {
 		return KeyEvent.class.getSimpleName().equals(eventLabel);
 	}
 
-	
 	@Override
 	public boolean isLooper() {
-		return false;
+		return true;
 	}
-	
+
 	@Override
-	public EventStackGobbler digest(AWTCapturedEvent capturedEvent) {
-//		if (isInputEvent(capturedEvent.eventLabel) || isMouseClick(capturedEvent.eventLabel)) {
-//			return this;
-//		}
-		if (isFocusLostEvent(capturedEvent.eventLabel)) {
+	public EventStackGobbler digest(
+		AWTCapturedEvent capturedEvent) {
+		if(isFocusLostEvent(capturedEvent.eventLabel)) {
 			String inputCapturedType = capturedEvent.componentType;
-			if (inputCapturedType.equals(inputTypeUnderCapture)) {
+			if(inputCapturedType.equals(inputTypeUnderCapture)) {
 				finalEvent = cloneEvent(capturedEvent);
 				String name = capturedEvent.componentName;
 				String locator = capturedEvent.componentLocator;
@@ -57,18 +57,17 @@ public class InputEventStackGobbler extends EventStackGobbler{
 	public AWTCapturedEvent getAdjustedEvent() {
 		return finalEvent;
 	}
-	
+
 	@Override
-	public EventType getInterpretedEventType(AWTCapturedEvent capturedEvent) {
+	public EventType getInterpretedEventType(
+		AWTCapturedEvent capturedEvent) {
 		return EventType.KEY_INPUT;
 	}
 
-	private static boolean isMenuType(String targetType) {
-		return "JMenu".equals(targetType);
-	}
-	
-	private static boolean isMenuItemType(String targetType) {
-		return "JMenuItem".equals(targetType);
+	@Override
+	public void reset() {
+		this.inputTypeUnderCapture = null;
+		this.finalEvent = null;
 	}
 
 }

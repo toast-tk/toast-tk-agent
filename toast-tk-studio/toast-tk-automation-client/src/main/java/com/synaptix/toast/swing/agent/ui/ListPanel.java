@@ -26,7 +26,6 @@ Creation date: 26 févr. 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
  */
-
 package com.synaptix.toast.swing.agent.ui;
 
 import java.awt.BorderLayout;
@@ -40,20 +39,22 @@ import javax.swing.JTextField;
 public class ListPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+
 	private JTextField value;
 
-	public ListPanel(final String[] items) {
+	public ListPanel(
+		final String[] items) {
 		super(new BorderLayout(5, 5));
-
 		final JComboBox jcb = new JComboBox(items);
 		jcb.addItemListener(new ItemListener() {
+
 			@Override
-			public void itemStateChanged(ItemEvent e) {
+			public void itemStateChanged(
+				ItemEvent e) {
 				value.setText(String.valueOf(jcb.getSelectedIndex()));
 			}
 		});
 		add(jcb, BorderLayout.CENTER);
-
 		value = new JTextField("", 20);
 		value.setEditable(false);
 		value.setVisible(false);

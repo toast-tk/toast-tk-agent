@@ -7,19 +7,24 @@ import org.bson.types.ObjectId;
 import com.github.jmkgreen.morphia.Datastore;
 import com.github.jmkgreen.morphia.Key;
 import com.github.jmkgreen.morphia.dao.BasicDAO;
+import com.github.jmkgreen.morphia.query.Query;
 import com.google.inject.Inject;
-import com.synaptix.toast.core.dao.ITaggable;
 import com.synaptix.toast.dao.domain.impl.common.TagImpl;
+import com.synaptix.toast.dao.domain.impl.test.block.ITaggable;
 
-public abstract class AbstractMongoDaoService<E extends ITaggable> extends BasicDAO<E, ObjectId> implements ICrudDaoService<E> {
+public abstract class AbstractMongoDaoService<E extends ITaggable> extends
+		BasicDAO<E, ObjectId> implements ICrudDaoService<E> {
 
 	@Inject
 	protected EntityCollectionManager entityManager;
+
 	protected CommonMongoDaoService commonService;
+
 	Class<E> clazz;
 
 	@Inject
-	protected AbstractMongoDaoService(Class<E> clazz, Datastore ds, CommonMongoDaoService service) {
+	protected AbstractMongoDaoService(Class<E> clazz, Datastore ds,
+			CommonMongoDaoService service) {
 		super(ds);
 		this.commonService = service;
 		this.clazz = clazz;
@@ -34,7 +39,8 @@ public abstract class AbstractMongoDaoService<E extends ITaggable> extends Basic
 		Key<E> save = super.save(entity);
 		String collection = entityManager.getCollection(clazz);
 		if (collection != null) {
-			commonService.indexEntity(ds, save.getKind(), save.getId().toString(), entity);
+			commonService.indexEntity(ds, save.getKind(), save.getId()
+					.toString(), entity);
 		}
 		return save;
 	}

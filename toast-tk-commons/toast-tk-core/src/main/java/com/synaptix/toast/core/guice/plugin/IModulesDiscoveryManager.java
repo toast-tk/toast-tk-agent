@@ -4,6 +4,5 @@ import com.google.inject.Module;
 
 public interface IModulesDiscoveryManager {
 
-    public Iterable<Module> getModules();
-    
+	public Iterable<Module> getModules();
 }

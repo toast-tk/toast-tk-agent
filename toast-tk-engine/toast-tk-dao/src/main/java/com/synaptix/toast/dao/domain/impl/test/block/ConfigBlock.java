@@ -1,23 +1,14 @@
-/**
- * 
- */
 package com.synaptix.toast.dao.domain.impl.test.block;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.github.jmkgreen.morphia.annotations.Embedded;
-import com.synaptix.toast.core.dao.IBlock;
-import com.synaptix.toast.dao.domain.impl.test.ComponentConfigLine;
+import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
+import com.synaptix.toast.dao.domain.impl.test.block.line.ComponentConfigLine;
 
-/**
- * A component configuration block.
- * 
- * @author E413544
- * 
- */
-// @Entity(value = "blocks")
 @Embedded
+@Deprecated
 public class ConfigBlock implements IBlock {
 
 	private String componentName;
@@ -33,7 +24,8 @@ public class ConfigBlock implements IBlock {
 		return lines;
 	}
 
-	public void setLines(List<ComponentConfigLine> lines) {
+	public void setLines(
+		List<ComponentConfigLine> lines) {
 		this.lines = lines;
 	}
 
@@ -41,12 +33,15 @@ public class ConfigBlock implements IBlock {
 		return componentName;
 	}
 
-	public void setComponentName(String componentName) {
+	public void setComponentName(
+		String componentName) {
 		this.componentName = componentName;
 	}
 
-
-	public void addLine(String testName, String systemName, String componentAssociation) {
+	public void addLine(
+		String testName,
+		String systemName,
+		String componentAssociation) {
 		lines.add(new ComponentConfigLine(testName, systemName, componentAssociation));
 	}
 
@@ -55,4 +50,9 @@ public class ConfigBlock implements IBlock {
 		return "config";
 	}
 
+
+	@Override
+	public int getHeaderSize() {
+		return 0;
+	}
 }

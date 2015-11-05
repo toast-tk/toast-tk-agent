@@ -26,7 +26,6 @@ Creation date: 23 févr. 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
  */
-
 package com.synaptix.toast.swing.agent.ui;
 
 import java.awt.Component;
@@ -64,10 +63,15 @@ import com.synaptix.toast.constant.Property;
 public class ConfigPanel extends JDialog {
 
 	private static final long serialVersionUID = 1L;
+
 	private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
+
 	private JPanel mainPane;
+
 	private final Properties properties;
+
 	private HashMap<String, JTextField> textFields;
+
 	private final File propertyFile;
 
 	/**
@@ -75,12 +79,13 @@ public class ConfigPanel extends JDialog {
 	 * 
 	 * @param propertiesConfiguration
 	 */
-	public ConfigPanel(Properties propertiesConfiguration, File propertyFile) {
+	public ConfigPanel(
+		Properties propertiesConfiguration,
+		File propertyFile) {
 		super();
 		this.properties = propertiesConfiguration;
-		this.propertyFile= propertyFile;
+		this.propertyFile = propertyFile;
 		initialize();
-
 	}
 
 	/**
@@ -97,8 +102,7 @@ public class ConfigPanel extends JDialog {
 		JPanel configEntry = new JPanel();
 		configEntry.setAlignmentX(Component.LEFT_ALIGNMENT);
 		configEntry.setLayout(new BoxLayout(configEntry, BoxLayout.PAGE_AXIS));
-
-		for (Object key : EnumerationUtils.toList(properties.propertyNames())) {
+		for(Object key : EnumerationUtils.toList(properties.propertyNames())) {
 			String strKey = (String) key;
 			JLabel label = new JLabel(label(strKey));
 			label.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
@@ -110,7 +114,6 @@ public class ConfigPanel extends JDialog {
 			textFields.put(strKey, textField);
 			mainPane.add(textField);
 		}
-
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setAlignmentX(LEFT_ALIGNMENT);
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
@@ -118,22 +121,22 @@ public class ConfigPanel extends JDialog {
 		JButton okButton = new JButton("Ok");
 		okButton.addActionListener(new ActionListener() {
 
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(
+				ActionEvent e) {
 				saveAndClose();
 			}
 		});
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
 
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(
+				ActionEvent e) {
 				close();
 			}
 		});
-
 		buttonPanel.add(cancelButton);
 		buttonPanel.add(okButton);
 		mainPane.add(buttonPanel);
-
 		setSize(500, 500);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setContentPane(mainPane);
@@ -143,21 +146,23 @@ public class ConfigPanel extends JDialog {
 		setVisible(true);
 	}
 
-	private String label(String strKey) {
-		if (Property.TOAST_RUNTIME_TYPE.equals(strKey)) {
+	private String label(
+		String strKey) {
+		if(Property.TOAST_RUNTIME_TYPE.equals(strKey)) {
 			return "Runtime Type (JNLP|MVN|JAR):";
 		}
-		if (Property.TOAST_RUNTIME_AGENT.equals(strKey)) {
+		if(Property.TOAST_RUNTIME_AGENT.equals(strKey)) {
 			return "Agent Path:";
 		}
-		if (Property.TOAST_RUNTIME_CMD.equals(strKey)) {
+		if(Property.TOAST_RUNTIME_CMD.equals(strKey)) {
 			return "SUT Launch Command:";
 		}
 		return strKey + ":";
 	}
 
-	private String render(Object object) {
-		if (object instanceof List) {
+	private String render(
+		Object object) {
+		if(object instanceof List) {
 			String raw = object.toString();
 			return raw.substring(1, raw.length() - 1);
 		}
@@ -165,12 +170,13 @@ public class ConfigPanel extends JDialog {
 	}
 
 	private void saveAndClose() {
-		for (Entry<String, JTextField> entry : textFields.entrySet()) {
+		for(Entry<String, JTextField> entry : textFields.entrySet()) {
 			properties.setProperty(entry.getKey(), entry.getValue().getText());
 		}
 		try {
 			properties.store(FileUtils.openOutputStream(propertyFile), "Saving !");
-		} catch (IOException e) {
+		}
+		catch(IOException e) {
 			LOG.warn("Could not save properties", e);
 		}
 		close();
@@ -180,5 +186,4 @@ public class ConfigPanel extends JDialog {
 		this.setVisible(false);
 		this.dispose();
 	}
-
 }

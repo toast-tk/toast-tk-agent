@@ -2,19 +2,21 @@ package com.synaptix.toast.core.report;
 
 import java.awt.image.BufferedImage;
 
+import com.synaptix.toast.core.annotation.craft.FixMe;
 
+@FixMe(todo = "split into different objects")
 public class TestResult {
+
 	private final boolean isSuccess;
+
 	private String message;
+
 	private String contextualTestSentence;
+
 	private BufferedImage screenShot;
+
 	// expected to add
 	private ResultKind resultKind;
-
-	/**
-	 * Used for Show tests, to return an object or a list of objects. Then, the reporter can display its content properly.
-	 */
-	private Object resultObject;
 
 	/**
 	 * This constructor can be used in case of success.
@@ -28,23 +30,28 @@ public class TestResult {
 	 * 
 	 * @param failureMessage
 	 */
-	public TestResult(String failureMessage) {
+	public TestResult(
+		String failureMessage) {
 		this(failureMessage, ResultKind.FAILURE);
 	}
-	
-	public TestResult(String failureMessage, BufferedImage img) {
-		this(failureMessage, ResultKind.FAILURE, img);
-	}
 
-	
-	public TestResult(String message, ResultKind resultKind, BufferedImage img) {
+// public TestResult(String failureMessage, BufferedImage img) {
+// this(failureMessage, ResultKind.FAILURE, img);
+// }
+//
+	public TestResult(
+		String message,
+		ResultKind resultKind,
+		BufferedImage img) {
 		this.message = message;
 		this.isSuccess = resultKind.equals(ResultKind.SUCCESS) || resultKind.equals(ResultKind.INFO);
 		this.setScreenShot(img);
 		this.setResultKind(resultKind);
 	}
-	
-	public TestResult(String message, ResultKind resultKind) {
+
+	public TestResult(
+		String message,
+		ResultKind resultKind) {
 		this(message, resultKind, null);
 	}
 
@@ -56,7 +63,8 @@ public class TestResult {
 		return message;
 	}
 
-	public void setMessage(String message) {
+	public void setMessage(
+		String message) {
 		this.message = message;
 	}
 
@@ -64,7 +72,8 @@ public class TestResult {
 		return resultKind;
 	}
 
-	public void setResultKind(ResultKind resultKind) {
+	public void setResultKind(
+		ResultKind resultKind) {
 		this.resultKind = resultKind;
 	}
 
@@ -91,10 +100,11 @@ public class TestResult {
 		INFO
 	}
 
-	public void setContextualTestSentence(String contextualTestSentence) {
+	public void setContextualTestSentence(
+		String contextualTestSentence) {
 		this.contextualTestSentence = contextualTestSentence;
 	}
-	
+
 	public String getContextualTestSentence() {
 		return contextualTestSentence;
 	}
@@ -103,7 +113,8 @@ public class TestResult {
 		return screenShot;
 	}
 
-	public void setScreenShot(BufferedImage screenShot) {
+	public void setScreenShot(
+		BufferedImage screenShot) {
 		this.screenShot = screenShot;
 	}
 }

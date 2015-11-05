@@ -1,10 +1,5 @@
 package com.synaptix.toast.core.runtime;
 
-/**
- * 
- * @author skokaina
- * 
- */
 public interface IFeedableSwingPage {
 
 	/**
@@ -12,8 +7,11 @@ public interface IFeedableSwingPage {
 	 * 
 	 * @param locator
 	 */
-	public void initElement(ISwingElement locator);
+	public void initElement(
+		ISwingElement locator);
 
-	public void addElement(String elementName, String type, String locator);
-
+	public void addElement(
+		String elementName,
+		String type,
+		String locator);
 }

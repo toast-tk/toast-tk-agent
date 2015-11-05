@@ -8,21 +8,22 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.xml.sax.SAXException;
 
-import com.synaptix.toast.core.annotation.craft.FixMe;
-import com.synaptix.toast.swing.agent.config.Config;
-import com.synaptix.toast.swing.agent.config.ConfigProvider;
+import com.synaptix.toast.core.agent.config.Config;
+import com.synaptix.toast.core.agent.config.ConfigProvider;
 
-@FixMe(todo = "replace sysout with a logger")
 public class StartCommandHandler {
-	
+
 	private static final Logger LOG = LogManager.getLogger(StartCommandHandler.class);
+
 	private final Config configuration = new ConfigProvider().get();
+
 	private Process process;
+
 	private SutRunnerAsExec runner;
 
-	public void start() {
+	public void start() throws IllegalAccessException {
 		LOG.info("start command received !");
-		if(process != null){
+		if(process != null) {
 			stop();
 			LOG.info("Stopping previous process !");
 		}
@@ -34,33 +35,37 @@ public class StartCommandHandler {
 	public boolean init() {
 		LOG.info("init command received !");
 		try {
-			if(runner == null){
+			if(runner == null) {
 				runner = SutRunnerAsExec.FromLocalConfiguration(configuration);
 			}
 			runner.init("JNLP", false);
 			LOG.info("system initialized !");
 			return true;
-		} catch (IllegalAccessException e) {
+		}
+		catch(IllegalAccessException e) {
 			e.printStackTrace();
-		} catch (SAXException e) {
+		}
+		catch(SAXException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		}
+		catch(IOException e) {
 			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
+		}
+		catch(ParserConfigurationException e) {
 			e.printStackTrace();
 		}
 		return false;
 	}
 
 	public void stop() {
-		if(this.process != null){
+		if(this.process != null) {
 			LOG.info("Stoping process !");
 			this.process.destroy();
 			this.process = null;
 			this.runner = null;
-		}else{
+		}
+		else {
 			LOG.info("No Process to stop !");
 		}
 	}
-	
 }

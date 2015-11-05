@@ -4,21 +4,23 @@ import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.EventStackGobbler;
 
-
-public class CheckBoxClickEventStackGobbler extends EventStackGobbler{
+public class CheckBoxClickEventStackGobbler extends EventStackGobbler {
 
 	@Override
-	public boolean isInterestedIn(AWTCapturedEvent capturedEvent) {
-		return isMouseClick(capturedEvent.eventLabel) && 
-				isCheckBoxType(capturedEvent.componentType);
+	public boolean isInterestedIn(
+		AWTCapturedEvent capturedEvent) {
+		return isMouseClick(capturedEvent.eventLabel) &&
+			isCheckBoxType(capturedEvent.componentType);
 	}
-	
-	public static boolean isCheckBoxType(String targetType) {
+
+	public static boolean isCheckBoxType(
+		String targetType) {
 		return "JCheckBox".equals(targetType);
 	}
 
 	@Override
-	public EventType getInterpretedEventType(AWTCapturedEvent capturedEvent) {
+	public EventType getInterpretedEventType(
+		AWTCapturedEvent capturedEvent) {
 		return EventType.CHECKBOX_CLICK;
 	}
 
@@ -28,7 +30,8 @@ public class CheckBoxClickEventStackGobbler extends EventStackGobbler{
 	}
 
 	@Override
-	public EventStackGobbler digest(AWTCapturedEvent capturedEvent) {
+	public EventStackGobbler digest(
+		AWTCapturedEvent capturedEvent) {
 		return this;
 	}
 
@@ -42,5 +45,8 @@ public class CheckBoxClickEventStackGobbler extends EventStackGobbler{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	@Override
+	public void reset() {
+	}
 }

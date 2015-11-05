@@ -1,4 +1,3 @@
-
 /**Copyright (c) 2013-2015, Synaptix Labs
 All rights reserved.
 
@@ -27,7 +26,6 @@ Creation date: 6 févr. 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
  */
-
 package com.synaptix.toast.swing.agent.ui;
 
 import java.awt.BorderLayout;
@@ -62,59 +60,65 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.synaptix.toast.constant.Property;
+import com.synaptix.toast.core.agent.IStudioApplication;
 import com.synaptix.toast.swing.agent.AgentBoot;
-import com.synaptix.toast.swing.agent.IStudioApplication;
 import com.synaptix.toast.swing.agent.constant.Resource;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
+import com.synaptix.toast.swing.agent.runtime.StudioScriptRunner;
 import com.synaptix.toast.swing.agent.runtime.SutRunnerAsExec;
-import com.synpatix.toast.runtime.core.runtime.DefaultScriptRunner;
 
 @Deprecated
 public class SwingAgentScriptRunnerPanel extends JPanel {
 
 	private static final long serialVersionUID = 4749771836758704761L;
+
 	private static final Logger LOG = LogManager.getLogger(SwingAgentScriptRunnerPanel.class);
 
 	// private final JButton attachButton;
 	private final JButton runButton;
+
 	private final JButton initButton;
+
 	private final JButton runtimePropertyButton;
+
 	private final JPanel toolPanel;
+
 	private final JTextArea script;
+
 	private final Properties properties;
+
 	private final File toastPropertiesFile;
 
-	private DefaultScriptRunner runner;
+	private StudioScriptRunner runner;
+
 	private final SutRunnerAsExec runtime;
+
 	private final IStudioApplication app;
 
 	@Inject
-	public SwingAgentScriptRunnerPanel(final SutRunnerAsExec runtime, final IStudioApplication app, EventBus eventBus) {
-
+	public SwingAgentScriptRunnerPanel(
+		final SutRunnerAsExec runtime,
+		final IStudioApplication app,
+		EventBus eventBus) {
 		eventBus.register(this);
 		this.runtime = runtime;
 		this.app = app;
-
 		// this.attachButton = new JButton("Attach");
 		this.toolPanel = new JPanel();
 		this.runButton = new JButton("Run Test", new ImageIcon(Resource.ICON_RUN_16PX_IMG));
 		this.runButton.setToolTipText("Execute current scenario..");
 		this.runButton.setEnabled(false);
-
 		this.runtimePropertyButton = new JButton("Settings", new ImageIcon(Resource.ICON_CONF_16PX_2_IMG));
 		this.runtimePropertyButton.setToolTipText("Edit runtime properties..");
-
 		this.initButton = new JButton("Start SUT", new ImageIcon(Resource.ICON_POWER_16PX_IMG));
 		this.initButton.setToolTipText("Start the system under test..");
-
-		if (app.isConnected()) {
+		if(app.isConnected()) {
 			disableInitButton();
-		} else {
+		}
+		else {
 			enableInitButton();
 		}
-
 		this.toastPropertiesFile = new File(Property.TOAST_PROPERTIES_FILE);
-
 		// this.attachButton.addActionListener(new ActionListener() {
 		//
 		// @Override
@@ -173,22 +177,25 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 		this.toolPanel.add(runButton);
 		this.toolPanel.add(runtimePropertyButton);
 		this.toolPanel.setAlignmentX(CENTER_ALIGNMENT);
-
 		this.properties = new Properties();
 		this.script = new JTextArea();
 		this.script.getDocument().addDocumentListener(new DocumentListener() {
+
 			@Override
-			public void removeUpdate(DocumentEvent e) {
+			public void removeUpdate(
+				DocumentEvent e) {
 				checkEmpty();
 			}
 
 			@Override
-			public void insertUpdate(DocumentEvent e) {
+			public void insertUpdate(
+				DocumentEvent e) {
 				checkEmpty();
 			}
 
 			@Override
-			public void changedUpdate(DocumentEvent e) {
+			public void changedUpdate(
+				DocumentEvent e) {
 				checkEmpty();
 			}
 
@@ -196,13 +203,11 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 				runButton.setEnabled(!script.getText().isEmpty());
 			}
 		});
-
 		final JScrollPane listScroller = new JScrollPane(script);
 		listScroller.setPreferredSize(new Dimension(250, 500));
 		this.setLayout(new BorderLayout());
 		this.add(toolPanel, BorderLayout.PAGE_START);
 		this.add(listScroller, BorderLayout.CENTER);
-
 		this.initActions();
 	}
 
@@ -216,73 +221,92 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 		this.initButton.setEnabled(false);
 	}
 
-	private void initProperties(File toastProperties) {
+	private void initProperties(
+		File toastProperties) {
 		try {
 			properties.load(FileUtils.openInputStream(toastProperties));
-		} catch (IOException e) {
+		}
+		catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	private void initActions() {
 		runButton.addActionListener(new ActionListener() {
+
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(
+				ActionEvent e) {
 				SwingUtilities.invokeLater(new Runnable() {
+
 					@Override
 					public void run() {
 						String test = script.getText();
-						if (test != null) {
+						if(test != null) {
 							// TODO: check if client is connected !
-							if (runner == null) {
-								runner = new DefaultScriptRunner(AgentBoot.injector);
+							if(runner == null) {
+								runner = new StudioScriptRunner(AgentBoot.injector);
 							}
 							String wikiScenario = toWikiScenario(test);
 							try {
 								runner.runRemoteScript(wikiScenario);
-							} catch (IllegalAccessException e) {
-								e.printStackTrace();
-							} catch (ClassNotFoundException e) {
+							}
+							catch(IllegalAccessException e) {
 								e.printStackTrace();
 							}
-						} else {
+							catch(ClassNotFoundException e) {
+								e.printStackTrace();
+							}
+							catch(IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						else {
 							JOptionPane.showMessageDialog(null, "Script Text Area is Empty !");
 						}
 					}
 				});
 			}
 
-			private String toWikiScenario(String test) {
+			private String toWikiScenario(
+				String test) {
 				String output = "|| scenario || swing ||\n";
 				String[] lines = test.split("\n");
-				for (String line : lines) {
+				for(String line : lines) {
 					output += "|" + line + "|\n";
 				}
 				return output;
 			}
 		});
-		
 		this.initButton.addActionListener(new ActionListener() {
+
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>(){
+			public void actionPerformed(
+				ActionEvent e) {
+				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
 					@Override
-					protected Void doInBackground() throws Exception {
+					protected Void doInBackground()
+						throws Exception {
 						disableInitButton();
 						initProperties(toastPropertiesFile);
 						String runtimeType = (String) properties.get(Property.TOAST_RUNTIME_TYPE);
 						try {
 							publish();
-							runtime.init(runtimeType,  true);
+							runtime.init(runtimeType, true);
 							Desktop.getDesktop().open(new File(Property.TOAST_HOME_DIR));
-						} catch (IllegalAccessException e) {
+						}
+						catch(IllegalAccessException e) {
 							e.printStackTrace();
-						} catch (SAXException e) {
+						}
+						catch(SAXException e) {
 							e.printStackTrace();
-						} catch (IOException e) {
+						}
+						catch(IOException e) {
 							e.printStackTrace();
-						} catch (ParserConfigurationException e) {
+						}
+						catch(ParserConfigurationException e) {
 							e.printStackTrace();
 						}
 						finally {
@@ -292,7 +316,8 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 					}
 
 					@Override
-					protected void process(List<Void> chunks) {
+					protected void process(
+						List<Void> chunks) {
 						super.process(chunks);
 						app.startProgress("Starting SUT..");
 					}
@@ -300,10 +325,11 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 				worker.execute();
 			}
 		});
-		
 		this.runtimePropertyButton.addActionListener(new ActionListener() {
+
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(
+				ActionEvent e) {
 				initProperties(toastPropertiesFile);
 				final ConfigPanel configPanel = new ConfigPanel(properties, toastPropertiesFile);
 			}
@@ -311,14 +337,15 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 	}
 
 	@Subscribe
-	public void handleServerConnexionStatus(SeverStatusMessage startUpMessage) {
-		switch (startUpMessage.state) {
-		case CONNECTED:
-			disableInitButton();
-			break;
-		default:
-			enableInitButton();
-			break;
+	public void handleServerConnexionStatus(
+		SeverStatusMessage startUpMessage) {
+		switch(startUpMessage.state) {
+			case CONNECTED :
+				disableInitButton();
+				break;
+			default :
+				enableInitButton();
+				break;
 		}
 	}
 }

@@ -4,13 +4,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class ImportedScenario {
+
 	private String id;
+
 	private String name;
-	
-	protected ImportedScenario(){
+
+	protected ImportedScenario() {
 	}
-	
-	public ImportedScenario(String item, String name){
+
+	public ImportedScenario(
+		String item,
+		String name) {
 		this.name = item;
 		this.name = name;
 	}
@@ -19,7 +23,8 @@ public class ImportedScenario {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(
+		String id) {
 		this.id = id;
 	}
 
@@ -27,10 +32,8 @@ public class ImportedScenario {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(
+		String name) {
 		this.name = name;
 	}
-	
-	
-	
 }

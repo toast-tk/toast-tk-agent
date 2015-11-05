@@ -13,8 +13,17 @@ public abstract class BasicEntityBean extends BasicTaggableMongoBean {
 		return id;
 	}
 
-	public void setId(ObjectId id) {
+	public void setId(
+		ObjectId id) {
 		this.id = id;
 	}
+	
+    public void setId(
+            String id) {
+        this.id = id == null ? null: new ObjectId(id);
+    }
 
+    public String getIdAsString() {
+        return id != null ? id.toString() : null;
+    }
 }

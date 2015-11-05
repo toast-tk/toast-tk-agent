@@ -1,4 +1,3 @@
-
 package com.synaptix.toast.plugin.swing.agent.listener;
 
 import java.awt.Component;
@@ -37,11 +36,14 @@ import com.synaptix.toast.plugin.swing.server.SwingInspectionManager;
 
 @FixMe(todo = "review hard coded values")
 public class InitRequestListener extends Listener {
-	private static final Logger LOG = LogManager.getLogger(InitRequestListener.class);
-	private final RepositoryHolder repositoryHolder;
-	static java.util.List<Class<?>> autorizedComponents = new ArrayList<Class<?>>();
-	static java.util.List<String> autorizedPackages = new ArrayList<String>();
 
+	private static final Logger LOG = LogManager.getLogger(InitRequestListener.class);
+
+	private final RepositoryHolder repositoryHolder;
+
+	static java.util.List<Class<?>> autorizedComponents = new ArrayList<Class<?>>();
+
+	static java.util.List<String> autorizedPackages = new ArrayList<String>();
 	static {
 		autorizedComponents.add(JLabel.class);
 		autorizedComponents.add(JButton.class);
@@ -56,66 +58,73 @@ public class InitRequestListener extends Listener {
 		autorizedComponents.add(JPanel.class);
 		autorizedComponents.add(JViewport.class);
 		autorizedComponents.add(JPasswordField.class);
-
 		autorizedPackages.add("com.synaptix.swing.simpledaystimeline");
 		autorizedPackages.add("com.synaptix.swing");
 	}
 
 	@Inject
-	public InitRequestListener(RepositoryHolder repositoryHolder) {
+	public InitRequestListener(
+		RepositoryHolder repositoryHolder) {
 		this.repositoryHolder = repositoryHolder;
 	}
 
 	@Override
-	public void received(Connection connection, Object object) {
+	public void received(
+		Connection connection,
+		Object object) {
 		try {
-			if (object instanceof InitInspectionRequest) {
+			if(object instanceof InitInspectionRequest) {
 				SwingInspectionManager.getInstance().clearContainers();
 				mutateJDialogsModalityType();
 				final List<Component> allComponents = SwingInspectionManager.getInstance().getAllComponents();
 				final Map<Object, String> allInstances = SwingInspectionManager.getInstance().getAllInstances();
 				repositoryHolder.getRepo().clear();
-				for (Component component : allComponents) {
+				for(Component component : allComponents) {
 					String componentLocator = computeLocator(allInstances, component);
-					if (isAutorizedComponent(component)) {
+					if(isAutorizedComponent(component)) {
 						repositoryHolder.getRepo().put(componentLocator, component);
 					}
 				}
 			}
-		} catch (Exception e) {
+		}
+		catch(Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
 	}
 
-	private String computeLocator(Map<Object, String> allInstances, Component component) {
+	private String computeLocator(
+		Map<Object, String> allInstances,
+		Component component) {
 		String componentName = allInstances.get(component);
 		String componentId = component.getName();
-		String componentLocator = componentName != null ? componentName : componentId;	
-		componentLocator = componentLocator != null ? componentLocator : component.getClass() + ":" + System.identityHashCode(component);
+		String componentLocator = componentName != null ? componentName : componentId;
+		componentLocator = componentLocator != null ? componentLocator : component.getClass() + ":"
+			+ System.identityHashCode(component);
 		return componentLocator;
 	}
 
 	private void mutateJDialogsModalityType() {
-		for (Container f : getWindows()) {
+		for(Container f : getWindows()) {
 			SwingInspectionManager.getInstance().addContainer(f);
-			if (JDialog.class.isAssignableFrom(f.getClass())) {
+			if(JDialog.class.isAssignableFrom(f.getClass())) {
 				((JDialog) f).setModal(false);
 				((JDialog) f).setModalityType(Dialog.ModalityType.MODELESS);
 			}
 		}
 	}
 
-	public static boolean isAutorizedComponent(Component component) {
-		for (String packageName : autorizedPackages) {
-			if (component.getClass().getPackage().getName().startsWith(packageName)) {
+	public static boolean isAutorizedComponent(
+		Component component) {
+		for(String packageName : autorizedPackages) {
+			if(component.getClass().getPackage().getName().startsWith(packageName)) {
 				return true;
 			}
 		}
-		if (autorizedComponents.contains(component.getClass())){
+		if(autorizedComponents.contains(component.getClass())) {
 			return true;
 		}
-		for (Class<?> autorizedComponent : autorizedComponents) {
-			if (autorizedComponent.isAssignableFrom(component.getClass())){
+		for(Class<?> autorizedComponent : autorizedComponents) {
+			if(autorizedComponent.isAssignableFrom(component.getClass())) {
 				return true;
 			}
 		}
@@ -124,29 +133,26 @@ public class InitRequestListener extends Listener {
 
 	private static Container[] getWindows() {
 		Window[] allWindows = Window.getWindows();
-
 		int frameCount = 0;
-		for (Window w : allWindows) {
-			if (acceptableContainer(w)) {
+		for(Window w : allWindows) {
+			if(acceptableContainer(w)) {
 				frameCount++;
 			}
 		}
-
 		Container[] containers = new Container[frameCount];
 		int c = 0;
-		for (Window w : allWindows) {
-			if (acceptableContainer(w)) {
+		for(Window w : allWindows) {
+			if(acceptableContainer(w)) {
 				containers[c++] = (Container) w;
 			}
 		}
-
 		return containers;
 	}
 
-	private static boolean acceptableContainer(Window w) {
+	private static boolean acceptableContainer(
+		Window w) {
 		boolean scopable = !w.getClass().getPackage().getName().startsWith("fr.synaptix");
 		boolean acceptable = scopable && (w instanceof Frame || w instanceof JDialog) && w.isVisible();
 		return acceptable;
 	}
-
 }

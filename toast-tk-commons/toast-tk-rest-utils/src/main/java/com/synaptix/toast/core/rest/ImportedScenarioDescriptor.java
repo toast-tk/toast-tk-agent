@@ -4,14 +4,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class ImportedScenarioDescriptor {
-	
+
 	private String type;
+
 	private String rows = new String();
-	
-	protected ImportedScenarioDescriptor(){
+
+	protected ImportedScenarioDescriptor() {
 	}
-	
-	public ImportedScenarioDescriptor(String type, String rows){
+
+	public ImportedScenarioDescriptor(
+		String type,
+		String rows) {
 		this.type = type;
 		this.rows = rows;
 	}
@@ -20,7 +23,8 @@ public class ImportedScenarioDescriptor {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(
+		String type) {
 		this.type = type;
 	}
 
@@ -28,10 +32,8 @@ public class ImportedScenarioDescriptor {
 		return rows;
 	}
 
-	public void setRows(String rows) {
+	public void setRows(
+		String rows) {
 		this.rows = rows;
 	}
-	
-	
-	
 }

@@ -10,7 +10,8 @@ public class Config {
 		return mongoServer;
 	}
 
-	public void setMongoServer(String mongoServer) {
+	public void setMongoServer(
+		String mongoServer) {
 		this.mongoServer = mongoServer;
 	}
 
@@ -18,8 +19,8 @@ public class Config {
 		return mongoPort;
 	}
 
-	public void setMongoPort(int mongoPort) {
+	public void setMongoPort(
+		int mongoPort) {
 		this.mongoPort = mongoPort;
 	}
-
 }

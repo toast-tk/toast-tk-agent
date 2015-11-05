@@ -1,3 +1,5 @@
+/*******************************************************************************
+ *******************************************************************************/
 package com.synaptix.toast.test.server.mock;
 
 import javax.swing.JFrame;
@@ -10,7 +12,9 @@ public class JListTestFrame extends JFrame {
 	private JList jList;
 
 	public JListTestFrame() {
-		final String[] datas = new String[]{"one", "two", "three", "four"};
+		final String[] datas = new String[]{
+				"one", "two", "three", "four"
+		};
 		this.jList = new JList(datas);
 		getContentPane().add(jList);
 		pack();

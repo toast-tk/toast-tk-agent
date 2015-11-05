@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 public class SwingInspectionManager {
+
 	private static SwingInspectionManager instance;
+
 	private List<Container> containers;
 
 	SwingInspectionManager() {
@@ -24,13 +26,14 @@ public class SwingInspectionManager {
 	 * @param c
 	 * @return
 	 */
-	public synchronized Map<Object, String> getAllInstances(Container container) {
+	public synchronized Map<Object, String> getAllInstances(
+		Container container) {
 		Map<Object, String> componentMap = new HashMap<Object, String>();
 		collectContainerFields(container, componentMap);
 		Component[] comps = container.getComponents();
-		for (Component component : comps) {
+		for(Component component : comps) {
 			collectContainerFields(component, componentMap);
-			if (component instanceof Container) {
+			if(component instanceof Container) {
 				componentMap.putAll(getAllInstances((Container) component));
 			}
 		}
@@ -39,11 +42,12 @@ public class SwingInspectionManager {
 
 	public synchronized Map<Object, String> getAllInstances() {
 		Map<Object, String> items = new HashMap<Object, String>();
-		for (Container container : containers) {
-			synchronized (items) {
+		for(Container container : containers) {
+			synchronized(items) {
 				try {
 					items.putAll(getAllInstances(container));
-				} catch (Exception e) {
+				}
+				catch(Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -53,11 +57,12 @@ public class SwingInspectionManager {
 
 	public synchronized List<Component> getAllComponents() {
 		List<Component> items = new ArrayList<Component>();
-		for (Container container : containers) {
-			synchronized (items) {
+		for(Container container : containers) {
+			synchronized(items) {
 				try {
 					items.addAll(getAllComponents(container));
-				} catch (Exception e) {
+				}
+				catch(Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -72,15 +77,17 @@ public class SwingInspectionManager {
 	 * @param c
 	 * @return
 	 */
-	public synchronized List<Component> getAllComponents(Container container) {
+	public synchronized List<Component> getAllComponents(
+		Container container) {
 		Component[] comps = container.getComponents();
 		List<Component> compList = new ArrayList<Component>();
-		for (Component comp : comps) {
+		for(Component comp : comps) {
 			compList.add(comp);
-			if (comp instanceof Container) {
+			if(comp instanceof Container) {
 				try {
 					compList.addAll(getAllComponents((Container) comp));
-				} catch (Exception e) {
+				}
+				catch(Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -88,33 +95,37 @@ public class SwingInspectionManager {
 		return compList;
 	}
 
-
-	private void collectContainerFields(Component component, Map<Object, String> componentMap) {
-		for (Field field : component.getClass().getDeclaredFields()) {
+	private void collectContainerFields(
+		Component component,
+		Map<Object, String> componentMap) {
+		for(Field field : component.getClass().getDeclaredFields()) {
 			try {
 				field.setAccessible(true);
 				Object propertyValue = field.get(component);
-				componentMap.put(propertyValue,  component.getClass().getCanonicalName() + ":" + field.getName());
-			} catch (Exception e) {
+				componentMap.put(propertyValue, component.getClass().getCanonicalName() + ":" + field.getName());
+			}
+			catch(Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-	public static synchronized  SwingInspectionManager getInstance() {
-		if (instance == null) {
+	public static synchronized SwingInspectionManager getInstance() {
+		if(instance == null) {
 			instance = new SwingInspectionManager();
 		}
 		return instance;
 	}
 
-	public synchronized void addContainer(Object retVal) {
-		if (isValidInstance(retVal)) {
+	public synchronized void addContainer(
+		Object retVal) {
+		if(isValidInstance(retVal)) {
 			containers.add((Container) retVal);
 		}
 	}
 
-	public synchronized boolean isValidInstance(Object retVal) {
+	public synchronized boolean isValidInstance(
+		Object retVal) {
 		return retVal instanceof Container;
 	}
 

@@ -1,11 +1,5 @@
 package com.synaptix.toast.core.runtime;
 
-
-/**
- * 
- * @author skokaina
- * 
- */
 public interface IFeedableWebPage {
 
 	/**
@@ -13,6 +7,6 @@ public interface IFeedableWebPage {
 	 * 
 	 * @param locator
 	 */
-	public void initElement(IWebElement locator);
-
+	public void initElement(
+		IWebElement locator);
 }

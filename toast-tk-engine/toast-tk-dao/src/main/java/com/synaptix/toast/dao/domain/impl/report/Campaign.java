@@ -12,15 +12,17 @@ import com.github.jmkgreen.morphia.annotations.Index;
 import com.github.jmkgreen.morphia.annotations.Indexes;
 import com.github.jmkgreen.morphia.annotations.PrePersist;
 import com.github.jmkgreen.morphia.annotations.Reference;
-import com.synaptix.toast.core.dao.ICampaign;
-import com.synaptix.toast.core.dao.ITestPage;
 import com.synaptix.toast.dao.domain.impl.common.BasicTaggableMongoBean;
-import com.synaptix.toast.dao.domain.impl.test.TestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.ICampaign;
+import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
+import com.synaptix.toast.dao.domain.impl.test.block.TestPage;
 
 @Entity(value = "report.campaigns")
-@Indexes({ @Index(value = "name, -iteration"), @Index("iteration") })
+@Indexes({
+		@Index(value = "name, -iteration"), @Index("iteration")
+})
 public class Campaign extends BasicTaggableMongoBean implements ICampaign {
-	
+
 	@Id
 	private ObjectId id;
 
@@ -34,30 +36,33 @@ public class Campaign extends BasicTaggableMongoBean implements ICampaign {
 	private List<ITestPage> testCases;
 
 	@Override
-	public void setId(Object object) {
-		if(object == null){
+	public void setId(
+		Object object) {
+		if(object == null) {
 			this.id = null;
 		}
 	}
 	
+	public void setId(
+		ObjectId id) {
+		this.id = id;
+	}
+
 	@Override
 	public String getIdAsString() {
-		return id != null ? id.toString(): null;
+		return id != null ? id.toString() : null;
 	}
 
 	public ObjectId getId() {
 		return id;
 	}
 
-	public void setId(ObjectId id) {
-		this.id = id;
-	}
-
 	public short getIteration() {
 		return iteration;
 	}
 
-	public void setIteration(short iteration) {
+	public void setIteration(
+		short iteration) {
 		this.iteration = iteration;
 	}
 
@@ -65,7 +70,8 @@ public class Campaign extends BasicTaggableMongoBean implements ICampaign {
 		return execDay;
 	}
 
-	public void setExecDay(Date execDay) {
+	public void setExecDay(
+		Date execDay) {
 		this.execDay = execDay;
 	}
 
@@ -73,17 +79,20 @@ public class Campaign extends BasicTaggableMongoBean implements ICampaign {
 		return testCases;
 	}
 
-	public void setTestCases(List<ITestPage> testCases) {
+	public void setTestCases(
+		List<ITestPage> testCases) {
 		this.testCases = testCases;
 	}
-	
-	public void setTestCasesImpl(List<TestPage> testCases) {
-		if(testCases != null){
+
+	public void setTestCasesImpl(
+		List<TestPage> testCases) {
+		if(testCases != null) {
 			this.testCases = new ArrayList<ITestPage>();
-			for (TestPage testPage : testCases) {
+			for(TestPage testPage : testCases) {
 				this.testCases.add(testPage);
 			}
-		}else {
+		}
+		else {
 			this.testCases = null;
 		}
 	}
@@ -95,12 +104,12 @@ public class Campaign extends BasicTaggableMongoBean implements ICampaign {
 		iteration++;
 	}
 
-	public void setHadINTDb(boolean hasDB) {
+	public void setHadINTDb(
+		boolean hasDB) {
 		this.hasINTDb = hasDB;
 	}
 
 	public boolean isHasINTDb() {
 		return hasINTDb;
 	}
-
 }

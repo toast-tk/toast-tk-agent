@@ -26,12 +26,9 @@ Creation date: 19 mars 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
-
 package com.synaptix.toast.test.dao;
 
 import com.google.inject.Guice;
 
 public class Test {
-
-	
 }

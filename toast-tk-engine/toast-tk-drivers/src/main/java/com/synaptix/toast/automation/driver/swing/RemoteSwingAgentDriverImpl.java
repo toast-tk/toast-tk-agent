@@ -25,20 +25,28 @@ import com.synaptix.toast.core.runtime.ITCPClient;
 import com.synaptix.toast.core.runtime.ITCPResponseReceivedHandler;
 
 public class RemoteSwingAgentDriverImpl implements IRemoteSwingAgentDriver {
-	
+
 	private static final Logger LOG = LogManager.getLogger(RemoteSwingAgentDriverImpl.class);
+
 	protected final ITCPClient client;
+
 	private static final int RECONNECTION_RATE = 10000;
+
 	private static final int WAIT_TIMEOUT = 30000;
+
 	protected Map<String, Object> existsResponseMap;
+
 	private Map<String, Object> valueResponseMap;
+
 	private final Object VOID_RESULT = new Object();
+
 	protected final String host;
+
 	private boolean started;
 
-
 	@Inject
-	public RemoteSwingAgentDriverImpl(@Named("host") String host) {
+	public RemoteSwingAgentDriverImpl(
+		@Named("host") String host) {
 		this.client = new KryoTCPClient();
 		this.started = false;
 		this.existsResponseMap = new HashMap<String, Object>();
@@ -48,66 +56,97 @@ public class RemoteSwingAgentDriverImpl implements IRemoteSwingAgentDriver {
 	}
 
 	private void initListeners() {
-		client.addResponseHandler(new ITCPResponseReceivedHandler(){
+		client.addResponseHandler(new ITCPResponseReceivedHandler() {
 			@Override
-			public void onResponseReceived(Object object) {
-				if (object instanceof ExistsResponse) {
-					ExistsResponse response = (ExistsResponse) object;
-					existsResponseMap.put(response.id, response.exists);
-				} 
-				else if (object instanceof ValueResponse) {
-					ValueResponse response = (ValueResponse) object;
-					valueResponseMap.put(response.getId(), response.value);
+			public void onResponseReceived(
+				Object object) {
+				if(object instanceof ExistsResponse) {
+					handleExistsResponse(object);
 				}
-				else if (object instanceof ErrorResponse){
-					ErrorResponse response = (ErrorResponse) object;
-					TestResult testResult = new TestResult(response.getMessage(), response.getScreenshot());
-					if(valueResponseMap.keySet().contains(response.getId())){
-						valueResponseMap.put(response.getId(), testResult);
-					}
-					else if (existsResponseMap.keySet().contains(response.getId())){
-						existsResponseMap.put(response.getId(), testResult);
-					}
-					else{
-						// notify runner
-						LOG.error("Error result received {}", response.getMessage());
-					}
+				else if(object instanceof ValueResponse) {
+					handleValueResponse(object);
 				}
-				if (object instanceof InitResponse) {
-					if(LOG.isDebugEnabled()){
-						InitResponse response = (InitResponse) object;
-						LOG.debug(response);
-					}
+				else if(object instanceof ErrorResponse) {
+					handleErrorResponse(object);
+				}
+				if(object instanceof InitResponse) {
+					handleInitResponse(object);
 				}
 				else {
-					if (object instanceof IIdRequest) {
-						handleResponse((IIdRequest)object);
-					}else if(!(object instanceof KeepAlive)){
-						LOG.warn(String.format("Unhandled response: %s", object));
-					}
-				}				
+					handleRemainingResponse(object);
+				}
 			}
 		});
 	}
 
 	@Override
-	public void start(String host) {
+	public void start(
+		String host) {
 		try {
-			client.connect(300000, host, CommonIOUtils.TCP_PORT);
+			client.connect(300000, host, CommonIOUtils.DRIVER_TCP_PORT);
 			this.started = true;
-		} catch (IOException e) {
+		}
+		catch(IOException e) {
 			startConnectionLoop();
 		}
 	}
-	
+
 	protected void startConnectionLoop() {
-		while (!client.isConnected()) {
+		while(!client.isConnected()) {
 			connect();
 			try {
 				Thread.sleep(RECONNECTION_RATE);
-			} catch (InterruptedException e) {
+			}
+			catch(InterruptedException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	private void handleRemainingResponse(
+		Object object) {
+		if(object instanceof IIdRequest) {
+			handleResponse((IIdRequest) object);
+		}
+		else if(!(object instanceof KeepAlive)) {
+			LOG.warn(String.format("Unhandled response: %s", object));
+		}
+	}
+
+	private void handleExistsResponse(
+		Object object) {
+		ExistsResponse response = (ExistsResponse) object;
+		existsResponseMap.put(response.id, response.exists);
+	}
+
+	private void handleValueResponse(
+		Object object) {
+		ValueResponse response = (ValueResponse) object;
+		valueResponseMap.put(response.getId(), response.value);
+	}
+
+	private void handleInitResponse(
+		Object object) {
+		if(LOG.isDebugEnabled()) {
+			InitResponse response = (InitResponse) object;
+			LOG.debug(response);
+		}
+	}
+
+	private void handleErrorResponse(
+		Object object) {
+		ErrorResponse response = (ErrorResponse) object;
+		TestResult testResult = new TestResult(response.getMessage(), null);
+		// TODO: manage screenshots
+		if(valueResponseMap.keySet().contains(response.getId())) {
+			valueResponseMap.put(response.getId(), testResult);
+		}
+		else if(existsResponseMap.keySet().contains(response.getId())) {
+			existsResponseMap.put(response.getId(), testResult);
+		}
+		else {
+			// notify runner
+			LOG.error("Error result received {}", response.getMessage());
 		}
 	}
 
@@ -115,27 +154,29 @@ public class RemoteSwingAgentDriverImpl implements IRemoteSwingAgentDriver {
 		try {
 			client.reconnect();
 			this.started = true;
-		} catch (Exception e) {
-			LOG.error(String.format("Server unreachable, reattempting to connect in %d !", RECONNECTION_RATE/1000));
+		}
+		catch(Exception e) {
+			LOG.error(String.format("Server unreachable, reattempting to connect in %d !", RECONNECTION_RATE / 1000));
 		}
 	}
 
 	@Override
-	public void process(IIdRequest request) {
+	public void process(
+		IIdRequest request) {
 		checkConnection();
 		init();
-		if (request.getId() != null) {
+		if(request.getId() != null) {
 			existsResponseMap.put(request.getId(), VOID_RESULT);
 		}
-		//TODO: block any request with No ID !!
+		// TODO: block any request with No ID !!
 		client.sendRequest(request);
 	}
 
 	private void checkConnection() {
-		if(!started){
+		if(!started) {
 			start(host);
 		}
-		if (!client.isConnected()) {
+		if(!client.isConnected()) {
 			connect();
 		}
 	}
@@ -152,39 +193,44 @@ public class RemoteSwingAgentDriverImpl implements IRemoteSwingAgentDriver {
 	}
 
 	@Override
-	public boolean waitForExist(String reqId) throws TimeoutException, ErrorResultReceivedException {
+	public boolean waitForExist(
+		String reqId)
+		throws TimeoutException, ErrorResultReceivedException {
 		boolean res = false;
 		int countTimeOut = WAIT_TIMEOUT;
 		int incOffset = 500;
-		if (existsResponseMap.containsKey(reqId)) {
-			while (VOID_RESULT.equals(existsResponseMap.get(reqId))) {
+		if(existsResponseMap.containsKey(reqId)) {
+			while(VOID_RESULT.equals(existsResponseMap.get(reqId))) {
 				try {
 					client.keepAlive();
 					Thread.sleep(500);
 					countTimeOut = countTimeOut - incOffset;
-					if(countTimeOut <= 0){
-						valueResponseMap.remove(reqId);
-						throw new TimeoutException("No Response received for request: " + reqId + " after " + (WAIT_TIMEOUT/1000) +  "s !");
+					if(countTimeOut <= 0) {
+						existsResponseMap.remove(reqId);
+						throw new TimeoutException("No Response received for request: " + reqId + " after "
+							+ (WAIT_TIMEOUT / 1000) + "s !");
 					}
-				} catch (InterruptedException e) {
+				}
+				catch(InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
-			if(existsResponseMap.get(reqId) instanceof TestResult){
-				throw new ErrorResultReceivedException((TestResult)existsResponseMap.get(reqId));
+			if(existsResponseMap.get(reqId) instanceof TestResult) {
+				throw new ErrorResultReceivedException((TestResult) existsResponseMap.get(reqId));
 			}
 			res = (Boolean) existsResponseMap.get(reqId);
 			existsResponseMap.remove(reqId);
 		}
 		return res;
-
 	}
 
 	@Override
-	public String processAndWaitForValue(IIdRequest request) throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
+	public String processAndWaitForValue(
+		IIdRequest request)
+		throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
 		String res = null;
 		final String idRequest = request.getId();
-		if (idRequest == null) {
+		if(idRequest == null) {
 			throw new IllegalAccessException("Request requires an Id to wait for a value.");
 		}
 		init();
@@ -194,36 +240,41 @@ public class RemoteSwingAgentDriverImpl implements IRemoteSwingAgentDriver {
 		return res;
 	}
 
-	private String waitForValue(final IIdRequest request) throws TimeoutException, ErrorResultReceivedException {
+	private String waitForValue(
+		final IIdRequest request)
+		throws TimeoutException, ErrorResultReceivedException {
 		final String idRequest = request.getId();
 		String res = null;
 		int countTimeOut = WAIT_TIMEOUT;
 		int incOffset = 500;
-		if (valueResponseMap.containsKey(idRequest)) {
-			while (VOID_RESULT.equals(valueResponseMap.get(idRequest))) {
+		if(valueResponseMap.containsKey(idRequest)) {
+			while(VOID_RESULT.equals(valueResponseMap.get(idRequest))) {
 				try {
 					client.keepAlive();
 					Thread.sleep(incOffset);
 					countTimeOut = countTimeOut - incOffset;
-					if(countTimeOut <= 0){
+					if(countTimeOut <= 0) {
 						valueResponseMap.remove(idRequest);
-						throw new TimeoutException("No Response received for request: " + idRequest + " after " + (WAIT_TIMEOUT/1000) +  "s !");
+						throw new TimeoutException("No Response received for request: " + idRequest + " after "
+							+ (WAIT_TIMEOUT / 1000) + "s !");
 					}
-				} catch (InterruptedException e) {
+				}
+				catch(InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
-			if(valueResponseMap.get(idRequest) instanceof TestResult){
-				throw new ErrorResultReceivedException((TestResult)valueResponseMap.get(idRequest));
+			if(valueResponseMap.get(idRequest) instanceof TestResult) {
+				throw new ErrorResultReceivedException((TestResult) valueResponseMap.get(idRequest));
 			}
 			res = (String) valueResponseMap.get(idRequest);
 			valueResponseMap.remove(idRequest);
 		}
 		return res;
 	}
-	
-	protected void handleResponse(IIdRequest response){
-		//nothing here, check children classes
+
+	protected void handleResponse(
+		IIdRequest response) {
+		// nothing here, check children classes
 	}
 
 	@Override

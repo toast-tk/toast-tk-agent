@@ -1,4 +1,3 @@
-
 package com.synaptix.toast.plugin.swing.agent.listener;
 
 import java.awt.Window;
@@ -8,12 +7,10 @@ import javax.swing.JFrame;
 
 import com.synaptix.toast.core.annotation.craft.FixMe;
 
-
 /**
  * RUS specific synchronization point 
  *
  */
-
 @FixMe(todo = "move in synaptix plugin")
 public class SynchronizationPointImpl implements ISynchronizationPoint {
 
@@ -22,12 +19,12 @@ public class SynchronizationPointImpl implements ISynchronizationPoint {
 	@Override
 	public boolean hasToWait() {
 		JFrame currentFrame = getFrame();
-		if(currentFrame == null){
+		if(currentFrame == null) {
 			return false;
 		}
 		String context = currentFrame.getAccessibleContext().getAccessibleDescription();
-		if (isLoadingContext(context)) {
-			if (isThereAFocusedDialog()) {
+		if(isLoadingContext(context)) {
+			if(isThereAFocusedDialog()) {
 				return false;
 			}
 			return true;
@@ -36,12 +33,12 @@ public class SynchronizationPointImpl implements ISynchronizationPoint {
 	}
 
 	public JFrame getFrame() {
-		if (superFrame == null || !superFrame.isVisible()) {
+		if(superFrame == null || !superFrame.isVisible()) {
 			Window[] windows = Window.getWindows();
-			for (Window window : windows) {
-				if (window instanceof JFrame) {
+			for(Window window : windows) {
+				if(window instanceof JFrame) {
 					JFrame foundFrame = (JFrame) window;
-					if (foundFrame.isVisible()) {
+					if(foundFrame.isVisible()) {
 						this.superFrame = foundFrame;
 						break;
 					}
@@ -53,10 +50,10 @@ public class SynchronizationPointImpl implements ISynchronizationPoint {
 
 	private boolean isThereAFocusedDialog() {
 		Window[] windows = Window.getWindows();
-		for (Window window : windows) {
-			if (window instanceof JDialog) {
+		for(Window window : windows) {
+			if(window instanceof JDialog) {
 				JDialog dialog = (JDialog) window;
-				if (dialog.isFocused()) {
+				if(dialog.isFocused()) {
 					return true;
 				}
 			}
@@ -64,7 +61,8 @@ public class SynchronizationPointImpl implements ISynchronizationPoint {
 		return false;
 	}
 
-	private boolean isLoadingContext(String accessibleDescription) {
+	private boolean isLoadingContext(
+		String accessibleDescription) {
 		return "babyProtection".equalsIgnoreCase(accessibleDescription);
 	}
 }

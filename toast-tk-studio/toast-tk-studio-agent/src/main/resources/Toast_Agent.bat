@@ -1,1 +1,0 @@
-vertx run java:com.synaptix.toast.swing.agent.runtime.RestMicroService -cp ./toast-tk-studio-agent-standalone.jar

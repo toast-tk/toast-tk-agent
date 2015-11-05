@@ -7,16 +7,19 @@ import com.synaptix.toast.plugin.swing.agent.record.gobbler.EventStackGobbler;
 public class PanelFocusEventStackGobbler extends EventStackGobbler {
 
 	@Override
-	public boolean isInterestedIn(AWTCapturedEvent capturedEvent) {
+	public boolean isInterestedIn(
+		AWTCapturedEvent capturedEvent) {
 		return isFocusGainedEvent(capturedEvent.eventLabel);
 	}
 
-	private boolean isFocusGainedEvent(String eventLabel) {
+	private boolean isFocusGainedEvent(
+		String eventLabel) {
 		return "CausedFocusEvent>".equals(eventLabel);
 	}
 
 	@Override
-	public EventType getInterpretedEventType(AWTCapturedEvent capturedEvent) {
+	public EventType getInterpretedEventType(
+		AWTCapturedEvent capturedEvent) {
 		return EventType.BRING_ON_TOP_DISPLAY;
 	}
 
@@ -26,7 +29,8 @@ public class PanelFocusEventStackGobbler extends EventStackGobbler {
 	}
 
 	@Override
-	public EventStackGobbler digest(AWTCapturedEvent capturedEvent) {
+	public EventStackGobbler digest(
+		AWTCapturedEvent capturedEvent) {
 		return this;
 	}
 
@@ -40,5 +44,8 @@ public class PanelFocusEventStackGobbler extends EventStackGobbler {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	@Override
+	public void reset() {
+	}
 }

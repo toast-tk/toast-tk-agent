@@ -1,4 +1,3 @@
-
 package com.synaptix.toast.plugin.swing.agent.listener;
 
 public interface ISynchronizationPoint {
@@ -9,5 +8,4 @@ public interface ISynchronizationPoint {
 	 * @return
 	 */
 	public boolean hasToWait();
-	
 }

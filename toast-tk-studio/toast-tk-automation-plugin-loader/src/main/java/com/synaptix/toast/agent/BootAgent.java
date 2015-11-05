@@ -46,7 +46,10 @@ public class BootAgent {
 	 * will be called. Then the real application main method will be called.
 	 * 
 	 */
-	public static void premain(String args, Instrumentation inst) throws Exception {
+	public static void premain(
+		String args,
+		Instrumentation inst)
+		throws Exception {
 		System.out.println("Premain method invoked with args: {} and inst: {}");
 		instrumentation = inst;
 		final String redpepperAgentPath = getToastPluginDirPath();
@@ -55,23 +58,28 @@ public class BootAgent {
 		Boot.main(null);
 	}
 
-	public static void agentmain(String agentArgs, Instrumentation inst) {
+	public static void agentmain(
+		String agentArgs,
+		Instrumentation inst) {
 		System.out.println("Main method invoked with args: {} and inst: {}");
 		instrumentation = inst;
 		Boot.main(null);
 	}
 
-	public static void main(String[] args) {
+	public static void main(
+		String[] args) {
 		Boot.main(null);
 	}
 
-	static void loadInterestingJars(final File redpepperAgentPath) {
+	static void loadInterestingJars(
+		final File redpepperAgentPath) {
 		final List<URL> collectedJarsInDirectory = collectJarsInDirectory(redpepperAgentPath);
-		for (final URL jar : collectedJarsInDirectory) {
+		for(final URL jar : collectedJarsInDirectory) {
 			LOG.info("Found plugin jar {}", jar);
 			try {
 				loadInterestingClasses(jar);
-			} catch (final IOException e) {
+			}
+			catch(final IOException e) {
 				LOG.error(e.getMessage(), e);
 			}
 		}
@@ -79,17 +87,19 @@ public class BootAgent {
 
 	private static String getToastPluginDirPath() {
 		return System.getProperty(Property.TOAST_PLUGIN_DIR_PROP) == null ? Property.TOAST_PLUGIN_DIR : System
-				.getProperty(Property.TOAST_PLUGIN_DIR_PROP);
+			.getProperty(Property.TOAST_PLUGIN_DIR_PROP);
 	}
 
-	static void loadInterestingClasses(final URL jar) throws IOException {
+	static void loadInterestingClasses(
+		final URL jar)
+		throws IOException {
 		final JarFile jarFile = new JarFile(jar.getPath());
 		final String[] packagesToLoad = getPackagesToLoad(jarFile);
-		if (packagesToLoad != null) {
+		if(packagesToLoad != null) {
 			final int length = packagesToLoad.length;
-			for (int index = 0; index < length; ++index) {
+			for(int index = 0; index < length; ++index) {
 				final String packageToLoad = packagesToLoad[index];
-				if (StringUtils.isNotBlank(packageToLoad)) {
+				if(StringUtils.isNotBlank(packageToLoad)) {
 					createInterestingJarFile(jarFile, index, packageToLoad);
 				}
 			}
@@ -97,8 +107,12 @@ public class BootAgent {
 		jarFile.close();
 	}
 
-	private static void createInterestingJarFile(final JarFile jarFile, int index, final String packageToLoad) throws IOException,
-			FileNotFoundException {
+	private static void createInterestingJarFile(
+		final JarFile jarFile,
+		int index,
+		final String packageToLoad)
+		throws IOException,
+		FileNotFoundException {
 		final Collection<JarEntry> interestingJarEntries = retrieveInterestingClasses(packageToLoad, jarFile);
 		final String destPath = getToastPluginDirPath() + index + "_interestingJars.jar";
 		final File destFile = retrieveDestinationFile(destPath);
@@ -109,100 +123,122 @@ public class BootAgent {
 		jarFileToLoad.close();
 	}
 
-	private static String[] getPackagesToLoad(final JarFile jarFile) throws IOException {
+	private static String[] getPackagesToLoad(
+		final JarFile jarFile)
+		throws IOException {
 		final Manifest manifest = jarFile.getManifest();
 		final Attributes attributes = manifest.getAttributes(MANIFEST_SYSTEM_LOAD);
 		final String value = attributes != null ? attributes.getValue("id") : null;
 		LOG.info("found package id: {}", value);
-		if (value != null && value.contains(",")) {
+		if(value != null && value.contains(",")) {
 			final String[] split = value.split(",");
 			final List<String> packages = new ArrayList<String>(split.length);
 			collectPackages(split, packages);
 			return packages.toArray(new String[packages.size()]);
 		}
-		return new String[] { value };
+		return new String[]{
+			value
+		};
 	}
 
-	private static void collectPackages(final String[] split, final List<String> packages) {
-		for (int index = 0; index < split.length; ++index) {
+	private static void collectPackages(
+		final String[] split,
+		final List<String> packages) {
+		for(int index = 0; index < split.length; ++index) {
 			final String namePackageToLoad = split[index];
-			if (namePackageToLoad != null && !namePackageToLoad.isEmpty()) {
+			if(namePackageToLoad != null && !namePackageToLoad.isEmpty()) {
 				final String trim = namePackageToLoad.trim();
-				if (trim != null && !trim.isEmpty()) {
+				if(trim != null && !trim.isEmpty()) {
 					packages.add(trim);
 				}
 			}
 		}
 	}
 
-	private static void tryLoadingClasses(final JarFile jarFileToLoad) {
+	private static void tryLoadingClasses(
+		final JarFile jarFileToLoad) {
 		final Enumeration<JarEntry> jarEntries = jarFileToLoad.entries();
 		final ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
-		while (jarEntries.hasMoreElements()) {
+		while(jarEntries.hasMoreElements()) {
 			tryLoadingClass(jarEntries, systemClassLoader);
 		}
 	}
 
-	private static void tryLoadingClass(final Enumeration<JarEntry> jarEntries, final ClassLoader systemClassLoader) {
+	private static void tryLoadingClass(
+		final Enumeration<JarEntry> jarEntries,
+		final ClassLoader systemClassLoader) {
 		final JarEntry jarEntry = jarEntries.nextElement();
 		final String name = jarEntry.getName();
-		if (isClass(name)) {
+		if(isClass(name)) {
 			final String normalizedClassName = normalizePath(name);
 			tryLoadingInSystemClassLoader(systemClassLoader, normalizedClassName);
 		}
 	}
 
-	private static void tryLoadingInSystemClassLoader(final ClassLoader systemClassLoader, final String normalizedClassName) {
+	private static void tryLoadingInSystemClassLoader(
+		final ClassLoader systemClassLoader,
+		final String normalizedClassName) {
 		try {
 			systemClassLoader.loadClass(normalizedClassName);
 			LOG.debug("success loading {}", normalizedClassName);
-		} catch (final Exception e) {
+		}
+		catch(final Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
 	}
 
-	private static boolean isClass(final String name) {
+	private static boolean isClass(
+		final String name) {
 		return name.endsWith(".class");
 	}
 
-	private static File retrieveDestinationFile(final String destPath) {
+	private static File retrieveDestinationFile(
+		final String destPath) {
 		final File destFile = new File(destPath);
-		if (destFile.exists()) {
+		if(destFile.exists()) {
 			final boolean delete = destFile.delete();
 			LOG.info("can delete {}", delete);
 		}
 		return destFile;
 	}
 
-	private static void writeInterestingJarEntries(final JarFile jarFile, final Collection<JarEntry> interestingJarEntries, final File destFile)
-			throws IOException, FileNotFoundException {
+	private static void writeInterestingJarEntries(
+		final JarFile jarFile,
+		final Collection<JarEntry> interestingJarEntries,
+		final File destFile)
+		throws IOException, FileNotFoundException {
 		JarOutputStream jos = null;
 		try {
 			final Manifest manifestJarToLoad = buildManifest();
 			jos = new JarOutputStream(new FileOutputStream(destFile), manifestJarToLoad);
-			for (final JarEntry jarEntry : interestingJarEntries) {
+			for(final JarEntry jarEntry : interestingJarEntries) {
 				addJarEntryToJarFile(jarFile, jos, jarEntry);
 			}
-		} finally {
-			if (jos != null) {
+		}
+		finally {
+			if(jos != null) {
 				jos.close();
 			}
 		}
 	}
 
-	private static void addJarEntryToJarFile(final JarFile jarFile, final JarOutputStream jos, final JarEntry jarEntry) {
+	private static void addJarEntryToJarFile(
+		final JarFile jarFile,
+		final JarOutputStream jos,
+		final JarEntry jarEntry) {
 		try {
 			final InputStream is = jarFile.getInputStream(jarEntry);
 			jos.putNextEntry(new JarEntry(jarEntry.getName()));
 			final byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
 			int bytesRead = 0;
-			while ((bytesRead = is.read(buffer)) != -1) {
+			while((bytesRead = is.read(buffer)) != -1) {
 				jos.write(buffer, 0, bytesRead);
 			}
 			is.close();
 			jos.flush();
 			jos.closeEntry();
-		} catch (final IOException e) {
+		}
+		catch(final IOException e) {
 			LOG.error(e.getMessage(), e);
 		}
 	}
@@ -213,14 +249,16 @@ public class BootAgent {
 		return manifestJarToLoad;
 	}
 
-	private static Collection<JarEntry> retrieveInterestingClasses(final String packageToLoad, final JarFile jarFile) {
+	private static Collection<JarEntry> retrieveInterestingClasses(
+		final String packageToLoad,
+		final JarFile jarFile) {
 		final Enumeration<JarEntry> jarEntries = jarFile.entries();
 		final Collection<JarEntry> interestingJarEntries = new ArrayList<JarEntry>();
-		while (jarEntries.hasMoreElements()) {
+		while(jarEntries.hasMoreElements()) {
 			final JarEntry jarEntry = jarEntries.nextElement();
-			if (isFile(jarEntry)) {
+			if(isFile(jarEntry)) {
 				final String name = normalizePath(jarEntry.getName());
-				if (isPackageToLoad(packageToLoad, name)) {
+				if(isPackageToLoad(packageToLoad, name)) {
 					addJarEntry(interestingJarEntries, jarEntry);
 				}
 			}
@@ -228,48 +266,62 @@ public class BootAgent {
 		return interestingJarEntries;
 	}
 
-	private static boolean isPackageToLoad(final String packageToLoad, final String name) {
+	private static boolean isPackageToLoad(
+		final String packageToLoad,
+		final String name) {
 		return name.startsWith(packageToLoad);
 	}
 
-	private static void addJarEntry(final Collection<JarEntry> interestingJarEntries, final JarEntry jarEntry) {
+	private static void addJarEntry(
+		final Collection<JarEntry> interestingJarEntries,
+		final JarEntry jarEntry) {
 		try {
 			interestingJarEntries.add(jarEntry);
-		} catch (final Exception e) {
+		}
+		catch(final Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
 	}
 
-	private static boolean isFile(final JarEntry jarEntry) {
+	private static boolean isFile(
+		final JarEntry jarEntry) {
 		return !jarEntry.isDirectory();
 	}
 
-	private static String normalizePath(final String value) {
+	private static String normalizePath(
+		final String value) {
 		return value.trim().replace('/', '.').replace(".class", "");
 	}
 
-	private static List<URL> collectJarsInDirectory(final File directory) {
+	private static List<URL> collectJarsInDirectory(
+		final File directory) {
 		final File[] jarFiles = retrieveJarFiles(directory);
 		final List<URL> allJars = new ArrayList<URL>();
-		for (final File jar : jarFiles) {
+		for(final File jar : jarFiles) {
 			addUrlJar(allJars, jar);
 		}
 		return allJars;
 	}
 
-	private static void addUrlJar(final List<URL> jars, final File jar) {
+	private static void addUrlJar(
+		final List<URL> jars,
+		final File jar) {
 		try {
 			jars.add(jarToUrl(jar));
-		} catch (final Exception e) {
+		}
+		catch(final Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
 	}
 
-	private static URL jarToUrl(final File jar) throws MalformedURLException {
+	private static URL jarToUrl(
+		final File jar)
+		throws MalformedURLException {
 		return jar.toURI().toURL();
 	}
 
-	private static File[] retrieveJarFiles(final File dir) {
+	private static File[] retrieveJarFiles(
+		final File dir) {
 		final File[] jarFiles = dir.listFiles(JAR_FILE_FILTER);
 		return jarFiles != null ? jarFiles : EMPTY_FILES;
 	}
@@ -280,7 +332,8 @@ public class BootAgent {
 		}
 
 		@Override
-		public boolean accept(final File pathname) {
+		public boolean accept(
+			final File pathname) {
 			return pathname.isFile() && pathname.getName().endsWith(".jar");
 		}
 	}

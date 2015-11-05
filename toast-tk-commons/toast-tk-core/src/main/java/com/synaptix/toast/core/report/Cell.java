@@ -1,7 +1,9 @@
 package com.synaptix.toast.core.report;
 
 class Cell {
+
 	private String value;
+
 	private CellColor color;
 
 	public Cell() {
@@ -9,12 +11,15 @@ class Cell {
 		setColor(CellColor.NONE);
 	}
 
-	public Cell(String value) {
+	public Cell(
+		String value) {
 		this();
 		this.setValue(value);
 	}
 
-	public Cell(String value, CellColor color) {
+	public Cell(
+		String value,
+		CellColor color) {
 		this.value = value;
 		this.color = color;
 	}
@@ -28,7 +33,8 @@ class Cell {
 		return value;
 	}
 
-	public void setValue(String value) {
+	public void setValue(
+		String value) {
 		this.value = value;
 	}
 
@@ -36,7 +42,8 @@ class Cell {
 		return color;
 	}
 
-	public void setColor(CellColor color) {
+	public void setColor(
+		CellColor color) {
 		this.color = color;
 	}
 }

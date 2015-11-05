@@ -13,15 +13,18 @@ import com.synaptix.toast.core.net.request.IIdRequest;
  *
  */
 public interface ICustomRequestHandler {
-	
+
 	/**
 	 * Method called to perform a given request (command) on the target Component
 	 * 
 	 * @param target Component
 	 * @param request to indicate which action we need to perform on the target Component
 	 * @return any response
+	 * @throws IllegalAccessException 
 	 */
-	public String hanldeFixtureCall(Component target, IIdRequest request);
+	public String hanldeFixtureCall(
+		Component target,
+		IIdRequest request) throws IllegalAccessException;
 
 	/**
 	 * Locate an element, the method should return the component (value) if it happens that it
@@ -31,7 +34,10 @@ public interface ICustomRequestHandler {
 	 * @param value
 	 * @return
 	 */
-	public Component locateComponentTarget(String item, String itemType, Component value);
+	public Component locateComponentTarget(
+		String item,
+		String itemType,
+		Component value);
 
 	/**
 	 * Handle a custom request not covered by the framework standard commands
@@ -39,9 +45,9 @@ public interface ICustomRequestHandler {
 	 * 
 	 * @param command -> Custom Command Request
 	 */
-	public String processCustomCall(CommandRequest command);
-	
-	
+	public String processCustomCall(
+		CommandRequest command);
+
 	/**
 	 * Check the handler is interested in handling the command request
 	 * 
@@ -57,12 +63,12 @@ public interface ICustomRequestHandler {
 	 */
 	public String getName();
 
-
 	/**
 	 * Check the handler is interested in handling the Swing component
 	 * 
 	 * @param component
 	 * @return
 	 */
-	public boolean isInterestedIn(Component component);
+	public boolean isInterestedIn(
+		Component component);
 }

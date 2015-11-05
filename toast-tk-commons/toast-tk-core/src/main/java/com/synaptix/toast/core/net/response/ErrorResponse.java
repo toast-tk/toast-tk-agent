@@ -1,22 +1,25 @@
 package com.synaptix.toast.core.net.response;
 
-import java.awt.image.BufferedImage;
-
 import com.synaptix.toast.core.net.request.IIdRequest;
 
 public class ErrorResponse implements IIdRequest {
+
 	private String id;
+
 	private String message;
-	private BufferedImage screenshot;
+
+	private String screenshot;
 
 	/**
 	 * serialization only
 	 */
 	public ErrorResponse() {
-
 	}
 
-	public ErrorResponse(String id, String message, BufferedImage screenshot) {
+	public ErrorResponse(
+		String id,
+		String message,
+		String screenshot) {
 		this.id = id;
 		this.message = message;
 		this.screenshot = screenshot;
@@ -31,10 +34,7 @@ public class ErrorResponse implements IIdRequest {
 		return message;
 	}
 
-	public BufferedImage getScreenshot() {
+	public String getScreenshot() {
 		return screenshot;
 	}
-
-	
-	
 }

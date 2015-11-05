@@ -13,12 +13,16 @@ import com.synaptix.toast.dao.service.init.DbStarter;
 public class SetupBlockDaoService extends AbstractMongoDaoService<SetupBlock> {
 
 	public interface Factory {
-		SetupBlockDaoService create(@Nullable @Assisted String dbName);
+		SetupBlockDaoService create(
+			@Nullable @Assisted String dbName);
 	}
 
 	@Inject
-	public SetupBlockDaoService(DbStarter starter, CommonMongoDaoService cService, @Nullable @Assisted String dbName, @Named("default_db") String default_db) {
+	public SetupBlockDaoService(
+		DbStarter starter,
+		CommonMongoDaoService cService,
+		@Nullable @Assisted String dbName,
+		@Named("default_db") String default_db) {
 		super(SetupBlock.class, starter.getDatabaseByName((dbName == null ? default_db : dbName)), cService);
 	}
-
 }

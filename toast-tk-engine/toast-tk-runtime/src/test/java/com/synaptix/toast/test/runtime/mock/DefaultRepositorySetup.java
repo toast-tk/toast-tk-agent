@@ -26,7 +26,6 @@ Creation date: 15 avr. 2015
 @author Sallah Kokaina <sallah.kokaina@gmail.com>
 
 */
-
 package com.synaptix.toast.test.runtime.mock;
 
 import java.util.Collection;
@@ -35,15 +34,16 @@ import java.util.Map;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.runtime.IFeedableSwingPage;
 import com.synaptix.toast.core.runtime.IFeedableWebPage;
-import com.synaptix.toast.core.runtime.IRepositorySetup;
+import com.synaptix.toast.core.runtime.IActionItemRepository;
 import com.synaptix.toast.core.runtime.ITestManager;
 
-public class DefaultRepositorySetup implements IRepositorySetup{
+public class DefaultRepositorySetup implements IActionItemRepository {
 
 	private Map<String, Object> userVariables;
 
 	@Override
-	public IFeedableSwingPage getSwingPage(String entityName) {
+	public IFeedableSwingPage getSwingPage(
+		String entityName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -55,68 +55,45 @@ public class DefaultRepositorySetup implements IRepositorySetup{
 	}
 
 	@Override
-	public ITestManager getTestManager() {
+	public void addSwingPage(
+		String fixtureName) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void addPage(
+		String fixtureName) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public TestResult addClass(
+		String className,
+		String testName,
+		String searchBy) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Class<?> getService(
+		String fixtureName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void addSwingPage(String fixtureName) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addPage(String fixtureName) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public TestResult addClass(String className, String testName, String searchBy) {
+	public IFeedableWebPage getPage(
+		String fixtureName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public TestResult addService(String testName, String className) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public TestResult addDomain(String domainClassName, String domainTestName, String tableName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public TestResult addProperty(String componentName, String testName, String systemName, String componentAssociation) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public TestResult insertComponent(String entityName2, Map<String, String> values2) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Class<?> getService(String fixtureName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public IFeedableWebPage getPage(String fixtureName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setUserVariables(Map<String, Object> userVariables) {
-		this.userVariables= userVariables;
+	public void setUserVariables(
+		Map<String, Object> userVariables) {
+		this.userVariables = userVariables;
 	}
 
 	@Override
@@ -124,4 +101,9 @@ public class DefaultRepositorySetup implements IRepositorySetup{
 		return userVariables;
 	}
 
+	@Override
+	public Collection<IFeedableWebPage> getWebPages() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

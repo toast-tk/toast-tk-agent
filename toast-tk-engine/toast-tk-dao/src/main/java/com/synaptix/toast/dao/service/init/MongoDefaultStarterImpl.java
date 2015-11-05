@@ -21,28 +21,31 @@ import com.synaptix.toast.dao.domain.Domain;
 import com.synaptix.toast.dao.service.dao.common.EntityCollectionManager;
 
 public class MongoDefaultStarterImpl implements DbStarter {
-	
+
 	private static final Logger LOG = LogManager.getLogger(MongoDefaultStarterImpl.class);
+
 	private Morphia morphia;
+
 	private MongoClient mClient;
-	private final Config config;
+
 	private Map<String, Datastore> dsMap;
-	private final EntityCollectionManager enitityManager;	
+
+	private final EntityCollectionManager enitityManager;
+
 	private final String mongoHost;
+
 	private final int mongoPort;
 
 	@Inject
 	public MongoDefaultStarterImpl(
-			Config config, 
-			EntityCollectionManager enitityManager,
-			@Named("MongoHost") String mongoHost,
-			@Named("MongoPort") int mongoPort
-		) 
+		Config config,
+		EntityCollectionManager enitityManager,
+		@Named("MongoHost") String mongoHost,
+		@Named("MongoPort") int mongoPort)
 	{
-		this.config = config;
 		this.enitityManager = enitityManager;
 		this.mongoHost = mongoHost == null ? config.getMongoServer() : mongoHost;
-		this.mongoPort = mongoPort == -1 ? config.getMongoPort(): mongoPort;
+		this.mongoPort = mongoPort == -1 ? config.getMongoPort() : mongoPort;
 		init();
 	}
 
@@ -53,7 +56,8 @@ public class MongoDefaultStarterImpl implements DbStarter {
 			mClient.setWriteConcern(WriteConcern.JOURNALED);
 			morphia = new Morphia();
 			processMappings();
-		} catch (UnknownHostException e) {
+		}
+		catch(UnknownHostException e) {
 			e.printStackTrace();
 		}
 	}
@@ -61,7 +65,7 @@ public class MongoDefaultStarterImpl implements DbStarter {
 	private void processMappings() {
 		Reflections reflection = new Reflections(Domain.class.getPackage().getName());
 		Set<Class<?>> typesAnnotatedWith = reflection.getTypesAnnotatedWith(Entity.class);
-		for (Class<?> c : typesAnnotatedWith) {
+		for(Class<?> c : typesAnnotatedWith) {
 			Entity entity = c.getAnnotation(Entity.class);
 			enitityManager.register(entity.value(), c);
 			morphia.map(c);
@@ -70,8 +74,9 @@ public class MongoDefaultStarterImpl implements DbStarter {
 	}
 
 	@Override
-	public Datastore getDatabaseByName(String name) {
-		if (dsMap.get(name) == null) {
+	public Datastore getDatabaseByName(
+		String name) {
+		if(dsMap.get(name) == null) {
 			Datastore ds = morphia.createDatastore(mClient, name);
 			ds.ensureCaps();
 			ds.ensureIndexes();
@@ -79,5 +84,4 @@ public class MongoDefaultStarterImpl implements DbStarter {
 		}
 		return dsMap.get(name);
 	}
-
 }

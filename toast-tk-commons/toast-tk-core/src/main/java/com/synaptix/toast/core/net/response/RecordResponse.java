@@ -3,35 +3,35 @@ package com.synaptix.toast.core.net.response;
 import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 import com.synaptix.toast.core.net.request.IIdRequest;
 
+public class RecordResponse implements IIdRequest {
 
-/**
- * Created by skokaina on 07/11/2014.
- */
-public class RecordResponse implements IIdRequest{
 	private String id;
+
 	public AWTCapturedEvent value;
+
 	private String sentence;
 
 	/**
 	 * serialization only
 	 */
-	public RecordResponse(){
-		
+	public RecordResponse() {
 	}
-	
-	public RecordResponse(AWTCapturedEvent eventObject) {
+
+	public RecordResponse(
+		AWTCapturedEvent eventObject) {
 		this.value = eventObject;
 	}
 
-	public RecordResponse(String sentence){
+	public RecordResponse(
+		String sentence) {
 		this.sentence = sentence;
 	}
-	
+
 	@Override
 	public String getId() {
 		return id;
 	}
-	
+
 	public AWTCapturedEvent getEvent() {
 		return value;
 	}
@@ -39,5 +39,4 @@ public class RecordResponse implements IIdRequest{
 	public String getSentence() {
 		return sentence;
 	}
-	
 }
