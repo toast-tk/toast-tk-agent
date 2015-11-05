@@ -25,7 +25,7 @@ test_sonar_job:
     - apt-get install -y xvfb
     - Xvfb :1 -screen 0 1024x768x24 &
     - export DISPLAY=:1
-    - mvn --batch-mode verify sonar:sonar -Dsonar.host.url=$SONAR_URL -Dsonar.jdbc.url=$SONAR_DB -Dsonar.jdbc.username=$SONAR_USERNAME -Dsonar.jdbc.password=$SONAR_PASSWORD -Dsonar.sources=**/toast-tk-commons/**/*,**/toast-tk-engine/**/*
+    - mvn --batch-mode verify sonar:sonar -Dsonar.host.url=$SONAR_URL -Dsonar.jdbc.url=$SONAR_DB -Dsonar.jdbc.username=$SONAR_USERNAME -Dsonar.jdbc.password=$SONAR_PASSWORD -Dsonar.exclusions=**/toast-tk-studio/**/*
 deploy_job:
   stage: deploy
   only:
