@@ -8,24 +8,22 @@ build_job:
   stage: build
   script:
     - mvn --batch-mode compile -Dmaven.test.skip=true -Djacoco.skip=true
-#test_sonar_preview_job:
-#  stage: test
-#  except:
-#    - master
-#  script:
-#    - mvn --batch-mode verify sonar:sonar -Dsonar.host.url=$SONAR_URL -Dsonar.analysis.mode=incremental
+test_sonar_preview_job:
+  stage: test
+  except:
+    - master
+  script:
+    - mvn --batch-mode verify sonar:sonar -Dsonar.host.url=$SONAR_URL -Dsonar.analysis.mode=incremental
 test_sonar_job:
   stage: test
-#  only:
-#    - master
+  only:
+    - master
   script:
-#    - cat /etc/apt/sources.list
     - apt-get update
-#    - apt-get install -y git openjdk-8-jdk maven xvfb
     - apt-get install -y xvfb
     - Xvfb :1 -screen 0 1024x768x24 &
     - export DISPLAY=:1
-    - mvn --batch-mode verify sonar:sonar -Dsonar.host.url=$SONAR_URL -Dsonar.jdbc.url=$SONAR_DB -Dsonar.jdbc.username=$SONAR_USERNAME -Dsonar.jdbc.password=$SONAR_PASSWORD -Dsonar.exclusions=**/toast-tk-studio/**/*
+    - mvn --batch-mode verify sonar:sonar -Dsonar.host.url=$SONAR_URL -Dsonar.jdbc.url=$SONAR_DB -Dsonar.jdbc.username=$SONAR_USERNAME -Dsonar.jdbc.password=$SONAR_PASSWORD
 deploy_job:
   stage: deploy
   only:
