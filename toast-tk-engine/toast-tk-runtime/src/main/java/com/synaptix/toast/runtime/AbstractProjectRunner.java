@@ -4,16 +4,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Injector;
-import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.core.rest.RestUtils;
 import com.synaptix.toast.dao.domain.impl.report.Project;
 import com.synaptix.toast.dao.domain.impl.test.block.ICampaign;
 import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
-import com.synaptix.toast.dao.domain.impl.test.block.TestPage;
 import com.synaptix.toast.runtime.dao.DAOManager;
 import com.synaptix.toast.runtime.parse.TestParser;
 
-@FixMe(todo="make the runner generic")
 public abstract class AbstractProjectRunner extends AbstractRunner {
 
 	private static final Logger LOG = LogManager.getLogger(AbstractProjectRunner.class);

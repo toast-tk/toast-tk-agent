@@ -8,12 +8,12 @@
   </parent>
   <packaging>pom</packaging>
   <artifactId>toast-tk-engine</artifactId>
-  <name>Toast Toolkit - Engine - POM Module</name>
+  <name>Toast Toolkit - Engine - POM</name>
 	<description>
 	    Toast TK Engine Parent Module.
 	    This module is the parent module for the engine module, featuring:
 	    	- Action Adapters Module
-	    	- Toast Maven Plugin
+	    	- Rest Utils
 	    	- Dao Module
 	    	- Runtime Module
 	    	- Drivers Module
@@ -25,7 +25,7 @@
 		<module>toast-tk-adapters</module>
 		<module>toast-tk-runtime-api</module>
 		<module>toast-tk-runtime</module>
-		<module>toast-tk-maven-plugin</module>
 		<module>toast-tk-dao-api</module>
+		<module>toast-tk-rest-utils</module>
 	</modules>
 </project>

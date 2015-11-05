@@ -17,20 +17,19 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.synaptix.toast.adapter.ActionAdapterCollector;
 import com.synaptix.toast.adapter.FixtureService;
-import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.adapter.ActionAdapterKind;
 import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.core.annotation.Action;
-import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
 import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
-import com.synaptix.toast.core.runtime.IActionItemRepository;
 import com.synaptix.toast.dao.domain.impl.test.block.TestBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.line.TestLine;
+import com.synaptix.toast.runtime.IActionItemRepository;
 import com.synaptix.toast.runtime.bean.ActionCommandDescriptor;
 import com.synaptix.toast.runtime.bean.TestLineDescriptor;
+import com.synaptix.toast.runtime.constant.Property;
 import com.synaptix.toast.runtime.utils.ArgumentHelper;
 
 public class TestBlockRunner implements IBlockRunner<TestBlock> {
@@ -210,7 +209,6 @@ public class TestBlockRunner implements IBlockRunner<TestBlock> {
 		return serviceClasses;
 	}
 
-	@FixMe(todo="make the call synchronuous")
 	private TestResult doRemoteActionCall(String command,
 			TestLineDescriptor descriptor) {
 		TestResult result;

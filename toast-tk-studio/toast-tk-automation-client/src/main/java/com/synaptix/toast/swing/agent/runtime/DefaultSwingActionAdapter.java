@@ -5,7 +5,7 @@ import com.synaptix.toast.adapter.swing.AbstractSwingActionAdapter;
 import com.synaptix.toast.automation.driver.swing.RemoteSwingAgentDriverImpl;
 import com.synaptix.toast.core.adapter.ActionAdapterKind;
 import com.synaptix.toast.core.annotation.ActionAdapter;
-import com.synaptix.toast.core.runtime.IActionItemRepository;
+import com.synaptix.toast.runtime.IActionItemRepository;
 
 @ActionAdapter(value = ActionAdapterKind.swing, name = "ToastSwingClientAdapter")
 public class DefaultSwingActionAdapter extends AbstractSwingActionAdapter {

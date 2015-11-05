@@ -6,10 +6,8 @@ import org.fest.swing.fixture.JComboBoxFixture;
 
 import com.synaptix.toast.adapter.swing.handler.ActionProcessor;
 import com.synaptix.toast.adapter.swing.utils.FestRobotInstance;
-import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.core.net.request.CommandRequest;
 
-@FixMe(todo = "fix cause it will throw an enum exception on SwingActionRequestListener side !")
 class JComboBoxGetActionProcessor implements ActionProcessor<JComboBox> {
 
 	@Override

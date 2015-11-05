@@ -1,14 +1,12 @@
 package com.synaptix.toast.adapter.swing.component;
 
 import java.util.UUID;
-import java.util.concurrent.TimeoutException;
 
 import com.synaptix.toast.adapter.swing.SwingAutoElement;
 import com.synaptix.toast.adapter.web.HasClickAction;
 import com.synaptix.toast.adapter.web.HasStringValue;
 import com.synaptix.toast.core.driver.IRemoteSwingAgentDriver;
 import com.synaptix.toast.core.net.request.CommandRequest;
-import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.ISwingElement;
 
 public class SwingCheckBoxElement extends SwingAutoElement implements HasClickAction, HasStringValue {
@@ -25,14 +23,14 @@ public class SwingCheckBoxElement extends SwingAutoElement implements HasClickAc
 	}
 
 	public void select()
-		throws TimeoutException, ErrorResultReceivedException {
+		throws Exception {
 		exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator())
 			.ofType(wrappedElement.getType().name()).sendKeys("true").build());
 	}
 
 	public void deselect()
-		throws TimeoutException, ErrorResultReceivedException {
+		throws Exception {
 		exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator())
 			.ofType(wrappedElement.getType().name()).sendKeys("false").build());
@@ -40,7 +38,7 @@ public class SwingCheckBoxElement extends SwingAutoElement implements HasClickAc
 
 	@Override
 	public boolean click()
-		throws TimeoutException, ErrorResultReceivedException {
+		throws Exception{
 		boolean res = exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator())
 			.ofType(wrappedElement.getType().name()).click().build());
@@ -53,7 +51,7 @@ public class SwingCheckBoxElement extends SwingAutoElement implements HasClickAc
 
 	@Override
 	public String getValue()
-		throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
+		throws Exception{
 		exists();
 		final String requestId = UUID.randomUUID().toString();
 		CommandRequest request = new CommandRequest.CommandRequestBuilder(requestId).with(wrappedElement.getLocator())

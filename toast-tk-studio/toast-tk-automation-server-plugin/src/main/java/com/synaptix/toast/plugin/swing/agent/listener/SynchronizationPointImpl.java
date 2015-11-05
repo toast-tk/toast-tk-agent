@@ -5,13 +5,9 @@ import java.awt.Window;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
-import com.synaptix.toast.core.annotation.craft.FixMe;
-
 /**
  * RUS specific synchronization point 
- *
  */
-@FixMe(todo = "move in synaptix plugin")
 public class SynchronizationPointImpl implements ISynchronizationPoint {
 
 	JFrame superFrame = null;

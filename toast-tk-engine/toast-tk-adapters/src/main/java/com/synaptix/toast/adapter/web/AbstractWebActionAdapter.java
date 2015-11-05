@@ -17,8 +17,8 @@ import com.synaptix.toast.core.annotation.Action;
 import com.synaptix.toast.core.annotation.ActionAdapter;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
-import com.synaptix.toast.core.runtime.IActionItemRepository;
 import com.synaptix.toast.core.runtime.IFeedableWebPage;
+import com.synaptix.toast.runtime.IActionItemRepository;
 
 @ActionAdapter(name="default-web-driver", value= ActionAdapterKind.web)
 public abstract class AbstractWebActionAdapter {

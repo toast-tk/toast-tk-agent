@@ -64,6 +64,7 @@
 		</jacoco.ut.execution.data.file>
 		<javassist.version>3.12.1.GA</javassist.version>
 		<maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
+		<kryonet.version>2.22.0-RC1</kryonet.version>
 	</properties>
 	<developers>
 		<developer>
@@ -160,6 +161,11 @@
 				<artifactId>guice</artifactId>
 				<version>${guice.version}</version>
 			</dependency>
+			<dependency>
+			<groupId>com.esotericsoftware</groupId>
+			<artifactId>kryonet</artifactId>
+			<version>${kryonet.version}</version>
+		</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<reporting>

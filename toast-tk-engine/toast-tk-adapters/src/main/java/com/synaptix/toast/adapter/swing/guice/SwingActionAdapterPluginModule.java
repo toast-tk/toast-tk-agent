@@ -1,9 +1,9 @@
 package com.synaptix.toast.adapter.swing.guice;
 
 import com.synaptix.toast.adapter.swing.handler.DefaultSwingCustomWidgetHandler;
-import com.synaptix.toast.core.guice.AbstractComponentFixtureModule;
+import com.synaptix.toast.core.guice.AbstractComponentAdapterModule;
 
-public class SwingActionAdapterPluginModule extends AbstractComponentFixtureModule {
+public class SwingActionAdapterPluginModule extends AbstractComponentAdapterModule {
 
 	@Override
 	protected void configureModule() {

@@ -1,13 +1,10 @@
 package com.synaptix.toast.adapter.swing.component;
 
-import java.util.concurrent.TimeoutException;
-
 import com.synaptix.toast.adapter.swing.SwingAutoElement;
 import com.synaptix.toast.adapter.web.HasClickAction;
 import com.synaptix.toast.adapter.web.HasSubItems;
 import com.synaptix.toast.core.driver.IRemoteSwingAgentDriver;
 import com.synaptix.toast.core.net.request.CommandRequest;
-import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.ISwingElement;
 
 /**
@@ -31,7 +28,7 @@ public class SwingMenuElement extends SwingAutoElement implements HasClickAction
 
 	@Override
 	public boolean click()
-		throws TimeoutException, ErrorResultReceivedException {
+		throws Exception {
 		boolean res = exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator())
 			.ofType(wrappedElement.getType().name()).click().build());
@@ -45,7 +42,7 @@ public class SwingMenuElement extends SwingAutoElement implements HasClickAction
 	@Override
 	public void clickOn(
 		String itemName)
-		throws TimeoutException, ErrorResultReceivedException {
+		throws Exception {
 		exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator())
 			.ofType(wrappedElement.getType().name()).select(itemName).build());

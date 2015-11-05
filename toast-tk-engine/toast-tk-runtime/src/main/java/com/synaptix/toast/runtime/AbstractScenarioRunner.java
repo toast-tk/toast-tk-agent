@@ -14,7 +14,6 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.synaptix.toast.core.annotation.EngineEventBus;
-import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.core.rest.RestUtils;
 import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
 import com.synaptix.toast.runtime.parse.TestParser;
@@ -22,7 +21,6 @@ import com.synaptix.toast.runtime.report.DefaultTestProgressReporter;
 import com.synaptix.toast.runtime.report.IHTMLReportGenerator;
 import com.synaptix.toast.runtime.utils.RunUtils;
 
-@FixMe(todo="make the runner generic")
 public abstract class AbstractScenarioRunner extends AbstractRunner{
 
 	private static final Logger LOG = LogManager.getLogger(AbstractScenarioRunner.class);

@@ -30,11 +30,9 @@ import org.apache.logging.log4j.Logger;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.google.inject.Inject;
-import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.core.net.request.InitInspectionRequest;
 import com.synaptix.toast.plugin.swing.server.SwingInspectionManager;
 
-@FixMe(todo = "review hard coded values")
 public class InitRequestListener extends Listener {
 
 	private static final Logger LOG = LogManager.getLogger(InitRequestListener.class);

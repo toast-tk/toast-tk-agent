@@ -61,7 +61,7 @@
 				<executions>
 					<execution>
 						<id>assemble</id>
-						<phase>install</phase>
+						<phase>compile</phase>
 						<goals>
 							<goal>fatJar</goal>
 						</goals>

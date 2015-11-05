@@ -1,22 +1,14 @@
 package com.synaptix.toast.adapter.swing.component;
 
 import java.util.UUID;
-import java.util.concurrent.TimeoutException;
 
 import com.synaptix.toast.adapter.swing.SwingAutoElement;
 import com.synaptix.toast.adapter.web.HasStringValue;
 import com.synaptix.toast.adapter.web.HasTextInput;
 import com.synaptix.toast.core.driver.IRemoteSwingAgentDriver;
 import com.synaptix.toast.core.net.request.CommandRequest;
-import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.ISwingElement;
 
-/**
- * input element
- * 
- * @author skokaina
- * 
- */
 public class SwingDateElement extends SwingAutoElement implements HasTextInput, HasStringValue {
 
 	public SwingDateElement(
@@ -33,7 +25,7 @@ public class SwingDateElement extends SwingAutoElement implements HasTextInput, 
 	@Override
 	public void setInput(
 		String e)
-		throws TimeoutException, ErrorResultReceivedException {
+		throws Exception {
 		exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator())
 			.ofType(wrappedElement.getType().name()).sendKeys(e).build());
@@ -41,7 +33,7 @@ public class SwingDateElement extends SwingAutoElement implements HasTextInput, 
 
 	public void setDateText(
 		String e)
-		throws TimeoutException, ErrorResultReceivedException {
+		throws Exception {
 		exists();
 		frontEndDriver.process(new CommandRequest.CommandRequestBuilder(null).with(wrappedElement.getLocator())
 			.ofType("date_text").sendKeys(e).build());
@@ -49,7 +41,7 @@ public class SwingDateElement extends SwingAutoElement implements HasTextInput, 
 
 	@Override
 	public String getValue()
-		throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
+		throws Exception {
 		exists();
 		final String requestId = UUID.randomUUID().toString();
 		CommandRequest request = new CommandRequest.CommandRequestBuilder(requestId).with(wrappedElement.getLocator())

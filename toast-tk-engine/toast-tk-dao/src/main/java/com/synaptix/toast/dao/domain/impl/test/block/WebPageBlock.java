@@ -1,13 +1,12 @@
 package com.synaptix.toast.dao.domain.impl.test.block;
 
-import com.github.jmkgreen.morphia.annotations.Embedded;
-import com.synaptix.toast.core.report.TestResult;
-import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
-import com.synaptix.toast.dao.domain.impl.test.block.line.BlockLine;
-import com.synaptix.toast.dao.domain.impl.test.block.line.WebPageConfigLine;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.github.jmkgreen.morphia.annotations.Embedded;
+import com.synaptix.toast.dao.domain.api.test.ITestResult;
+import com.synaptix.toast.dao.domain.impl.test.block.line.BlockLine;
+import com.synaptix.toast.dao.domain.impl.test.block.line.WebPageConfigLine;
 
 @Embedded
 public class WebPageBlock implements IBlock {
@@ -18,7 +17,7 @@ public class WebPageBlock implements IBlock {
 
     private String fixtureName;
 
-    private TestResult testResult;
+    private ITestResult testResult;
 
     /**
      *
@@ -59,12 +58,12 @@ public class WebPageBlock implements IBlock {
         blockLines.add(line);
     }
 
-    public TestResult getTestResult() {
+    public ITestResult getTestResult() {
         return testResult;
     }
 
     public void setTestResult(
-            TestResult testResult) {
+    		ITestResult testResult) {
         this.testResult = testResult;
     }
 

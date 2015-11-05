@@ -8,17 +8,20 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>toast-tk-adapters-api</artifactId>
-
+	<name>Toast Toolkit - Action Adapter Api</name>
 	<dependencies>
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.esotericsoftware</groupId>
+			<artifactId>kryonet</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.synaptix.toast</groupId>
-			<artifactId>toast-tk-core</artifactId>
+			<artifactId>toast-tk-dao-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
-	<name>Toast Toolkit - Action Adapter Api</name>
 </project>

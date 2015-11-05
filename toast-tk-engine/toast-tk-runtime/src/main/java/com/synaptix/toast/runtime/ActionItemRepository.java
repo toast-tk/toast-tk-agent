@@ -13,7 +13,6 @@ import com.synaptix.toast.adapter.utils.ActionAdapterHelper;
 import com.synaptix.toast.adapter.web.component.DefaultWebPage;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
-import com.synaptix.toast.core.runtime.IActionItemRepository;
 import com.synaptix.toast.core.runtime.IFeedableSwingPage;
 import com.synaptix.toast.core.runtime.IFeedableWebPage;
 import com.synaptix.toast.runtime.bean.TestComponentConfig;

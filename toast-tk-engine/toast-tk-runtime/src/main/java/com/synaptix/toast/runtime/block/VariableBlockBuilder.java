@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.synaptix.toast.core.runtime.IActionItemRepository;
 import com.synaptix.toast.dao.domain.impl.test.block.VariableBlock;
 import com.synaptix.toast.dao.domain.impl.test.block.line.BlockLine;
+import com.synaptix.toast.runtime.IActionItemRepository;
 
 public class VariableBlockBuilder implements IBlockRunner<VariableBlock>{
 

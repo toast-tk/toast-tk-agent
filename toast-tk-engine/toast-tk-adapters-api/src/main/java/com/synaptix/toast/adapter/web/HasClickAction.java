@@ -2,8 +2,6 @@ package com.synaptix.toast.adapter.web;
 
 import java.util.concurrent.TimeoutException;
 
-import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
-
 /**
  * 
  * @author skokaina
@@ -17,7 +15,7 @@ public interface HasClickAction {
 	 * @throws ErrorResultReceivedException 
 	 */
 	public boolean click()
-		throws TimeoutException, ErrorResultReceivedException;
+		throws Exception;
 
 	/**
 	 * represents a double click action

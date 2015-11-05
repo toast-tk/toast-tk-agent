@@ -7,10 +7,10 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.event.TestProgressMessage;
 import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
 import com.synaptix.toast.runtime.IReportUpdateCallBack;
+import com.synaptix.toast.runtime.constant.Property;
 
 public class DefaultTestProgressReporter {
 

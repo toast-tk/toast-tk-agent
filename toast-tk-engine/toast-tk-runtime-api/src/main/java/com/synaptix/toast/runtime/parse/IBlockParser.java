@@ -6,9 +6,8 @@ import com.synaptix.toast.dao.domain.BlockType;
 import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
 
 /**
- * Block parsers must implement this interface. A block parser can read a list of strings, and create an IBlock. See digest method.
- * <p>
- * Created by Nicolas Sauvage on 06/08/2015.
+ * Block parsers must implement this interface. 
+ * A block parser can read a list of strings, and create an IBlock. See digest method.
  */
 public interface IBlockParser {
 

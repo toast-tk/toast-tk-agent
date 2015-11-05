@@ -2,7 +2,7 @@ package com.synaptix.toast.dao.domain.impl.test.block.line;
 
 import com.github.jmkgreen.morphia.annotations.Embedded;
 import com.github.jmkgreen.morphia.annotations.Entity;
-import com.synaptix.toast.core.report.TestResult;
+import com.synaptix.toast.dao.domain.api.test.ITestResult;
 
 @Entity(value = "test", noClassnameStored = true)
 @Embedded
@@ -18,9 +18,9 @@ public class WebPageConfigLine{
 
 	private int position;
 
-	private TestResult result;
+	private ITestResult result;
 
-	public TestResult getTestResult() {
+	public ITestResult getTestResult() {
 		return result;
 	}
 
@@ -44,7 +44,7 @@ public class WebPageConfigLine{
 	 * @param result
 	 */
 	public void setResult(
-		TestResult result) {
+			ITestResult result) {
 		this.result = result;
 	}
 
@@ -68,7 +68,7 @@ public class WebPageConfigLine{
 		return position;
 	}
 
-	public TestResult getResult() {
+	public ITestResult getResult() {
 		return result;
 	}
 

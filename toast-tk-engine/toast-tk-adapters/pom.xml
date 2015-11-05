@@ -40,16 +40,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.synaptix.toast</groupId>
-			<artifactId>toast-tk-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.synaptix.toast</groupId>
-			<artifactId>toast-tk-rest-utils</artifactId>
-			<version>${project.version}</version>
-		</dependency>	
-		<dependency>
-			<groupId>com.synaptix.toast</groupId>
 			<artifactId>toast-tk-adapters-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>

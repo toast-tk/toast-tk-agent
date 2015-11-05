@@ -7,12 +7,10 @@ import com.github.jmkgreen.morphia.annotations.Embedded;
 import com.github.jmkgreen.morphia.annotations.Entity;
 import com.github.jmkgreen.morphia.annotations.Index;
 import com.github.jmkgreen.morphia.annotations.Indexes;
-import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.dao.domain.api.test.IRunnableTest;
+import com.synaptix.toast.dao.domain.api.test.ITestResult;
 import com.synaptix.toast.dao.domain.impl.common.BasicEntityBean;
 import com.synaptix.toast.dao.domain.impl.repository.ReportHelper;
-import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
-import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
 
 @Entity(value = "test")
 @Indexes({
@@ -23,7 +21,7 @@ import com.synaptix.toast.dao.domain.impl.test.block.ITestPage;
 public class TestPage extends BasicEntityBean implements IRunnableTest, ITestPage {
 
     @Embedded
-    private TestResult testResult;
+    private ITestResult testResult;
 
     @Embedded
     private List<IBlock> blocks;
@@ -102,13 +100,13 @@ public class TestPage extends BasicEntityBean implements IRunnableTest, ITestPag
     }
 
     @Override
-    public TestResult getTestResult() {
+    public ITestResult getTestResult() {
         return this.testResult;
     }
 
     @Override
     public void setTestResult(
-            TestResult testResult) {
+            ITestResult testResult) {
         this.testResult = testResult;
     }
 

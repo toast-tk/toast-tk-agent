@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.jmkgreen.morphia.annotations.Embedded;
-import com.synaptix.toast.core.report.TestResult;
-import com.synaptix.toast.dao.domain.impl.test.block.IBlock;
+import com.synaptix.toast.dao.domain.api.test.ITestResult;
 import com.synaptix.toast.dao.domain.impl.test.block.line.BlockLine;
 import com.synaptix.toast.dao.domain.impl.test.block.line.SwingPageConfigLine;
 
@@ -18,7 +17,7 @@ public class SwingPageBlock implements IBlock {
 
 	private String fixtureName;
 
-	private TestResult testResult;
+	private ITestResult testResult;
 
 	public SwingPageBlock() {
 		blockLines = new ArrayList<SwingPageConfigLine>();
@@ -56,12 +55,12 @@ public class SwingPageBlock implements IBlock {
 		blockLines.add(line);
 	}
 
-	public TestResult getTestResult() {
+	public ITestResult getTestResult() {
 		return testResult;
 	}
 
 	public void setTestResult(
-		TestResult testResult) {
+			ITestResult testResult) {
 		this.testResult = testResult;
 	}
 

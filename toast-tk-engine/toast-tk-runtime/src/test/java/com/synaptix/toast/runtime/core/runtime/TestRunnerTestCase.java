@@ -12,7 +12,7 @@ import org.junit.AfterClass;
 import org.junit.Test;
 
 import com.synaptix.toast.core.annotation.Action;
-import com.synaptix.toast.core.runtime.IActionItemRepository;
+import com.synaptix.toast.runtime.IActionItemRepository;
 import com.synaptix.toast.runtime.bean.ActionCommandDescriptor;
 import com.synaptix.toast.runtime.block.TestBlockRunner;
 import com.synaptix.toast.runtime.utils.ArgumentHelper;

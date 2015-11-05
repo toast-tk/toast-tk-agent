@@ -23,7 +23,6 @@ import static com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.Wait;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.TimeoutException;
 
 import com.synaptix.toast.adapter.swing.component.DefaultSwingPage;
 import com.synaptix.toast.adapter.swing.component.SwingDateElement;
@@ -34,7 +33,7 @@ import com.synaptix.toast.adapter.swing.utils.SwingAutoUtils;
 import com.synaptix.toast.adapter.web.HasClickAction;
 import com.synaptix.toast.adapter.web.HasStringValue;
 import com.synaptix.toast.adapter.web.HasSubItems;
-import com.synaptix.toast.constant.Property;
+import com.synaptix.toast.adapter.constant.Property;
 import com.synaptix.toast.core.adapter.ActionAdapterKind;
 import com.synaptix.toast.core.adapter.AutoSwingType;
 import com.synaptix.toast.core.annotation.Action;
@@ -44,9 +43,9 @@ import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.net.request.TableCommandRequestQueryCriteria;
 import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.report.TestResult.ResultKind;
-import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.IFeedableSwingPage;
-import com.synaptix.toast.core.runtime.IActionItemRepository;
+import com.synaptix.toast.dao.domain.api.test.ITestResult;
+import com.synaptix.toast.runtime.IActionItemRepository;
 
 @ActionAdapter(value = ActionAdapterKind.swing, name = "")
 public abstract class AbstractSwingActionAdapter {
@@ -250,11 +249,11 @@ public abstract class AbstractSwingActionAdapter {
 	}
 
 	@Action(action = SelectTableRow, description = "Selectionner une ligne de tableau avec critères")
-	public TestResult selectMission(
+	public ITestResult selectMission(
 		String pageName,
 		String widgetName,
 		String tableColumnFinder)
-		throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
+		throws Exception {
 		SwingTableElement table = (SwingTableElement) getPageField(pageName, widgetName);
 		List<TableCommandRequestQueryCriteria> tableCriteria = new ArrayList<TableCommandRequestQueryCriteria>();
 		String[] criteria = tableColumnFinder.split(Property.TABLE_CRITERIA_SEPARATOR);
