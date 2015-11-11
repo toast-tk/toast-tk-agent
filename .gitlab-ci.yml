@@ -1,5 +1,4 @@
-#image: ubuntu:latest
-image: maven:3.3.3-jdk-8
+image: noki/maven-xvfb
 stages:
   - build
   - test
