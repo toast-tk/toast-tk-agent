@@ -22,17 +22,17 @@
 		<dependency>
 			<groupId>com.synaptix.toast</groupId>
 			<artifactId>toast-tk-dao-api</artifactId>
-			<version>${project.version}</version>
+			<version>${toast-tk.engine.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.synaptix.toast</groupId>
 			<artifactId>toast-tk-adapters-api</artifactId>
-			<version>${project.version}</version>
+			<version>${toast-tk.engine.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.synaptix.toast</groupId>
 			<artifactId>toast-tk-runtime-api</artifactId>
-			<version>${project.version}</version>
+			<version>${toast-tk.engine.version}</version>
 		</dependency>
 	</dependencies>
 </project>

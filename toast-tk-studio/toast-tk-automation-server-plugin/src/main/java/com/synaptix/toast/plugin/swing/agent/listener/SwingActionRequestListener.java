@@ -244,7 +244,8 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 		final Component target)
 		throws InterruptedException {
 		if(isToRunOutsideEdt(target)) {
-			handleActionOutsideEdt(target, command);
+			ResultKind res = handleActionOutsideEdt(target, command);
+			connection.sendTCP(new ValueResponse(command.getId(), res != null ? res.name() : null));
 		}
 		else {
 			queueAndHandleInsideEdt(connection, command, target);
@@ -291,7 +292,10 @@ public class SwingActionRequestListener extends Listener implements Runnable {
 	private Component findComponent(
 		String item,
 		String itemType) {
-		Component target = repositoryHolder.getRepo().get(item);
+		Component target = repositoryHolder.getIdRepo().get(item);
+		if(target == null){
+			target = repositoryHolder.getRepo().get(item);
+		}
 		if(target == null) {
 			for(Map.Entry<String, Component> entrySet : repositoryHolder.getRepo().entrySet()) {
 				final Component component = entrySet.getValue();

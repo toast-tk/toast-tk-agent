@@ -109,7 +109,7 @@
 		<dependency>
 			<groupId>com.synaptix.toast</groupId>
 			<artifactId>toast-tk-runtime</artifactId>
-			<version>${project.version}</version>
+			<version>${toast-tk.engine.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.synaptix.toast</groupId>

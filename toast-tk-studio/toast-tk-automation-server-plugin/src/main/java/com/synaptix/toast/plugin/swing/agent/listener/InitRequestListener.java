@@ -24,6 +24,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JViewport;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -81,6 +82,9 @@ public class InitRequestListener extends Listener {
 					String componentLocator = computeLocator(allInstances, component);
 					if(isAutorizedComponent(component)) {
 						repositoryHolder.getRepo().put(componentLocator, component);
+						if(component.getName() != null && !StringUtils.isEmpty(component.getName())){
+							repositoryHolder.getIdRepo().put(component.getName(), component);
+						}
 					}
 				}
 			}
@@ -89,6 +93,7 @@ public class InitRequestListener extends Listener {
 			LOG.error(e.getMessage(), e);
 		}
 	}
+	
 
 	private String computeLocator(
 		Map<Object, String> allInstances,

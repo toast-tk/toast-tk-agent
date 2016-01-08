@@ -10,6 +10,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.logging.log4j.LogManager;
@@ -290,5 +295,16 @@ public class SutRunnerAsExec {
 		String command = javaBin+ " " + getAgentPathProperty() + " " + plugins + " -jar \"" + selectedFile.getAbsolutePath() + "\"";
 		System.out.println(javaBin+ " " + getAgentPathProperty() + " " + plugins + " -jar \"" + selectedFile.getAbsolutePath() + "\"");
 		executeSutBat(command);
+	}
+
+	public static SutRunnerAsExec FromArgs(String[] args) throws ParseException {
+		CommandLineParser parser = new DefaultParser();
+		Options options = new Options();
+		CommandLine cmd = parser.parse(options, args);
+		Config config = new Config();
+		config.setJnlpRuntimeHost("http://x64ertbidv3.si.fret.sncf.fr:8081/RUSystem");
+		config.setJnlpRuntimeFile("RUSystem.jnlp");;
+		config.setDebugArgs("");
+		return SutRunnerAsExec.FromLocalConfiguration(config);
 	}
 }

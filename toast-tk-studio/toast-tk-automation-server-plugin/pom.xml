@@ -57,7 +57,7 @@
 		<dependency>
 			<groupId>com.synaptix.toast</groupId>
 			<artifactId>toast-tk-adapters</artifactId>
-			<version>${project.version}</version>
+			<version>${toast-tk.engine.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.seleniumhq.selenium</groupId>

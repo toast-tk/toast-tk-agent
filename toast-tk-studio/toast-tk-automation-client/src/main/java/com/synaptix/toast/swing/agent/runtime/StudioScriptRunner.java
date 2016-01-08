@@ -5,11 +5,10 @@ import com.synaptix.toast.runtime.AbstractScenarioRunner;
 
 public class StudioScriptRunner extends AbstractScenarioRunner {
 
-	public StudioScriptRunner(
-		Injector injector) {
-		super(injector);
+	public StudioScriptRunner(Injector i){
+		super(i);
 	}
-
+	
 	@Override
 	public void tearDownEnvironment() {
 		// TODO Auto-generated method stub

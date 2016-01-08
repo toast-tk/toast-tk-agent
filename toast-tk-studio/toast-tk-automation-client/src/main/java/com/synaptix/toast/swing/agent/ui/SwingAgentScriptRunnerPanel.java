@@ -251,14 +251,7 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 							try {
 								runner.runRemoteScript(wikiScenario);
 							}
-							catch(IllegalAccessException e) {
-								e.printStackTrace();
-							}
-							catch(ClassNotFoundException e) {
-								e.printStackTrace();
-							}
-							catch(IOException e) {
-								// TODO Auto-generated catch block
+							catch (Exception e) {
 								e.printStackTrace();
 							}
 						}
