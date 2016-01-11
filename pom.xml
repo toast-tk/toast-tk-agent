@@ -160,10 +160,10 @@
 				<version>${guice.version}</version>
 			</dependency>
 			<dependency>
-			<groupId>com.esotericsoftware</groupId>
-			<artifactId>kryonet</artifactId>
-			<version>${kryonet.version}</version>
-		</dependency>
+				<groupId>com.esotericsoftware</groupId>
+				<artifactId>kryonet</artifactId>
+				<version>${kryonet.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<reporting>

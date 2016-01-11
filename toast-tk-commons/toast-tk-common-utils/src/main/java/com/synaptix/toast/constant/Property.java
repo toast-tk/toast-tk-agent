@@ -38,6 +38,8 @@ public class Property {
 
 	public static final String AGENT_JAR_NAME = "toast-tk-agent-standalone.jar";
 
+	public static final String TOAST_SUT_RUNNER_SH = "run_sut.sh";
+	
 	public static final String TOAST_SUT_RUNNER_BAT = "run_sut.bat";
 
 	public static final String REDPEPPER_AUTOMATION_SETTINGS_DEFAULT_DIR = "settings/toast_descriptor.json";
