@@ -32,7 +32,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 [Files]
 Source: "install\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "D:\java\jre1.7.0_75\*"; DestDir: "{app}\jre"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Program Files\Java\jre1.8.0_66*"; DestDir: "{app}\jre"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "addons\*"; DestDir: "{app}\addons"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
@@ -47,3 +47,4 @@ Filename: "{app}\Toast Studio.exe"; Description: "{cm:LaunchProgram,Toast Tk Stu
 [Registry]
 ; set PATH
 Root: HKCU; Subkey: "Environment"; ValueType:string; ValueName:"TOAST_JRE_HOME"; ValueData:"{app}\jre" ; Flags: preservestringtype ;
+Root: HKCU; Subkey: "Environment"; ValueType:string; ValueName:"TOAST_HOME"; ValueData:"{app}" ; Flags: preservestringtype ;

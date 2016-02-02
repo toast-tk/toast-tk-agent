@@ -16,10 +16,13 @@ import com.synaptix.toast.core.agent.interpret.WebEventRecord;
 import com.synaptix.toast.core.driver.IRemoteSwingAgentDriver;
 import com.synaptix.toast.core.net.request.IIdRequest;
 import com.synaptix.toast.core.net.request.PoisonPill;
+import com.synaptix.toast.core.net.response.ValueResponse;
 import com.synaptix.toast.core.net.response.WebRecordResponse;
+import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.ITCPClient;
 import com.synaptix.toast.core.runtime.ITCPResponseReceivedHandler;
+import com.synaptix.toast.swing.agent.guice.StudioEventBus;
 
 public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 
@@ -37,7 +40,8 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 
 	@Inject
 	public RemoteWebAgentDriverImpl(
-		@Named("host") String host, EventBus eventBus) {
+		@Named("host") String host, 
+		@StudioEventBus EventBus eventBus) {
 		this.client = new KryoTCPClient();
 		this.started = false;
 		this.host = host;
@@ -147,11 +151,10 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 	}
 
 	@Override
-	public String processAndWaitForValue(
+	public TestResult processAndWaitForValue(
 		IIdRequest request)
 		throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
-		String res = null;
-		return res;
+		return null;
 	}
 
 	@Override

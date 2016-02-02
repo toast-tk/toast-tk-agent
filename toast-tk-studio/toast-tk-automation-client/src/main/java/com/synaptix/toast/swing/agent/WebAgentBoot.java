@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.common.eventbus.EventBus;
 import com.synaptix.toast.constant.Property;
+import com.synaptix.toast.core.agent.config.Config;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage.State;
 import com.synaptix.toast.utils.StreamGobbler;
@@ -19,8 +20,8 @@ public class WebAgentBoot {
 
 	private static final Logger LOG = LogManager.getLogger(WebAgentBoot.class);
 
-	private static String STREAMGOBBLER_OUTPUT_FILEPATH = Property.TOAST_LOG_DIR + "\\agent.log";
-	private static String STREAMGOBBLER_ERROR_FILEPATH = Property.TOAST_LOG_DIR + "\\agent_error.log";
+	private static String STREAMGOBBLER_OUTPUT_FILEPATH = Config.TOAST_LOG_DIR + "\\agent.log";
+	private static String STREAMGOBBLER_ERROR_FILEPATH = Config.TOAST_LOG_DIR + "\\agent_error.log";
 	private static final String WINDOWS_SHELL = "C:\\Windows\\System32\\cmd.exe";
 	private static final String AGENT_CMD = "\"../addons/agent/toast-agent.bat\"";
 

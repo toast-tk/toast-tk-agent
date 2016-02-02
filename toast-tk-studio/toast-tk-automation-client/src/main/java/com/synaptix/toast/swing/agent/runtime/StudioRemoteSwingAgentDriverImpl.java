@@ -24,6 +24,7 @@ import com.synaptix.toast.core.net.response.ScanResponse;
 import com.synaptix.toast.core.runtime.ITCPResponseReceivedHandler;
 import com.synaptix.toast.swing.agent.WebAgentBoot;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
+import com.synaptix.toast.swing.agent.guice.StudioEventBus;
 import com.synaptix.toast.swing.agent.interpret.LiveRedPlayEventInterpreter;
 import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
 
@@ -47,7 +48,7 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 
 	@Inject
 	public StudioRemoteSwingAgentDriverImpl(
-		final EventBus eventBus,
+		final @StudioEventBus EventBus eventBus,
 		final MongoRepositoryCacheWrapper mongoRepoManager)
 		throws IOException {
 		this("localhost");
@@ -66,24 +67,9 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 			public void onResponseReceived(
 				Object object) {
 				eventBus.post(new SeverStatusMessage(SeverStatusMessage.State.DISCONNECTED));
-				startConnectionDeamon();
 			}
 		});
 		this.interpreter = new LiveRedPlayEventInterpreter(mongoRepoManager);
-		startConnectionDeamon();
-	}
-
-	private void startConnectionDeamon() {
-		Thread connectionDeamon = new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				start(host);
-			}
-		});
-		connectionDeamon.setName("Connection Deamon");
-		connectionDeamon.setDaemon(true);
-		connectionDeamon.start();
 	}
 
 	@Override
@@ -249,5 +235,15 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 			request.text = url;
 			driver.process(request);
 		}
+	}
+
+	@Override
+	public void disconnect() {
+		super.stop();
+	}
+
+	@Override
+	public void connect() {
+		start(host);
 	}
 }

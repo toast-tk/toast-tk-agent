@@ -21,7 +21,6 @@ public class AgentBoot {
 	public static final void boot() {
 		final List<Module> modules = new ArrayList<Module>();
 		modules.add(new AbstractActionAdapterModule() {
-
 			@Override
 			protected void configure() {
 				bind(RemoteSwingAgentDriverImpl.class).in(Singleton.class);

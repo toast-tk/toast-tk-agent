@@ -1,6 +1,5 @@
 package com.synaptix.toast.constant;
 
-import java.io.File;
 
 public class Property {
 
@@ -21,20 +20,6 @@ public class Property {
 	public static final String TOAST_RUNTIME_CMD = "toast.runtime.command";
 
 	public static final String TOAST_RUNTIME_AGENT = "toast.runtime.agent";
-
-	public static final String TOAST_HOME_DIR_NAME = ".toast";
-
-	public static final String TOAST_HOME_DIR = System.getProperty("user.home") + File.separatorChar + TOAST_HOME_DIR_NAME + File.separatorChar;
-
-	public static final String TOAST_PLUGIN_DIR = System.getProperty("user.home") + File.separatorChar + TOAST_HOME_DIR_NAME
-		+ File.separatorChar + "plugins";
-
-	public static final String TOAST_RUNTIME_DIR = System.getProperty("user.home") + File.separatorChar + TOAST_HOME_DIR_NAME
-		+ File.separatorChar + "runtime";
-
-	public static final String TOAST_LOG_DIR = System.getProperty("user.home") + File.separatorChar + TOAST_HOME_DIR_NAME + File.separatorChar +"log";;
-
-	public static final String TOAST_PROPERTIES_FILE = Property.TOAST_HOME_DIR + "toast.properties";
 
 	public static final String AGENT_JAR_NAME = "toast-tk-agent-standalone.jar";
 

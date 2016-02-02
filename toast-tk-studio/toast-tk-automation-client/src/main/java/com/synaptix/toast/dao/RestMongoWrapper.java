@@ -43,7 +43,6 @@ public class RestMongoWrapper extends RestUtils {
 		Client httpClient = Client.create();
 		GsonBuilder gson = new GsonBuilder();
 		gson.registerTypeHierarchyAdapter(ObjectId.class, new com.google.gson.JsonSerializer<ObjectId>() {
-
 			@Override
 			public JsonElement serialize(
 				ObjectId src,
@@ -57,8 +56,7 @@ public class RestMongoWrapper extends RestUtils {
 		});
 		String json = gson.create().toJson(repoToSave);
 		WebResource webResource = httpClient.resource(webAppResourceURI);
-		ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
-			.post(ClientResponse.class, json);
+		ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, json);
 		int statusCode = response.getStatus();
 		return statusCode == Response.Status.OK.getStatusCode();
 	}

@@ -8,25 +8,25 @@ public class DefaultEventInterpreter implements IEventInterpreter {
 	@Override
 	public String onButtonClick(
 		AWTCapturedEvent eventObject) {
-		return String.format("Cliquer sur le button '%s'", eventObject.componentName);
+		return String.format("Cliquer sur le button *%s*", eventObject.componentName);
 	}
 
 	@Override
 	public String onClick(
 		AWTCapturedEvent eventObject) {
-		return String.format("Cliquer sur '%s' de type '%s'", eventObject.componentLocator, eventObject.componentType);
+		return String.format("Cliquer sur *%s* de type *%s*", eventObject.componentLocator, eventObject.componentType);
 	}
 
 	@Override
 	public String onTableClick(
 		AWTCapturedEvent eventObject) {
-		return String.format("Selectionner dans le tableau la ligne ayant %s", eventObject.businessValue);
+		return String.format("Selectionner dans le tableau la ligne ayant *%s*", eventObject.businessValue);
 	}
 
 	@Override
 	public String onMenuClick(
 		AWTCapturedEvent eventObject) {
-		return String.format("Choisir le menu '%s'", eventObject.componentName);
+		return String.format("Choisir le menu *%s*", eventObject.componentName);
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class DefaultEventInterpreter implements IEventInterpreter {
 		if("JDialog".equals(eventObject.componentType) || "JSyDialog".equals(eventObject.componentType)) {
 			type = "dialogue";
 		}
-		return String.format("Affichage %s '%s'", type, eventObject.componentName);
+		return String.format("Affichage %s *%s*", type, eventObject.componentName);
 	}
 
 	@Override
@@ -56,14 +56,14 @@ public class DefaultEventInterpreter implements IEventInterpreter {
 		AWTCapturedEvent eventObject) {
 		return String
 			.format(
-				"Selection Fenetre '%s'",
+				"Selection Fenetre *%s*",
 				eventObject.componentName == null || "null".equals(eventObject.componentName) ? eventObject.componentType : eventObject.componentName);
 	}
 
 	@Override
 	public String onPopupMenuClick(
 		AWTCapturedEvent eventObject) {
-		return String.format("Selectionner le menu '%s'", eventObject.componentName);
+		return String.format("Selectionner le menu *%s*", eventObject.componentName);
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package com.synaptix.toast.test.server;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -65,6 +65,7 @@ public class TestRequestHandlersForTextField {
 		readValueFromTextfield(connection);
 		assertEquals(true, connection.result instanceof ValueResponse);
 		assertEquals(value, ((ValueResponse) connection.result).value);
+		assertNotNull(((ValueResponse) connection.result).b64ScreenShot);
 	}
 
 	private void readValueFromTextfield(

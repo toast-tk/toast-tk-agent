@@ -12,6 +12,7 @@ import com.synaptix.toast.core.annotation.craft.FixMe;
 public class ConfigProvider implements Provider<Config> {
 
 	private Config config;
+	
 
 	public ConfigProvider() {
 		super();
@@ -19,7 +20,7 @@ public class ConfigProvider implements Provider<Config> {
 	}
 
 	private void initConfig() {
-		String userHomepath = Property.TOAST_HOME_DIR;
+		String userHomepath = Config.TOAST_HOME_DIR;
 		Properties p = null;
 		if(userHomepath != null) {
 			p = new Properties();

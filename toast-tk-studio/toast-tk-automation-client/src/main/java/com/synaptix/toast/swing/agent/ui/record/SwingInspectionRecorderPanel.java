@@ -30,6 +30,7 @@ import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.core.agent.interpret.InterpretedEvent;
 import com.synaptix.toast.swing.agent.constant.Resource;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
+import com.synaptix.toast.swing.agent.guice.StudioEventBus;
 import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
 import com.synaptix.toast.swing.agent.runtime.StudioScriptRunner;
 import com.synaptix.toast.swing.agent.runtime.SutRunnerAsExec;
@@ -77,7 +78,7 @@ public class SwingInspectionRecorderPanel extends JPanel {
 	@Inject
 	public SwingInspectionRecorderPanel(
 		ISwingAutomationClient recorder,
-		EventBus eventBus,
+		@StudioEventBus EventBus eventBus,
 		Config config,
 		final MongoRepositoryCacheWrapper mongoRepoManager) {
 		super(new BorderLayout());
@@ -118,7 +119,6 @@ public class SwingInspectionRecorderPanel extends JPanel {
 
 	private void enableRecording() {
 		this.startStopRecordButton.setEnabled(true);
-		this.startStopRecordButton.setText("Stop");
 	}
 
 	private void disableRecording() {

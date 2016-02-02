@@ -44,11 +44,9 @@ public class SutRunnerAsExec {
 
 	private static final String WINDOWS_SHELL = "C:\\Windows\\System32\\cmd.exe";
 
-	private static String STREAMGOBBLER_OUTPUT_FILEPATH = Property.TOAST_LOG_DIR
-			+ "\\process.out.log";
+	private static String STREAMGOBBLER_OUTPUT_FILEPATH = Config.TOAST_LOG_DIR + "\\process.out.log";
 
-	private static String STREAMGOBBLER_ERROR_FILEPATH = Property.TOAST_LOG_DIR
-			+ "\\process.err.log";
+	private static String STREAMGOBBLER_ERROR_FILEPATH = Config.TOAST_LOG_DIR + "\\process.err.log";
 
 	private static String SUT_AGENT_PATH = "\\toast-tk-agent-standalone.jar";
 
@@ -77,12 +75,10 @@ public class SutRunnerAsExec {
 
 	public Process executeSutBat() throws IllegalAccessException {
 		if (SystemUtils.IS_OS_WINDOWS) {
-			final String sutBatPath = Property.TOAST_HOME_DIR
-					+ Property.TOAST_SUT_RUNNER_BAT;
+			final String sutBatPath = Config.TOAST_HOME_DIR + Property.TOAST_SUT_RUNNER_BAT;
 			return executeSutBat(sutBatPath);
 		} else {
-			final String sutBatPath = Property.TOAST_HOME_DIR
-					+ Property.TOAST_SUT_RUNNER_BAT;
+			final String sutBatPath = Config.TOAST_HOME_DIR + Property.TOAST_SUT_RUNNER_BAT;
 			return executeSutBat(sutBatPath);
 		}
 	}
@@ -149,13 +145,11 @@ public class SutRunnerAsExec {
 			String command = downloadDependenciesAndBuildBatCommand();
 			if (createBat) {
 				if (SystemUtils.IS_OS_WINDOWS) {
-					FileWriter w = new FileWriter(Property.TOAST_HOME_DIR
-							+ Property.TOAST_SUT_RUNNER_BAT);
+					FileWriter w = new FileWriter(Config.TOAST_HOME_DIR + Property.TOAST_SUT_RUNNER_BAT);
 					w.write(command + "\n");
 					w.close();
 				} else {
-					FileWriter w = new FileWriter(Property.TOAST_HOME_DIR
-							+ Property.TOAST_SUT_RUNNER_SH);
+					FileWriter w = new FileWriter(Config.TOAST_HOME_DIR + Property.TOAST_SUT_RUNNER_SH);
 					w.write(command + "\n");
 					w.close();
 				}
@@ -175,7 +169,7 @@ public class SutRunnerAsExec {
 	private String downloadDependenciesAndBuildBatCommand()
 			throws SAXException, IOException, IllegalAccessException,
 			ParserConfigurationException {
-		final File homeDir = new File(Property.TOAST_RUNTIME_DIR);
+		final File homeDir = new File(Config.TOAST_RUNTIME_DIR);
 		final String baseUri = configuration.getJnlpRuntimeHost();
 		final String agentPathProperty = getAgentPathProperty();
 		if (homeDir.exists()) {
@@ -250,7 +244,7 @@ public class SutRunnerAsExec {
 		final String pluginDirProperty = " -DIGNORE_CLIENT_SERVER_VERSION_CHECK=true -D"
 				+ Property.TOAST_PLUGIN_DIR_PROP
 				+ "=\""
-				+ Property.TOAST_PLUGIN_DIR + "\"";
+				+ Config.TOAST_PLUGIN_DIR + "\"";
 		final String debugRemoteArgs = " " + configuration.getDebugArgs() + " ";
 		String javaHome = System.getenv("TOAST_JRE_HOME");
 		String cmdPrefix = SystemUtils.IS_OS_WINDOWS ? "\"" + javaHome
@@ -264,11 +258,11 @@ public class SutRunnerAsExec {
 					+ mainClass + " " + AppArgsDesc;
 		} else {
 			command = "#!/bin/bash\n" + cmdPrefix + agentPathProperty + " " + pluginDirProperty
-					+ " " + jvmArgs + debugRemoteArgs + " -cp \""
+					+ " " + "-Drus.server.address=x64ertbidv3.si.fret.sncf.fr" + " " 
+					+ jvmArgs + debugRemoteArgs + " -cp \""
 					+ homeDir.getAbsolutePath() + File.separatorChar + "*\" "
 					+ mainClass + " " + AppArgsDesc;
 		}
-
 		return command;
 	}
 
@@ -324,7 +318,7 @@ public class SutRunnerAsExec {
 		String javaBin = "\"" + javaHome + "\\bin\\java.exe\" ";
 		javaBin = "java";
 		String plugins = "-D" + Property.TOAST_PLUGIN_DIR_PROP + "=\""
-				+ Property.TOAST_PLUGIN_DIR + "\"";
+				+ Config.TOAST_PLUGIN_DIR + "\"";
 		String command = javaBin + " " + getAgentPathProperty() + " " + plugins
 				+ " -jar \"" + selectedFile.getAbsolutePath() + "\"";
 		System.out.println(javaBin + " " + getAgentPathProperty() + " "

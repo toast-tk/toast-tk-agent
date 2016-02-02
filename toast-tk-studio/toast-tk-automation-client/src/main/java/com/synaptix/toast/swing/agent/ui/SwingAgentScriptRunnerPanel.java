@@ -61,9 +61,11 @@ import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.agent.IStudioApplication;
+import com.synaptix.toast.core.agent.config.Config;
 import com.synaptix.toast.swing.agent.AgentBoot;
 import com.synaptix.toast.swing.agent.constant.Resource;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
+import com.synaptix.toast.swing.agent.guice.StudioEventBus;
 import com.synaptix.toast.swing.agent.runtime.StudioScriptRunner;
 import com.synaptix.toast.swing.agent.runtime.SutRunnerAsExec;
 
@@ -99,7 +101,7 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 	public SwingAgentScriptRunnerPanel(
 		final SutRunnerAsExec runtime,
 		final IStudioApplication app,
-		EventBus eventBus) {
+		@StudioEventBus EventBus eventBus) {
 		eventBus.register(this);
 		this.runtime = runtime;
 		this.app = app;
@@ -118,7 +120,7 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 		else {
 			enableInitButton();
 		}
-		this.toastPropertiesFile = new File(Property.TOAST_PROPERTIES_FILE);
+		this.toastPropertiesFile = new File(Config.TOAST_PROPERTIES_FILE);
 		// this.attachButton.addActionListener(new ActionListener() {
 		//
 		// @Override
@@ -288,7 +290,7 @@ public class SwingAgentScriptRunnerPanel extends JPanel {
 						try {
 							publish();
 							runtime.init(runtimeType, true);
-							Desktop.getDesktop().open(new File(Property.TOAST_HOME_DIR));
+							Desktop.getDesktop().open(new File(Config.TOAST_HOME_DIR));
 						}
 						catch(IllegalAccessException e) {
 							e.printStackTrace();

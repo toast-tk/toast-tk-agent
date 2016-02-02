@@ -42,17 +42,21 @@ You need to clone this repository to compile Toast using maven.
 ``` java
 $ git clone https://gitlab.synaptix-labs.com/synaptix/toast-tk.git
 $ cd toast-tk
-$ mvn clean install
+$ mvn clean install -U -PADD_JNLP
 ```
 
 The packages are now installed in your local maven repository.
 
 ## Toast TK Studio
-${version} = __1.3-rc3__
+${version} = __1.3.0-SNAPSHOT__
 
-### JNLP Mode
+### JNLP Mode (to review)
 1. cd toast-tk/toast-tk-studio/target/toast-studio-${version}
 2. open app.jnlp and Enjoy !
+
+### EXE Mode (to review)
+1. cd toast-tk/toast-tk-studio/setup/toast-studio-setup.exe
+2. install and Enjoy !
 
 ### IDE Mode (Eclipse)
 1. Clone the repository.
@@ -60,7 +64,8 @@ ${version} = __1.3-rc3__
 3. Import the projects as maven projects from the cloned repository. 
 4. Build All
 5. Copy toast-tk/toast-tk-studio/target/toast-studio-${version}/agent-lib to ${user.home}/.toast/plugins
-6. Launch __AgentBoot__ as a Java Application and Enjoy !
+6. Launch __AgentBoot__ as a Java Application passwing VM argument: -Dtoast.home=${user.home}/.toast
+7. Enjoy !
 
 ## Toast TK WebApp
 * 1- Clone the webapp repository and compile it using sbt.

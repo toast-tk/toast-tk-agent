@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.synaptix.toast.constant.Property;
+import com.synaptix.toast.core.agent.config.Config;
 
 public class BootAgent {
 
@@ -86,7 +87,7 @@ public class BootAgent {
 	}
 
 	private static String getToastPluginDirPath() {
-		return System.getProperty(Property.TOAST_PLUGIN_DIR_PROP) == null ? Property.TOAST_PLUGIN_DIR : System
+		return System.getProperty(Property.TOAST_PLUGIN_DIR_PROP) == null ? Config.TOAST_PLUGIN_DIR : System
 			.getProperty(Property.TOAST_PLUGIN_DIR_PROP);
 	}
 

@@ -1,7 +1,21 @@
 package com.synaptix.toast.core.agent.config;
 
+import java.io.File;
+
 public class Config {
 
+	public static final String TOAST_HOME_PROPERTY = "toast.home";
+
+	public static final String TOAST_PROPERTIES_FILE = System.getProperty(TOAST_HOME_PROPERTY) + File.separatorChar + "toast.properties";
+
+	public static final String TOAST_PLUGIN_DIR = System.getProperty(TOAST_HOME_PROPERTY) + File.separatorChar + "plugins";
+
+	public static final String TOAST_RUNTIME_DIR = System.getProperty(TOAST_HOME_PROPERTY) + File.separatorChar + "runtime";
+
+	public static final String TOAST_LOG_DIR = System.getProperty(TOAST_HOME_PROPERTY) + File.separatorChar + "log";
+	
+	public static final String TOAST_HOME_DIR = System.getProperty(TOAST_HOME_PROPERTY) + File.separatorChar;
+	
 	private String mongoServer;
 
 	private String runtimeType;
@@ -43,20 +57,16 @@ public class Config {
 		this.runtimeType = runtimeType;
 	}
 
-	public String getUserHome() {
-		return System.getProperty("user.home");
-	}
-
-	public String getWorkSpaceDir() {
-		return getUserHome() + "/.toast/";
+	public String getToastHome() {
+		return System.getProperty(TOAST_HOME_PROPERTY);
 	}
 
 	public String getLogDir() {
-		return getWorkSpaceDir() + "log/";
+		return getToastHome() + "log/";
 	}
 
 	public String getPluginDir() {
-		return getWorkSpaceDir() + "plugins/";
+		return getToastHome() + File.separatorChar + "plugins/";
 	}
 
 	public void setWebAppAddr(

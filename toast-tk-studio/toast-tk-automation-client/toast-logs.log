@@ -1,0 +1,197 @@
+2016-01-26 11:37:57,522 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-01-26 11:37:58,783 ERROR co.sy.to.sw.ag.StudioApplicationImpl [AWT-EventQueue-0] Couldn't download plugin and Agent at url http://10.23.252.131:8080/toast/agent-lib
+java.net.SocketTimeoutException: Read timed out
+	at java.net.SocketInputStream.socketRead0(Native Method) ~[?:1.8.0_60]
+	at java.net.SocketInputStream.socketRead(SocketInputStream.java:116) ~[?:1.8.0_60]
+	at java.net.SocketInputStream.read(SocketInputStream.java:170) ~[?:1.8.0_60]
+	at java.net.SocketInputStream.read(SocketInputStream.java:141) ~[?:1.8.0_60]
+	at java.io.BufferedInputStream.fill(BufferedInputStream.java:246) ~[?:1.8.0_60]
+	at java.io.BufferedInputStream.read1(BufferedInputStream.java:286) ~[?:1.8.0_60]
+	at java.io.BufferedInputStream.read(BufferedInputStream.java:345) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.parseHTTPHeader(HttpClient.java:704) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.parseHTTP(HttpClient.java:647) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1535) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1440) ~[?:1.8.0_60]
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:480) ~[?:1.8.0_60]
+	at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:429) ~[jsoup-1.7.2.jar:?]
+	at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:410) ~[jsoup-1.7.2.jar:?]
+	at org.jsoup.helper.HttpConnection.execute(HttpConnection.java:164) ~[jsoup-1.7.2.jar:?]
+	at org.jsoup.helper.HttpConnection.get(HttpConnection.java:153) ~[jsoup-1.7.2.jar:?]
+	at com.synaptix.toast.swing.agent.StudioApplicationImpl$2.run(StudioApplicationImpl.java:154) [classes/:?]
+	at java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:311) [?:1.8.0_60]
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:756) [?:1.8.0_60]
+	at java.awt.EventQueue.access$500(EventQueue.java:97) [?:1.8.0_60]
+	at java.awt.EventQueue$3.run(EventQueue.java:709) [?:1.8.0_60]
+	at java.awt.EventQueue$3.run(EventQueue.java:703) [?:1.8.0_60]
+	at java.security.AccessController.doPrivileged(Native Method) ~[?:1.8.0_60]
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:76) [?:1.8.0_60]
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:726) [?:1.8.0_60]
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:201) [?:1.8.0_60]
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:116) [?:1.8.0_60]
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:105) [?:1.8.0_60]
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101) [?:1.8.0_60]
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93) [?:1.8.0_60]
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82) [?:1.8.0_60]
+2016-01-26 11:38:08,524 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-01-26 11:38:19,523 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-01-26 11:38:30,523 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-01-26 11:38:41,518 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-01-26 11:38:52,517 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-01-26 11:39:03,519 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-01-26 11:39:14,516 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-01-26 11:39:25,524 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-01-26 11:39:36,542 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-01-26 11:39:47,540 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-01-26 11:39:58,540 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-01-26 11:40:09,540 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-01-26 11:40:20,540 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-01-26 11:40:22,637 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Terminating inspection server - Poison Pill !
+2016-02-01 11:52:45,671 ERROR co.sy.to.sw.ag.StudioApplicationImpl [AWT-EventQueue-0] Couldn't download plugin and Agent at url http://10.23.252.131:8080/toast/agent-lib
+java.net.SocketTimeoutException: Read timed out
+	at java.net.SocketInputStream.socketRead0(Native Method) ~[?:1.8.0_60]
+	at java.net.SocketInputStream.socketRead(SocketInputStream.java:116) ~[?:1.8.0_60]
+	at java.net.SocketInputStream.read(SocketInputStream.java:170) ~[?:1.8.0_60]
+	at java.net.SocketInputStream.read(SocketInputStream.java:141) ~[?:1.8.0_60]
+	at java.io.BufferedInputStream.fill(BufferedInputStream.java:246) ~[?:1.8.0_60]
+	at java.io.BufferedInputStream.read1(BufferedInputStream.java:286) ~[?:1.8.0_60]
+	at java.io.BufferedInputStream.read(BufferedInputStream.java:345) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.parseHTTPHeader(HttpClient.java:704) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.parseHTTP(HttpClient.java:647) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1535) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1440) ~[?:1.8.0_60]
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:480) ~[?:1.8.0_60]
+	at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:429) ~[jsoup-1.7.2.jar:?]
+	at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:410) ~[jsoup-1.7.2.jar:?]
+	at org.jsoup.helper.HttpConnection.execute(HttpConnection.java:164) ~[jsoup-1.7.2.jar:?]
+	at org.jsoup.helper.HttpConnection.get(HttpConnection.java:153) ~[jsoup-1.7.2.jar:?]
+	at com.synaptix.toast.swing.agent.StudioApplicationImpl$2.run(StudioApplicationImpl.java:154) [classes/:?]
+	at java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:311) [?:1.8.0_60]
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:756) [?:1.8.0_60]
+	at java.awt.EventQueue.access$500(EventQueue.java:97) [?:1.8.0_60]
+	at java.awt.EventQueue$3.run(EventQueue.java:709) [?:1.8.0_60]
+	at java.awt.EventQueue$3.run(EventQue2016-02-02 15:35:00,305 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-02-02 15:35:11,303 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-02-02 15:35:22,304 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-02-02 15:35:33,303 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-02-02 15:35:44,298 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-02-02 15:35:51,292 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Terminating inspection server - Poison Pill !
+2016-02-02 17:48:41,341 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-02-02 17:48:52,369 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-02-02 17:49:03,401 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-02-02 17:49:14,417 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-02-02 17:49:25,412 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-02-02 17:49:36,442 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-02-02 17:50:02,569 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-02-02 17:50:13,578 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-02-02 17:50:24,596 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-02-02 17:50:35,628 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-02-02 17:50:46,644 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-02-02 17:50:57,662 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [Connection Deamon] Server unreachable, reattempting to connect in 10 !
+2016-02-02 18:39:32,864 ERROR co.sy.to.sw.ag.WorkspaceBuilder [main] Accès refusé
+java.io.IOException: Accès refusé
+	at java.io.WinNTFileSystem.createFileExclusively(Native Method) ~[?:1.8.0_60]
+	at java.io.File.createNewFile(File.java:1012) ~[?:1.8.0_60]
+	at com.synaptix.toast.swing.agent.WorkspaceBuilder.initWorkspace(WorkspaceBuilder.java:42) [classes/:?]
+	at com.synaptix.toast.swing.agent.StudioApplicationImpl.<init>(StudioApplicationImpl.java:42) [classes/:?]
+	at com.synaptix.toast.swing.agent.StudioApplicationImpl$$FastClassByGuice$$5f51a4c5.newInstance(<generated>) [guice-3.0.jar:?]
+	at com.google.inject.internal.cglib.reflect.$FastConstructor.newInstance(FastConstructor.java:40) [guice-3.0.jar:?]
+	at com.google.inject.internal.DefaultConstructionProxyFactory$1.newInstance(DefaultConstructionProxyFactory.java:60) [guice-3.0.jar:?]
+	at com.google.inject.internal.ConstructorInjector.construct(ConstructorInjector.java:85) [guice-3.0.jar:?]
+	at com.google.inject.internal.ConstructorBindingImpl$Factory.get(ConstructorBindingImpl.java:254) [guice-3.0.jar:?]
+	at com.google.inject.internal.FactoryProxy.get(FactoryProxy.java:54) [guice-3.0.jar:?]
+	at com.google.inject.internal.ProviderToInternalFactoryAdapter$1.call(ProviderToInternalFactoryAdapter.java:46) [guice-3.0.jar:?]
+	at com.google.inject.internal.InjectorImpl.callInContext(InjectorImpl.java:1031) [guice-3.0.jar:?]
+	at com.google.inject.internal.ProviderToInternalFactoryAdapter.get(ProviderToInternalFactoryAdapter.java:40) [guice-3.0.jar:?]
+	at com.google.inject.Scopes$1$1.get(Scopes.java:65) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalFactoryToProviderAdapter.get(InternalFactoryToProviderAdapter.java:40) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalInjectorCreator$1.call(InternalInjectorCreator.java:204) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalInjectorCreator$1.call(InternalInjectorCreator.java:198) [guice-3.0.jar:?]
+	at com.google.inject.internal.InjectorImpl.callInContext(InjectorImpl.java:1024) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalInjectorCreator.loadEagerSingletons(InternalInjectorCreator.java:198) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalInjectorCreator.injectDynamically(InternalInjectorCreator.java:179) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalInjectorCreator.build(InternalInjectorCreator.java:109) [guice-3.0.jar:?]
+	at com.google.inject.Guice.createInjector(Guice.java:95) [guice-3.0.jar:?]
+	at com.google.inject.Guice.createInjector(Guice.java:72) [guice-3.0.jar:?]
+	at com.synaptix.toast.swing.agent.AgentBoot.boot(AgentBoot.java:33) [classes/:?]
+	at com.synaptix.toast.swing.agent.AgentBoot.main(AgentBoot.java:38) [classes/:?]
+2016-02-02 18:39:33,084 ERROR co.sy.to.sw.ag.WorkspaceBuilder [main] Accès refusé
+java.io.IOException: Accès refusé
+	at java.io.WinNTFileSystem.createFileExclusively(Native Method) ~[?:1.8.0_60]
+	at java.io.File.createNewFile(File.java:1012) ~[?:1.8.0_60]
+	at com.synaptix.toast.swing.agent.WorkspaceBuilder.initWorkspace(WorkspaceBuilder.java:42) [classes/:?]
+	at com.synaptix.toast.swing.agent.StudioApplicationImpl.<init>(StudioApplicationImpl.java:42) [classes/:?]
+	at com.synaptix.toast.swing.agent.StudioApplicationImpl$$FastClassByGuice$$5f51a4c5.newInstance(<generated>) [guice-3.0.jar:?]
+	at com.google.inject.internal.cglib.reflect.$FastConstructor.newInstance(FastConstructor.java:40) [guice-3.0.jar:?]
+	at com.google.inject.internal.DefaultConstructionProxyFactory$1.newInstance(DefaultConstructionProxyFactory.java:60) [guice-3.0.jar:?]
+	at com.google.inject.internal.ConstructorInjector.construct(ConstructorInjector.java:85) [guice-3.0.jar:?]
+	at com.google.inject.internal.ConstructorBindingImpl$Factory.get(ConstructorBindingImpl.java:254) [guice-3.0.jar:?]
+	at com.google.inject.internal.FactoryProxy.get(FactoryProxy.java:54) [guice-3.0.jar:?]
+	at com.google.inject.internal.ProviderToInternalFactoryAdapter$1.call(ProviderToInternalFactoryAdapter.java:46) [guice-3.0.jar:?]
+	at com.google.inject.internal.InjectorImpl.callInContext(InjectorImpl.java:1031) [guice-3.0.jar:?]
+	at com.google.inject.internal.ProviderToInternalFactoryAdapter.get(ProviderToInternalFactoryAdapter.java:40) [guice-3.0.jar:?]
+	at com.google.inject.Scopes$1$1.get(Scopes.java:65) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalFactoryToProviderAdapter.get(InternalFactoryToProviderAdapter.java:40) [guice-3.0.jar:?]
+	at com.google.inject.internal.SingleParameterInjector.inject(SingleParameterInjector.java:38) [guice-3.0.jar:?]
+	at com.google.inject.internal.SingleParameterInjector.getAll(SingleParameterInjector.java:62) [guice-3.0.jar:?]
+	at com.google.inject.internal.ConstructorInjector.construct(ConstructorInjector.java:84) [guice-3.0.jar:?]
+	at com.google.inject.internal.ConstructorBindingImpl$Factory.get(ConstructorBindingImpl.java:254) [guice-3.0.jar:?]
+	at com.google.inject.internal.ProviderToInternalFactoryAdapter$1.call(ProviderToInternalFactoryAdapter.java:46) [guice-3.0.jar:?]
+	at com.google.inject.internal.InjectorImpl.callInContext(InjectorImpl.java:1031) [guice-3.0.jar:?]
+	at com.google.inject.internal.ProviderToInternalFactoryAdapter.get(ProviderToInternalFactoryAdapter.java:40) [guice-3.0.jar:?]
+	at com.google.inject.Scopes$1$1.get(Scopes.java:65) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalFactoryToProviderAdapter.get(InternalFactoryToProviderAdapter.java:40) [guice-3.0.jar:?]
+	at com.google.inject.internal.SingleParameterInjector.inject(SingleParameterInjector.java:38) [guice-3.0.jar:?]
+	at com.google.inject.internal.SingleParameterInjector.getAll(SingleParameterInjector.java:62) [guice-3.0.jar:?]
+	at com.google.inject.internal.ConstructorInjector.construct(ConstructorInjector.java:84) [guice-3.0.jar:?]
+	at com.google.inject.internal.ConstructorBindingImpl$Factory.get(ConstructorBindingImpl.java:254) [guice-3.0.jar:?]
+	at com.google.inject.internal.ProviderToInternalFactoryAdapter$1.call(ProviderToInternalFactoryAdapter.java:46) [guice-3.0.jar:?]
+	at com.google.inject.internal.InjectorImpl.callInContext(InjectorImpl.java:1031) [guice-3.0.jar:?]
+	at com.google.inject.internal.ProviderToInternalFactoryAdapter.get(ProviderToInternalFactoryAdapter.java:40) [guice-3.0.jar:?]
+	at com.google.inject.Scopes$1$1.get(Scopes.java:65) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalFactoryToProviderAdapter.get(InternalFactoryToProviderAdapter.java:40) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalInjectorCreator$1.call(InternalInjectorCreator.java:204) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalInjectorCreator$1.call(InternalInjectorCreator.java:198) [guice-3.0.jar:?]
+	at com.google.inject.internal.InjectorImpl.callInContext(InjectorImpl.java:1024) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalInjectorCreator.loadEagerSingletons(InternalInjectorCreator.java:198) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalInjectorCreator.injectDynamically(InternalInjectorCreator.java:179) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalInjectorCreator.build(InternalInjectorCreator.java:109) [guice-3.0.jar:?]
+	at com.google.inject.Guice.createInjector(Guice.java:95) [guice-3.0.jar:?]
+	at com.google.inject.Guice.createInjector(Guice.java:72) [guice-3.0.jar:?]
+	at com.synaptix.toast.swing.agent.AgentBoot.boot(AgentBoot.java:33) [classes/:?]
+	at com.synaptix.toast.swing.agent.AgentBoot.main(AgentBoot.java:38) [classes/:?]
+2016-02-02 18:39:33,084 ERROR co.sy.to.sw.ag.WorkspaceBuilder [main] Accès refusé
+java.io.IOException: Accès refusé
+	at java.io.WinNTFileSystem.createFileExclusively(Native Method) ~[?:1.8.0_60]
+	at java.io.File.createNewFile(File.java:1012) ~[?:1.8.0_60]
+	at com.synaptix.toast.swing.agent.WorkspaceBuilder.initWorkspace(WorkspaceBuilder.java:42) [classes/:?]
+	at com.synaptix.toast.swing.agent.StudioApplicationImpl.<init>(StudioApplicationImpl.java:42) [classes/:?]
+	at com.synaptix.toast.swing.agent.StudioApplicationImpl$$FastClassByGuice$$5f51a4c5.newInstance(<generated>) [guice-3.0.jar:?]
+	at com.google.inject.internal.cglib.reflect.$FastConstructor.newInstance(FastConstructor.java:40) [guice-3.0.jar:?]
+	at com.google.inject.internal.DefaultConstructionProxyFactory$1.newInstance(DefaultConstructionProxyFactory.java:60) [guice-3.0.jar:?]
+	at com.google.inject.internal.ConstructorInjector.construct(ConstructorInjector.java:85) [guice-3.0.jar:?]
+	at com.google.inject.internal.ConstructorBindingImpl$Factory.get(ConstructorBindingImpl.java:254) [guice-3.0.jar:?]
+	at com.google.inject.internal.FactoryProxy.get(FactoryProxy.java:54) [guice-3.0.jar:?]
+	at com.google.inject.internal.ProviderToInternalFactoryAdapter$1.call(ProviderToInternalFactoryAdapter.java:46) [guice-3.0.jar:?]
+	at com.google.inject.internal.InjectorImpl.callInContext(InjectorImpl.java:1031) [guice-3.0.jar:?]
+	at com.google.inject.internal.ProviderToInternalFactoryAdapter.get(ProviderToInternalFactoryAdapter.java:40) [guice-3.0.jar:?]
+	at com.google.inject.Scopes$1$1.get(Scopes.java:65) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalFactoryToProviderAdapter.get(InternalFactoryToProviderAdapter.java:40) [guice-3.0.jar:?]
+	at com.google.inject.internal.SingleParameterInjector.inject(SingleParameterInjector.java:38) [guice-3.0.jar:?]
+	at com.google.inject.internal.SingleParameterInjector.getAll(SingleParameterInjector.java:62) [guice-3.0.jar:?]
+	at com.google.inject.internal.ConstructorInjector.construct(ConstructorInjector.java:84) [guice-3.0.jar:?]
+	at com.google.inject.internal.ConstructorBindingImpl$Factory.get(ConstructorBindingImpl.java:254) [guice-3.0.jar:?]
+	at com.google.inject.internal.ProviderToInternalFactoryAdapter$1.call(ProviderToInternalFactoryAdapter.java:46) [guice-3.0.jar:?]
+	at com.google.inject.internal.InjectorImpl.callInContext(InjectorImpl.java:1031) [guice-3.0.jar:?]
+	at com.google.inject.internal.ProviderToInternalFactoryAdapter.get(ProviderToInternalFactoryAdapter.java:40) [guice-3.0.jar:?]
+	at com.google.inject.Scopes$1$1.get(Scopes.java:65) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalFactoryToProviderAdapter.get(InternalFactoryToProviderAdapter.java:40) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalInjectorCreator$1.call(InternalInjectorCreator.java:204) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalInjectorCreator$1.call(InternalInjectorCreator.java:198) [guice-3.0.jar:?]
+	at com.google.inject.internal.InjectorImpl.callInContext(InjectorImpl.java:1024) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalInjectorCreator.loadEagerSingletons(InternalInjectorCreator.java:198) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalInjectorCreator.injectDynamically(InternalInjectorCreator.java:179) [guice-3.0.jar:?]
+	at com.google.inject.internal.InternalInjectorCreator.build(InternalInjectorCreator.java:109) [guice-3.0.jar:?]
+	at com.google.inject.Guice.createInjector(Guice.java:95) [guice-3.0.jar:?]
+	at com.google.inject.Guice.createInjector(Guice.java:72) [guice-3.0.jar:?]
+	at com.synaptix.toast.swing.agent.AgentBoot.boot(AgentBoot.java:33) [classes/:?]
+	at com.synaptix.toast.swing.agent.AgentBoot.main(AgentBoot.java:38) [classes/:?]

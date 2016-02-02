@@ -59,6 +59,7 @@ import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.core.net.response.ScanResponse;
 import com.synaptix.toast.core.rest.RestUtils;
 import com.synaptix.toast.swing.agent.constant.Resource;
+import com.synaptix.toast.swing.agent.guice.StudioEventBus;
 
 public class SwingInspectorPanel extends JPanel {
 
@@ -91,7 +92,7 @@ public class SwingInspectorPanel extends JPanel {
 	@Inject
 	public SwingInspectorPanel(
 		ISwingAutomationClient cmdServer,
-		EventBus evenBus,
+		@StudioEventBus EventBus evenBus,
 		Config config) {
 		this.cmdServer = cmdServer;
 		this.config = config;

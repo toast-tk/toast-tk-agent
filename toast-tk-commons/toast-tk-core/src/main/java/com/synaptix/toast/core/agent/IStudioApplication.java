@@ -23,7 +23,5 @@ public interface IStudioApplication {
 
 	public String getRuntimeType();
 
-	public void openConfigDialog();
 
-	public void initProperties();
 }
