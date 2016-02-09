@@ -40,7 +40,7 @@ import com.synaptix.toast.core.net.request.CommandRequest;
 import com.synaptix.toast.core.net.response.ErrorResponse;
 import com.synaptix.toast.core.net.response.ExistsResponse;
 import com.synaptix.toast.core.net.response.ValueResponse;
-import com.synaptix.toast.core.report.TestResult.ResultKind;
+import com.synaptix.toast.dao.domain.api.test.ITestResult.ResultKind;
 
 public class SwingActionRequestListener extends Listener implements Runnable {
 

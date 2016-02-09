@@ -163,8 +163,9 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 		client.sendRequest(request);
 	}
 
+	@Override
 	public void processCustomCommand(
-		CommandRequest request) {
+		IIdRequest request) {
 		client.sendRequest(request);
 	}
 

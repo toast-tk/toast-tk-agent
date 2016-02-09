@@ -18,10 +18,10 @@ import com.synaptix.toast.core.net.request.IIdRequest;
 import com.synaptix.toast.core.net.request.PoisonPill;
 import com.synaptix.toast.core.net.response.ValueResponse;
 import com.synaptix.toast.core.net.response.WebRecordResponse;
-import com.synaptix.toast.core.report.TestResult;
 import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.ITCPClient;
 import com.synaptix.toast.core.runtime.ITCPResponseReceivedHandler;
+import com.synaptix.toast.dao.domain.api.test.ITestResult;
 import com.synaptix.toast.swing.agent.guice.StudioEventBus;
 
 public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
@@ -151,7 +151,7 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 	}
 
 	@Override
-	public TestResult processAndWaitForValue(
+	public ITestResult processAndWaitForValue(
 		IIdRequest request)
 		throws IllegalAccessException, TimeoutException, ErrorResultReceivedException {
 		return null;
