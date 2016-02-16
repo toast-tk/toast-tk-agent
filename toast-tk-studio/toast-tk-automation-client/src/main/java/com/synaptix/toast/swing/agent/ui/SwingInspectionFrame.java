@@ -355,7 +355,7 @@ public class SwingInspectionFrame extends JFrame {
 	@Subscribe
 	public void startLoading(
 		final LoadingMessage lMsg) {
-		if(!glassPane.isVisible()) {
+		if(!glassPane.isVisible() && lMsg.progress < 100) {
 			glassPane.setVisible(true);
 		}
 		glassPane.setMessage(lMsg.msg);

@@ -55,9 +55,6 @@ public class TestRequestHandlersForJList {
 		catch(InterruptedException e) {
 			e.printStackTrace();
 		}
-		// assertEquals(expectedIndice,
-// ((ValueResponse)connection.result).value); TODO FIXME, Issue #16 - null
-// pointer
 	}
 
 	public static CommandRequest buildJListCommandRequest() {

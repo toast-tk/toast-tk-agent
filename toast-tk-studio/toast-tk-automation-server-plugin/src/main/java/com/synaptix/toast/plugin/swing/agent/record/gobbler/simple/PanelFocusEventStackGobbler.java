@@ -12,11 +12,6 @@ public class PanelFocusEventStackGobbler extends EventStackGobbler {
 		return isFocusGainedEvent(capturedEvent.eventLabel);
 	}
 
-	private boolean isFocusGainedEvent(
-		String eventLabel) {
-		return "CausedFocusEvent>".equals(eventLabel);
-	}
-
 	@Override
 	public EventType getInterpretedEventType(
 		AWTCapturedEvent capturedEvent) {

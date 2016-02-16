@@ -124,7 +124,8 @@ public class ProgressGlassPane extends JComponent {
 		int y = (getHeight() - BAR_HEIGHT - metrics.getDescent()) / 2;
 		// draws the text
 		g2.setColor(TEXT_COLOR);
-		g2.drawString(message, x, y);
+		g2.drawString("Downloading...", x, y);
+		g2.drawString(message, x, y+30);
 		// goes to the position of the progress bar
 		y += metrics.getDescent();
 		// computes the size of the progress indicator

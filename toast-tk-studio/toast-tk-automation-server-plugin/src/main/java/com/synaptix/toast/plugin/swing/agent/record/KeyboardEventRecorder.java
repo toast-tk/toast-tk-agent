@@ -42,7 +42,7 @@ public class KeyboardEventRecorder extends AbstractEventRecorder {
 		captureEvent.componentLocator = getEventComponentLocator(event);
 		captureEvent.componentName = getEventComponentLabel(event);
 		captureEvent.container = getEventComponentContainer(event);
-		captureEvent.componentType = kEvent.getComponent().getClass().getSimpleName();
+		captureEvent.componentType = kEvent.getComponent().getClass().getName();
 		captureEvent.eventLabel = event.getClass().getSimpleName();
 		captureEvent.timeStamp = System.nanoTime();
 		return captureEvent;

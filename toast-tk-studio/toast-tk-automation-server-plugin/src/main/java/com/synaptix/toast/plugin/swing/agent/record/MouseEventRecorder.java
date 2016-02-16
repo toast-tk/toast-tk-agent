@@ -4,10 +4,6 @@ import java.awt.AWTEvent;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JCheckBox;
-import javax.swing.JList;
-import javax.swing.JTable;
-
 import org.fest.swing.input.InputState;
 
 import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
@@ -30,8 +26,7 @@ public class MouseEventRecorder extends AbstractEventRecorder {
 			if(isCapturedEventUninteresting(captureEvent)) {
 				return;
 			}
-			final String classTypeSimpleName = findClassName(mEvent);
-			captureEvent.componentType = classTypeSimpleName;
+			captureEvent.componentType = findClassName(mEvent);
 			captureEvent.timeStamp = System.nanoTime();
 			appendEventRecord(captureEvent);
 		}
@@ -41,22 +36,8 @@ public class MouseEventRecorder extends AbstractEventRecorder {
 		final MouseEvent mEvent) {
 		final Component component = mEvent.getComponent();
 		final Class<? extends Component> componentClass = component.getClass();
-		final String classTypeSimpleName = componentClass.getSimpleName();
-		if(classTypeSimpleName == null || "".equals(classTypeSimpleName)) {
-			if(component instanceof JTable) {
-				return "JTable";
-			}
-			else if(component instanceof JCheckBox) {
-				return "JCheckBox";
-			}
-			else if(component instanceof JList) {
-				return "JList";
-			}
-			else {
-				return componentClass.getName();
-			}
-		}
-		return classTypeSimpleName;
+		final String classTypeName = componentClass.getName();
+		return classTypeName;
 	}
 
 	private static boolean isReleasedMouseEvent(

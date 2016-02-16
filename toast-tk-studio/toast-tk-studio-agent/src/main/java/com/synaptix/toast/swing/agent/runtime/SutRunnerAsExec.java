@@ -277,11 +277,11 @@ public class SutRunnerAsExec {
 				String _fPath = DownloadUtils.getFile(
 						baseUri + "/" + _fileName, homeDir.getAbsolutePath());
 				if (appInstance != null) {
-					appInstance.updateStatusMessage("Downloading: " + _fPath);
+					appInstance.updateStatusMessage(_fPath);
 				}
 				float _nbFile = (_index + 1) * 100f;
 				if (appInstance != null) {
-					appInstance.updateProgress("Downloading: " + _fileName,
+					appInstance.updateProgress(_fileName,
 							(int) (_nbFile / _length));
 				}
 			}

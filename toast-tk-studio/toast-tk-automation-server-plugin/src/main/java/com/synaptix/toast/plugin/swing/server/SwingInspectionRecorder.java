@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.fest.swing.input.InputState;
@@ -25,9 +26,6 @@ import com.synaptix.toast.plugin.swing.agent.record.WindowEventRecorder;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.EventStackGobbler;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.EventStackGobblerProvider;
 
-/**
- * Created by skokaina on 07/11/2014.
- */
 public class SwingInspectionRecorder implements IEventRecorder {
 
 	private static final Logger LOG = LogManager.getLogger(SwingInspectionRecorder.class);
@@ -158,6 +156,7 @@ public class SwingInspectionRecorder implements IEventRecorder {
 		EventType eventType,
 		AWTCapturedEvent event) {
 		event.setEventType(eventType);
+		LOG.info("New Event Published: " + ToStringBuilder.reflectionToString(event));
 		cmdServer.publishRecordEvent(event);
 		liveRecordedStepsBuffer.clear();
 		this.currentEventStackGobbler = null;

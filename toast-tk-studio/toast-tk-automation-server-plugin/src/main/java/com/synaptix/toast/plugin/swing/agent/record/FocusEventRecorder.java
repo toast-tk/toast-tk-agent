@@ -77,7 +77,7 @@ public class FocusEventRecorder extends AbstractEventRecorder {
 		final AWTCapturedEvent captureEvent = new AWTCapturedEvent();
 		captureEvent.eventLabel = event.getClass().getSimpleName() + ">";
 		captureEvent.componentLocator = getEventComponentLocator(event);
-		captureEvent.componentType = component.getClass().getSimpleName();
+		captureEvent.componentType = component.getClass().getName();
 		captureEvent.businessValue = getEventValue(event);
 		captureEvent.componentName = eventComponentName;
 		captureEvent.container = container;
@@ -93,9 +93,9 @@ public class FocusEventRecorder extends AbstractEventRecorder {
 		final AWTCapturedEvent captureEvent = new AWTCapturedEvent();
 		captureEvent.eventLabel = event.getClass().getSimpleName() + "<";
 		captureEvent.componentLocator = getEventComponentLocator(event);
-		captureEvent.componentType = wEvent.getComponent().getClass().getSimpleName();
+		captureEvent.componentType = wEvent.getComponent().getClass().getName();
 		captureEvent.businessValue = getEventValue(event);
-		captureEvent.componentName = wEvent.getComponent().getName();
+		captureEvent.componentName = wEvent.getComponent().getName() == null ? getEventComponentLabel(event) : wEvent.getComponent().getName();
 		captureEvent.container = container;
 		captureEvent.timeStamp = System.nanoTime();
 		return captureEvent;

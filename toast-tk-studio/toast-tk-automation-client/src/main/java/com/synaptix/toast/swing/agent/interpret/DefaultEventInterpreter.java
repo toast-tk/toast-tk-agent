@@ -39,7 +39,7 @@ public class DefaultEventInterpreter implements IEventInterpreter {
 	public String onWindowDisplay(
 		AWTCapturedEvent eventObject) {
 		String type = eventObject.componentType;
-		if("JDialog".equals(eventObject.componentType) || "JSyDialog".equals(eventObject.componentType)) {
+		if(eventObject.componentType.contains("Dialog")) {
 			type = "dialogue";
 		}
 		return String.format("Affichage %s *%s*", type, eventObject.componentName);

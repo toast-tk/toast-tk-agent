@@ -1,5 +1,7 @@
 package com.synaptix.toast.plugin.swing.agent.record.gobbler.simple;
 
+import javax.swing.JMenuItem;
+
 import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.EventStackGobbler;
@@ -48,7 +50,14 @@ public class MenuItemClickEventStackGobbler extends EventStackGobbler {
 
 	private static boolean isMenuItemType(
 		String targetType) {
-		return "JMenuItem".equals(targetType);
+		try {
+			Class<?> tClass = Class.forName(targetType);
+			boolean isCompliant = JMenuItem.class.isAssignableFrom(tClass) || targetType.contains("JMenuItem");
+			return isCompliant;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	@Override

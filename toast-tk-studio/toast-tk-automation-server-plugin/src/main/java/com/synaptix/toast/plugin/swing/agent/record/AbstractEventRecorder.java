@@ -102,7 +102,7 @@ public abstract class AbstractEventRecorder implements FilteredAWTEventListener,
 		final AWTEvent awtEvent) {
 		final FocusEvent fEvent = (FocusEvent) awtEvent;
 		if(fEvent.getComponent() instanceof JCheckBox) {
-			return getCheckBoxFocusEvent(fEvent);
+			return getCheckBoxValue(fEvent);
 		}
 		if(fEvent.getComponent() instanceof JTextField) {
 			return getTextFieldFocusEvent(fEvent);
@@ -152,10 +152,16 @@ public abstract class AbstractEventRecorder implements FilteredAWTEventListener,
 		return ((JTextField) focusEvent.getComponent()).getText();
 	}
 
-	private static String getCheckBoxFocusEvent(
+	private static String getCheckBoxValue(
 		final FocusEvent focusEvent) {
-		return Boolean.toString(((JCheckBox) focusEvent.getComponent()).isSelected());
+		return Boolean.toString(!((JCheckBox) focusEvent.getComponent()).isSelected());
 	}
+	
+	private static String getCheckBoxValue(
+			final MouseEvent mEvent) {
+		return Boolean.toString(!((JCheckBox) mEvent.getComponent()).isSelected());
+	}
+
 
 	private static String getMouseEvent(
 		final AWTEvent awtEvent) {
@@ -166,6 +172,9 @@ public abstract class AbstractEventRecorder implements FilteredAWTEventListener,
 		}
 		else if(componentEvent instanceof JTable) {
 			return getJTableMouseEvent(mEvent);
+		}
+		else if(componentEvent instanceof JCheckBox) {
+			return getCheckBoxValue(mEvent);
 		}
 		else if(componentEvent instanceof JList) {
 			return getJListMouseEvent(mEvent);
@@ -237,9 +246,11 @@ public abstract class AbstractEventRecorder implements FilteredAWTEventListener,
 	private static String computeMenuItemPath(List<String> namePath, JMenuItem menuItem){
 		if(menuItem.getParent() instanceof JPopupMenu){
 			JPopupMenu fromParent = (JPopupMenu)menuItem.getParent();
-			JMenu menu = (JMenu)fromParent.getInvoker();
-			if(menu != null){
-				namePath.add(menu.getText());
+			if(fromParent.getInvoker() instanceof JMenu){
+				JMenu menu = (JMenu)fromParent.getInvoker();
+				if(menu != null){
+					namePath.add(menu.getText());
+				}
 			}
 			Collections.reverse(namePath);
 			return StringUtils.join(namePath, " / ");
@@ -277,12 +288,12 @@ public abstract class AbstractEventRecorder implements FilteredAWTEventListener,
 			ancestorLocator = ((JDialog) ancestorOfClass).getTitle();
 		}
 		if(ancestorLocator == null) {
+			ancestorLocator = getJTabbedPaneAncestor(component);
+		}
+		if(ancestorLocator == null) {
 			ancestorLocator = getJLayeredPaneAncestor(component);
 		}
 		if(ancestorLocator == null) {
-			ancestorLocator = getJTabbedPaneAncestor(component);
-		}
-		if(ancestorOfClass == null) {
 			ancestorLocator = getJFrameAncestor(component);
 		}
 		return ancestorLocator;

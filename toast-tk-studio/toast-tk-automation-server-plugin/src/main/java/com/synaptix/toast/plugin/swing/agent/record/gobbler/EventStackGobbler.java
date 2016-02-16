@@ -24,6 +24,12 @@ public abstract class EventStackGobbler {
 		String eventLabel) {
 		return "CausedFocusEvent<".equals(eventLabel);
 	}
+	
+	protected boolean isFocusGainedEvent(
+			String eventLabel) {
+		return "CausedFocusEvent>".equals(eventLabel);
+	}
+
 
 	protected boolean isMouseClick(
 		String eventLabel) {

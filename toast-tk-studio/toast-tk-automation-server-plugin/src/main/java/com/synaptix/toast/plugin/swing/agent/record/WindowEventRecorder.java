@@ -44,7 +44,7 @@ public class WindowEventRecorder extends AbstractEventRecorder {
 		AWTCapturedEvent captureEvent = new AWTCapturedEvent();
 		captureEvent.eventLabel = event.getClass().getSimpleName();
 		captureEvent.componentLocator = getEventComponentLocator(event);
-		captureEvent.componentType = wEvent.getComponent().getClass().getSimpleName();
+		captureEvent.componentType = wEvent.getComponent().getClass().getName();
 		captureEvent.businessValue = getEventValue(event);
 		captureEvent.componentName = eventComponentName;
 		captureEvent.container = getEventComponentContainer(event);

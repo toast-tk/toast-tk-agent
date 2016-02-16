@@ -66,7 +66,7 @@ public class LiveRedPlayEventInterpreter extends DefaultEventInterpreter {
 	@Override
 	public String onCheckBoxClick(AWTCapturedEvent eventObject) {
 		eventObject.componentType = "checkbox";
-		return onClick(eventObject);
+		return onKeyInput(eventObject);
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package com.synaptix.toast.plugin.swing.agent.record;
 
 
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
@@ -11,18 +10,6 @@ import org.junit.Test;
 
 public class EventRecorderTest {
 	
-	
-//	@Test
-//	public void computeComponentNameInJrameTest(){
-//		JFrame frame = new JFrame("Frame Title");
-//		JMenu fileMenu = new JMenu("File");
-//		JMenuItem saveMenuItem = new JMenuItem("Save");
-//		fileMenu.add(saveMenuItem);
-//		frame.add(fileMenu);
-//		String componentName = AbstractEventRecorder.getComponentName(saveMenuItem);
-//		Assert.assertEquals("File / Save", componentName);
-//	}
-//	
 	@Test
 	public void computeComponentNameTest(){
 		JMenu fileMenu = new JMenu("File");
