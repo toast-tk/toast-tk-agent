@@ -11,10 +11,14 @@ public class ButtonClickEventStackGobbler extends EventStackGobbler {
 	@Override
 	public boolean isInterestedIn(
 		AWTCapturedEvent capturedEvent) {
-		return isMouseClick(capturedEvent.eventLabel) &&
+		return  isValidEvent(capturedEvent) &&
 			isButtonType(capturedEvent.componentType);
 	}
 
+	private boolean isValidEvent(AWTCapturedEvent capturedEvent){
+		return (isMouseClick(capturedEvent.eventLabel) || isFocusLostEvent(capturedEvent.eventLabel));
+	}
+	
 	private static boolean isButtonType(
 		String targetType) {
 		try {

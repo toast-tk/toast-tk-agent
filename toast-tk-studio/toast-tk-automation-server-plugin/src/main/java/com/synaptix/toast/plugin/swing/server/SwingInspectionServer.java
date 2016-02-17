@@ -271,12 +271,7 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 		}
 	}
 
-	// TODO: implement
-	// to publish
-	// only to
-	// relevant
-	// client IDs
-	// !!!
+	// TODO: implement to publish only to relevant client IDs
 	@Override
 	public void publishRecordEvent(
 		AWTCapturedEvent eventObject) {

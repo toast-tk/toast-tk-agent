@@ -19,6 +19,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -46,6 +47,7 @@ public class InitRequestListener extends Listener {
 	static {
 		autorizedComponents.add(JLabel.class);
 		autorizedComponents.add(JButton.class);
+		autorizedComponents.add(JRadioButton.class);
 		autorizedComponents.add(JComboBox.class);
 		autorizedComponents.add(JCheckBox.class);
 		autorizedComponents.add(JTable.class);

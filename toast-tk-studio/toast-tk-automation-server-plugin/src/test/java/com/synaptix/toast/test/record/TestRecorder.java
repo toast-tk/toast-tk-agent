@@ -8,6 +8,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 
+import javax.swing.JButton;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JTextField;
 import javax.swing.event.MenuEvent;
 
 import org.junit.Before;
@@ -34,7 +38,7 @@ public class TestRecorder {
 	
 	@Test
 	public void buttonClickRecordTest(){
-		AWTCapturedEvent event = new AWTCapturedEvent("", "", "Connexion", "JButton", null, 0);
+		AWTCapturedEvent event = new AWTCapturedEvent("", "", "Connexion", JButton.class.getName(), null, 0);
 		event.eventLabel = MouseEvent.class.getSimpleName();
 		AWTCapturedEvent capturedEvent = recorder.liveExplore(Arrays.asList(event));
 		assertEquals(capturedEvent.getEventType(), EventType.BUTTON_CLICK);
@@ -43,10 +47,10 @@ public class TestRecorder {
 	
 	@Test
 	public void inputTypeRecordTest(){
-		AWTCapturedEvent event = new AWTCapturedEvent("", "", "Login", "JTextField", null, 0);
+		AWTCapturedEvent event = new AWTCapturedEvent("", "", "Login", JTextField.class.getName(), null, 0);
 		event.eventLabel = KeyEvent.class.getSimpleName();
 		
-		AWTCapturedEvent closureEvent = new AWTCapturedEvent("", "", "Login", "JTextField", "value", 0);
+		AWTCapturedEvent closureEvent = new AWTCapturedEvent("", "", "Login", JTextField.class.getName(), "value", 0);
 		closureEvent.eventLabel = "CausedFocusEvent<";
 		
 		AWTCapturedEvent unCapturedEvent = recorder.liveExplore(Arrays.asList(event));
@@ -60,10 +64,10 @@ public class TestRecorder {
 	
 	@Test
 	public void inputTypeSequencedRecordTest(){
-		AWTCapturedEvent event = new AWTCapturedEvent("", "", "Login", "JTextField", null, 0);
+		AWTCapturedEvent event = new AWTCapturedEvent("", "", "Login", JTextField.class.getName(), null, 0);
 		event.eventLabel = KeyEvent.class.getSimpleName();
 		
-		AWTCapturedEvent closureEvent = new AWTCapturedEvent("", "", "Login", "JTextField", "value", 0);
+		AWTCapturedEvent closureEvent = new AWTCapturedEvent("", "", "Login", JTextField.class.getName(), "value", 0);
 		closureEvent.eventLabel = "CausedFocusEvent<";
 		
 		AWTCapturedEvent capturedEvent = recorder.liveExplore(Arrays.asList(event, closureEvent));
@@ -74,7 +78,7 @@ public class TestRecorder {
 	
 	@Test
 	public void menuRecordTest(){
-		AWTCapturedEvent menuEvent = new AWTCapturedEvent("", "", "File", "JMenu", null, 0);
+		AWTCapturedEvent menuEvent = new AWTCapturedEvent("", "", "File", JMenu.class.getName(), null, 0);
 		menuEvent.eventLabel = MouseEvent.class.getSimpleName();
 		AWTCapturedEvent capturedEvent = recorder.liveExplore(Arrays.asList(menuEvent));
 		assertEquals(capturedEvent.getEventType(), EventType.MENU_CLICK);
@@ -84,7 +88,7 @@ public class TestRecorder {
 	
 	@Test
 	public void menuItemRecordTest(){
-		AWTCapturedEvent menuItemEvent = new AWTCapturedEvent("File", "", "Save", "JMenuItem", null, 0);
+		AWTCapturedEvent menuItemEvent = new AWTCapturedEvent("File", "", "Save", JMenuItem.class.getName(), null, 0);
 		menuItemEvent.eventLabel = MouseEvent.class.getSimpleName();
 		AWTCapturedEvent capturedEvent = recorder.liveExplore(Arrays.asList(menuItemEvent));
 		assertEquals(capturedEvent.getEventType(), EventType.MENU_CLICK);

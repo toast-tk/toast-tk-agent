@@ -133,6 +133,8 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 		switch(response.value.getEventType()) {
 			case BUTTON_CLICK :
 				return interpreter.onButtonClick(response.value);
+			case RADIO_CLICK :
+				return interpreter.onButtonClick(response.value);
 			case CHECKBOX_CLICK :
 				return interpreter.onCheckBoxClick(response.value);
 			case CLICK :

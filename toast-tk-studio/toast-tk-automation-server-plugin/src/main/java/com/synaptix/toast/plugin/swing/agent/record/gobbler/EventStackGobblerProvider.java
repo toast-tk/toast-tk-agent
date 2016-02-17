@@ -12,6 +12,7 @@ import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.MenuClickEven
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.MenuItemClickEventStackGobbler;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.PanelFocusEventStackGobbler;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.PopupClickEventStackGobbler;
+import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.RadioButtonClickEventStackGobbler;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.TableClickEventStackGobbler;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.WindowFocusEventStackGobbler;
 
@@ -24,6 +25,7 @@ public class EventStackGobblerProvider {
 		gobblers.add(new MenuClickEventStackGobbler());
 		gobblers.add(new MenuItemClickEventStackGobbler());
 		gobblers.add(new ButtonClickEventStackGobbler());
+		gobblers.add(new RadioButtonClickEventStackGobbler());
 		gobblers.add(new CheckBoxClickEventStackGobbler());
 		gobblers.add(new TableClickEventStackGobbler());
 		gobblers.add(new PopupClickEventStackGobbler());

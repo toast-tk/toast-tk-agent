@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import com.synaptix.toast.adapter.SentenceBuilder;
 import com.synaptix.toast.core.adapter.ActionAdapterSentenceRef.Types;
 import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
+import com.synaptix.toast.core.agent.interpret.DefaultEventInterpreter;
 import com.synaptix.toast.dao.domain.impl.repository.RepositoryImpl;
 
 /**

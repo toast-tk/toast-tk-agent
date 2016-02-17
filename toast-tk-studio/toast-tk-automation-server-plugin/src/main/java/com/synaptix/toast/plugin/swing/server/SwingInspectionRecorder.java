@@ -200,6 +200,10 @@ public class SwingInspectionRecorder implements IEventRecorder {
 	@Override
 	public void scanUi(
 		boolean debug) {
-		cmdServer.scan(debug);
+		this.cmdServer.scan(debug);
+	}
+	
+	protected void setCommandServer(ISwingInspectionServer server){
+		this.cmdServer = server;
 	}
 }
