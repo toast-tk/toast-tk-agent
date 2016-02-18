@@ -4,6 +4,7 @@ import java.awt.AWTEvent;
 import java.awt.Component;
 import java.awt.event.FocusEvent;
 
+import javax.swing.AbstractButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JTabbedPane;
@@ -114,6 +115,8 @@ public class FocusEventRecorder extends AbstractEventRecorder {
 		else if(component.getClass().equals(JFrame.class)) {
 			final JFrame panel = (JFrame) component;
 			return panel.getTitle();
+		}else if(component instanceof AbstractButton){
+			return getComponentName(component);
 		}
 		return component.getName();
 	}

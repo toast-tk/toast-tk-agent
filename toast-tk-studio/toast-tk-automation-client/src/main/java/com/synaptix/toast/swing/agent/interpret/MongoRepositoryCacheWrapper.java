@@ -67,7 +67,7 @@ public class MongoRepositoryCacheWrapper {
 			impl.name = locator.split(":")[1];
 		}
 		else {
-			impl.name = locator.contains(".") ? impl.type + "-" + UUID.randomUUID().toString() : locator;
+			impl.name = locator == null ? type + "-" + UUID.randomUUID().toString() : locator;
 		}
 		impl.name = formatLabel(impl.name);
 		impl.type = type;

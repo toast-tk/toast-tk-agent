@@ -1,4 +1,4 @@
-package com.synaptix.toast.swing.agent.runtime;
+package com.synaptix.toast.swing.agent.runtime.web;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -16,7 +16,6 @@ import com.synaptix.toast.core.agent.interpret.WebEventRecord;
 import com.synaptix.toast.core.driver.IRemoteSwingAgentDriver;
 import com.synaptix.toast.core.net.request.IIdRequest;
 import com.synaptix.toast.core.net.request.PoisonPill;
-import com.synaptix.toast.core.net.response.ValueResponse;
 import com.synaptix.toast.core.net.response.WebRecordResponse;
 import com.synaptix.toast.core.runtime.ErrorResultReceivedException;
 import com.synaptix.toast.core.runtime.ITCPClient;
@@ -29,8 +28,6 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 	private static final Logger LOG = LogManager.getLogger(RemoteWebAgentDriverImpl.class);
 
 	protected final ITCPClient client;
-
-	private static final int RECONNECTION_RATE = 10000;
 
 	protected final String host;
 
@@ -62,7 +59,6 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 				}
 			}
 		});
-		
 		client.addDisconnectionHandler(new ITCPResponseReceivedHandler() {
 			@Override
 			public void onResponseReceived(
@@ -78,29 +74,25 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 			IActionInterpret interpret = InterpretationProvider.getSentenceBuilder(eventRecord.type);
 			return interpret == null ? null : interpret.getSentence(eventRecord);
 	}
+	
 	@Override
 	public void start(
 		String host) {
 		try {
 			client.connect(300000, host, CommonIOUtils.AGENT_TCP_PORT);
-			this.started = true;
+			if(client.isConnected()){
+				this.started = true;
+			}else{
+				this.started = false;
+			}
 		}
 		catch(IOException e) {
-			startConnectionLoop();
+			LOG.error(e);
+			this.started = false;
 		}
 	}
 
 	protected void startConnectionLoop() {
-		while(!client.isConnected()) {
-			connect();
-			try {
-				Thread.sleep(RECONNECTION_RATE);
-			}
-			catch(InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		
 		//lame hack to keep kryo connection active
 //		new Thread(new Runnable() {
 //			
@@ -119,24 +111,27 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 //				}
 //			}
 //		}).start();
-		
 	}
 	
 
 	public void connect() {
 		try {
 			client.reconnect();
-			this.started = true;
+			if(client.isConnected()){
+				this.started = true;
+			}else{
+				this.started = false;
+			}
 		}
 		catch(Exception e) {
-			LOG.error(String.format("Server unreachable, reattempting to connect in %d !", RECONNECTION_RATE / 1000));
+			LOG.error(String.format("Server unreachable !"));
+			this.started = false;
 		}
 	}
 
 	@Override
 	public void process(
 		IIdRequest request) {
-
 		checkConnection();
 		client.sendRequest(request);
 	}
