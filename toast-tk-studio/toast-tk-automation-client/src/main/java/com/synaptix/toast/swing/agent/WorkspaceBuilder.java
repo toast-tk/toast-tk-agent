@@ -87,4 +87,14 @@ public class WorkspaceBuilder implements IWorkspaceBuilder {
 	public String getRuntimeType() {
 		return (String) properties.get(Property.TOAST_RUNTIME_TYPE);
 	}
+
+	@Override
+	public File getToastPropertiesFile() {
+		return toastPropertiesFile;
+	}
+
+	@Override
+	public Properties getProperties() {
+		return properties;
+	}
 }

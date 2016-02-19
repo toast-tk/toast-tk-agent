@@ -233,4 +233,8 @@ public class SwingInspectionRecorderPanel extends JPanel {
 		dialog.add(panel);
 		dialog.setVisible(true);
 	}
+	
+	public JTextArea getInterpretedOutputArea() {
+		return interpretedOutputArea;
+	}
 }
