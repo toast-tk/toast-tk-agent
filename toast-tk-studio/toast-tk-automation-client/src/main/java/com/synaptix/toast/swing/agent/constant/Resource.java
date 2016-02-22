@@ -60,6 +60,9 @@ public class Resource {
 	public static final Image ICON_SHARE_IMG = kit.createImage(Resource.class.getClassLoader().getResource(
 		_64pxIconsDirPath + "share2.png"));
 
+	public static final Image ICON_SETTINGS_IMG = kit.createImage(Resource.class.getClassLoader().getResource(
+			_64pxIconsDirPath + "settingsIcon.png"));
+
 	// 16px icons
 	public static final Image ICON_CAMERA_16PX_IMG = kit.createImage(Resource.class.getClassLoader().getResource(
 		_16pxIconsDirPath + "camera113.png"));
@@ -104,5 +107,22 @@ public class Resource {
 		_16pxIconsDirPath + "wiping16.png"));
 
 	public static final Image ICON_POWER_16PX_IMG = kit.createImage(Resource.class.getClassLoader().getResource(
-		_16pxIconsDirPath + "power6.png"));;
+		_16pxIconsDirPath + "power6.png"));
+
+	public static final Image ICON_SETTINGS_16PX_IMG = kit.createImage(Resource.class.getClassLoader().getResource(
+			_16pxIconsDirPath + "settingsIcon.png"));
+
+	public static final Image ICON_HOME_16PX_IMG = kit.createImage(Resource.class.getClassLoader().getResource(
+			_16pxIconsDirPath + "homeIcon.png"));
+	
+	public static final Image ICON_AMPOULE_16PX_IMG = kit.createImage(Resource.class.getClassLoader().getResource(
+			_16pxIconsDirPath + "ampoule_icon.png"));
+	
+	public static final Image ICON_ARRET_16PX_IMG = kit.createImage(Resource.class.getClassLoader().getResource(
+			_16pxIconsDirPath + "arret.png"));
+	
+	public static final Image ICON_PRISE_16PX_IMG = kit.createImage(Resource.class.getClassLoader().getResource(
+			_16pxIconsDirPath + "prise.png"));
+	
+	;
 }

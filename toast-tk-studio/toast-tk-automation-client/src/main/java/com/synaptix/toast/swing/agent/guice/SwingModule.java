@@ -14,10 +14,15 @@ import com.synaptix.toast.swing.agent.StudioApplicationImpl;
 import com.synaptix.toast.swing.agent.WorkspaceBuilder;
 import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
 import com.synaptix.toast.swing.agent.runtime.StudioRemoteSwingAgentDriverImpl;
+import com.synaptix.toast.swing.agent.ui.AdvancedSettingsPanel;
+import com.synaptix.toast.swing.agent.ui.CorpusPanel;
+import com.synaptix.toast.swing.agent.ui.HeaderPanel;
+import com.synaptix.toast.swing.agent.ui.HomePanel;
 import com.synaptix.toast.swing.agent.ui.SwingAgentScriptRunnerPanel;
 import com.synaptix.toast.swing.agent.ui.SwingInspectionFrame;
 import com.synaptix.toast.swing.agent.ui.SwingInspectorPanel;
 import com.synaptix.toast.swing.agent.ui.record.SwingInspectionRecorderPanel;
+import com.synaptix.toast.swing.agent.ui.record.listener.AdvancedSettingsListener;
 
 public class SwingModule extends AbstractModule {
 
@@ -31,10 +36,13 @@ public class SwingModule extends AbstractModule {
 		bind(SwingAgentScriptRunnerPanel.class).in(Singleton.class);
 		bind(SwingInspectorPanel.class).in(Singleton.class);
 		bind(SwingInspectionRecorderPanel.class).in(Singleton.class);
+		bind(HomePanel.class).in(Singleton.class);
+		bind(AdvancedSettingsPanel.class).in(Singleton.class);
+		bind(CorpusPanel.class).in(Singleton.class);
+		bind(HeaderPanel.class).in(Singleton.class);
 		bind(ISwingAutomationClient.class).to(StudioRemoteSwingAgentDriverImpl.class).in(Singleton.class);
 		bind(MongoRepositoryCacheWrapper.class).in(Singleton.class);
 		bind(EventBus.class).annotatedWith(EngineEventBus.class).to(EventBus.class).in(Singleton.class);
 		bind(EventBus.class).annotatedWith(StudioEventBus.class).to(EventBus.class).in(Singleton.class);
 	}
-
 }
