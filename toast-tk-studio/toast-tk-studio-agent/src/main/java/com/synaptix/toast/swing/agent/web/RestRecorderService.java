@@ -41,7 +41,7 @@ public class RestRecorderService extends Verticle {
 
 	private static final String PATH = "/record";
 
-	private static final String CHROME_DRIVER_PATH = "D:\\Apps\\chromedriver.exe";
+	private static final String CHROME_DRIVER_PATH = "/addons/chromedriver.exe";
 
 	private KryoAgentServer server;
 
@@ -185,7 +185,8 @@ public class RestRecorderService extends Verticle {
 	}
 
 	private static WebDriver launchBrowser(String host) {
-		System.setProperty("webdriver.chrome.driver", CHROME_DRIVER_PATH);
+		String toastHome = System.getenv("TOAST_HOME");
+		System.setProperty("webdriver.chrome.driver", toastHome + CHROME_DRIVER_PATH);
 		WebDriver driver = new ChromeDriver();
 		driver.get(host);
 		return driver;

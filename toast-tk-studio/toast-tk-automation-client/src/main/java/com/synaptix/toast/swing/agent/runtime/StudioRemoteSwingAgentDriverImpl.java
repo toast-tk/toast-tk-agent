@@ -33,6 +33,8 @@ import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
 import com.synaptix.toast.swing.agent.runtime.web.RemoteWebAgentDriverImpl;
 import com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot;
 
+
+//FIXME: split the class in 2: distinguer le recorder web du recordeur swing !
 public class StudioRemoteSwingAgentDriverImpl extends
 		RemoteSwingAgentDriverImpl implements ISwingAutomationClient {
 
