@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -53,24 +55,24 @@ public class HeaderPanel extends JPanel {
 	
 	private AdvancedSettingsPanel advancedSettingsPanel;
 
-	public static CardLayout cl = new CardLayout();
-	
+	public static CardLayout corpusLayout = new CardLayout();
+
 	String[] listPanel = {"Home", "Recorder", "Inspection", "AdvancedSettings"};
 
 	@Inject
 	public HeaderPanel(
 		final HomePanel homePanel,
-		final SwingInspectorPanel inspectorPanel,
-		final SwingInspectionRecorderPanel recorderPanel,
-		final AdvancedSettingsPanel advancedSettingsPanel,
-		CorpusPanel corpusPanel,
+		final SwingInspectorPanel inspectorPane,
+		final SwingInspectionRecorderPanel recorderPane,
+		final AdvancedSettingsPanel advancedSettingsPane,
+		CorpusPanel corpusPane,
 		Config config,
 		ISwingAutomationClient recorder,
 		final ISwingAutomationClient serverClient,
 		@StudioEventBus EventBus eventBus) {
 		super();
-		this.corpusPanel = corpusPanel;
-		this.advancedSettingsPanel = advancedSettingsPanel;
+		this.corpusPanel = corpusPane;
+		this.advancedSettingsPanel = advancedSettingsPane;
 		this.serverClient = serverClient;
 		this.recorder = recorder;
 		this.connectButton = new JButton("Connect", connectedIcon);
@@ -88,25 +90,25 @@ public class HeaderPanel extends JPanel {
 		final JPanel commandPanel = buildCommandPanel();
 		add(commandPanel, BorderLayout.NORTH);
 		
-		corpusPanel.setLayout(cl);
-		corpusPanel.add(homePanel, listPanel[0]);
-		corpusPanel.add(recorderPanel, listPanel[1]);
-		corpusPanel.add(inspectorPanel, listPanel[2]);
-		corpusPanel.add(advancedSettingsPanel, listPanel[3]);
-		add(corpusPanel, BorderLayout.CENTER);
+		corpusPane.setLayout(corpusLayout);
+		corpusPane.add(homePanel, listPanel[0]);
+		corpusPane.add(recorderPane, listPanel[1]);
+		corpusPane.add(inspectorPane, listPanel[2]);
+		corpusPane.add(advancedSettingsPane, listPanel[3]);
+		add(corpusPane, BorderLayout.CENTER);
 		initActions();
 	}
 
 	private JPanel buildCommandPanel() {
-		final JPanel commandPanel = new JPanel();
-		commandPanel.add(this.homeButton, BorderLayout.BEFORE_LINE_BEGINS);
-		final JPanel shortcutsPanel = new JPanel();
-		shortcutsPanel.add(this.connectButton, BorderLayout.CENTER);
-		shortcutsPanel.add(this.startStopRecordButton, BorderLayout.CENTER);
-		shortcutsPanel.add(this.saveScenarioButton,BorderLayout.CENTER);
-		commandPanel.add(shortcutsPanel, BorderLayout.CENTER);
-		commandPanel.add(this.advancedSettingsButton, BorderLayout.AFTER_LINE_ENDS);
-		return commandPanel;
+		final JPanel commandPane = new JPanel();
+		commandPane.add(this.homeButton, BorderLayout.BEFORE_LINE_BEGINS);
+		final JPanel shortcutsPane = new JPanel();
+		shortcutsPane.add(this.connectButton);
+		shortcutsPane.add(this.startStopRecordButton);
+		shortcutsPane.add(this.saveScenarioButton);
+		commandPane.add(shortcutsPane, BorderLayout.CENTER);
+		commandPane.add(this.advancedSettingsButton, BorderLayout.AFTER_LINE_ENDS);
+		return commandPane;
 	}
 
 	private void enableRecording() {
@@ -128,7 +130,7 @@ public class HeaderPanel extends JPanel {
 		
 		homeButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent event){
-				cl.show(corpusPanel, "Home");
+				corpusLayout.show(corpusPanel, "Home");
 			}
 	    });
 
@@ -160,7 +162,7 @@ public class HeaderPanel extends JPanel {
 		advancedSettingsButton.addActionListener(
 				new ActionListener(){
 			public void actionPerformed(ActionEvent event){
-				cl.show(corpusPanel, "AdvancedSettings");
+				corpusLayout.show(corpusPanel, "AdvancedSettings");
 			}
 	    });
 		
@@ -169,7 +171,6 @@ public class HeaderPanel extends JPanel {
 //				cl.next(corpusPanel);
 //			}
 //	    });
-
 	}
 
 	@Subscribe
@@ -186,6 +187,6 @@ public class HeaderPanel extends JPanel {
 	}
 	
 	public void switchAdvancedSettings() {
-		cl.show(corpusPanel, "AdvancedSettings");
+		corpusLayout.show(corpusPanel, "AdvancedSettings");
 	}
 }

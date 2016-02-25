@@ -13,5 +13,13 @@ public interface IWorkspaceBuilder {
 
 	File getToastPropertiesFile();
 
+	File getToastWebPropertiesFile();
+
+	void propertiesChanged();
+
 	Properties getProperties();
+
+	Properties getSwingProperties();
+
+	Properties getWebProperties();
 }

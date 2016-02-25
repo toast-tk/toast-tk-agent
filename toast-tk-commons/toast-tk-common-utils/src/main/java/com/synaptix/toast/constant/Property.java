@@ -52,4 +52,6 @@ public class Property {
 	public static final String ACTION_ITEM_REGEX = "\\{\\{([\\w:]+)\\}\\}";
 	
 	public static final String RESULT_FOLDER = "TestResult";
+	
+	public static final String TOAST_TEST_WEB_PROPERTY_FILE_FIXE_ME = "toast.web.settings";
 }

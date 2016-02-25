@@ -7,6 +7,8 @@ import com.google.inject.name.Names;
 import com.synaptix.toast.core.agent.IStudioApplication;
 import com.synaptix.toast.core.agent.config.Config;
 import com.synaptix.toast.core.agent.config.ConfigProvider;
+import com.synaptix.toast.core.agent.config.WebConfig;
+import com.synaptix.toast.core.agent.config.WebConfigProvider;
 import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.core.annotation.EngineEventBus;
 import com.synaptix.toast.swing.agent.IWorkspaceBuilder;
@@ -22,7 +24,6 @@ import com.synaptix.toast.swing.agent.ui.SwingAgentScriptRunnerPanel;
 import com.synaptix.toast.swing.agent.ui.SwingInspectionFrame;
 import com.synaptix.toast.swing.agent.ui.SwingInspectorPanel;
 import com.synaptix.toast.swing.agent.ui.record.SwingInspectionRecorderPanel;
-import com.synaptix.toast.swing.agent.ui.record.listener.AdvancedSettingsListener;
 
 public class SwingModule extends AbstractModule {
 
@@ -33,6 +34,7 @@ public class SwingModule extends AbstractModule {
 		bind(IWorkspaceBuilder.class).to(WorkspaceBuilder.class).asEagerSingleton();
 		bind(SwingInspectionFrame.class).asEagerSingleton();
 		bind(Config.class).toProvider(ConfigProvider.class).in(Singleton.class);
+		bind(WebConfig.class).toProvider(WebConfigProvider.class).in(Singleton.class);
 		bind(SwingAgentScriptRunnerPanel.class).in(Singleton.class);
 		bind(SwingInspectorPanel.class).in(Singleton.class);
 		bind(SwingInspectionRecorderPanel.class).in(Singleton.class);

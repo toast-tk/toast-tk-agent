@@ -4,10 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.LayoutManager;
-import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +33,7 @@ import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.synaptix.toast.core.agent.IStudioApplication;
 import com.synaptix.toast.core.agent.config.Config;
+import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.core.agent.interpret.InterpretedEvent;
 import com.synaptix.toast.swing.agent.constant.Resource;
 import com.synaptix.toast.swing.agent.guice.StudioEventBus;
@@ -53,10 +54,14 @@ public class HomePanel extends JPanel {
 	
 	private JPanel jPanelButton;
 	
+	private JSwitchBox webSwingSlider;
+	
 	private final IStudioApplication app;
 
 	private final SutRunnerAsExec runtime;
-	
+
+	private ISwingAutomationClient recorder;
+
 	private static final ImageIcon ampouleIcon = new ImageIcon(Resource.ICON_AMPOULE_16PX_IMG);
 	
 	private SwingInspectionRecorderPanel recorderPanel;
@@ -66,8 +71,10 @@ public class HomePanel extends JPanel {
 			final SutRunnerAsExec runtime,
 			final IStudioApplication app,
 			SwingInspectionRecorderPanel recorderPanel,
+			ISwingAutomationClient recorder,
 			@StudioEventBus EventBus eventBus) {
 		this.config = config;
+		this.recorder = recorder;
 		this.recorderPanel = recorderPanel;
 		this.configuration = new JTextArea();
 		this.configuration.setEditable(false);
@@ -113,11 +120,12 @@ public class HomePanel extends JPanel {
 		initButton.setBackground(Color.green);
 		initButton.setToolTipText("Download the system under test, and open a bat to start it's inspection & recording...");
 		initButton.setIcon(new ImageIcon(Resource.ICON_POWER_16PX_IMG));
-		
+		webSwingSlider = new JSwitchBox("Web", "Swing");
 		configButton = new JButton("Ok");
 		
 		jPanelButton.add(initButton);
 		jPanelButton.add(configButton);
+		jPanelButton.add(webSwingSlider);
 		homePanel.add(jPanelButton, BorderLayout.PAGE_END);
 		
 		return homePanel;
@@ -188,6 +196,19 @@ public class HomePanel extends JPanel {
 				configButton.setVisible(false);
 				configuration.setText("SUT non initialisé");
 				initButton.setVisible(true);
+			}
+		});
+		
+		this.webSwingSlider.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(
+				ItemEvent e) {
+				final String item = webSwingSlider.getText();
+				if(item.equals("Swing")){
+					recorder.switchToSwingRecordingMode();
+				} else {
+					recorder.switchToWebRecordingMode();
+				}
 			}
 		});
 	}

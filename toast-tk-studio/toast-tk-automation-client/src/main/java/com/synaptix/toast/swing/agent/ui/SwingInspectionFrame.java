@@ -45,12 +45,14 @@ public class SwingInspectionFrame extends JFrame {
 
 	private final JPanel statusPanel;
 
+	private JPanel container;
+
 	private final JLabel statusMessageLabel;
 
 	private final ProgressGlassPane glassPane;
 
 	private String CONNECTED_TEXT = "Toast Automation Server - Connected";
-
+	
 	@Inject
 	public SwingInspectionFrame(
 		final ISwingAutomationClient serverClient,
@@ -71,13 +73,9 @@ public class SwingInspectionFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setIconImage(Resource.ICON_IMG);
 		setModalExclusionType(Dialog.ModalExclusionType.TOOLKIT_EXCLUDE);
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(headerPanel);
-		
-//		JTabbedPane tabPan = new JTabbedPane(JTabbedPane.TOP);
-//		tabPan.addTab("", new ImageIcon(Resource.ICON_CAMERA_IMG), recorderPanel, "Record your actions as a scenario");
-//		tabPan.addTab("", new ImageIcon(Resource.ICON_SEARCH_IMG), inspectorPanel, "Inspect the SUT interface widgets");
-//		getContentPane().add(recorderPanel);
+		container = new JPanel();
+		container.setLayout(new BorderLayout());
+		container.add(headerPanel);
 
 		statusPanel = new JPanel();
 		statusPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
@@ -86,7 +84,8 @@ public class SwingInspectionFrame extends JFrame {
 		statusMessageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		statusPanel.add(statusMessageLabel);
 		
-		this.add(statusPanel, BorderLayout.SOUTH);
+		container.add(statusPanel, BorderLayout.SOUTH);
+		setContentPane(container);
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(
@@ -99,15 +98,6 @@ public class SwingInspectionFrame extends JFrame {
 		double width = defaultToolkit.getScreenSize().getWidth() / 3;
 		double height = defaultToolkit.getScreenSize().getHeight() - 40;
 		setMinimumSize(new Dimension(Double.valueOf(width).intValue(), Double.valueOf(height).intValue()));
-		createMenuBar();
-	}
-
-	private void createMenuBar() {
-//		JMenuBar menubar = new JMenuBar();
-//		JMenu startMenu = new JMenu("Start");
-//		startMenu.setIcon(new ImageIcon(Resource.ICON_POWER_16PX_IMG));
-//		menubar.add(startMenu);
-//		setJMenuBar(menubar);
 	}
 
 	private void launchProgressBar() {
