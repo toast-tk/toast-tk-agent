@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import com.google.inject.Inject;
 import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.agent.config.Config;
+import com.synaptix.toast.core.agent.config.WebConfig;
 import com.synaptix.toast.swing.agent.ui.ConfigPanel;
 
 public class WorkspaceBuilder implements IWorkspaceBuilder {
@@ -19,14 +20,27 @@ public class WorkspaceBuilder implements IWorkspaceBuilder {
 
 	private File toastPropertiesFile;
 
+	private File toastWebPropertiesFile;
+
 	private final Properties properties;
+
+	private final Properties swingProperties;
+
+	private final Properties webProperties;
 
 	private Config config;
 	
+	private WebConfig webConfig;
+	
 	@Inject
-	public WorkspaceBuilder(Config config){
+	public WorkspaceBuilder(
+			Config config, 
+			WebConfig webConfig){
 		this.config = config;
+		this.webConfig = webConfig;
 		this.properties = new Properties();
+		this.swingProperties = new Properties();
+		this.webProperties = new Properties();
 	}
 
 	@Override
@@ -41,10 +55,12 @@ public class WorkspaceBuilder implements IWorkspaceBuilder {
 					isNewEnv = true;
 					toastPropertiesFile.createNewFile();
 				}
-				initAndStoreProperties(config);
-				if(isNewEnv){
-					openConfigDialog();
+				this.toastWebPropertiesFile = new File(workSpaceDir + "/toast.web.properties");
+				if (!toastWebPropertiesFile.exists()) {
+					isNewEnv = true;
+					toastWebPropertiesFile.createNewFile();
 				}
+				initAndStoreProperties(config, webConfig);
 			} catch (IOException e) {
 				LOG.error(e.getMessage(), e);
 				e.printStackTrace();
@@ -57,10 +73,22 @@ public class WorkspaceBuilder implements IWorkspaceBuilder {
 		}
 	}
 
+	public void propertiesChanged() {
+		this.properties.clear();
+		this.properties.putAll(this.swingProperties);
+		this.properties.putAll(this.webProperties);
+	}
+
 	private void createHomeDirectories(final Config config, String workSpaceDir) {
 		new File(workSpaceDir).mkdir();
 		new File(config.getPluginDir()).mkdir();
 		new File(workSpaceDir + "/log").mkdir();
+	}
+
+	private void initAndStoreProperties(final Config config, final WebConfig webConfig) throws IOException {
+		initAndStoreProperties(config);
+		initAndStoreProperties(webConfig);
+		propertiesChanged();
 	}
 
 	private void initAndStoreProperties(final Config config) throws IOException {
@@ -75,12 +103,19 @@ public class WorkspaceBuilder implements IWorkspaceBuilder {
 		p.setProperty(Property.JNLP_RUNTIME_HOST, config.getJnlpRuntimeHost());
 		p.setProperty(Property.JNLP_RUNTIME_FILE, config.getJnlpRuntimeFile());
 		p.store(FileUtils.openOutputStream(this.toastPropertiesFile), null);
-		this.properties.load(FileUtils.openInputStream(this.toastPropertiesFile));
+		this.swingProperties.load(FileUtils.openInputStream(this.toastPropertiesFile));
 	}
-	
-	@Override
+
+	private void initAndStoreProperties(final WebConfig webConfig) throws IOException {
+		Properties p = new Properties();
+		p.setProperty(Property.TOAST_TEST_WEB_PROPERTY_FILE_FIXE_ME, webConfig.getToastWebPropertyFixeMe());
+		p.store(FileUtils.openOutputStream(this.toastWebPropertiesFile), null);
+		this.webProperties.load(FileUtils.openInputStream(this.toastWebPropertiesFile));
+	}
+
+	@Override @Deprecated
 	public void openConfigDialog() {
-		new ConfigPanel(properties, toastPropertiesFile);
+//		new ConfigPanel(properties, toastPropertiesFile);
 	}
 	
 	@Override
@@ -94,7 +129,22 @@ public class WorkspaceBuilder implements IWorkspaceBuilder {
 	}
 
 	@Override
+	public File getToastWebPropertiesFile() {
+		return toastWebPropertiesFile;
+	}
+
+	@Override
 	public Properties getProperties() {
 		return properties;
+	}
+
+	@Override
+	public Properties getSwingProperties() {
+		return swingProperties;
+	}
+
+	@Override
+	public Properties getWebProperties() {
+		return webProperties;
 	}
 }

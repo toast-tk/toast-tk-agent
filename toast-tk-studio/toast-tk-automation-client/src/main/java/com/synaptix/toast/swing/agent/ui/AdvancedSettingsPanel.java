@@ -1,5 +1,7 @@
 package com.synaptix.toast.swing.agent.ui;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,6 +23,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -32,6 +35,7 @@ import org.apache.logging.log4j.Logger;
 import com.google.inject.Inject;
 import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.agent.config.Config;
+import com.synaptix.toast.core.agent.config.WebConfig;
 import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.swing.agent.IWorkspaceBuilder;
 import com.synaptix.toast.swing.agent.constant.Resource;
@@ -67,20 +71,26 @@ public class AdvancedSettingsPanel extends JPanel {
 	private final MongoRepositoryCacheWrapper mongoRepoManager;
 	
 	private final Config config;
-	
+
+	private final WebConfig webConfig;
+
 	private SwingInspectionRecorderPanel recorderPanel;
 
-	private HashMap<String, JTextField> textFields;
+	private HashMap<String, JTextField> textFieldsSwing;
+	
+	private HashMap<String, JTextField> textFieldsWeb;
 
 	@Inject
 	public AdvancedSettingsPanel(
 		Config config,
+		WebConfig webConfig,
 		final IWorkspaceBuilder workspaceBuilder,
 		ISwingAutomationClient recorder,
 		final MongoRepositoryCacheWrapper mongoRepoManager,
 		final SwingInspectionRecorderPanel recorderPanel) {
 		super();
 		this.config = config;
+		this.webConfig = webConfig;
 		this.recorder = recorder;
 		this.workspaceBuilder = workspaceBuilder;
 		this.mongoRepoManager = mongoRepoManager;
@@ -96,7 +106,12 @@ public class AdvancedSettingsPanel extends JPanel {
 		this.recordTypeComboBox = new JComboBox<String>(new String[]{
 				"Web", "Swing" 
 		});
-		add(buildMainPanel());
+//		setBackground(Color.blue);
+		JTabbedPane tabPan = new JTabbedPane(JTabbedPane.LEFT);
+		tabPan.addTab("Swing settings", new ImageIcon(Resource.ICON_JAVA_IMG), buildSwingPanel(), "configuration swing");
+		tabPan.addTab("Web settings  ", new ImageIcon(Resource.ICON_WEB_IMG), buildWebPanel(), "configuration web");
+		add(tabPan);
+		revalidate();
 		initActions();
 	}
 	
@@ -164,25 +179,26 @@ public class AdvancedSettingsPanel extends JPanel {
 		return recorderPanel.getInterpretedOutputArea();
 	}
 
-	private JPanel buildMainPanel() {
+	private JPanel buildSwingPanel() {
 		JPanel mainPanel = new JPanel();
+		JPanel containerPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		mainPanel.add(buildHiddenButton());
-		this.textFields = new HashMap<String, JTextField>();
+		this.textFieldsSwing = new HashMap<String, JTextField>();
 		JPanel configEntry = new JPanel();
 		configEntry.setAlignmentX(Component.LEFT_ALIGNMENT);
 		configEntry.setLayout(new BoxLayout(configEntry, BoxLayout.PAGE_AXIS));
-		for(Object key : EnumerationUtils.toList(workspaceBuilder.getProperties().propertyNames())) {
+		for(Object key : EnumerationUtils.toList(workspaceBuilder.getSwingProperties().propertyNames())) {
 			String strKey = (String) key;
 			JLabel label = new JLabel(label(strKey));
 			label.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
 			label.setAlignmentX(LEFT_ALIGNMENT);
 			mainPanel.add(label);
-			JTextField textField = new JTextField(render(workspaceBuilder.getProperties().getProperty(strKey)));
+			JTextField textField = new JTextField(render(workspaceBuilder.getSwingProperties().getProperty(strKey)));
 			textField.setColumns(30);
 			textField.setAlignmentX(LEFT_ALIGNMENT);
-			textFields.put(strKey, textField);
+			textFieldsSwing.put(strKey, textField);
 			mainPanel.add(textField);
 		}
 		JPanel buttonPanel = new JPanel();
@@ -194,12 +210,52 @@ public class AdvancedSettingsPanel extends JPanel {
 
 			public void actionPerformed(
 				ActionEvent e) {
-				save();
+				saveSwing();
 			}
 		});
 		buttonPanel.add(okButton);
 		mainPanel.add(buttonPanel);
-		return(mainPanel);
+		containerPanel.add(mainPanel); return(containerPanel);
+	}
+
+	private JPanel buildWebPanel() {
+		JPanel mainPanel = new JPanel();
+		JPanel containerPanel = new JPanel();
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+		mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+		mainPanel.add(buildHiddenButton());
+		this.textFieldsWeb = new HashMap<String, JTextField>();
+		JPanel configEntry = new JPanel();
+		configEntry.setAlignmentX(Component.LEFT_ALIGNMENT);
+		configEntry.setLayout(new BoxLayout(configEntry, BoxLayout.PAGE_AXIS));
+		for(Object key : EnumerationUtils.toList(workspaceBuilder.getWebProperties().propertyNames())) {
+			String strKey = (String) key;
+			JLabel label = new JLabel(label(strKey));
+			label.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
+			label.setAlignmentX(LEFT_ALIGNMENT);
+			mainPanel.add(label);
+			JTextField textField = new JTextField(render(workspaceBuilder.getWebProperties().getProperty(strKey)));
+			textField.setColumns(30);
+			textField.setAlignmentX(LEFT_ALIGNMENT);
+			textFieldsWeb.put(strKey, textField);
+			mainPanel.add(textField);
+		}
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setAlignmentX(LEFT_ALIGNMENT);
+		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
+		buttonPanel.add(Box.createHorizontalGlue());
+		JButton okButton = new JButton("Save settings");
+		okButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(
+				ActionEvent e) {
+				saveWeb();
+			}
+		});
+		buttonPanel.add(okButton);
+		mainPanel.add(buttonPanel);
+		containerPanel.add(mainPanel);
+		return(containerPanel);
 	}
 
 	private String label(
@@ -225,12 +281,27 @@ public class AdvancedSettingsPanel extends JPanel {
 		return object.toString();
 	}
 
-	private void save() {
-		for(Entry<String, JTextField> entry : textFields.entrySet()) {
-			workspaceBuilder.getProperties().setProperty(entry.getKey(), entry.getValue().getText());
+	private void saveWeb() {
+		for(Entry<String, JTextField> entry : textFieldsWeb.entrySet()) {
+			workspaceBuilder.getWebProperties().setProperty(entry.getKey(), entry.getValue().getText());
 		}
 		try {
-			workspaceBuilder.getProperties().store(FileUtils.openOutputStream(workspaceBuilder.getToastPropertiesFile()), "Saving !");
+			workspaceBuilder.getWebProperties().store(FileUtils.openOutputStream(workspaceBuilder.getToastWebPropertiesFile()), "Saving !");
+			workspaceBuilder.propertiesChanged();
+		}
+		catch(IOException e) {
+			LOG.warn("Could not save properties", e);
+		}
+		close();
+	}
+
+	private void saveSwing() {
+		for(Entry<String, JTextField> entry : textFieldsSwing.entrySet()) {
+			workspaceBuilder.getSwingProperties().setProperty(entry.getKey(), entry.getValue().getText());
+		}
+		try {
+			workspaceBuilder.getSwingProperties().store(FileUtils.openOutputStream(workspaceBuilder.getToastPropertiesFile()), "Saving !");
+			workspaceBuilder.propertiesChanged();
 		}
 		catch(IOException e) {
 			LOG.warn("Could not save properties", e);
