@@ -129,6 +129,8 @@ public class Resource {
 	
 	public static final Image ICON_PRISE_16PX_IMG = kit.createImage(Resource.class.getClassLoader().getResource(
 		_16pxIconsDirPath + "prise.png"));
-	
+
+	public static final Image ICON_KILL_POISON_16PX_IMG = kit.createImage(Resource.class.getClassLoader().getResource(
+			_16pxIconsDirPath + "kill_poison.png"));
 	;
 }

@@ -88,7 +88,7 @@ public class StartStopRecordListener implements ActionListener{
 		recorder.startRecording();
 	}
 
-	private void stopRecording() {
+	public void stopRecording() {
 		recordingActive = false;
 		startStopRecordButton.setText(startRecordingLabel);
 		startStopRecordButton.setIcon(startRecordingIcon);

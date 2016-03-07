@@ -95,8 +95,8 @@ public class SwingInspectionFrame extends JFrame {
 			}
 		});
 		Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
-		double width = defaultToolkit.getScreenSize().getWidth() / 3;
-		double height = defaultToolkit.getScreenSize().getHeight() - 40;
+		double width = defaultToolkit.getScreenSize().getWidth() / 2;
+		double height = defaultToolkit.getScreenSize().getHeight() - 140;
 		setMinimumSize(new Dimension(Double.valueOf(width).intValue(), Double.valueOf(height).intValue()));
 	}
 
