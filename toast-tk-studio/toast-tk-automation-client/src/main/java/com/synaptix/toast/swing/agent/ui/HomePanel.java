@@ -122,7 +122,6 @@ public class HomePanel extends JPanel {
 		initButton.setIcon(new ImageIcon(Resource.ICON_POWER_16PX_IMG));
 		webSwingSlider = new JSwitchBox("Web", "Swing");
 		configButton = new JButton("Ok");
-		
 		jPanelButton.add(initButton);
 		jPanelButton.add(configButton);
 		jPanelButton.add(webSwingSlider);
@@ -222,7 +221,7 @@ public class HomePanel extends JPanel {
 	private void initText() {
 		String sut = config.getRuntimeCommand();
 		configButton.setVisible(false);
-		initButton.setVisible(false);
+//		initButton.setVisible(false);
 		if ("".equals(sut)) {
 			String text = "Il n'y a pas de projet configuré \n"
 					+ "\nAller dans les paramètres avancés pour configurer";
