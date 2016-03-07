@@ -95,8 +95,8 @@ public class SwingInspectionFrame extends JFrame {
 			}
 		});
 		Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
-		double width = defaultToolkit.getScreenSize().getWidth() / 3;
-		double height = defaultToolkit.getScreenSize().getHeight() - 40;
+		double width = defaultToolkit.getScreenSize().getWidth() / 2;
+		double height = defaultToolkit.getScreenSize().getHeight() - 140;
 		setMinimumSize(new Dimension(Double.valueOf(width).intValue(), Double.valueOf(height).intValue()));
 	}
 
@@ -106,7 +106,7 @@ public class SwingInspectionFrame extends JFrame {
 			protected Void doInBackground()
 				throws Exception {
 				for(int i = 0; i < 100; i++) {
-					Thread.sleep(100);// Simulate loading
+					Thread.sleep(10);// Simulate loading
 					publish(i);// Notify progress
 				}
 				return Void.TYPE.newInstance();

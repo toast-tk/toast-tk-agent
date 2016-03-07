@@ -34,9 +34,6 @@ import com.synaptix.toast.plugin.swing.agent.listener.InitRequestListener;
 import com.synaptix.toast.plugin.swing.agent.listener.RepositoryHolder;
 import com.synaptix.toast.plugin.swing.agent.listener.SwingActionRequestListener;
 
-/**
- * Created by skokaina on 07/11/2014.
- */
 public class SwingInspectionServer implements ISwingInspectionServer {
 
 	private static final Logger LOG = LogManager.getLogger(SwingInspectionServer.class);

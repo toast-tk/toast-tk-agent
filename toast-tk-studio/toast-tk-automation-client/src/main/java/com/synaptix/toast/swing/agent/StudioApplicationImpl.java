@@ -1,7 +1,5 @@
 package com.synaptix.toast.swing.agent;
 
-import java.io.File;
-
 import javax.swing.JOptionPane;
 
 import org.apache.logging.log4j.LogManager;
@@ -29,15 +27,19 @@ public class StudioApplicationImpl implements IStudioApplication {
 
 	private final Config config;
 
+	private IStudioAppContext context;
+
 	@Inject
 	public StudioApplicationImpl(
 		final Config config,
 		final @StudioEventBus EventBus eventBus,
 		final IWorkspaceBuilder workspaceBuilder,
+		final IStudioAppContext context,
 		final ISwingAutomationClient serverClient) {
 		this.eventBus = eventBus;
 		this.serverClient = serverClient;
 		this.config = config;
+		this.context = context;
 		this.workspaceBuilder = workspaceBuilder;
 		workspaceBuilder.initWorkspace();
 		if(!serverClient.isConnectedToWebApp()) {

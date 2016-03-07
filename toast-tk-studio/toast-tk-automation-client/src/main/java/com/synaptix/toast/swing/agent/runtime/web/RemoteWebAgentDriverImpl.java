@@ -154,7 +154,6 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 
 	@Override
 	public void stop() {
-		client.sendRequest(new PoisonPill());
 		client.close();
 	}
 

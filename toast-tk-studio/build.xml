@@ -3,7 +3,8 @@
 		<!-- Création du dossier install -->
 		<mkdir dir="install/lib" />
 		<mkdir dir="install/plugins" />
-
+		<copy file="server-keystore.jks" todir="install/"/>
+		
 		<copydir dest="install/lib" src="target/toast-studio-1.3.0-SNAPSHOT/lib"></copydir>
 		<copydir dest="install/plugins" src="target/toast-studio-1.3.0-SNAPSHOT/agent-lib"></copydir>
 

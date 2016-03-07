@@ -39,16 +39,6 @@ public class Boot {
 		bootPluginsLoader = new ServicePluginLoader<ToastPluginBoot>(ToastPluginBoot.class, pluginsClassPathProvider);
 		collectPluginModules(bootPluginsLoader, pluginModules);
 		Guice.createInjector(pluginModules);
-		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
-
-			@Override
-			public void eventDispatched(
-				AWTEvent event) {
-				if(event.getID() == WindowEvent.WINDOW_CLOSING) {
-					System.exit(0);
-				}
-			}
-		}, AWTEvent.WINDOW_EVENT_MASK);
 	}
 
 	private static void collectPluginModules(

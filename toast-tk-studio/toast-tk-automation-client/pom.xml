@@ -34,6 +34,25 @@
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
+						<id>copy-lib-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<copy
+									file="${project.build.directory}/../../toast-tk-studio-agent/target/agent-1.0-fat.jar"
+									todir="${project.build.directory}/../../addons" />
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
 						<id>copy-jnlp-dependencies</id>
 						<phase>test</phase>
 						<goals>
@@ -98,9 +117,9 @@
 			<artifactId>jsoup</artifactId>
 			<version>1.7.2</version>
 		</dependency>
-	
 
-		<!-- Toast Dependencies -->	
+
+		<!-- Toast Dependencies -->
 		<dependency>
 			<groupId>com.synaptix.toast</groupId>
 			<artifactId>toast-tk-common-utils</artifactId>
@@ -128,24 +147,6 @@
 			</activation>
 			<build>
 				<plugins>
-					<plugin>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>copy-lib-dependencies</id>
-								<phase>package</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-								<configuration>
-									<tasks>
-										<copy file="${project.build.directory}/../../toast-tk-studio-agent/target/agent-1.0-fat.jar"
-										      todir="${project.build.directory}/../../addons" />
-									</tasks>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>webstart-maven-plugin</artifactId>

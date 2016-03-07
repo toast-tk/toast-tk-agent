@@ -8,8 +8,6 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -37,6 +35,8 @@ public class HeaderPanel extends JPanel {
 
 	private final JButton advancedSettingsButton;
 
+	private JButton killServerButton;
+
 	private static final String startRecordingLabel = "Start";
 
 	private static final ImageIcon startRecordingIcon = new ImageIcon(Resource.ICON_RUN_16PX_IMG);
@@ -49,13 +49,13 @@ public class HeaderPanel extends JPanel {
 	
 	private final Config config;
 	
-	private ISwingAutomationClient serverClient;
-
 	private CorpusPanel corpusPanel;
 	
 	private AdvancedSettingsPanel advancedSettingsPanel;
 
 	public static CardLayout corpusLayout = new CardLayout();
+
+	private StartStopRecordListener startStopRecordListener;
 
 	String[] listPanel = {"Home", "Recorder", "Inspection", "AdvancedSettings"};
 
@@ -67,16 +67,14 @@ public class HeaderPanel extends JPanel {
 		final AdvancedSettingsPanel advancedSettingsPane,
 		CorpusPanel corpusPane,
 		Config config,
-		ISwingAutomationClient recorder,
-		final ISwingAutomationClient serverClient,
+		final ISwingAutomationClient recorder,
 		@StudioEventBus EventBus eventBus) {
 		super();
 		this.corpusPanel = corpusPane;
 		this.advancedSettingsPanel = advancedSettingsPane;
-		this.serverClient = serverClient;
 		this.recorder = recorder;
 		this.connectButton = new JButton("Connect", connectedIcon);
-		this.connectButton.setToolTipText("Connect to the SUT");
+		this.connectButton.setToolTipText("Connect to Toast Recording Agent");
 		this.startStopRecordButton = new JButton(startRecordingLabel, startRecordingIcon);
 		this.startStopRecordButton.setToolTipText("Start/Stop recording your actions in a scenario");
 		this.saveScenarioButton = new JButton("Share Scenario", new ImageIcon(Resource.ICON_SHARE_16PX_IMG));
@@ -85,6 +83,8 @@ public class HeaderPanel extends JPanel {
 		this.homeButton.setToolTipText("Accueil");
 		this.advancedSettingsButton = new JButton("Advanced Settings", new ImageIcon(Resource.ICON_SETTINGS_16PX_IMG));
 		this.advancedSettingsButton.setToolTipText("Paramètres avancés");
+		this.killServerButton = new JButton("Kill", new ImageIcon(Resource.ICON_KILL_POISON_16PX_IMG));
+		this.killServerButton.setToolTipText("kill the server");
 		this.config = config;
 		
 		final JPanel commandPanel = buildCommandPanel();
@@ -106,6 +106,7 @@ public class HeaderPanel extends JPanel {
 		shortcutsPane.add(this.connectButton);
 		shortcutsPane.add(this.startStopRecordButton);
 		shortcutsPane.add(this.saveScenarioButton);
+		shortcutsPane.add(this.killServerButton);
 		commandPane.add(shortcutsPane, BorderLayout.CENTER);
 		commandPane.add(this.advancedSettingsButton, BorderLayout.AFTER_LINE_ENDS);
 		return commandPane;
@@ -134,22 +135,20 @@ public class HeaderPanel extends JPanel {
 			}
 	    });
 
-		this.startStopRecordButton.addActionListener(new StartStopRecordListener(recorder, startStopRecordButton));
+		startStopRecordListener = new StartStopRecordListener(recorder, startStopRecordButton);
+		this.startStopRecordButton.addActionListener(startStopRecordListener);
 		this.saveScenarioButton.addActionListener(
 				new ShareScenarioListener(recorder, config, advancedSettingsPanel.getInterpretedOutputArea(), saveScenarioButton));
 		
 		this.connectButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (serverClient.isConnected()) {
-					serverClient.disconnect();
-					connectButton.setToolTipText("Connect from SUT");
-					connectButton.setText("Connect");
-					connectButton.setIcon(connectedIcon);
-					disableRecording();
+				if (recorder.isConnected()) {
+					recorder.disconnect();
+					resetConnectButton();
 				} else {
-					serverClient.connect();
-					if (serverClient.isConnected()) {
+					recorder.connect();
+					if (recorder.isConnected()) {
 						connectButton.setToolTipText("Disconnect from SUT");
 						connectButton.setText("Disconnect");
 						connectButton.setIcon(disconnectedIcon);
@@ -165,7 +164,23 @@ public class HeaderPanel extends JPanel {
 				corpusLayout.show(corpusPanel, "AdvancedSettings");
 			}
 	    });
-		
+
+		killServerButton.addActionListener(
+				new ActionListener(){
+			public void actionPerformed(ActionEvent event){
+				resetConnectButton();
+				startStopRecordListener.stopRecording();
+				recorder.killServer();
+			}
+	    });
+	}
+
+	private void resetConnectButton() {
+		connectButton.setToolTipText("Connect from SUT");
+		connectButton.setText("Connect");
+		connectButton.setIcon(connectedIcon);
+		disableRecording();
+		killServerButton.setEnabled(false);
 	}
 
 	@Subscribe
@@ -180,7 +195,7 @@ public class HeaderPanel extends JPanel {
 				break;
 		}
 	}
-	
+
 	public void switchAdvancedSettings() {
 		corpusLayout.show(corpusPanel, "AdvancedSettings");
 	}

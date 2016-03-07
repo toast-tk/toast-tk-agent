@@ -39,8 +39,7 @@ import com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot;
 public class StudioRemoteSwingAgentDriverImpl extends
 		RemoteSwingAgentDriverImpl implements ISwingAutomationClient {
 
-	private static final Logger LOG = LogManager
-			.getLogger(StudioRemoteSwingAgentDriverImpl.class);
+	private static final Logger LOG = LogManager.getLogger(StudioRemoteSwingAgentDriverImpl.class);
 
 	private EventBus eventBus;
 
@@ -182,8 +181,13 @@ public class StudioRemoteSwingAgentDriverImpl extends
 	public void killServer() {
 		LOG.info("Terminating inspection server - Poison Pill !");
 		client.sendRequest(new PoisonPill());
-		if(webDriver != null){
-			webDriver.process(new PoisonPill());
+		if(webDriver == null){
+			webDriver =  new RemoteWebAgentDriverImpl("localhost", eventBus);
+			webDriver.start("localhost");
+			if(webDriver.isConnected()){
+				webDriver.process(new PoisonPill());
+			}
+			webDriver = null;
 		}
 	}
 
@@ -228,27 +232,30 @@ public class StudioRemoteSwingAgentDriverImpl extends
 	}
 
 	@Override
-	public void startRecording(String url) {
+	public void startWebRecording(String url) {
 		if(this.isWebMode){
 			initRemoteWebRecordingAgent();
+			openBrowserWithRecordUrl(url);
 		}
-		if (webDriver != null ) {
-			InitInspectionRequest request = new InitInspectionRequest();
-			request.text = url;
-			webDriver.process(request);
-		}
+	}
+
+	private void openBrowserWithRecordUrl(String url) {
+		InitInspectionRequest request = new InitInspectionRequest();
+		request.text = url != null ? url : this.webConfig.getWebInitRecordingUrl();
+		webDriver.process(request);
 	}
 	
 	private void initRemoteWebRecordingAgent(){
 		if(this.webDriver == null){
 			webDriver = new RemoteWebAgentDriverImpl("localhost", eventBus);
+		}
+		if(!this.webDriver.isConnected()){
 			webDriver.start("localhost");
 			if(!webDriver.isStarted()){ 
 				runWebAgentAndLaunchBrowser();
 			}else{
 				launchBrowser();
 			}
-			
 		}
 	}
 	
@@ -291,7 +298,7 @@ public class StudioRemoteSwingAgentDriverImpl extends
 		thread.start();
 		try {
 			Thread.sleep(1000);
-			switchToWebRecordingMode();
+			launchBrowser();
 		} catch (InterruptedException e) {
 			LOG.error(e);
 		}
@@ -299,11 +306,21 @@ public class StudioRemoteSwingAgentDriverImpl extends
 
 	@Override
 	public void disconnect() {
-		super.stop();
+		if(this.isWebMode()){
+			if(this.webDriver != null){
+				this.webDriver.stop();
+			}
+		}else{//swing mode
+			super.stop();
+		}
 	}
 
 	@Override
 	public void connect() {
-		start(host);
+		if(this.isWebMode()){
+			startWebRecording(null);
+		}else{
+			start(host);
+		}
 	}
 }

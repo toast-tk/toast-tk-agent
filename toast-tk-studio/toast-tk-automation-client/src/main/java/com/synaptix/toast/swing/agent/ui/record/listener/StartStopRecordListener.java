@@ -77,7 +77,7 @@ public class StartStopRecordListener implements ActionListener{
 		recordingActive = true;
 		startStopRecordButton.setText(stopRecordingLabel);
 		startStopRecordButton.setIcon(stopRecordingIcon);
-		recorder.startRecording(url);
+		recorder.startWebRecording(url);
 	}
 
 	private void startRecording() {
@@ -87,10 +87,12 @@ public class StartStopRecordListener implements ActionListener{
 		recorder.startRecording();
 	}
 
-	private void stopRecording() {
+	public void stopRecording() {
 		recordingActive = false;
 		startStopRecordButton.setText(startRecordingLabel);
 		startStopRecordButton.setIcon(startRecordingIcon);
-		recorder.stopRecording();
+		if(recorder.isConnected()){
+			recorder.stopRecording();
+		}
 	}
 }

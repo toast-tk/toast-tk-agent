@@ -11,7 +11,9 @@ import com.synaptix.toast.core.agent.config.WebConfig;
 import com.synaptix.toast.core.agent.config.WebConfigProvider;
 import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.core.annotation.EngineEventBus;
+import com.synaptix.toast.swing.agent.IStudioAppContext;
 import com.synaptix.toast.swing.agent.IWorkspaceBuilder;
+import com.synaptix.toast.swing.agent.StudioAppContext;
 import com.synaptix.toast.swing.agent.StudioApplicationImpl;
 import com.synaptix.toast.swing.agent.WorkspaceBuilder;
 import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
@@ -46,5 +48,8 @@ public class SwingModule extends AbstractModule {
 		bind(MongoRepositoryCacheWrapper.class).in(Singleton.class);
 		bind(EventBus.class).annotatedWith(EngineEventBus.class).to(EventBus.class).in(Singleton.class);
 		bind(EventBus.class).annotatedWith(StudioEventBus.class).to(EventBus.class).in(Singleton.class);
+		bind(IStudioAppContext.class).to(StudioAppContext.class).in(Singleton.class);
+		
+		install(new SwingWidgetModule());
 	}
 }
