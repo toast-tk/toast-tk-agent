@@ -53,5 +53,5 @@ public class Property {
 	
 	public static final String RESULT_FOLDER = "TestResult";
 	
-	public static final String TOAST_TEST_WEB_PROPERTY_FILE_FIXE_ME = "toast.web.settings";
+	public static final String TOAST_TEST_WEB_INIT_RECORDING_URL = "toast.web.recording.url";
 }

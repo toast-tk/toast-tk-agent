@@ -173,4 +173,8 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 	public void init() {
 		
 	}
+
+	public boolean isStarted() {
+		return this.started;
+	}
 }

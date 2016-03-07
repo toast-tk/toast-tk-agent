@@ -12079,3 +12079,68 @@ Caused by: java.net.ConnectException: Connection refused: no further information
 	at sun.nio.ch.SocketAdaptor.connect(Unknown Source) ~[?:1.8.0_66]
 	at com.esotericsoftware.kryonet.TcpConnection.connect(TcpConnection.java:77) ~[kryonet-2.22.0-RC1.jar:?]
 	... 43 more
+2016-02-25 12:15:33,083 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [main] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-02-25 12:15:33,099 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [main] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-02-25 12:15:34,353 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-2] 
+Sending 'GET' request to URL : http://localhost:4444/record/ping
+2016-02-25 12:15:34,353 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-2] Response Code : 200
+2016-02-25 12:15:34,802 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 2016-02-25 12:15:34,802 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 00:00  INFO: [kryonet] Server closed.
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 2016-02-25 12:15:35,067 ERROR co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Server initialization error: null
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] java.net.BindException: Address already in use: bind
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at sun.nio.ch.Net.bind0(Native Method) ~[?:1.8.0_60]
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at sun.nio.ch.Net.bind(Net.java:433) ~[?:1.8.0_60]
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at sun.nio.ch.Net.bind(Net.java:425) ~[?:1.8.0_60]
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:223) ~[?:1.8.0_60]
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at sun.nio.ch.ServerSocketAdaptor.bind(ServerSocketAdaptor.java:74) ~[?:1.8.0_60]
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at sun.nio.ch.ServerSocketAdaptor.bind(ServerSocketAdaptor.java:67) ~[?:1.8.0_60]
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at com.esotericsoftware.kryonet.Server.bind(Server.java:140) ~[toast-tk-studio-agent-standalone.jar:?]
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at com.esotericsoftware.kryonet.Server.bind(Server.java:124) ~[toast-tk-studio-agent-standalone.jar:?]
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at com.synaptix.toast.swing.agent.web.KryoAgentServer.<init>(KryoAgentServer.java:27) [toast-tk-studio-agent-standalone.jar:?]
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at com.synaptix.toast.swing.agent.web.RestRecorderService.start(RestRecorderService.java:134) [toast-tk-studio-agent-standalone.jar:?]
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at org.vertx.java.platform.Verticle.start(Verticle.java:82) [vertx-platform-2.1.6.jar:?]
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at org.vertx.java.platform.impl.DefaultPlatformManager$22.run(DefaultPlatformManager.java:1765) [vertx-platform-2.1.6.jar:?]
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at org.vertx.java.core.impl.DefaultContext$3.run(DefaultContext.java:175) [vertx-core-2.1.6.jar:?]
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:370) [netty-all-4.0.21.Final.jar:4.0.21.Final]
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:357) [netty-all-4.0.21.Final.jar:4.0.21.Final]
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:116) [netty-all-4.0.21.Final.jar:4.0.21.Final]
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_60]
+2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 2016-02-25 12:15:35,067 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Started !
+2016-02-25 12:15:35,360 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-2] Strating to record web actions !
+2016-02-25 12:16:21,650 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Not switching to web recording mode, already activated !
+2016-02-25 12:16:23,589 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Not switching to web recording mode, already activated !
+2016-02-25 12:16:24,511 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Not switching to web recording mode, already activated !
+2016-02-25 12:16:45,537 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Not switching to web recording mode, already activated !
+2016-03-07 14:29:18,878 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [main] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-07 14:29:18,878 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [main] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-07 14:29:20,958 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 2016-03-07 14:29:20,958 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-03-07 14:29:20,989 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Thread-2] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-07 14:29:21,692 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 00:00  INFO: [kryonet] Server opened.
+2016-03-07 14:29:21,692 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 2016-03-07 14:29:21,692 INFO co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Toast Agent Server listening on port : 1471
+2016-03-07 17:06:25,547 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [main] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-07 17:06:25,547 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [main] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-07 17:06:26,850 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-2] 
+Sending 'GET' request to URL : http://localhost:4444/record/ping
+2016-03-07 17:06:26,850 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-2] Response Code : 200
+2016-03-07 17:06:26,913 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 2016-03-07 17:06:26,897 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-03-07 17:06:27,194 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 00:00  INFO: [kryonet] Server closed.
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 2016-03-07 17:06:27,194 ERROR co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Server initialization error: null
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] java.net.BindException: Address already in use: bind
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at sun.nio.ch.Net.bind0(Native Method) ~[?:1.8.0_60]
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at sun.nio.ch.Net.bind(Net.java:433) ~[?:1.8.0_60]
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at sun.nio.ch.Net.bind(Net.java:425) ~[?:1.8.0_60]
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:223) ~[?:1.8.0_60]
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at sun.nio.ch.ServerSocketAdaptor.bind(ServerSocketAdaptor.java:74) ~[?:1.8.0_60]
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at sun.nio.ch.ServerSocketAdaptor.bind(ServerSocketAdaptor.java:67) ~[?:1.8.0_60]
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at com.esotericsoftware.kryonet.Server.bind(Server.java:140) ~[toast-tk-studio-agent-standalone.jar:?]
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at com.esotericsoftware.kryonet.Server.bind(Server.java:124) ~[toast-tk-studio-agent-standalone.jar:?]
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at com.synaptix.toast.swing.agent.web.KryoAgentServer.<init>(KryoAgentServer.java:27) [toast-tk-studio-agent-standalone.jar:?]
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at com.synaptix.toast.swing.agent.web.RestRecorderService.start(RestRecorderService.java:134) [toast-tk-studio-agent-standalone.jar:?]
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at org.vertx.java.platform.Verticle.start(Verticle.java:82) [vertx-platform-2.1.6.jar:?]
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at org.vertx.java.platform.impl.DefaultPlatformManager$22.run(DefaultPlatformManager.java:1765) [vertx-platform-2.1.6.jar:?]
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at org.vertx.java.core.impl.DefaultContext$3.run(DefaultContext.java:175) [vertx-core-2.1.6.jar:?]
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:370) [netty-all-4.0.21.Final.jar:4.0.21.Final]
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:357) [netty-all-4.0.21.Final.jar:4.0.21.Final]
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:116) [netty-all-4.0.21.Final.jar:4.0.21.Final]
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_60]
+2016-03-07 17:06:27,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 2016-03-07 17:06:27,209 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Started !

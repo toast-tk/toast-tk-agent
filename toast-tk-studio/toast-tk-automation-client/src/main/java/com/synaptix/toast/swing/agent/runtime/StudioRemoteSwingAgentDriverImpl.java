@@ -13,6 +13,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.synaptix.toast.automation.driver.swing.RemoteSwingAgentDriverImpl;
 import com.synaptix.toast.core.agent.config.Config;
+import com.synaptix.toast.core.agent.config.WebConfig;
 import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.core.agent.interpret.IEventInterpreter;
 import com.synaptix.toast.core.agent.interpret.InterpretedEvent;
@@ -47,7 +48,11 @@ public class StudioRemoteSwingAgentDriverImpl extends
 
 	private IEventInterpreter interpreter;
 
-	private RemoteWebAgentDriverImpl driver;
+	private RemoteWebAgentDriverImpl webDriver;
+
+	private WebConfig webConfig;
+
+	private boolean isWebMode;
 
 	private final static String FAT_JAR_AGENT = "agent-1.0-fat.jar";
 
@@ -57,15 +62,14 @@ public class StudioRemoteSwingAgentDriverImpl extends
 
 	@Inject
 	public StudioRemoteSwingAgentDriverImpl(
-			final @StudioEventBus EventBus eventBus, final Config config,
+			final @StudioEventBus EventBus eventBus, 
+			final Config config,
+			final WebConfig webConfig,
 			final MongoRepositoryCacheWrapper mongoRepoManager)
 			throws IOException {
 		this("localhost");
 		this.eventBus = eventBus;
-		boolean activateTempWeb = Boolean.getBoolean("web.active");
-		if(activateTempWeb){
-			runWebAgentAndLaunchBrowser(config);
-		}
+		this.webConfig = webConfig;
 		client.addConnectionHandler(new ITCPResponseReceivedHandler() {
 			@Override
 			public void onResponseReceived(Object object) {
@@ -81,38 +85,6 @@ public class StudioRemoteSwingAgentDriverImpl extends
 			}
 		});
 		this.interpreter = new LiveRedPlayEventInterpreter(mongoRepoManager);
-	}
-
-	private void runWebAgentAndLaunchBrowser(final Config config) {
-		String toastHome = System.getenv("TOAST_HOME");
-		String agentDir = toastHome + SystemUtils.FILE_SEPARATOR + "addons" + SystemUtils.FILE_SEPARATOR;
-		LOG.info("Loading web agent from: " + agentDir + FAT_JAR_AGENT);
-		LOG.info("Java Home: " + SystemUtils.JAVA_HOME);
-		
-		Thread thread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					String line;
-					Process p = Runtime.getRuntime().exec("java -jar \"" + agentDir + FAT_JAR_AGENT + "\"");
-					BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-					while ((line = in.readLine()) != null) {
-						LOG.info(line);
-					}
-					in.close();
-				} catch (IOException e) {
-					LOG.error(e);
-				}
-			}
-		});
-		thread.start();
-		
-		try {
-			Thread.sleep(1000);
-			switchToWebRecordingMode();
-		} catch (InterruptedException e) {
-			LOG.error(e);
-		}
 	}
 
 	@Override
@@ -154,8 +126,8 @@ public class StudioRemoteSwingAgentDriverImpl extends
 
 	@Override
 	public void stopRecording() {
-		if (driver != null) {
-			driver.stop();
+		if (webDriver != null) {
+			webDriver.stop();
 		} else {
 			client.sendRequest(new RecordRequest(false));
 		}
@@ -210,6 +182,9 @@ public class StudioRemoteSwingAgentDriverImpl extends
 	public void killServer() {
 		LOG.info("Terminating inspection server - Poison Pill !");
 		client.sendRequest(new PoisonPill());
+		if(webDriver != null){
+			webDriver.process(new PoisonPill());
+		}
 	}
 
 	@Override
@@ -226,8 +201,8 @@ public class StudioRemoteSwingAgentDriverImpl extends
 
 	@Override
 	public boolean isConnected() {
-		if (driver != null) {
-			return client.isConnected() || driver.isConnected();
+		if (webDriver != null) {
+			return client.isConnected() || webDriver.isConnected();
 		}
 		return client.isConnected();
 	}
@@ -244,38 +219,81 @@ public class StudioRemoteSwingAgentDriverImpl extends
 
 	@Override
 	public void switchToWebRecordingMode() {
-		if (!isWebMode()) {
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					driver = new RemoteWebAgentDriverImpl("localhost", eventBus);
-					driver.start("localhost");
-					
-					boolean res = WebAgentBoot.ping(eventBus);
-					if(res){
-						InitInspectionRequest request = new InitInspectionRequest();
-						request.text = "https://www.google.com";
-						driver.process(request);
-						LOG.info("Strating to record web actions !");
-					}
-				}
-			}).start();
-		} else {
-			LOG.info("Not switching to web recording mode, already activated !");
-		}
+		this.isWebMode = true;
 	}
 
 	@Override
 	public boolean isWebMode() {
-		return this.driver != null && this.driver.isConnected();
+		return this.isWebMode;
 	}
 
 	@Override
 	public void startRecording(String url) {
-		if (driver != null) {
+		if(this.isWebMode){
+			initRemoteWebRecordingAgent();
+		}
+		if (webDriver != null ) {
 			InitInspectionRequest request = new InitInspectionRequest();
 			request.text = url;
-			driver.process(request);
+			webDriver.process(request);
+		}
+	}
+	
+	private void initRemoteWebRecordingAgent(){
+		if(this.webDriver == null){
+			webDriver = new RemoteWebAgentDriverImpl("localhost", eventBus);
+			webDriver.start("localhost");
+			if(!webDriver.isStarted()){ 
+				runWebAgentAndLaunchBrowser();
+			}else{
+				launchBrowser();
+			}
+			
+		}
+	}
+	
+	private void launchBrowser() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				boolean res = WebAgentBoot.ping(eventBus);
+				if(res){
+					InitInspectionRequest request = new InitInspectionRequest();
+					request.text = webConfig.getWebInitRecordingUrl();
+					webDriver.process(request);
+					LOG.info("Strating to record web actions !");
+				}
+			}
+		}).start();
+	}
+
+	private void runWebAgentAndLaunchBrowser() {
+		String toastHome = System.getenv("TOAST_HOME");
+		String agentDir = toastHome + SystemUtils.FILE_SEPARATOR + "addons" + SystemUtils.FILE_SEPARATOR;
+		LOG.info("Loading web agent from: " + agentDir + FAT_JAR_AGENT);
+		LOG.info("Java Home: " + SystemUtils.JAVA_HOME);
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					String line;
+					Process p = Runtime.getRuntime().exec("java -jar \"" + agentDir + FAT_JAR_AGENT + "\"");
+					BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+					while ((line = in.readLine()) != null) {
+						LOG.info(line);
+					}
+					in.close();
+				} catch (IOException e) {
+					LOG.error(e);
+				}
+			}
+		});
+		thread.start();
+		try {
+			Thread.sleep(1000);
+			switchToWebRecordingMode();
+		} catch (InterruptedException e) {
+			LOG.error(e);
 		}
 	}
 

@@ -60,6 +60,7 @@ public class KryoAgentServer {
 				try {
 					if(object instanceof PoisonPill) {
 						restRecorderService.stop();
+						restRecorderService.closeBrowser();
 						System.exit(1);
 					}
 				}

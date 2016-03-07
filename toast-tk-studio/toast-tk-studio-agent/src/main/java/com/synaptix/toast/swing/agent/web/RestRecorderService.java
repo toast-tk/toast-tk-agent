@@ -208,4 +208,10 @@ public class RestRecorderService extends Verticle {
 			}
 		}
 	}
+
+	public void closeBrowser() {
+		if(driver != null){
+			driver.close();
+		}
+	}
 }

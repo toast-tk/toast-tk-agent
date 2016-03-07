@@ -108,7 +108,7 @@ public class WorkspaceBuilder implements IWorkspaceBuilder {
 
 	private void initAndStoreProperties(final WebConfig webConfig) throws IOException {
 		Properties p = new Properties();
-		p.setProperty(Property.TOAST_TEST_WEB_PROPERTY_FILE_FIXE_ME, webConfig.getToastWebPropertyFixeMe());
+		p.setProperty(Property.TOAST_TEST_WEB_INIT_RECORDING_URL, webConfig.getWebInitRecordingUrl());
 		p.store(FileUtils.openOutputStream(this.toastWebPropertiesFile), null);
 		this.webProperties.load(FileUtils.openInputStream(this.toastWebPropertiesFile));
 	}

@@ -73,8 +73,7 @@ public class StartStopRecordListener implements ActionListener{
 		}		
 	}
 
-	private void startWebRecording(
-		String url) {
+	private void startWebRecording(String url) {
 		recordingActive = true;
 		startStopRecordButton.setText(stopRecordingLabel);
 		startStopRecordButton.setIcon(stopRecordingIcon);

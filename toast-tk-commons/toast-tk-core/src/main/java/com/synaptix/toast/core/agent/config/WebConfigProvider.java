@@ -33,7 +33,7 @@ public class WebConfigProvider implements Provider<WebConfig> {
 		}
 		webConfig = new WebConfig();
 		String toastWebPropertyDefaultValue = "default value of Web Property/Fixe me";
-		webConfig.setToastWebPropertyFixeMe(p.getProperty(Property.TOAST_TEST_WEB_PROPERTY_FILE_FIXE_ME, toastWebPropertyDefaultValue));
+		webConfig.setWebInitRecordingUrl(p.getProperty(Property.TOAST_TEST_WEB_INIT_RECORDING_URL, toastWebPropertyDefaultValue));
 	}
 
 	@Override

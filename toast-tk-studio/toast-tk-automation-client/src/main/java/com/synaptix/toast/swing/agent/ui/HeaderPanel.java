@@ -166,11 +166,6 @@ public class HeaderPanel extends JPanel {
 			}
 	    });
 		
-//		randomButton.addActionListener(new ActionListener(){
-//			public void actionPerformed(ActionEvent event){
-//				cl.next(corpusPanel);
-//			}
-//	    });
 	}
 
 	@Subscribe
