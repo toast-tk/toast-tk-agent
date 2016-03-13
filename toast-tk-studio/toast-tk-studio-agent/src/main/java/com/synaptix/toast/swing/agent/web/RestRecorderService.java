@@ -41,8 +41,6 @@ public class RestRecorderService extends Verticle {
 
 	private static final String PATH = "/record";
 
-	private static final String CHROME_DRIVER_PATH = "/addons/chromedriver.exe";
-
 	private KryoAgentServer server;
 
 	private void processEvent(WebEventRecord record) {
@@ -57,12 +55,8 @@ public class RestRecorderService extends Verticle {
 		matcher.options("/record/event", new Handler<HttpServerRequest>() {
 			@Override
 			public void handle(HttpServerRequest req) {
-				req.response().headers()
-						.add("Access-Control-Allow-Origin", "*");
-				req.response()
-						.headers()
-						.add("Access-Control-Allow-Headers",
-								"Origin, X-Requested-With, Content-Type, Accept, POST");
+				req.response().headers().add("Access-Control-Allow-Origin", "*");
+				req.response().headers().add("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept, POST");
 				req.response().setStatusCode(200).end();
 			}
 		});
@@ -79,8 +73,7 @@ public class RestRecorderService extends Verticle {
 						RestRecorderService.this.processEvent(eventRecord);
 					}
 				});
-				req.response().headers()
-						.add("Access-Control-Allow-Origin", "*");
+				req.response().headers().add("Access-Control-Allow-Origin", "*");
 				req.response().setStatusCode(200).end();
 			}
 		});
@@ -88,8 +81,7 @@ public class RestRecorderService extends Verticle {
 			@Override
 			public void handle(HttpServerRequest req) {
 				LOG.info("Alive ping check!");
-				req.response().headers()
-						.add("Access-Control-Allow-Origin", "*");
+				req.response().headers().add("Access-Control-Allow-Origin", "*");
 				req.response().setStatusCode(200).end();
 			}
 		});
@@ -97,8 +89,7 @@ public class RestRecorderService extends Verticle {
 			@Override
 			public void handle(HttpServerRequest req) {
 				openRecordingBrowser("http://www.google.fr");
-				req.response().headers()
-						.add("Access-Control-Allow-Origin", "*");
+				req.response().headers().add("Access-Control-Allow-Origin", "*");
 				req.response().setStatusCode(200).end();
 				if (isStarted && RestRecorderService.this.thread == null) {
 					RestRecorderService.this.thread = buildReinjectionThread();
@@ -114,8 +105,7 @@ public class RestRecorderService extends Verticle {
 					driver = null;
 				}
 				server.close();
-				req.response().headers()
-						.add("Access-Control-Allow-Origin", "*");
+				req.response().headers().add("Access-Control-Allow-Origin", "*");
 				req.response().setStatusCode(200).end();
 				System.exit(0);
 			}
@@ -168,12 +158,10 @@ public class RestRecorderService extends Verticle {
 	private void injectRecordScript() throws IOException {
 		JavascriptExecutor executor = ((JavascriptExecutor) driver);
 		String toastHome = System.getenv("TOAST_HOME");
-		Path absolutePath = Paths.get(toastHome + "/addons/agent/recorder.js")
-				.toAbsolutePath();
+		Path absolutePath = Paths.get(toastHome + "/addons/agent/recorder.js").toAbsolutePath();
 		LOG.info("Getting recorder at: " + absolutePath.toString());
 		File file = absolutePath.normalize().toFile();
-		final FileInputStream resourceAsStream = FileUtils
-				.openInputStream(file);
+		final FileInputStream resourceAsStream = FileUtils.openInputStream(file);
 		String script = IOUtils.toString(resourceAsStream);
 		String subscript = "var script = window.document.createElement('script'); script.innerHTML=\""
 				+ script.replace("\r\n", "\\\r\n")
@@ -185,8 +173,11 @@ public class RestRecorderService extends Verticle {
 	}
 
 	private static WebDriver launchBrowser(String host) {
-		String toastHome = System.getenv("TOAST_HOME");
-		System.setProperty("webdriver.chrome.driver", toastHome + CHROME_DRIVER_PATH);
+		//String toastHome = System.getenv("TOAST_HOME");
+		//, toastHome+ "/addons/chromedriver.exe"
+		String chromeDriverPath = System.getProperty("toast.chromedriver.path");
+		LOG.info("ChromeDriverPath = " + chromeDriverPath);
+		System.setProperty("webdriver.chrome.driver", chromeDriverPath);
 		WebDriver driver = new ChromeDriver();
 		driver.get(host);
 		return driver;

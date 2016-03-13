@@ -115,7 +115,10 @@ public class DeployConnectorMojo extends AbstractMojo {
 		String classRelativePath = classFile.getCanonicalPath().replace(
 			project.getBuild().getOutputDirectory() + "\\",
 			"");
-		String className = classRelativePath.replace(".class", "").replace("\\", ".");
+		classRelativePath = classFile.getCanonicalPath().replace(
+				project.getBuild().getOutputDirectory() + "/",
+				"");
+		String className = classRelativePath.replace(".class", "").replace("\\", ".").replace("/", ".");
 		return className;
 	}
 

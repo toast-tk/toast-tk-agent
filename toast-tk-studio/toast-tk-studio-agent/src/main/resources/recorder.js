@@ -55,7 +55,6 @@ function recorder(){
 
 	function extractLocatorFromEvent(target){
 		var selector = target.nodeName.toLowerCase();
-		/*$(target).parents().map(function() { return target.tagName; }).get().reverse().concat([target.nodeName]).join('>');*/
 		var id = document.body.getAttribute('id');
 		if (id) { 
 			selector += '#'+ id;
