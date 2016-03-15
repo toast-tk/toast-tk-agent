@@ -16,6 +16,15 @@
 		<vertx.version>2.1.6</vertx.version>
 	</properties>
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -54,6 +63,12 @@
 							<tasks>
 								<copy file="${project.build.directory}/${toast.tk.studioAgentPath}"
 									todir="${project.build.directory}/classes/${toast.vertx.module}/lib" />
+								<copy file="${project.build.directory}/classes/recorder.js"
+									tofile="${project.build.directory}/classes/${toast.vertx.module}/recorder.js" />
+								<copy file="${project.build.directory}/classes/server-keystore.jks"
+									tofile="${project.build.directory}/classes/${toast.vertx.module}/server-keystore.jks" />
+								<copy file="${project.build.directory}/classes/toast.png"
+									tofile="${project.build.directory}/classes/${toast.vertx.module}/toast.png" />
 							</tasks>
 						</configuration>
 					</execution>
@@ -81,7 +96,8 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>

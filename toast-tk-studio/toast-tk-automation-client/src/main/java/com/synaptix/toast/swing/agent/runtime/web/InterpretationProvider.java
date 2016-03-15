@@ -13,6 +13,7 @@ public class InterpretationProvider {
 	{
 		map = new HashMap<String, IActionInterpret>();
 		map.put("click", new WebClickInterpret());
+		map.put("keypress", new KeypressInterpret());
 	}
 	
 	public static InterpretationProvider getInstance(){

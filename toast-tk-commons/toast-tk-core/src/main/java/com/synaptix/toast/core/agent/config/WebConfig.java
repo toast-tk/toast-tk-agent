@@ -14,6 +14,8 @@ public class WebConfig {
 	
 	private String webStartRecordingUrl;
 
+	private String chromeDriverPath;
+
 	public String getToastHome() {
 		return System.getProperty(TOAST_HOME_PROPERTY);
 	}
@@ -33,5 +35,14 @@ public class WebConfig {
 
 	public String getWebInitRecordingUrl() {
 		return this.webStartRecordingUrl;
+	}
+	
+	public void setChromeDriverPath(
+		String chromeDriverPath) {
+		this.chromeDriverPath = chromeDriverPath;
+	}
+
+	public String getChromeDriverPath() {
+		return this.chromeDriverPath;
 	}
 }

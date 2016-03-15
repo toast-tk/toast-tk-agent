@@ -14259,3 +14259,721 @@ Sending 'GET' request to URL : http://localhost:4444/record/ping
 2016-03-12 21:21:31,235 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] Executing command: /Users/blackbox/.toast/addons/agent-1.0-fat.jar
 2016-03-12 21:21:40,520 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 2016-03-12 21:21:35,061 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
 2016-03-12 21:21:48,187 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-1] 00:00  INFO: [kryonet] Server opened.
+2016-03-14 16:50:41,807 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-14 16:50:41,807 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-14 16:50:41,807 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-14 16:50:43,870 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-14 16:50:43,870 ERROR co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Connection refused: connect
+java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method) ~[?:1.8.0_60]
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188) ~[?:1.8.0_60]
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172) ~[?:1.8.0_60]
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:589) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:538) ~[?:1.8.0_60]
+	at sun.net.NetworkClient.doConnect(NetworkClient.java:180) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:432) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:527) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.<init>(HttpClient.java:211) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:308) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:326) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1168) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1104) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:998) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:932) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1512) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1440) ~[?:1.8.0_60]
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:480) ~[?:1.8.0_60]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.executeGET(WebAgentBoot.java:35) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.ping(WebAgentBoot.java:82) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.StudioRemoteSwingAgentDriverImpl$3.run(StudioRemoteSwingAgentDriverImpl.java:255) [classes/:?]
+	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_60]
+2016-03-14 16:50:44,871 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] Server unreachable !
+2016-03-14 16:50:45,912 ERROR co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Connection refused: connect
+java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method) ~[?:1.8.0_60]
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188) ~[?:1.8.0_60]
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172) ~[?:1.8.0_60]
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:589) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:538) ~[?:1.8.0_60]
+	at sun.net.NetworkClient.doConnect(NetworkClient.java:180) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:432) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:527) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.<init>(HttpClient.java:211) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:308) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:326) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1168) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1104) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:998) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:932) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1512) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1440) ~[?:1.8.0_60]
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:480) ~[?:1.8.0_60]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.executeGET(WebAgentBoot.java:35) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.ping(WebAgentBoot.java:82) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.StudioRemoteSwingAgentDriverImpl$3.run(StudioRemoteSwingAgentDriverImpl.java:255) [classes/:?]
+	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_60]
+2016-03-14 16:50:47,956 ERROR co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Connection refused: connect
+java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method) ~[?:1.8.0_60]
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188) ~[?:1.8.0_60]
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172) ~[?:1.8.0_60]
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:589) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:538) ~[?:1.8.0_60]
+	at sun.net.NetworkClient.doConnect(NetworkClient.java:180) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:432) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:527) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.<init>(HttpClient.java:211) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:308) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:326) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1168) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1104) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:998) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:932) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1512) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1440) ~[?:1.8.0_60]
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:480) ~[?:1.8.0_60]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.executeGET(WebAgentBoot.java:35) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.ping(WebAgentBoot.java:82) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.StudioRemoteSwingAgentDriverImpl$3.run(StudioRemoteSwingAgentDriverImpl.java:255) [classes/:?]
+	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_60]
+2016-03-14 16:50:48,895 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] Executing command: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-14 16:50:49,972 ERROR co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Connection refused: connect
+java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method) ~[?:1.8.0_60]
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188) ~[?:1.8.0_60]
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172) ~[?:1.8.0_60]
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:589) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:538) ~[?:1.8.0_60]
+	at sun.net.NetworkClient.doConnect(NetworkClient.java:180) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:432) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:527) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.<init>(HttpClient.java:211) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:308) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:326) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1168) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1104) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:998) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:932) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1512) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1440) ~[?:1.8.0_60]
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:480) ~[?:1.8.0_60]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.executeGET(WebAgentBoot.java:35) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.ping(WebAgentBoot.java:82) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.StudioRemoteSwingAgentDriverImpl$3.run(StudioRemoteSwingAgentDriverImpl.java:255) [classes/:?]
+	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_60]
+2016-03-14 16:50:52,016 ERROR co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Connection refused: connect
+java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method) ~[?:1.8.0_60]
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188) ~[?:1.8.0_60]
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172) ~[?:1.8.0_60]
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:589) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:538) ~[?:1.8.0_60]
+	at sun.net.NetworkClient.doConnect(NetworkClient.java:180) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:432) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:527) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.<init>(HttpClient.java:211) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:308) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:326) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1168) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1104) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:998) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:932) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1512) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1440) ~[?:1.8.0_60]
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:480) ~[?2016-03-14 16:55:50,760 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-14 16:55:50,761 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-14 16:55:50,761 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-14 16:55:52,830 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-14 16:55:52,830 ERROR co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Connection refused: connect
+java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method) ~[?:1.8.0_60]
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188) ~[?:1.8.0_60]
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172) ~[?:1.8.0_60]
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:589) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:538) ~[?:1.8.0_60]
+	at sun.net.NetworkClient.doConnect(NetworkClient.java:180) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:432) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:527) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.<init>(HttpClient.java:211) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:308) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:326) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1168) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1104) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:998) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:932) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1512) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1440) ~[?:1.8.0_60]
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:480) ~[?:1.8.0_60]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.executeGET(WebAgentBoot.java:35) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.ping(WebAgentBoot.java:82) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.StudioRemoteSwingAgentDriverImpl$3.run(StudioRemoteSwingAgentDriverImpl.java:255) [classes/:?]
+	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_60]
+2016-03-14 16:55:53,846 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] Server unreachable !
+2016-03-14 16:55:54,863 ERROR co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Connection refused: connect
+java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method) ~[?:1.8.0_60]
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188) ~[?:1.8.0_60]
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172) ~[?:1.8.0_60]
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:589) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:538) ~[?:1.8.0_60]
+	at sun.net.NetworkClient.doConnect(NetworkClient.java:180) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:432) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:527) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.<init>(HttpClient.java:211) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:308) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:326) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1168) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1104) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:998) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:932) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1512) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1440) ~[?:1.8.0_60]
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:480) ~[?:1.8.0_60]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.executeGET(WebAgentBoot.java:35) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.ping(WebAgentBoot.java:82) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.StudioRemoteSwingAgentDriverImpl$3.run(StudioRemoteSwingAgentDriverImpl.java:255) [classes/:?]
+	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_60]
+2016-03-14 16:55:55,519 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] Executing command: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-14 16:55:56,894 ERROR co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Connection refused: connect
+java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method) ~[?:1.8.0_60]
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188) ~[?:1.8.0_60]
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172) ~[?:1.8.0_60]
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:589) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:538) ~[?:1.8.0_60]
+	at sun.net.NetworkClient.doConnect(NetworkClient.java:180) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:432) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:527) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.<init>(HttpClient.java:211) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:308) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:326) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1168) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1104) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:998) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:932) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1512) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1440) ~[?:1.8.0_60]
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:480) ~[?:1.8.0_60]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.executeGET(WebAgentBoot.java:35) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.ping(WebAgentBoot.java:82) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.StudioRemoteSwingAgentDriverImpl$3.run(StudioRemoteSwingAgentDriverImpl.java:255) [classes/:?]
+	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_60]
+2016-03-14 16:55:58,905 ERROR co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Connection refused: connect
+java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method) ~[?:1.8.0_60]
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188) ~[?:1.8.0_60]
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172) ~[?:1.8.0_60]
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:589) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:538) ~[?:1.8.0_60]
+	at sun.net.NetworkClient.doConnect(NetworkClient.java:180) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:432) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:527) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.<init>(HttpClient.java:211) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:308) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:326) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1168) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1104) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:998) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:932) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1512) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1440) ~[?:1.8.0_60]
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:480) ~[?:1.8.0_60]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.executeGET(WebAgentBoot.java:35) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.ping(WebAgentBoot.java:82) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.StudioRemoteSwingAgentDriverImpl$3.run(StudioRemoteSwingAgentDriverImpl.java:255) [classes/:?]
+	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_60]
+2016-03-14 16:56:00,938 ERROR co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Connection refused: connect
+java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method) ~[?:1.8.0_60]
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188) ~[?:1.8.0_60]
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172) ~[?:1.8.0_60]
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:589) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:538) ~[?:1.8.0_60]
+	at sun.net.NetworkClient.doConnect(NetworkClient.java:180) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:432) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:527) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.<init>(HttpClient.java:211) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:308) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:326) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1168) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1104) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:998) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:932) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1512) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1440) ~[?:1.8.0_60]
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:480) ~[?:1.8.0_60]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.executeGET(WebAgentBoot.java:35) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.ping(WebAgentBoot.java:82) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.StudioRemoteSwingAgentDriverImpl$3.run(StudioRemoteSwingAgentDriverImpl.java:255) [classes/:?]
+	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_60]
+2016-03-14 16:56:05,209 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 16:56:05,037 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-03-14 16:56:05,428 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Server opened.
+2016-03-14 16:56:05,428 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 16:56:05,428 INFO co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Toast Agent Server listening on port : 1471
+2016-03-14 16:56:05,428 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 16:56:05,428 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Started !
+2016-03-14 16:57:00,522 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-14 16:57:00,537 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-14 16:57:00,537 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-14 16:57:00,537 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] Executing command: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-14 16:57:01,744 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 16:57:01,728 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-03-14 16:57:01,931 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Server opened.
+2016-03-14 16:57:01,931 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 16:57:01,931 INFO co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Toast Agent Server listening on port : 1471
+2016-03-14 16:57:01,931 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 16:57:01,931 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Started !
+2016-03-14 16:57:02,087 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Connection 1 connected: /127.0.0.1
+2016-03-14 16:57:02,134 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 16:57:02,134 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Alive ping check!
+2016-03-14 16:57:02,134 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 16:57:02,134 INFO co.sy.to.sw.ag.we.KryoAgentServer [Server] receiving init request !
+2016-03-14 16:57:02,149 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 16:57:02,134 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] ChromeDriverPath = D:\Apps\chromedriver.exe
+2016-03-14 16:57:02,149 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] 
+Sending 'GET' request to URL : http://localhost:4444/record/ping
+2016-03-14 16:57:02,149 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Response Code : 200
+2016-03-14 16:57:03,150 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-4] Strating to record web actions !
+2016-03-14 16:57:16,036 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 16:57:16,035 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Getting recorder at: C:\Program Files (x86)\Toast Tk Studio\addons\agent\recorder.js
+2016-03-14 16:57:16,103 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 16:57:16,102 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Recorder injected !
+2016-03-14 17:01:09,855 ERROR co.sy.to.au.dr.sw.RemoteSwingAgentDriverImpl [AWT-EventQueue-0] Unable to connect to: localhost/127.0.0.1:1470
+java.io.IOException: Unable to connect to: localhost/127.0.0.1:1470
+	at com.esotericsoftware.kryonet.TcpConnection.connect(TcpConnection.java:92) ~[kryonet-2.22.0-RC1.jar:?]
+	at com.esotericsoftware.kryonet.Client.connect(Client.java:156) ~[kryonet-2.22.0-RC1.jar:?]
+	at com.esotericsoftware.kryonet.Client.connect(Client.java:111) ~[kryonet-2.22.0-RC1.jar:?]
+	at com.synaptix.toast.automation.driver.swing.KryoTCPClient.connect(KryoTCPClient.java:30) ~[classes/:?]
+	at com.synaptix.toast.automation.driver.swing.RemoteSwingAgentDriverImpl.start(RemoteSwingAgentDriverImpl.java:89) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.StudioRemoteSwingAgentDriverImpl.connect(StudioRemoteSwingAgentDriverImpl.java:315) [classes/:?]
+	at com.synaptix.toast.swing.agent.ui.HeaderPanel$2.actionPerformed(HeaderPanel.java:150) [classes/:?]
+	at javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:2022) [?:1.8.0_60]
+	at javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2348) [?:1.8.0_60]
+	at javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:402) [?:1.8.0_60]
+	at javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:259) [?:1.8.0_60]
+	at javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:252) [?:1.8.0_60]
+	at java.awt.AWTEventMulticaster.mouseReleased(AWTEventMulticaster.java:289) [?:1.8.0_60]
+	at java.awt.Component.processMouseEvent(Component.java:6535) [?:1.8.0_60]
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3324) [?:1.8.0_60]
+	at java.awt.Component.processEvent(Component.java:6300) [?:1.8.0_60]
+	at java.awt.Container.processEvent(Container.java:2236) [?:1.8.0_60]
+	at java.awt.Component.dispatchEventImpl(Component.java:4891) [?:1.8.0_60]
+	at java.awt.Container.dispatchEventImpl(Container.java:2294) [?:1.8.0_60]
+	at java.awt.Component.dispatchEvent(Component.java:4713) [?:1.8.0_60]
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4888) [?:1.8.0_60]
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:4525) [?:1.8.0_60]
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:4466) [?:1.8.0_60]
+	at java.awt.Container.dispatchEventImpl(Container.java:2280) [?:1.8.0_60]
+	at java.awt.Window.dispatchEventImpl(Window.java:2750) [?:1.8.0_60]
+	at java.awt.Component.dispatchEvent(Component.java:4713) [?:1.8.0_60]
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:758) [?:1.8.0_60]
+	at java.awt.EventQueue.access$500(EventQueue.java:97) [?:1.8.0_60]
+	at java.awt.EventQueue$3.run(EventQueue.java:709) [?:1.8.0_60]
+	at java.awt.EventQueue$3.run(EventQueue.java:703) [?:1.8.0_60]
+	at java.security.AccessController.doPrivileged(Native Method) ~[?:1.8.0_60]
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:76) [?:1.8.0_60]
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86) [?:1.8.0_60]
+	at java.awt.EventQueue$4.run(EventQueue.java:731) [?:1.8.0_60]
+	at java.awt.EventQueue$4.run(EventQueue.java:729) [?:1.8.0_60]
+	at java.security.AccessController.doPrivileged(Native Method) ~[?:1.8.0_60]
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:76) [?:1.8.0_60]
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:728) [?:1.8.0_60]
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:201) [?:1.8.0_60]
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:116) [?:1.8.0_60]
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:105) [?:1.8.0_60]
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101) [?:1.8.0_60]
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93) [?:1.8.0_60]
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82) [?:1.8.0_60]
+Caused by: java.net.ConnectException: Connection refused: no further information
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method) ~[?:1.8.0_60]
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717) ~[?:1.8.0_60]
+	at sun.nio.ch.SocketAdaptor.connect(SocketAdaptor.java:111) ~[?:1.8.0_60]
+	at com.esotericsoftware.kryonet.TcpConnection.connect(TcpConnection.java:77) ~[kryonet-2.22.0-RC1.jar:?]
+	... 43 more
+2016-03-14 17:01:20,531 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-14 17:01:20,531 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-14 17:01:20,531 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-14 17:01:20,532 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] Executing command: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-14 17:01:21,800 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:01:21,800 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-03-14 17:01:21,987 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Server opened.
+2016-03-14 17:01:21,987 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:01:21,987 INFO co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Toast Agent Server listening on port : 1471
+2016-03-14 17:01:21,987 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:01:21,987 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Started !
+2016-03-14 17:01:22,096 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Connection 1 connected: /127.0.0.1
+2016-03-14 17:01:22,143 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:01:22,128 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Alive ping check!
+2016-03-14 17:01:22,143 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] 
+Sending 'GET' request to URL : http://localhost:4444/record/ping
+2016-03-14 17:01:22,143 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Response Code : 200
+2016-03-14 17:01:22,143 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:01:22,143 INFO co.sy.to.sw.ag.we.KryoAgentServer [Server] receiving init request !
+2016-03-14 17:01:22,143 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:01:22,143 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] ChromeDriverPath = D:\Apps\chromedriver.exe
+2016-03-14 17:33:27,361 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-14 17:33:27,361 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-14 17:33:27,361 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-14 17:33:27,362 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] Executing command: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-14 17:33:28,599 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:33:28,599 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-03-14 17:33:28,801 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Server opened.
+2016-03-14 17:33:28,801 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:33:28,801 INFO co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Toast Agent Server listening on port : 1471
+2016-03-14 17:33:28,817 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:33:28,801 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Started !
+2016-03-14 17:33:28,926 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Connection 1 connected: /127.0.0.1
+2016-03-14 17:33:28,973 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:33:28,973 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Alive ping check!
+2016-03-14 17:33:28,989 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] 
+Sending 'GET' request to URL : http://localhost:4444/record/ping
+2016-03-14 17:33:28,989 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Response Code : 200
+2016-03-14 17:33:28,989 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:33:28,989 INFO co.sy.to.sw.ag.we.KryoAgentServer [Server] receiving init request !
+2016-03-14 17:33:28,989 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:33:28,989 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] ChromeDriverPath = D:\Apps\chromedriver.exe
+2016-03-14 17:33:30,003 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-4] Strating to record web actions !
+2016-03-14 17:33:40,228 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:33:40,227 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Getting recorder at: C:\Program Files (x86)\Toast Tk Studio\addons\agent\recorder.js
+2016-03-14 17:33:40,283 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:33:40,283 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Recorder injected !
+2016-03-14 17:59:47,392 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-14 17:59:47,408 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-14 17:59:47,408 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-14 17:59:47,408 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] Executing command: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-14 17:59:48,710 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:59:48,710 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-03-14 17:59:48,912 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Server opened.
+2016-03-14 17:59:48,912 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:59:48,912 INFO co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Toast Agent Server listening on port : 1471
+2016-03-14 17:59:48,912 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:59:48,912 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Started !
+2016-03-14 17:59:48,928 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Connection 1 connected: /127.0.0.1
+2016-03-14 17:59:48,975 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:59:48,975 INFO co.sy.to.sw.ag.we.KryoAgentServer [Server] receiving init request !
+2016-03-14 17:59:48,975 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:59:48,975 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] ChromeDriverPath = D:\Apps\chromedriver.exe
+2016-03-14 17:59:48,990 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:59:48,990 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Alive ping check!
+2016-03-14 17:59:48,990 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] 
+Sending 'GET' request to URL : http://localhost:4444/record/ping
+2016-03-14 17:59:48,990 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Response Code : 200
+2016-03-14 17:59:50,004 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-4] Strating to record web actions !
+2016-03-14 17:59:59,943 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:59:59,942 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Getting recorder at: C:\Program Files (x86)\Toast Tk Studio\addons\agent\recorder.js
+2016-03-14 17:59:59,992 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 17:59:59,992 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Recorder injected !
+2016-03-14 19:08:26,064 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-14 19:08:26,079 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-14 19:08:26,079 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-14 19:08:26,255 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] Listening for transport dt_socket at address: 4000
+2016-03-14 19:08:27,395 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:08:27,395 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-03-14 19:08:27,599 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Server opened.
+2016-03-14 19:08:27,599 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:08:27,599 INFO co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Toast Agent Server listening on port : 1471
+2016-03-14 19:08:27,599 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:08:27,599 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Started !
+2016-03-14 19:08:28,129 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Connection 1 connected: /127.0.0.1
+2016-03-14 19:08:28,139 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:08:28,139 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Alive ping check!
+2016-03-14 19:08:28,176 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:08:28,176 INFO co.sy.to.sw.ag.we.KryoAgentServer [Server] receiving init request !
+2016-03-14 19:08:28,176 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:08:28,176 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] ChromeDriverPath = D:\Apps\chromedriver.exe
+2016-03-14 19:08:28,176 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] 
+Sending 'GET' request to URL : http://localhost:4444/record/ping
+2016-03-14 19:08:28,176 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Response Code : 200
+2016-03-14 19:08:29,182 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-4] Strating to record web actions !
+2016-03-14 19:08:37,646 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:08:37,645 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Getting recorder at: C:\Program Files (x86)\Toast Tk Studio\addons\agent\recorder.js
+2016-03-14 19:08:37,704 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:08:37,704 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Recorder injected !
+2016-03-14 19:13:08,672 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-14 19:13:08,672 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-14 19:13:08,672 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-14 19:13:08,816 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] Listening for transport dt_socket at address: 4000
+2016-03-14 19:13:09,973 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:13:09,957 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-03-14 19:13:10,176 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Server opened.
+2016-03-14 19:13:10,176 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:13:10,176 INFO co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Toast Agent Server listening on port : 1471
+2016-03-14 19:13:10,176 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:13:10,176 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Started !
+2016-03-14 19:13:10,192 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Connection 1 connected: /127.0.0.1
+2016-03-14 19:13:10,239 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:13:10,239 INFO co.sy.to.sw.ag.we.KryoAgentServer [Server] receiving init request !
+2016-03-14 19:13:10,239 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:13:10,239 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] ChromeDriverPath = D:\Apps\chromedriver.exe
+2016-03-14 19:13:10,239 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:13:10,239 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Alive ping check!
+2016-03-14 19:13:10,254 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] 
+Sending 'GET' request to URL : http://localhost:4444/record/ping
+2016-03-14 19:13:10,254 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Response Code : 200
+2016-03-14 19:13:11,256 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-4] Strating to record web actions !
+2016-03-14 19:13:20,894 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:13:20,893 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Getting recorder at: C:\Program Files (x86)\Toast Tk Studio\addons\agent\recorder.js
+2016-03-14 19:13:20,948 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:13:20,947 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Recorder injected !
+2016-03-14 19:19:15,836 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-14 19:19:15,852 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-14 19:19:15,852 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-14 19:19:15,950 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] Listening for transport dt_socket at address: 4000
+2016-03-14 19:19:17,214 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:19:17,214 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-03-14 19:19:17,434 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Server opened.
+2016-03-14 19:19:17,434 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:19:17,434 INFO co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Toast Agent Server listening on port : 1471
+2016-03-14 19:19:17,434 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:19:17,434 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Started !
+2016-03-14 19:19:17,886 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Connection 1 connected: /127.0.0.1
+2016-03-14 19:19:17,934 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:19:17,934 INFO co.sy.to.sw.ag.we.KryoAgentServer [Server] receiving init request !
+2016-03-14 19:19:17,934 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:19:17,934 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] ChromeDriverPath = D:\Apps\chromedriver.exe
+2016-03-14 19:19:17,949 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:19:17,949 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Alive ping check!
+2016-03-14 19:19:17,949 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] 
+Sending 'GET' request to URL : http://localhost:4444/record/ping
+2016-03-14 19:19:17,949 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Response Code : 200
+2016-03-14 19:19:18,962 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-4] Strating to record web actions !
+2016-03-14 19:19:27,149 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:19:27,148 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Getting recorder at: C:\Program Files (x86)\Toast Tk Studio\addons\agent\recorder.js
+2016-03-14 19:19:27,199 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:19:27,198 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Recorder injected !
+2016-03-14 19:25:11,613 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-14 19:25:11,614 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-14 19:25:11,614 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-14 19:25:11,741 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] Listening for transport dt_socket at address: 4000
+2016-03-14 19:25:12,882 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:25:12,882 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-03-14 19:25:13,101 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Server opened.
+2016-03-14 19:25:13,101 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:25:13,101 INFO co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Toast Agent Server listening on port : 1471
+2016-03-14 19:25:13,101 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:25:13,101 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Started !
+2016-03-14 19:25:13,132 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Connection 1 connected: /127.0.0.1
+2016-03-14 19:25:13,179 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:25:13,179 INFO co.sy.to.sw.ag.we.KryoAgentServer [Server] receiving init request !
+2016-03-14 19:25:13,179 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:25:13,179 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] ChromeDriverPath = D:\Apps\chromedriver.exe
+2016-03-14 19:25:13,194 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:25:13,194 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Alive ping check!
+2016-03-14 19:25:13,194 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] 
+Sending 'GET' request to URL : http://localhost:4444/record/ping
+2016-03-14 19:25:13,194 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Response Code : 200
+2016-03-14 19:25:14,198 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-4] Strating to record web actions !
+2016-03-14 19:25:22,901 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:25:22,901 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Getting recorder at: C:\Program Files (x86)\Toast Tk Studio\addons\agent\recorder.js
+2016-03-14 19:25:22,934 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:25:22,934 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Recorder injected !
+2016-03-14 19:29:59,245 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-14 19:29:59,246 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-14 19:29:59,246 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-14 19:29:59,436 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] Listening for transport dt_socket at address: 4000
+2016-03-14 19:30:00,832 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:30:00,816 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-03-14 19:30:01,097 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Server opened.
+2016-03-14 19:30:01,097 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:30:01,097 INFO co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Toast Agent Server listening on port : 1471
+2016-03-14 19:30:01,097 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:30:01,097 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Started !
+2016-03-14 19:30:01,284 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Connection 1 connected: /127.0.0.1
+2016-03-14 19:30:01,348 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:30:01,348 INFO co.sy.to.sw.ag.we.KryoAgentServer [Server] receiving init request !
+2016-03-14 19:30:01,348 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:30:01,348 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] ChromeDriverPath = D:\Apps\chromedriver.exe
+2016-03-14 19:30:01,363 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:30:01,363 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Alive ping check!
+2016-03-14 19:30:01,363 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] 
+Sending 'GET' request to URL : http://localhost:4444/record/ping
+2016-03-14 19:30:01,363 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Response Code : 200
+2016-03-14 19:30:02,377 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-4] Strating to record web actions !
+2016-03-14 19:30:10,290 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:30:10,289 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Getting recorder at: C:\Program Files (x86)\Toast Tk Studio\addons\agent\recorder.js
+2016-03-14 19:30:10,350 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-14 19:30:10,350 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Recorder injected !
+2016-03-15 15:47:45,164 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-15 15:47:45,171 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-15 15:47:45,171 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-15 15:47:45,398 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] Listening for transport dt_socket at address: 4000
+2016-03-15 15:47:46,579 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 15:47:46,577 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-03-15 15:47:47,028 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Server opened.
+2016-03-15 15:47:47,029 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 15:47:47,028 INFO co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Toast Agent Server listening on port : 1471
+2016-03-15 15:47:47,030 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 15:47:47,029 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Started !
+2016-03-15 15:47:47,178 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Connection 1 connected: /127.0.0.1
+2016-03-15 15:47:47,231 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 15:47:47,231 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Alive ping check!
+2016-03-15 15:47:47,244 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 15:47:47,244 INFO co.sy.to.sw.ag.we.KryoAgentServer [Server] receiving init request !
+2016-03-15 15:47:47,244 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 15:47:47,244 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] ChromeDriverPath = D:\Apps\chromedriver.exe
+2016-03-15 15:47:47,247 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] 
+Sending 'GET' request to URL : http://localhost:4444/record/ping
+2016-03-15 15:47:47,247 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Response Code : 200
+2016-03-15 15:47:48,249 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-4] Strating to record web actions !
+2016-03-15 15:48:03,318 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 15:48:03,317 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Getting recorder at: C:\Program Files (x86)\Toast Tk Studio\addons\agent\recorder.js
+2016-03-15 15:48:03,369 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 15:48:03,369 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Recorder injected !
+2016-03-15 16:41:27,405 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-15 16:41:27,411 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-15 16:41:27,412 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-15 16:41:28,112 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] Listening for transport dt_socket at address: 4000
+2016-03-15 16:41:29,294 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:41:29,293 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-03-15 16:41:29,415 ERROR co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Connection refused: connect
+java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method) ~[?:1.8.0_60]
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206) ~[?:1.8.0_60]
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188) ~[?:1.8.0_60]
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172) ~[?:1.8.0_60]
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:589) ~[?:1.8.0_60]
+	at java.net.Socket.connect(Socket.java:538) ~[?:1.8.0_60]
+	at sun.net.NetworkClient.doConnect(NetworkClient.java:180) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:432) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:527) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.<init>(HttpClient.java:211) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:308) ~[?:1.8.0_60]
+	at sun.net.www.http.HttpClient.New(HttpClient.java:326) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1168) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1104) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:998) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:932) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1512) ~[?:1.8.0_60]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1440) ~[?:1.8.0_60]
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:480) ~[?:1.8.0_60]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.executeGET(WebAgentBoot.java:35) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot.ping(WebAgentBoot.java:82) [classes/:?]
+	at com.synaptix.toast.swing.agent.runtime.StudioRemoteSwingAgentDriverImpl$3.run(StudioRemoteSwingAgentDriverImpl.java:255) [classes/:?]
+	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_60]
+2016-03-15 16:41:29,424 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-15 16:41:29,712 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Server opened.
+2016-03-15 16:41:29,714 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:41:29,712 INFO co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Toast Agent Server listening on port : 1471
+2016-03-15 16:41:29,714 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:41:29,713 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Started !
+2016-03-15 16:41:29,941 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Connection 1 connected: /127.0.0.1
+2016-03-15 16:41:30,044 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:41:30,043 INFO co.sy.to.sw.ag.we.KryoAgentServer [Server] receiving init request !
+2016-03-15 16:41:30,044 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:41:30,044 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] ChromeDriverPath = D:\Apps\chromedriver.exe
+2016-03-15 16:41:30,492 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:41:30,484 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Alive ping check!
+2016-03-15 16:47:38,693 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-15 16:47:38,697 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-15 16:47:38,697 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-15 16:47:38,822 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] Listening for transport dt_socket at address: 4000
+2016-03-15 16:47:40,037 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:47:40,036 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-03-15 16:47:40,377 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Server opened.
+2016-03-15 16:47:40,377 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:47:40,377 INFO co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Toast Agent Server listening on port : 1471
+2016-03-15 16:47:40,378 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:47:40,377 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Started !
+2016-03-15 16:47:40,698 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Connection 1 connected: /127.0.0.1
+2016-03-15 16:47:40,745 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:47:40,745 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Alive ping check!
+2016-03-15 16:47:40,750 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:47:40,750 INFO co.sy.to.sw.ag.we.KryoAgentServer [Server] receiving init request !
+2016-03-15 16:52:03,167 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-15 16:52:03,182 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-15 16:52:03,183 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-15 16:52:03,302 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] Listening for transport dt_socket at address: 4000
+2016-03-15 16:52:04,550 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:52:04,549 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-03-15 16:52:04,863 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Server opened.
+2016-03-15 16:52:04,863 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:52:04,863 INFO co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Toast Agent Server listening on port : 1471
+2016-03-15 16:52:04,864 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:52:04,864 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Started !
+2016-03-15 16:52:05,195 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Connection 1 connected: /127.0.0.1
+2016-03-15 16:52:05,261 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:52:05,260 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Alive ping check!
+2016-03-15 16:52:05,265 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] 
+Sending 'GET' request to URL : http://localhost:4444/record/ping
+2016-03-15 16:52:05,265 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Response Code : 200
+2016-03-15 16:52:05,270 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:52:05,268 INFO co.sy.to.sw.ag.we.KryoAgentServer [Server] receiving init request !
+2016-03-15 16:52:05,270 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:52:05,268 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] ChromeDriverPath = D:\Apps\chromedriver.exe
+2016-03-15 16:52:06,270 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-4] Strating to record web actions !
+2016-03-15 16:52:15,804 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:52:15,790 ERROR co.sy.to.sw.ag.we.KryoAgentServer [Server] null
+2016-03-15 16:52:15,804 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] java.lang.NullPointerException
+2016-03-15 16:52:15,804 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 	at java.io.Reader.<init>(Reader.java:78) ~[?:1.8.0_60]
+2016-03-15 16:52:15,804 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 	at java.io.InputStreamReader.<init>(InputStreamReader.java:113) ~[?:1.8.0_60]
+2016-03-15 16:52:15,805 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 	at org.apache.commons.io.IOUtils.copy(IOUtils.java:1906) ~[toast-tk-studio-agent-standalone.jar:?]
+2016-03-15 16:52:15,805 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 	at org.apache.commons.io.IOUtils.toString(IOUtils.java:778) ~[toast-tk-studio-agent-standalone.jar:?]
+2016-03-15 16:52:15,805 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 	at org.apache.commons.io.IOUtils.toString(IOUtils.java:759) ~[toast-tk-studio-agent-standalone.jar:?]
+2016-03-15 16:52:15,805 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 	at com.synaptix.toast.swing.agent.web.RestRecorderService.injectRecordScript(RestRecorderService.java:169) ~[toast-tk-studio-agent-standalone.jar:?]
+2016-03-15 16:52:15,806 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 	at com.synaptix.toast.swing.agent.web.RestRecorderService.openRecordingBrowser(RestRecorderService.java:193) ~[toast-tk-studio-agent-standalone.jar:?]
+2016-03-15 16:52:15,806 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 	at com.synaptix.toast.swing.agent.web.KryoAgentServer$1.received(KryoAgentServer.java:47) [toast-tk-studio-agent-standalone.jar:?]
+2016-03-15 16:52:15,806 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 	at com.esotericsoftware.kryonet.Server$1.received(Server.java:61) [toast-tk-studio-agent-standalone.jar:?]
+2016-03-15 16:52:15,806 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 	at com.esotericsoftware.kryonet.Connection.notifyReceived(Connection.java:246) [toast-tk-studio-agent-standalone.jar:?]
+2016-03-15 16:53:33,425 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-15 16:53:33,432 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-15 16:53:33,432 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-15 16:53:33,529 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] Listening for transport dt_socket at address: 4000
+2016-03-15 16:53:34,732 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:53:34,731 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-03-15 16:53:35,069 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Server opened.
+2016-03-15 16:53:35,070 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:53:35,069 INFO co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Toast Agent Server listening on port : 1471
+2016-03-15 16:53:35,071 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:53:35,070 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Started !
+2016-03-15 16:53:35,439 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Connection 1 connected: /127.0.0.1
+2016-03-15 16:53:35,513 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:53:35,496 INFO co.sy.to.sw.ag.we.KryoAgentServer [Server] receiving init request !
+2016-03-15 16:53:35,513 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:53:35,496 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] ChromeDriverPath = D:\Apps\chromedriver.exe
+2016-03-15 16:53:35,527 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:53:35,526 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Alive ping check!
+2016-03-15 16:53:35,531 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] 
+Sending 'GET' request to URL : http://localhost:4444/record/ping
+2016-03-15 16:53:35,531 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Response Code : 200
+2016-03-15 16:53:36,539 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-4] Strating to record web actions !
+2016-03-15 16:53:43,609 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:53:43,609 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Recorder injected !
+2016-03-15 16:53:43,613 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 16:53:43,613 INFO co.sy.to.sw.ag.we.KryoAgentServer [Server] receiving init request !
+2016-03-15 16:53:54,403 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@1f71bcaa
+2016-03-15 16:54:03,462 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@1f71bcaa
+2016-03-15 16:54:03,462 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@72aaa4bb
+2016-03-15 16:54:03,508 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@1f71bcaa
+2016-03-15 16:54:03,509 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@72aaa4bb
+2016-03-15 16:54:03,509 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@605ceba8
+2016-03-15 16:54:04,503 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@1f71bcaa
+2016-03-15 16:54:04,504 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@72aaa4bb
+2016-03-15 16:54:04,504 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@605ceba8
+2016-03-15 16:54:04,504 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@63f9308a
+2016-03-15 16:54:04,578 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@1f71bcaa
+2016-03-15 16:54:04,578 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@72aaa4bb
+2016-03-15 16:54:04,578 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@605ceba8
+2016-03-15 16:54:04,578 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@63f9308a
+2016-03-15 16:54:05,158 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@415b2123
+2016-03-15 16:54:05,310 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@415b2123
+2016-03-15 16:54:05,310 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@3df1ff1
+2016-03-15 16:54:06,352 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@415b2123
+2016-03-15 16:54:06,352 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@3df1ff1
+2016-03-15 16:54:06,352 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@4d9b589
+2016-03-15 16:54:06,539 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@415b2123
+2016-03-15 16:54:06,539 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@3df1ff1
+2016-03-15 16:54:06,539 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@4d9b589
+2016-03-15 16:54:06,539 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@2e8ea8f8
+2016-03-15 16:54:06,729 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@415b2123
+2016-03-15 16:54:06,729 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@3df1ff1
+2016-03-15 16:54:06,729 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@4d9b589
+2016-03-15 16:54:06,729 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@2e8ea8f8
+2016-03-15 16:54:06,729 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@36c4c633
+2016-03-15 16:54:07,012 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@415b2123
+2016-03-15 16:54:07,012 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@3df1ff1
+2016-03-15 16:54:07,013 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@4d9b589
+2016-03-15 16:54:07,013 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@2e8ea8f8
+2016-03-15 16:54:07,013 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@36c4c633
+2016-03-15 16:54:07,013 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@4d1f778d
+2016-03-15 16:54:08,966 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@415b2123
+2016-03-15 16:54:08,967 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@3df1ff1
+2016-03-15 16:54:08,968 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@4d9b589
+2016-03-15 16:54:08,969 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@2e8ea8f8
+2016-03-15 16:54:08,969 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@36c4c633
+2016-03-15 16:54:08,969 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@4d1f778d
+2016-03-15 16:54:08,969 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@4a3e65a
+2016-03-15 16:54:09,077 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@415b2123
+2016-03-15 16:54:09,077 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@3df1ff1
+2016-03-15 16:54:09,077 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@4d9b589
+2016-03-15 16:54:09,078 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@2e8ea8f8
+2016-03-15 16:54:09,078 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@36c4c633
+2016-03-15 16:54:09,080 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@4d1f778d
+2016-03-15 16:54:09,080 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@4a3e65a
+2016-03-15 17:02:44,208 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-15 17:02:44,213 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-15 17:02:44,213 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-15 17:02:44,300 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] Listening for transport dt_socket at address: 4000
+2016-03-15 17:02:45,541 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 17:02:45,540 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-03-15 17:02:45,857 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Server opened.
+2016-03-15 17:02:45,857 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 17:02:45,857 INFO co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Toast Agent Server listening on port : 1471
+2016-03-15 17:02:45,858 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 17:02:45,857 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Started !
+2016-03-15 17:02:46,219 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Connection 1 connected: /127.0.0.1
+2016-03-15 17:02:46,272 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] 
+Sending 'GET' request to URL : http://localhost:4444/record/ping
+2016-03-15 17:02:46,273 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Response Code : 200
+2016-03-15 17:02:46,275 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 17:02:46,269 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Alive ping check!
+2016-03-15 17:02:46,275 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 17:02:46,271 INFO co.sy.to.sw.ag.we.KryoAgentServer [Server] receiving init request !
+2016-03-15 17:02:46,275 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 17:02:46,272 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] ChromeDriverPath = D:\Apps\chromedriver.exe
+2016-03-15 17:02:47,281 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-4] Strating to record web actions !
+2016-03-15 17:02:59,588 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 17:02:59,588 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Recorder injected !
+2016-03-15 17:02:59,590 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 17:02:59,590 INFO co.sy.to.sw.ag.we.KryoAgentServer [Server] receiving init request !
+2016-03-15 17:02:59,592 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:13  INFO: [kryonet] Connection 1 disconnected.
+2016-03-15 17:03:00,542 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@27bac694
+2016-03-15 17:03:02,403 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@27bac694
+2016-03-15 17:03:02,403 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@5aaa4d2
+2016-03-15 17:03:02,502 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@27bac694
+2016-03-15 17:20:14,219 ERROR co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] java.io.IOException: Unable to connect to: localhost/127.0.0.1:1471
+2016-03-15 17:20:14,227 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Loading web agent from: C:\Program Files (x86)\Toast Tk Studio\addons\agent-1.0-fat.jar
+2016-03-15 17:20:14,227 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [AWT-EventQueue-0] Java Home: C:\Program Files\Java\jdk1.8.0_60\jre
+2016-03-15 17:20:14,339 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] Listening for transport dt_socket at address: 4000
+2016-03-15 17:20:15,606 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 17:20:15,605 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Starting..
+2016-03-15 17:20:16,022 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Server opened.
+2016-03-15 17:20:16,022 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 17:20:16,022 INFO co.sy.to.sw.ag.we.KryoAgentServer [vert.x-eventloop-thread-1] Toast Agent Server listening on port : 1471
+2016-03-15 17:20:16,039 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 17:20:16,039 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Started !
+2016-03-15 17:20:16,236 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 00:00  INFO: [kryonet] Connection 1 connected: /127.0.0.1
+2016-03-15 17:20:16,309 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 17:20:16,302 INFO co.sy.to.sw.ag.we.KryoAgentServer [Server] receiving init request !
+2016-03-15 17:20:16,309 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 17:20:16,302 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] ChromeDriverPath = D:\Apps\chromedriver.exe
+2016-03-15 17:20:16,313 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 17:20:16,313 INFO co.sy.to.sw.ag.we.RestRecorderService [vert.x-eventloop-thread-1] Alive ping check!
+2016-03-15 17:20:16,317 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] 
+Sending 'GET' request to URL : http://localhost:4444/record/ping
+2016-03-15 17:20:16,318 INFO co.sy.to.sw.ag.ru.we.WebAgentBoot [Thread-4] Response Code : 200
+2016-03-15 17:20:17,321 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-4] Strating to record web actions !
+2016-03-15 17:20:24,703 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 17:20:24,703 INFO co.sy.to.sw.ag.we.RestRecorderService [Server] Recorder injected !
+2016-03-15 17:20:24,705 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] 2016-03-15 17:20:24,704 INFO co.sy.to.sw.ag.we.KryoAgentServer [Server] receiving init request !
+2016-03-15 17:20:38,937 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@539343a9
+2016-03-15 17:20:47,741 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@539343a9
+2016-03-15 17:20:59,096 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@3d723766
+2016-03-15 17:21:06,742 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@539343a9
+2016-03-15 17:21:08,102 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@3d723766
+2016-03-15 17:21:34,428 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@2b2ba4d2
+2016-03-15 17:21:52,516 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@539343a9
+2016-03-15 17:21:57,836 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@3d723766
+2016-03-15 17:22:10,666 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@2b2ba4d2
+2016-03-15 17:23:15,110 INFO co.sy.to.sw.ag.ru.StudioRemoteSwingAgentDriverImpl [Thread-3] No EventStackGobler for event: com.synaptix.toast.core.agent.interpret.WebEventRecord@5c9c3617

@@ -10,6 +10,8 @@ function recorder(){
 
 	var nativeEvents = {
 		'submit': 'HTMLEvents',
+		'blur': 'HTMLEvents',
+		'focus': 'HTMLEvents',
 		'keypress': 'KeyEvents',
 		'click': 'MouseEvents',
 		'dblclick': 'MouseEvents',
@@ -38,12 +40,93 @@ function recorder(){
 	
 	function storeEvent(event) {
 		ev = convertEvent(event);
+		ev.value = getTargetValue(event.target);
+		ev.component=getTargetComponent(event.target);
 		setTimeout(publishEvent(ev), 10);
 		if(processing) {
 			eventQueue.push(ev);
 		} else {
 			events.push(ev);
 		}
+	}
+	
+	function getTargetComponent(node){
+		if(node.nodeName.toLowerCase() === 'input'){
+			return 'input:'+ (node.getAttribute('type'))
+		}
+		return node.nodeName.toLowerCase();	
+	}
+	
+	function getTargetValue(node){
+		if(node.nodeName.toLowerCase() === 'input'){
+			var type = node.getAttribute('type');
+			if(type){
+				if (type === 'text'){
+					return node.value;
+				}
+				if (type === 'password'){
+					return node.value;
+				}
+				if (type === 'date'){
+					return node.value;
+				}
+				if(type === 'button'){
+					return node.value;
+				}
+				if(type === 'submit'){
+					return node.value;
+				}
+				if (type === 'date'){
+					return node.value;
+				}
+				if (type === 'email'){
+					return node.value;
+				}
+				if (type === 'radio'){
+					return node.checked;
+				}
+				if (type === 'range'){
+					return node.value;
+				}
+				if (type === 'number'){
+					return node.value;
+				}
+				if (type === 'search'){
+					return node.value;
+				}
+				if (type === 'time'){
+					return node.value;
+				}
+				if (type === 'tel'){
+					return node.value;
+				}
+				if (type === 'week'){
+					return node.value;
+				}
+				if (type === 'month'){
+					return node.value;
+				}
+				if (type === 'datetime'){
+					return node.value;
+				}
+				if (type === 'url'){
+					return node.value;
+				}
+				if (type === 'checkbox'){
+					return node.checked;
+				}
+			}
+		}
+		if(node.nodeName.toLowerCase() === 'select'){
+			return node.value;
+		}
+		if(node.nodeName.toLowerCase() === 'a'){
+			return node.innerText;
+		}
+		if(node.nodeName.toLowerCase() === 'button'){
+			return node.value;
+		}
+
 	}
 	
 	function publishEvent(event){
@@ -55,12 +138,14 @@ function recorder(){
 
 	function extractLocatorFromEvent(target){
 		var selector = target.nodeName.toLowerCase();
+		if(target.id){
+			return selector += '#'+ target.id;
+		}
 		var id = document.body.getAttribute('id');
 		if (id) { 
 			selector += '#'+ id;
 		}
-		var classNames = document.body.getAttribute('class');
-		console.log('classes: ' + classNames);
+		var classNames = target.className;
 		if (classNames) {
 			selector += '.' + classNames.trim().replace(/\\s/gi, '.');
 		}

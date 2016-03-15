@@ -273,9 +273,17 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 			public void run() {
 				try {
 					String line;
-					String chromeDriverPathOption = "-Dtoast.chromedriver.path=/usr/bin/chromedriver";
-					String[] args = new String[] { "java", chromeDriverPathOption, "-jar",  agentDir + FAT_JAR_AGENT  };
-					LOG.info("Executing command: " + args[3]);
+					String chromeDriverPathOption = "-Dtoast.chromedriver.path="+webConfig.getChromeDriverPath();
+					String debug = "-Xdebug";
+					String debugInfo  ="-Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n";
+					String[] args = new String[] { 
+							"java",
+							chromeDriverPathOption, 
+							debug,
+							debugInfo,
+							"-jar", 
+							agentDir + FAT_JAR_AGENT 
+					};
 					Process p = Runtime.getRuntime().exec(args);
 					BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 					while ((line = in.readLine()) != null) {
@@ -302,7 +310,8 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 			if (this.webDriver != null) {
 				this.webDriver.stop();
 			}
-		} else {// swing mode
+		} else {
+			// swing mode
 			super.stop();
 		}
 	}
@@ -316,30 +325,4 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 		}
 	}
 	
-	public static void main(String[] args) {
-		String toastHome = System.getenv("TOAST_HOME");
-		String agentDir = toastHome + SystemUtils.FILE_SEPARATOR + "addons" + SystemUtils.FILE_SEPARATOR;
-		LOG.info("Loading web agent from: " + agentDir + FAT_JAR_AGENT);
-		LOG.info("Java Home: " + SystemUtils.JAVA_HOME);
-		Thread thread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					String line;
-					String chromeDriverPathOption = "-Dtoast.chromedriver.path=/usr/bin/chromedriver";
-					String[] args = new String[] { "java", chromeDriverPathOption, "-jar",  agentDir + FAT_JAR_AGENT  };
-					LOG.info("Executing command: " + args[3]);
-					Process p = Runtime.getRuntime().exec(args);
-					BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-					while ((line = in.readLine()) != null) {
-						LOG.info(line);
-					}
-					in.close();
-				} catch (IOException e) {
-					LOG.error(e);
-				}
-			}
-		});
-		thread.start();
-	}
 }

@@ -1,12 +1,8 @@
 package com.synaptix.toast.swing.agent.web;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStream;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.logging.log4j.LogManager;
@@ -18,7 +14,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.buffer.Buffer;
-import org.vertx.java.core.http.HttpServer;
 import org.vertx.java.core.http.HttpServerRequest;
 import org.vertx.java.core.http.RouteMatcher;
 import org.vertx.java.platform.Verticle;
@@ -26,12 +21,13 @@ import org.vertx.java.platform.Verticle;
 import com.google.gson.Gson;
 import com.synaptix.toast.core.agent.interpret.WebEventRecord;
 import com.synaptix.toast.core.annotation.craft.FixMe;
+import com.synaptix.toast.swing.agent.tray.SysTrayHook;
+import com.synaptix.toast.swing.agent.web.record.WebRecorder;
 
 @FixMe(todo = "ensure we have firefow browser installed, use a factory")
 public class RestRecorderService extends Verticle {
 
-	private static final Logger LOG = LogManager
-			.getLogger(RestRecorderService.class);
+	private static final Logger LOG = LogManager.getLogger(RestRecorderService.class);
 
 	private WebDriver driver;
 
@@ -43,13 +39,16 @@ public class RestRecorderService extends Verticle {
 
 	private KryoAgentServer server;
 
+	private WebRecorder recorder;
+
 	private void processEvent(WebEventRecord record) {
-		server.sendEvent(record);
+		recorder.append(record);
 	}
 
 	@Override
 	public void start() {
 		LOG.info("Starting..");
+		SysTrayHook.init();
 		RouteMatcher matcher = new RouteMatcher();
 		final Gson gson = new Gson();
 		matcher.options("/record/event", new Handler<HttpServerRequest>() {
@@ -85,31 +84,7 @@ public class RestRecorderService extends Verticle {
 				req.response().setStatusCode(200).end();
 			}
 		});
-		matcher.get(PATH + "/start", new Handler<HttpServerRequest>() {
-			@Override
-			public void handle(HttpServerRequest req) {
-				openRecordingBrowser("http://www.google.fr");
-				req.response().headers().add("Access-Control-Allow-Origin", "*");
-				req.response().setStatusCode(200).end();
-				if (isStarted && RestRecorderService.this.thread == null) {
-					RestRecorderService.this.thread = buildReinjectionThread();
-					thread.start();
-				}
-			}
-		});
-		matcher.get(PATH + "/stop", new Handler<HttpServerRequest>() {
-			@Override
-			public void handle(HttpServerRequest req) {
-				if (driver != null) {
-					driver.close();
-					driver = null;
-				}
-				server.close();
-				req.response().headers().add("Access-Control-Allow-Origin", "*");
-				req.response().setStatusCode(200).end();
-				System.exit(0);
-			}
-		});
+		matcher.get(PATH + "/stop", new StopHandler(this));
 		try{
 			String toastHome = System.getenv("TOAST_HOME");
 			
@@ -122,6 +97,7 @@ public class RestRecorderService extends Verticle {
 			//PLAIN ONE
 			vertx.createHttpServer().requestHandler(matcher).listen(4444);
 			server = new KryoAgentServer(this);
+			recorder = new WebRecorder(server);
 			LOG.info("Started !");
 		}catch(Exception e){
 			LOG.error(e);
@@ -157,11 +133,7 @@ public class RestRecorderService extends Verticle {
 
 	private void injectRecordScript() throws IOException {
 		JavascriptExecutor executor = ((JavascriptExecutor) driver);
-		String toastHome = System.getenv("TOAST_HOME");
-		Path absolutePath = Paths.get(toastHome + "/addons/agent/recorder.js").toAbsolutePath();
-		LOG.info("Getting recorder at: " + absolutePath.toString());
-		File file = absolutePath.normalize().toFile();
-		final FileInputStream resourceAsStream = FileUtils.openInputStream(file);
+		InputStream resourceAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("recorder.js");
 		String script = IOUtils.toString(resourceAsStream);
 		String subscript = "var script = window.document.createElement('script'); script.innerHTML=\""
 				+ script.replace("\r\n", "\\\r\n")
@@ -173,8 +145,6 @@ public class RestRecorderService extends Verticle {
 	}
 
 	private static WebDriver launchBrowser(String host) {
-		//String toastHome = System.getenv("TOAST_HOME");
-		//, toastHome+ "/addons/chromedriver.exe"
 		String chromeDriverPath = System.getProperty("toast.chromedriver.path");
 		LOG.info("ChromeDriverPath = " + chromeDriverPath);
 		System.setProperty("webdriver.chrome.driver", chromeDriverPath);
@@ -204,5 +174,13 @@ public class RestRecorderService extends Verticle {
 		if(driver != null){
 			driver.close();
 		}
+	}
+
+	public WebDriver getDriver() {
+		return driver;
+	}
+
+	public KryoAgentServer getServer() {
+		return server;
 	}
 }
