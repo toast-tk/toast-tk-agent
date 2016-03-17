@@ -12,6 +12,7 @@ function recorder(){
 		'submit': 'HTMLEvents',
 		'blur': 'HTMLEvents',
 		'focus': 'HTMLEvents',
+		'change': 'HTMLEvents',
 		'keypress': 'KeyEvents',
 		'click': 'MouseEvents',
 		'dblclick': 'MouseEvents',
@@ -36,7 +37,7 @@ function recorder(){
 			storeEvent(event);
 			return true;
 		}
-	}
+	};
 	
 	function storeEvent(event) {
 		ev = convertEvent(event);
@@ -48,14 +49,14 @@ function recorder(){
 		} else {
 			events.push(ev);
 		}
-	}
+	};
 	
 	function getTargetComponent(node){
 		if(node.nodeName.toLowerCase() === 'input'){
-			return 'input:'+ (node.getAttribute('type'))
+			return 'input:'+ (node.getAttribute('type'));
 		}
 		return node.nodeName.toLowerCase();	
-	}
+	};
 	
 	function getTargetValue(node){
 		if(node.nodeName.toLowerCase() === 'input'){
@@ -127,14 +128,14 @@ function recorder(){
 			return node.value;
 		}
 
-	}
+	};
 	
 	function publishEvent(event){
 		console.log(event);
 		xmlhttp.open('POST', host + '/event');
 		xmlhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 		xmlhttp.send(JSON.stringify(event));
-	}
+	};
 
 	function extractLocatorFromEvent(target){
 		var selector = target.nodeName.toLowerCase();
@@ -150,7 +151,7 @@ function recorder(){
 			selector += '.' + classNames.trim().replace(/\\s/gi, '.');
 		}
 		return selector;
-	}
+	};
 	
 	function convertEvent(event) {
 		var ev = {};
@@ -170,7 +171,7 @@ function recorder(){
 		ev['offsetY'] = event.offsetY;
 		eventHistory[id] = ev;
 		return ev;
-	}
+	};
 
 	function getEvents() {
 		processing = true;

@@ -3,22 +3,26 @@ package com.synaptix.toast.swing.agent.web.record;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.ImmutableList;
 import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
 import com.synaptix.toast.core.agent.interpret.WebEventRecord;
+import com.synaptix.toast.swing.agent.web.IAgentServer;
 import com.synaptix.toast.swing.agent.web.KryoAgentServer;
 
 public class WebRecorder {
 
 	private static final Logger LOG = LogManager.getLogger(WebRecorder.class);
 	private EventStackGobbler currentEventStackGobbler;
-	private KryoAgentServer server;
+	private IAgentServer server;
 	private List<WebEventRecord> liveRecordedStepsBuffer;
 
-	public WebRecorder(KryoAgentServer server) {
+	public WebRecorder(IAgentServer server) {
 		this.liveRecordedStepsBuffer = new ArrayList<WebEventRecord>();
 		this.server = server;
 	}
@@ -47,7 +51,8 @@ public class WebRecorder {
 						return _process(interpretedEventType, capturedEvent);
 					}
 				}else{
-					System.out.println("No EventStackGobler for event: " + capturedEvent);
+					System.out.println("No EventStackGobler for event: " 
+						+ ToStringBuilder.reflectionToString(capturedEvent, ToStringStyle.SIMPLE_STYLE));
 				}
 			}
 			return null;
@@ -70,5 +75,4 @@ public class WebRecorder {
 			LOG.error(e);
 		}		
 	}
-
 }

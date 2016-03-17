@@ -10,13 +10,11 @@ import com.synaptix.toast.swing.agent.web.record.WebRecorder;
 
 public class RecordHandler implements Handler<HttpServerRequest>{
 	
-	private RestRecorderService service;
 	final Gson gson = new Gson();
 	private WebRecorder recorder;
 	
 	public RecordHandler(RestRecorderService service2) {
 		this.recorder = new WebRecorder(service2.getServer());
-		this.service = service2;
 	}
 
 	@Override

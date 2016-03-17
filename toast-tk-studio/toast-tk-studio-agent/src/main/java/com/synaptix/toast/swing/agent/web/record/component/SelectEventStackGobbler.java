@@ -1,7 +1,5 @@
 package com.synaptix.toast.swing.agent.web.record.component;
 
-import java.awt.event.KeyEvent;
-
 import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
 import com.synaptix.toast.core.agent.interpret.WebEventRecord;
 import com.synaptix.toast.swing.agent.web.record.EventStackGobbler;
@@ -10,52 +8,42 @@ public class SelectEventStackGobbler extends EventStackGobbler {
 
 	WebEventRecord finalEvent = null;
 
-
 	@Override
 	public boolean isInterestedIn(
 			WebEventRecord capturedEvent) {
 		String component = capturedEvent.getComponent() != null ? capturedEvent.getComponent() : "";
-		return "focus".equals(capturedEvent.getType()) && component.startsWith("select");
-	}
-
-	public boolean isInputEvent(
-		String eventLabel) {
-		return KeyEvent.class.getSimpleName().equals(eventLabel);
+		return "change".equals(capturedEvent.getType()) && component.startsWith("select");
 	}
 
 	@Override
 	public boolean isLooper() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public EventStackGobbler digest(
 			WebEventRecord capturedEvent) {
-		if(finalEvent == null && "blur".equals(capturedEvent.getType())){
-			this.finalEvent = capturedEvent;
-		}
 		return this;
 	}
 
 	@Override
 	public boolean isCompleted() {
-		return this.finalEvent != null;
+		return true;
 	}
 
 	@Override
 	public WebEventRecord getAdjustedEvent() {
-		return finalEvent;
+		return null;
 	}
 
 	@Override
 	public EventType getInterpretedEventType(
 			WebEventRecord capturedEvent) {
-		return EventType.KEY_INPUT;
+		return EventType.JLIST_CLICK;
 	}
 
 	@Override
 	public void reset() {
-		this.finalEvent = null;
 	}
 
 }

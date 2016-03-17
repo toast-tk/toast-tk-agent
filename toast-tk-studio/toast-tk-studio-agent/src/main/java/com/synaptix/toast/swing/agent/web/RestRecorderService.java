@@ -12,6 +12,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.http.HttpServerRequest;
 import org.vertx.java.core.http.RouteMatcher;
@@ -28,7 +29,7 @@ public class RestRecorderService extends Verticle {
 	private WebDriver driver;
 	private boolean isStarted;
 	private Thread thread;
-	private KryoAgentServer server;
+	private IAgentServer server;
 	
 	@Override
 	public void start() {
@@ -103,7 +104,7 @@ public class RestRecorderService extends Verticle {
 		InputStream resourceAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("recorder.js");
 		String script = IOUtils.toString(resourceAsStream);
 		String subscript = "var script = window.document.createElement('script'); script.innerHTML=\""
-				+ script.replace("\r\n", "\\\r\n")
+				+ script.replace("\r\n", "").replace("\n", "")
 				+ "\";window.document.head.appendChild(script);";
 		executor.executeScript(subscript);
 		String recordingStatus = "window.document.body.setAttribute('recording','true');";
@@ -112,10 +113,11 @@ public class RestRecorderService extends Verticle {
 	}
 
 	private static WebDriver launchBrowser(String host) {
-		String chromeDriverPath = System.getProperty("toast.chromedriver.path");
-		LOG.info("ChromeDriverPath = " + chromeDriverPath);
-		System.setProperty("webdriver.chrome.driver", chromeDriverPath);
-		WebDriver driver = new ChromeDriver();
+		//String chromeDriverPath = System.getProperty("toast.chromedriver.path");
+		//LOG.info("ChromeDriverPath = " + chromeDriverPath);
+		//System.setProperty("webdriver.chrome.driver", chromeDriverPath);
+		//WebDriver driver = new ChromeDriver();
+		FirefoxDriver driver = new FirefoxDriver();
 		driver.get(host);
 		return driver;
 	}
@@ -147,7 +149,7 @@ public class RestRecorderService extends Verticle {
 		return driver;
 	}
 
-	public KryoAgentServer getServer() {
+	public IAgentServer getServer() {
 		return server;
 	}
 	

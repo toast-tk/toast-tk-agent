@@ -324,5 +324,4 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 			start(host);
 		}
 	}
-	
 }

@@ -22,6 +22,8 @@ import com.synaptix.toast.core.runtime.ITCPClient;
 import com.synaptix.toast.core.runtime.ITCPResponseReceivedHandler;
 import com.synaptix.toast.dao.domain.api.test.ITestResult;
 import com.synaptix.toast.swing.agent.guice.StudioEventBus;
+import com.synaptix.toast.swing.agent.runtime.web.interpret.IActionInterpret;
+import com.synaptix.toast.swing.agent.runtime.web.interpret.InterpretationProvider;
 
 public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 
@@ -63,7 +65,7 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 			@Override
 			public void onResponseReceived(
 				Object object) {
-				System.out.println("Disconnected !");
+				System.out.println("Disconnect received !");
 				connect();
 			}
 		});
@@ -92,28 +94,6 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 			this.started = false;
 		}
 	}
-
-	protected void startConnectionLoop() {
-		//lame hack to keep kryo connection active
-//		new Thread(new Runnable() {
-//			
-//			@Override
-//			public void run() {
-//				while(true){
-//					if(client.isConnected()){
-//						try {
-//							Thread.sleep(500);
-//						}
-//						catch(InterruptedException e) {
-//							e.printStackTrace();
-//						}
-//						client.keepAlive();
-//					}
-//				}
-//			}
-//		}).start();
-	}
-	
 
 	public void connect() {
 		try {

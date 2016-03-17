@@ -1,4 +1,4 @@
-package com.synaptix.toast.swing.agent.runtime.web;
+package com.synaptix.toast.swing.agent.runtime.web.interpret;
 
 import java.util.HashMap;
 import java.util.Map;

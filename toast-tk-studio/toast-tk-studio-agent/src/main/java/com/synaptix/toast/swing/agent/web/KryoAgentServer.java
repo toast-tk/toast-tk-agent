@@ -12,7 +12,7 @@ import com.synaptix.toast.core.net.request.InitInspectionRequest;
 import com.synaptix.toast.core.net.request.PoisonPill;
 import com.synaptix.toast.core.net.response.WebRecordResponse;
 
-public class KryoAgentServer {
+public class KryoAgentServer implements IAgentServer{
 
 	private static final Logger LOG = LogManager.getLogger(KryoAgentServer.class);
 	private final Server server;
