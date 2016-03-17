@@ -13,16 +13,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.vertx.java.core.Handler;
-import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.http.HttpServerRequest;
 import org.vertx.java.core.http.RouteMatcher;
 import org.vertx.java.platform.Verticle;
 
-import com.google.gson.Gson;
-import com.synaptix.toast.core.agent.interpret.WebEventRecord;
 import com.synaptix.toast.core.annotation.craft.FixMe;
 import com.synaptix.toast.swing.agent.tray.SysTrayHook;
-import com.synaptix.toast.swing.agent.web.record.WebRecorder;
 
 @FixMe(todo = "ensure we have firefow browser installed, use a factory")
 public class RestRecorderService extends Verticle {
@@ -30,27 +26,15 @@ public class RestRecorderService extends Verticle {
 	private static final Logger LOG = LogManager.getLogger(RestRecorderService.class);
 
 	private WebDriver driver;
-
 	private boolean isStarted;
-
 	private Thread thread;
-
-	private static final String PATH = "/record";
-
 	private KryoAgentServer server;
-
-	private WebRecorder recorder;
-
-	private void processEvent(WebEventRecord record) {
-		recorder.append(record);
-	}
-
+	
 	@Override
 	public void start() {
 		LOG.info("Starting..");
 		SysTrayHook.init();
 		RouteMatcher matcher = new RouteMatcher();
-		final Gson gson = new Gson();
 		matcher.options("/record/event", new Handler<HttpServerRequest>() {
 			@Override
 			public void handle(HttpServerRequest req) {
@@ -59,24 +43,8 @@ public class RestRecorderService extends Verticle {
 				req.response().setStatusCode(200).end();
 			}
 		});
-		matcher.post(PATH + "/event", new Handler<HttpServerRequest>() {
-
-			@Override
-			public void handle(HttpServerRequest req) {
-				req.bodyHandler(new Handler<Buffer>() {
-					@Override
-					public void handle(Buffer buffer) {
-						String eventJson = buffer.toString();
-						WebEventRecord eventRecord = gson.fromJson(eventJson,
-								WebEventRecord.class);
-						RestRecorderService.this.processEvent(eventRecord);
-					}
-				});
-				req.response().headers().add("Access-Control-Allow-Origin", "*");
-				req.response().setStatusCode(200).end();
-			}
-		});
-		matcher.get(PATH + "/ping", new Handler<HttpServerRequest>() {
+		matcher.post("/record/event", new RecordHandler(this));
+		matcher.get("/record/ping", new Handler<HttpServerRequest>() {
 			@Override
 			public void handle(HttpServerRequest req) {
 				LOG.info("Alive ping check!");
@@ -84,7 +52,7 @@ public class RestRecorderService extends Verticle {
 				req.response().setStatusCode(200).end();
 			}
 		});
-		matcher.get(PATH + "/stop", new StopHandler(this));
+		matcher.get("/record/stop", new StopHandler(this));
 		try{
 			String toastHome = System.getenv("TOAST_HOME");
 			
@@ -97,7 +65,6 @@ public class RestRecorderService extends Verticle {
 			//PLAIN ONE
 			vertx.createHttpServer().requestHandler(matcher).listen(4444);
 			server = new KryoAgentServer(this);
-			recorder = new WebRecorder(server);
 			LOG.info("Started !");
 		}catch(Exception e){
 			LOG.error(e);
@@ -183,4 +150,5 @@ public class RestRecorderService extends Verticle {
 	public KryoAgentServer getServer() {
 		return server;
 	}
+	
 }

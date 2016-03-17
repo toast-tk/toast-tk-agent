@@ -3,6 +3,9 @@ package com.synaptix.toast.swing.agent.web.record;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.common.collect.ImmutableList;
 import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
 import com.synaptix.toast.core.agent.interpret.WebEventRecord;
@@ -10,6 +13,7 @@ import com.synaptix.toast.swing.agent.web.KryoAgentServer;
 
 public class WebRecorder {
 
+	private static final Logger LOG = LogManager.getLogger(WebRecorder.class);
 	private EventStackGobbler currentEventStackGobbler;
 	private KryoAgentServer server;
 	private List<WebEventRecord> liveRecordedStepsBuffer;
@@ -63,7 +67,7 @@ public class WebRecorder {
 			liveExplore(liveRecordedStepsBuffer);
 		}
 		catch(Exception e) {
-			System.err.println(e.getMessage());
+			LOG.error(e);
 		}		
 	}
 

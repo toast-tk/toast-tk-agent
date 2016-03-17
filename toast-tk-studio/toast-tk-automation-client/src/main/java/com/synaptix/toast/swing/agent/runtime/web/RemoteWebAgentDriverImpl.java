@@ -64,6 +64,7 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 			public void onResponseReceived(
 				Object object) {
 				System.out.println("Disconnected !");
+				connect();
 			}
 		});
 	}
@@ -71,7 +72,7 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 	private String buildFormat(
 		WebRecordResponse response) {
 			final WebEventRecord eventRecord = response.value;
-			IActionInterpret interpret = InterpretationProvider.getSentenceBuilder(eventRecord.type);
+			IActionInterpret interpret = InterpretationProvider.getSentenceBuilder(eventRecord.component);
 			return interpret == null ? null : interpret.getSentence(eventRecord);
 	}
 	

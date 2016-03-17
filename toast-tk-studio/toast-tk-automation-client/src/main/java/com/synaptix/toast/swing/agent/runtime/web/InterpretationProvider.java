@@ -3,6 +3,8 @@ package com.synaptix.toast.swing.agent.runtime.web;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 
 public class InterpretationProvider {
 	
@@ -12,8 +14,10 @@ public class InterpretationProvider {
 	
 	{
 		map = new HashMap<String, IActionInterpret>();
-		map.put("click", new WebClickInterpret());
-		map.put("keypress", new KeypressInterpret());
+		map.put("a", new WebClickInterpret());
+		map.put("select", new WebClickInterpret());
+		map.put("button", new WebClickInterpret());
+		map.put("input", new KeypressInterpret());
 	}
 	
 	public static InterpretationProvider getInstance(){
@@ -27,6 +31,9 @@ public class InterpretationProvider {
 
 	private IActionInterpret getInterpretFor(
 		String type) {
+		if(type != null && type.contains(":")){
+			type = StringUtils.split(type, ":")[0];
+		}
 		return map.get(type);
 	}
 }
