@@ -32,9 +32,9 @@ public class WebConfigProvider implements Provider<WebConfig> {
 			}
 		}
 		webConfig = new WebConfig();
-		String toastWebPropertyDefaultValue = "default value of Web Property/Fixe me";
-		webConfig.setWebInitRecordingUrl(p.getProperty(Property.TOAST_TEST_WEB_INIT_RECORDING_URL, toastWebPropertyDefaultValue));
+		webConfig.setWebInitRecordingUrl(p.getProperty(Property.TOAST_TEST_WEB_INIT_RECORDING_URL, "url to record"));
 		webConfig.setChromeDriverPath(p.getProperty(Property.TOAST_CHROMEDRIVER_PATH, "ChromeDriver Path"));
+		webConfig.setWebAppUrl(p.getProperty(Property.TOAST_TEST_WEB_APP_URL, "Toast WebApp url"));
 	}
 
 	@Override

@@ -57,6 +57,44 @@ public class MongoRepositoryCacheWrapper {
 		container.rows.add(impl);
 		return impl.name;
 	}
+	
+	public String find(
+			RepositoryImpl container,
+			String type,
+			String locator,
+			String name) {
+			for(RepositoryImpl repImpl : cache) {
+				if(repImpl.getName().equals(container.getName())) {
+					if(repImpl.rows != null) {
+						for(ElementImpl element : repImpl.rows) {
+							if(element.locator.equalsIgnoreCase(locator.toLowerCase())) {
+								return "".equals(element.name) || element.name == null ? element.locator : element.name;
+							}
+						}
+					}
+				}
+			}
+			ElementImpl impl = extractElement(type, locator, name);
+			container.rows.add(impl);
+			return impl.name;
+		}
+	
+	private ElementImpl extractElement(
+			String type,
+			String locator, 
+			String name) {
+			ElementImpl impl = new ElementImpl();
+			impl.locator = locator;
+			if(locator.contains(":")) {
+				impl.name = locator.split(":")[1];
+			}
+			else {
+				impl.name = name == null ? type + "-" + UUID.randomUUID().toString() : name;
+			}
+			impl.name = formatLabel(impl.name);
+			impl.type = type;
+			return impl;
+		}
 
 	private ElementImpl extractElement(
 		String type,
@@ -75,7 +113,7 @@ public class MongoRepositoryCacheWrapper {
 	}
 
 	public RepositoryImpl findContainer(
-		String lastKnownContainer) {
+		String lastKnownContainer, String type) {
 		lastKnownContainer = formatLabel(lastKnownContainer);
 		for(RepositoryImpl repImpl : cache) {
 			if(repImpl.getName().equals(lastKnownContainer)) {
@@ -84,7 +122,7 @@ public class MongoRepositoryCacheWrapper {
 		}
 		RepositoryImpl repImpl = new RepositoryImpl();
 		repImpl.setName(lastKnownContainer);
-		repImpl.type = "swing page";
+		repImpl.type = type;
 		cache.add(repImpl);
 		return repImpl;
 	}

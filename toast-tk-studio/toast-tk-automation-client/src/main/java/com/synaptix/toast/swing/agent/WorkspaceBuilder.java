@@ -81,8 +81,6 @@ public class WorkspaceBuilder implements IWorkspaceBuilder {
 
 	private void createHomeDirectories(final Config config, String workSpaceDir) {
 		new File(workSpaceDir).mkdir();
-		new File(config.getPluginDir()).mkdir();
-		new File(workSpaceDir + "/log").mkdir();
 	}
 
 	private void initAndStoreProperties(final Config config, final WebConfig webConfig) throws IOException {

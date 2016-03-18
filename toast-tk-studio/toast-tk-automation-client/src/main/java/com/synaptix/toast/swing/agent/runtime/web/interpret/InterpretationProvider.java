@@ -5,28 +5,29 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.inject.Inject;
+import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
+
 
 public class InterpretationProvider {
 	
-	private static InterpretationProvider INSTANCE = new InterpretationProvider();
+	private MongoRepositoryCacheWrapper mongoRepoManager;
+
+	private Map<String, IActionInterpret> map;
 	
-	private static Map<String, IActionInterpret> map;
-	
-	{
+	@Inject
+	InterpretationProvider(MongoRepositoryCacheWrapper mongoRepoManager){
+		this.mongoRepoManager = mongoRepoManager;
 		map = new HashMap<String, IActionInterpret>();
-		map.put("a", new WebClickInterpret());
-		map.put("select", new WebClickInterpret());
-		map.put("button", new WebClickInterpret());
-		map.put("input", new KeypressInterpret());
-	}
-	
-	public static InterpretationProvider getInstance(){
-		return INSTANCE;
+		map.put("a", new WebClickInterpret(mongoRepoManager));
+		map.put("select", new WebClickInterpret(mongoRepoManager));
+		map.put("button", new WebClickInterpret(mongoRepoManager));
+		map.put("text", new KeypressInterpret(mongoRepoManager));
 	}
 
-	public static IActionInterpret getSentenceBuilder(
+	public IActionInterpret getSentenceBuilder(
 		String type) {
-		return getInstance().getInterpretFor(type);
+		return getInterpretFor(type);
 	}
 
 	private IActionInterpret getInterpretFor(

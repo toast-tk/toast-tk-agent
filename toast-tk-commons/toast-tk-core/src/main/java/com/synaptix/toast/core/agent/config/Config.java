@@ -4,17 +4,16 @@ import java.io.File;
 
 public class Config {
 
-	public static final String TOAST_HOME_PROPERTY = "toast.home";
 
-	public static final String TOAST_PROPERTIES_FILE = System.getProperty(TOAST_HOME_PROPERTY) + File.separatorChar + "toast.properties";
+	public static final String TOAST_PROPERTIES_FILE =System.getProperty("user.home") + "/.toast" + File.separatorChar + "toast.properties";
 
-	public static final String TOAST_PLUGIN_DIR = System.getProperty(TOAST_HOME_PROPERTY) + File.separatorChar + "plugins";
+	public static final String TOAST_PLUGIN_DIR = System.getProperty("user.home") + "/.toast"+ File.separatorChar + "plugins";
 
-	public static final String TOAST_RUNTIME_DIR = System.getProperty(TOAST_HOME_PROPERTY) + File.separatorChar + "runtime";
+	public static final String TOAST_RUNTIME_DIR = System.getProperty("user.home") + "/.toast" + File.separatorChar + "runtime";
 
-	public static final String TOAST_LOG_DIR = System.getProperty(TOAST_HOME_PROPERTY) + File.separatorChar + "log";
+	public static final String TOAST_LOG_DIR =System.getProperty("user.home") + "/.toast" + File.separatorChar + "log";
 	
-	public static final String TOAST_HOME_DIR = System.getProperty(TOAST_HOME_PROPERTY) + File.separatorChar;
+	public static final String TOAST_HOME_DIR = System.getProperty("user.home") + "/.toast" + File.separatorChar;
 	
 	private String mongoServer;
 
@@ -58,7 +57,7 @@ public class Config {
 	}
 
 	public String getToastHome() {
-		return System.getProperty(TOAST_HOME_PROPERTY);
+		return System.getProperty("user.home") + "/.toast";
 	}
 
 	public String getLogDir() {

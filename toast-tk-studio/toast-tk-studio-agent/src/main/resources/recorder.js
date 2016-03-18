@@ -43,6 +43,8 @@ function recorder(){
 		ev = convertEvent(event);
 		ev.value = getTargetValue(event.target);
 		ev.component=getTargetComponent(event.target);
+		ev.parent=document.location.hostname.replace(/\\./g, '_');
+		ev.componentName=getTargetComponentName(event.target);
 		setTimeout(publishEvent(ev), 10);
 		if(processing) {
 			eventQueue.push(ev);
@@ -51,9 +53,17 @@ function recorder(){
 		}
 	};
 	
+	
+	function getTargetComponentName(node){
+		return node.getAttribute('aria-label') 
+		|| node.getAttribute('alt') 
+		|| node.getAttribute('title') 
+		|| node.getAttribute('name');
+	};
+	
 	function getTargetComponent(node){
 		if(node.nodeName.toLowerCase() === 'input'){
-			return 'input:'+ (node.getAttribute('type'));
+			return node.getAttribute('type');
 		}
 		return node.nodeName.toLowerCase();	
 	};

@@ -22,6 +22,7 @@ import com.synaptix.toast.core.runtime.ITCPClient;
 import com.synaptix.toast.core.runtime.ITCPResponseReceivedHandler;
 import com.synaptix.toast.dao.domain.api.test.ITestResult;
 import com.synaptix.toast.swing.agent.guice.StudioEventBus;
+import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
 import com.synaptix.toast.swing.agent.runtime.web.interpret.IActionInterpret;
 import com.synaptix.toast.swing.agent.runtime.web.interpret.InterpretationProvider;
 
@@ -37,14 +38,18 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 
 	private EventBus eventBus;
 
+	private InterpretationProvider interpretationProvider;
+
 	@Inject
 	public RemoteWebAgentDriverImpl(
 		@Named("host") String host, 
-		@StudioEventBus EventBus eventBus) {
+		@StudioEventBus EventBus eventBus,
+		InterpretationProvider interpretationProvider) {
 		this.client = new KryoTCPClient();
 		this.started = false;
 		this.host = host;
 		this.eventBus = eventBus;
+		this.interpretationProvider = interpretationProvider;
 		initListeners();
 	}
 
@@ -57,7 +62,7 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 					WebRecordResponse result = (WebRecordResponse) object;
 					String command = buildFormat(result);
 					eventBus.post(new InterpretedEvent(command, 0L));
-					System.out.println("Received: " + object);
+					LOG.info("Received: " + object);
 				}
 			}
 		});
@@ -65,8 +70,7 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 			@Override
 			public void onResponseReceived(
 				Object object) {
-				System.out.println("Disconnect received !");
-				connect();
+				LOG.info("Disconnect received !");
 			}
 		});
 	}
@@ -74,7 +78,7 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 	private String buildFormat(
 		WebRecordResponse response) {
 			final WebEventRecord eventRecord = response.value;
-			IActionInterpret interpret = InterpretationProvider.getSentenceBuilder(eventRecord.component);
+			IActionInterpret interpret = interpretationProvider.getSentenceBuilder(eventRecord.component);
 			return interpret == null ? null : interpret.getSentence(eventRecord);
 	}
 	
@@ -85,6 +89,20 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 			client.connect(300000, host, CommonIOUtils.AGENT_TCP_PORT);
 			if(client.isConnected()){
 				this.started = true;
+				new Thread(new Runnable(){
+					@Override
+					public void run() {
+						while(started){
+							try {
+								Thread.sleep(100);
+								client.keepAlive();
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}
+				}).start();
 			}else{
 				this.started = false;
 			}

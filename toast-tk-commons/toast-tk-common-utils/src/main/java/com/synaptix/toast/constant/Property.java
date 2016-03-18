@@ -56,4 +56,7 @@ public class Property {
 	public static final String TOAST_TEST_WEB_INIT_RECORDING_URL = "toast.web.recording.url";
 
 	public static final String TOAST_CHROMEDRIVER_PATH = "toast.chromedriver.path";
+	
+	public static final String TOAST_TEST_WEB_APP_URL = "toast.webapp.url";
+
 }

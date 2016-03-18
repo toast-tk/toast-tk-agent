@@ -33,6 +33,7 @@ import com.synaptix.toast.swing.agent.interpret.LiveRedPlayEventInterpreter;
 import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
 import com.synaptix.toast.swing.agent.runtime.web.RemoteWebAgentDriverImpl;
 import com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot;
+import com.synaptix.toast.swing.agent.runtime.web.interpret.InterpretationProvider;
 
 //FIXME: split the class in 2: distinguer le recorder web du recordeur swing !
 public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl implements ISwingAutomationClient {
@@ -50,8 +51,9 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 	private WebConfig webConfig;
 
 	private boolean isWebMode;
+	
+	private InterpretationProvider interpretationProvider;
 
-	private final static String FAT_JAR_AGENT = "agent-1.0-fat.jar";
 
 	public StudioRemoteSwingAgentDriverImpl(String host) throws IOException {
 		super(host);
@@ -59,10 +61,12 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 
 	@Inject
 	public StudioRemoteSwingAgentDriverImpl(final @StudioEventBus EventBus eventBus, final Config config,
-			final WebConfig webConfig, final MongoRepositoryCacheWrapper mongoRepoManager) throws IOException {
+			final WebConfig webConfig, final MongoRepositoryCacheWrapper mongoRepoManager,
+			 InterpretationProvider interpretationProvider) throws IOException {
 		this("localhost");
 		this.eventBus = eventBus;
 		this.webConfig = webConfig;
+		this.interpretationProvider = interpretationProvider;
 		client.addConnectionHandler(new ITCPResponseReceivedHandler() {
 			@Override
 			public void onResponseReceived(Object object) {
@@ -172,7 +176,7 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 		LOG.info("Terminating inspection server - Poison Pill !");
 		client.sendRequest(new PoisonPill());
 		if (webDriver == null) {
-			webDriver = new RemoteWebAgentDriverImpl("localhost", eventBus);
+			webDriver = new RemoteWebAgentDriverImpl("localhost", eventBus, interpretationProvider);
 			webDriver.start("localhost");
 			if (webDriver.isConnected()) {
 				webDriver.process(new PoisonPill());
@@ -224,85 +228,18 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 	public void startWebRecording(String url) {
 		if (this.isWebMode) {
 			initRemoteWebRecordingAgent();
-			openBrowserWithRecordUrl(url);
 		}
-	}
-
-	private void openBrowserWithRecordUrl(String url) {
-		InitInspectionRequest request = new InitInspectionRequest();
-		request.text = url != null ? url : this.webConfig.getWebInitRecordingUrl();
-		webDriver.process(request);
 	}
 
 	private void initRemoteWebRecordingAgent() {
 		if (this.webDriver == null) {
-			webDriver = new RemoteWebAgentDriverImpl("localhost", eventBus);
+			webDriver = new RemoteWebAgentDriverImpl("localhost", eventBus, interpretationProvider);
 		}
 		if (!this.webDriver.isConnected()) {
 			webDriver.start("localhost");
-			if (!webDriver.isStarted()) {
-				runWebAgentAndLaunchBrowser();
-			} else {
-				launchBrowser();
-			}
 		}
 	}
 
-	private void launchBrowser() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				boolean res = WebAgentBoot.ping(eventBus);
-				if (res) {
-					InitInspectionRequest request = new InitInspectionRequest();
-					request.text = webConfig.getWebInitRecordingUrl();
-					webDriver.process(request);
-					LOG.info("Strating to record web actions !");
-				}
-			}
-		}).start();
-	}
-
-	private void runWebAgentAndLaunchBrowser() {
-		String toastHome = System.getenv("TOAST_HOME");
-		String agentDir = toastHome + SystemUtils.FILE_SEPARATOR + "addons" + SystemUtils.FILE_SEPARATOR;
-		LOG.info("Loading web agent from: " + agentDir + FAT_JAR_AGENT);
-		LOG.info("Java Home: " + SystemUtils.JAVA_HOME);
-		Thread thread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					String line;
-					String chromeDriverPathOption = "-Dtoast.chromedriver.path="+webConfig.getChromeDriverPath();
-					String debug = "-Xdebug";
-					String debugInfo  ="-Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n";
-					String[] args = new String[] { 
-							"java",
-							chromeDriverPathOption, 
-							debug,
-							debugInfo,
-							"-jar", 
-							agentDir + FAT_JAR_AGENT 
-					};
-					Process p = Runtime.getRuntime().exec(args);
-					BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-					while ((line = in.readLine()) != null) {
-						LOG.info(line);
-					}
-					in.close();
-				} catch (IOException e) {
-					LOG.error(e);
-				}
-			}
-		});
-		thread.start();
-		try {
-			Thread.sleep(1000);
-			launchBrowser();
-		} catch (InterruptedException e) {
-			LOG.error(e);
-		}
-	}
 
 	@Override
 	public void disconnect() {

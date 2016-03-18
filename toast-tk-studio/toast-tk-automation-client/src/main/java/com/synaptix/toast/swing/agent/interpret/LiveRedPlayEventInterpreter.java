@@ -56,7 +56,7 @@ public class LiveRedPlayEventInterpreter extends DefaultEventInterpreter {
 	@Override
 	public String onClick(AWTCapturedEvent eventObject) {
 		RepositoryImpl container = mongoRepoManager
-				.findContainer(eventObject.container);
+				.findContainer(eventObject.container, "swing page");
 		String label = mongoRepoManager.find(container,
 				convertToKnowType(eventObject.componentType),
 				eventObject.componentName);
@@ -79,7 +79,7 @@ public class LiveRedPlayEventInterpreter extends DefaultEventInterpreter {
 	@Override
 	public String onKeyInput(AWTCapturedEvent eventObject) {
 		RepositoryImpl container = mongoRepoManager
-				.findContainer(eventObject.container);
+				.findContainer(eventObject.container, "swing page");
 		String label = mongoRepoManager.find(container,
 				convertToKnowType(eventObject.componentType),
 				eventObject.componentName);
@@ -118,7 +118,7 @@ public class LiveRedPlayEventInterpreter extends DefaultEventInterpreter {
 	@Override
 	public String onTableClick(AWTCapturedEvent eventObject) {
 		RepositoryImpl container = mongoRepoManager
-				.findContainer(eventObject.container);
+				.findContainer(eventObject.container, "swing page");
 		String label = mongoRepoManager.find(container,
 				convertToKnowType(eventObject.componentType),
 				eventObject.componentLocator);
@@ -136,7 +136,7 @@ public class LiveRedPlayEventInterpreter extends DefaultEventInterpreter {
 	@Override
 	public String onComboBoxClick(AWTCapturedEvent eventObject) {
 		RepositoryImpl container = mongoRepoManager
-				.findContainer(eventObject.container);
+				.findContainer(eventObject.container, "swing page");
 		String label = mongoRepoManager.find(container,
 				convertToKnowType(eventObject.componentType),
 				eventObject.componentName);

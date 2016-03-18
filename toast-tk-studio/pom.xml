@@ -22,6 +22,8 @@
 	    	- Swing Agent (the Studio)
 	</description>
 	<modules>
+		<module>core</module>
+		<module>twinkle</module>
 		<module>toast-tk-automation-plugin-loader</module>
 		<module>toast-tk-automation-server-plugin</module>
 		<module>toast-tk-studio-agent</module>

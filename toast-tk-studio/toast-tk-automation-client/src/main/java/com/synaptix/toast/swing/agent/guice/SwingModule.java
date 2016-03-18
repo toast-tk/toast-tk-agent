@@ -18,6 +18,7 @@ import com.synaptix.toast.swing.agent.StudioApplicationImpl;
 import com.synaptix.toast.swing.agent.WorkspaceBuilder;
 import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
 import com.synaptix.toast.swing.agent.runtime.StudioRemoteSwingAgentDriverImpl;
+import com.synaptix.toast.swing.agent.runtime.web.interpret.InterpretationProvider;
 import com.synaptix.toast.swing.agent.ui.AdvancedSettingsPanel;
 import com.synaptix.toast.swing.agent.ui.CorpusPanel;
 import com.synaptix.toast.swing.agent.ui.HeaderPanel;
@@ -49,7 +50,7 @@ public class SwingModule extends AbstractModule {
 		bind(EventBus.class).annotatedWith(EngineEventBus.class).to(EventBus.class).in(Singleton.class);
 		bind(EventBus.class).annotatedWith(StudioEventBus.class).to(EventBus.class).in(Singleton.class);
 		bind(IStudioAppContext.class).to(StudioAppContext.class).in(Singleton.class);
-		
+		bind(InterpretationProvider.class).in(Singleton.class);
 		install(new SwingWidgetModule());
 	}
 }

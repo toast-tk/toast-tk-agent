@@ -69,6 +69,8 @@
 									tofile="${project.build.directory}/classes/${toast.vertx.module}/server-keystore.jks" />
 								<copy file="${project.build.directory}/classes/toast.png"
 									tofile="${project.build.directory}/classes/${toast.vertx.module}/toast.png" />
+								<copy file="${project.build.directory}/classes/ToastLogo.png"
+									tofile="${project.build.directory}/classes/${toast.vertx.module}/ToastLogo.png" />
 							</tasks>
 						</configuration>
 					</execution>
@@ -90,24 +92,6 @@
 						<goals>
 							<goal>fatJar</goal>
 						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>deploy</id>
-						<phase>install</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<tasks>
-								<copy file="${project.build.directory}/agent-1.0-fat.jar"
-									tofile="/Users/blackbox/.toast/addons/agent-1.0-fat.jar" />
-							</tasks>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -192,5 +176,22 @@
 			<groupId>com.esotericsoftware</groupId>
 			<artifactId>kryonet</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>ch.swingfx</groupId>
+			<artifactId>twinkle</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>4.0</version>
+		</dependency>
+
+
 	</dependencies>
 </project>
