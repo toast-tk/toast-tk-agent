@@ -96,12 +96,6 @@ public class RunScriptActionListener implements ActionListener {
 										}
 									});
 							}
-							catch(IllegalAccessException e) {
-								e.printStackTrace();
-							}
-							catch(ClassNotFoundException e) {
-								e.printStackTrace();
-							}
 							catch(IOException e) {
 								e.printStackTrace();
 							}
