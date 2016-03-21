@@ -178,6 +178,8 @@ public class DownloadScriptsMojo extends AbstractMojo {
         String jsonResponse = RestUtils.getJsonResponseAsString(uri, httpClient);
         Set<Driver> drivers = new HashSet<DownloadScriptsMojo.Driver>();
         JSONArray jsonResult;
+        File scenariiOutputFolder = new File(outputResourceDirectory.getAbsolutePath() + File.separator + "scenarii");
+        scenariiOutputFolder.mkdir();
         try {
             jsonResult = new JSONArray(jsonResponse);
             getLog().info("Copying " + jsonResult.length() + " scenarios");
@@ -186,6 +188,7 @@ public class DownloadScriptsMojo extends AbstractMojo {
                 String scenario = jsonResult.getString(i);
                 Pattern pattern1 = Pattern.compile("(scenario driver):(\\w*)");
                 Pattern pattern2 = Pattern.compile("(\\|\\| scenario \\|\\| )(\\w*)( \\|\\|)");
+                Pattern pattern3 = Pattern.compile("(Name):(\\w*)");
                 Matcher matcher = pattern1.matcher(scenario);
                 String driverName = "";
                 while (matcher.find()) {
@@ -206,7 +209,14 @@ public class DownloadScriptsMojo extends AbstractMojo {
                 if (addDriver) {
                     drivers.add(e);
                 }
+                matcher = pattern3.matcher(scenario);
+                String scenarioName = "";
+                while (matcher.find()) {
+                	scenarioName = matcher.group(2);
+                }
                 builder.append(scenario);
+                File scenarioFile = new File(scenariiOutputFolder, scenarioName + ".md");
+                writeFile(scenarioFile, scenario);
             }
             File scenarioImplFile = new File(outputResourceDirectory, "toast_imported_scenario.txt");
             writeFile(scenarioImplFile, builder.toString());
