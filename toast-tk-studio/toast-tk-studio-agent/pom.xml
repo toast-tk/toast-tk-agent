@@ -159,4 +159,22 @@
 			<artifactId>guice</artifactId>
 		</dependency>
 	</dependencies>
+	<profiles>
+		<profile>
+			<id>DEPLOY_NEXUS_SYNAPTIX</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<distributionManagement>
+				<repository>
+					<id>synaptix-releases-repository</id>
+					<url>http://nexus.talanlabs.com/content/repositories/releases/</url>
+				</repository>
+				<snapshotRepository>
+					<id>synaptix-snapshots-repository</id>
+					<url>http://nexus.talanlabs.com/content/repositories/snapshots/</url>
+				</snapshotRepository>
+			</distributionManagement>
+		</profile>
+	</profiles>
 </project>
