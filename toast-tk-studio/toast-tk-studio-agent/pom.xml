@@ -145,9 +145,9 @@
 			<artifactId>kryonet</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>ch.swingfx</groupId>
+			<groupId>com.synaptix.toast</groupId>
 			<artifactId>twinkle</artifactId>
-			<version>1.0.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
