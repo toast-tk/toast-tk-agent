@@ -27,6 +27,6 @@
 		<module>toast-tk-automation-plugin-loader</module>
 		<module>toast-tk-automation-server-plugin</module>
 		<module>toast-tk-studio-agent</module>
-		<module>toast-tk-automation-client</module>
+<!-- 		<module>toast-tk-automation-client</module> -->
 	</modules>
 </project>
