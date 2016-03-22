@@ -17,30 +17,15 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>ch.swingfx</groupId>
+  <parent>
+    <groupId>com.synaptix.toast</groupId>
+    <artifactId>toast-tk</artifactId>
+    <version>1.3.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  
   <artifactId>core</artifactId>
-  <version>1.0.0</version>
   <packaging>jar</packaging>
+  <name>twinkle-core</name>
 
-  <name>core</name>
-  <url>http://swingfx.ch</url>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
- <build>
-  	<plugins>
-  		<plugin>
-  			<groupId>org.apache.maven.plugins</groupId>
-  			<artifactId>maven-compiler-plugin</artifactId>
-  			<version>2.3.2</version>
-  			<configuration>
-  				<source>1.8</source>
-  				<target>1.8</target>
-  			</configuration>
-  		</plugin>
-  	</plugins>
-  </build>
-  <dependencies>
-  </dependencies>
 </project>
