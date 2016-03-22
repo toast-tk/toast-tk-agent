@@ -16,7 +16,6 @@ public class ConfigProvider implements Provider<Config> {
 
 	public ConfigProvider() {
 		super();
-		initConfig();
 	}
 
 	private void initConfig() {
@@ -55,6 +54,7 @@ public class ConfigProvider implements Provider<Config> {
 
 	@Override
 	public Config get() {
+		initConfig();
 		return config;
 	}
 }

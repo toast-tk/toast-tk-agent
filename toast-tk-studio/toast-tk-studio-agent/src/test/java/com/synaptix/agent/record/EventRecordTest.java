@@ -38,7 +38,7 @@ public class EventRecordTest {
 	
 	@Test
 	public void testButtonRecordEvent(){
-		WebEventRecord record_click = builder.component("button").target(".button").ofType("blur").withValue("Click me").build();
+		WebEventRecord record_click = builder.component("button").target(".button").ofType("click").withValue("Click me").build();
 		webRecorder.append(record_click);
 		Assert.assertEquals("Click me", server.event.getValue());
 	}

@@ -17,7 +17,6 @@ public class WebConfigProvider implements Provider<WebConfig> {
 
 	public WebConfigProvider() {
 		super();
-		initConfig();
 	}
 
 	private void initConfig() {
@@ -39,6 +38,7 @@ public class WebConfigProvider implements Provider<WebConfig> {
 
 	@Override
 	public WebConfig get() {
+		initConfig();
 		return webConfig;
 	}
 }

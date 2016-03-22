@@ -13,7 +13,7 @@ public class ButtonClickEventStackGobbler extends EventStackGobbler {
 		boolean isButton = (component.equals("button") 
 				|| component.equals("submit") 
 				|| component.equals("radio"));
-		return "blur".equals(capturedEvent.getType()) && isButton;
+		return "click".equals(capturedEvent.getType()) && isButton;
 	}
 
 

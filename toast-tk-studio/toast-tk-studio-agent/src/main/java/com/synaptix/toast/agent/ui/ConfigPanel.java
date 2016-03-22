@@ -130,7 +130,7 @@ public class ConfigPanel extends JDialog {
 			properties.setProperty(entry.getKey(), entry.getValue().getText());
 		}
 		try {
-			properties.store(FileUtils.openOutputStream(propertyFile), "Saving !");
+			properties.store(FileUtils.openOutputStream(propertyFile), "Saved !");
 		}
 		catch(IOException e) {
 			LOG.warn("Could not save properties", e);

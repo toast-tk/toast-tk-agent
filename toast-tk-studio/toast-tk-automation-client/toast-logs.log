@@ -19718,3 +19718,24 @@ Sending 'GET' request to URL : http://localhost:4444/record/ping
 2016-03-18 16:14:19,129 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Received: com.synaptix.toast.core.net.response.WebRecordResponse@72a097b5
 2016-03-18 16:14:25,900 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Received: com.synaptix.toast.core.net.response.WebRecordResponse@643fb370
 2016-03-18 16:14:39,219 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Received: com.synaptix.toast.core.net.response.WebRecordResponse@6a6f8600
+2016-03-22 12:08:46,349 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Received: com.synaptix.toast.core.net.response.WebRecordResponse@7cc83c92
+2016-03-22 12:08:57,822 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Received: com.synaptix.toast.core.net.response.WebRecordResponse@4a735ed0
+2016-03-22 12:09:17,753 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Received: com.synaptix.toast.core.net.response.WebRecordResponse@3c3d4be6
+2016-03-22 12:09:19,933 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Received: com.synaptix.toast.core.net.response.WebRecordResponse@321e8ca9
+2016-03-22 12:09:22,504 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Received: com.synaptix.toast.core.net.response.WebRecordResponse@5f1ee979
+2016-03-22 12:09:27,611 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Received: com.synaptix.toast.core.net.response.WebRecordResponse@f4bb994
+2016-03-22 12:09:45,383 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Received: com.synaptix.toast.core.net.response.WebRecordResponse@59ffb1e0
+2016-03-22 12:10:04,542 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Disconnect received !
+2016-03-22 15:36:35,143 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Received: com.synaptix.toast.core.net.response.WebRecordResponse@f9442e4
+2016-03-22 15:36:56,017 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Disconnect received !
+2016-03-22 15:37:15,535 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] Disconnect received !
+2016-03-22 15:37:30,465 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [AWT-EventQueue-0] Disconnect received !
+2016-03-22 15:41:56,826 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Received: com.synaptix.toast.core.net.response.WebRecordResponse@5ebf50a6
+2016-03-22 15:42:04,178 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Received: com.synaptix.toast.core.net.response.WebRecordResponse@5f8d812e
+2016-03-22 15:42:08,987 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Received: com.synaptix.toast.core.net.response.WebRecordResponse@1d18b223
+2016-03-22 15:42:21,134 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Received: com.synaptix.toast.core.net.response.WebRecordResponse@28dfaeb3
+2016-03-22 15:42:32,323 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Received: com.synaptix.toast.core.net.response.WebRecordResponse@679ffb7e
+2016-03-22 15:42:39,659 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Received: com.synaptix.toast.core.net.response.WebRecordResponse@518206cc
+2016-03-22 15:42:45,316 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Received: com.synaptix.toast.core.net.response.WebRecordResponse@249bcf02
+2016-03-22 15:42:48,484 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Received: com.synaptix.toast.core.net.response.WebRecordResponse@7ac4a75a
+2016-03-22 15:44:09,336 INFO co.sy.to.sw.ag.ru.we.RemoteWebAgentDriverImpl [Client] Disconnect received !

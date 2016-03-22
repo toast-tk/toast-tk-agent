@@ -18,7 +18,7 @@ import ch.swingfx.twinkle.window.Positions;
 
 public class NotificationManager {
 
-	private static final Logger LOG = LogManager.getLogger(SysTrayHook.class);
+	private static final Logger LOG = LogManager.getLogger(MainApp.class);
 	
 	public static NotificationBuilder showMessage(String message) {
 		ImageIcon icon = new ImageIcon(RestRecorderService.class.getClassLoader().getResource("ToastLogo.png"));

@@ -23,23 +23,25 @@ import com.google.inject.Inject;
 import com.synaptix.toast.agent.web.RestRecorderService;
 import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.agent.config.Config;
+import com.synaptix.toast.core.agent.config.ConfigProvider;
 import com.synaptix.toast.core.agent.config.WebConfig;
+import com.synaptix.toast.core.agent.config.WebConfigProvider;
 
-public class SysTrayHook {
+public class MainApp {
 
-	private static final Logger LOG = LogManager.getLogger(SysTrayHook.class);
+	private static final Logger LOG = LogManager.getLogger(MainApp.class);
 	final static String PROPERTY_FILE = "/toast.web.properties";
 	private RestRecorderService service;
 	private File toastWebPropertiesFile;
-	private Config config;
-	private WebConfig webConfig;
+	private ConfigProvider configProvider;
+	private WebConfigProvider webConfigProvider;
 	private final Properties webProperties;
 
 	
 	@Inject
-	public SysTrayHook(Config config,WebConfig webConfig){
-		this.config = config;
-		this.webConfig = webConfig;
+	public MainApp(ConfigProvider config,WebConfigProvider webConfig){
+		this.configProvider = config;
+		this.webConfigProvider = webConfig;
 		this.webProperties = new Properties();
 		initWorkspace();
 		init();
@@ -47,9 +49,11 @@ public class SysTrayHook {
 
 	private void initWorkspace() {
 		try {
+			Config config = configProvider.get();
+			WebConfig webConfig = webConfigProvider.get();
 			final String workSpaceDir = config.getToastHome();
-			LOG.info("creating workspace directory at: " +workSpaceDir );
-			createHomeDirectories(config, workSpaceDir);
+			LOG.info("creating workspace directory at: " + workSpaceDir );
+			createHomeDirectories(workSpaceDir);
 			this.toastWebPropertiesFile = new File(workSpaceDir + PROPERTY_FILE);
 			if (!toastWebPropertiesFile.exists()) {
 				toastWebPropertiesFile.createNewFile();
@@ -62,7 +66,7 @@ public class SysTrayHook {
 	}
 	
 
-	private void createHomeDirectories(final Config config, String workSpaceDir) {
+	private void createHomeDirectories(String workSpaceDir) {
 		new File(workSpaceDir).mkdir();
 	}
 
@@ -126,7 +130,7 @@ public class SysTrayHook {
 	ActionListener getStartListener(){
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	        	service.openRecordingBrowser(webConfig.getWebInitRecordingUrl());
+	        	service.openRecordingBrowser(webConfigProvider.get().getWebInitRecordingUrl());
 	        }
 	    };
 	    return listener;
@@ -152,11 +156,11 @@ public class SysTrayHook {
 	}
 
 	public WebConfig getWebConfig() {
-		return webConfig;
+		return webConfigProvider.get();
 	}
 
 	public Config getConfig() {
-		return config;
+		return configProvider.get();
 	}
 	
 	public void setService(RestRecorderService service){

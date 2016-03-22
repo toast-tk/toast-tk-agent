@@ -19,10 +19,10 @@ public class InterpretationProvider {
 	InterpretationProvider(MongoRepositoryCacheWrapper mongoRepoManager){
 		this.mongoRepoManager = mongoRepoManager;
 		map = new HashMap<String, IActionInterpret>();
-		map.put("a", new WebClickInterpret(mongoRepoManager));
-		map.put("select", new WebClickInterpret(mongoRepoManager));
-		map.put("button", new WebClickInterpret(mongoRepoManager));
-		map.put("text", new KeypressInterpret(mongoRepoManager));
+		map.put("a", new WebClickInterpret(this.mongoRepoManager));
+		map.put("select", new SelectInterpret(this.mongoRepoManager));
+		map.put("button", new WebClickInterpret(this.mongoRepoManager));
+		map.put("text", new KeypressInterpret(this.mongoRepoManager));
 	}
 
 	public IActionInterpret getSentenceBuilder(

@@ -12,9 +12,11 @@ public class RecordHandler implements Handler<HttpServerRequest>{
 	
 	final Gson gson = new Gson();
 	private WebRecorder recorder;
+	private RestRecorderService service;
 	
-	public RecordHandler(RestRecorderService service2) {
-		this.recorder = new WebRecorder(service2.getServer());
+	public RecordHandler(RestRecorderService service) {
+		this.recorder = new WebRecorder(service.getServer());
+		this.service = service;
 	}
 
 	@Override
@@ -24,6 +26,8 @@ public class RecordHandler implements Handler<HttpServerRequest>{
 			public void handle(Buffer buffer) {
 				String eventJson = buffer.toString();
 				WebEventRecord eventRecord = gson.fromJson(eventJson,WebEventRecord.class);
+				String pageName = service.getCurrentPageName() != null ? service.getCurrentPageName() : eventRecord.parent;
+				eventRecord.setParent(pageName);
 				processEvent(eventRecord);
 			}
 		});

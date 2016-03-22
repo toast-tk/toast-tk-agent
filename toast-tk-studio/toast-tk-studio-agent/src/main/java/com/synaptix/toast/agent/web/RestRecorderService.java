@@ -3,6 +3,8 @@ package com.synaptix.toast.agent.web;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.swing.JOptionPane;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.logging.log4j.LogManager;
@@ -21,7 +23,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.synaptix.toast.agent.guice.WebAgentModule;
 import com.synaptix.toast.agent.ui.NotificationManager;
-import com.synaptix.toast.agent.ui.SysTrayHook;
+import com.synaptix.toast.agent.ui.MainApp;
 import com.synaptix.toast.core.annotation.craft.FixMe;
 
 @FixMe(todo = "ensure we have firefow browser installed, use a factory")
@@ -33,14 +35,15 @@ public class RestRecorderService extends Verticle {
 	private boolean isStarted;
 	private Thread thread;
 	private IAgentServer server;
-	private SysTrayHook hook;
-	
+	private MainApp app;
+	private String currentPageName;
+	 
 	@Override
 	public void start() {
 		LOG.info("Starting..");
 		server = new KryoAgentServer(this);
 		Injector injector = Guice.createInjector(new WebAgentModule());
-		hook = injector.getInstance(SysTrayHook.class);
+		app = injector.getInstance(MainApp.class);
 		RouteMatcher matcher = new RouteMatcher();
 		matcher.options("/record/event", new Handler<HttpServerRequest>() {
 			@Override
@@ -61,7 +64,7 @@ public class RestRecorderService extends Verticle {
 		});
 		matcher.get("/record/stop", new StopHandler(this));
 		try{
-			String toastHome = hook.getConfig().getToastHome();
+			String toastHome = app.getConfig().getToastHome();
 			
 			//SECURE ONE
 			vertx.createHttpServer().requestHandler(matcher)
@@ -72,7 +75,7 @@ public class RestRecorderService extends Verticle {
 			//PLAIN ONE
 			vertx.createHttpServer().requestHandler(matcher).listen(4444);
 			
-			hook.setService(this);
+			app.setService(this);
 			LOG.info("Started !");
 			NotificationManager.showMessage("Web Agent - Active !").showNotification();
 		}catch(Exception e){
@@ -119,12 +122,13 @@ public class RestRecorderService extends Verticle {
 		executor.executeScript(recordingStatus);
 		LOG.info("Recorder injected !");
 		NotificationManager.showMessage("Web Recording - Ready !").showNotification();
+		currentPageName = JOptionPane.showInputDialog("Current Page Name :");
 	}
 
 	private WebDriver launchBrowser(String host) {
 		String chromeDriverPath = System.getProperty("toast.chromedriver.path");
 		LOG.info("ChromeDriverPath = " + chromeDriverPath);
-		System.setProperty("webdriver.chrome.driver", hook.getWebConfig().getChromeDriverPath());
+		System.setProperty("webdriver.chrome.driver", app.getWebConfig().getChromeDriverPath());
 		WebDriver driver = new ChromeDriver();
 		driver.get(host);
 		return driver;
@@ -161,4 +165,7 @@ public class RestRecorderService extends Verticle {
 		return server;
 	}
 	
+	public String getCurrentPageName(){
+		return currentPageName;
+	}
 }
