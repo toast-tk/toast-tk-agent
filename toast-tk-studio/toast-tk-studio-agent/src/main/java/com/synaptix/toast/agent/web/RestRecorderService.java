@@ -24,6 +24,7 @@ import com.google.inject.Injector;
 import com.synaptix.toast.agent.guice.WebAgentModule;
 import com.synaptix.toast.agent.ui.NotificationManager;
 import com.synaptix.toast.agent.ui.MainApp;
+import com.synaptix.toast.core.agent.interpret.WebEventRecord;
 import com.synaptix.toast.core.annotation.craft.FixMe;
 
 @FixMe(todo = "ensure we have firefow browser installed, use a factory")
@@ -121,8 +122,17 @@ public class RestRecorderService extends Verticle {
 		String recordingStatus = "window.document.body.setAttribute('recording','true');";
 		executor.executeScript(recordingStatus);
 		LOG.info("Recorder injected !");
+		publishNewPageState();
 		NotificationManager.showMessage("Web Recording - Ready !").showNotification();
 		currentPageName = JOptionPane.showInputDialog("Current Page Name :");
+	}
+
+	private void publishNewPageState() {
+		WebEventRecord record = new WebEventRecord();
+		record.setTarget(driver.getCurrentUrl());
+		record.setType("open");	
+		record.setComponent("open");
+		getServer().sendEvent(record);
 	}
 
 	private WebDriver launchBrowser(String host) {

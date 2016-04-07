@@ -35,7 +35,6 @@ import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
 import com.synaptix.toast.swing.agent.runtime.StudioScriptRunner;
 import com.synaptix.toast.swing.agent.runtime.SutRunnerAsExec;
 import com.synaptix.toast.swing.agent.ui.record.listener.OpenScenarioListener;
-import com.synaptix.toast.swing.agent.ui.record.listener.RunScriptActionListener;
 import com.synaptix.toast.swing.agent.ui.record.listener.ShareScenarioListener;
 import com.synaptix.toast.swing.agent.ui.record.listener.StartStopRecordListener;
 
@@ -136,7 +135,7 @@ public class SwingInspectionRecorderPanel extends JPanel {
 		this.openScenarioButton.addActionListener(new OpenScenarioListener(interpretedOutputArea));
 		this.startStopRecordButton.addActionListener(new StartStopRecordListener(recorder, startStopRecordButton));
 		this.saveScenarioButton.addActionListener(new  ShareScenarioListener(recorder, config, interpretedOutputArea, saveScenarioButton));
-		this.runButton.addActionListener(new RunScriptActionListener(recorder, interpretedOutputArea, runner, mongoRepoManager));
+		//this.runButton.addActionListener(new RunScriptActionListener(recorder, interpretedOutputArea, runner, mongoRepoManager));
 		this.recordTypeComboBox.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(

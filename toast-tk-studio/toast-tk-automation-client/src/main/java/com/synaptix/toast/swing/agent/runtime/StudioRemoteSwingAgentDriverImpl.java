@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
+import com.synaptix.toast.action.interpret.web.InterpretationProvider;
 import com.synaptix.toast.automation.driver.swing.RemoteSwingAgentDriverImpl;
 import com.synaptix.toast.core.agent.config.Config;
 import com.synaptix.toast.core.agent.config.WebConfig;
@@ -33,7 +34,6 @@ import com.synaptix.toast.swing.agent.interpret.LiveRedPlayEventInterpreter;
 import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
 import com.synaptix.toast.swing.agent.runtime.web.RemoteWebAgentDriverImpl;
 import com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot;
-import com.synaptix.toast.swing.agent.runtime.web.interpret.InterpretationProvider;
 
 //FIXME: split the class in 2: distinguer le recorder web du recordeur swing !
 public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl implements ISwingAutomationClient {
@@ -79,7 +79,7 @@ public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl
 				eventBus.post(new SeverStatusMessage(SeverStatusMessage.State.DISCONNECTED));
 			}
 		});
-		this.interpreter = new LiveRedPlayEventInterpreter(mongoRepoManager);
+		this.interpreter = new LiveRedPlayEventInterpreter(mongoRepoManager, config.getWebAppAddr(), config.getWebAppPort());
 	}
 
 	@Override

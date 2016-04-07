@@ -30,7 +30,7 @@ import com.sun.jersey.api.client.Client;
 import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.rest.RestUtils;
 
-@Mojo(name = "generate", defaultPhase = LifecyclePhase.GENERATE_RESOURCES, requiresDependencyResolution = ResolutionScope.COMPILE)
+@Mojo(name = "generate", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class DownloadScriptsMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "${basedir}/src/main/resources/settings", required = true)
@@ -62,8 +62,13 @@ public class DownloadScriptsMojo extends AbstractMojo {
         getLog().info("Toast Tk Maven Plugin - Connecting to -> " + host);
         try {
             String repository = RestUtils.downloadRepository(host + "/loadWikifiedRepository");
-            File scenarioImplFile = new File(outputResourceDirectory, "toast_imported_repository.txt");
+            File scenarioImplFile = new File(outputResourceDirectory, "toast_swing_repository.txt");
             writeFile(scenarioImplFile, repository);
+            
+            String webrepository = RestUtils.downloadRepository(host + "/loadWebWikifiedRepository");
+            File destFile = new File(outputResourceDirectory, "toast_web_repository.txt");
+            writeFile(destFile, webrepository);
+            
             Client httpClient = Client.create();
             Set<Driver> drivers = downloadScenarii(host + "/wikiScenarii", httpClient);
             StringBuilder builder = new StringBuilder();
@@ -185,7 +190,8 @@ public class DownloadScriptsMojo extends AbstractMojo {
             getLog().info("Copying " + jsonResult.length() + " scenarios");
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < jsonResult.length(); i++) {
-                String scenario = jsonResult.getString(i);
+                String scenarioHeader = "#include ../toast_web_repository.txt\n\n";
+                String scenario = scenarioHeader + jsonResult.getString(i);
                 Pattern pattern1 = Pattern.compile("(scenario driver):(\\w*)");
                 Pattern pattern2 = Pattern.compile("(\\|\\| scenario \\|\\| )(\\w*)( \\|\\|)");
                 Pattern pattern3 = Pattern.compile("(Name):(\\w*)");
@@ -218,8 +224,6 @@ public class DownloadScriptsMojo extends AbstractMojo {
                 File scenarioFile = new File(scenariiOutputFolder, scenarioName + ".md");
                 writeFile(scenarioFile, scenario);
             }
-            File scenarioImplFile = new File(outputResourceDirectory, "toast_imported_scenario.txt");
-            writeFile(scenarioImplFile, builder.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }

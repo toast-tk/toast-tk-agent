@@ -42,7 +42,6 @@ import com.synaptix.toast.swing.agent.runtime.StudioScriptRunner;
 import com.synaptix.toast.swing.agent.runtime.SutRunnerAsExec;
 import com.synaptix.toast.swing.agent.ui.record.SwingInspectionRecorderPanel;
 import com.synaptix.toast.swing.agent.ui.record.listener.OpenScenarioListener;
-import com.synaptix.toast.swing.agent.ui.record.listener.RunScriptActionListener;
 
 public class AdvancedSettingsPanel extends JPanel {
 	
@@ -170,7 +169,7 @@ public class AdvancedSettingsPanel extends JPanel {
 			}
 		});
 		
-		this.runButton.addActionListener(new RunScriptActionListener(recorder, getInterpretedOutputArea(), runner, mongoRepoManager));
+		//this.runButton.addActionListener(new RunScriptActionListener(recorder, getInterpretedOutputArea(), runner, mongoRepoManager));
 	}
 
 	public JTextArea getInterpretedOutputArea() {

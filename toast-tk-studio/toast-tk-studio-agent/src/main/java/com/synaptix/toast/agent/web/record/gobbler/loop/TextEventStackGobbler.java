@@ -22,7 +22,7 @@ public class TextEventStackGobbler extends LoopEventStackGobbler {
 
 	@Override
 	public String getStopEvent() {
-		return "change";
+		return "blur";
 	}
 
 	@Override

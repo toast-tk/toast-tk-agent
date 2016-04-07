@@ -9,6 +9,8 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.synaptix.toast.action.interpret.web.IActionInterpret;
+import com.synaptix.toast.action.interpret.web.InterpretationProvider;
 import com.synaptix.toast.automation.driver.swing.KryoTCPClient;
 import com.synaptix.toast.core.agent.inspection.CommonIOUtils;
 import com.synaptix.toast.core.agent.interpret.InterpretedEvent;
@@ -23,8 +25,6 @@ import com.synaptix.toast.core.runtime.ITCPResponseReceivedHandler;
 import com.synaptix.toast.dao.domain.api.test.ITestResult;
 import com.synaptix.toast.swing.agent.guice.StudioEventBus;
 import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
-import com.synaptix.toast.swing.agent.runtime.web.interpret.IActionInterpret;
-import com.synaptix.toast.swing.agent.runtime.web.interpret.InterpretationProvider;
 
 public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 
@@ -97,7 +97,6 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 								Thread.sleep(100);
 								client.keepAlive();
 							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 						}

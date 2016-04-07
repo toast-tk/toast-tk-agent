@@ -24,7 +24,7 @@ public class EventRecordTest {
 	public void testInputRecordEvent(){
 		WebEventRecord record_focus = builder.component("text").target(".text").ofType("focus").withValue("check").build();
 		webRecorder.append(record_focus);
-		WebEventRecord record_blur = builder.component("text").target(".text").ofType("change").withValue("checkout").build();
+		WebEventRecord record_blur = builder.component("text").target(".text").ofType("blur").withValue("checkout").build();
 		webRecorder.append(record_blur);
 		Assert.assertEquals("checkout", server.event.getValue());
 	}
