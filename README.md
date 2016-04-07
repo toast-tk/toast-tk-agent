@@ -1,4 +1,4 @@
-[![Build Status](https://jenkins.synaptix-labs.com/buildStatus/icon?job=Toast-tk)](https://jenkins.synaptix-labs.com/job/Toast-tk/)
+[![Build Status](https://jenkins.talanlabs.com/buildStatus/icon?job=Toast-tk)](https://jenkins.talanlabs.com/job/Toast-tk/)
 
 Build not working, requires xvbf plugin on jenkins to support X11.
 
@@ -13,15 +13,15 @@ Toast Toolkit aims to ease collaboration between Business Analysts
 and Developpers to describe and test an application behavior. 
 
 <div style="text-align:center" width="100%">
-<img src="https://gitlab.synaptix-labs.com/synaptix/toast-tk/uploads/76234d43d51527bfe7264f8c0b9d9843/collaborative_cycle.png" alt="collaborative_cycle" 
+<img src="https://gitlab.talanlabs.com/synaptix/toast-tk/uploads/76234d43d51527bfe7264f8c0b9d9843/collaborative_cycle.png" alt="collaborative_cycle" 
 width="600px" height="400px" >
 </div>
 
 Toast provides:
-- [Strongly Typed Tests](https://gitlab.synaptix-labs.com/synaptix/toast-tk/wikis/toast-strongly-typed-tests)
-- [Test Refactoring](https://gitlab.synaptix-labs.com/synaptix/toast-tk/wikis/toast-test-refactoring)
-- [Collaborative Apporach](https://gitlab.synaptix-labs.com/synaptix/toast-tk/wikis/toast-collaborative-approach)
-- [Test Campaign Reporting](https://gitlab.synaptix-labs.com/synaptix/toast-tk/wikis/toast-campaign-reporting)
+- [Strongly Typed Tests](https://gitlab.talanlabs.com/synaptix/toast-tk/wikis/toast-strongly-typed-tests)
+- [Test Refactoring](https://gitlab.talanlabs.com/synaptix/toast-tk/wikis/toast-test-refactoring)
+- [Collaborative Apporach](https://gitlab.talanlabs.com/synaptix/toast-tk/wikis/toast-collaborative-approach)
+- [Test Campaign Reporting](https://gitlab.talanlabs.com/synaptix/toast-tk/wikis/toast-campaign-reporting)
 
 
 Toast is a set of tools for recording, replaying test actions for:
@@ -40,7 +40,7 @@ The test cases can be run either through the UI or in batch mode through Eclipse
 You need to clone this repository to compile Toast using maven.
 
 ``` java
-$ git clone https://gitlab.synaptix-labs.com/synaptix/toast-tk.git
+$ git clone https://gitlab.talanlabs.com/synaptix/toast-tk.git
 $ cd toast-tk
 $ mvn clean install -U -PADD_JNLP
 ```
@@ -71,7 +71,7 @@ ${version} = __1.3.0-SNAPSHOT__
 * 1- Clone the webapp repository and compile it using sbt.
 
 ```
-$ git clone https://gitlab.synaptix-labs.com/sallah-kokaina/toast-tk-play-webapp.git
+$ git clone https://gitlab.talanlabs.com/sallah-kokaina/toast-tk-play-webapp.git
 $ cd toast-tk-play-webapp
 $ sbt
 $ dist
@@ -85,4 +85,4 @@ $ ./toast-tk-webapp
 # More Information 
 ***
 
-[wiki](https://gitlab.synaptix-labs.com/synaptix/toast-tk/wikis/home)
+[wiki](https://gitlab.talanlabs.com/synaptix/toast-tk/wikis/home)
