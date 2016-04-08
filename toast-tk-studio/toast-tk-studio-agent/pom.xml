@@ -127,6 +127,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.synaptix.toast</groupId>
+			<artifactId>toast-tk-rest-utils</artifactId>
+			<version>${toast-tk.engine.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.synaptix.toast</groupId>
 			<artifactId>toast-tk-common-utils</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -139,10 +144,6 @@
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-chrome-driver</artifactId>
 			<version>[2.46.0,)</version>
-		</dependency>
-		<dependency>
-			<groupId>com.esotericsoftware</groupId>
-			<artifactId>kryonet</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.synaptix.toast</groupId>

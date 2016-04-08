@@ -13,7 +13,7 @@ public class LinkEventStackGobbler extends EventStackGobbler {
 	public boolean isInterestedIn(
 			WebEventRecord capturedEvent) {
 		String component = capturedEvent.getComponent() != null ? capturedEvent.getComponent() : "";
-		return "click".equals(capturedEvent.getType()) && component.startsWith("a");
+		return "click".equals(capturedEvent.getEventType()) && component.startsWith("a");
 	}
 
 

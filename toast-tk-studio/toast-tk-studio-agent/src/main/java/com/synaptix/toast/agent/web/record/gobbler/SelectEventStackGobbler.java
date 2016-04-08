@@ -12,7 +12,7 @@ public class SelectEventStackGobbler extends EventStackGobbler {
 	public boolean isInterestedIn(
 			WebEventRecord capturedEvent) {
 		String component = capturedEvent.getComponent() != null ? capturedEvent.getComponent() : "";
-		return "change".equals(capturedEvent.getType()) && component.equals("select");
+		return "change".equals(capturedEvent.getEventType()) && component.equals("select");
 	}
 
 	@Override

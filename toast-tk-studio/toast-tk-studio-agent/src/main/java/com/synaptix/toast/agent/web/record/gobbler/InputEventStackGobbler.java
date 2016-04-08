@@ -19,7 +19,7 @@ public class InputEventStackGobbler extends EventStackGobbler {
 							|| component.equals("input:submit") 
 							|| component.equals("input:button")
 							|| component.equals("input:radio"));
-		return "focus".equals(capturedEvent.getType()) && component.startsWith("input") && !isButton;
+		return "focus".equals(capturedEvent.getEventType()) && component.startsWith("input") && !isButton;
 	}
 
 
@@ -34,7 +34,7 @@ public class InputEventStackGobbler extends EventStackGobbler {
 		if(currentTarget == null){
 			currentTarget = capturedEvent.getTarget();
 		}
-		if(finalEvent == null && "blur".equals(capturedEvent.getType())){
+		if(finalEvent == null && "blur".equals(capturedEvent.getEventType())){
 			this.finalEvent = capturedEvent;
 		}
 		return this;

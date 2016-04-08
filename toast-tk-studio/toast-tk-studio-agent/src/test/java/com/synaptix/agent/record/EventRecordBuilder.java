@@ -11,7 +11,7 @@ public class EventRecordBuilder {
 	}
 
 	public EventRecordBuilder ofType(String type){
-		record.type = type;
+		record.eventType = type;
 		return this;
 	}
 	

@@ -14,7 +14,7 @@ public abstract class LoopEventStackGobbler extends EventStackGobbler {
 	public boolean isInterestedIn(
 			WebEventRecord capturedEvent) {
 		String component = capturedEvent.getComponent() != null ? capturedEvent.getComponent() : "";
-		return getStartEvents().contains(capturedEvent.getType()) && component.equals(getComponentType());
+		return getStartEvents().contains(capturedEvent.getEventType()) && component.equals(getComponentType());
 	}
 	
 
@@ -30,7 +30,7 @@ public abstract class LoopEventStackGobbler extends EventStackGobbler {
 				&&
 				capturedEvent.getTarget().equals(currentTarget)
 				&& 
-				getStopEvent().equals(capturedEvent.getType())){
+				getStopEvent().equals(capturedEvent.getEventType())){
 			this.finalEvent = capturedEvent;
 		}
 		return this;

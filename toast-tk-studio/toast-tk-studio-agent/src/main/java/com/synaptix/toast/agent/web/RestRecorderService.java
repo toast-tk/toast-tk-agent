@@ -38,13 +38,14 @@ public class RestRecorderService extends Verticle {
 	private IAgentServer server;
 	private MainApp app;
 	private String currentPageName;
+
 	 
 	@Override
 	public void start() {
 		LOG.info("Starting..");
-		server = new KryoAgentServer(this);
 		Injector injector = Guice.createInjector(new WebAgentModule());
 		app = injector.getInstance(MainApp.class);
+		this.server = new AgentServerImpl(app);
 		RouteMatcher matcher = new RouteMatcher();
 		matcher.options("/record/event", new Handler<HttpServerRequest>() {
 			@Override
@@ -130,7 +131,7 @@ public class RestRecorderService extends Verticle {
 	private void publishNewPageState() {
 		WebEventRecord record = new WebEventRecord();
 		record.setTarget(driver.getCurrentUrl());
-		record.setType("open");	
+		record.setEventType("open");	
 		record.setComponent("open");
 		getServer().sendEvent(record);
 	}

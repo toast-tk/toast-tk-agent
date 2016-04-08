@@ -13,8 +13,16 @@ public class FakeKryoServer implements IAgentServer{
 	}
 
 	@Override
-	public void close() {
+	public void register() {
+		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void unRegister() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

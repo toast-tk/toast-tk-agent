@@ -16,7 +16,7 @@ public class StopHandler implements Handler<HttpServerRequest>{
 		if (service.getDriver() != null) {
 			service.getDriver().close();
 		}
-		service.getServer().close();
+		service.getServer().unRegister();
 		req.response().headers().add("Access-Control-Allow-Origin", "*");
 		req.response().setStatusCode(200).end();
 		System.exit(0);

@@ -130,6 +130,7 @@ public class MainApp {
 	ActionListener getStartListener(){
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
+	        	service.getServer().register();
 	        	service.openRecordingBrowser(webConfigProvider.get().getWebInitRecordingUrl());
 	        }
 	    };
@@ -154,7 +155,7 @@ public class MainApp {
 	    };
 	    return listener;
 	}
-
+	
 	public WebConfig getWebConfig() {
 		return webConfigProvider.get();
 	}
