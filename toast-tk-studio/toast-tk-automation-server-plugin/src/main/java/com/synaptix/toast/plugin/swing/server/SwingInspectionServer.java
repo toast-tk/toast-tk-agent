@@ -202,7 +202,7 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 			String componentLocator = componentName != null ? componentName : componentId;
 			componentLocator = componentLocator != null ? componentLocator : component.getClass() + ":"
 				+ System.identityHashCode(component);
-			if(InitRequestListener.isAutorizedComponent(component)) {
+			if(InitRequestListener.isAuthorizedComponent(component)) {
 				repositoryHolder.getRepo().put(componentLocator, component);
 			}
 		}
