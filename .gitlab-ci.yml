@@ -28,5 +28,5 @@ deploy_job:
   only:
     - master
   script:
-    - mvn --batch-mode deploy -Dmaven.test.skip=true -Djacoco.skip=true -PDEPLOY_NEXUS_SYNAPTIX
+    - mvn -PADD_JNLP --batch-mode deploy -Dmaven.test.skip=true -Djacoco.skip=true -PDEPLOY_NEXUS_SYNAPTIX
     - echo "Deploy"
