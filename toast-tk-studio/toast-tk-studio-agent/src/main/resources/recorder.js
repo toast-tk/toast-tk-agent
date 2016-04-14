@@ -167,7 +167,7 @@ function recorder(){
 		var ev = {};
 		var id = new Date().getTime() + ':' + Math.random();
 		ev['id'] = id;
-		ev['type'] = event.type;
+		ev['eventType'] = event.type;
 		ev['target'] = extractLocatorFromEvent(event.target);
 		ev['button'] = event.button;
 		ev['charCode'] = event.charCode;

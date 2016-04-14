@@ -31,13 +31,13 @@ public class WebRecorder {
 			for(final WebEventRecord capturedEvent : immutableLineList) {
 				if(this.currentEventStackGobbler == null) {
 					this.currentEventStackGobbler = EventStackGobblerProvider.get(capturedEvent);
-					LOG.info(this.currentEventStackGobbler + " -> start <- " + ToStringBuilder.reflectionToString(capturedEvent, ToStringStyle.SIMPLE_STYLE));
+					LOG.info(this.currentEventStackGobbler + " -> start <- " + ToStringBuilder.reflectionToString(capturedEvent, ToStringStyle.DEFAULT_STYLE));
 				}
 				if(currentEventStackGobbler != null){
 					if(currentEventStackGobbler.isLooper()) {
-						LOG.info(this.currentEventStackGobbler + " -> digest <- " + ToStringBuilder.reflectionToString(capturedEvent, ToStringStyle.SIMPLE_STYLE));
+						LOG.info(this.currentEventStackGobbler + " -> digest <- " + ToStringBuilder.reflectionToString(capturedEvent, ToStringStyle.DEFAULT_STYLE));
 						if(this.currentEventStackGobbler.digest(capturedEvent).isCompleted()) {
-							LOG.info(this.currentEventStackGobbler + " -> completed-loop <- " + ToStringBuilder.reflectionToString(capturedEvent, ToStringStyle.SIMPLE_STYLE));
+							LOG.info(this.currentEventStackGobbler + " -> completed-loop <- " + ToStringBuilder.reflectionToString(capturedEvent, ToStringStyle.DEFAULT_STYLE));
 							EventType interpretedEventType = currentEventStackGobbler.getInterpretedEventType(capturedEvent);
 							WebEventRecord adjustedEvent = currentEventStackGobbler.getAdjustedEvent();
 							currentEventStackGobbler.reset();
