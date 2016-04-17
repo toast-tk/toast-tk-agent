@@ -36,7 +36,10 @@ public class MainApp {
 	private ConfigProvider configProvider;
 	private WebConfigProvider webConfigProvider;
 	private final Properties webProperties;
-
+	private TrayIcon trayIcon;
+	private Image online_image;
+	private Image offline_image;
+	private MenuItem connectItem;
 	
 	@Inject
 	public MainApp(ConfigProvider config,WebConfigProvider webConfig){
@@ -80,24 +83,31 @@ public class MainApp {
 	}
 	
 	public void init(){
-		TrayIcon trayIcon = null;
 		if (SystemTray.isSupported()) {
 		    SystemTray tray = SystemTray.getSystemTray();
-		    InputStream resourceAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo.png");
-		    try {
-				Image image = ImageIO.read(resourceAsStream);
+		     try {
+		    	InputStream offline_imageAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo_off.png");   
+				this.offline_image = ImageIO.read(offline_imageAsStream);
+				
+				InputStream online_imageAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo_on.png");   
+				this.online_image = ImageIO.read(online_imageAsStream);
+				
 			    PopupMenu popup = new PopupMenu();
 			    
 			    MenuItem killItem = new MenuItem("Kill agent");
-			    MenuItem startRecordingItem = new MenuItem("Start Record");
+			    MenuItem connectItem = new MenuItem("Connect to WebApp");
+			    MenuItem startRecordingItem = new MenuItem("Start Recording");
 			    MenuItem stopRecordingItem = new MenuItem("Stop Recording");
 			    MenuItem settingsItem = new MenuItem("Settings");
 			    
 			    killItem.addActionListener(getKillListener());
+			    connectItem.addActionListener(getConnectListener());
 			    stopRecordingItem.addActionListener(getStopListener());
 			    startRecordingItem.addActionListener(getStartListener());
 			    settingsItem.addActionListener(getSettingsListener());
 			    
+			    popup.add(connectItem);
+			    popup.addSeparator();
 			    popup.add(startRecordingItem);
 			    popup.add(stopRecordingItem);
 			    popup.addSeparator();
@@ -105,7 +115,7 @@ public class MainApp {
 			    popup.addSeparator();
 			    popup.add(settingsItem); 
 			    
-			    trayIcon = new TrayIcon(image, "Toast TK - Web Agent", popup);
+			    this.trayIcon = new TrayIcon(offline_image, "Toast TK - Web Agent", popup);
 			} catch (IOException e1) {
 				LOG.info(e1);
 			}
@@ -116,6 +126,17 @@ public class MainApp {
 		    	LOG.info(e);
 		    }
 		}
+	}
+	
+	ActionListener getConnectListener(){
+	    ActionListener listener = new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	        	service.getServer().register();
+	        	trayIcon.setImage(online_image);
+	        	NotificationManager.showMessage("Web Agent - Connected to Webapp !").showNotification();
+	        }
+	    };
+	    return listener;
 	}
 	
 	ActionListener getKillListener(){
@@ -130,7 +151,6 @@ public class MainApp {
 	ActionListener getStartListener(){
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	        	service.getServer().register();
 	        	service.openRecordingBrowser(webConfigProvider.get().getWebInitRecordingUrl());
 	        }
 	    };

@@ -3,6 +3,7 @@ package com.synaptix.toast.agent.web;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.io.IOUtils;
@@ -38,6 +39,7 @@ public class RestRecorderService extends Verticle {
 	private IAgentServer server;
 	private MainApp app;
 	private String currentPageName;
+	private JFrame frmOpt; 
 
 	 
 	@Override
@@ -125,10 +127,23 @@ public class RestRecorderService extends Verticle {
 		LOG.info("Recorder injected !");
 		publishNewPageState();
 		NotificationManager.showMessage("Web Recording - Ready !").showNotification();
-		currentPageName = JOptionPane.showInputDialog("Current Page Name :");
+		
+	}
+	
+	private String requestPageName() {
+	    if (frmOpt == null) {
+	        frmOpt = new JFrame();
+	    }
+	    frmOpt.setVisible(true);
+	    frmOpt.setLocation(100, 100);
+	    frmOpt.setAlwaysOnTop(true);
+	    String currentPageName = JOptionPane.showInputDialog(frmOpt, "Current Location Page Name :", driver.getCurrentUrl(), JOptionPane.WARNING_MESSAGE);
+	    frmOpt.dispose();
+	    return currentPageName;
 	}
 
 	private void publishNewPageState() {
+		currentPageName = requestPageName();
 		WebEventRecord record = new WebEventRecord();
 		record.setTarget(driver.getCurrentUrl());
 		record.setEventType("open");	
