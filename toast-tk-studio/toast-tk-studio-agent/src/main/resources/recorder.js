@@ -56,9 +56,9 @@ function recorder(){
 	
 	function getTargetComponentName(node){
 		return node.getAttribute('aria-label') 
-		|| node.getAttribute('alt') 
-		|| node.getAttribute('title') 
-		|| node.getAttribute('name');
+			|| node.getAttribute('alt') 
+			|| node.getAttribute('title') 
+			|| node.getAttribute('name');
 	};
 	
 	function getTargetComponent(node){

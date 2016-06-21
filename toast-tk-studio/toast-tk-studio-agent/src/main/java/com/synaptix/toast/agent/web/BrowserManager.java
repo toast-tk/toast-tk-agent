@@ -9,7 +9,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import com.google.inject.Inject;
 import com.synaptix.toast.agent.ui.ConfigPanel;
-import com.synaptix.toast.core.agent.config.ConfigProvider;
 import com.synaptix.toast.core.agent.config.WebConfig;
 import com.synaptix.toast.core.agent.config.WebConfigProvider;
 

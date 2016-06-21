@@ -4,8 +4,6 @@ package com.synaptix.toast.agent.web;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.http.HttpServerRequest;
 import org.vertx.java.core.http.RouteMatcher;
@@ -14,8 +12,8 @@ import org.vertx.java.platform.Verticle;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.synaptix.toast.agent.guice.WebAgentModule;
-import com.synaptix.toast.agent.ui.NotificationManager;
 import com.synaptix.toast.agent.ui.MainApp;
+import com.synaptix.toast.agent.ui.NotificationManager;
 import com.synaptix.toast.agent.web.rest.PingHandler;
 import com.synaptix.toast.agent.web.rest.RecordHandler;
 import com.synaptix.toast.agent.web.rest.StopHandler;
@@ -47,7 +45,6 @@ public class RestRecorderService extends Verticle {
 			//PLAIN ONE
 			vertx.createHttpServer().requestHandler(matcher).listen(4444);
 			
-			app.setService(this);
 			NotificationManager.showMessage("Web Agent - Active !").showNotification();
 			LOG.info("Started !");
 		}catch(Exception e){

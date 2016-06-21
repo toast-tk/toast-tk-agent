@@ -34,7 +34,6 @@ public class MainApp {
 	private static final Logger LOG = LogManager.getLogger(MainApp.class);
 	final static String PROPERTY_FILE = "/toast.web.properties";
 	private BrowserManager browserManager;
-	private RestRecorderService service;
 	private File toastWebPropertiesFile;
 	private ConfigProvider configProvider;
 	private WebConfigProvider webConfigProvider;
@@ -42,7 +41,6 @@ public class MainApp {
 	private TrayIcon trayIcon;
 	private Image online_image;
 	private Image offline_image;
-	private MenuItem connectItem;
 	private IAgentServer agentServer;
 	
 	@Inject
@@ -190,7 +188,5 @@ public class MainApp {
 		return configProvider.get();
 	}
 	
-	public void setService(RestRecorderService service){
-		this.service = service;
-	}
+
 }
