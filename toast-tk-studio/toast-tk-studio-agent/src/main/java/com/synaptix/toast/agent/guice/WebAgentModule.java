@@ -7,6 +7,8 @@ import com.synaptix.toast.agent.web.AgentServerImpl;
 import com.synaptix.toast.agent.web.BrowserManager;
 import com.synaptix.toast.agent.web.IAgentServer;
 import com.synaptix.toast.agent.web.ScriptInjector;
+import com.synaptix.toast.agent.web.UriChangeListener;
+import com.synaptix.toast.agent.web.record.WebRecorder;
 import com.synaptix.toast.agent.web.rest.RecordHandler;
 import com.synaptix.toast.agent.web.rest.StopHandler;
 import com.synaptix.toast.core.agent.config.Config;
@@ -28,6 +30,8 @@ public class WebAgentModule extends AbstractModule{
 		bind(IAgentServer.class).to(AgentServerImpl.class).in(Singleton.class);
 		bind(RecordHandler.class).in(Singleton.class);
 		bind(StopHandler.class).in(Singleton.class);
+		bind(UriChangeListener.class).in(Singleton.class);
+		bind(WebRecorder.class).in(Singleton.class);
 	}
 
 }

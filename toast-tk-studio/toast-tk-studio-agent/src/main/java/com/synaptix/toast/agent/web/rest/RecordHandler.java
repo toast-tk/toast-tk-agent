@@ -6,8 +6,7 @@ import org.vertx.java.core.http.HttpServerRequest;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
-import com.synaptix.toast.agent.web.IAgentServer;
-import com.synaptix.toast.agent.web.RestRecorderService;
+import com.synaptix.toast.agent.web.UriChangeListener;
 import com.synaptix.toast.agent.web.record.WebRecorder;
 import com.synaptix.toast.core.agent.interpret.WebEventRecord;
 
@@ -15,12 +14,12 @@ public class RecordHandler implements Handler<HttpServerRequest>{
 	
 	final Gson gson = new Gson();
 	private WebRecorder recorder;
-	private IAgentServer agentServer;
+	private UriChangeListener uriChangeListener;
 	
 	@Inject
-	public RecordHandler(IAgentServer agentServer) {
-		this.agentServer = agentServer;
-		this.recorder = new WebRecorder(agentServer);
+	public RecordHandler(WebRecorder webRecorder, UriChangeListener uriChangeListener) {
+		this.uriChangeListener= uriChangeListener;
+		this.recorder = webRecorder;
 	}
 
 	@Override
@@ -30,7 +29,9 @@ public class RecordHandler implements Handler<HttpServerRequest>{
 			public void handle(Buffer buffer) {
 				String eventJson = buffer.toString();
 				WebEventRecord eventRecord = gson.fromJson(eventJson,WebEventRecord.class);
-				String pageName = agentServer.getCurrentPageName() != null ? agentServer.getCurrentPageName() : eventRecord.parent;
+				String pageName = uriChangeListener.getLocation() != null ? 
+								  uriChangeListener.getLocation() : 
+								  eventRecord.parent;
 				eventRecord.setParent(pageName);
 				processEvent(eventRecord);
 			}

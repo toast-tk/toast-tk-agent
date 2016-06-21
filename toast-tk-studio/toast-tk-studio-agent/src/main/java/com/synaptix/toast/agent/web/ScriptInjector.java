@@ -24,12 +24,13 @@ public class ScriptInjector {
 	private WebDriver driver;
 	private boolean isStarted;
 	private JFrame frmOpt; 
-	private String currentPageName;
 	private IAgentServer server;
+	private UriChangeListener uriChangeListener;
 	
 	@Inject
-	public ScriptInjector(IAgentServer server){
+	public ScriptInjector(IAgentServer server, UriChangeListener uriChangeListener){
 		this.server = server;
+		this.uriChangeListener = uriChangeListener;
 	}
 	
 	private Thread initInjectionRetryThread() {
@@ -76,7 +77,7 @@ public class ScriptInjector {
 	}
 	
 	private void publishNewPageState() {
-		currentPageName = requestPageName();
+		this.uriChangeListener.onUriChange(requestPageName());
 		WebEventRecord record = new WebEventRecord();
 		record.setTarget(driver.getCurrentUrl());
 		record.setEventType("open");	
@@ -91,14 +92,12 @@ public class ScriptInjector {
 	    frmOpt.setVisible(true);
 	    frmOpt.setLocation(100, 100);
 	    frmOpt.setAlwaysOnTop(true);
-	    String currentPageName = JOptionPane.showInputDialog(frmOpt, "Current Location Page Name :", driver.getCurrentUrl(), 
+	    String currentPageName = JOptionPane.showInputDialog(frmOpt, 
+	    													"Current Location Page Name :", 
+												    		driver.getCurrentUrl(), 
 												    		JOptionPane.WARNING_MESSAGE);
 	    frmOpt.dispose();
 	    return currentPageName;
-	}
-	
-	public String getCurrentPageName(){
-		return currentPageName;
 	}
 	
 	public void setDriver(WebDriver driver){

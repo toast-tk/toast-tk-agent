@@ -65,9 +65,9 @@ public class RestRecorderService extends Verticle {
 				req.response().setStatusCode(200).end();
 			}
 		});
-		matcher.post("/record/event", new RecordHandler(this));
+		matcher.post("/record/event", injector.getInstance(RecordHandler.class));
 		matcher.get("/record/ping", new PingHandler());
-		matcher.get("/record/stop", injector.getInstance(StopHandler.class);
+		matcher.get("/record/stop", injector.getInstance(StopHandler.class));
 		return matcher;
 	}
 
