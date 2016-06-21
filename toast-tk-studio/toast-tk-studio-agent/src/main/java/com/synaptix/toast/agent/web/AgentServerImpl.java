@@ -48,7 +48,4 @@ public class AgentServerImpl  implements IAgentServer{
 		return this.app.getWebConfig().getWebAppUrl();
 	}
 
-	
-	
-	
 }

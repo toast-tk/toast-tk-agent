@@ -20,6 +20,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Inject;
+import com.synaptix.toast.agent.web.BrowserManager;
+import com.synaptix.toast.agent.web.IAgentServer;
 import com.synaptix.toast.agent.web.RestRecorderService;
 import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.agent.config.Config;
@@ -31,6 +33,7 @@ public class MainApp {
 
 	private static final Logger LOG = LogManager.getLogger(MainApp.class);
 	final static String PROPERTY_FILE = "/toast.web.properties";
+	private BrowserManager browserManager;
 	private RestRecorderService service;
 	private File toastWebPropertiesFile;
 	private ConfigProvider configProvider;
@@ -40,12 +43,16 @@ public class MainApp {
 	private Image online_image;
 	private Image offline_image;
 	private MenuItem connectItem;
+	private IAgentServer agentServer;
 	
 	@Inject
-	public MainApp(ConfigProvider config,WebConfigProvider webConfig){
+	public MainApp(ConfigProvider config, WebConfigProvider webConfig, 
+			BrowserManager browserManager, IAgentServer agentServer){
 		this.configProvider = config;
 		this.webConfigProvider = webConfig;
+		this.browserManager = browserManager;
 		this.webProperties = new Properties();
+		this.agentServer= agentServer;
 		initWorkspace();
 		init();
 	}
@@ -68,7 +75,6 @@ public class MainApp {
 		}
 	}
 	
-
 	private void createHomeDirectories(String workSpaceDir) {
 		new File(workSpaceDir).mkdir();
 	}
@@ -131,7 +137,7 @@ public class MainApp {
 	ActionListener getConnectListener(){
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	        	service.getServer().register();
+	        	agentServer.register();
 	        	trayIcon.setImage(online_image);
 	        	NotificationManager.showMessage("Web Agent - Connected to Webapp !").showNotification();
 	        }
@@ -151,7 +157,7 @@ public class MainApp {
 	ActionListener getStartListener(){
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	        	service.openRecordingBrowser(webConfigProvider.get().getWebInitRecordingUrl());
+	        	browserManager.startRecording();
 	        }
 	    };
 	    return listener;
@@ -160,7 +166,7 @@ public class MainApp {
 	ActionListener getStopListener(){
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	        	service.closeBrowser();
+	        	browserManager.closeBrowser();
 	        }
 	    };
 	    return listener;
