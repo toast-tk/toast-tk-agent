@@ -1,6 +1,7 @@
 package com.synaptix.toast.agent.ui;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -144,7 +145,7 @@ public class ConfigPanel extends JDialog {
 				
 				if( testWebAppDirectory(textField.getText(),false) ) {
 					iconPanel.add(iconValid);
-					errorLabel = new JLabel();
+					errorLabel = new JLabel(" ");
 				}
 				else 
 				{
@@ -157,7 +158,7 @@ public class ConfigPanel extends JDialog {
 				
 				if( testWebAppURL(textField.getText(),false) ) {
 					iconPanel.add(iconValid);
-					errorLabel = new JLabel();
+					errorLabel = new JLabel(" ");
 				}
 				else 
 				{
@@ -282,6 +283,8 @@ public class ConfigPanel extends JDialog {
 					String strKey = (String) key;
 					try {
 						testIconValid(strKey, false);
+						mainPane.repaint();
+						mainPane.revalidate();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -291,7 +294,7 @@ public class ConfigPanel extends JDialog {
 			
 		});
 		
-		buttonPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 30, 0));
+		buttonPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
 		buttonPanel.add(tryButton);
 		buttonPanel.add(cancelButton);
 		buttonPanel.add(okButton);
@@ -396,7 +399,7 @@ public class ConfigPanel extends JDialog {
 			{
 				iconPanelWebApp.removeAll();
 				iconPanelWebApp.add(iconValidWebApp);
-				errorLabelWebApp.setText("");
+				errorLabelWebApp.setText(" ");
 			}
 		}
 		if(strKey.contains(recorderName))
@@ -411,7 +414,7 @@ public class ConfigPanel extends JDialog {
 			{
 				iconPanelRecorder.removeAll();
 				iconPanelRecorder.add(iconValidRecorder);
-				errorLabelRecorder.setText("");
+				errorLabelRecorder.setText(" ");
 			}
 		}
 		if(strKey.contains(chromeDriverName)) {
@@ -425,7 +428,7 @@ public class ConfigPanel extends JDialog {
 			{
 				iconPanelChrome.removeAll();
 				iconPanelChrome.add(iconValidChrome);
-				errorLabelChrome.setText("");
+				errorLabelChrome.setText(" ");
 			}
 		}
 	}
