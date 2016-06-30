@@ -2,6 +2,8 @@ package com.synaptix.toast.agent.web;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -194,4 +196,25 @@ public class RestRecorderService extends Verticle {
 	public String getCurrentPageName(){
 		return currentPageName;
 	}
+	
+	// Fonction récupéré sur crunchify.com/how-to-get-ping-status-of-any--http-end-point-in-java/
+	public static boolean getStatus(String url) throws IOException {
+		 
+        boolean result = false;
+        try {
+            URL siteURL = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) siteURL
+                    .openConnection();
+            connection.setRequestMethod("GET");
+            connection.connect();
+ 
+            int code = connection.getResponseCode();
+            if (code == 200) {
+                result = true;
+            }
+        } catch (Exception e) {
+            result = false;
+        }
+        return result;
+    }
 }

@@ -39,7 +39,11 @@ public class MainApp {
 	private TrayIcon trayIcon;
 	private Image online_image;
 	private Image offline_image;
-	private MenuItem connectItem;
+	//private MenuItem connectItem; Never used
+	//private boolean connectedValue;
+	private String chromedriverName = "ChromeDriver";
+	private String webappName = "WebApp";
+	private String recordingName = "Recording";
 	
 	@Inject
 	public MainApp(ConfigProvider config,WebConfigProvider webConfig){
@@ -91,6 +95,7 @@ public class MainApp {
 				
 				InputStream online_imageAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo_on.png");   
 				this.online_image = ImageIO.read(online_imageAsStream);
+
 				
 			    PopupMenu popup = new PopupMenu();
 			    
@@ -131,9 +136,15 @@ public class MainApp {
 	ActionListener getConnectListener(){
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	        	service.getServer().register();
-	        	trayIcon.setImage(online_image);
-	        	NotificationManager.showMessage("Web Agent - Connected to Webapp !").showNotification();
+	        	try {
+					if(verificationWebApp(webappName)) {
+						service.getServer().register();
+						trayIcon.setImage(online_image);
+						NotificationManager.showMessage("Web Agent - Connected to Webapp !").showNotification();
+					}
+				} catch (IOException e1) {
+					LOG.error(e1.getMessage(), e1);
+				}
 	        }
 	    };
 	    return listener;
@@ -151,7 +162,25 @@ public class MainApp {
 	ActionListener getStartListener(){
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	        	service.openRecordingBrowser(webConfigProvider.get().getWebInitRecordingUrl());
+	        	try {
+	        		boolean flag = false;
+	        		
+					if(verificationWebApp(chromedriverName)) {
+						if(verificationWebApp(recordingName)) {
+							if(verificationWebApp(webappName)) {
+								flag = true;
+								service.openRecordingBrowser(webConfigProvider.get().getWebInitRecordingUrl());
+							}
+						}
+					}
+					
+					if(!flag) {
+						NotificationManager.showMessage("Please, change recoder parameters.").showNotification();
+					}
+					
+				} catch (IOException e1) {
+					LOG.error(e1.getMessage(), e1);
+				}
 	        }
 	    };
 	    return listener;
@@ -170,7 +199,12 @@ public class MainApp {
 	ActionListener getSettingsListener(){
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	        	new ConfigPanel(webProperties, toastWebPropertiesFile);
+	        	try {
+					new ConfigPanel(webProperties, toastWebPropertiesFile);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 	        }
 	    };
 	    return listener;
@@ -187,4 +221,29 @@ public class MainApp {
 	public void setService(RestRecorderService service){
 		this.service = service;
 	}
+
+	public boolean verificationWebApp(String nomUrlATester) throws IOException{
+		String input = "";
+		if(nomUrlATester == webappName) {
+			input = webConfigProvider.get().getWebAppUrl();
+		}
+		if(nomUrlATester == recordingName) {
+			input = webConfigProvider.get().getWebInitRecordingUrl();
+		}
+		if(nomUrlATester == chromedriverName) {
+			input = webConfigProvider.get().getChromeDriverPath();
+		}
+		
+		if(nomUrlATester == webappName || nomUrlATester == recordingName) {
+			return ConfigPanel.testWebAppURL(input, true);
+		}
+		else {
+			if(nomUrlATester ==  chromedriverName) {
+				return ConfigPanel.testWebAppDirectory(input, true);
+			}
+			else // Si on l'a appelé d'une mauvaise manière
+				return false;
+		}
+	}
+	
 }
