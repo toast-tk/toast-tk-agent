@@ -11,22 +11,22 @@ public class EventRecordBuilder {
 	}
 
 	public EventRecordBuilder ofType(String type){
-		record.eventType = type;
+		record.setEventType(type);
 		return this;
 	}
 	
 	public EventRecordBuilder component(String component){
-		record.component = component;
+		record.setComponent(component);
 		return this;
 	}
 	
 	public EventRecordBuilder withValue(String value){
-		record.value = value;
+		record.setValue(value);
 		return this;
 	}	
 	
 	public EventRecordBuilder target(String target){
-		record.target = target;
+		record.setTarget(target);
 		return this;
 	}
 
