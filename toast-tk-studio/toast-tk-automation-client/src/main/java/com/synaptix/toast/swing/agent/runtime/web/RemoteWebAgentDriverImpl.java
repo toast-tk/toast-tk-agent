@@ -78,7 +78,7 @@ public class RemoteWebAgentDriverImpl implements IRemoteSwingAgentDriver {
 	private String buildFormat(
 		WebRecordResponse response) {
 			final WebEventRecord eventRecord = response.value;
-			IActionInterpret interpret = interpretationProvider.getSentenceBuilder(eventRecord.component);
+			IActionInterpret interpret = interpretationProvider.getSentenceBuilder(eventRecord.getComponent());
 			return interpret == null ? null : interpret.getSentence(eventRecord);
 	}
 	

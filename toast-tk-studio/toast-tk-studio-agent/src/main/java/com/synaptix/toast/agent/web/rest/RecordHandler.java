@@ -31,7 +31,7 @@ public class RecordHandler implements Handler<HttpServerRequest>{
 				WebEventRecord eventRecord = gson.fromJson(eventJson,WebEventRecord.class);
 				String pageName = uriChangeListener.getLocation() != null ? 
 								  uriChangeListener.getLocation() : 
-								  eventRecord.parent;
+								  eventRecord.getParent();
 				eventRecord.setParent(pageName);
 				processEvent(eventRecord);
 			}
