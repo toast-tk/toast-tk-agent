@@ -79,4 +79,9 @@ public class DefaultRawEventInterpreter implements IEventInterpreter {
 	public boolean isConnectedToWebApp() {
 		return false;
 	}
+
+	@Override
+	public String onOpenPopupMenu(AWTCapturedEvent value) {
+		return String.format("Choisir le menu contextuel '%s", value.componentName);
+	}
 }

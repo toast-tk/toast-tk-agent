@@ -26,7 +26,7 @@ public class RecordHandler implements Handler<HttpServerRequest>{
 			public void handle(Buffer buffer) {
 				String eventJson = buffer.toString();
 				WebEventRecord eventRecord = gson.fromJson(eventJson,WebEventRecord.class);
-				String pageName = service.getCurrentPageName() != null ? service.getCurrentPageName() : eventRecord.parent;
+				String pageName = service.getCurrentPageName() != null ? service.getCurrentPageName() : eventRecord.getParent();
 				eventRecord.setParent(pageName);
 				processEvent(eventRecord);
 			}
