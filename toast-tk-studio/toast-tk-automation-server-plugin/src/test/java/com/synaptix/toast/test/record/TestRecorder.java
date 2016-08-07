@@ -3,7 +3,6 @@ package com.synaptix.toast.test.record;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import java.awt.MenuItem;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
@@ -12,16 +11,16 @@ import javax.swing.JButton;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JTextField;
-import javax.swing.event.MenuEvent;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
-import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
 import com.synaptix.toast.plugin.swing.server.SwingInspectionRecorder;
 import com.synaptix.toast.test.TestSuiteHelper;
+
+import io.toast.tk.core.agent.interpret.AWTCapturedEvent;
+import io.toast.tk.core.agent.interpret.IEventInterpreter.EventType;
 
 public class TestRecorder {
 

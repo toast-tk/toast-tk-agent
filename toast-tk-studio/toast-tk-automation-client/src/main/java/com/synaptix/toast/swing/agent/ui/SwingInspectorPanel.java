@@ -55,11 +55,12 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.synaptix.toast.core.agent.config.Config;
-import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
-import com.synaptix.toast.core.net.response.ScanResponse;
-import com.synaptix.toast.core.rest.RestUtils;
 import com.synaptix.toast.swing.agent.constant.Resource;
 import com.synaptix.toast.swing.agent.guice.StudioEventBus;
+
+import io.toast.tk.core.agent.inspection.ISwingAutomationClient;
+import io.toast.tk.core.net.response.ScanResponse;
+import io.toast.tk.core.rest.RestUtils;
 
 public class SwingInspectorPanel extends JPanel {
 

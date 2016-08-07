@@ -1,6 +1,6 @@
 package com.synaptix.toast.agent.web;
 
-import com.synaptix.toast.core.agent.interpret.WebEventRecord;
+import io.toast.tk.core.agent.interpret.WebEventRecord;
 
 public interface IAgentServer {
 

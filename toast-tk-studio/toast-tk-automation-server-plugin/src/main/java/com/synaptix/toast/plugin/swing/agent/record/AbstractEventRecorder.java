@@ -37,10 +37,11 @@ import org.apache.logging.log4j.Logger;
 import org.fest.swing.input.InputState;
 
 import com.synaptix.toast.constant.Property;
-import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
-import com.synaptix.toast.core.guice.FilteredAWTEventListener;
 import com.synaptix.toast.core.record.AwtEventProcessor;
 import com.synaptix.toast.core.record.IEventRecorder;
+
+import io.toast.tk.core.agent.interpret.AWTCapturedEvent;
+import io.toast.tk.core.guice.FilteredAWTEventListener;
 
 /**
  * 

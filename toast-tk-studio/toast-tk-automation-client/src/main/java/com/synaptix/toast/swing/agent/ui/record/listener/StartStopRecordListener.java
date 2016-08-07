@@ -11,8 +11,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.swing.agent.constant.Resource;
+
+import io.toast.tk.core.agent.inspection.ISwingAutomationClient;
 
 
 public class StartStopRecordListener implements ActionListener{

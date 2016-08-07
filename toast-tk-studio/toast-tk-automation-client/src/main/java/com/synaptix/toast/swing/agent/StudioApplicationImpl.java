@@ -9,11 +9,12 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.synaptix.toast.core.agent.IStudioApplication;
 import com.synaptix.toast.core.agent.config.Config;
-import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.swing.agent.event.message.LoadingMessage;
 import com.synaptix.toast.swing.agent.event.message.StatusMessage;
 import com.synaptix.toast.swing.agent.event.message.StopLoadingMessage;
 import com.synaptix.toast.swing.agent.guice.StudioEventBus;
+
+import io.toast.tk.core.agent.inspection.ISwingAutomationClient;
 
 public class StudioApplicationImpl implements IStudioApplication {
 

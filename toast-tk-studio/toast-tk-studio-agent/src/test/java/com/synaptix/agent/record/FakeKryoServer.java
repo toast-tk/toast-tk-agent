@@ -1,7 +1,8 @@
 package com.synaptix.agent.record;
 
 import com.synaptix.toast.agent.web.IAgentServer;
-import com.synaptix.toast.core.agent.interpret.WebEventRecord;
+
+import io.toast.tk.core.agent.interpret.WebEventRecord;
 
 public class FakeKryoServer implements IAgentServer{
 

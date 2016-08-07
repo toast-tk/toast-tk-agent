@@ -3,8 +3,8 @@ package com.synaptix.toast.test.server.mock;
 import java.awt.Component;
 import java.util.Set;
 
-import com.synaptix.toast.core.agent.inspection.ISwingInspectionServer;
-import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
+import io.toast.tk.core.agent.inspection.ISwingInspectionServer;
+import io.toast.tk.core.agent.interpret.AWTCapturedEvent;
 
 public class FakeSwingInspectionServer implements ISwingInspectionServer {
 

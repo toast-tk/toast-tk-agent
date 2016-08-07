@@ -14,10 +14,6 @@ import org.fest.swing.input.InputState;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
-import com.synaptix.toast.core.agent.inspection.ISwingInspectionServer;
-import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
-import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
-import com.synaptix.toast.core.guice.FilteredAWTEventListener;
 import com.synaptix.toast.core.record.IEventRecorder;
 import com.synaptix.toast.plugin.swing.agent.record.FocusEventRecorder;
 import com.synaptix.toast.plugin.swing.agent.record.KeyboardEventRecorder;
@@ -25,6 +21,11 @@ import com.synaptix.toast.plugin.swing.agent.record.MouseEventRecorder;
 import com.synaptix.toast.plugin.swing.agent.record.WindowEventRecorder;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.EventStackGobbler;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.EventStackGobblerProvider;
+
+import io.toast.tk.core.agent.inspection.ISwingInspectionServer;
+import io.toast.tk.core.agent.interpret.AWTCapturedEvent;
+import io.toast.tk.core.agent.interpret.IEventInterpreter.EventType;
+import io.toast.tk.core.guice.FilteredAWTEventListener;
 
 public class SwingInspectionRecorder implements IEventRecorder {
 

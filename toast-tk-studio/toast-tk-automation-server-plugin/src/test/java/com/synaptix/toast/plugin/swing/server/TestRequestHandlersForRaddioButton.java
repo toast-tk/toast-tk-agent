@@ -8,19 +8,20 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.synaptix.toast.adapter.swing.component.SwingButtonElement;
-import com.synaptix.toast.core.adapter.AutoSwingType;
-import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
-import com.synaptix.toast.core.agent.interpret.DefaultEventInterpreter;
-import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
-import com.synaptix.toast.core.net.request.CommandRequest;
-import com.synaptix.toast.core.net.request.InitInspectionRequest;
 import com.synaptix.toast.plugin.swing.agent.listener.InitRequestListener;
 import com.synaptix.toast.plugin.swing.agent.listener.SwingActionRequestListener;
 import com.synaptix.toast.test.TestSuiteHelper;
 import com.synaptix.toast.test.server.mock.FakeConnection;
 import com.synaptix.toast.test.server.mock.FakeSwingInspectionServer;
 import com.synaptix.toast.test.server.mock.JRadioButtonTestFrame;
+
+import io.toast.tk.adapter.swing.component.SwingButtonElement;
+import io.toast.tk.core.adapter.AutoSwingType;
+import io.toast.tk.core.agent.interpret.AWTCapturedEvent;
+import io.toast.tk.core.agent.interpret.DefaultEventInterpreter;
+import io.toast.tk.core.agent.interpret.IEventInterpreter.EventType;
+import io.toast.tk.core.net.request.CommandRequest;
+import io.toast.tk.core.net.request.InitInspectionRequest;
 
 public class TestRequestHandlersForRaddioButton {
 

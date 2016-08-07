@@ -20,19 +20,20 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.google.inject.Inject;
-import com.synaptix.toast.core.agent.inspection.CommonIOUtils;
-import com.synaptix.toast.core.agent.inspection.ISwingInspectionServer;
-import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
-import com.synaptix.toast.core.net.request.HighLightRequest;
-import com.synaptix.toast.core.net.request.PoisonPill;
-import com.synaptix.toast.core.net.request.RecordRequest;
-import com.synaptix.toast.core.net.request.ScanRequest;
-import com.synaptix.toast.core.net.response.RecordResponse;
-import com.synaptix.toast.core.net.response.ScanResponse;
 import com.synaptix.toast.core.record.IEventRecorder;
 import com.synaptix.toast.plugin.swing.agent.listener.InitRequestListener;
 import com.synaptix.toast.plugin.swing.agent.listener.RepositoryHolder;
 import com.synaptix.toast.plugin.swing.agent.listener.SwingActionRequestListener;
+
+import io.toast.tk.core.agent.inspection.CommonIOUtils;
+import io.toast.tk.core.agent.inspection.ISwingInspectionServer;
+import io.toast.tk.core.agent.interpret.AWTCapturedEvent;
+import io.toast.tk.core.net.request.HighLightRequest;
+import io.toast.tk.core.net.request.PoisonPill;
+import io.toast.tk.core.net.request.RecordRequest;
+import io.toast.tk.core.net.request.ScanRequest;
+import io.toast.tk.core.net.response.RecordResponse;
+import io.toast.tk.core.net.response.ScanResponse;
 
 public class SwingInspectionServer implements ISwingInspectionServer {
 
@@ -284,4 +285,6 @@ public class SwingInspectionServer implements ISwingInspectionServer {
 	public void close() {
 		server.close();
 	}
+
+
 }

@@ -2,7 +2,7 @@ package com.synaptix.toast.core.record;
 
 import java.awt.Component;
 
-import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
+import io.toast.tk.core.agent.interpret.AWTCapturedEvent;
 
 public interface IEventRecorder {
 

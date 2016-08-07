@@ -34,9 +34,10 @@ import org.apache.logging.log4j.Logger;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.google.inject.Inject;
-import com.synaptix.toast.core.guice.ICustomRequestHandler;
-import com.synaptix.toast.core.net.request.InitInspectionRequest;
 import com.synaptix.toast.plugin.swing.server.SwingInspectionManager;
+
+import io.toast.tk.core.guice.ICustomRequestHandler;
+import io.toast.tk.core.net.request.InitInspectionRequest;
 
 public class InitRequestListener extends Listener {
 

@@ -27,13 +27,14 @@ import javax.swing.border.BevelBorder;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
-import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.swing.agent.constant.Resource;
 import com.synaptix.toast.swing.agent.event.message.LoadingMessage;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
 import com.synaptix.toast.swing.agent.event.message.StatusMessage;
 import com.synaptix.toast.swing.agent.event.message.StopLoadingMessage;
 import com.synaptix.toast.swing.agent.guice.StudioEventBus;
+
+import io.toast.tk.core.agent.inspection.ISwingAutomationClient;
 
 public class SwingInspectionFrame extends JFrame {
 

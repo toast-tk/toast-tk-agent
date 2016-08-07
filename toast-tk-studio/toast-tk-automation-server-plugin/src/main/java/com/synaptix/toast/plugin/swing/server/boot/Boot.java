@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.inject.Module;
-import com.synaptix.toast.adapter.swing.guice.SwingActionAdapterPluginModule;
-import com.synaptix.toast.adapter.swing.handler.DefaultSwingCustomWidgetHandler;
 import com.synaptix.toast.core.guice.plugin.ToastPluginBoot;
 import com.synaptix.toast.plugin.swing.server.guice.SwingServerModule;
+
+import io.toast.tk.adapter.swing.handler.DefaultSwingCustomWidgetHandler;
 
 public class Boot implements ToastPluginBoot {
 

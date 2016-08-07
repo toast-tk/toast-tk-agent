@@ -2,8 +2,8 @@ package com.synaptix.toast.plugin.swing.agent.record.gobbler;
 
 import java.awt.event.MouseEvent;
 
-import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
-import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
+import io.toast.tk.core.agent.interpret.AWTCapturedEvent;
+import io.toast.tk.core.agent.interpret.IEventInterpreter.EventType;
 
 public abstract class EventStackGobbler {
 

@@ -20,17 +20,17 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.synaptix.toast</groupId>
+			<groupId>io.toast-tk</groupId>
 			<artifactId>toast-tk-dao-api</artifactId>
 			<version>${toast-tk.engine.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.synaptix.toast</groupId>
+			<groupId>io.toast-tk</groupId>
 			<artifactId>toast-tk-adapters-api</artifactId>
 			<version>${toast-tk.engine.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.synaptix.toast</groupId>
+			<groupId>io.toast-tk</groupId>
 			<artifactId>toast-tk-runtime-api</artifactId>
 			<version>${toast-tk.engine.version}</version>
 		</dependency>

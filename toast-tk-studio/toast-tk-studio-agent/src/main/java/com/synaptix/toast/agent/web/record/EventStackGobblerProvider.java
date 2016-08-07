@@ -8,7 +8,8 @@ import com.synaptix.toast.agent.web.record.gobbler.InputEventStackGobbler;
 import com.synaptix.toast.agent.web.record.gobbler.LinkEventStackGobbler;
 import com.synaptix.toast.agent.web.record.gobbler.SelectEventStackGobbler;
 import com.synaptix.toast.agent.web.record.gobbler.loop.TextEventStackGobbler;
-import com.synaptix.toast.core.agent.interpret.WebEventRecord;
+
+import io.toast.tk.core.agent.interpret.WebEventRecord;
 
 public class EventStackGobblerProvider {
 

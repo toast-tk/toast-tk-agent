@@ -1,7 +1,8 @@
 package com.synaptix.toast.swing.agent.runtime;
 
 import com.google.inject.Injector;
-import com.synaptix.toast.runtime.AbstractScenarioRunner;
+
+import io.toast.tk.runtime.AbstractScenarioRunner;
 
 public class StudioScriptRunner extends AbstractScenarioRunner {
 

@@ -9,8 +9,9 @@ import org.apache.logging.log4j.Logger;
 import com.esotericsoftware.minlog.Log;
 import com.google.gson.Gson;
 import com.synaptix.toast.agent.ui.MainApp;
-import com.synaptix.toast.core.agent.interpret.WebEventRecord;
-import com.synaptix.toast.core.rest.RestUtils;
+
+import io.toast.tk.core.agent.interpret.WebEventRecord;
+import io.toast.tk.core.rest.RestUtils;
 
 public class AgentServerImpl  implements IAgentServer{
 

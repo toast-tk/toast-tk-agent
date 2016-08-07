@@ -4,20 +4,16 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
-import com.synaptix.toast.action.interpret.web.InterpretationProvider;
 import com.synaptix.toast.core.agent.IStudioApplication;
 import com.synaptix.toast.core.agent.config.Config;
 import com.synaptix.toast.core.agent.config.ConfigProvider;
 import com.synaptix.toast.core.agent.config.WebConfig;
 import com.synaptix.toast.core.agent.config.WebConfigProvider;
-import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
-import com.synaptix.toast.core.annotation.EngineEventBus;
 import com.synaptix.toast.swing.agent.IStudioAppContext;
 import com.synaptix.toast.swing.agent.IWorkspaceBuilder;
 import com.synaptix.toast.swing.agent.StudioAppContext;
 import com.synaptix.toast.swing.agent.StudioApplicationImpl;
 import com.synaptix.toast.swing.agent.WorkspaceBuilder;
-import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
 import com.synaptix.toast.swing.agent.runtime.StudioRemoteSwingAgentDriverImpl;
 import com.synaptix.toast.swing.agent.ui.AdvancedSettingsPanel;
 import com.synaptix.toast.swing.agent.ui.CorpusPanel;
@@ -27,6 +23,11 @@ import com.synaptix.toast.swing.agent.ui.SwingAgentScriptRunnerPanel;
 import com.synaptix.toast.swing.agent.ui.SwingInspectionFrame;
 import com.synaptix.toast.swing.agent.ui.SwingInspectorPanel;
 import com.synaptix.toast.swing.agent.ui.record.SwingInspectionRecorderPanel;
+
+import io.toast.tk.action.interpret.web.InterpretationProvider;
+import io.toast.tk.core.agent.inspection.ISwingAutomationClient;
+import io.toast.tk.core.annotation.EngineEventBus;
+import io.toast.tk.swing.agent.interpret.MongoRepositoryCacheWrapper;
 
 public class SwingModule extends AbstractModule {
 

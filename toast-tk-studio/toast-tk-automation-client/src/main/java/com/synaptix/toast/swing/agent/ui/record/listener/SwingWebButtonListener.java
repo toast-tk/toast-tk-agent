@@ -3,7 +3,7 @@ package com.synaptix.toast.swing.agent.ui.record.listener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
+import io.toast.tk.core.agent.inspection.ISwingAutomationClient;
 
 public class SwingWebButtonListener implements ActionListener {
 

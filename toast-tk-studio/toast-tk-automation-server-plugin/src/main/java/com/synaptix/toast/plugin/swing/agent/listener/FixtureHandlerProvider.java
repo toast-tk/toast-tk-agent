@@ -12,8 +12,9 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.synaptix.toast.core.guice.ICustomRequestHandler;
-import com.synaptix.toast.core.net.request.CommandRequest;
+
+import io.toast.tk.core.guice.ICustomRequestHandler;
+import io.toast.tk.core.net.request.CommandRequest;
 
 @Singleton
 public class FixtureHandlerProvider {

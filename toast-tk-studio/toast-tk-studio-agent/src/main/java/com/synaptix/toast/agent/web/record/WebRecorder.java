@@ -10,8 +10,9 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.ImmutableList;
 import com.synaptix.toast.agent.web.IAgentServer;
-import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
-import com.synaptix.toast.core.agent.interpret.WebEventRecord;
+
+import io.toast.tk.core.agent.interpret.IEventInterpreter.EventType;
+import io.toast.tk.core.agent.interpret.WebEventRecord;
 
 public class WebRecorder {
 

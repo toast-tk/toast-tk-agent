@@ -7,8 +7,9 @@ import java.awt.event.WindowEvent;
 
 import org.fest.swing.input.InputState;
 
-import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 import com.synaptix.toast.core.record.IEventRecorder;
+
+import io.toast.tk.core.agent.interpret.AWTCapturedEvent;
 
 public class WindowEventRecorder extends AbstractEventRecorder {
 

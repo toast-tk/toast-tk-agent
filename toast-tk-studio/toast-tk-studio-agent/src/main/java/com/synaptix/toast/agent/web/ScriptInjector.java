@@ -16,7 +16,8 @@ import org.openqa.selenium.WebElement;
 
 import com.google.inject.Inject;
 import com.synaptix.toast.agent.ui.NotificationManager;
-import com.synaptix.toast.core.agent.interpret.WebEventRecord;
+
+import io.toast.tk.core.agent.interpret.WebEventRecord;
 
 public class ScriptInjector {
 

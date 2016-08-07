@@ -1,8 +1,11 @@
 package com.synaptix.toast.agent.web.record.gobbler;
 
+import java.util.List;
+
 import com.synaptix.toast.agent.web.record.EventStackGobbler;
-import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
-import com.synaptix.toast.core.agent.interpret.WebEventRecord;
+
+import io.toast.tk.core.agent.interpret.IEventInterpreter.EventType;
+import io.toast.tk.core.agent.interpret.WebEventRecord;
 
 public class InputEventStackGobbler extends EventStackGobbler {
 
@@ -17,8 +20,7 @@ public class InputEventStackGobbler extends EventStackGobbler {
 		String component = capturedEvent.getComponent() != null ? capturedEvent.getComponent() : "";
 		boolean isButton = (component.equals("button") 
 							|| component.equals("input:submit") 
-							|| component.equals("input:button")
-							|| component.equals("input:radio"));
+							|| component.equals("input:button"));
 		return "focus".equals(capturedEvent.getEventType()) && component.startsWith("input") && !isButton;
 	}
 
@@ -63,13 +65,20 @@ public class InputEventStackGobbler extends EventStackGobbler {
 	}
 
 	@Override
-	public String getStopEvent() {
+	public List<String> getStopEvents() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getComponentType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<String> getStartEvents() {
 		// TODO Auto-generated method stub
 		return null;
 	}

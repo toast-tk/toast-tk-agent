@@ -1,22 +1,24 @@
 package com.synaptix.toast.test.server;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.synaptix.toast.adapter.swing.component.SwingInputElement;
-import com.synaptix.toast.core.adapter.AutoSwingType;
-import com.synaptix.toast.core.net.request.CommandRequest;
-import com.synaptix.toast.core.net.request.InitInspectionRequest;
-import com.synaptix.toast.core.net.response.ValueResponse;
 import com.synaptix.toast.plugin.swing.agent.listener.InitRequestListener;
 import com.synaptix.toast.plugin.swing.agent.listener.SwingActionRequestListener;
 import com.synaptix.toast.test.TestSuiteHelper;
 import com.synaptix.toast.test.server.mock.FakeConnection;
 import com.synaptix.toast.test.server.mock.TexfieldTestFrame;
+
+import io.toast.tk.adapter.swing.component.SwingInputElement;
+import io.toast.tk.core.adapter.AutoSwingType;
+import io.toast.tk.core.net.request.CommandRequest;
+import io.toast.tk.core.net.request.InitInspectionRequest;
+import io.toast.tk.core.net.response.ValueResponse;
 
 public class TestRequestHandlersForTextField {
 

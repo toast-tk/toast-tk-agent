@@ -26,17 +26,18 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.synaptix.toast.core.agent.config.Config;
-import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
-import com.synaptix.toast.core.agent.interpret.InterpretedEvent;
 import com.synaptix.toast.swing.agent.constant.Resource;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
 import com.synaptix.toast.swing.agent.guice.StudioEventBus;
-import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
 import com.synaptix.toast.swing.agent.runtime.StudioScriptRunner;
 import com.synaptix.toast.swing.agent.runtime.SutRunnerAsExec;
 import com.synaptix.toast.swing.agent.ui.record.listener.OpenScenarioListener;
 import com.synaptix.toast.swing.agent.ui.record.listener.ShareScenarioListener;
 import com.synaptix.toast.swing.agent.ui.record.listener.StartStopRecordListener;
+
+import io.toast.tk.core.agent.inspection.ISwingAutomationClient;
+import io.toast.tk.core.agent.interpret.InterpretedEvent;
+import io.toast.tk.swing.agent.interpret.MongoRepositoryCacheWrapper;
 
 public class SwingInspectionRecorderPanel extends JPanel {
 

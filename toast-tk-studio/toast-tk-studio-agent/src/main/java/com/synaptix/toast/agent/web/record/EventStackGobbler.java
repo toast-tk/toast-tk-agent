@@ -1,7 +1,9 @@
 package com.synaptix.toast.agent.web.record;
 
-import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
-import com.synaptix.toast.core.agent.interpret.WebEventRecord;
+import java.util.List;
+
+import io.toast.tk.core.agent.interpret.IEventInterpreter.EventType;
+import io.toast.tk.core.agent.interpret.WebEventRecord;
 
 public abstract class EventStackGobbler {
 
@@ -21,7 +23,9 @@ public abstract class EventStackGobbler {
 	
 	public abstract void reset();
 	
-	public abstract String getStopEvent();
+	public abstract List<String> getStartEvents();
+	
+	public abstract List<String> getStopEvents();
 	
 	public abstract String getComponentType();
 }

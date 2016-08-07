@@ -1,6 +1,6 @@
 package com.synaptix.agent.record;
 
-import com.synaptix.toast.core.agent.interpret.WebEventRecord;
+import io.toast.tk.core.agent.interpret.WebEventRecord;
 
 public class EventRecordBuilder {
 
@@ -20,14 +20,31 @@ public class EventRecordBuilder {
 		return this;
 	}
 	
-	public EventRecordBuilder withValue(String value){
+	public EventRecordBuilder val(String value){
 		record.setValue(value);
 		return this;
 	}	
 	
-	public EventRecordBuilder target(String target){
+	private EventRecordBuilder target(String target){
 		record.setTarget(target);
 		return this;
+	}
+	
+	public EventRecordBuilder locator(String locator){
+		return target(locator);
+	}
+	
+
+	public EventRecordBuilder changeEvent(){
+		return ofType("change");
+	}
+	
+	public EventRecordBuilder focusEvent(){
+		return ofType("focus");
+	}
+	
+	public EventRecordBuilder input(){
+		return component("text");
 	}
 
 	public WebEventRecord build() {

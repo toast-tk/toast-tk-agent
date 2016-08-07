@@ -1,39 +1,35 @@
 package com.synaptix.toast.swing.agent.runtime;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.UUID;
 
-import org.apache.commons.lang3.SystemUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
-import com.synaptix.toast.action.interpret.web.InterpretationProvider;
-import com.synaptix.toast.automation.driver.swing.RemoteSwingAgentDriverImpl;
 import com.synaptix.toast.core.agent.config.Config;
 import com.synaptix.toast.core.agent.config.WebConfig;
-import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
-import com.synaptix.toast.core.agent.interpret.IEventInterpreter;
-import com.synaptix.toast.core.agent.interpret.InterpretedEvent;
-import com.synaptix.toast.core.net.request.CommandRequest;
-import com.synaptix.toast.core.net.request.HighLightRequest;
-import com.synaptix.toast.core.net.request.IIdRequest;
-import com.synaptix.toast.core.net.request.InitInspectionRequest;
-import com.synaptix.toast.core.net.request.PoisonPill;
-import com.synaptix.toast.core.net.request.RecordRequest;
-import com.synaptix.toast.core.net.request.ScanRequest;
-import com.synaptix.toast.core.net.response.RecordResponse;
-import com.synaptix.toast.core.net.response.ScanResponse;
-import com.synaptix.toast.core.runtime.ITCPResponseReceivedHandler;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
 import com.synaptix.toast.swing.agent.guice.StudioEventBus;
-import com.synaptix.toast.swing.agent.interpret.LiveRedPlayEventInterpreter;
-import com.synaptix.toast.swing.agent.interpret.MongoRepositoryCacheWrapper;
 import com.synaptix.toast.swing.agent.runtime.web.RemoteWebAgentDriverImpl;
-import com.synaptix.toast.swing.agent.runtime.web.WebAgentBoot;
+
+import io.toast.tk.action.interpret.web.InterpretationProvider;
+import io.toast.tk.automation.driver.swing.RemoteSwingAgentDriverImpl;
+import io.toast.tk.core.agent.inspection.ISwingAutomationClient;
+import io.toast.tk.core.agent.interpret.IEventInterpreter;
+import io.toast.tk.core.agent.interpret.InterpretedEvent;
+import io.toast.tk.core.net.request.CommandRequest;
+import io.toast.tk.core.net.request.HighLightRequest;
+import io.toast.tk.core.net.request.IIdRequest;
+import io.toast.tk.core.net.request.PoisonPill;
+import io.toast.tk.core.net.request.RecordRequest;
+import io.toast.tk.core.net.request.ScanRequest;
+import io.toast.tk.core.net.response.RecordResponse;
+import io.toast.tk.core.net.response.ScanResponse;
+import io.toast.tk.core.runtime.ITCPResponseReceivedHandler;
+import io.toast.tk.swing.agent.interpret.LiveRedPlayEventInterpreter;
+import io.toast.tk.swing.agent.interpret.MongoRepositoryCacheWrapper;
 
 //FIXME: split the class in 2: distinguer le recorder web du recordeur swing !
 public class StudioRemoteSwingAgentDriverImpl extends RemoteSwingAgentDriverImpl implements ISwingAutomationClient {

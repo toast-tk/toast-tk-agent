@@ -10,15 +10,16 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.synaptix.toast.core.net.request.InitInspectionRequest;
-import com.synaptix.toast.core.net.request.TableCommandRequest;
-import com.synaptix.toast.core.net.request.TableCommandRequestQueryCriteria;
-import com.synaptix.toast.core.net.response.ValueResponse;
 import com.synaptix.toast.plugin.swing.agent.listener.InitRequestListener;
 import com.synaptix.toast.plugin.swing.agent.listener.SwingActionRequestListener;
 import com.synaptix.toast.test.TestSuiteHelper;
 import com.synaptix.toast.test.server.mock.FakeConnection;
 import com.synaptix.toast.test.server.mock.TableTestFrame;
+
+import io.toast.tk.core.net.request.InitInspectionRequest;
+import io.toast.tk.core.net.request.TableCommandRequest;
+import io.toast.tk.core.net.request.TableCommandRequestQueryCriteria;
+import io.toast.tk.core.net.response.ValueResponse;
 
 public class TestRequestHandlersForJTable {
 

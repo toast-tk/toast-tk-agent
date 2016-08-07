@@ -8,10 +8,11 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
-import com.synaptix.toast.core.rest.ImportedScenario;
-import com.synaptix.toast.core.rest.ImportedScenarioDescriptor;
-import com.synaptix.toast.core.rest.RestUtils;
 import com.synaptix.toast.swing.agent.ui.ListPanel;
+
+import io.toast.tk.core.rest.ImportedScenario;
+import io.toast.tk.core.rest.ImportedScenarioDescriptor;
+import io.toast.tk.core.rest.RestUtils;
 
 
 public class OpenScenarioListener implements ActionListener {

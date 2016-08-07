@@ -61,7 +61,7 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.synaptix.toast</groupId>
+			<groupId>io.toast-tk</groupId>
 			<artifactId>toast-tk-adapters</artifactId>
 			<version>${toast-tk.engine.version}</version>
 			<exclusions>

@@ -5,12 +5,13 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.synaptix.toast.core.net.request.CommandRequest;
-import com.synaptix.toast.core.net.request.InitInspectionRequest;
 import com.synaptix.toast.plugin.swing.agent.listener.InitRequestListener;
 import com.synaptix.toast.test.TestSuiteHelper;
 import com.synaptix.toast.test.server.mock.FakeConnection;
 import com.synaptix.toast.test.server.mock.JComboBoxTestFrame;
+
+import io.toast.tk.core.net.request.CommandRequest;
+import io.toast.tk.core.net.request.InitInspectionRequest;
 
 public class TestRecordHandlersForJComboBox {
 

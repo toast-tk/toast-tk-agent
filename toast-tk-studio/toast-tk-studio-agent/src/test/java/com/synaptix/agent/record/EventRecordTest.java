@@ -5,7 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.synaptix.toast.agent.web.record.WebRecorder;
-import com.synaptix.toast.core.agent.interpret.WebEventRecord;
+
+import io.toast.tk.core.agent.interpret.WebEventRecord;
 
 public class EventRecordTest {
 	
@@ -22,30 +23,30 @@ public class EventRecordTest {
 	
 	@Test
 	public void testInputRecordEvent(){
-		WebEventRecord record_focus = builder.component("text").target(".text").ofType("focus").withValue("check").build();
+		WebEventRecord record_focus = builder.input().locator(".text").focusEvent().build();
 		webRecorder.append(record_focus);
-		WebEventRecord record_blur = builder.component("text").target(".text").ofType("blur").withValue("checkout").build();
-		webRecorder.append(record_blur);
+		WebEventRecord record_val_change = builder.input().locator(".text").changeEvent().val("checkout").build();
+		webRecorder.append(record_val_change);
 		Assert.assertEquals("checkout", server.event.getValue());
 	}
 	
 	@Test
 	public void testLinkRecordEvent(){
-		WebEventRecord record_click = builder.component("a").target(".link").ofType("click").withValue("Click me").build();
+		WebEventRecord record_click = builder.component("a").locator(".link").ofType("click").val("Click me").build();
 		webRecorder.append(record_click);
 		Assert.assertEquals("Click me", server.event.getValue());
 	}
 	
 	@Test
 	public void testButtonRecordEvent(){
-		WebEventRecord record_click = builder.component("button").target(".button").ofType("click").withValue("Click me").build();
+		WebEventRecord record_click = builder.component("button").locator(".button").ofType("click").val("Click me").build();
 		webRecorder.append(record_click);
 		Assert.assertEquals("Click me", server.event.getValue());
 	}
 	
 	@Test
 	public void testSelectRecordEvent(){
-		WebEventRecord record_click = builder.component("select").target(".select").ofType("change").withValue("SelectedValue").build();
+		WebEventRecord record_click = builder.component("select").locator(".select").ofType("change").val("SelectedValue").build();
 		webRecorder.append(record_click);
 		Assert.assertEquals("SelectedValue", server.event.getValue());
 	}

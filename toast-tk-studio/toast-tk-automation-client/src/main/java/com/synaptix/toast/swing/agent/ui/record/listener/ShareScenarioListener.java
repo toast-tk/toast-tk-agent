@@ -8,8 +8,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
 import com.synaptix.toast.core.agent.config.Config;
-import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
-import com.synaptix.toast.core.rest.RestUtils;
+
+import io.toast.tk.core.agent.inspection.ISwingAutomationClient;
+import io.toast.tk.core.rest.RestUtils;
 
 
 public class ShareScenarioListener implements ActionListener{

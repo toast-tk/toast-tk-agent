@@ -13,13 +13,14 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.synaptix.toast.core.agent.config.Config;
-import com.synaptix.toast.core.agent.inspection.ISwingAutomationClient;
 import com.synaptix.toast.swing.agent.constant.Resource;
 import com.synaptix.toast.swing.agent.event.message.SeverStatusMessage;
 import com.synaptix.toast.swing.agent.guice.StudioEventBus;
 import com.synaptix.toast.swing.agent.ui.record.SwingInspectionRecorderPanel;
 import com.synaptix.toast.swing.agent.ui.record.listener.ShareScenarioListener;
 import com.synaptix.toast.swing.agent.ui.record.listener.StartStopRecordListener;
+
+import io.toast.tk.core.agent.inspection.ISwingAutomationClient;
 
 public class HeaderPanel extends JPanel {
 

@@ -8,7 +8,8 @@ import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.synaptix.toast.agent.web.UriChangeListener;
 import com.synaptix.toast.agent.web.record.WebRecorder;
-import com.synaptix.toast.core.agent.interpret.WebEventRecord;
+
+import io.toast.tk.core.agent.interpret.WebEventRecord;
 
 public class RecordHandler implements Handler<HttpServerRequest>{
 	

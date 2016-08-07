@@ -8,17 +8,17 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.synaptix.toast.adapter.swing.component.SwingButtonElement;
-import com.synaptix.toast.core.adapter.AutoSwingType;
-import com.synaptix.toast.core.net.request.CommandRequest;
-import com.synaptix.toast.core.net.request.InitInspectionRequest;
-import com.synaptix.toast.core.net.response.ValueResponse;
 import com.synaptix.toast.plugin.swing.agent.listener.InitRequestListener;
 import com.synaptix.toast.plugin.swing.agent.listener.SwingActionRequestListener;
-import com.synaptix.toast.plugin.swing.server.SwingInspectionRecorder;
 import com.synaptix.toast.test.TestSuiteHelper;
 import com.synaptix.toast.test.server.mock.ButtonTestFrame;
 import com.synaptix.toast.test.server.mock.FakeConnection;
+
+import io.toast.tk.adapter.swing.component.SwingButtonElement;
+import io.toast.tk.core.adapter.AutoSwingType;
+import io.toast.tk.core.net.request.CommandRequest;
+import io.toast.tk.core.net.request.InitInspectionRequest;
+import io.toast.tk.core.net.response.ValueResponse;
 
 public class TestRequestHandlersForButton {
 

@@ -3,7 +3,6 @@ package com.synaptix.toast.plugin.swing.agent.record.gobbler;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.looper.ComboBoxClickEventStackGobbler;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.looper.InputEventStackGobbler;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.ButtonClickEventStackGobbler;
@@ -15,6 +14,8 @@ import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.PopupClickEve
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.RadioButtonClickEventStackGobbler;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.TableClickEventStackGobbler;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.simple.WindowFocusEventStackGobbler;
+
+import io.toast.tk.core.agent.interpret.AWTCapturedEvent;
 
 public class EventStackGobblerProvider {
 

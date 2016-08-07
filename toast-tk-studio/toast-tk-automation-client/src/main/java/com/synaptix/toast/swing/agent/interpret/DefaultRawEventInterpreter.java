@@ -1,7 +1,7 @@
 package com.synaptix.toast.swing.agent.interpret;
 
-import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
-import com.synaptix.toast.core.agent.interpret.IEventInterpreter;
+import io.toast.tk.core.agent.interpret.AWTCapturedEvent;
+import io.toast.tk.core.agent.interpret.IEventInterpreter;
 
 /**
  * Keep all stored to build things later

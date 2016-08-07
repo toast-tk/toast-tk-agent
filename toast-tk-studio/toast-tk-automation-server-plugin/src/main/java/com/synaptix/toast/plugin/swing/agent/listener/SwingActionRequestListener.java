@@ -31,16 +31,17 @@ import org.fest.swing.fixture.JPopupMenuFixture;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.google.inject.Inject;
-import com.synaptix.toast.adapter.swing.handler.ActionProcessor;
-import com.synaptix.toast.adapter.swing.handler.ActionProcessorFactory;
-import com.synaptix.toast.adapter.swing.handler.ActionProcessorFactoryProvider;
-import com.synaptix.toast.adapter.swing.utils.FestRobotInstance;
-import com.synaptix.toast.core.adapter.AutoSwingType;
-import com.synaptix.toast.core.net.request.CommandRequest;
-import com.synaptix.toast.core.net.response.ErrorResponse;
-import com.synaptix.toast.core.net.response.ExistsResponse;
-import com.synaptix.toast.core.net.response.ValueResponse;
-import com.synaptix.toast.dao.domain.api.test.ITestResult.ResultKind;
+
+import io.toast.tk.adapter.swing.handler.ActionProcessor;
+import io.toast.tk.adapter.swing.handler.ActionProcessorFactory;
+import io.toast.tk.adapter.swing.handler.ActionProcessorFactoryProvider;
+import io.toast.tk.adapter.swing.utils.FestRobotInstance;
+import io.toast.tk.core.adapter.AutoSwingType;
+import io.toast.tk.core.net.request.CommandRequest;
+import io.toast.tk.core.net.response.ErrorResponse;
+import io.toast.tk.core.net.response.ExistsResponse;
+import io.toast.tk.core.net.response.ValueResponse;
+import io.toast.tk.dao.domain.api.test.ITestResult.ResultKind;
 
 public class SwingActionRequestListener extends Listener implements Runnable {
 

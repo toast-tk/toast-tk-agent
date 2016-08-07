@@ -1,9 +1,7 @@
 package com.synaptix.toast.agent.web.record;
 
-import java.util.List;
-
-import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
-import com.synaptix.toast.core.agent.interpret.WebEventRecord;
+import io.toast.tk.core.agent.interpret.IEventInterpreter.EventType;
+import io.toast.tk.core.agent.interpret.WebEventRecord;
 
 public abstract class LoopEventStackGobbler extends EventStackGobbler {
 
@@ -18,7 +16,6 @@ public abstract class LoopEventStackGobbler extends EventStackGobbler {
 	}
 	
 
-	public abstract List<String> getStartEvents();
 	
 	
 	public LoopEventStackGobbler digest(
@@ -30,7 +27,7 @@ public abstract class LoopEventStackGobbler extends EventStackGobbler {
 				&&
 				capturedEvent.getTarget().equals(currentTarget)
 				&& 
-				getStopEvent().equals(capturedEvent.getEventType())){
+				getStopEvents().contains(capturedEvent.getEventType())){
 			this.finalEvent = capturedEvent;
 		}
 		return this;

@@ -1,8 +1,11 @@
 package com.synaptix.toast.agent.web.record.gobbler;
 
+import java.util.List;
+
 import com.synaptix.toast.agent.web.record.EventStackGobbler;
-import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
-import com.synaptix.toast.core.agent.interpret.WebEventRecord;
+
+import io.toast.tk.core.agent.interpret.IEventInterpreter.EventType;
+import io.toast.tk.core.agent.interpret.WebEventRecord;
 
 public class SelectEventStackGobbler extends EventStackGobbler {
 
@@ -47,13 +50,19 @@ public class SelectEventStackGobbler extends EventStackGobbler {
 	}
 
 	@Override
-	public String getStopEvent() {
+	public String getComponentType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getComponentType() {
+	public List<String> getStartEvents() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> getStopEvents() {
 		// TODO Auto-generated method stub
 		return null;
 	}

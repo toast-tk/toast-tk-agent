@@ -1,11 +1,11 @@
 package com.synaptix.toast.plugin.swing.agent.record.gobbler.simple;
 
-import javax.swing.JMenuItem;
 import javax.swing.JTable;
 
-import com.synaptix.toast.core.agent.interpret.AWTCapturedEvent;
-import com.synaptix.toast.core.agent.interpret.IEventInterpreter.EventType;
 import com.synaptix.toast.plugin.swing.agent.record.gobbler.EventStackGobbler;
+
+import io.toast.tk.core.agent.interpret.AWTCapturedEvent;
+import io.toast.tk.core.agent.interpret.IEventInterpreter.EventType;
 
 public class TableClickEventStackGobbler extends EventStackGobbler {
 
