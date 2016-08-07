@@ -71,14 +71,14 @@ public class InputEventStackGobbler extends EventStackGobbler {
 	}
 
 	@Override
-	public String getComponentType() {
+	public List<String> getStartEvents() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 
 	@Override
-	public List<String> getStartEvents() {
+	public List<String> getSupportedComponents() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -1,5 +1,6 @@
 package com.synaptix.toast.agent.web.record.gobbler;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.synaptix.toast.agent.web.record.EventStackGobbler;
@@ -58,15 +59,13 @@ public class ButtonClickEventStackGobbler extends EventStackGobbler {
 	}
 
 	@Override
-	public String getComponentType() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> getStartEvents() {
+		return Arrays.asList("click");
 	}
 
 
 	@Override
-	public List<String> getStartEvents() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> getSupportedComponents() {
+		return Arrays.asList("submit", "button");
 	}
 }

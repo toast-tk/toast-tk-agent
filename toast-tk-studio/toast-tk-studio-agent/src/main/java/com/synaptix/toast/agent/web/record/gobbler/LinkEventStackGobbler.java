@@ -1,5 +1,6 @@
 package com.synaptix.toast.agent.web.record.gobbler;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.synaptix.toast.agent.web.record.EventStackGobbler;
@@ -10,15 +11,6 @@ import io.toast.tk.core.agent.interpret.WebEventRecord;
 public class LinkEventStackGobbler extends EventStackGobbler {
 
 	WebEventRecord finalEvent = null;
-
-
-	@Override
-	public boolean isInterestedIn(
-			WebEventRecord capturedEvent) {
-		String component = capturedEvent.getComponent() != null ? capturedEvent.getComponent() : "";
-		return "click".equals(capturedEvent.getEventType()) && component.startsWith("a");
-	}
-
 
 	@Override
 	public boolean isLooper() {
@@ -58,17 +50,16 @@ public class LinkEventStackGobbler extends EventStackGobbler {
 	}
 
 
+
 	@Override
-	public String getComponentType() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> getStartEvents() {
+		return Arrays.asList("click");
 	}
 
 
 	@Override
-	public List<String> getStartEvents() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> getSupportedComponents() {
+		return Arrays.asList("a");
 	}
 
 }
