@@ -20,7 +20,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Inject;
-import com.synaptix.toast.constant.Property;
 import com.synaptix.toast.core.agent.config.Config;
 import com.synaptix.toast.core.agent.config.ConfigProvider;
 import com.synaptix.toast.core.agent.config.WebConfig;

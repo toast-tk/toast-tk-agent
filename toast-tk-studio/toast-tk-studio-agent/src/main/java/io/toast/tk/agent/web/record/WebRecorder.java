@@ -1,7 +1,5 @@
 package io.toast.tk.agent.web.record;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -9,10 +7,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.common.collect.ImmutableList;
-
-import io.toast.tk.core.agent.interpret.IEventInterpreter.EventType;
 import io.toast.tk.agent.web.IAgentServer;
+import io.toast.tk.core.agent.interpret.IEventInterpreter.EventType;
 import io.toast.tk.core.agent.interpret.WebEventRecord;
 
 public class WebRecorder {
