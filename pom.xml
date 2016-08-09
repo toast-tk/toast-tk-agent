@@ -8,8 +8,8 @@
 	<packaging>pom</packaging>
 	<name>Toast Toolkit - POM Module</name>
 	<organization>
-		<name>Synaptix-Labs</name>
-		<url>http://www.synaptix-labs.com</url>
+		<name>Toast TK</name>
+		<url>http://toast-tk.io</url>
 	</organization>
 	<modules>
 		<!-- common modules -->
@@ -64,13 +64,6 @@
 			<name>Sallah Kokaina</name>
 			<id>skokaina</id>
 			<email>sallah.kokaina@gmail.com</email>
-			<organization>Synaptix-Labs - Cereza Management and IT - Talan Group</organization>
-		</developer>
-		<developer>
-			<name>Nicolas Sauvage</name>
-			<id>nsauvage</id>
-			<email>nicolas.sauvage@synaptix.fr</email>
-			<organization>Synaptix-Labs - Cereza Management and IT - Talan Group</organization>
 		</developer>
 	</developers>
 	<dependencies>
@@ -212,11 +205,6 @@
 				<configuration>
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.github.ferstl</groupId>
-				<artifactId>depgraph-maven-plugin</artifactId>
-				<version>1.0.1</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -382,40 +370,4 @@
 			<url>http://nexus.synaptix-labs.com/content/repositories/snapshots/</url>
 		</repository>
 	</repositories>
-	<profiles>
-		<profile>
-			<id>DEPLOY_NEXUS_SYNAPTIX</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<distributionManagement>
-				<repository>
-					<id>synaptix-releases-repository</id>
-					<url>http://nexus.synaptix-labs.com/content/repositories/releases/</url>
-				</repository>
-				<snapshotRepository>
-					<id>synaptix-snapshots-repository</id>
-					<url>http://nexus.synaptix-labs.com/content/repositories/snapshots/</url>
-				</snapshotRepository>
-			</distributionManagement>
-		</profile>
-		<profile>
-			<id>DEPLOY_NEXUS_SNCF</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<distributionManagement>
-				<repository>
-					<id>sncf-releases</id>
-					<name>Inhouse Releases Repository</name>
-					<url>http://x64ertbidv3.si.fret.sncf.fr:8091/nexus/content/repositories/releases/</url>
-				</repository>
-				<snapshotRepository>
-					<id>sncf-snapshots</id>
-					<name>Inhouse Snapshots Repository</name>
-					<url>http://x64ertbidv3.si.fret.sncf.fr:8091/nexus/content/repositories/snapshots/</url>
-				</snapshotRepository>
-			</distributionManagement>
-		</profile>
-	</profiles>
 </project>

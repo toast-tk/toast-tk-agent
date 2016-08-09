@@ -16,17 +16,10 @@
 	</properties>
 	<description>
 	    Toast TK Studio Parent Module.
-	    This module is the parent module for the studio, featuring:
-	    	- Adapters Plugin Loader
-	    	- Swing Action Adapter Plugin
-	    	- Swing Agent (the Studio)
 	</description>
 	<modules>
 		<module>core</module>
 		<module>twinkle</module>
-		<module>toast-tk-automation-plugin-loader</module>
-		<module>toast-tk-automation-server-plugin</module>
 		<module>toast-tk-studio-agent</module>
- 		<module>toast-tk-automation-client</module>
 	</modules>
 </project>
