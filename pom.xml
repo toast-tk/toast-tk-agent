@@ -359,10 +359,4 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-	<repositories>
-		<repository>
-			<id>synaptix-snapshots-repository</id>
-			<url>http://nexus.synaptix-labs.com/content/repositories/snapshots/</url>
-		</repository>
-	</repositories>
 </project>
