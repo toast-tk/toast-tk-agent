@@ -361,10 +361,6 @@
 	</build>
 	<repositories>
 		<repository>
-			<id>mongodb-morphia</id>
-			<url>http://morphia.googlecode.com/svn/mavenrepo/</url>
-		</repository>
-		<repository>
 			<id>synaptix-snapshots-repository</id>
 			<url>http://nexus.synaptix-labs.com/content/repositories/snapshots/</url>
 		</repository>
