@@ -20,6 +20,12 @@ function recorder(){
 		'dragend': 'MouseEvents'
 	};
 
+	var blacklistNodes = [
+		'#document',
+		'HMTL',
+		'body'
+	]
+
 	function initEvent(){ 
 		if(document.body.getAttribute('recording') == undefined){
 			for(eventName in nativeEvents) {
@@ -33,18 +39,20 @@ function recorder(){
 		if(event.triggeredManually) {
 			return true;
 		}
-		if(event.type in nativeEvents) {
+		if(event.type in nativeEvents 
+			&& !blacklistNodes.includes(event.target.nodeName )) {
 			storeEvent(event);
 			return true;
 		}
 	};
 	
 	function storeEvent(event) {
+		var target= 'target' in event? event.target : event.srcElement; //IE Hack
 		ev = convertEvent(event);
-		ev.value = getTargetValue(event.target);
-		ev.component=getTargetComponent(event.target);
+		ev.value = getTargetValue(target);
+		ev.component=getTargetComponent(target);
 		ev.parent=document.location.hostname.replace(/\\./g, '_');
-		ev.componentName=getTargetComponentName(event.target);
+		ev.componentName=getTargetComponentName(target);
 		setTimeout(publishEvent(ev), 10);
 		if(processing) {
 			eventQueue.push(ev);
@@ -75,7 +83,7 @@ function recorder(){
 				if (type === 'text'){
 					return node.value;
 				}
-				if (type === 'password'){
+				if (type === 'password'){ 
 					return node.value;
 				}
 				if (type === 'date'){
@@ -142,9 +150,9 @@ function recorder(){
 	
 	function publishEvent(event){
 		console.log(event);
-		xmlhttp.open('POST', host + '/event');
-		xmlhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-		xmlhttp.send(JSON.stringify(event));
+		//xmlhttp.open('POST', host + '/event');
+		//xmlhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+		//xmlhttp.send(JSON.stringify(event));
 	};
 
 	function extractLocatorFromEvent(target){
@@ -164,24 +172,52 @@ function recorder(){
 	};
 	
 	function convertEvent(event) {
+		var target= 'target' in event? event.target : event.srcElement; //IE Hack
 		var ev = {};
 		var id = new Date().getTime() + ':' + Math.random();
 		ev['id'] = id;
 		ev['eventType'] = event.type;
-		ev['target'] = extractLocatorFromEvent(event.target);
+		ev['target'] = extractLocatorFromEvent(target);
 		ev['button'] = event.button;
 		ev['charCode'] = event.charCode;
 		ev['keyCode'] = event.keyCode;
 		ev['altKey'] = event.altKey;
 		ev['ctrlKey'] = event.ctrlKey;
 		ev['shiftKey'] = event.shiftKey;
-		ev['clientX'] = event.clientX;
-		ev['clientY'] = event.clientY;
-		ev['offsetX'] = event.offsetX;
-		ev['offsetY'] = event.offsetY;
+		var absolutePos = getPageXY(target);
+		ev['offsetX'] = absolutePos[0];
+		ev['offsetY'] = absolutePos[1];
+		ev['path'] = getPathTo(target);
 		eventHistory[id] = ev;
 		return ev;
 	};
+
+	function getPathTo(element) {
+	    if (element.id!=='')
+	        return 'id("'+element.id+'")';
+	    if (element===document.body)
+	        return element.tagName;
+
+	    var ix= 0;
+	    var siblings= element.parentNode.childNodes;
+	    for (var i= 0; i<siblings.length; i++) {
+	        var sibling= siblings[i];
+	        if (sibling===element)
+	            return getPathTo(element.parentNode)+'/'+element.tagName+'['+(ix+1)+']';
+	        if (sibling.nodeType===1 && sibling.tagName===element.tagName)
+	            ix++;
+	    }
+	}
+
+	function getPageXY(element) {
+	    var x= 0, y= 0;
+	    while (element) {
+	        x+= element.offsetLeft;
+	        y+= element.offsetTop;
+	        element= element.offsetParent;
+	    }
+	    return [x, y];
+	}
 
 	function getEvents() {
 		processing = true;

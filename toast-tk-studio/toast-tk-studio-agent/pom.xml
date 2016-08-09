@@ -27,30 +27,6 @@
 		</resources>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.5.3</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>attached</goal>
-						</goals>
-						<phase>package</phase>
-						<configuration>
-							<finalName>toast-tk-studio-agent</finalName>
-							<descriptor>src/assembly/bin.xml</descriptor>
-							<archive>
-								<manifest>
-									<mainClass>
-										com.synaptix.toast.swing.agent.swing.JNLPEnvInitializer
-									</mainClass>
-								</manifest>
-							</archive>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
@@ -160,22 +136,4 @@
 			<artifactId>guice</artifactId>
 		</dependency>
 	</dependencies>
-	<profiles>
-		<profile>
-			<id>DEPLOY_NEXUS_SYNAPTIX</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<distributionManagement>
-				<repository>
-					<id>synaptix-releases-repository</id>
-					<url>http://nexus.talanlabs.com/content/repositories/releases/</url>
-				</repository>
-				<snapshotRepository>
-					<id>synaptix-snapshots-repository</id>
-					<url>http://nexus.talanlabs.com/content/repositories/snapshots/</url>
-				</snapshotRepository>
-			</distributionManagement>
-		</profile>
-	</profiles>
 </project>
