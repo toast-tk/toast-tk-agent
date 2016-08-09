@@ -16,7 +16,6 @@
 	    	- Core
 	</description>
 	<modules>
-		<module>toast-tk-common-utils</module>
 		<module>toast-tk-maven-plugin</module>
 		<module>toast-tk-core</module>
 	</modules>

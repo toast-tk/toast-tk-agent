@@ -9,14 +9,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtMethod;
-import javassist.LoaderClassPath;
-import javassist.Modifier;
-import javassist.NotFoundException;
-
-import javassist.bytecode.ClassFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -28,12 +20,20 @@ import org.apache.maven.project.MavenProject;
 
 import com.google.gson.Gson;
 import com.synaptix.toast.constant.Property;
-import com.synaptix.toast.core.adapter.ActionAdapterKind;
-import com.synaptix.toast.core.annotation.Action;
-import com.synaptix.toast.core.annotation.ActionAdapter;
 import com.synaptix.toast.core.dao.adapter.ActionAdapterDescriptor;
 import com.synaptix.toast.core.dao.adapter.ActionAdapterDescriptorLine;
-import com.synaptix.toast.core.rest.RestUtils;
+
+import io.toast.tk.core.adapter.ActionAdapterKind;
+import io.toast.tk.core.annotation.Action;
+import io.toast.tk.core.annotation.ActionAdapter;
+import io.toast.tk.core.rest.RestUtils;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.LoaderClassPath;
+import javassist.Modifier;
+import javassist.NotFoundException;
+import javassist.bytecode.ClassFile;
 
 @Mojo(name = "deploy", defaultPhase = LifecyclePhase.INSTALL, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class DeployConnectorMojo extends AbstractMojo {

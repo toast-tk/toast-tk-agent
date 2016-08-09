@@ -33,6 +33,12 @@ import io.toast.tk.agent.web.RestRecorderService;
 public class MainApp {
 
 	private static final Logger LOG = LogManager.getLogger(MainApp.class);
+
+	
+	public static final String TOAST_TEST_WEB_INIT_RECORDING_URL = "toast.web.recording.url";
+	public static final String TOAST_CHROMEDRIVER_PATH = "toast.chromedriver.path";
+	public static final String TOAST_TEST_WEB_APP_URL = "toast.webapp.url";
+	
 	final static String PROPERTY_FILE = "/toast.web.properties";
 	private BrowserManager browserManager;
 	private File toastWebPropertiesFile;
@@ -84,9 +90,9 @@ public class MainApp {
 
 	private void initAndStoreProperties(final WebConfig webConfig) throws IOException {
 		Properties p = new Properties();
-		p.setProperty(Property.TOAST_TEST_WEB_INIT_RECORDING_URL, webConfig.getWebInitRecordingUrl());
-		p.setProperty(Property.TOAST_CHROMEDRIVER_PATH, webConfig.getChromeDriverPath());
-		p.setProperty(Property.TOAST_TEST_WEB_APP_URL, webConfig.getWebAppUrl());
+		p.setProperty(TOAST_TEST_WEB_INIT_RECORDING_URL, webConfig.getWebInitRecordingUrl());
+		p.setProperty(TOAST_CHROMEDRIVER_PATH, webConfig.getChromeDriverPath());
+		p.setProperty(TOAST_TEST_WEB_APP_URL, webConfig.getWebAppUrl());
 		p.store(FileUtils.openOutputStream(this.toastWebPropertiesFile), null);
 		this.webProperties.load(FileUtils.openInputStream(this.toastWebPropertiesFile));
 	}

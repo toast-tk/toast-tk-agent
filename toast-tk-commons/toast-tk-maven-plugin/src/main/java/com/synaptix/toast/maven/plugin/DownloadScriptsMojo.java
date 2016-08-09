@@ -28,7 +28,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.sun.jersey.api.client.Client;
 import com.synaptix.toast.constant.Property;
-import com.synaptix.toast.core.rest.RestUtils;
+
+import io.toast.tk.core.rest.RestUtils;
 
 @Mojo(name = "generate", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class DownloadScriptsMojo extends AbstractMojo {

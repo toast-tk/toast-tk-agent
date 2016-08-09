@@ -5,8 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import junit.framework.TestCase;
-
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 public @interface UnitTestedBy {

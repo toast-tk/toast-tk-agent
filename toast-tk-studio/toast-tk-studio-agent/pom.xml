@@ -107,11 +107,6 @@
 			<version>${toast-tk.engine.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.synaptix.toast</groupId>
-			<artifactId>toast-tk-common-utils</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
 			<version>[2.46.0,)</version>
