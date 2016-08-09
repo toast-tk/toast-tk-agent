@@ -15,11 +15,6 @@
 			<artifactId>guice</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.synaptix.toast</groupId>
-			<artifactId>toast-tk-common-utils</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>io.toast-tk</groupId>
 			<artifactId>toast-tk-dao-api</artifactId>
 			<version>${toast-tk.engine.version}</version>
