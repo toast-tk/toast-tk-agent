@@ -13,7 +13,7 @@ public class WebConfig {
 
 	private String webAppUrl;
 	
-	private String ApiKey;
+	private String apiKey;
 	
 	public static String getToastHome() {
 		return System.getProperty("user.home") + "/" + ".toast";
@@ -56,11 +56,11 @@ public class WebConfig {
 	}
 
 	public void setApiKey(
-		String apiKey) {
-		this.ApiKey = apiKey;
+		String apikey) {
+		this.apiKey = apikey;
 	}
 
 	public String getApiKey() {
-		return this.ApiKey;
+		return this.apiKey;
 	}
 }

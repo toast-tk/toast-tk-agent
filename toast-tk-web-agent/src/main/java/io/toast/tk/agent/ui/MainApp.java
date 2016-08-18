@@ -44,7 +44,6 @@ public class MainApp implements IAgentApp {
 	private String chromeDriverName = "chromedriver";
 	private String webAppName = "webApp";
 	private String recorderName = "recording";
-	private String apiKeyName = "api";
 	
 	@Inject
 	public MainApp(WebConfigProvider webConfig, 
