@@ -42,23 +42,24 @@ import org.apache.logging.log4j.Logger;
 public class ConfigPanel extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private String chromeDriverName = "chromedriver";
-	private String webAppName = "webapp";
+	private String webAppName = "webApp";
 	private String recorderName = "recording";
+	private String apiKeyName = "api";
 
 	private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
 
 	private JPanel mainPane;
 
-	private JLabel labelChrome, labelWebApp, labelRecorder;
-	private JTextField textFieldChrome, textFieldWebApp, textFieldRecorder;
-	private JPanel textButtonPanelChrome, textButtonPanelWebApp, textButtonPanelRecorder,
-		iconPanelChrome, iconPanelWebApp, iconPanelRecorder;
+	private JLabel labelChrome, labelWebApp, labelRecorder, labelApiKey;
+	private JTextField textFieldChrome, textFieldWebApp, textFieldRecorder, textFieldApiKey;
+	private JPanel textButtonPanelChrome, textButtonPanelWebApp, textButtonPanelRecorder, textButtonPanelApiKey,
+		iconPanelChrome, iconPanelWebApp, iconPanelRecorder, iconPanelApiKey;
 	private JLabel errorLabelChrome, errorLabelWebApp, errorLabelRecorder;
 	private JButton fileSearchChrome;
 
-	private JLabel iconValidChrome, iconValidWebApp, iconValidRecorder, 
+	private JLabel iconValidChrome, iconValidWebApp, iconValidRecorder,
 		iconNotValidChrome, 	iconNotValidWebApp, 	iconNotValidRecorder;
 
 	private final Properties properties;
@@ -135,7 +136,7 @@ public class ConfigPanel extends JDialog {
 			JLabel iconValid = new JLabel(new ImageIcon(this.valid_image));
 			JLabel iconNotValid = new JLabel(new ImageIcon(this.notvalid_image));
 			
-			JLabel errorLabel;
+			JLabel errorLabel = null;
 			if(strKey.contains(chromeDriverName)){
 				errorMessage = errorMessageSelectFile;
 				
@@ -150,16 +151,18 @@ public class ConfigPanel extends JDialog {
 				}
 			}
 			else {
-				errorMessage = errorMessageSelectURL;
-				
-				if( testWebAppURL(textField.getText(),false) ) {
-					iconPanel.add(iconValid);
-					errorLabel = new JLabel(" ");
-				}
-				else 
-				{
-					iconPanel.add(iconNotValid);
-					errorLabel = new JLabel(errorMessage);
+				if(!strKey.contains(apiKeyName)){ // apiKey does not have verification
+					errorMessage = errorMessageSelectURL;
+					
+					if( testWebAppURL(textField.getText(),false) ) {
+						iconPanel.add(iconValid);
+						errorLabel = new JLabel(" ");
+					}
+					else 
+					{
+						iconPanel.add(iconNotValid);
+						errorLabel = new JLabel(errorMessage);
+					}
 				}
 			}
 			
@@ -241,6 +244,14 @@ public class ConfigPanel extends JDialog {
 				textButtonPanelRecorder.add(iconPanelRecorder);
 				errorLabelRecorder = errorLabel;
 			}
+			if(strKey.contains(apiKeyName)) {
+				labelApiKey = label;
+				textFieldApiKey = textField;
+				iconPanelApiKey = iconPanel;
+				textButtonPanelApiKey = textButtonPanel;
+				textButtonPanelApiKey.add(textFieldApiKey);
+				textButtonPanelApiKey.add(iconPanelApiKey);
+			}
 		}
 		
 
@@ -290,13 +301,16 @@ public class ConfigPanel extends JDialog {
 		buttonPanel.add(cancelButton);
 		buttonPanel.add(okButton);
 		
-		mainPane.add(labelChrome);
-		mainPane.add(textButtonPanelChrome);
-		mainPane.add(errorLabelChrome);
-
 		mainPane.add(labelWebApp);
 		mainPane.add(textButtonPanelWebApp);
 		mainPane.add(errorLabelWebApp);
+		
+		mainPane.add(labelApiKey);
+		mainPane.add(textButtonPanelApiKey);
+
+		mainPane.add(labelChrome);
+		mainPane.add(textButtonPanelChrome);
+		mainPane.add(errorLabelChrome);
 		
 		mainPane.add(labelRecorder);
 		mainPane.add(textButtonPanelRecorder);

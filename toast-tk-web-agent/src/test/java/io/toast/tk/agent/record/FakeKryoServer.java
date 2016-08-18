@@ -13,7 +13,7 @@ public class FakeKryoServer implements IAgentServer{
 	}
 
 	@Override
-	public void register() {
+	public void register(String ApiKey) {
 		// TODO Auto-generated method stub
 		
 	}

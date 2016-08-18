@@ -37,8 +37,8 @@ public class AgentServerImpl  implements IAgentServer{
 	}
 
 	@Override
-	public void register() {
-		RestUtils.registerAgent(getWebAppURI()+"/susbcribe/driver");
+	public void register(String ApiKey) {
+		RestUtils.registerAgent(getWebAppURI()+"/susbcribe/driver" + ApiKey);
 		LOG.info("Agent registred with hotname {}", hostName);
 	}
 

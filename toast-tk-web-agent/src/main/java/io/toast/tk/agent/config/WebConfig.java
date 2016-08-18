@@ -1,7 +1,5 @@
 package io.toast.tk.agent.config;
 
-import java.io.File;
-
 public class WebConfig {
 
 
@@ -14,6 +12,8 @@ public class WebConfig {
 	private String chromeDriverPath;
 
 	private String webAppUrl;
+	
+	private String ApiKey;
 	
 	public static String getToastHome() {
 		return System.getProperty("user.home") + "/" + ".toast";
@@ -53,5 +53,14 @@ public class WebConfig {
 
 	public String getWebAppUrl() {
 		return this.webAppUrl;
+	}
+
+	public void setApiKey(
+		String apiKey) {
+		this.ApiKey = apiKey;
+	}
+
+	public String getApiKey() {
+		return this.ApiKey;
 	}
 }
