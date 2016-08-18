@@ -33,18 +33,15 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
-
-
 /**
  * Stub for displaying Configuration item.
  */
 public class ConfigPanel extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	private String chromeDriverName = "chromedriver";
-	private String webAppName = "webApp";
+	private String webAppName = "webapp";
 	private String recorderName = "recording";
 	private String apiKeyName = "api";
 
@@ -56,12 +53,12 @@ public class ConfigPanel extends JDialog {
 	private JTextField textFieldChrome, textFieldWebApp, textFieldRecorder, textFieldApiKey;
 	private JPanel textButtonPanelChrome, textButtonPanelWebApp, textButtonPanelRecorder, textButtonPanelApiKey,
 		iconPanelChrome, iconPanelWebApp, iconPanelRecorder, iconPanelApiKey;
-	private JLabel errorLabelChrome, errorLabelWebApp, errorLabelRecorder;
+	private JLabel errorLabelChrome, errorLabelWebApp, errorLabelRecorder, errorLabelApiKey;
 	private JButton fileSearchChrome;
 
 	private JLabel iconValidChrome, iconValidWebApp, iconValidRecorder,
 		iconNotValidChrome, 	iconNotValidWebApp, 	iconNotValidRecorder;
-
+	
 	private final Properties properties;
 
 	private HashMap<String, JTextField> textFields;
@@ -70,9 +67,11 @@ public class ConfigPanel extends JDialog {
 	
 	private Image notvalid_image;
 	private Image valid_image;
+	private Image toast_logo;
 	
 	private String errorMessageSelectFile = "The file that you have selected do not exist.";
 	private String errorMessageSelectURL = "The URL does not anwser.";
+	private String errorMessageApiKey = "The Api Key have to match with the WebApp";
 	
 	/**
 	 * This is the default constructor
@@ -108,9 +107,12 @@ public class ConfigPanel extends JDialog {
 		
 		InputStream notvalid_imageAsStream = this.getClass().getClassLoader().getResourceAsStream("picto-non-valide.png");   
 		this.notvalid_image = ImageIO.read(notvalid_imageAsStream);
-		
+
 		InputStream valid_imageAsStream = this.getClass().getClassLoader().getResourceAsStream("picto-valide.png");   
 		this.valid_image = ImageIO.read(valid_imageAsStream);
+		
+		InputStream toast_logoAsStream = this.getClass().getClassLoader().getResourceAsStream("ToastLogo_24.png");   
+		this.toast_logo = ImageIO.read(toast_logoAsStream);
 		
 		for(Object key : EnumerationUtils.toList(properties.propertyNames())) {
 			String strKey = (String) key;
@@ -132,10 +134,10 @@ public class ConfigPanel extends JDialog {
 			textButtonPanel.add(Box.createHorizontalGlue());
 			
 			JPanel iconPanel = new JPanel();
-
+			
 			JLabel iconValid = new JLabel(new ImageIcon(this.valid_image));
 			JLabel iconNotValid = new JLabel(new ImageIcon(this.notvalid_image));
-			
+
 			JLabel errorLabel = null;
 			if(strKey.contains(chromeDriverName)){
 				errorMessage = errorMessageSelectFile;
@@ -163,6 +165,13 @@ public class ConfigPanel extends JDialog {
 						iconPanel.add(iconNotValid);
 						errorLabel = new JLabel(errorMessage);
 					}
+				}
+				else {
+					JLabel toastLogo = new JLabel(new ImageIcon(this.toast_logo));
+					iconPanel.add(toastLogo);
+					
+					errorMessage = errorMessageApiKey;
+					errorLabel = new JLabel(errorMessage);
 				}
 			}
 			
@@ -251,6 +260,7 @@ public class ConfigPanel extends JDialog {
 				textButtonPanelApiKey = textButtonPanel;
 				textButtonPanelApiKey.add(textFieldApiKey);
 				textButtonPanelApiKey.add(iconPanelApiKey);
+				errorLabelApiKey = errorLabel;
 			}
 		}
 		
@@ -278,7 +288,7 @@ public class ConfigPanel extends JDialog {
 		});
 		
 
-		JButton tryButton = new JButton("Validate");
+		JButton tryButton = new JButton("Test");
 		tryButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				for(Object key : EnumerationUtils.toList(properties.propertyNames())) 
@@ -300,18 +310,19 @@ public class ConfigPanel extends JDialog {
 		buttonPanel.add(tryButton);
 		buttonPanel.add(cancelButton);
 		buttonPanel.add(okButton);
-		
+
 		mainPane.add(labelWebApp);
 		mainPane.add(textButtonPanelWebApp);
 		mainPane.add(errorLabelWebApp);
-		
+
 		mainPane.add(labelApiKey);
 		mainPane.add(textButtonPanelApiKey);
+		mainPane.add(errorLabelApiKey);
 
 		mainPane.add(labelChrome);
 		mainPane.add(textButtonPanelChrome);
 		mainPane.add(errorLabelChrome);
-		
+
 		mainPane.add(labelRecorder);
 		mainPane.add(textButtonPanelRecorder);
 		mainPane.add(errorLabelRecorder);
