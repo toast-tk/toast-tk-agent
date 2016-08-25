@@ -370,7 +370,7 @@ public class ConfigPanel extends JDialog {
 		
 	    mainPane.add(secondPane);
 		
-		setTitle("Settings");
+		setTitle("AGENT SETTINGS");
 		setSize(500, 500);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setContentPane(mainPane);

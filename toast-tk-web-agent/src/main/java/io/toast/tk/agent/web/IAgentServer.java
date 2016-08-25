@@ -6,7 +6,7 @@ public interface IAgentServer {
 
 	void sendEvent(WebEventRecord adjustedEvent);
 	
-	void register(String ApiKey);
+	boolean register(String ApiKey);
 	
 	void unRegister();
 

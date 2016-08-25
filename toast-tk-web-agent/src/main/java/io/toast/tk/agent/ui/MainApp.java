@@ -97,7 +97,6 @@ public class MainApp implements IAgentApp {
 				InputStream online_imageAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo_on.png");   
 				this.online_image = ImageIO.read(online_imageAsStream);
 
-				
 			    PopupMenu popup = new PopupMenu();
 			    
 			    MenuItem killItem = new MenuItem("Kill agent");
@@ -139,9 +138,10 @@ public class MainApp implements IAgentApp {
 	        public void actionPerformed(ActionEvent e) {
 	        	try {
 					if(verificationWebApp(webAppName)) {
-						agentServer.register(webConfigProvider.get().getLogDir());
-						trayIcon.setImage(online_image);
-						NotificationManager.showMessage("Web Agent - Connected to Webapp !").showNotification();
+						if(agentServer.register(webConfigProvider.get().getApiKey())) {
+							trayIcon.setImage(online_image);
+							NotificationManager.showMessage("Web Agent - Connected to Webapp !").showNotification();
+						}
 					}
 				} catch (IOException e1) {
 					LOG.error(e1.getMessage(), e1);
@@ -154,6 +154,7 @@ public class MainApp implements IAgentApp {
 	ActionListener getKillListener(){
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
+	        	agentServer.unRegister();
 	        	System.exit(-1);
 	        }
 	    };
