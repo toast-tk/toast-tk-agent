@@ -1,5 +1,6 @@
 package io.toast.tk.agent.web;
 
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -10,7 +11,6 @@ import com.google.gson.Gson;
 import com.google.inject.Inject;
 
 import io.toast.tk.agent.ui.IAgentApp;
-import io.toast.tk.agent.ui.MainApp;
 import io.toast.tk.core.agent.interpret.WebEventRecord;
 import io.toast.tk.core.rest.RestUtils;
 
@@ -38,8 +38,16 @@ public class AgentServerImpl  implements IAgentServer{
 
 	@Override
 	public void register() {
-		RestUtils.registerAgent(getWebAppURI()+"/susbcribe/driver");
-		LOG.info("Agent registred with hotname {}", hostName);
+		try {
+			String localAddress = Inet4Address.getLocalHost().getHostAddress();
+			AgentInformation info = new AgentInformation(localAddress, "TOKEN");
+			String json = new Gson().toJson(info);
+			RestUtils.registerAgent(getWebAppURI()+"/susbcribe/driver", json);
+			LOG.info("Agent registred with hotname {}", hostName);
+		} catch (UnknownHostException e) {
+			LOG.error(e.getMessage(), e);
+		}
+		
 	}
 
 	@Override
