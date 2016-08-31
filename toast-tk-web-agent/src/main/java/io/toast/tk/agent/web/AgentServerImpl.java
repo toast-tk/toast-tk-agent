@@ -4,6 +4,7 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import org.apache.log4j.jmx.Agent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -70,6 +71,7 @@ public class AgentServerImpl  implements IAgentServer{
 		} catch (UnknownHostException e) {
 			LOG.error(e.getMessage(), e);
 		}
+		return false;
 	}
 
 	@Override
