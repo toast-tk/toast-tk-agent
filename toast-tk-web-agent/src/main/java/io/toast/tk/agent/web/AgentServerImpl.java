@@ -1,5 +1,6 @@
 package io.toast.tk.agent.web;
 
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -40,27 +41,35 @@ public class AgentServerImpl  implements IAgentServer{
 		return register(null);
 	}
 	public boolean register(String ApiKey) {
-		String url = getWebAppURI();
-		// If it ends with a "/", we delete it
-		if(getWebAppURI().endsWith("/")) {
-			url = (new StringBuilder(url)).deleteCharAt(url.length()-1).toString();
+		try {
+			String url = getWebAppURI();
+			// If it ends with a "/", we delete it
+			if(getWebAppURI().endsWith("/")) {
+				url = (new StringBuilder(url)).deleteCharAt(url.length()-1).toString();
+			}
+			url = url + "/susbcribe/driver";
+
+			String localAddress = Inet4Address.getLocalHost().getHostAddress();
+			AgentInformation info = new AgentInformation(localAddress, "TOKEN");
+			String json = new Gson().toJson(info);
+			
+			boolean result = false;
+			if(ApiKey != null) {
+				result = RestUtils.registerAgent(url, json, ApiKey);
+			} else {
+				result = RestUtils.registerAgent(url, json);
+			}
+			
+			if(result) {
+				LOG.info("Agent registred with hotname {}", hostName);
+			}
+			else {
+				LOG.info("The webApp does not anwser at " + url);
+			}
+			return result;
+		} catch (UnknownHostException e) {
+			LOG.error(e.getMessage(), e);
 		}
-		url = url + "/susbcribe/driver";
-		
-		boolean result = false;
-		if(ApiKey != null) {
-			result = RestUtils.registerAgent(url, ApiKey);
-		} else {
-			result = RestUtils.registerAgent(url);
-		}
-		
-		if(result) {
-			LOG.info("Agent registred with hotname {}", hostName);
-		}
-		else {
-			LOG.info("The webApp does not anwser at " + url);
-		}
-		return result;
 	}
 
 	@Override
