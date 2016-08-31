@@ -142,7 +142,11 @@ public class MainApp implements IAgentApp {
 							trayIcon.setImage(online_image);
 							NotificationManager.showMessage("Web Agent - Connected to Webapp !").showNotification();
 						}
+						else
+							NotificationManager.showMessage("The Web App does not answer with the ApiKey " + webConfigProvider.get().getApiKey()).showNotification();
 					}
+					else 
+						NotificationManager.showMessage("The Web App does not anwser").showNotification();
 				} catch (IOException e1) {
 					LOG.error(e1.getMessage(), e1);
 				}

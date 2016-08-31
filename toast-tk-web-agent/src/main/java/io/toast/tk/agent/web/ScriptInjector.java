@@ -16,6 +16,7 @@ import org.openqa.selenium.WebElement;
 
 import com.google.inject.Inject;
 
+import io.toast.tk.agent.config.WebConfigProvider;
 import io.toast.tk.agent.ui.NotificationManager;
 import io.toast.tk.core.agent.interpret.WebEventRecord;
 
@@ -27,11 +28,13 @@ public class ScriptInjector {
 	private JFrame frmOpt; 
 	private IAgentServer server;
 	private UriChangeListener uriChangeListener;
+	private WebConfigProvider configProvider;
 	
 	@Inject
-	public ScriptInjector(IAgentServer server, UriChangeListener uriChangeListener){
+	public ScriptInjector(IAgentServer server, UriChangeListener uriChangeListener, WebConfigProvider configProvider){
 		this.server = server;
 		this.uriChangeListener = uriChangeListener;
+		this.configProvider = configProvider;
 	}
 	
 	private Thread initInjectionRetryThread() {
@@ -83,7 +86,7 @@ public class ScriptInjector {
 		record.setTarget(driver.getCurrentUrl());
 		record.setEventType("open");	
 		record.setComponent("open");
-		this.server.sendEvent(record);
+		this.server.sendEvent(record, configProvider.get().getApiKey());
 	}
 	
 	private String requestPageName() {

@@ -8,7 +8,7 @@ public class FakeKryoServer implements IAgentServer{
 	public WebEventRecord event;
 	
 	@Override
-	public void sendEvent(WebEventRecord adjustedEvent) {
+	public void sendEvent(WebEventRecord adjustedEvent, String ApiKey) {
 		this.event = adjustedEvent;
 	}
 

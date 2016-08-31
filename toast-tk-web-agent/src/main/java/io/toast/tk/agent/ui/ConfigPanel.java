@@ -376,6 +376,7 @@ public class ConfigPanel extends JDialog {
 		setContentPane(mainPane);
 		setResizable(false);
 		setLocationRelativeTo(null);
+		setAlwaysOnTop(true);
 		pack();
 		setVisible(true);
 		
@@ -400,7 +401,8 @@ public class ConfigPanel extends JDialog {
 		catch(IOException e) {
 			LOG.warn("Could not save properties", e);
 		}
-		close();
+		setAlwaysOnTop(false);
+		this.close();
 	}
 
 	private void close() {
@@ -410,6 +412,8 @@ public class ConfigPanel extends JDialog {
 	
 	private void chooseFile(String strKey) {
 		try {
+			setAlwaysOnTop(false);
+			
 	        JFileChooser dialogue = new JFileChooser();
 	        dialogue.setDialogTitle("Directory to the chromeDriver");
 	        dialogue.showOpenDialog(null);
@@ -429,6 +433,8 @@ public class ConfigPanel extends JDialog {
 					testIconValid(strKey, false);
 		        }
 	        }
+
+			setAlwaysOnTop(true);
 	         
 		} catch (IOException e) {
 			LOG.error(e.getMessage(), e);
