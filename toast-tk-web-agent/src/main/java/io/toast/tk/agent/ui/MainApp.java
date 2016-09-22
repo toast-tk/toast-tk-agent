@@ -45,6 +45,9 @@ public class MainApp implements IAgentApp {
 	private String webAppName = "webApp";
 	private String recorderName = "recording";
 	
+	private boolean connectedToWebApp = false;
+	private boolean listenerStarted = false;
+	
 	@Inject
 	public MainApp(WebConfigProvider webConfig, 
 			BrowserManager browserManager, IAgentServer agentServer){
@@ -140,10 +143,11 @@ public class MainApp implements IAgentApp {
 					if(verificationWebApp(webAppName)) {
 						if(agentServer.register(webConfigProvider.get().getApiKey())) {
 							trayIcon.setImage(online_image);
+							connectedToWebApp = true;
 							NotificationManager.showMessage("Web Agent - Connected to Webapp !").showNotification();
 						}
 						else
-							NotificationManager.showMessage("The Web App does not answer with the ApiKey " + webConfigProvider.get().getApiKey()).showNotification();
+							NotificationManager.showMessage("The ApiKey does not match with the WebApp: \n" + webConfigProvider.get().getApiKey()).showNotification();
 					}
 					else 
 						NotificationManager.showMessage("The Web App does not anwser").showNotification();
@@ -168,24 +172,26 @@ public class MainApp implements IAgentApp {
 	ActionListener getStartListener(){
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	        	browserManager.startRecording();
-
 	        	try {
-	        		boolean flag = false;
-	        		
-					if(verificationWebApp(chromeDriverName)) {
-						if(verificationWebApp(recorderName)) {
-							if(verificationWebApp(webAppName)) {
-								flag = true;
-								browserManager.startRecording();
+	        		if(connectedToWebApp) {
+	        			boolean flag = false;
+		        		
+						if(verificationWebApp(chromeDriverName)) {
+							if(verificationWebApp(recorderName)) {
+								if(verificationWebApp(webAppName)) {
+									flag = true;
+									listenerStarted = true;
+									browserManager.startRecording();
+								}
 							}
 						}
-					}
-					
-					if(!flag) {
-						NotificationManager.showMessage("Unable to start recorder, please check recoder parameters !").showNotification();
-					}
-					
+						
+						if(!flag) {
+							NotificationManager.showMessage("Unable to start recorder, please check recoder parameters !").showNotification();
+						}
+	        		}
+	        		else 
+						NotificationManager.showMessage("You have to be connected to the WebApp !").showNotification();
 				} catch (IOException e1) {
 					LOG.error(e1.getMessage(), e1);
 				}
@@ -197,7 +203,11 @@ public class MainApp implements IAgentApp {
 	ActionListener getStopListener(){
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	        	browserManager.closeBrowser();
+	        	if(listenerStarted) {
+		        	browserManager.closeBrowser();
+	        	}
+	        	else
+					NotificationManager.showMessage("The recorder has not been started !").showNotification();
 	        }
 	    };
 	    return listener;

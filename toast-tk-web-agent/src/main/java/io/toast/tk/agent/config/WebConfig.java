@@ -1,5 +1,7 @@
 package io.toast.tk.agent.config;
 
+import org.apache.commons.lang.SystemUtils;
+
 public class WebConfig {
 
 
@@ -16,7 +18,7 @@ public class WebConfig {
 	private String apiKey;
 	
 	public static String getToastHome() {
-		return System.getProperty("user.home") + "/" + ".toast";
+		return System.getProperty("user.home") + SystemUtils.FILE_SEPARATOR + ".toast";
 	}
 
 	public String getLogDir() {

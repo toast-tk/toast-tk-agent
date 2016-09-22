@@ -32,7 +32,6 @@ public class AgentServerImpl  implements IAgentServer{
 		}
 	}
 
-	@Override
 	public void sendEvent(WebEventRecord eventRecord, String ApiKey) {
 		String json = new Gson().toJson(eventRecord);
 		RestUtils.postWebEventRecord(getWebAppURI()+"/record", json, ApiKey);
@@ -48,18 +47,16 @@ public class AgentServerImpl  implements IAgentServer{
 			if(getWebAppURI().endsWith("/")) {
 				url = (new StringBuilder(url)).deleteCharAt(url.length()-1).toString();
 			}
-			url = url + "/susbcribe/driver";
+			url = url + "/susbcribe";
 
 			String localAddress = Inet4Address.getLocalHost().getHostAddress();
-			AgentInformation info = new AgentInformation(localAddress, "TOKEN");
+			AgentInformation info = new AgentInformation(localAddress, ApiKey);
 			String json = new Gson().toJson(info);
 			
 			boolean result = false;
-			if(ApiKey != null) {
-				result = RestUtils.registerAgent(url, json, ApiKey);
-			} else {
-				result = RestUtils.registerAgent(url, json);
-			}
+			
+			result = RestUtils.registerAgent(url, json, ApiKey);
+			
 			
 			if(result) {
 				LOG.info("Agent registred with hotname {}", hostName);
