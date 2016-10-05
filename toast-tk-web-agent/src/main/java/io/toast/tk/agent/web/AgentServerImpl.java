@@ -42,12 +42,7 @@ public class AgentServerImpl  implements IAgentServer{
 	}
 	public boolean register(String ApiKey) {
 		try {
-			String url = getWebAppURI();
-			// If it ends with a "/", we delete it
-			if(getWebAppURI().endsWith("/")) {
-				url = (new StringBuilder(url)).deleteCharAt(url.length()-1).toString();
-			}
-			url = url + "/susbcribe";
+			String url = getWebAppURI() + "/susbcribe";
 
 			String localAddress = Inet4Address.getLocalHost().getHostAddress();
 			AgentInformation info = new AgentInformation(localAddress, ApiKey);
@@ -77,7 +72,11 @@ public class AgentServerImpl  implements IAgentServer{
 	}
 	
 	private String getWebAppURI(){
-		return this.app.getWebConfig().getWebAppUrl();
+		String url = this.app.getWebConfig().getWebAppUrl();
+		if(url.endsWith("/")) {
+			url = (new StringBuilder(url)).deleteCharAt(url.length()-1).toString();
+		}
+		return url;
 	}
 
 }

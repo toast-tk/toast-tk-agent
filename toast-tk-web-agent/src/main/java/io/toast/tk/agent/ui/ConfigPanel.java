@@ -327,9 +327,8 @@ public class ConfigPanel extends JDialog {
 		JButton tryButton = new JButton("Test");
 		tryButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-		        JOptionPane.showMessageDialog(null, "The parameters have been tested !", "", JOptionPane.INFORMATION_MESSAGE);
 
-				for(Object key : EnumerationUtils.toList(properties.propertyNames())) 
+		        for(Object key : EnumerationUtils.toList(properties.propertyNames())) 
 				{
 					String strKey = (String) key;
 					try {
@@ -339,7 +338,9 @@ public class ConfigPanel extends JDialog {
 					} catch (IOException e) {
 						LOG.error(e.getMessage(), e);
 					}
-				}
+				}		        
+		        NotificationManager.showMessage("The parameters have been tested !");
+
 			}
 			
 		});
