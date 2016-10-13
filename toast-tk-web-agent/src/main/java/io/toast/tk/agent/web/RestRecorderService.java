@@ -46,7 +46,7 @@ public class RestRecorderService extends Verticle {
 			NotificationManager.showMessage("Web Agent - Active !").showNotification();
 			LOG.info("Started !");
 		}catch(Exception e){
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 		}
 	}
 

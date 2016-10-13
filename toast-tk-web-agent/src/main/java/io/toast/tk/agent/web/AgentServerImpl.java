@@ -42,7 +42,7 @@ public class AgentServerImpl  implements IAgentServer{
 			String localAddress = Inet4Address.getLocalHost().getHostAddress();
 			AgentInformation info = new AgentInformation(localAddress, "TOKEN");
 			String json = new Gson().toJson(info);
-			RestUtils.registerAgent(getWebAppURI()+"/susbcribe/driver", json);
+			RestUtils.registerAgent(getWebAppURI()+"/susbcribe", json);
 			LOG.info("Agent registred with hotname {}", hostName);
 		} catch (UnknownHostException e) {
 			LOG.error(e.getMessage(), e);

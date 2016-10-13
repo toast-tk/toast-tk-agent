@@ -15,11 +15,13 @@ public class TestRecorder {
 	
 	public static void main(
 		String[] args) throws IOException {
+		RestRecorderService service = new RestRecorderService();
+		service.start();
 		injectRecordScript();
 	}
 	
 	private static void injectRecordScript() throws IOException {
-		System.setProperty("webdriver.chrome.driver", "C:/TEMP/chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
         WebDriver driver = new ChromeDriver();
         driver.get("http://10.23.252.131:9000/");
         File file = new File("C:\\TEMP\\test.js");
