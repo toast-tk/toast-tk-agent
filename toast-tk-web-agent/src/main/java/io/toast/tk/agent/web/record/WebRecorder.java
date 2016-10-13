@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Inject;
 
+import io.toast.tk.agent.config.WebConfigProvider;
 import io.toast.tk.agent.web.IAgentServer;
 import io.toast.tk.core.agent.interpret.IEventInterpreter.EventType;
 import io.toast.tk.core.agent.interpret.WebEventRecord;
@@ -18,10 +19,12 @@ public class WebRecorder {
 	private static final Logger LOG = LogManager.getLogger(WebRecorder.class);
 	private EventStackGobbler currentEventStackGobbler;
 	private IAgentServer server;
+	private WebConfigProvider configProvider;
 
 	@Inject
-	public WebRecorder(IAgentServer server) {
+	public WebRecorder(IAgentServer server, WebConfigProvider configProvider) {
 		this.server = server;
+		this.configProvider = configProvider;
 	}
 
 	public void liveExplore(final WebEventRecord capturedEvent) {
@@ -81,7 +84,7 @@ public class WebRecorder {
 			final WebEventRecord adjustedEvent) {
 		this.currentEventStackGobbler.reset();
 		this.currentEventStackGobbler = null;
-		server.sendEvent(adjustedEvent);
+		server.sendEvent(adjustedEvent, configProvider.get().getApiKey());
 		return adjustedEvent;
 	}
 

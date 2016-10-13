@@ -30,7 +30,7 @@ public class RestRecorderService extends Verticle {
 	 
 	@Override
 	public void start() {
-		LOG.info("Starting..");
+		//LOG.info("Starting..");
 		initInjectors();
 		RouteMatcher matcher = initMatchers();
 		try{

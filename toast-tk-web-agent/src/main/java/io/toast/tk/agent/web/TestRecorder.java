@@ -21,9 +21,8 @@ public class TestRecorder {
 	}
 	
 	private static void injectRecordScript() throws IOException {
-		System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
         WebDriver driver = new ChromeDriver();
-        driver.get("http://10.23.252.131:9000/");
+        driver.get("http://localhost:9000/");
         File file = new File("C:\\TEMP\\test.js");
 		FileInputStream openInputStream = FileUtils.openInputStream(file);
 		String script = IOUtils.toString(openInputStream);

@@ -30,11 +30,6 @@ import io.toast.tk.agent.web.RestRecorderService;
 public class MainApp implements IAgentApp {
 
 	private static final Logger LOG = LogManager.getLogger(MainApp.class);
-
-	
-	public static final String TOAST_TEST_WEB_INIT_RECORDING_URL = "toast.web.recording.url";
-	public static final String TOAST_CHROMEDRIVER_PATH = "toast.chromedriver.path";
-	public static final String TOAST_TEST_WEB_APP_URL = "toast.webapp.url";
 	
 	final static String PROPERTY_FILE = "/toast.web.properties";
 	private BrowserManager browserManager;
@@ -46,9 +41,12 @@ public class MainApp implements IAgentApp {
 	private Image offline_image;
 	private IAgentServer agentServer;
 
-	private String chromedriverName = "ChromeDriver";
-	private String webappName = "WebApp";
-	private String recordingName = "Recording";
+	private String chromeDriverName = "chromedriver";
+	private String webAppName = "webApp";
+	private String recorderName = "recording";
+	
+	private boolean connectedToWebApp = false;
+	private boolean listenerStarted = false;
 	
 	@Inject
 	public MainApp(WebConfigProvider webConfig, 
@@ -84,9 +82,10 @@ public class MainApp implements IAgentApp {
 
 	private void initAndStoreProperties(final WebConfig webConfig) throws IOException {
 		Properties p = new Properties();
-		p.setProperty(TOAST_TEST_WEB_INIT_RECORDING_URL, webConfig.getWebInitRecordingUrl());
-		p.setProperty(TOAST_CHROMEDRIVER_PATH, webConfig.getChromeDriverPath());
-		p.setProperty(TOAST_TEST_WEB_APP_URL, webConfig.getWebAppUrl());
+		p.setProperty(WebConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL, webConfig.getWebInitRecordingUrl());
+		p.setProperty(WebConfigProvider.TOAST_CHROMEDRIVER_PATH, webConfig.getChromeDriverPath());
+		p.setProperty(WebConfigProvider.TOAST_TEST_WEB_APP_URL, webConfig.getWebAppUrl());
+		p.setProperty(WebConfigProvider.TOAST_API_KEY, webConfig.getApiKey());
 		p.store(FileUtils.openOutputStream(this.toastWebPropertiesFile), null);
 		this.webProperties.load(FileUtils.openInputStream(this.toastWebPropertiesFile));
 	}
@@ -101,7 +100,6 @@ public class MainApp implements IAgentApp {
 				InputStream online_imageAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo_on.png");   
 				this.online_image = ImageIO.read(online_imageAsStream);
 
-				
 			    PopupMenu popup = new PopupMenu();
 			    
 			    MenuItem killItem = new MenuItem("Kill agent");
@@ -142,11 +140,17 @@ public class MainApp implements IAgentApp {
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
 	        	try {
-					if(verificationWebApp(webappName)) {
-						agentServer.register();
-						trayIcon.setImage(online_image);
-						NotificationManager.showMessage("Web Agent - Connected to Webapp !").showNotification();
+					if(verificationWebApp(webAppName)) {
+						if(agentServer.register(webConfigProvider.get().getApiKey())) {
+							trayIcon.setImage(online_image);
+							connectedToWebApp = true;
+							NotificationManager.showMessage("Web Agent - Connected to Webapp !").showNotification();
+						}
+						else
+							NotificationManager.showMessage("The ApiKey does not match with the WebApp: \n" + webConfigProvider.get().getApiKey()).showNotification();
 					}
+					else 
+						NotificationManager.showMessage("The Web App does not anwser").showNotification();
 				} catch (IOException e1) {
 					LOG.error(e1.getMessage(), e1);
 				}
@@ -158,6 +162,7 @@ public class MainApp implements IAgentApp {
 	ActionListener getKillListener(){
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
+	        	agentServer.unRegister();
 	        	System.exit(-1);
 	        }
 	    };
@@ -167,24 +172,26 @@ public class MainApp implements IAgentApp {
 	ActionListener getStartListener(){
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	        	browserManager.startRecording();
-
 	        	try {
-	        		boolean flag = false;
-	        		
-					if(verificationWebApp(chromedriverName)) {
-						if(verificationWebApp(recordingName)) {
-							if(verificationWebApp(webappName)) {
-								flag = true;
-								browserManager.startRecording();
+	        		if(connectedToWebApp) {
+	        			boolean flag = false;
+		        		
+						if(verificationWebApp(chromeDriverName)) {
+							if(verificationWebApp(recorderName)) {
+								if(verificationWebApp(webAppName)) {
+									flag = true;
+									listenerStarted = true;
+									browserManager.startRecording();
+								}
 							}
 						}
-					}
-					
-					if(!flag) {
-						NotificationManager.showMessage("Unable to start recorder, please check recoder parameters !").showNotification();
-					}
-					
+						
+						if(!flag) {
+							NotificationManager.showMessage("Unable to start recorder, please check recoder parameters !").showNotification();
+						}
+	        		}
+	        		else 
+						NotificationManager.showMessage("You have to be connected to the WebApp !").showNotification();
 				} catch (IOException e1) {
 					LOG.error(e1.getMessage(), e1);
 				}
@@ -196,7 +203,11 @@ public class MainApp implements IAgentApp {
 	ActionListener getStopListener(){
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	        	browserManager.closeBrowser();
+	        	if(listenerStarted) {
+		        	browserManager.closeBrowser();
+	        	}
+	        	else
+					NotificationManager.showMessage("The recorder has not been started !").showNotification();
 	        }
 	    };
 	    return listener;
@@ -221,20 +232,20 @@ public class MainApp implements IAgentApp {
 
 	public boolean verificationWebApp(String nomUrlATester) throws IOException{
 		String input = "";
-		if(nomUrlATester == webappName) {
+		if(nomUrlATester == webAppName) {
 			input = webConfigProvider.get().getWebAppUrl();
 		}
-		if(nomUrlATester == recordingName) {
+		if(nomUrlATester == recorderName) {
 			input = webConfigProvider.get().getWebInitRecordingUrl();
 		}
-		if(nomUrlATester == chromedriverName) {
+		if(nomUrlATester == chromeDriverName) {
 			input = webConfigProvider.get().getChromeDriverPath();
 		}
-		if(nomUrlATester == webappName || nomUrlATester == recordingName) {
+		if(nomUrlATester == webAppName || nomUrlATester == recorderName) {
 			return ConfigPanel.testWebAppURL(input, true);
 		}
 		else {
-			if(nomUrlATester ==  chromedriverName) {
+			if(nomUrlATester ==  chromeDriverName) {
 				return ConfigPanel.testWebAppDirectory(input, true);
 			}
 			else {

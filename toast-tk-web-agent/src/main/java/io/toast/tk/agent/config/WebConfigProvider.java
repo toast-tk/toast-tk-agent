@@ -26,6 +26,8 @@ public class WebConfigProvider implements Provider<WebConfig> {
 	
 	public static final String TOAST_TEST_WEB_APP_URL = "toast.webapp.url";
 
+	public static final String TOAST_API_KEY = "toast.api.key";
+
 
 	public WebConfigProvider() {
 		super();
@@ -47,6 +49,7 @@ public class WebConfigProvider implements Provider<WebConfig> {
 		webConfig.setWebInitRecordingUrl(p.getProperty(TOAST_TEST_WEB_INIT_RECORDING_URL, "url to record"));
 		webConfig.setChromeDriverPath(p.getProperty(TOAST_CHROMEDRIVER_PATH, "ChromeDriver Path"));
 		webConfig.setWebAppUrl(p.getProperty(TOAST_TEST_WEB_APP_URL, "Toast WebApp url"));
+		webConfig.setApiKey(p.getProperty(TOAST_API_KEY, "Web App Api Key"));
 	}
 
 	@Override

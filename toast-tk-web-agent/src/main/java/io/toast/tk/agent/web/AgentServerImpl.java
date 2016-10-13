@@ -30,24 +30,39 @@ public class AgentServerImpl  implements IAgentServer{
 		}
 	}
 
-	@Override
-	public void sendEvent(WebEventRecord eventRecord) {
+	public void sendEvent(WebEventRecord eventRecord, String ApiKey) {
 		String json = new Gson().toJson(eventRecord);
-		RestUtils.postWebEventRecord(getWebAppURI()+"/record", json);
+		RestUtils.postWebEventRecord(getWebAppURI()+"/record", json, ApiKey);
 	}
 
-	@Override
-	public void register() {
+	public boolean register() {
+		return register(null);
+	}
+	public boolean register(String ApiKey) {
 		try {
+			String url = getWebAppURI() + "/susbcribe";
+
 			String localAddress = Inet4Address.getLocalHost().getHostAddress();
-			AgentInformation info = new AgentInformation(localAddress, "TOKEN");
+			AgentInformation info = new AgentInformation(localAddress, ApiKey);
 			String json = new Gson().toJson(info);
-			RestUtils.registerAgent(getWebAppURI()+"/susbcribe", json);
-			LOG.info("Agent registred with hotname {}", hostName);
+
+			
+			boolean result = false;
+			
+			result = RestUtils.registerAgent(url, json, ApiKey);
+			
+			
+			if(result) {
+				LOG.info("Agent registred with hotname {}", hostName);
+			}
+			else {
+				LOG.info("The webApp does not anwser at " + url);
+			}
+			return result;
 		} catch (UnknownHostException e) {
 			LOG.error(e.getMessage(), e);
 		}
-		
+		return false;
 	}
 
 	@Override
@@ -56,7 +71,11 @@ public class AgentServerImpl  implements IAgentServer{
 	}
 	
 	private String getWebAppURI(){
-		return this.app.getWebConfig().getWebAppUrl();
+		String url = this.app.getWebConfig().getWebAppUrl();
+		if(url.endsWith("/")) {
+			url = (new StringBuilder(url)).deleteCharAt(url.length()-1).toString();
+		}
+		return url;
 	}
 
 }

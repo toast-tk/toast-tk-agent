@@ -1,6 +1,6 @@
 package io.toast.tk.agent.config;
 
-import java.io.File;
+import org.apache.commons.lang.SystemUtils;
 
 public class WebConfig {
 
@@ -15,8 +15,10 @@ public class WebConfig {
 
 	private String webAppUrl;
 	
+	private String apiKey;
+	
 	public static String getToastHome() {
-		return System.getProperty("user.home") + "/" + ".toast";
+		return System.getProperty("user.home") + SystemUtils.FILE_SEPARATOR + ".toast";
 	}
 
 	public String getLogDir() {
@@ -53,5 +55,14 @@ public class WebConfig {
 
 	public String getWebAppUrl() {
 		return this.webAppUrl;
+	}
+
+	public void setApiKey(
+		String apikey) {
+		this.apiKey = apikey;
+	}
+
+	public String getApiKey() {
+		return this.apiKey;
 	}
 }

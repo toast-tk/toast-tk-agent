@@ -1,6 +1,9 @@
 package io.toast.tk.agent.ui;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,6 +28,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -32,9 +36,6 @@ import org.apache.commons.collections4.EnumerationUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-
-
 
 /**
  * Stub for displaying Configuration item.
@@ -46,21 +47,22 @@ public class ConfigPanel extends JDialog {
 	private String chromeDriverName = "chromedriver";
 	private String webAppName = "webapp";
 	private String recorderName = "recording";
+	private String apiKeyName = "api";
 
 	private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
 
-	private JPanel mainPane;
+	private JPanel mainPane, secondPane, chromePanel, webAppPanel, recorderPanel, apiKeyPanel;
 
-	private JLabel labelChrome, labelWebApp, labelRecorder;
-	private JTextField textFieldChrome, textFieldWebApp, textFieldRecorder;
-	private JPanel textButtonPanelChrome, textButtonPanelWebApp, textButtonPanelRecorder,
-		iconPanelChrome, iconPanelWebApp, iconPanelRecorder;
-	private JLabel errorLabelChrome, errorLabelWebApp, errorLabelRecorder;
+	private JLabel icon;
+	private JTextField textFieldChrome, textFieldWebApp, textFieldRecorder, textFieldApiKey;
+	private JPanel textButtonPanelChrome, textButtonPanelWebApp, textButtonPanelRecorder, textButtonPanelApiKey,
+		iconPanelChrome, iconPanelWebApp, iconPanelRecorder, iconPanelApiKey;
+	private JLabel errorLabelChrome, errorLabelWebApp, errorLabelRecorder, errorLabelApiKey;
 	private JButton fileSearchChrome;
 
-	private JLabel iconValidChrome, iconValidWebApp, iconValidRecorder, 
+	private JLabel iconValidChrome, iconValidWebApp, iconValidRecorder,
 		iconNotValidChrome, 	iconNotValidWebApp, 	iconNotValidRecorder;
-
+	
 	private final Properties properties;
 
 	private HashMap<String, JTextField> textFields;
@@ -69,9 +71,12 @@ public class ConfigPanel extends JDialog {
 	
 	private Image notvalid_image;
 	private Image valid_image;
+	private Image toast_logo;
+	private Image backGround_image;
 	
 	private String errorMessageSelectFile = "The file that you have selected do not exist.";
 	private String errorMessageSelectURL = "The URL does not anwser.";
+	private String errorMessageApiKey = "The Api Key have to match with the WebApp";
 	
 	/**
 	 * This is the default constructor
@@ -97,27 +102,46 @@ public class ConfigPanel extends JDialog {
 	private void initialize() throws IOException {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		mainPane = new JPanel();
-		
-		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.PAGE_AXIS));
+		mainPane.setBackground(Color.white);
+		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.X_AXIS));
 		mainPane.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		this.textFields = new HashMap<String, JTextField>();
 		JPanel configEntry = new JPanel();
 		configEntry.setAlignmentX(Component.LEFT_ALIGNMENT);
 		configEntry.setLayout(new BoxLayout(configEntry, BoxLayout.PAGE_AXIS));
-		
+
+		InputStream AgentParamBackGroundAsStream = this.getClass().getClassLoader().getResourceAsStream("AgentParamBackGround.jpg");   
+		this.backGround_image = ImageIO.read(AgentParamBackGroundAsStream);
+	    icon = new JLabel(new ImageIcon(this.backGround_image));
+	    JPanel panIcon = new JPanel();
+	    panIcon.setBackground(Color.white);
+	    panIcon.setLayout(new BorderLayout());
+	    panIcon.add(icon);
+	    
+	    mainPane.add(panIcon);
+	    
+		secondPane = new JPanel();
+		secondPane.setBackground(Color.white);
+		secondPane.setLayout(new BoxLayout(secondPane, BoxLayout.PAGE_AXIS));
+	    
 		InputStream notvalid_imageAsStream = this.getClass().getClassLoader().getResourceAsStream("picto-non-valide.png");   
 		this.notvalid_image = ImageIO.read(notvalid_imageAsStream);
-		
+
 		InputStream valid_imageAsStream = this.getClass().getClassLoader().getResourceAsStream("picto-valide.png");   
 		this.valid_image = ImageIO.read(valid_imageAsStream);
+		
+		InputStream toast_logoAsStream = this.getClass().getClassLoader().getResourceAsStream("ToastLogo_24.png");   
+		this.toast_logo = ImageIO.read(toast_logoAsStream);
 		
 		for(Object key : EnumerationUtils.toList(properties.propertyNames())) {
 			String strKey = (String) key;
 			String errorMessage = "";
-			JLabel label = new JLabel(strKey);
-			label.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
-			label.setAlignmentX(LEFT_ALIGNMENT);
-			
+			JPanel panel = new JPanel();
+			panel.setAlignmentX(LEFT_ALIGNMENT);
+			panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+			panel.add(Box.createHorizontalGlue());
+			panel.setBackground(Color.white);
+			panel.setBorder(BorderFactory.createTitledBorder(strKey));
 		
 			JTextField textField = new JTextField(render(properties.getProperty(strKey)));
 			textField.setColumns(30);
@@ -131,11 +155,13 @@ public class ConfigPanel extends JDialog {
 			textButtonPanel.add(Box.createHorizontalGlue());
 			
 			JPanel iconPanel = new JPanel();
-
-			JLabel iconValid = new JLabel(new ImageIcon(this.valid_image));
-			JLabel iconNotValid = new JLabel(new ImageIcon(this.notvalid_image));
 			
-			JLabel errorLabel;
+			JLabel iconValid = new JLabel(new ImageIcon(this.valid_image));
+			iconValid.setBackground(Color.white);
+			JLabel iconNotValid = new JLabel(new ImageIcon(this.notvalid_image));
+			iconNotValid.setBackground(Color.white);
+
+			JLabel errorLabel = null;
 			if(strKey.contains(chromeDriverName)){
 				errorMessage = errorMessageSelectFile;
 				
@@ -150,15 +176,25 @@ public class ConfigPanel extends JDialog {
 				}
 			}
 			else {
-				errorMessage = errorMessageSelectURL;
-				
-				if( testWebAppURL(textField.getText(),false) ) {
-					iconPanel.add(iconValid);
-					errorLabel = new JLabel(" ");
+				if(!strKey.contains(apiKeyName)){ // apiKey does not have verification
+					errorMessage = errorMessageSelectURL;
+					
+					if( testWebAppURL(textField.getText(),false) ) {
+						iconPanel.add(iconValid);
+						errorLabel = new JLabel(" ");
+					}
+					else 
+					{
+						iconPanel.add(iconNotValid);
+						errorLabel = new JLabel(errorMessage);
+					}
 				}
-				else 
-				{
-					iconPanel.add(iconNotValid);
+				else {
+					JLabel toastLogo = new JLabel(new ImageIcon(this.toast_logo));
+					toastLogo.setBackground(Color.white);
+					iconPanel.add(toastLogo);
+					
+					errorMessage = errorMessageApiKey;
 					errorLabel = new JLabel(errorMessage);
 				}
 			}
@@ -170,8 +206,8 @@ public class ConfigPanel extends JDialog {
 			        {
 			        	try {
 							testIconValid(strKey, false);
-							mainPane.repaint();
-							mainPane.revalidate();
+							secondPane.repaint();
+							secondPane.revalidate();
 								
 						} catch (IOException e) {
 							LOG.error(e.getMessage(), e);
@@ -207,7 +243,6 @@ public class ConfigPanel extends JDialog {
 			}
 
 			if(strKey.contains(chromeDriverName)) {
-				labelChrome = label;
 				textFieldChrome = textField;
 				iconPanelChrome = iconPanel;
 				iconValidChrome = iconValid;
@@ -218,9 +253,12 @@ public class ConfigPanel extends JDialog {
 				textButtonPanelChrome.add(textFieldChrome);
 				textButtonPanelChrome.add(iconPanelChrome);
 				errorLabelChrome = errorLabel;
+				
+				chromePanel = panel;
+				chromePanel.add(textButtonPanelChrome);
+				chromePanel.add(errorLabelChrome);
 			}
 			if(strKey.contains(webAppName)) {
-				labelWebApp = label;
 				textFieldWebApp = textField;
 				iconPanelWebApp = iconPanel;
 				iconValidWebApp = iconValid;
@@ -229,9 +267,12 @@ public class ConfigPanel extends JDialog {
 				textButtonPanelWebApp.add(textFieldWebApp);
 				textButtonPanelWebApp.add(iconPanelWebApp);
 				errorLabelWebApp = errorLabel;
+
+				webAppPanel = panel;
+				webAppPanel.add(textButtonPanelWebApp);
+				webAppPanel.add(errorLabelWebApp);
 			}
 			if(strKey.contains(recorderName)) {
-				labelRecorder = label;
 				textFieldRecorder = textField;
 				iconPanelRecorder = iconPanel;
 				iconValidRecorder = iconValid;
@@ -240,6 +281,22 @@ public class ConfigPanel extends JDialog {
 				textButtonPanelRecorder.add(textFieldRecorder);
 				textButtonPanelRecorder.add(iconPanelRecorder);
 				errorLabelRecorder = errorLabel;
+
+				recorderPanel = panel;
+				recorderPanel.add(textButtonPanelRecorder);
+				recorderPanel.add(errorLabelRecorder);
+			}
+			if(strKey.contains(apiKeyName)) {
+				textFieldApiKey = textField;
+				iconPanelApiKey = iconPanel;
+				textButtonPanelApiKey = textButtonPanel;
+				textButtonPanelApiKey.add(textFieldApiKey);
+				textButtonPanelApiKey.add(iconPanelApiKey);
+				errorLabelApiKey = errorLabel;
+
+				apiKeyPanel = panel;
+				apiKeyPanel.add(textButtonPanelApiKey);
+				apiKeyPanel.add(errorLabelApiKey);
 			}
 		}
 		
@@ -267,50 +324,60 @@ public class ConfigPanel extends JDialog {
 		});
 		
 
-		JButton tryButton = new JButton("Validate");
+		JButton tryButton = new JButton("Test");
 		tryButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				for(Object key : EnumerationUtils.toList(properties.propertyNames())) 
+
+		        for(Object key : EnumerationUtils.toList(properties.propertyNames())) 
 				{
 					String strKey = (String) key;
 					try {
 						testIconValid(strKey, false);
-						mainPane.repaint();
-						mainPane.revalidate();
+						secondPane.repaint();
+						secondPane.revalidate();
 					} catch (IOException e) {
 						LOG.error(e.getMessage(), e);
 					}
-				}
+				}		        
+		        NotificationManager.showMessage("The parameters have been tested !");
+
 			}
 			
 		});
 		
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
+		buttonPanel.setBackground(Color.white);
 		buttonPanel.add(tryButton);
 		buttonPanel.add(cancelButton);
 		buttonPanel.add(okButton);
-		
-		mainPane.add(labelChrome);
-		mainPane.add(textButtonPanelChrome);
-		mainPane.add(errorLabelChrome);
 
-		mainPane.add(labelWebApp);
-		mainPane.add(textButtonPanelWebApp);
-		mainPane.add(errorLabelWebApp);
+	    JPanel generalParameters = new JPanel();
+	    generalParameters.setBackground(Color.white);
+	    generalParameters.setBorder(BorderFactory.createTitledBorder("General Parameters"));
+	    generalParameters.add(webAppPanel);
+
+	    generalParameters.add(apiKeyPanel);
+
+	    JPanel recorderParameters = new JPanel();
+	    recorderParameters.setBackground(Color.white);
+	    recorderParameters.setBorder(BorderFactory.createTitledBorder("Recorder Parameters"));
+	    recorderParameters.add(chromePanel);
+
+	    recorderParameters.add(recorderPanel);
+
+	    secondPane.add(generalParameters);
+	    secondPane.add(recorderParameters);
+	    secondPane.add(buttonPanel);
 		
-		mainPane.add(labelRecorder);
-		mainPane.add(textButtonPanelRecorder);
-		mainPane.add(errorLabelRecorder);
+	    mainPane.add(secondPane);
 		
-		mainPane.add(buttonPanel);
-		
-		
-		setTitle("Settings");
+		setTitle("AGENT SETTINGS");
 		setSize(500, 500);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setContentPane(mainPane);
 		setResizable(false);
 		setLocationRelativeTo(null);
+		setAlwaysOnTop(true);
 		pack();
 		setVisible(true);
 		
@@ -335,7 +402,8 @@ public class ConfigPanel extends JDialog {
 		catch(IOException e) {
 			LOG.warn("Could not save properties", e);
 		}
-		close();
+		setAlwaysOnTop(false);
+		this.close();
 	}
 
 	private void close() {
@@ -345,6 +413,8 @@ public class ConfigPanel extends JDialog {
 	
 	private void chooseFile(String strKey) {
 		try {
+			setAlwaysOnTop(false);
+			
 	        JFileChooser dialogue = new JFileChooser();
 	        dialogue.setDialogTitle("Directory to the chromeDriver");
 	        dialogue.showOpenDialog(null);
@@ -364,6 +434,8 @@ public class ConfigPanel extends JDialog {
 					testIconValid(strKey, false);
 		        }
 	        }
+
+			setAlwaysOnTop(true);
 	         
 		} catch (IOException e) {
 			LOG.error(e.getMessage(), e);
