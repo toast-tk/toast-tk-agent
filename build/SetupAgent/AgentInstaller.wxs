@@ -35,6 +35,7 @@
             <Component Id="ApplicationSourceFiles" Guid="651b4f52-9256-4e56-a0c6-b7aa69482f7c">
               <File Id="ServerKeystoreFile" Source="resources\server-keystore.jks"/>
               <File Id="AgentStandAloneFile" Source="resources\agent-1.0-fat.jar"/>
+              <File Id="ChromeDriverFile" Source="resources\chromedriver.exe"/>
             </Component>
             
             <Directory Id="PLUGINSDIR" Name="plugins">
