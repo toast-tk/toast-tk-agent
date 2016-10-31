@@ -5,9 +5,9 @@ import org.apache.commons.lang.SystemUtils;
 public class WebConfig {
 
 
-	public static final String TOAST_PROPERTIES_FILE = getToastHome() + "/" + "toast.web.properties";
+	public static final String TOAST_PROPERTIES_FILE = getToastHome() + SystemUtils.FILE_SEPARATOR + "toast.web.properties";
 
-	public static final String TOAST_LOG_DIR = getToastHome() + "/" + "log.web";
+	public static final String TOAST_LOG_DIR = getToastHome() + SystemUtils.FILE_SEPARATOR + "log.web";
 		
 	private String webStartRecordingUrl;
 
@@ -26,7 +26,7 @@ public class WebConfig {
 	}
 
 	public String getPluginDir() {
-		return getToastHome() + "/" + "plugins/";
+		return getToastHome() + SystemUtils.FILE_SEPARATOR + "plugins/";
 	}
 
 	public void setWebInitRecordingUrl(

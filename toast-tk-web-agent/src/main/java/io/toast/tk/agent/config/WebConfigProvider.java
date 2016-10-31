@@ -46,8 +46,8 @@ public class WebConfigProvider implements Provider<WebConfig> {
 			}
 		}
 		webConfig = new WebConfig();
-		webConfig.setWebInitRecordingUrl(p.getProperty(TOAST_TEST_WEB_INIT_RECORDING_URL, "url to record"));
-		webConfig.setChromeDriverPath(p.getProperty(TOAST_CHROMEDRIVER_PATH, "ChromeDriver Path"));
+		webConfig.setWebInitRecordingUrl(p.getProperty(TOAST_TEST_WEB_INIT_RECORDING_URL, "URL to record"));
+		webConfig.setChromeDriverPath(p.getProperty(TOAST_CHROMEDRIVER_PATH, userHomepath + "chromedriver.exe"));
 		webConfig.setWebAppUrl(p.getProperty(TOAST_TEST_WEB_APP_URL, "Toast WebApp url"));
 		webConfig.setApiKey(p.getProperty(TOAST_API_KEY, "Web App Api Key"));
 	}
