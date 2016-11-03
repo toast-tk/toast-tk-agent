@@ -418,6 +418,7 @@ public class ConfigPanel extends JDialog {
 	        JFileChooser dialogue = new JFileChooser();
 	        dialogue.setDialogTitle("Directory to the chromeDriver");
 	        dialogue.showOpenDialog(null);
+	        dialogue.setMaximumSize(getMaximumSize());
 	        
 	        if(dialogue.getSelectedFile() != null)
 	        {
