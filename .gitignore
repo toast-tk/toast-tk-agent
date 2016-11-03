@@ -23,3 +23,7 @@ pom.xml.versionsBackup
 
 # Logs
 *.log
+
+#MSI
+build/SetupAgent/resources/agent-1.0-fat.jar
+dist/
