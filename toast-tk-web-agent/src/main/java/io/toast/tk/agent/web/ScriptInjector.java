@@ -57,7 +57,11 @@ public class ScriptInjector {
 							} catch (IOException e) {
 								LOG.error(e.getMessage(), e);
 							}
+						}else{
+							LOG.info("Recorder is still alive !");
 						}
+					}else {
+						LOG.info("Injection thread info: driver={}, isStarted={}", driver, isStarted);
 					}
 				}
 			}
@@ -68,10 +72,12 @@ public class ScriptInjector {
 		JavascriptExecutor executor = ((JavascriptExecutor) driver);
 		InputStream resourceAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("recorder.js");
 		String script = IOUtils.toString(resourceAsStream);
-		String subscript = "var script = window.document.createElement('script'); script.innerHTML=\""
-				+ script.replace("\r\n", "").replace("\n", "")
-				+ "\";window.document.head.appendChild(script);";
-		executor.executeScript(subscript);
+		StringBuilder subsScriptBuilder = new StringBuilder();
+		subsScriptBuilder.append("var script = window.document.createElement('script');");
+		subsScriptBuilder.append("script.innerHTML=\"");
+		subsScriptBuilder.append(script.replace("\r\n", "").replace("\n", ""));
+		subsScriptBuilder.append( "\";window.document.head.appendChild(script);");
+		executor.executeScript(subsScriptBuilder.toString());
 		String recordingStatus = "window.document.body.setAttribute('recording','true');";
 		executor.executeScript(recordingStatus);
 		LOG.info("Recorder injected !");
@@ -94,10 +100,10 @@ public class ScriptInjector {
 	        frmOpt = new JFrame();
 	    }
 	    frmOpt.setVisible(true);
-	    frmOpt.setLocation(100, 100);
+	    frmOpt.setLocation(0, 0);
 	    frmOpt.setAlwaysOnTop(true);
 	    String currentPageName = JOptionPane.showInputDialog(frmOpt, 
-	    													"Current Location Page Name :", 
+	    													"Current Location - Repository Page Name :", 
 												    		driver.getCurrentUrl(), 
 												    		JOptionPane.WARNING_MESSAGE);
 	    frmOpt.dispose();

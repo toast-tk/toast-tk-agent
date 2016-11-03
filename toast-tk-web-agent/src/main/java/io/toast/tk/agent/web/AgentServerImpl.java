@@ -45,20 +45,16 @@ public class AgentServerImpl  implements IAgentServer{
 			String localAddress = Inet4Address.getLocalHost().getHostAddress();
 			AgentInformation info = new AgentInformation(localAddress, ApiKey);
 			String json = new Gson().toJson(info);
-
 			
-			boolean result = false;
+			boolean isRegistered = RestUtils.registerAgent(url, json, ApiKey);
 			
-			result = RestUtils.registerAgent(url, json, ApiKey);
-			
-			
-			if(result) {
+			if(isRegistered) {
 				LOG.info("Agent registred with hotname {}", hostName);
 			}
 			else {
 				LOG.info("The webApp does not anwser at " + url);
 			}
-			return result;
+			return isRegistered;
 		} catch (UnknownHostException e) {
 			LOG.error(e.getMessage(), e);
 		}
