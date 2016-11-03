@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
@@ -43,11 +44,12 @@ public class ScriptInjector {
 			public void run() {
 				while (true) {
 					try {
+						
 						Thread.sleep(1000);
 					} catch (InterruptedException e1) {
 						LOG.error(e1.getMessage(), e1);
 					}
-					if (driver != null && isStarted) {
+					if (driver != null && StringUtils.isNotEmpty(driver.getCurrentUrl())) {
 						final WebElement body = driver.findElement(By.tagName("body"));
 						final String attribute = body.getAttribute("recording");
 						if (!"true".equals(attribute)) {
@@ -69,6 +71,7 @@ public class ScriptInjector {
 	}
 
 	public void injectScript() throws IOException {
+		isStarted = true;
 		JavascriptExecutor executor = ((JavascriptExecutor) driver);
 		InputStream resourceAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("recorder.js");
 		String script = IOUtils.toString(resourceAsStream);
@@ -112,6 +115,10 @@ public class ScriptInjector {
 	
 	public void setDriver(WebDriver driver){
 		this.driver = driver;
+	}
+
+	public boolean isStarted() {
+		return isStarted;
 	}
 
 }

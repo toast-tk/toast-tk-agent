@@ -36,7 +36,7 @@ public class BrowserManager {
 	}
 
 	public void startRecording() {
-		if (driver == null) {
+		if (driver == null || !this.scriptInjector.isStarted()) {
 			driver = buildDriver();
 			String host = getWebConfig().getWebInitRecordingUrl();
 			driver.get(host);
@@ -56,6 +56,7 @@ public class BrowserManager {
 	public void closeBrowser() {
 		if(driver != null){
 			driver.close();
+			driver = null;
 		}
 	}
 
