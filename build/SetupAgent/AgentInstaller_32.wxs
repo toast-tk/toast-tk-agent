@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- Change the product version at every update -->
-<?define ProductVersion = "0.0.1"?>
+<?define ProductVersion = "0.1.4"?>
 <!-- Do not change the ProductUpgradeCode -->
 <?define ProductUpgradeCode = "ab67ea4c-d2c3-4729-95eb-0ba451da5db2"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
@@ -27,6 +27,7 @@
       <SetDirectory Id="USER_DIRECTORY" Value="C:\Users\[%USERNAME]\" />
       <SetDirectory Id="TTK_DIRECTORY" Value="C:\Users\[%USERNAME]\.toast\" />
       <SetDirectory Id="JAVALOCATION" Value="C:\Users\[%USERNAME]\.toast\Java\" /> 
+      <SetDirectory Id="DESKTOPLOCATION" Value="C:\Users\[%USERNAME]\Desktop\" /> 
      
       <Directory Id="TARGETDIR" Name="SourceDir">
         
@@ -45,14 +46,12 @@
             </Directory>
                 
             <Directory Id="JAVALOCATION">
-                <Component Id="Java32" Guid="42d4915e-0ab4-4d8d-bae2-1c4fb0584d77">
-                  <File Id="Java32" Source="resources_x82\java.exe"/>
-                  <Condition><![CDATA[Not VersionNT64]]></Condition>
-                </Component>
-                <Component Id="Java64" Guid="bfe32484-5610-4249-891c-4ca716e75ff6">
-                  <File Id="Java64" Source="resources_64\java.exe"/>
-                  <Condition><![CDATA[VersionNT64]]></Condition>
-                </Component>
+              <Component Id="Java32" Guid="42d4915e-0ab4-4d8d-bae2-1c4fb0584d77">
+                <File Id="Java32" Source="resources_x82\java.exe"/>
+              </Component>
+              <Component Id="Javaw32" Guid="26020919-EA4E-4286-BF8B-0C4916106361">
+                <File Id="Javaw32" Source="resources_x82\javaw.exe"/>
+              </Component>
             </Directory>
           </Directory>
       
@@ -60,19 +59,12 @@
           <Directory Id="USER_DIRECTORY">
             <Directory Id="INSTALLDIR" Name="ToastTK">
               <Component Id="ApplicationLauncherFiles32" Guid="d1707b51-3439-4cfe-8509-b44ea8ba5ab2">
-                <File Id="runAgent32" Source="resources_64\AgentLauncher.exe"/>
-                <File Id="readme32" Source="resources_64\README.txt"/>
-                <Condition><![CDATA[Not VersionNT64]]></Condition>
-              </Component>
-              
-              <Component Id="ApplicationLauncherFiles64" Guid="c5e14f75-1a1a-4170-8f5e-b9cb705efd3e">
-                <File Id="runAgent64" Source="resources_x82\AgentLauncher.exe"/>
-                <File Id="readme64" Source="resources_x82\README.txt"/>
-                <Condition><![CDATA[VersionNT64]]></Condition>
+                <File Id="runAgent32" Source="resources_x82\Toast-Agent.exe"/>
+                <File Id="readme32" Source="resources_x82\README.txt"/>
               </Component>
             </Directory>
           </Directory>
-      
+              
           <!-- start menu entry -->
           <Directory Id="ProgramMenuFolder">
             <Directory Id="ProgramMenuSubfolder" Name="Agent">
@@ -88,6 +80,17 @@
             </Directory>
          </Directory>
       
+          <!-- shortcut in the desktop -->
+          <Directory Id="DESKTOPLOCATION">
+            <Component Id="ApplicationShortcut32" Guid="997C1109-D1F2-4583-9BBA-718EB60628E3">
+                <Shortcut Id="ApplicationStartMenuShortcut32" 
+                          Name="Toast-Agent"
+                          Description="Toast TK Web Agent"
+                          Target="[#runAgent32]"
+                          WorkingDirectory="ProgramMenuSubfolder"/>
+                <RegistryValue Root="HKCU" Key="Software\Microsoft\MyApplicationName" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+            </Component>
+          </Directory>
       </Directory>
 
      <!-- Proprety modification from WixUI_InstallDir -->
@@ -99,13 +102,13 @@
      </InstallExecuteSequence>
         
      <Feature Id="DefaultFeature" Level="1">
-        <ComponentRef Id="Java32"/>
-        <ComponentRef Id="Java64"/>
-        <ComponentRef Id="ApplicationSourceFiles"/>
-        <ComponentRef Id="Plugins"/>
-        <ComponentRef Id="ApplicationLauncherFiles32"/>
-        <ComponentRef Id="ApplicationLauncherFiles64"/>
-        <ComponentRef Id="ApplicationShortcuts"/>
+       <ComponentRef Id="Java32"/>
+       <ComponentRef Id="Javaw32"/>
+       <ComponentRef Id="ApplicationSourceFiles"/>
+       <ComponentRef Id="Plugins"/>
+       <ComponentRef Id="ApplicationLauncherFiles32"/>
+       <ComponentRef Id="ApplicationShortcut32"/>
+       <ComponentRef Id="ApplicationShortcuts"/>
      </Feature>
       
    </Product>

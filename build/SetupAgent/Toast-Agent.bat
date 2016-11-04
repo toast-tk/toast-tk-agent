@@ -18,4 +18,4 @@ goto deb
 echo MsgBox "There is a problem. Please, reinstall ToastTk-Agent."> msgbox.vbs 
 cscript msgbox.vbs
 :2
-%javaDirectory%\java.exe -jar %toastDirectory%\agent-1.0-fat.jar
+%javaDirectory%\javaw.exe -jar %toastDirectory%\agent-1.0-fat.jar
