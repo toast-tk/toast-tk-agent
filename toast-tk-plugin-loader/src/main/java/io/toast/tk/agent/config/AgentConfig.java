@@ -2,10 +2,9 @@ package io.toast.tk.agent.config;
 
 import org.apache.commons.lang.SystemUtils;
 
-public class WebConfig {
+public class AgentConfig {
 
-
-	public static final String TOAST_PROPERTIES_FILE = getToastHome() + SystemUtils.FILE_SEPARATOR + "toast.web.properties";
+	public static final String TOAST_PROPERTIES_FILE = getToastHome() + SystemUtils.FILE_SEPARATOR + "agent.properties";
 
 	public static final String TOAST_LOG_DIR = getToastHome() + SystemUtils.FILE_SEPARATOR + "log.web";
 		
@@ -16,6 +15,10 @@ public class WebConfig {
 	private String webAppUrl;
 	
 	private String apiKey;
+
+	private String pluginDir;
+
+	private String scriptsDir;
 	
 	public static String getToastHome() {
 		return System.getProperty("user.home") + SystemUtils.FILE_SEPARATOR + ".toast";
@@ -26,7 +29,7 @@ public class WebConfig {
 	}
 
 	public String getPluginDir() {
-		return getToastHome() + SystemUtils.FILE_SEPARATOR + "plugins/";
+		return this.pluginDir == null ? getToastHome() + SystemUtils.FILE_SEPARATOR + "plugins/": this.pluginDir;
 	}
 
 	public void setWebInitRecordingUrl(
@@ -65,4 +68,17 @@ public class WebConfig {
 	public String getApiKey() {
 		return this.apiKey;
 	}
+
+	public void setPluginDir(String pluginDir) {
+		 this.pluginDir = pluginDir;
+	}
+
+	public String getScriptsDir() {
+		return this.scriptsDir;		
+	}
+	
+	public void setScriptsDir(String scriptsDir) {
+		this.scriptsDir = scriptsDir;		
+	}
+
 }

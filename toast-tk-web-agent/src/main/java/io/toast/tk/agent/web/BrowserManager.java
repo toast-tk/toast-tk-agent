@@ -9,20 +9,20 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import com.google.inject.Inject;
 
-import io.toast.tk.agent.config.WebConfig;
-import io.toast.tk.agent.config.WebConfigProvider;
+import io.toast.tk.agent.config.AgentConfig;
+import io.toast.tk.agent.config.AgentConfigProvider;
 import io.toast.tk.agent.ui.ConfigPanel;
 
 public class BrowserManager {
 
 	private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
 	
-	private WebConfigProvider webConfigProvider;
+	private AgentConfigProvider webConfigProvider;
 	private ScriptInjector scriptInjector;
 	private WebDriver driver;
 
 	@Inject
-	public BrowserManager(WebConfigProvider webConfigProvider, ScriptInjector scriptInjector){
+	public BrowserManager(AgentConfigProvider webConfigProvider, ScriptInjector scriptInjector){
 		this.webConfigProvider = webConfigProvider;
 		this.scriptInjector= scriptInjector;
 	}
@@ -64,7 +64,7 @@ public class BrowserManager {
 		return driver;
 	}
 
-	public WebConfig getWebConfig() {
+	public AgentConfig getWebConfig() {
 		return webConfigProvider.get();
 	}
 

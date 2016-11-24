@@ -3,7 +3,6 @@ package io.toast.tk.agent.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,7 +27,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -37,31 +35,27 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import io.toast.tk.agent.config.AgentConfigProvider;
+
 /**
- * Stub for displaying Configuration item.
+ * Configuration panel
  */
 public class ConfigPanel extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	
-	private String chromeDriverName = "chromedriver";
-	private String webAppName = "webapp";
-	private String recorderName = "recording";
-	private String apiKeyName = "api";
-
 	private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
 
-	private JPanel mainPane, secondPane, chromePanel, webAppPanel, recorderPanel, apiKeyPanel;
+	private JPanel mainPane, secondPane, chromePanel, webAppPanel, recorderPanel, apiKeyPanel, pluginPanel;
 
 	private JLabel icon;
-	private JTextField textFieldChrome, textFieldWebApp, textFieldRecorder, textFieldApiKey;
-	private JPanel textButtonPanelChrome, textButtonPanelWebApp, textButtonPanelRecorder, textButtonPanelApiKey,
-		iconPanelChrome, iconPanelWebApp, iconPanelRecorder, iconPanelApiKey;
-	private JLabel errorLabelChrome, errorLabelWebApp, errorLabelRecorder, errorLabelApiKey;
-	private JButton fileSearchChrome;
+	private JTextField textFieldChrome, textFieldWebApp, textFieldRecorder, textFieldApiKey, textFieldPlugins;
+	private JPanel textButtonPanelChrome, textButtonPanelPlugins, textButtonPanelWebApp, textButtonPanelRecorder, 
+					textButtonPanelApiKey, iconPanelChrome, iconPanelWebApp, iconPanelRecorder, iconPanelApiKey, 
+					iconPanelPlugins;
+	private JLabel errorLabelChrome, errorLabelWebApp, errorLabelRecorder, errorLabelApiKey, errorLabelPlugins;
+	private JButton fileSearchChrome, fileSearchPlugins;
 
-	private JLabel iconValidChrome, iconValidWebApp, iconValidRecorder,
-		iconNotValidChrome, 	iconNotValidWebApp, 	iconNotValidRecorder;
+	private JLabel iconValidChrome, iconValidWebApp, iconValidRecorder, iconNotValidChrome, iconNotValidWebApp, iconNotValidRecorder;
 	
 	private final Properties properties;
 
@@ -162,7 +156,7 @@ public class ConfigPanel extends JDialog {
 			iconNotValid.setBackground(Color.white);
 
 			JLabel errorLabel = null;
-			if(strKey.contains(chromeDriverName)){
+			if(strKey.equals(AgentConfigProvider.TOAST_CHROMEDRIVER_PATH)){
 				errorMessage = errorMessageSelectFile;
 				
 				if( testWebAppDirectory(textField.getText(),false) ) {
@@ -176,7 +170,7 @@ public class ConfigPanel extends JDialog {
 				}
 			}
 			else {
-				if(!strKey.contains(apiKeyName)){ // apiKey does not have verification
+				if(!strKey.equals(AgentConfigProvider.TOAST_API_KEY)){ // apiKey does not have verification
 					errorMessage = errorMessageSelectURL;
 					
 					if( testWebAppURL(textField.getText(),false) ) {
@@ -230,19 +224,15 @@ public class ConfigPanel extends JDialog {
 
 			JButton fileSearch = new JButton();
 			fileSearch.setText("...");
-			if(strKey.contains(chromeDriverName)){
+			if(strKey.equals(AgentConfigProvider.TOAST_CHROMEDRIVER_PATH)){
 				fileSearch.addActionListener(new ActionListener() {
-	
 					public void actionPerformed(ActionEvent arg0) {
-						
 						chooseFile(strKey);
-						
 					}
-					
 				});
 			}
 
-			if(strKey.contains(chromeDriverName)) {
+			if(strKey.equals(AgentConfigProvider.TOAST_CHROMEDRIVER_PATH)) {
 				textFieldChrome = textField;
 				iconPanelChrome = iconPanel;
 				iconValidChrome = iconValid;
@@ -258,7 +248,7 @@ public class ConfigPanel extends JDialog {
 				chromePanel.add(textButtonPanelChrome);
 				chromePanel.add(errorLabelChrome);
 			}
-			if(strKey.contains(webAppName)) {
+			if(strKey.equals(AgentConfigProvider.TOAST_TEST_WEB_APP_URL)) {
 				textFieldWebApp = textField;
 				iconPanelWebApp = iconPanel;
 				iconValidWebApp = iconValid;
@@ -272,7 +262,7 @@ public class ConfigPanel extends JDialog {
 				webAppPanel.add(textButtonPanelWebApp);
 				webAppPanel.add(errorLabelWebApp);
 			}
-			if(strKey.contains(recorderName)) {
+			if(strKey.equals(AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL)) {
 				textFieldRecorder = textField;
 				iconPanelRecorder = iconPanel;
 				iconValidRecorder = iconValid;
@@ -286,7 +276,7 @@ public class ConfigPanel extends JDialog {
 				recorderPanel.add(textButtonPanelRecorder);
 				recorderPanel.add(errorLabelRecorder);
 			}
-			if(strKey.contains(apiKeyName)) {
+			if(strKey.equals(AgentConfigProvider.TOAST_API_KEY)) {
 				textFieldApiKey = textField;
 				iconPanelApiKey = iconPanel;
 				textButtonPanelApiKey = textButtonPanel;
@@ -297,6 +287,19 @@ public class ConfigPanel extends JDialog {
 				apiKeyPanel = panel;
 				apiKeyPanel.add(textButtonPanelApiKey);
 				apiKeyPanel.add(errorLabelApiKey);
+			}
+			
+			if(strKey.equals(AgentConfigProvider.TOAST_PLUGIN_DIR)) {
+				textFieldPlugins = textField;
+				iconPanelPlugins = iconPanel;
+				textButtonPanelPlugins = textButtonPanel;
+				textButtonPanelPlugins.add(textFieldPlugins);
+				textButtonPanelPlugins.add(iconPanelPlugins);
+				errorLabelPlugins = errorLabel;
+
+				pluginPanel = panel;
+				pluginPanel.add(textButtonPanelPlugins);
+				pluginPanel.add(errorLabelPlugins);
 			}
 		}
 		
@@ -423,20 +426,17 @@ public class ConfigPanel extends JDialog {
 	        {
 		        if(dialogue.getSelectedFile().isDirectory())
 		        {
-					NotificationManager.showMessage("You choosed a Directory. You have to choose a File.").showNotification();
+					NotificationManager.showMessage("Wrong path selected, please select chromedriver binary file.").showNotification();
 		        }
 		        
 		        if(dialogue.getSelectedFile().isFile())
 		        {
 			        LOG.info("File selected : " + dialogue.getSelectedFile().getAbsolutePath());
 			        textFieldChrome.setText(dialogue.getSelectedFile().getAbsolutePath());
-			    
 					testIconValid(strKey, false);
 		        }
 	        }
-
 			setAlwaysOnTop(true);
-	         
 		} catch (IOException e) {
 			LOG.error(e.getMessage(), e);
 		}
@@ -444,7 +444,7 @@ public class ConfigPanel extends JDialog {
 	
 	
 	private void testIconValid(String strKey, boolean runTryValue) throws IOException {
-		if(strKey.contains(webAppName))
+		if(strKey.equals(AgentConfigProvider.TOAST_TEST_WEB_APP_URL))
 		{
 			if(!testWebAppURL(textFieldWebApp.getText(),runTryValue))
 			{
@@ -459,7 +459,7 @@ public class ConfigPanel extends JDialog {
 				errorLabelWebApp.setText(" ");
 			}
 		}
-		if(strKey.contains(recorderName))
+		if(strKey.equals(AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL))
 		{
 			if(!testWebAppURL(textFieldRecorder.getText(),runTryValue))
 			{
@@ -474,7 +474,7 @@ public class ConfigPanel extends JDialog {
 				errorLabelRecorder.setText(" ");
 			}
 		}
-		if(strKey.contains(chromeDriverName)) {
+		if(strKey.equals(AgentConfigProvider.TOAST_CHROMEDRIVER_PATH)) {
 			if(!testWebAppDirectory(textFieldChrome.getText(),runTryValue))
 			{
 				iconPanelChrome.removeAll();
@@ -492,7 +492,6 @@ public class ConfigPanel extends JDialog {
 		
 	public static boolean testWebAppDirectory(String directory, boolean runTryValue) throws IOException{
 		String fileName = directory.split("/")[directory.split("/").length - 1];
-		
 		if(directory.contains(" ")){
 			if(runTryValue) 
     		{
@@ -507,7 +506,6 @@ public class ConfigPanel extends JDialog {
     		return true;
     	}
     	else {
-    		
     		LOG.info("Status of " + directory + " : KO");
     		return false;
     	}

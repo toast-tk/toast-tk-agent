@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>io.toast-tk</groupId>
 		<artifactId>toast-tk-agent</artifactId>
-		<version>0.1.4-SNAPSHOT</version>
+		<version>0.1.5-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<name>Toast Toolkit - Agent</name>
@@ -116,9 +116,29 @@
 			<artifactId>toast-tk-adapters-api</artifactId>
 			<version>${toast-tk.engine.version}</version>
 		</dependency>
+			<dependency>
+			<groupId>io.toast-tk</groupId>
+			<artifactId>toast-tk-runtime</artifactId>
+			<version>${toast-tk.engine.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>io.toast-tk</groupId>
 			<artifactId>toast-tk-rest-utils</artifactId>
+			<version>${toast-tk.engine.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.toast-tk</groupId>
+			<artifactId>toast-tk-selenium-plugin</artifactId>
+			<version>${toast-tk.engine.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.toast-tk</groupId>
+			<artifactId>toast-tk-plugin-loader</artifactId>
+			<version>${toast-tk.engine.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.toast-tk</groupId>
+			<artifactId>toast-tk-agent-api</artifactId>
 			<version>${toast-tk.engine.version}</version>
 		</dependency>
 		<dependency>

@@ -3,8 +3,8 @@ package io.toast.tk.agent.guice;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 
-import io.toast.tk.agent.config.WebConfig;
-import io.toast.tk.agent.config.WebConfigProvider;
+import io.toast.tk.agent.config.AgentConfig;
+import io.toast.tk.agent.config.AgentConfigProvider;
 import io.toast.tk.agent.ui.IAgentApp;
 import io.toast.tk.agent.ui.MainApp;
 import io.toast.tk.agent.web.AgentServerImpl;
@@ -20,8 +20,8 @@ public class WebAgentModule extends AbstractModule{
 
 	@Override
 	protected void configure() {
-		bind(WebConfigProvider.class).in(Singleton.class);
-		bind(WebConfig.class).toProvider(WebConfigProvider.class);
+		bind(AgentConfigProvider.class).in(Singleton.class);
+		bind(AgentConfig.class).toProvider(AgentConfigProvider.class);
 		bind(BrowserManager.class).in(Singleton.class);
 		bind(ScriptInjector.class).in(Singleton.class);
 		bind(IAgentApp.class).to(MainApp.class).in(Singleton.class);
