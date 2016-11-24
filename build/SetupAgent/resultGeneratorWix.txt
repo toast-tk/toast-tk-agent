@@ -1,53 +1,3 @@
-<?xml version="1.0"?>
-<!-- Change the product version at every update -->
-<?define ProductVersion = "0.1.4"?>
-<!-- Do not change the ProductUpgradeCode -->
-<?define ProductUpgradeCode = "ab67ea4c-d2c3-4729-95eb-0ba451da5db2"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-   <Product Id="*" UpgradeCode="$(var.ProductUpgradeCode)" 
-            Name="Toast TK Agent" Version="$(var.ProductVersion)" Manufacturer="TalanLabs" Language="1033">
-     
-      <Package InstallerVersion="200" Compressed="yes" Comments="Windows Installer Package for Toast TK Agent"
-               InstallScope='perUser' InstallPrivileges='limited' />
-     
-      <Media Id="1" Cabinet="product.cab" EmbedCab="yes"/>
-      <Icon Id="ProductIcon" SourceFile="homeIcon.ico"/>
-      <Property Id="ARPPRODUCTICON" Value="ProductIcon"/>
-      <Property Id="ARPHELPLINK" Value="http://www.toast-tk.io"/>
-      <Property Id="ARPURLINFOABOUT" Value="http://www.toast-tk.io"/>
-      <Property Id="ARPNOREPAIR" Value="1"/>
-     
-      <Upgrade Id="$(var.ProductUpgradeCode)">
-         <UpgradeVersion Minimum="$(var.ProductVersion)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED"/>
-         <UpgradeVersion Minimum="0.0.0" Maximum="$(var.ProductVersion)" IncludeMinimum="yes" IncludeMaximum="no" 
-                         Property="OLDERVERSIONBEINGUPGRADED"/>	  
-      </Upgrade>
-      <Condition Message="A newer version of this software is already installed.">NOT NEWERVERSIONDETECTED</Condition>
-
-      <SetDirectory Id="USER_DIRECTORY" Value="C:\Users\[%USERNAME]\" />
-      <SetDirectory Id="TTK_DIRECTORY" Value="C:\Users\[%USERNAME]\.toast\" />
-      <SetDirectory Id="JAVALOCATION" Value="C:\Users\[%USERNAME]\.toast\Java\" /> 
-      <SetDirectory Id="DESKTOPLOCATION" Value="C:\Users\[%USERNAME]\Desktop\" /> 
-     
-      <Directory Id="TARGETDIR" Name="SourceDir">
-        
-          <!-- source file in the TTK directory -->
-          <Directory Id="TTK_DIRECTORY">
-            <Component Id="ApplicationSourceFiles" Guid="651b4f52-9256-4e56-a0c6-b7aa69482f7c">
-              <File Id="ServerKeystoreFile" Source="resources\server-keystore.jks"/>
-              <File Id="AgentStandAloneFile" Source="resources\agent-1.0-fat.jar"/>
-              <File Id="ChromeDriverFile" Source="resources\chromedriver.exe"/>
-            </Component>
-            
-            <Directory Id="PLUGINSDIR" Name="plugins">
-                <Component Id="Plugins" Guid="796bc79c-40de-49e4-a37e-8da82dc15e4a">
-                   <CreateFolder />
-                </Component>
-            </Directory>
-                
-            <Directory Id="JAVALOCATION">
-
-              <!-- JRE COMPONENT -->
               <Directory Id = "jre" Name = "jre">
                  <Component Id = "jretCOPYRIGHT" Guid = "71172986-d1d3-400d-a81d-05fc36684fc5" >
                    <File Id = "jretCOPYRIGHT" Source="jre\COPYRIGHT"/>
@@ -698,60 +648,8 @@
                     </Directory>
                  </Directory>
               </Directory>
-              <!-- JRE COMPONENT -->
 
-            </Directory>
-          </Directory>
-      
-          <!-- launcher files in the directory choosed -->
-          <Directory Id="USER_DIRECTORY">
-            <Directory Id="INSTALLDIR" Name="ToastTK">
-              <Component Id="ApplicationLauncherFiles64" Guid="c5e14f75-1a1a-4170-8f5e-b9cb705efd3e">
-                <File Id="runAgent64" Source="resources_64\Toast-Agent.exe"/>
-                <File Id="readme64" Source="resources_64\README.txt"/>
-              </Component>
-            </Directory>
-          </Directory>
-              
-          <!-- start menu entry -->
-          <Directory Id="ProgramMenuFolder">
-            <Directory Id="ProgramMenuSubfolder" Name="Agent">
-               <Component Id="ApplicationShortcuts" Guid="f78509dc-4c1f-48b2-97da-04e6b55834ee">
-                  <RegistryValue Root="HKCU" Key="Software\ToastTk\ToastTk-Agent" 
-                            Name="installed" Type="integer" Value="1" KeyPath="yes"/>
-                 <Shortcut Id="ApplicationShortcut1" Name="ToastTkAgentLauncher" Description="ToastTk-Agent"
-                           Target="[INSTALLDIR]AgentLauncher.exe" WorkingDirectory="INSTALLDIR"/>
-                 <Shortcut Id="ApplicationShortcut2" Name="ToastTkAgentLauncher" Description="ToastTk-Agent"
-                           Target="[INSTALLDIR]README.txt" WorkingDirectory="INSTALLDIR"/>
-                  <RemoveFolder Id="ProgramMenuSubfolder" On="uninstall"/>
-               </Component>
-            </Directory>
-         </Directory>
-      
-          <!-- shortcut in the desktop -->
-          <Directory Id="DESKTOPLOCATION">
-            <Component Id="ApplicationShortcut64" Guid="9BB88764-19E9-4EBF-8752-5D379D2A4C3C">
-                <Shortcut Id="ApplicationStartMenuShortcut64" 
-                          Name="Toast-Agent"
-                          Description="Toast TK Web Agent"
-                          Target="[#runAgent64]"
-                          WorkingDirectory="ProgramMenuSubfolder"/>
-                <RegistryValue Root="HKCU" Key="Software\Microsoft\MyApplicationName" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
-            </Component>
-          </Directory>
-      </Directory>
 
-     <!-- Proprety modification from WixUI_InstallDir -->
-     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR"/>
-     <UIRef Id="WixUI_InstallDir" />
-
-     <InstallExecuteSequence>
-        <RemoveExistingProducts After="InstallValidate"/>
-     </InstallExecuteSequence>
-        
-     <Feature Id="DefaultFeature" Level="1">
-
-       <!-- JRE COMPONENT -->
        <ComponentRef Id = "jretCOPYRIGHT" />
        <ComponentRef Id = "jretLICENSE" />
        <ComponentRef Id = "jretREADMEutxt" />
@@ -956,15 +854,4 @@
        <ComponentRef Id = "jretlibtsecuritytlocalupolicyujar" />
        <ComponentRef Id = "jretlibtsecurityttrustedulibraries" />
        <ComponentRef Id = "jretlibtsecuritytUSuexportupolicyujar" />
-       <!-- JRE COMPONENT -->
 
-
-       <ComponentRef Id="ApplicationSourceFiles"/>
-       <ComponentRef Id="Plugins"/>
-       <ComponentRef Id="ApplicationLauncherFiles64"/>
-       <ComponentRef Id="ApplicationShortcut64"/>
-       <ComponentRef Id="ApplicationShortcuts"/>
-     </Feature>
-      
-   </Product>
-</Wix>
