@@ -21,7 +21,8 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AgentInstaller.wxs" />
+    <Compile Include="AgentInstaller_64.wxs" />
+    <Compile Include="AgentInstaller_32.wxs" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUIExtension">

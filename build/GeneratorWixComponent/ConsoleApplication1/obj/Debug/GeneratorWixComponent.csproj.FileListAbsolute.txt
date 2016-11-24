@@ -1,0 +1,6 @@
+C:\Users\ncohen\workspace\toast-tk-agent\build\GeneratorWixComponent\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe.config
+C:\Users\ncohen\workspace\toast-tk-agent\build\GeneratorWixComponent\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+C:\Users\ncohen\workspace\toast-tk-agent\build\GeneratorWixComponent\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+C:\Users\ncohen\workspace\toast-tk-agent\build\GeneratorWixComponent\ConsoleApplication1\obj\Debug\GeneratorWixComponent.csprojResolveAssemblyReference.cache
+C:\Users\ncohen\workspace\toast-tk-agent\build\GeneratorWixComponent\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+C:\Users\ncohen\workspace\toast-tk-agent\build\GeneratorWixComponent\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
