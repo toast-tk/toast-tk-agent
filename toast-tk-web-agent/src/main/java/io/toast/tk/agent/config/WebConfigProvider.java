@@ -28,6 +28,16 @@ public class WebConfigProvider implements Provider<WebConfig> {
 
 	public static final String TOAST_API_KEY = "toast.api.key";
 
+	public static final String TOAST_PLUGIN_DIR = "toast.plugin.dir";
+
+	public static final String TOAST_PROXY_ADRESS = "toast.proxy.adress";
+
+	public static final String TOAST_PROXY_PORT = "toast.proxy.port";
+
+	public static final String TOAST_PROXY_USER_NAME = "toast.proxy.username";
+
+	public static final String TOAST_PROXY_USER_PSWD = "toast.proxy.userpswd";
+
 
 	public WebConfigProvider() {
 		super();
@@ -50,6 +60,11 @@ public class WebConfigProvider implements Provider<WebConfig> {
 		webConfig.setChromeDriverPath(p.getProperty(TOAST_CHROMEDRIVER_PATH, userHomepath + "chromedriver.exe"));
 		webConfig.setWebAppUrl(p.getProperty(TOAST_TEST_WEB_APP_URL, "Toast WebApp url"));
 		webConfig.setApiKey(p.getProperty(TOAST_API_KEY, "Web App Api Key"));
+		webConfig.setPluginDir(p.getProperty(TOAST_PLUGIN_DIR, webConfig.getBasicPluginDir()));
+		webConfig.setProxyAdress(p.getProperty(TOAST_PROXY_ADRESS, "Proxy Adress"));
+		webConfig.setProxyPort(p.getProperty(TOAST_PROXY_PORT, "Proxy Port"));
+		webConfig.setProxyUserName(p.getProperty(TOAST_PROXY_USER_NAME, "Proxy User Name"));
+		webConfig.setProxyUserPswd(p.getProperty(TOAST_PROXY_USER_PSWD, "Proxy User Pswd"));
 	}
 
 	@Override
