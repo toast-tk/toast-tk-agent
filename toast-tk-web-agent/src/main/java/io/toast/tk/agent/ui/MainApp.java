@@ -86,6 +86,11 @@ public class MainApp implements IAgentApp {
 		p.setProperty(WebConfigProvider.TOAST_CHROMEDRIVER_PATH, webConfig.getChromeDriverPath());
 		p.setProperty(WebConfigProvider.TOAST_TEST_WEB_APP_URL, webConfig.getWebAppUrl());
 		p.setProperty(WebConfigProvider.TOAST_API_KEY, webConfig.getApiKey());
+		p.setProperty(WebConfigProvider.TOAST_PLUGIN_DIR, webConfig.getPluginDir());
+		p.setProperty(WebConfigProvider.TOAST_PROXY_ADRESS, webConfig.getProxyAdress());
+		p.setProperty(WebConfigProvider.TOAST_PROXY_PORT, webConfig.getProxyPort());
+		p.setProperty(WebConfigProvider.TOAST_PROXY_USER_NAME, webConfig.getProxyUserName());
+		p.setProperty(WebConfigProvider.TOAST_PROXY_USER_PSWD, webConfig.getProxyUserPswd());
 		p.store(FileUtils.openOutputStream(this.toastWebPropertiesFile), null);
 		this.webProperties.load(FileUtils.openInputStream(this.toastWebPropertiesFile));
 	}

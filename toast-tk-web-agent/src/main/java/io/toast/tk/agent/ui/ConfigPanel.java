@@ -53,10 +53,10 @@ public class ConfigPanel extends JDialog {
 	private String recorderName = "recording";
 	private String apiKeyName = "api";
 	private String pluginName = "plugin";
-	private String proxyAdress = "proxyAdress";
-	private String proxyPort = "proxyPort";
-	private String proxyUser = "proxyUser";
-	private String proxyPswd = "proxyPswd";
+	private String proxyAdress = "adress";
+	private String proxyPort = "port";
+	private String proxyUser = "username";
+	private String proxyPswd = "userpswd";
 	private static int timeout = 1000; // in milliseconds
 
 	private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
@@ -321,6 +321,7 @@ public class ConfigPanel extends JDialog {
 				apiKeyPanel.add(errorLabelApiKey);
 			} 	else if(strKey.contains(pluginName)) {
 				textFieldPlugin = textField;
+				iconPanelPlugin = iconPanel;
 				iconValidPlugin = iconValid;
 				iconNotValidPlugin = iconNotValid;
 				fileSearchPlugin = fileSearch;

@@ -14,7 +14,7 @@ To update a new version of the AgentInstaller, you have to :
 - Update the version in the file AgentInstaller.wxs at this line : "<?define ProductVersion = "0.0.1"?>" (if needed)
 - Change/Put the file "agent-1.0-fat.jar" and "server-keystore.jks" in the folder SetupAgent\SetupAgent\resources from the old version to the new one. This files will be put in the right repository thanks to the installer.
 - Run the .bat "toast-tk-agent/build/compileMSIAgent.bat"
-- The installer "AgentInstaller.msi" is updated in the folder "toast-tk-agent/dist/". 
+- The installer "AgentInstaller_32.msi" and "AgentInstaller_64.msi" are updated in the folder "toast-tk-agent/dist/". 
 
 N.B. : 
 1/ The installer automaticly install the files in the directory "C:\Users\%USERNAME%\.toast". 
