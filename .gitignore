@@ -23,3 +23,12 @@ pom.xml.versionsBackup
 
 # Logs
 *.log
+*.cs
+
+#JRE
+build/SetupAgent/jre/
+build/SetupAgent/resources_64/jre/
+build/SetupAgent/resources_x82/jre/
+build/SetupAgent/resources/agent-1.0-fat.jar
+dist/AgentInstaller_32.msi
+*.msi
