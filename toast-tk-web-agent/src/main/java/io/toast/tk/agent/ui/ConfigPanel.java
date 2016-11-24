@@ -3,6 +3,7 @@ package io.toast.tk.agent.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +12,11 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.Authenticator;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.PasswordAuthentication;
+import java.net.Proxy;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +35,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
 import org.apache.commons.collections4.EnumerationUtils;
 import org.apache.commons.io.FileUtils;
@@ -57,7 +63,7 @@ public class ConfigPanel extends JDialog {
 	private String proxyPort = "port";
 	private String proxyUser = "username";
 	private String proxyPswd = "userpswd";
-	private static int timeout = 1000; // in milliseconds
+	private static int timeout = 500; // in milliseconds
 
 	private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
 
@@ -75,8 +81,10 @@ public class ConfigPanel extends JDialog {
 		errorLabelProxyAdress, errorLabelProxyPort, errorLabelProxyUserName, errorLabelProxyUserPswd;;
 	private JButton fileSearchChrome, fileSearchPlugin;
 
-	private JLabel iconValidChrome, iconValidWebApp, iconValidRecorder, iconValidPlugin,iconValidProxyAdress,
-		iconNotValidChrome, 	iconNotValidWebApp, 	iconNotValidRecorder, iconNotValidPlugin, iconNotValidProxyAdress;
+	private JLabel iconValidChrome, iconValidWebApp, iconValidRecorder, iconValidPlugin,
+		iconNotValidChrome, 	iconNotValidWebApp, 	iconNotValidRecorder, iconNotValidPlugin;
+	
+	public static JCheckBox proxyCheckBox;
 	
 	private final Properties properties;
 
@@ -151,9 +159,7 @@ public class ConfigPanel extends JDialog {
 		for(Object key : EnumerationUtils.toList(properties.propertyNames())) {
 			String strKey = (String) key;
 			String errorMessage = "";
-			JPanel panel = new JPanel();
-			panel.setAlignmentX(LEFT_ALIGNMENT);
-			panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+			JPanel panel = createPanel();
 			panel.add(Box.createHorizontalGlue());
 			panel.setBackground(Color.white);
 			panel.setBorder(BorderFactory.createTitledBorder(strKey));
@@ -164,12 +170,11 @@ public class ConfigPanel extends JDialog {
 			textFields.put(strKey, textField);
 			
 			
-			JPanel textButtonPanel = new JPanel();
-			textButtonPanel.setAlignmentX(LEFT_ALIGNMENT);
-			textButtonPanel.setLayout(new BoxLayout(textButtonPanel, BoxLayout.LINE_AXIS));
+			JPanel textButtonPanel = createPanel(BoxLayout.LINE_AXIS);
 			textButtonPanel.add(Box.createHorizontalGlue());
 			
 			JPanel iconPanel = new JPanel();
+			iconPanel.setBackground(Color.white);
 			
 			JLabel iconValid = new JLabel(new ImageIcon(this.valid_image));
 			iconValid.setBackground(Color.white);
@@ -177,10 +182,22 @@ public class ConfigPanel extends JDialog {
 			iconNotValid.setBackground(Color.white);
 
 			JLabel errorLabel = null;
-			if(strKey.contains(chromeDriverName) || strKey.contains(pluginName)){
+			if(strKey.contains(chromeDriverName)){
 				errorMessage = errorMessageSelectFile;
 				
-				if( testWebAppDirectory(textField.getText(),false) ) {
+				if( testWebAppDirectory(textField.getText(),false, true) ) {
+					iconPanel.add(iconValid);
+					errorLabel = new JLabel(" ");
+				}
+				else 
+				{
+					iconPanel.add(iconNotValid);
+					errorLabel = new JLabel(errorMessage);
+				}
+			} else if(strKey.contains(pluginName)){
+				errorMessage = errorMessageSelectFile;
+				
+				if( testWebAppDirectory(textField.getText(),false, false) ) {
 					iconPanel.add(iconValid);
 					errorLabel = new JLabel(" ");
 				}
@@ -199,14 +216,15 @@ public class ConfigPanel extends JDialog {
 					errorMessage = errorMessageApiKey;
 					errorLabel = new JLabel(errorMessage);
 				}
-				else if(strKey.contains(proxyUser) ||
+				else if(strKey.contains(proxyAdress) ||
+						strKey.contains(proxyUser) ||
 						strKey.contains(proxyPswd) ||
-						strKey.contains(proxyPort)){ // Proxy tests will only be for the proxy adress
+						strKey.contains(proxyPort)){ // Proxy tests will be tested through the webApp URL
 					JLabel toastLogo = new JLabel(new ImageIcon(this.toast_logo));
 					toastLogo.setBackground(Color.white);
 					iconPanel.add(toastLogo);
 					
-					errorMessage = "";
+					errorMessage = " ";
 					errorLabel = new JLabel(errorMessage);
 				}
 				else {
@@ -426,6 +444,7 @@ public class ConfigPanel extends JDialog {
 			
 		});
 
+		Font fontTitle = new Font("Arial",Font.BOLD,16);
 		
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
 		buttonPanel.setBackground(Color.white);
@@ -433,28 +452,42 @@ public class ConfigPanel extends JDialog {
 		buttonPanel.add(cancelButton);
 		buttonPanel.add(okButton);
 
-	    JPanel generalParameters = new JPanel();
+	    JPanel generalParameters = createPanel();
+	    JPanel generalParameters1 = createPanel(BoxLayout.LINE_AXIS);
+	    JPanel generalParameters2 = createPanel(BoxLayout.LINE_AXIS);
 	    generalParameters.setBackground(Color.white);
-	    generalParameters.setBorder(BorderFactory.createTitledBorder("General Parameters"));
-	    generalParameters.add(webAppPanel);
-	    generalParameters.add(apiKeyPanel);
-	    generalParameters.add(pluginPanel);
+	    generalParameters.setBorder(BorderFactory.createTitledBorder(generalParameters.getBorder(),
+	    		"General Parameters",TitledBorder.ABOVE_TOP,TitledBorder.CENTER, fontTitle));
+	    generalParameters1.add(webAppPanel);
+	    generalParameters1.add(apiKeyPanel);
+	    generalParameters2.add(pluginPanel);
+	    generalParameters.add(generalParameters1);
+	    generalParameters.add(generalParameters2);
 
-	    JPanel recorderParameters = new JPanel();
+	    JPanel recorderParameters = createPanel();
 	    recorderParameters.setBackground(Color.white);
-	    recorderParameters.setBorder(BorderFactory.createTitledBorder("Recorder Parameters"));
+	    recorderParameters.setBorder(BorderFactory.createTitledBorder(recorderParameters.getBorder(),
+	    		"Recorder Parameters",TitledBorder.ABOVE_TOP,TitledBorder.CENTER, fontTitle));
 	    recorderParameters.add(chromePanel);
 	    recorderParameters.add(recorderPanel);
 
-	    JPanel proxyPanel = new JPanel();
-		JCheckBox proxyCheckBox = new JCheckBox("Proxy");
+	    JPanel proxyPanel = createPanel();
+	    JPanel proxyPanel1 = createPanel(BoxLayout.LINE_AXIS);
+	    JPanel proxyPanel2 = createPanel(BoxLayout.LINE_AXIS);
+	    JPanel proxyPanel3 = createPanel(BoxLayout.LINE_AXIS);
+		proxyCheckBox = new JCheckBox("Activation");
+		proxyCheckBox.setBackground(Color.white);
 	    proxyPanel.setBackground(Color.white);
-	    proxyPanel.setBorder(BorderFactory.createTitledBorder("Proxy Parameters"));
-	    proxyPanel.add(proxyCheckBox);
-	    proxyPanel.add(proxyAdressPanel);
-	    proxyPanel.add(proxyPortPanel);
-	    proxyPanel.add(proxyUserNamePanel);
-	    proxyPanel.add(proxyUserPswdPanel);
+	    proxyPanel.setBorder(BorderFactory.createTitledBorder(proxyPanel.getBorder(),
+	    		"Proxy Parameters",TitledBorder.ABOVE_TOP,TitledBorder.CENTER, fontTitle));
+	    proxyPanel1.add(proxyCheckBox);
+	    proxyPanel2.add(proxyAdressPanel);
+	    proxyPanel2.add(proxyPortPanel);
+	    proxyPanel3.add(proxyUserNamePanel);
+	    proxyPanel3.add(proxyUserPswdPanel);
+	    proxyPanel.add(proxyPanel1);
+	    proxyPanel.add(proxyPanel2);
+	    proxyPanel.add(proxyPanel3);
 
 	    secondPane.add(generalParameters);
 	    secondPane.add(recorderParameters);
@@ -539,7 +572,15 @@ public class ConfigPanel extends JDialog {
 	private void testIconValid(String strKey, boolean runTryValue) throws IOException {
 		if(strKey.contains(webAppName))
 		{
-			if(!testWebAppURL(textFieldWebApp.getText(),runTryValue))
+			boolean test = false;
+			if(proxyCheckBox.isSelected()) {
+				test = testWebAppURL(textFieldWebApp.getText(),runTryValue, 
+						textFieldProxyAdress.getText(), textFieldProxyPort.getText(), 
+						textFieldProxyUserName.getText(), textFieldProxyUserPswd.getText());
+			}
+			else test = testWebAppURL(textFieldWebApp.getText(),runTryValue);
+			
+			if(!test)
 			{
 				iconPanelWebApp.removeAll();
 				iconPanelWebApp.add(iconNotValidWebApp);
@@ -553,7 +594,15 @@ public class ConfigPanel extends JDialog {
 			}
 		} else if(strKey.contains(recorderName))
 		{
-			if(!testWebAppURL(textFieldRecorder.getText(),runTryValue))
+			boolean test = false;
+			if(proxyCheckBox.isSelected()) {
+				test = testWebAppURL(textFieldRecorder.getText(),runTryValue, 
+						textFieldProxyAdress.getText(), textFieldProxyPort.getText(), 
+						textFieldProxyUserName.getText(), textFieldProxyUserPswd.getText());
+			}
+			else test = testWebAppURL(textFieldRecorder.getText(),runTryValue);
+			
+			if(!test)
 			{
 				iconPanelRecorder.removeAll();
 				iconPanelRecorder.add(iconNotValidRecorder);
@@ -566,7 +615,7 @@ public class ConfigPanel extends JDialog {
 				errorLabelRecorder.setText(" ");
 			}
 		} else if(strKey.contains(chromeDriverName)) {
-			if(!testWebAppDirectory(textFieldChrome.getText(),runTryValue))
+			if(!testWebAppDirectory(textFieldChrome.getText(),runTryValue, true))
 			{
 				iconPanelChrome.removeAll();
 				iconPanelChrome.add(iconNotValidChrome);
@@ -579,7 +628,7 @@ public class ConfigPanel extends JDialog {
 				errorLabelChrome.setText(" ");
 			}
 		} else if(strKey.contains(pluginName)) {
-			if(!testWebAppDirectory(textFieldPlugin.getText(),runTryValue))
+			if(!testWebAppDirectory(textFieldPlugin.getText(),runTryValue, false))
 			{
 				iconPanelPlugin.removeAll();
 				iconPanelPlugin.add(iconNotValidPlugin);
@@ -591,23 +640,10 @@ public class ConfigPanel extends JDialog {
 				iconPanelPlugin.add(iconValidPlugin);
 				errorLabelPlugin.setText(" ");
 			}
-		} else if(strKey.contains(proxyAdress)) {
-			if(!testWebAppDirectory(textFieldProxyAdress.getText(),runTryValue))
-			{
-				iconPanelProxyAdress.removeAll();
-				iconPanelProxyAdress.add(iconNotValidProxyAdress);
-				errorLabelProxyAdress.setText(errorMessageSelectFile);
-			}
-			else 
-			{
-				iconPanelProxyAdress.removeAll();
-				iconPanelProxyAdress.add(iconValidProxyAdress);
-				errorLabelProxyAdress.setText(" ");
-			}
-		}
+		} 
 	}
 		
-	public static boolean testWebAppDirectory(String directory, boolean runTryValue) throws IOException{
+	public static boolean testWebAppDirectory(String directory, boolean runTryValue, boolean fileOrDirectory) throws IOException{
 		String fileName = directory.split("/")[directory.split("/").length - 1];
 		
 		if(directory.contains(" ")){
@@ -619,17 +655,53 @@ public class ConfigPanel extends JDialog {
     		return false;
     	}
     	
-    	if(testFileDirectory(directory, runTryValue, fileName)){
-    		LOG.info("Status of " + directory + " : OK");
-    		return true;
-    	}
-    	else {
-    		
-    		LOG.info("Status of " + directory + " : KO");
-    		return false;
-    	}
+		if(fileOrDirectory) {
+			if(testFileDirectory(directory, runTryValue, fileName)){
+	    		LOG.info("Status of " + directory + " : OK");
+	    		return true;
+	    	}
+	    	else {
+	    		LOG.info("Status of " + directory + " : KO");
+	    		return false;
+	    	}
+		} else {
+			if(testDirectory(directory, runTryValue, fileName)){
+	    		LOG.info("Status of " + directory + " : OK");
+	    		return true;
+	    	}
+	    	else {
+	    		LOG.info("Status of " + directory + " : KO");
+	    		return false;
+	    	}
+		}
 	}
 
+	public static boolean testDirectory(String directory, boolean runTryValue, String fileName) {
+		File myFile = new File(directory); 
+		if(myFile.exists()) 
+		{
+			if(myFile.isDirectory())
+			{
+				return true;
+			}
+			else
+			{
+				if(runTryValue) 
+	    		{
+	    			NotificationManager.showMessage("You did not select a directory.").showNotification();
+	    		}
+				return false;
+			}
+		} 
+		else
+		{
+			if(runTryValue) 
+    		{
+    			NotificationManager.showMessage("The directory : " + directory.split(fileName)[0] + " does not exist !").showNotification();
+    		}
+			return false;
+		}
+	}
 	public static boolean testFileDirectory(String directory, boolean runTryValue, String fileName) {
 		File myFile = new File(directory); 
 		if(myFile.exists()) 
@@ -657,7 +729,11 @@ public class ConfigPanel extends JDialog {
 		}
 	}
 	
-	public static boolean testWebAppURL(String URL, boolean runTryValue) throws IOException{
+	public static boolean testWebAppURL(String URL, boolean runTryValue) throws IOException {
+		return testWebAppURL(URL, runTryValue, null, null, null, null);
+	}
+	public static boolean testWebAppURL(String URL, boolean runTryValue, String proxyAdress, 
+			String proxyPort, String proxyUserName, String proxyUserPswd) throws IOException{
 		if(URL.contains(" ")){
 			if(runTryValue) 
     		{
@@ -667,7 +743,7 @@ public class ConfigPanel extends JDialog {
     		return false;
     	}
     	
-    	if(getStatus(URL)){
+    	if(getStatus(URL, proxyAdress, proxyPort, proxyUserName, proxyUserPswd)){
     		LOG.info("Status of " + URL + " : OK");
     		return true;
     	}
@@ -681,13 +757,37 @@ public class ConfigPanel extends JDialog {
     	}
 	}
 	
-	public static boolean getStatus(String url) throws IOException {	 
+	public boolean isChecked() {
+		return proxyCheckBox.isSelected();
+	}
+	
+	public static boolean getStatus(String url, String proxyAdress, String proxyPort, 
+			String proxyUserName, String proxyUserPswd) throws IOException {	 
         boolean result = false;
         try {
             URL siteURL = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) siteURL
+            HttpURLConnection connection = null;
+            if(proxyUserName != null && proxyUserPswd != null) {
+            	Authenticator authenticator = new Authenticator() {
+
+                    public PasswordAuthentication getPasswordAuthentication() {
+                        return (new PasswordAuthentication(proxyUserName,
+                        		proxyUserPswd.toCharArray()));
+                    }
+                };
+                Authenticator.setDefault(authenticator);
+            }
+            
+            if(proxyAdress != null && proxyUserName != null) {
+            	Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyAdress, Integer.parseInt(proxyPort)));
+            	connection = (HttpURLConnection) siteURL
+                        .openConnection(proxy);
+            }
+            else connection = (HttpURLConnection) siteURL
                     .openConnection();
+            
             connection.setRequestMethod("GET");
+            connection.setConnectTimeout(timeout);
             connection.connect();
  
             int code = connection.getResponseCode();
@@ -699,4 +799,16 @@ public class ConfigPanel extends JDialog {
         }
         return result;
     }
+
+	public static JPanel createPanel() {
+		return createPanel(BoxLayout.PAGE_AXIS);
+	}
+	public static JPanel createPanel(int boxLayout) {
+		JPanel panel = new JPanel();
+		panel.setAlignmentX(LEFT_ALIGNMENT);
+		panel.setLayout(new BoxLayout(panel, boxLayout));
+		panel.setBackground(Color.white);
+		
+		return panel;
+	}
 }

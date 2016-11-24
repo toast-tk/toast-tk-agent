@@ -251,7 +251,7 @@ public class MainApp implements IAgentApp {
 		}
 		else {
 			if(nomUrlATester ==  chromeDriverName) {
-				return ConfigPanel.testWebAppDirectory(input, true);
+				return ConfigPanel.testWebAppDirectory(input, true, ConfigPanel.proxyCheckBox.isSelected());
 			}
 			else {
 				return false;
