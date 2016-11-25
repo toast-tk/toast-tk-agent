@@ -15,7 +15,6 @@ import com.github.kristofa.servicepluginloader.ServicePlugin;
 import com.github.kristofa.servicepluginloader.ServicePluginClassPath;
 import com.github.kristofa.servicepluginloader.ServicePluginLoader;
 import com.github.kristofa.servicepluginloader.ServicePluginsClassPathProvider;
-import com.google.inject.Guice;
 import com.google.inject.Module;
 
 import io.toast.tk.agent.config.AgentConfigProvider;

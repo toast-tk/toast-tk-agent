@@ -3,6 +3,8 @@ package io.toast.tk.agent.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -51,10 +53,10 @@ public class ConfigPanel extends JDialog {
 	private String recorderName = "recording";
 	private String apiKeyName = "api";
 	private String pluginName = "plugin";
-	private String proxyAdress = "proxyAdress";
-	private String proxyPort = "proxyPort";
-	private String proxyUser = "proxyUser";
-	private String proxyPswd = "proxyPswd";
+	private String proxyAdress = "adress";
+	private String proxyPort = "port";
+	private String proxyUser = "username";
+	private String proxyPswd = "userpswd";
 	private static int timeout = 1000; // in milliseconds
 
 	private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
@@ -321,7 +323,7 @@ public class ConfigPanel extends JDialog {
 				textButtonPanelPlugin = textButtonPanel;
 				textButtonPanelPlugin.add(fileSearchPlugin);
 				textButtonPanelPlugin.add(textFieldPlugin);
-				textButtonPanelPlugin.add(iconPanelPlugin);
+				//textButtonPanelPlugin.add(iconPanelPlugin);
 				errorLabelPlugin = errorLabel;
 
 				pluginPanel = panel;
@@ -433,14 +435,16 @@ public class ConfigPanel extends JDialog {
 	    generalParameters.add(webAppPanel);
 	    generalParameters.add(apiKeyPanel);
 	    generalParameters.add(pluginPanel);
+	    generalParameters.setLayout(new BoxLayout(generalParameters, BoxLayout.PAGE_AXIS));
 
-	    JPanel recorderParameters = new JPanel();
+	    JPanel recorderParameters = new JPanel(new GridLayout());
 	    recorderParameters.setBackground(Color.white);
 	    recorderParameters.setBorder(BorderFactory.createTitledBorder("Recorder Parameters"));
 	    recorderParameters.add(chromePanel);
 	    recorderParameters.add(recorderPanel);
+	    recorderParameters.setLayout(new BoxLayout(recorderParameters, BoxLayout.Y_AXIS));
 
-	    JPanel proxyPanel = new JPanel();
+	    JPanel proxyPanel = new JPanel(new GridLayout());
 		JCheckBox proxyCheckBox = new JCheckBox("Proxy");
 	    proxyPanel.setBackground(Color.white);
 	    proxyPanel.setBorder(BorderFactory.createTitledBorder("Proxy Parameters"));
@@ -449,6 +453,7 @@ public class ConfigPanel extends JDialog {
 	    proxyPanel.add(proxyPortPanel);
 	    proxyPanel.add(proxyUserNamePanel);
 	    proxyPanel.add(proxyUserPswdPanel);
+	    proxyPanel.setLayout(new BoxLayout(proxyPanel, BoxLayout.PAGE_AXIS));
 
 	    secondPane.add(generalParameters);
 	    secondPane.add(recorderParameters);
