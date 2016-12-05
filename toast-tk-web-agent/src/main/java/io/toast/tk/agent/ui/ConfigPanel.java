@@ -34,16 +34,12 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import org.apache.commons.collections4.EnumerationUtils;
 import org.apache.commons.io.FileUtils;
-import org.apache.http.HttpHost;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -67,12 +63,15 @@ public class ConfigPanel extends JDialog {
 
 	private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
 
-	private JPanel mainPane, secondPane, chromePanel, webAppPanel, recorderPanel, apiKeyPanel, pluginPanel,
+	private JPanel mainPane;
+	private JPanel secondPane; 
+	private JPanel chromePanel, webAppPanel, recorderPanel, apiKeyPanel, pluginPanel,
 		proxyAdressPanel, proxyPortPanel, proxyUserNamePanel, proxyUserPswdPanel;
 
 	private JLabel icon;
 	private JTextField textFieldChrome, textFieldWebApp, textFieldRecorder, textFieldApiKey, textFieldPlugin,
-		textFieldProxyAdress, textFieldProxyPort, textFieldProxyUserName, textFieldProxyUserPswd;
+		textFieldProxyAdress, textFieldProxyPort, textFieldProxyUserName;
+	private JPasswordField textFieldProxyUserPswd;
 	private JPanel textButtonPanelChrome, textButtonPanelWebApp, textButtonPanelRecorder, textButtonPanelApiKey, textButtonPanelPlugin,
 		textButtonPanelProxyAdress, textButtonPanelProxyPort, textButtonPanelProxyUserName, textButtonPanelProxyUserPswd,
 		iconPanelChrome, iconPanelWebApp, iconPanelRecorder, iconPanelApiKey, iconPanelPlugin,
@@ -128,6 +127,9 @@ public class ConfigPanel extends JDialog {
 		mainPane.setBackground(Color.white);
 		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.X_AXIS));
 		mainPane.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+		mainPane.setBorder(BorderFactory.createTitledBorder(mainPane.getBorder(),
+	    		"Agent setup",TitledBorder.ABOVE_TOP,TitledBorder.CENTER, 
+	    		new Font("Arial",Font.BOLD,30)));
 		this.textFields = new HashMap<String, JTextField>();
 		JPanel configEntry = new JPanel();
 		configEntry.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -167,8 +169,17 @@ public class ConfigPanel extends JDialog {
 			JTextField textField = new JTextField(render(properties.getProperty(strKey)));
 			textField.setColumns(30);
 			textField.setAlignmentX(LEFT_ALIGNMENT);
-			textFields.put(strKey, textField);
 			
+			JPasswordField textPassField = new JPasswordField(render(properties.getProperty(strKey)));
+			textPassField.setColumns(30);
+			textPassField.setAlignmentX(LEFT_ALIGNMENT);
+			textPassField.setEchoChar('*');
+			
+			if(strKey.contains(proxyPswd)) {
+				textFields.put(strKey, textPassField);
+			} else {
+				textFields.put(strKey, textField);
+			}
 			
 			JPanel textButtonPanel = createPanel(BoxLayout.LINE_AXIS);
 			textButtonPanel.add(Box.createHorizontalGlue());
@@ -270,6 +281,34 @@ public class ConfigPanel extends JDialog {
 					
 				}
 			});
+			textPassField.addKeyListener(new KeyListener() {
+				public void keyPressed(
+						KeyEvent a) {
+				        if(a.getKeyCode()==KeyEvent.VK_ENTER)
+				        {
+				        	try {
+								testIconValid(strKey, false);
+								secondPane.repaint();
+								secondPane.revalidate();
+									
+							} catch (IOException e) {
+								LOG.error(e.getMessage(), e);
+							}
+				        }
+					}
+
+					@Override
+					public void keyReleased(KeyEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void keyTyped(KeyEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
 
 			JButton fileSearch = new JButton();
 			fileSearch.setText("...");
@@ -386,7 +425,7 @@ public class ConfigPanel extends JDialog {
 				proxyUserNamePanel.add(textButtonPanelProxyUserName);
 				proxyUserNamePanel.add(errorLabelProxyUserName);
 			} else if(strKey.contains(proxyPswd)) {
-				textFieldProxyUserPswd = textField;
+				textFieldProxyUserPswd = textPassField;
 				iconPanelProxyUserPswd = iconPanel;
 				textButtonPanelProxyUserPswd = textButtonPanel;
 				textButtonPanelProxyUserPswd.add(textFieldProxyUserPswd);
@@ -489,14 +528,14 @@ public class ConfigPanel extends JDialog {
 	    proxyPanel.add(proxyPanel2);
 	    proxyPanel.add(proxyPanel3);
 
-	    secondPane.add(generalParameters);
-	    secondPane.add(recorderParameters);
-	    secondPane.add(proxyPanel);
+	    secondPane.add("General Parameters", generalParameters);
+	    secondPane.add("Recorder Parameters", recorderParameters);
+	    secondPane.add("Proxy Parameters", proxyPanel);
 	    secondPane.add(buttonPanel);
-		
+	    
 	    mainPane.add(secondPane);
 		
-		setTitle("AGENT SETTINGS");
+		setDefaultLookAndFeelDecorated(true);
 		setSize(500, 500);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setContentPane(mainPane);
@@ -576,7 +615,7 @@ public class ConfigPanel extends JDialog {
 			if(proxyCheckBox.isSelected()) {
 				test = testWebAppURL(textFieldWebApp.getText(),runTryValue, 
 						textFieldProxyAdress.getText(), textFieldProxyPort.getText(), 
-						textFieldProxyUserName.getText(), textFieldProxyUserPswd.getText());
+						textFieldProxyUserName.getText(), String.valueOf(textFieldProxyUserPswd.getPassword()));
 			}
 			else test = testWebAppURL(textFieldWebApp.getText(),runTryValue);
 			
@@ -598,7 +637,7 @@ public class ConfigPanel extends JDialog {
 			if(proxyCheckBox.isSelected()) {
 				test = testWebAppURL(textFieldRecorder.getText(),runTryValue, 
 						textFieldProxyAdress.getText(), textFieldProxyPort.getText(), 
-						textFieldProxyUserName.getText(), textFieldProxyUserPswd.getText());
+						textFieldProxyUserName.getText(), String.valueOf(textFieldProxyUserPswd.getPassword()));
 			}
 			else test = testWebAppURL(textFieldRecorder.getText(),runTryValue);
 			
