@@ -23,6 +23,7 @@ import com.google.inject.Inject;
 
 import io.toast.tk.agent.config.AgentConfig;
 import io.toast.tk.agent.config.AgentConfigProvider;
+import io.toast.tk.agent.run.TestRunner;
 import io.toast.tk.agent.web.BrowserManager;
 import io.toast.tk.agent.web.IAgentServer;
 import io.toast.tk.agent.web.RestRecorderService;
@@ -46,6 +47,8 @@ public class MainApp implements IAgentApp {
 	
 	private boolean connectedToWebApp = false;
 	private boolean listenerStarted = false;
+
+	private TestRunner runner;
 	
 	@Inject
 	public MainApp(AgentConfigProvider webConfig, 
@@ -54,6 +57,7 @@ public class MainApp implements IAgentApp {
 		this.browserManager = browserManager;
 		this.webProperties = new Properties();
 		this.agentServer= agentServer;
+		this.runner = new TestRunner(this.webConfigProvider);
 		initWorkspace();
 		init();
 	}
@@ -107,14 +111,16 @@ public class MainApp implements IAgentApp {
 
 			    PopupMenu popup = new PopupMenu();
 			    
-			    MenuItem killItem = new MenuItem("Shutdown");
+			    MenuItem quitItem = new MenuItem("Quit");
 			    MenuItem connectItem = new MenuItem("Connect");
+			    MenuItem executeItem = new MenuItem("Execute Scripts");
 			    MenuItem startRecordingItem = new MenuItem("Start Recording");
 			    MenuItem stopRecordingItem = new MenuItem("Stop Recording");
 			    MenuItem settingsItem = new MenuItem("Settings");
 			    
-			    killItem.addActionListener(getKillListener());
+			    quitItem.addActionListener(getKillListener());
 			    connectItem.addActionListener(getConnectListener());
+			    executeItem.addActionListener(getExecuteListener());
 			    stopRecordingItem.addActionListener(getStopListener());
 			    startRecordingItem.addActionListener(getStartListener());
 			    settingsItem.addActionListener(getSettingsListener());
@@ -124,9 +130,11 @@ public class MainApp implements IAgentApp {
 			    popup.add(startRecordingItem);
 			    popup.add(stopRecordingItem);
 			    popup.addSeparator();
-			    popup.add(killItem);
+			    popup.add(executeItem);
 			    popup.addSeparator();
-			    popup.add(settingsItem); 
+			    popup.add(settingsItem);
+			    popup.addSeparator();
+			    popup.add(quitItem); 
 			    
 			    this.trayIcon = new TrayIcon(offline_image, "Toast TK - Web Agent", popup);
 			} catch (IOException e1) {
@@ -166,6 +174,15 @@ public class MainApp implements IAgentApp {
 	    return listener;
 	}
 	
+	ActionListener getExecuteListener(){
+	    ActionListener listener = new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	        	runner.execute();
+	        }
+	    };
+	    return listener;
+	}
+	
 	ActionListener getKillListener(){
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
@@ -182,7 +199,6 @@ public class MainApp implements IAgentApp {
 	        	try {
 	        		if(connectedToWebApp) {
 	        			boolean flag = false;
-		        		
 						if(verificationWebApp(chromeDriverName)) {
 							if(verificationWebApp(recorderName)) {
 								if(verificationWebApp(webAppName)) {
@@ -226,14 +242,14 @@ public class MainApp implements IAgentApp {
 	        	try {
 					new ConfigPanel(webProperties, toastWebPropertiesFile);
 				} catch (IOException e1) {
-					e1.printStackTrace();
+					LOG.error(e1.getMessage(), e1);
 				}
 	        }
 	    };
 	    return listener;
 	}
 	
-	public AgentConfig getWebConfig() {
+	public AgentConfig getConfig() {
 		return webConfigProvider.get();
 	}
 

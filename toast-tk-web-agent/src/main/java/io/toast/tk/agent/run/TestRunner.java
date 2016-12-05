@@ -18,6 +18,7 @@ import io.toast.tk.agent.config.AgentConfigProvider;
 import io.toast.tk.agent.ui.NotificationManager;
 import io.toast.tk.dao.domain.impl.test.block.ITestPage;
 import io.toast.tk.dao.domain.impl.test.block.ITestPlan;
+import io.toast.tk.plugin.IAgentPlugin;
 import io.toast.tk.plugin.PluginLoader;
 import io.toast.tk.runtime.parse.FileHelper;
 import io.toast.tk.runtime.parse.TestParser;
@@ -67,23 +68,21 @@ public class TestRunner {
 		});
 	}
 	
-	public static void main(String[] args){
-		TestRunner runner = new TestRunner(new AgentConfigProvider());
-		runner.execute();
-	}
-	
 	public ITestPage run(ITestPage testPage) throws IOException {
+		LOG.info("Agent plugin class loader: " + IAgentPlugin.class.getClassLoader());
 		PluginLoader loader = new PluginLoader(provider);
-		Module[] pluginModules = loader.collectGuiceModules(loader.loadPlugins());
+		Module[] pluginModules = loader.collectGuiceModules(loader.loadPlugins(IAgentPlugin.class.getClassLoader()));
 		this.testPageRunner =  new TestPageRunner(pluginModules);
 		return testPageRunner.runTestPage(testPage);
 	}
 
-	public void run(ITestPlan testPlan) throws Exception {
+	/*public void run(ITestPlan testPlan) throws Exception {
+		LOG.info("Agent plugin class loader: " + IAgentPlugin.class.getClassLoader());
 		PluginLoader loader = new PluginLoader(provider);
-		Module[] pluginModules = loader.collectGuiceModules(loader.loadPlugins());
+		Module[] pluginModules = loader.collectGuiceModules(loader.loadPlugins(IAgentPlugin.class.getClassLoader()));
 		this.testPlanRunner =  new TestPlanRunner(pluginModules);
 		testPlanRunner.execute(testPlan, true);
-	}
+	}*/
+	
 	
 }
