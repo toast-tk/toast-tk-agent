@@ -40,10 +40,6 @@ public class MainApp implements IAgentApp {
 	private Image online_image;
 	private Image offline_image;
 	private IAgentServer agentServer;
-
-	private String chromeDriverName = "chromedriver";
-	private String webAppName = "webApp";
-	private String recorderName = "recording";
 	
 	private boolean connectedToWebApp = false;
 	private boolean listenerStarted = false;
@@ -153,7 +149,7 @@ public class MainApp implements IAgentApp {
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
 	        	try {
-					if(verificationWebApp(webAppName)) {
+					if(verificationWebApp(AgentConfigProvider.TOAST_TEST_WEB_APP_URL)) {
 						if(agentServer.register(webConfigProvider.get().getApiKey())) {
 							trayIcon.setImage(online_image);
 							connectedToWebApp = true;
@@ -177,7 +173,16 @@ public class MainApp implements IAgentApp {
 	ActionListener getExecuteListener(){
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	        	runner.execute();
+	        	try {
+					if(verificationWebApp(AgentConfigProvider.TOAST_PLUGIN_DIR)) {
+						if(verificationWebApp(AgentConfigProvider.TOAST_SCRIPTS_DIR)) {
+				        	runner.execute();
+						}
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 	        }
 	    };
 	    return listener;
@@ -199,9 +204,9 @@ public class MainApp implements IAgentApp {
 	        	try {
 	        		if(connectedToWebApp) {
 	        			boolean flag = false;
-						if(verificationWebApp(chromeDriverName)) {
-							if(verificationWebApp(recorderName)) {
-								if(verificationWebApp(webAppName)) {
+						if(verificationWebApp(AgentConfigProvider.TOAST_CHROMEDRIVER_PATH)) {
+							if(verificationWebApp(AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL)) {
+								if(verificationWebApp(AgentConfigProvider.TOAST_TEST_WEB_APP_URL)) {
 									flag = true;
 									listenerStarted = true;
 									browserManager.startRecording();
@@ -254,26 +259,21 @@ public class MainApp implements IAgentApp {
 	}
 
 	public boolean verificationWebApp(String property) throws IOException{
-		String input = "";
-		if(property == webAppName) {
-			input = webConfigProvider.get().getWebAppUrl();
+		if(property == AgentConfigProvider.TOAST_TEST_WEB_APP_URL) {
+			return ConfigPanel.testWebAppURL(webConfigProvider.get().getWebAppUrl(), true);
 		}
-		if(property == recorderName) {
-			input = webConfigProvider.get().getWebInitRecordingUrl();
+		if(property == AgentConfigProvider.TOAST_PLUGIN_DIR) {
+			return ConfigPanel.testWebAppDirectory(webConfigProvider.get().getWebInitRecordingUrl(), true, false);
 		}
-		if(property == chromeDriverName) {
-			input = webConfigProvider.get().getChromeDriverPath();
+		if(property == AgentConfigProvider.TOAST_SCRIPTS_DIR) {
+			return ConfigPanel.testWebAppDirectory(webConfigProvider.get().getWebInitRecordingUrl(), true, false);
 		}
-		if(property == webAppName || property == recorderName) {
-			return ConfigPanel.testWebAppURL(input, true);
+		if(property == AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL) {
+			return ConfigPanel.testWebAppURL(webConfigProvider.get().getWebInitRecordingUrl(), true);
 		}
-		else {
-			if(property ==  chromeDriverName) {
-				return ConfigPanel.testWebAppDirectory(input, true, ConfigPanel.proxyCheckBox.isSelected());
-			}
-			else {
-				return false;
-			}	
+		if(property == AgentConfigProvider.TOAST_CHROMEDRIVER_PATH) {
+			return ConfigPanel.testWebAppDirectory(webConfigProvider.get().getChromeDriverPath(), true, true);
 		}
+		return false;
 	}
 }
