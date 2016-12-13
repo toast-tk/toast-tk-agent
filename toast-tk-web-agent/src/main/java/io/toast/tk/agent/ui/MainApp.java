@@ -176,6 +176,7 @@ public class MainApp implements IAgentApp {
 	        	try {
 					if(verificationWebApp(AgentConfigProvider.TOAST_PLUGIN_DIR)) {
 						if(verificationWebApp(AgentConfigProvider.TOAST_SCRIPTS_DIR)) {
+							NotificationManager.showMessage("The scripts are executed !").showNotification();
 				        	runner.execute();
 						}
 					}
@@ -259,19 +260,19 @@ public class MainApp implements IAgentApp {
 	}
 
 	public boolean verificationWebApp(String property) throws IOException{
-		if(property == AgentConfigProvider.TOAST_TEST_WEB_APP_URL) {
+		if(property.equals(AgentConfigProvider.TOAST_TEST_WEB_APP_URL)) {
 			return ConfigPanel.testWebAppURL(webConfigProvider.get().getWebAppUrl(), true);
 		}
-		if(property == AgentConfigProvider.TOAST_PLUGIN_DIR) {
-			return ConfigPanel.testWebAppDirectory(webConfigProvider.get().getWebInitRecordingUrl(), true, false);
+		if(property.equals(AgentConfigProvider.TOAST_PLUGIN_DIR)) {
+			return ConfigPanel.testWebAppDirectory(webConfigProvider.get().getPluginDir(), true, false);
 		}
-		if(property == AgentConfigProvider.TOAST_SCRIPTS_DIR) {
-			return ConfigPanel.testWebAppDirectory(webConfigProvider.get().getWebInitRecordingUrl(), true, false);
+		if(property.equals(AgentConfigProvider.TOAST_SCRIPTS_DIR)) {
+			return ConfigPanel.testWebAppDirectory(webConfigProvider.get().getScriptsDir(), true, false);
 		}
-		if(property == AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL) {
+		if(property.equals(AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL)) {
 			return ConfigPanel.testWebAppURL(webConfigProvider.get().getWebInitRecordingUrl(), true);
 		}
-		if(property == AgentConfigProvider.TOAST_CHROMEDRIVER_PATH) {
+		if(property.equals(AgentConfigProvider.TOAST_CHROMEDRIVER_PATH)) {
 			return ConfigPanel.testWebAppDirectory(webConfigProvider.get().getChromeDriverPath(), true, true);
 		}
 		return false;
