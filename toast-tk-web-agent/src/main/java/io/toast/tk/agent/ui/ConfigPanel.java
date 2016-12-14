@@ -247,8 +247,9 @@ public class ConfigPanel extends JDialog {
 	private void chooseDirectory(JTextField textField, String strKey) {
 		setAlwaysOnTop(false);
 
-		JFileChooser dialogue = new JFileChooser();
-		dialogue.setDialogTitle("Select directory");
+		JFileChooser dialogue = new JFileChooser(textField.getText());
+		dialogue.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		dialogue.setDialogTitle("Select directory for " + strKey);
 		dialogue.showOpenDialog(null);
 		dialogue.setMaximumSize(getMaximumSize());
 
