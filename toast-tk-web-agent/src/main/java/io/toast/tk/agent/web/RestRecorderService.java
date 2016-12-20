@@ -35,13 +35,13 @@ public class RestRecorderService extends Verticle {
 		RouteMatcher matcher = initMatchers();
 		try{
 			//SECURE ONE
-			vertx.createHttpServer().requestHandler(matcher)
+			/*vertx.createHttpServer().requestHandler(matcher)
 			.setSSL(true)
 			.setKeyStorePath(AgentConfig.getToastHome() + SystemUtils.FILE_SEPARATOR + "server-keystore.jks")
 			.setKeyStorePassword("wibble").listen(4445);
 			
 			//PLAIN ONE
-			vertx.createHttpServer().requestHandler(matcher).listen(4444);
+			vertx.createHttpServer().requestHandler(matcher).listen(4444);*/
 			
 			NotificationManager.showMessage("Web Agent - Active !").showNotification();
 			LOG.info("Started !");

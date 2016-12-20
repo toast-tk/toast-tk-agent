@@ -24,6 +24,7 @@ import com.google.inject.Inject;
 import io.toast.tk.agent.config.AgentConfig;
 import io.toast.tk.agent.config.AgentConfigProvider;
 import io.toast.tk.agent.run.TestRunner;
+import io.toast.tk.agent.ui.WaiterThread.RunnerThread;
 import io.toast.tk.agent.web.BrowserManager;
 import io.toast.tk.agent.web.IAgentServer;
 import io.toast.tk.agent.web.RestRecorderService;
@@ -44,7 +45,6 @@ public class MainApp implements IAgentApp {
 	private boolean connectedToWebApp = false;
 	private boolean listenerStarted = false;
 
-	private TestRunner runner;
 	
 	@Inject
 	public MainApp(AgentConfigProvider webConfig, 
@@ -53,7 +53,6 @@ public class MainApp implements IAgentApp {
 		this.browserManager = browserManager;
 		this.webProperties = new Properties();
 		this.agentServer= agentServer;
-		this.runner = new TestRunner(this.webConfigProvider);
 		initWorkspace();
 		init();
 	}
@@ -177,7 +176,8 @@ public class MainApp implements IAgentApp {
 					if(verificationWebApp(AgentConfigProvider.TOAST_PLUGIN_DIR)) {
 						if(verificationWebApp(AgentConfigProvider.TOAST_SCRIPTS_DIR)) {
 							NotificationManager.showMessage("The scripts are executed !").showNotification();
-				        	runner.execute();
+							Thread thread = new Thread(new WaiterThread(webConfigProvider));
+							thread.start();
 						}
 					}
 				} catch (IOException e1) {

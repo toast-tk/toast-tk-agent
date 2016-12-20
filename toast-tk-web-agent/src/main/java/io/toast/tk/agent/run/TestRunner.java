@@ -29,6 +29,7 @@ public class TestRunner {
 	private TestPageRunner testPageRunner;
 	private TestPlanRunner testPlanRunner;
 	private AgentConfigProvider provider;
+	public String fileName;
 	
 	public TestRunner(AgentConfigProvider provider){
 		this.provider = provider;
@@ -45,6 +46,7 @@ public class TestRunner {
 		try {
 			Files.list(path).forEach(p -> {
 				try{
+					fileName = p.getFileName().toString();
 					List<String> scriptLines = FileHelper.getScript(new FileInputStream(p.toFile()));
 					ITestPage testScript = parser.parse(scriptLines, p.getFileName().toString());
 					testScripts.add(testScript);
@@ -66,6 +68,13 @@ public class TestRunner {
 				NotificationManager.showMessage("Failed to execute " + script.getName() + " !");
 			}
 		});
+	}
+	
+	public void kill() {
+		this.testPageRunner = null;
+		this.testPlanRunner = null;
+		this.provider = null;
+		this.fileName = null;
 	}
 	
 	public ITestPage run(ITestPage testPage) throws IOException {

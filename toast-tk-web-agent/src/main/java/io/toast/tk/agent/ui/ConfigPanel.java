@@ -153,7 +153,7 @@ public class ConfigPanel extends JDialog {
 		secondPane.addTab("Recording", createRecorderPanel());
 		secondPane.addTab("Proxy", createProxyPanel());
 
-		JPanel contentPanel = createBasicPanel();
+		JPanel contentPanel = PanelHelper.createBasicPanel();
 		contentPanel.add(secondPane);
 		contentPanel.add(createFullButtonPanel());
 		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.PAGE_AXIS));
@@ -164,7 +164,7 @@ public class ConfigPanel extends JDialog {
 				.getResourceAsStream("AgentParamBackGround.png");
 		this.backGround_image = ImageIO.read(AgentParamBackGroundAsStream);
 
-		JPanel panIcon = createBasicPanel();
+		JPanel panIcon = PanelHelper.createBasicPanel();
 		panIcon.setLayout(new BorderLayout());
 		panIcon.add(new JLabel(new ImageIcon(this.backGround_image)));
 		panIcon.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
@@ -172,11 +172,11 @@ public class ConfigPanel extends JDialog {
 		//"Arial",Font.BOLD,14));
 	    JLabel firstMainPanel = new JLabel("AGENT SETTING");
 	    firstMainPanel.setFont(new Font("Verdana",Font.BOLD,22));
-		JPanel secondMainPanel = createBasicPanel(BoxLayout.X_AXIS);
+		JPanel secondMainPanel = PanelHelper.createBasicPanel(BoxLayout.X_AXIS);
 		secondMainPanel.add(panIcon);
 		secondMainPanel.add(contentPanel);
 		
-		mainPane = createBasicPanel();
+		mainPane = PanelHelper.createBasicPanel();
 		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
 		mainPane.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		mainPane.add(firstMainPanel);
@@ -504,7 +504,7 @@ public class ConfigPanel extends JDialog {
 	}
 	
 	private JPanel createFullButtonPanel() {
-		JPanel buttonPanel = createBasicPanel();
+		JPanel buttonPanel = PanelHelper.createBasicPanel();
 		buttonPanel.setAlignmentX(LEFT_ALIGNMENT);
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
 		buttonPanel.add(Box.createHorizontalGlue());
@@ -517,9 +517,9 @@ public class ConfigPanel extends JDialog {
 	}
 	
 	private JPanel createGeneralPanel() {
-		JPanel generalParameters = createBasicPanel(BoxLayout.LINE_AXIS);
-	    JPanel generalParameters1 = createBasicPanel(BoxLayout.PAGE_AXIS);
-	    JPanel generalParameters2 = createBasicPanel(BoxLayout.PAGE_AXIS);
+		JPanel generalParameters = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+	    JPanel generalParameters1 = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
+	    JPanel generalParameters2 = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
 		generalParameters1.add(webAppPanel);
 		generalParameters1.add(apiKeyPanel);
 		generalParameters2.add(pluginPanel);
@@ -530,7 +530,7 @@ public class ConfigPanel extends JDialog {
 	}
 	
 	private JPanel createRecorderPanel() {
-		JPanel recorderParameters = createBasicPanel(BoxLayout.PAGE_AXIS);
+		JPanel recorderParameters = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
 		recorderParameters.add(chromePanel);
 		recorderParameters.add(recorderPanel);
 		recorderParameters.setLayout(new BoxLayout(recorderParameters, BoxLayout.Y_AXIS));
@@ -538,10 +538,10 @@ public class ConfigPanel extends JDialog {
 	}
 	
 	private JPanel createProxyPanel() {
-		JPanel proxyPanel = createBasicPanel(BoxLayout.PAGE_AXIS);
-	    JPanel proxyPanel1 = createBasicPanel(BoxLayout.LINE_AXIS);
-	    JPanel proxyPanel2 = createBasicPanel(BoxLayout.LINE_AXIS);
-	    JPanel proxyPanel3 = createBasicPanel(BoxLayout.LINE_AXIS);
+		JPanel proxyPanel = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
+	    JPanel proxyPanel1 = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+	    JPanel proxyPanel2 = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+	    JPanel proxyPanel3 = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 		proxyCheckBox = new JCheckBox("Activation");
 		proxyCheckBox.setBackground(Color.white);
 	    proxyPanel1.add(proxyCheckBox);
@@ -601,37 +601,6 @@ public class ConfigPanel extends JDialog {
 		return tryButton;
 	}
 
-
-	private JPanel createBasicPanel() {
-		JPanel panel = new JPanel();
-		panel.setBackground(Color.white);
-		return panel;
-	} 
-	private JPanel createBasicPanel(int boxLayout) {
-		JPanel panel = createBasicPanel();
-		panel.add(Box.createHorizontalGlue());
-		panel.setLayout(new BoxLayout(panel, boxLayout));
-		
-		return panel;
-	}
-	private JPanel createBasicPanel(String strKey, Font font) {
-		JPanel panel = createBasicPanel();
-		panel.add(Box.createHorizontalGlue());
-		panel.setBorder(BorderFactory.createTitledBorder(panel.getBorder(),
-	    		strKey,TitledBorder.ABOVE_TOP,TitledBorder.CENTER, font));
-		
-		return panel;
-	} 
-	private JPanel createBasicPanel(String strKey, int boxLayout) {
-		return createBasicPanel(strKey, boxLayout, new Font("Arial",Font.BOLD,14));
-	}
-	private JPanel createBasicPanel(String strKey, int boxLayout, Font font) {
-		JPanel panel = createBasicPanel(strKey, font);
-		panel.setLayout(new BoxLayout(panel, boxLayout));
-		
-		return panel;
-	}
-	
 	private JTextField createBasicTextPanel (String strKey) {
 
 		JTextField textField = new JTextField(render(properties.getProperty(strKey)));
@@ -710,58 +679,58 @@ public class ConfigPanel extends JDialog {
 		//%% WEBAPP PANEL %%
 		String strKey = webAppName;
 		textFieldWebApp = createBasicTextPanel(strKey);
-		iconPanelWebApp = createBasicPanel();
+		iconPanelWebApp = PanelHelper.createBasicPanel();
 		iconValidWebApp = createIconValid();
 		iconNotValidWebApp = createIconNotValid();
-		textButtonPanelWebApp = createBasicPanel(BoxLayout.LINE_AXIS);
+		textButtonPanelWebApp = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 		textButtonPanelWebApp.add(textFieldWebApp);
 		textButtonPanelWebApp.add(iconPanelWebApp);
 		errorLabelWebApp = buildErrorLabel(strKey, iconPanelWebApp, textFieldWebApp, 3);
-		webAppPanel = createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		webAppPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
 		webAppPanel.add(textButtonPanelWebApp);
 		webAppPanel.add(errorLabelWebApp);
 
 		//%% API PANEL %%
 		strKey = apiKeyName;
 		textFieldApiKey = createBasicTextPanel(strKey);
-		iconPanelApiKey = createBasicPanel();
-		textButtonPanelApiKey = createBasicPanel(BoxLayout.LINE_AXIS);
+		iconPanelApiKey = PanelHelper.createBasicPanel();
+		textButtonPanelApiKey = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 		textButtonPanelApiKey.add(textFieldApiKey);
 		textButtonPanelApiKey.add(iconPanelApiKey);
 		errorLabelApiKey = buildErrorLabel(strKey, iconPanelApiKey, textFieldApiKey, 4);
-		apiKeyPanel = createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		apiKeyPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
 		apiKeyPanel.add(textButtonPanelApiKey);
 		apiKeyPanel.add(errorLabelApiKey);
 
 		//%% PLUGIN PANEL %%
 		strKey = pluginName;
 		textFieldPlugin = createBasicTextPanel(strKey);
-		iconPanelPlugin = createBasicPanel();
+		iconPanelPlugin = PanelHelper.createBasicPanel();
 		iconValidPlugin = createIconValid();
 		iconNotValidPlugin = createIconNotValid();
 		fileSearchPlugin = createBasicFileSearch(textFieldPlugin, strKey,false);
-		textButtonPanelPlugin = createBasicPanel(BoxLayout.LINE_AXIS);
+		textButtonPanelPlugin = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 		textButtonPanelPlugin.add(fileSearchPlugin);
 		textButtonPanelPlugin.add(textFieldPlugin);
 		textButtonPanelPlugin.add(iconPanelPlugin);
 		errorLabelPlugin = buildErrorLabel(strKey, iconPanelPlugin, textFieldPlugin, 2);
-		pluginPanel = createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		pluginPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
 		pluginPanel.add(textButtonPanelPlugin);
 		pluginPanel.add(errorLabelPlugin);
 			
 		//%% SCRIPTS PANEL %%
 		strKey = scriptsName;
 		textFieldScripts = createBasicTextPanel(strKey);
-		iconPanelScripts = createBasicPanel();
+		iconPanelScripts = PanelHelper.createBasicPanel();
 		iconValidScripts = createIconValid();
 		iconNotValidScripts = createIconNotValid();
 		fileSearchScripts = createBasicFileSearch(textFieldScripts, strKey, false);
-		textButtonPanelScripts = createBasicPanel(BoxLayout.LINE_AXIS);
+		textButtonPanelScripts = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 		textButtonPanelScripts.add(fileSearchScripts);
 		textButtonPanelScripts.add(textFieldScripts);
 		textButtonPanelScripts.add(iconPanelScripts);
 		errorLabelScripts = buildErrorLabel(strKey, iconPanelScripts, textFieldScripts, 2);
-		scriptsPanel = createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		scriptsPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
 		scriptsPanel.add(textButtonPanelScripts);
 		scriptsPanel.add(errorLabelScripts);
 		
@@ -769,16 +738,16 @@ public class ConfigPanel extends JDialog {
 		strKey = chromeDriverName;
 		textFieldChrome = createBasicTextPanel(strKey);
 		textFieldChrome.setSize(textFieldWebApp.getSize());
-		iconPanelChrome = createBasicPanel();
+		iconPanelChrome = PanelHelper.createBasicPanel();
 		iconValidChrome = createIconValid();
 		iconNotValidChrome = createIconNotValid();
 		fileSearchChrome = createBasicFileSearch(textFieldChrome, strKey);
-		textButtonPanelChrome = createBasicPanel(BoxLayout.LINE_AXIS);
+		textButtonPanelChrome = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 		textButtonPanelChrome.add(fileSearchChrome);
 		textButtonPanelChrome.add(textFieldChrome);
 		textButtonPanelChrome.add(iconPanelChrome);
 		errorLabelChrome = buildErrorLabel(strKey, iconPanelChrome, textFieldChrome, 1);;
-		chromePanel = createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		chromePanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
 		chromePanel.add(textButtonPanelChrome);
 		chromePanel.add(errorLabelChrome);
 		
@@ -786,38 +755,38 @@ public class ConfigPanel extends JDialog {
 		strKey = recorderName;
 		textFieldRecorder = createBasicTextPanel(strKey);
 		textFieldRecorder.setSize(textFieldWebApp.getSize());
-		iconPanelRecorder = createBasicPanel();
+		iconPanelRecorder = PanelHelper.createBasicPanel();
 		iconValidRecorder = createIconValid();
 		iconNotValidRecorder = createIconNotValid();
-		textButtonPanelRecorder = createBasicPanel(BoxLayout.LINE_AXIS);
+		textButtonPanelRecorder = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 		textButtonPanelRecorder.add(textFieldRecorder);
 		textButtonPanelRecorder.add(iconPanelRecorder);
 		errorLabelRecorder = buildErrorLabel(strKey, iconPanelRecorder, textFieldRecorder, 3);
-		recorderPanel = createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		recorderPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
 		recorderPanel.add(textButtonPanelRecorder);
 		recorderPanel.add(errorLabelRecorder);		
 		
 		//%% PROXY ADRESS PANEL %%
 		strKey = proxyAdress;
 		textFieldProxyAdress = createBasicTextPanel(strKey);
-		iconPanelProxyAdress = createBasicPanel();
-		textButtonPanelProxyAdress = createBasicPanel(BoxLayout.LINE_AXIS);
+		iconPanelProxyAdress = PanelHelper.createBasicPanel();
+		textButtonPanelProxyAdress = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 		textButtonPanelProxyAdress.add(textFieldProxyAdress);
 		textButtonPanelProxyAdress.add(iconPanelProxyAdress);
 		errorLabelProxyAdress = buildErrorLabel(strKey, iconPanelProxyAdress, textFieldProxyAdress, 0);
-		proxyAdressPanel = createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		proxyAdressPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
 		proxyAdressPanel.add(textButtonPanelProxyAdress);
 		proxyAdressPanel.add(errorLabelProxyAdress);
 		
 		//%% PROXY PORT PANEL %%
 		strKey = proxyPort;
 		textFieldProxyPort = createBasicTextPanel(strKey);
-		iconPanelProxyPort = createBasicPanel();
-		textButtonPanelProxyPort = createBasicPanel(BoxLayout.LINE_AXIS);
+		iconPanelProxyPort = PanelHelper.createBasicPanel();
+		textButtonPanelProxyPort = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 		textButtonPanelProxyPort.add(textFieldProxyPort);
 		textButtonPanelProxyPort.add(iconPanelProxyPort);
 		errorLabelProxyPort = buildErrorLabel(strKey, iconPanelProxyPort, textFieldProxyPort, 0);
-		proxyPortPanel = createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		proxyPortPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
 		proxyPortPanel.add(textButtonPanelProxyPort);
 		proxyPortPanel.add(errorLabelProxyPort);
 		chromeDriverName = "chromedriver";
@@ -825,24 +794,24 @@ public class ConfigPanel extends JDialog {
 		//%% PROXY USER NAME PANEL %%
 		strKey = proxyUser;
 		textFieldProxyUserName = createBasicTextPanel(strKey);
-		iconPanelProxyUserName = createBasicPanel();
-		textButtonPanelProxyUserName = createBasicPanel(BoxLayout.LINE_AXIS);
+		iconPanelProxyUserName = PanelHelper.createBasicPanel();
+		textButtonPanelProxyUserName = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 		textButtonPanelProxyUserName.add(textFieldProxyUserName);
 		textButtonPanelProxyUserName.add(iconPanelProxyUserName);
 		errorLabelProxyUserName = buildErrorLabel(strKey, iconPanelProxyUserName, textFieldProxyUserName, 0);
-		proxyUserNamePanel = createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		proxyUserNamePanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
 		proxyUserNamePanel.add(textButtonPanelProxyUserName);
 		proxyUserNamePanel.add(errorLabelProxyUserName);
 		
 		//%% PROXY USER PSWD PANEL %%
 		strKey = proxyPswd;
 		textFieldProxyUserPswd = createBasicTextPanel(strKey);
-		iconPanelProxyUserPswd = createBasicPanel();
-		textButtonPanelProxyUserPswd = createBasicPanel(BoxLayout.LINE_AXIS);
+		iconPanelProxyUserPswd = PanelHelper.createBasicPanel();
+		textButtonPanelProxyUserPswd = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 		textButtonPanelProxyUserPswd.add(textFieldProxyUserPswd);
 		textButtonPanelProxyUserPswd.add(iconPanelProxyUserPswd);
 		errorLabelProxyUserPswd = buildErrorLabel(strKey, iconPanelProxyUserPswd, textFieldProxyUserPswd, 0);
-		proxyUserPswdPanel = createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		proxyUserPswdPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
 		proxyUserPswdPanel.add(textButtonPanelProxyUserPswd);
 		proxyUserPswdPanel.add(errorLabelProxyUserPswd);
 	}
@@ -906,7 +875,7 @@ public class ConfigPanel extends JDialog {
 		} 
 	}
 	
-	private void centerWindow() {
+	public void centerWindow() {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Point middle = new Point(screenSize.width / 2, screenSize.height / 2);
 		Point newLocation = new Point(middle.x - (this.getWidth() / 2), 
