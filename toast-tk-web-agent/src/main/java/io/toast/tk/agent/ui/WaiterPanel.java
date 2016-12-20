@@ -206,6 +206,10 @@ public class WaiterPanel extends JFrame {
 					if(rep == 0)	
 						interupted = true;	
 				}
+				else {
+					dispose();
+				}
+					
 			}
 		});
 	    interputButton.setBorder(null);
