@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -37,11 +36,13 @@ public class BoxPanel {
 
 
 	private final Properties properties;
-	private HashMap<String, JTextField> textFields;
+
+	public JPanel panel;
+	private static Dimension dim = null;
 	
 	private String strkey;
 	private JTextField textField;
-	private JPanel panel, textButtonPanel, iconPanel;
+	private JPanel textButtonPanel, iconPanel;
 	private JLabel errorLabel;
 	private JButton fileSearch;
 
@@ -55,43 +56,47 @@ public class BoxPanel {
 	private String errorMessageSelectURL = "The URL does not anwser.";
 	private String errorMessageApiKey = "The Api Key have to match with the WebApp";
 
-	public JCheckBox proxyCheckBox = null;
-	public BoxPanel proxyAdressPanel = null;
-	public BoxPanel proxyPortPanel = null;
-	public BoxPanel proxyUserPanel = null;
-	public BoxPanel proxyPswdPanel = null;
+	private JCheckBox proxyCheckBox = null;
+	private BoxPanel proxyAdressPanel = null;
+	private BoxPanel proxyPortPanel = null;
+	private BoxPanel proxyUserPanel = null;
+	private BoxPanel proxyPswdPanel = null;
 	
-	public String chromeDriverName = AgentConfigProvider.TOAST_CHROMEDRIVER_PATH;
-	public String webAppName = AgentConfigProvider.TOAST_TEST_WEB_APP_URL;
-	public String recorderName = AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL;
-	public String apiKeyName = AgentConfigProvider.TOAST_API_KEY;
-	public String pluginName = AgentConfigProvider.TOAST_PLUGIN_DIR;
-	public String scriptsName = AgentConfigProvider.TOAST_SCRIPTS_DIR;
-	public String proxyAdress = AgentConfigProvider.TOAST_PROXY_ADRESS;
-	public String proxyPort = AgentConfigProvider.TOAST_PROXY_PORT;
-	public String proxyUser = AgentConfigProvider.TOAST_PROXY_USER_NAME;
-	public String proxyPswd = AgentConfigProvider.TOAST_PROXY_USER_PSWD;
+	private String chromeDriverName = AgentConfigProvider.TOAST_CHROMEDRIVER_PATH;
+	private String webAppName = AgentConfigProvider.TOAST_TEST_WEB_APP_URL;
+	private String recorderName = AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL;
+	private String apiKeyName = AgentConfigProvider.TOAST_API_KEY;
+	private String pluginName = AgentConfigProvider.TOAST_PLUGIN_DIR;
+	private String scriptsName = AgentConfigProvider.TOAST_SCRIPTS_DIR;
+	private String proxyAdress = AgentConfigProvider.TOAST_PROXY_ADRESS;
+	private String proxyPort = AgentConfigProvider.TOAST_PROXY_PORT;
+	private String proxyUser = AgentConfigProvider.TOAST_PROXY_USER_NAME;
+	private String proxyPswd = AgentConfigProvider.TOAST_PROXY_USER_PSWD;
 	
-	public BoxPanel(Properties properties, HashMap<String, JTextField> textFields, String strkey) throws IOException {
+	public BoxPanel(Properties properties, String strkey) throws IOException {
 		this.properties = properties;
-		this.textFields = textFields;
 		this.strkey = strkey;	
-		this.proxyAdress = null;
-		this.proxyPort = null;
-		this.proxyUser = null;
-		this.proxyPswd = null;
+		this.proxyAdressPanel = null;
+		this.proxyPortPanel = null;
+		this.proxyUserPanel = null;
+		this.proxyPswdPanel = null;
 		
 		this.notvalid_image = PanelHelper.createImage(this,"picto-non-valide.png");
 		this.valid_image = PanelHelper.createImage(this,"picto-valide.png");
 		this.toast_logo = PanelHelper.createImage(this,"ToastLogo_24.png");
 				
 		this.buildContentPanel();
+		
+		if(dim == null) {
+			dim = panel.getPreferredSize();
+		}
+		else 
+			panel.setPreferredSize(dim);
 	}
-	public BoxPanel(Properties properties, HashMap<String, JTextField> textFields, String strkey, 
+	public BoxPanel(Properties properties, String strkey, 
 			BoxPanel proxyAdress, BoxPanel proxyPort, 
 			BoxPanel proxyUser, BoxPanel proxyPswd, JCheckBox proxyCheckBox ) throws IOException {
-		this.properties = properties;this.textFields = textFields;
-		
+		this.properties = properties;
 		this.strkey = strkey;
 		this.proxyAdressPanel = proxyAdress;
 		this.proxyPortPanel = proxyPort;
@@ -149,7 +154,7 @@ public class BoxPanel {
 		}
 	}
 
-	private void testIconValid(String strKey, boolean runTryValue) throws IOException {
+	public void testIconValid(String strKey, boolean runTryValue) throws IOException {
 		if(strKey.contains(webAppName) || strKey.contains(recorderName)) {
 			boolean test = false;
 			if(proxyCheckBox.isSelected()) {
@@ -228,8 +233,6 @@ public class BoxPanel {
 			}
 		});
 		
-		textFields.put(strKey, textField);
-		
 		return textField;
 	}
 	
@@ -272,14 +275,13 @@ public class BoxPanel {
 		textField = createBasicTextPanel(strkey);
 		iconPanel = PanelHelper.createBasicPanel();
 		textButtonPanel = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+		iconValid = createIconValid();
+		iconNotValid = createIconNotValid();
 		
 		//%% WEBAPP PANEL %%
 		if(strkey == webAppName) {
-			iconValid = createIconValid();
-			iconNotValid = createIconNotValid();
 			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 3);
 			panel = PanelHelper.createBasicPanel("Toast WebApp URL", BoxLayout.PAGE_AXIS);
-
 		}
 		
 		//%% API PANEL %%
@@ -294,7 +296,6 @@ public class BoxPanel {
 			textButtonPanel.add(fileSearch);
 			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 2);
 			panel = PanelHelper.createBasicPanel("Plugin directory", BoxLayout.PAGE_AXIS);
-
 		}	
 			
 		//%% SCRIPTS PANEL %%
@@ -303,35 +304,28 @@ public class BoxPanel {
 			textButtonPanel.add(fileSearch);
 			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 2);
 			panel = PanelHelper.createBasicPanel("Script directory", BoxLayout.PAGE_AXIS);
-
 		}
 		
 		//%% CHROME PANEL %%
 		if(strkey == chromeDriverName) {
-			iconValid = createIconValid();
-			iconNotValid = createIconNotValid();
 			fileSearch = createBasicFileSearch(textField, strkey);
 			textButtonPanel.add(fileSearch);
 			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 1);;
 			panel = PanelHelper.createBasicPanel("ChromeDriver path directory", BoxLayout.PAGE_AXIS);
-
 		}
 		
 		//%% RECORDER PANEL %%
 		if(strkey == recorderName) {
-			iconValid = createIconValid();
-			iconNotValid = createIconNotValid();
 			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 3);
 			panel = PanelHelper.createBasicPanel("Recorded WebApp URL", BoxLayout.PAGE_AXIS);
-	
 		}
 		
 		//%% PROXY ADRESS PANEL %%
 		if(strkey == proxyAdress) {
 			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 0);
 			panel = PanelHelper.createBasicPanel("Proxy adress", BoxLayout.PAGE_AXIS);
-
 		}
+		
 		//%% PROXY PORT PANEL %%
 		if(strkey == proxyPort) {
 			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 0);
@@ -349,10 +343,8 @@ public class BoxPanel {
 		if(strkey == proxyPswd) {
 			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 0);
 			panel = PanelHelper.createBasicPanel("Proxy user password", BoxLayout.PAGE_AXIS);
-
 		}
 		
-
 		textButtonPanel.add(textField);
 		textButtonPanel.add(iconPanel);
 		panel.add(textButtonPanel);
