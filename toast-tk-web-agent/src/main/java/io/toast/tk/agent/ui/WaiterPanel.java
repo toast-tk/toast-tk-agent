@@ -1,41 +1,27 @@
 package io.toast.tk.agent.ui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Iterator;
-
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JSplitPane;
-import javax.swing.JTextField;
-import javax.swing.WindowConstants;
 
 
 /**
- * Runner panel
+ * Waiter panel
  */
+@SuppressWarnings("serial")
 public class WaiterPanel extends JFrame {
 
 	private JPanel mainPane;
@@ -43,9 +29,10 @@ public class WaiterPanel extends JFrame {
 	private long scriptTime;
 	private int scriptNumber = 0;
 	private boolean interupted = false;
-	private int iteration = 0;
+	private boolean done = false;
+	private int iteration = 0, i = 0;
 	
-	private JPanel leftPanel, rightPanel;
+	private JPanel leftPanel, rightPanel, panIcon;
 	private JLabel timeLabel, scriptNameLabel, scriptNumberLabel, secondMainPanel;
 	
 	public WaiterPanel() throws IOException {
@@ -66,18 +53,19 @@ public class WaiterPanel extends JFrame {
 	}
 	
 	public void setScript(String name, String state) {
-		iteration++;
 		scriptTime = (System.currentTimeMillis() - firstTime)/1000;
 		
-		if(scriptNameLabel.getText() != null) {
-			if(!scriptNameLabel.getText().contains(name)) {
-				scriptNameLabel.setText(name);
+		if(name != null) {
+			if(scriptNameLabel.getText() != null) {
+				if(!scriptNameLabel.getText().contains(name)) {
+					scriptNameLabel.setText(name);
+					scriptNumber ++;
+				}			
+			}
+			else {
 				scriptNumber ++;
-			}			
-		}
-		else {
-			scriptNumber ++;
-			scriptNameLabel.setText(name);
+				scriptNameLabel.setText(name);
+			}
 		}
 		
 		scriptNumberLabel.setText(PanelHelper.numbToStr(scriptNumber));
@@ -86,10 +74,17 @@ public class WaiterPanel extends JFrame {
 		scriptNameLabel.repaint();
 		scriptNameLabel.revalidate();
 		
+		panIcon.repaint();
+		panIcon.revalidate();
+		
 		timeLabel.setText(PanelHelper.secToHMS(scriptTime));
 		timeLabel.repaint();
 		timeLabel.revalidate();
-
+		
+		i++;
+		if(i % 20 == 0) {
+			iteration++;
+		}
 		secondMainPanel.setText(PanelHelper.addPoint(state,iteration));
 		secondMainPanel.repaint();
 		secondMainPanel.revalidate();
@@ -98,6 +93,7 @@ public class WaiterPanel extends JFrame {
 	public void stop() {
 		secondMainPanel.setText("Done.");
 		interupted = true;
+		done = true;
 		secondMainPanel.repaint();
 		secondMainPanel.revalidate();
 	    this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);   
@@ -113,8 +109,7 @@ public class WaiterPanel extends JFrame {
         mainPane.add(rightPanel);
         
 
-		InputStream toast_logoInput = this.getClass().getClassLoader().getResourceAsStream("ToastLogo.png");
-		Image toast_logo = ImageIO.read(toast_logoInput);
+		Image toast_logo = PanelHelper.createImage(this,"ToastLogo.png");
         
         // add the panel to this frame        
 		this.setContentPane(mainPane);
@@ -129,33 +124,28 @@ public class WaiterPanel extends JFrame {
 		Dimension pD = new Dimension(300, 25);
 		Dimension mD = new Dimension(250, 25);
 		
-		JLabel firstMainPanel = new JLabel("Script runner");
-	    firstMainPanel.setFont(new Font("Verdana",Font.BOLD,22));
+		JLabel firstMainPanel = PanelHelper.createBasicJLabel("Script runner",PanelHelper.FONT_TITLE_2);
+        firstMainPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 	    firstMainPanel.setPreferredSize(pD);
 	    firstMainPanel.setMinimumSize(mD);
 	    
-	    secondMainPanel = new JLabel("In progress...");
-	    secondMainPanel.setFont(new Font("Verdana",Font.BOLD,22));
+	    secondMainPanel = PanelHelper.createBasicJLabel("In progress...",PanelHelper.FONT_TITLE_2);
 	    secondMainPanel.setPreferredSize(pD);
 	    secondMainPanel.setMinimumSize(mD);
 
-		InputStream toast_logoInput = this.getClass().getClassLoader().getResourceAsStream("toast-loading.png");
-		Image toast_logo = ImageIO.read(toast_logoInput);
-		JPanel panIcon = PanelHelper.createBasicPanel();
+		Image toast_logo = PanelHelper.createImage(this,"toast-loading.gif");
+		panIcon = PanelHelper.createBasicPanel();
 		panIcon.add(new JLabel(new ImageIcon(toast_logo)));
-
-        leftPanel = PanelHelper.createBasicPanel();
-        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.PAGE_AXIS));
-
-        firstMainPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         panIcon.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        leftPanel = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
         leftPanel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
         leftPanel.add(firstMainPanel);
         leftPanel.add(panIcon);
         leftPanel.add(secondMainPanel);
 
-		pD = new Dimension(300, 300);
-		mD = new Dimension(250, 250);
+		pD = new Dimension(300, 350);
+		mD = new Dimension(250, 300);
         leftPanel.setPreferredSize(pD);
         leftPanel.setMinimumSize(mD);
         leftPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
@@ -167,18 +157,14 @@ public class WaiterPanel extends JFrame {
 		
 	    JPanel scriptPanel = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 		
-	    JPanel scriptNamePanel = PanelHelper.createBasicPanel(
-	    		"Script in progress : ", new Font("Verdana",Font.PLAIN,15));
-	    scriptNameLabel = new JLabel(" ");
-	    scriptNameLabel.setFont(new Font("Verdana",Font.PLAIN,12));
+	    JPanel scriptNamePanel = PanelHelper.createBasicPanel("Script in progress : ", PanelHelper.FONT_TEXT_BOLD);
+	    scriptNameLabel = PanelHelper.createBasicJLabel();
 	    scriptNamePanel.setPreferredSize(new Dimension(250, pHeight));
 	    scriptNamePanel.setMinimumSize(new Dimension(210, mHeight));
 	    scriptNamePanel.add(scriptNameLabel);
 	    
-	    JPanel scriptNumberPanel = PanelHelper.createBasicPanel(
-	    		"N°", new Font("Verdana",Font.PLAIN,15));
-	    scriptNumberLabel = new JLabel(PanelHelper.numbToStr(scriptNumber));
-	    scriptNumberLabel.setFont(new Font("Verdana",Font.PLAIN,12));
+	    JPanel scriptNumberPanel = PanelHelper.createBasicPanel("N°", PanelHelper.FONT_TEXT_BOLD);
+	    scriptNumberLabel = PanelHelper.createBasicJLabel(PanelHelper.numbToStr(scriptNumber));
 	    scriptNumberPanel.setPreferredSize(new Dimension(50, pHeight));
 	    scriptNumberPanel.setMinimumSize(new Dimension(40, mHeight));
 	    scriptNumberPanel.add(scriptNumberLabel);
@@ -186,28 +172,30 @@ public class WaiterPanel extends JFrame {
 	    scriptPanel.add(scriptNumberPanel);
 	    scriptPanel.add(scriptNamePanel);
 
-	    JPanel timePanel = PanelHelper.createBasicPanel(
-	    		"Progress time : ", new Font("Verdana",Font.PLAIN,15));
-	    timeLabel = new JLabel(PanelHelper.secToHMS(scriptTime));
-	    timeLabel.setFont(new Font("Verdana",Font.PLAIN,12));
+	    JPanel timePanel = PanelHelper.createBasicPanel("Progress time : ", PanelHelper.FONT_TEXT_BOLD);
+	    timeLabel = PanelHelper.createBasicJLabel(PanelHelper.secToHMS(scriptTime));
 	    timePanel.setPreferredSize(new Dimension(300, pHeight));
 	    timePanel.setMinimumSize(new Dimension(250, mHeight));
 	    timePanel.add(timeLabel);
 	    
-	    InputStream power_buttonInput = this.getClass().getClassLoader().getResourceAsStream("power_button.png");
-		Image power_button = ImageIO.read(power_buttonInput);
+		Image power_button = PanelHelper.createImage(this,"power_button.png");
 	    JButton interputButton = new JButton(new ImageIcon(power_button));
+	    interputButton.setToolTipText("Interruption of the script");
 	    interputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(!interupted) {
 					int rep = JOptionPane.showConfirmDialog(null,
-							"Do you want to interupt the script ?",null,JOptionPane.YES_NO_OPTION);	
+									"Do you want to interupt the script ?",
+									"Interruption of the script",
+									JOptionPane.YES_NO_OPTION);	
 					if(rep == 0)	
 						interupted = true;	
 				}
 				else {
-					dispose();
+					if(done) {
+						dispose();
+					}
 				}
 					
 			}
@@ -217,9 +205,9 @@ public class WaiterPanel extends JFrame {
 	    interputButton.setBackground(Color.WHITE);
 	    interputButton.setPreferredSize(new Dimension(70, 70));
 	    interputButton.setMinimumSize(new Dimension(60, 60));
+	    interputButton.setAlignmentX(CENTER_ALIGNMENT);
 
-        rightPanel = PanelHelper.createBasicPanel();
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        rightPanel = PanelHelper.createBasicPanel(BoxLayout.Y_AXIS);
         rightPanel.add(scriptPanel);
         rightPanel.add(timePanel);
         rightPanel.add(interputButton);

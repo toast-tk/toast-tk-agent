@@ -4,43 +4,30 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Font;
 import java.awt.Image;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.Authenticator;
-import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.PasswordAuthentication;
-import java.net.Proxy;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.border.TitledBorder;
 
 import org.apache.commons.collections4.EnumerationUtils;
 import org.apache.commons.io.FileUtils;
@@ -52,7 +39,7 @@ import io.toast.tk.agent.config.AgentConfigProvider;
 /**
  * Configuration panel
  */
-public class ConfigPanel extends JDialog {
+public class ConfigPanel extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
@@ -66,7 +53,6 @@ public class ConfigPanel extends JDialog {
 	public String proxyPort = AgentConfigProvider.TOAST_PROXY_PORT;
 	public String proxyUser = AgentConfigProvider.TOAST_PROXY_USER_NAME;
 	public String proxyPswd = AgentConfigProvider.TOAST_PROXY_USER_PSWD;
-	private static int timeout = 500; // in milliseconds
 
 	private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
 
@@ -103,7 +89,6 @@ public class ConfigPanel extends JDialog {
 
 	private Image notvalid_image;
 	private Image valid_image;
-	private Image toast_logo;
 	private Image backGround_image;
 
 	private String errorMessageSelectFile = "The file that you have selected do not exist.";
@@ -121,7 +106,7 @@ public class ConfigPanel extends JDialog {
 		this.properties = propertiesConfiguration;
 		this.propertyFile = propertyFile;
 		
-		initialize();
+		buildContentPanel();
 	}
 	
 	/**
@@ -131,47 +116,40 @@ public class ConfigPanel extends JDialog {
 	 * @return void
 	 * @throws IOException
 	 */
-	private void initialize() throws IOException {
+	private void buildContentPanel() throws IOException {
 		
 		this.textFields = new HashMap<String, JTextField>();
 		this.secondPane = new JTabbedPane();
-		
-		InputStream notvalid_imageAsStream = this.getClass().getClassLoader()
-				.getResourceAsStream("picto-non-valide.png");
-		this.notvalid_image = ImageIO.read(notvalid_imageAsStream);
-
-		InputStream valid_imageAsStream = this.getClass().getClassLoader().getResourceAsStream("picto-valide.png");
-		this.valid_image = ImageIO.read(valid_imageAsStream);
-
-		InputStream toast_logoAsStream = this.getClass().getClassLoader().getResourceAsStream("ToastLogo_24.png");
-		this.toast_logo = ImageIO.read(toast_logoAsStream);
-		
+		secondPane.setFont(PanelHelper.FONT_TITLE_2);
 		buildFields();
 		
 		secondPane.setBackground(Color.white);
-		secondPane.addTab("General parameters", createGeneralPanel());
-		secondPane.addTab("Recording", createRecorderPanel());
-		secondPane.addTab("Proxy", createProxyPanel());
+
+		ImageIcon general_logo = PanelHelper.createImageIcon(this, "ToastLogo_24.png");
+		secondPane.addTab("General parameters", general_logo, createGeneralPanel());
+
+		ImageIcon record_logo = PanelHelper.createImageIcon(this,"ToastLogo_24.png");
+		secondPane.addTab("Recording", record_logo, createRecorderPanel());
+
+		ImageIcon proxy_logo = PanelHelper.createImageIcon(this, "ToastLogo_24.png");
+		secondPane.addTab("Proxy", proxy_logo, createProxyPanel());
 
 		JPanel contentPanel = PanelHelper.createBasicPanel();
 		contentPanel.add(secondPane);
 		contentPanel.add(createFullButtonPanel());
 		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.PAGE_AXIS));
 
-		
-
-		InputStream AgentParamBackGroundAsStream = this.getClass().getClassLoader()
-				.getResourceAsStream("AgentParamBackGround.png");
-		this.backGround_image = ImageIO.read(AgentParamBackGroundAsStream);
+		this.backGround_image = PanelHelper.createImage(this,"AgentParamBackGround.png");
 
 		JPanel panIcon = PanelHelper.createBasicPanel();
 		panIcon.setLayout(new BorderLayout());
 		panIcon.add(new JLabel(new ImageIcon(this.backGround_image)));
 		panIcon.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		
-		//"Arial",Font.BOLD,14));
 	    JLabel firstMainPanel = new JLabel("AGENT SETTING");
-	    firstMainPanel.setFont(new Font("Verdana",Font.BOLD,22));
+	    firstMainPanel.setFont(PanelHelper.FONT_TITLE_1);
+	    firstMainPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 15, 15));
+	    
 		JPanel secondMainPanel = PanelHelper.createBasicPanel(BoxLayout.X_AXIS);
 		secondMainPanel.add(panIcon);
 		secondMainPanel.add(contentPanel);
@@ -182,15 +160,17 @@ public class ConfigPanel extends JDialog {
 		mainPane.add(firstMainPanel);
 		mainPane.add(secondMainPanel);
 
+
+		Image toast_logo = PanelHelper.createImage(this,"ToastLogo.png");
+		this.setIconImage(toast_logo);
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setBackground(Color.white);
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		setContentPane(mainPane);
 		setResizable(false);
-		setAlwaysOnTop(true);
 		pack();
-		centerWindow(); // setLocationRelativeTo(null) does not work
+		PanelHelper.centerWindow(this); // setLocationRelativeTo(null) does not work
 		setVisible(true);
 
 	}
@@ -212,7 +192,6 @@ public class ConfigPanel extends JDialog {
 		} catch (IOException e) {
 			LOG.warn("Could not save properties", e);
 		}
-		setAlwaysOnTop(false);
 		this.close();
 	}
 
@@ -222,8 +201,6 @@ public class ConfigPanel extends JDialog {
 	}
 
 	private void chooseFile(JTextField textField, String strKey) {	
-		setAlwaysOnTop(false);
-
 		JFileChooser dialogue = new JFileChooser();
 		dialogue.setDialogTitle("Select file");
 		dialogue.showOpenDialog(null);
@@ -239,14 +216,10 @@ public class ConfigPanel extends JDialog {
 					LOG.error(e.getMessage(), e);
 				}
 			}
-		}
-		setAlwaysOnTop(true);
-		
+		}		
 	}
 
 	private void chooseDirectory(JTextField textField, String strKey) {
-		setAlwaysOnTop(false);
-
 		JFileChooser dialogue = new JFileChooser(textField.getText());
 		dialogue.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		dialogue.setDialogTitle("Select directory for " + strKey);
@@ -265,19 +238,18 @@ public class ConfigPanel extends JDialog {
 				}
 			}
 		}
-		setAlwaysOnTop(true);
 	}
 
 	private void testIconValid(String strKey, boolean runTryValue) throws IOException {
 		if(strKey.contains(webAppName)) {
 			boolean test = false;
 			if(proxyCheckBox.isSelected()) {
-				test = testWebAppURL(textFieldWebApp.getText(),runTryValue, 
+				test = ConfigTesterHelper.testWebAppURL(textFieldWebApp.getText(),runTryValue, 
 						textFieldProxyAdress.getText(), textFieldProxyPort.getText(), 
 						textFieldProxyUserName.getText(), textFieldProxyUserPswd.getText());
 			}
 			else {
-				test = testWebAppURL(textFieldWebApp.getText(),runTryValue);
+				test = ConfigTesterHelper.testWebAppURL(textFieldWebApp.getText(),runTryValue);
 			}
 			if(!test){
 				iconPanelWebApp.removeAll();
@@ -292,12 +264,12 @@ public class ConfigPanel extends JDialog {
 		else if (strKey.contains(recorderName)) {
 			boolean test = false;
 			if(proxyCheckBox.isSelected()) {
-				test = testWebAppURL(textFieldRecorder.getText(),runTryValue, 
+				test = ConfigTesterHelper.testWebAppURL(textFieldRecorder.getText(),runTryValue, 
 						textFieldProxyAdress.getText(), textFieldProxyPort.getText(), 
 						textFieldProxyUserName.getText(), textFieldProxyUserPswd.getText());
 			}
 			else {
-				test = testWebAppURL(textFieldRecorder.getText(),runTryValue);
+				test = ConfigTesterHelper.testWebAppURL(textFieldRecorder.getText(),runTryValue);
 			}
 			
 			if(!test)
@@ -312,7 +284,7 @@ public class ConfigPanel extends JDialog {
 			}
 
 		} else if(strKey.contains(chromeDriverName)) {
-			if(!testWebAppDirectory(textFieldChrome.getText(),runTryValue, true))
+			if(!ConfigTesterHelper.testWebAppDirectory(textFieldChrome.getText(),runTryValue, true))
 			{
 				iconPanelChrome.removeAll();
 				iconPanelChrome.add(iconNotValidChrome);
@@ -323,7 +295,7 @@ public class ConfigPanel extends JDialog {
 				errorLabelChrome.setText(" ");
 			}
 		} else if(strKey.contains(pluginName)) {
-			if(!testWebAppDirectory(textFieldPlugin.getText(),runTryValue, false))
+			if(!ConfigTesterHelper.testWebAppDirectory(textFieldPlugin.getText(),runTryValue, false))
 			{
 				iconPanelPlugin.removeAll();
 				iconPanelPlugin.add(iconNotValidPlugin);
@@ -334,7 +306,7 @@ public class ConfigPanel extends JDialog {
 				errorLabelPlugin.setText(" ");
 			}
 		} else if(strKey.contains(scriptsName)) {
-			if(!testWebAppDirectory(textFieldScripts.getText(),runTryValue, false))
+			if(!ConfigTesterHelper.testWebAppDirectory(textFieldScripts.getText(),runTryValue, false))
 			{
 				iconPanelScripts.removeAll();
 				iconPanelScripts.add(iconNotValidScripts);
@@ -347,175 +319,6 @@ public class ConfigPanel extends JDialog {
 		} 
 	}
 
-	public static boolean testWebAppDirectory(String directory, boolean runTryValue, boolean fileOrDirectory)
-			throws IOException {
-		String fileName = directory.split("/")[directory.split("/").length - 1];
-		if (directory.contains(" ")) {
-			if (runTryValue) {
-				NotificationManager.showMessage(directory + " has spaces in its name.").showNotification();
-			}
-			LOG.info("Status of " + directory + " : KO");
-			return false;
-		}
-
-		if (fileOrDirectory) {
-			if (testFileDirectory(directory, runTryValue, fileName)) {
-				LOG.info("Status of " + directory + " : OK");
-				return true;
-			} else {
-				LOG.info("Status of " + directory + " : KO");
-				return false;
-			}
-		} else {
-			if (testDirectory(directory, runTryValue, fileName)) {
-				LOG.info("Status of " + directory + " : OK");
-				return true;
-			} else {
-				LOG.info("Status of " + directory + " : KO");
-				return false;
-			}
-		}
-	}
-
-	public static boolean testDirectory(String directory, boolean runTryValue, String fileName) {
-		File myFile = new File(directory);
-		if (myFile.exists()) {
-			if (myFile.isDirectory()) {
-				return true;
-			} else {
-				if (runTryValue) {
-					NotificationManager.showMessage("You did not select a directory.").showNotification();
-				}
-				return false;
-			}
-		} else {
-			if (runTryValue) {
-				NotificationManager.showMessage("The directory : " + directory.split(fileName)[0] + " does not exist !")
-						.showNotification();
-			}
-			return false;
-		}
-	}
-
-	public static boolean testFileDirectory(String directory, boolean runTryValue, String fileName) {
-		File myFile = new File(directory);
-		if (myFile.exists()) {
-			if (myFile.isFile()) {
-				return true;
-			} else {
-				if (runTryValue) {
-					NotificationManager.showMessage("You did not select a file.").showNotification();
-				}
-				return false;
-			}
-		} else {
-			if (runTryValue) {
-				NotificationManager
-						.showMessage(fileName + " does not exist in the directory : " + directory.split(fileName)[0])
-						.showNotification();
-			}
-			return false;
-		}
-	}
-
-	public static boolean testWebAppURL(String URL, boolean runTryValue) throws IOException {
-		return testWebAppURL(URL, runTryValue, null, null, null, null);
-	}
-
-	public static boolean testWebAppURL(String URL, boolean runTryValue, String proxyAdress, String proxyPort,
-			String proxyUserName, String proxyUserPswd) throws IOException {
-		if (URL.contains(" ")) {
-			if (runTryValue) {
-				NotificationManager.showMessage(URL + " has spaces in its name.").showNotification();
-			}
-			LOG.info("Status of " + URL + " : KO");
-			return false;
-		}
-
-		if (getStatus(URL)) {
-			LOG.info("Status of " + URL + " : OK");
-			return true;
-		} else {
-			if (runTryValue) {
-				NotificationManager.showMessage(URL + " does not answer.").showNotification();
-			}
-			LOG.info("Status of " + URL + " : KO");
-			return false;
-		}
-	}
-
-	public static boolean getStatus(String url) throws IOException {
-		boolean result = false;
-		try {
-			URL siteURL = new URL(url);
-			HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
-			connection.setRequestMethod("GET");
-			connection.connect();
-
-			int code = connection.getResponseCode();
-			if (code == 200) {
-				result = true;
-			}
-		} catch (Exception e) {
-			result = false;
-		}
-		return result;
-	}
-
-	public boolean isChecked() {
-		return proxyCheckBox.isSelected();
-	}
-
-	public static boolean getStatus(String url, String proxyAdress, String proxyPort, String proxyUserName,
-			String proxyUserPswd) throws IOException {
-		boolean result = false;
-		try {
-			URL siteURL = new URL(url);
-			HttpURLConnection connection = null;
-			if (proxyUserName != null && proxyUserPswd != null) {
-				Authenticator authenticator = new Authenticator() {
-
-					public PasswordAuthentication getPasswordAuthentication() {
-						return (new PasswordAuthentication(proxyUserName, proxyUserPswd.toCharArray()));
-					}
-				};
-				Authenticator.setDefault(authenticator);
-			}
-
-			if (proxyAdress != null && proxyUserName != null) {
-				Proxy proxy = new Proxy(Proxy.Type.HTTP,
-						new InetSocketAddress(proxyAdress, Integer.parseInt(proxyPort)));
-				connection = (HttpURLConnection) siteURL.openConnection(proxy);
-			} else
-				connection = (HttpURLConnection) siteURL.openConnection();
-
-			connection.setRequestMethod("GET");
-			connection.setConnectTimeout(timeout);
-			connection.connect();
-
-			int code = connection.getResponseCode();
-			if (code == 200) {
-				result = true;
-			}
-		} catch (Exception e) {
-			result = false;
-		}
-		return result;
-	}
-	
-	private JPanel createFullButtonPanel() {
-		JPanel buttonPanel = PanelHelper.createBasicPanel();
-		buttonPanel.setAlignmentX(LEFT_ALIGNMENT);
-		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
-		buttonPanel.add(Box.createHorizontalGlue());
-		buttonPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
-		buttonPanel.setBackground(Color.white);
-		buttonPanel.add(createBasicTestButton());
-		buttonPanel.add(createBasicCancelButton());
-		buttonPanel.add(createBasicOkButton());
-		return buttonPanel;
-	}
-	
 	private JPanel createGeneralPanel() {
 		JPanel generalParameters = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 	    JPanel generalParameters1 = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
@@ -544,6 +347,16 @@ public class ConfigPanel extends JDialog {
 	    JPanel proxyPanel3 = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 		proxyCheckBox = new JCheckBox("Activation");
 		proxyCheckBox.setBackground(Color.white);
+		proxyCheckBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(proxyCheckBox.isSelected()) {
+					ConfigTesterHelper.proxy = true;
+				} else {
+					ConfigTesterHelper.proxy = false;
+				}
+			}
+		});
 	    proxyPanel1.add(proxyCheckBox);
 	    proxyPanel2.add(proxyAdressPanel);
 	    proxyPanel2.add(proxyPortPanel);
@@ -555,6 +368,19 @@ public class ConfigPanel extends JDialog {
 	    return proxyPanel;
 	}
 
+	private JPanel createFullButtonPanel() {
+		JPanel buttonPanel = PanelHelper.createBasicPanel();
+		buttonPanel.setAlignmentX(LEFT_ALIGNMENT);
+		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
+		buttonPanel.add(Box.createHorizontalGlue());
+		buttonPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
+		buttonPanel.setBackground(Color.white);
+		buttonPanel.add(createBasicTestButton());
+		buttonPanel.add(createBasicCancelButton());
+		buttonPanel.add(createBasicOkButton());
+		return buttonPanel;
+	}
+	
 	private JButton createBasicOkButton() {
 		JButton okButton = new JButton("Ok");
 		
@@ -601,15 +427,22 @@ public class ConfigPanel extends JDialog {
 		return tryButton;
 	}
 
+	
 	private JTextField createBasicTextPanel (String strKey) {
 
 		JTextField textField = new JTextField(render(properties.getProperty(strKey)));
-		textField.setPreferredSize(new Dimension(200, 30));
+
+		Dimension pD = new Dimension(textField.getPreferredSize().width, 30);
+		Dimension mD = new Dimension(textField.getMaximumSize().width, 40);
+		textField.setPreferredSize(pD);
+        textField.setMaximumSize(mD);
+        
+        textField.setFont(PanelHelper.FONT_TEXT);
+        
 		textField.setLayout(new BorderLayout());
 		textField.setColumns(30);
-		textField.setAlignmentX(LEFT_ALIGNMENT);
-		textFields.put(strKey, textField);
-		
+		textField.setAlignmentX(LEFT_ALIGNMENT);	
+		textField.setAlignmentY(Component.CENTER_ALIGNMENT);	
 		
 		textField.addKeyListener(new KeyListener() {
 			@Override
@@ -617,8 +450,8 @@ public class ConfigPanel extends JDialog {
 				if (a.getKeyCode() == KeyEvent.VK_ENTER) {
 					try {
 						testIconValid(strKey, false);
-						secondPane.repaint();
-						secondPane.revalidate();
+						repaint();
+						revalidate();
 
 					} catch (IOException e) {
 						LOG.error(e.getMessage(), e);
@@ -634,6 +467,8 @@ public class ConfigPanel extends JDialog {
 			public void keyTyped(KeyEvent e) {
 			}
 		});
+		
+		textFields.put(strKey, textField);
 		
 		return textField;
 	}
@@ -665,13 +500,11 @@ public class ConfigPanel extends JDialog {
 	
 	public JLabel createIconValid() {
 		JLabel iconValid = new JLabel(new ImageIcon(this.valid_image));
-		iconValid.setBackground(Color.white);
 		return iconValid;
 	}
 	
 	public JLabel createIconNotValid() {
 		JLabel iconNotValid = new JLabel(new ImageIcon(this.notvalid_image));
-		iconNotValid.setBackground(Color.white);
 		return iconNotValid;
 	}
 	
@@ -686,7 +519,7 @@ public class ConfigPanel extends JDialog {
 		textButtonPanelWebApp.add(textFieldWebApp);
 		textButtonPanelWebApp.add(iconPanelWebApp);
 		errorLabelWebApp = buildErrorLabel(strKey, iconPanelWebApp, textFieldWebApp, 3);
-		webAppPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		webAppPanel = PanelHelper.createBasicPanel("Toast WebApp URL", BoxLayout.PAGE_AXIS);
 		webAppPanel.add(textButtonPanelWebApp);
 		webAppPanel.add(errorLabelWebApp);
 
@@ -698,7 +531,7 @@ public class ConfigPanel extends JDialog {
 		textButtonPanelApiKey.add(textFieldApiKey);
 		textButtonPanelApiKey.add(iconPanelApiKey);
 		errorLabelApiKey = buildErrorLabel(strKey, iconPanelApiKey, textFieldApiKey, 4);
-		apiKeyPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		apiKeyPanel = PanelHelper.createBasicPanel("User API key", BoxLayout.PAGE_AXIS);
 		apiKeyPanel.add(textButtonPanelApiKey);
 		apiKeyPanel.add(errorLabelApiKey);
 
@@ -714,7 +547,7 @@ public class ConfigPanel extends JDialog {
 		textButtonPanelPlugin.add(textFieldPlugin);
 		textButtonPanelPlugin.add(iconPanelPlugin);
 		errorLabelPlugin = buildErrorLabel(strKey, iconPanelPlugin, textFieldPlugin, 2);
-		pluginPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		pluginPanel = PanelHelper.createBasicPanel("Plugin directory", BoxLayout.PAGE_AXIS);
 		pluginPanel.add(textButtonPanelPlugin);
 		pluginPanel.add(errorLabelPlugin);
 			
@@ -730,7 +563,7 @@ public class ConfigPanel extends JDialog {
 		textButtonPanelScripts.add(textFieldScripts);
 		textButtonPanelScripts.add(iconPanelScripts);
 		errorLabelScripts = buildErrorLabel(strKey, iconPanelScripts, textFieldScripts, 2);
-		scriptsPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		scriptsPanel = PanelHelper.createBasicPanel("Script directory", BoxLayout.PAGE_AXIS);
 		scriptsPanel.add(textButtonPanelScripts);
 		scriptsPanel.add(errorLabelScripts);
 		
@@ -747,7 +580,7 @@ public class ConfigPanel extends JDialog {
 		textButtonPanelChrome.add(textFieldChrome);
 		textButtonPanelChrome.add(iconPanelChrome);
 		errorLabelChrome = buildErrorLabel(strKey, iconPanelChrome, textFieldChrome, 1);;
-		chromePanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		chromePanel = PanelHelper.createBasicPanel("ChromeDriver path directory", BoxLayout.PAGE_AXIS);
 		chromePanel.add(textButtonPanelChrome);
 		chromePanel.add(errorLabelChrome);
 		
@@ -762,7 +595,7 @@ public class ConfigPanel extends JDialog {
 		textButtonPanelRecorder.add(textFieldRecorder);
 		textButtonPanelRecorder.add(iconPanelRecorder);
 		errorLabelRecorder = buildErrorLabel(strKey, iconPanelRecorder, textFieldRecorder, 3);
-		recorderPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		recorderPanel = PanelHelper.createBasicPanel("Recorded WebApp URL", BoxLayout.PAGE_AXIS);
 		recorderPanel.add(textButtonPanelRecorder);
 		recorderPanel.add(errorLabelRecorder);		
 		
@@ -774,7 +607,7 @@ public class ConfigPanel extends JDialog {
 		textButtonPanelProxyAdress.add(textFieldProxyAdress);
 		textButtonPanelProxyAdress.add(iconPanelProxyAdress);
 		errorLabelProxyAdress = buildErrorLabel(strKey, iconPanelProxyAdress, textFieldProxyAdress, 0);
-		proxyAdressPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		proxyAdressPanel = PanelHelper.createBasicPanel("Proxy adress", BoxLayout.PAGE_AXIS);
 		proxyAdressPanel.add(textButtonPanelProxyAdress);
 		proxyAdressPanel.add(errorLabelProxyAdress);
 		
@@ -786,7 +619,7 @@ public class ConfigPanel extends JDialog {
 		textButtonPanelProxyPort.add(textFieldProxyPort);
 		textButtonPanelProxyPort.add(iconPanelProxyPort);
 		errorLabelProxyPort = buildErrorLabel(strKey, iconPanelProxyPort, textFieldProxyPort, 0);
-		proxyPortPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		proxyPortPanel = PanelHelper.createBasicPanel("Proxy port", BoxLayout.PAGE_AXIS);
 		proxyPortPanel.add(textButtonPanelProxyPort);
 		proxyPortPanel.add(errorLabelProxyPort);
 		chromeDriverName = "chromedriver";
@@ -799,7 +632,7 @@ public class ConfigPanel extends JDialog {
 		textButtonPanelProxyUserName.add(textFieldProxyUserName);
 		textButtonPanelProxyUserName.add(iconPanelProxyUserName);
 		errorLabelProxyUserName = buildErrorLabel(strKey, iconPanelProxyUserName, textFieldProxyUserName, 0);
-		proxyUserNamePanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		proxyUserNamePanel = PanelHelper.createBasicPanel("Proxy user name", BoxLayout.PAGE_AXIS);
 		proxyUserNamePanel.add(textButtonPanelProxyUserName);
 		proxyUserNamePanel.add(errorLabelProxyUserName);
 		
@@ -811,7 +644,7 @@ public class ConfigPanel extends JDialog {
 		textButtonPanelProxyUserPswd.add(textFieldProxyUserPswd);
 		textButtonPanelProxyUserPswd.add(iconPanelProxyUserPswd);
 		errorLabelProxyUserPswd = buildErrorLabel(strKey, iconPanelProxyUserPswd, textFieldProxyUserPswd, 0);
-		proxyUserPswdPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		proxyUserPswdPanel = PanelHelper.createBasicPanel("Proxy user password", BoxLayout.PAGE_AXIS);
 		proxyUserPswdPanel.add(textButtonPanelProxyUserPswd);
 		proxyUserPswdPanel.add(errorLabelProxyUserPswd);
 	}
@@ -824,7 +657,6 @@ public class ConfigPanel extends JDialog {
 		// 2 for Directory
 		// 3 for URL
 		// 4 for ApiKey message
-		
 		JLabel iconValid = new JLabel(new ImageIcon(this.valid_image));
 		JLabel iconNotValid = new JLabel(new ImageIcon(this.notvalid_image));
 		iconValid.setBackground(Color.white);
@@ -832,54 +664,46 @@ public class ConfigPanel extends JDialog {
 		String errorMessage = null;
 		if(testValue == 1) {
 			errorMessage = errorMessageSelectFile;				
-			if( testWebAppDirectory(textField.getText(),false, true) ) {
+			if(ConfigTesterHelper.testWebAppDirectory(textField.getText(),false, true) ) {
 				iconPanel.add(iconValid);
-				return new JLabel(" ");
+				return PanelHelper.createBasicJLabel(" ", PanelHelper.FONT_TEXT_BOLD);
 			}
 			else {
 				iconPanel.add(iconNotValid);
-				return new JLabel(errorMessage);
+				return PanelHelper.createBasicJLabel(errorMessage, PanelHelper.FONT_TEXT_BOLD);
 			}
 		}
 		else if(testValue == 2) {
 			errorMessage = errorMessageSelectFile;
-			if( testWebAppDirectory(textField.getText(),false, false) ) {
+			if( ConfigTesterHelper.testWebAppDirectory(textField.getText(),false, false) ) {
 				iconPanel.add(iconValid);
-				return new JLabel(" ");
+				return PanelHelper.createBasicJLabel(" ", PanelHelper.FONT_TEXT_BOLD);
 			} else {
 				iconPanel.add(iconNotValid);
-				return new JLabel(errorMessage);
+				return PanelHelper.createBasicJLabel(errorMessage, PanelHelper.FONT_TEXT_BOLD);
 			}
 		} else if(testValue == 3) {
 			errorMessage = errorMessageSelectURL;
-			if (testWebAppURL(textField.getText(), false)) {
+			if (ConfigTesterHelper.testWebAppURL(textField.getText(), false)) {
 				iconPanel.add(iconValid);
-				return new JLabel(" ");
+				return PanelHelper.createBasicJLabel(" ", PanelHelper.FONT_TEXT_BOLD);
 			} else {
 				iconPanel.add(iconNotValid);
-				return new JLabel(errorMessage);
+				return PanelHelper.createBasicJLabel(errorMessage, PanelHelper.FONT_TEXT_BOLD);
 			}
 		} else if(testValue == 4) { // apiKey does not have verification
 				JLabel toastLogo = new JLabel(new ImageIcon(this.toast_logo));
 				toastLogo.setBackground(Color.white);
 				iconPanel.add(toastLogo);
 				errorMessage = errorMessageApiKey;
-				return new JLabel(errorMessage);
+				return PanelHelper.createBasicJLabel(errorMessage, PanelHelper.FONT_TEXT_BOLD);
 		} else { // Proxy tests will be tested through the webApp URL
 			JLabel toastLogo = new JLabel(new ImageIcon(this.toast_logo));
 			toastLogo.setBackground(Color.white);
 			iconPanel.add(toastLogo);
 			
 			errorMessage = " ";
-			return new JLabel(errorMessage);
+			return PanelHelper.createBasicJLabel(errorMessage, PanelHelper.FONT_TEXT_BOLD);
 		} 
-	}
-	
-	public void centerWindow() {
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Point middle = new Point(screenSize.width / 2, screenSize.height / 2);
-		Point newLocation = new Point(middle.x - (this.getWidth() / 2), 
-		                              middle.y - (this.getHeight() / 2));
-		this.setLocation(newLocation);
 	}
 }

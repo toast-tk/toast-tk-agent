@@ -2,11 +2,8 @@ package io.toast.tk.agent.ui;
 
 import java.io.IOException;
 
-import javax.swing.JProgressBar;
-
 import io.toast.tk.agent.config.AgentConfigProvider;
 import io.toast.tk.agent.run.TestRunner;
-import io.toast.tk.agent.ui.InfiniteProgressPanel;
 
 public class WaiterThread implements Runnable {
 	  private WaiterPanel panel;
@@ -25,7 +22,7 @@ public class WaiterThread implements Runnable {
 		  	thread.start();
 	  		while(thread.isAlive()) {
 	  			try {
-					Thread.sleep(1000);
+					Thread.sleep(50);
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 				}
@@ -33,6 +30,7 @@ public class WaiterThread implements Runnable {
 	  			if(panel.isInterupted()) {
 	  				thread.interrupt();
 	  			  	panel.setScript(testrunner.fileName, "Interupting");
+	  			  	testrunner.kill();
 	  			}
 	  			else 
 	  				panel.setScript(testrunner.fileName, "In progress");
@@ -41,11 +39,12 @@ public class WaiterThread implements Runnable {
 	  		this.kill();
 	  }
 	  
-	private void kill() {
+	  private void kill() {
 		  Thread.currentThread().interrupt();
 		  panel = null;
 		  thread.interrupt();
 		  thread = null;
+		  testrunner.kill();
 		  testrunner = null;
 	  }
 	  

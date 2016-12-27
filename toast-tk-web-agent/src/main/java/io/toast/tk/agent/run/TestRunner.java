@@ -31,6 +31,8 @@ public class TestRunner {
 	private AgentConfigProvider provider;
 	public String fileName;
 	
+	private boolean interupted = false;
+	
 	public TestRunner(AgentConfigProvider provider){
 		this.provider = provider;
 	}
@@ -46,7 +48,6 @@ public class TestRunner {
 		try {
 			Files.list(path).forEach(p -> {
 				try{
-					fileName = p.getFileName().toString();
 					List<String> scriptLines = FileHelper.getScript(new FileInputStream(p.toFile()));
 					ITestPage testScript = parser.parse(scriptLines, p.getFileName().toString());
 					testScripts.add(testScript);
@@ -62,7 +63,10 @@ public class TestRunner {
 		
 		testScripts.forEach(script ->{
 			try {
-				run(script);
+				if(!interupted) {
+					fileName = script.getName();
+					run(script);
+				}
 			} catch (Exception e) {
 				LOG.error(e.getMessage(), e);
 				NotificationManager.showMessage("Failed to execute " + script.getName() + " !");
@@ -71,6 +75,7 @@ public class TestRunner {
 	}
 	
 	public void kill() {
+		this.interupted = true;
 		this.testPageRunner = null;
 		this.testPlanRunner = null;
 		this.provider = null;

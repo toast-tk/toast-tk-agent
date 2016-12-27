@@ -23,8 +23,6 @@ import com.google.inject.Inject;
 
 import io.toast.tk.agent.config.AgentConfig;
 import io.toast.tk.agent.config.AgentConfigProvider;
-import io.toast.tk.agent.run.TestRunner;
-import io.toast.tk.agent.ui.WaiterThread.RunnerThread;
 import io.toast.tk.agent.web.BrowserManager;
 import io.toast.tk.agent.web.IAgentServer;
 import io.toast.tk.agent.web.RestRecorderService;
@@ -261,19 +259,19 @@ public class MainApp implements IAgentApp {
 
 	public boolean verificationWebApp(String property) throws IOException{
 		if(property.equals(AgentConfigProvider.TOAST_TEST_WEB_APP_URL)) {
-			return ConfigPanel.testWebAppURL(webConfigProvider.get().getWebAppUrl(), true);
+			return ConfigTesterHelper.testWebAppURL(webConfigProvider.get().getWebAppUrl(), true);
 		}
 		if(property.equals(AgentConfigProvider.TOAST_PLUGIN_DIR)) {
-			return ConfigPanel.testWebAppDirectory(webConfigProvider.get().getPluginDir(), true, false);
+			return ConfigTesterHelper.testWebAppDirectory(webConfigProvider.get().getPluginDir(), true, false);
 		}
 		if(property.equals(AgentConfigProvider.TOAST_SCRIPTS_DIR)) {
-			return ConfigPanel.testWebAppDirectory(webConfigProvider.get().getScriptsDir(), true, false);
+			return ConfigTesterHelper.testWebAppDirectory(webConfigProvider.get().getScriptsDir(), true, false);
 		}
 		if(property.equals(AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL)) {
-			return ConfigPanel.testWebAppURL(webConfigProvider.get().getWebInitRecordingUrl(), true);
+			return ConfigTesterHelper.testWebAppURL(webConfigProvider.get().getWebInitRecordingUrl(), true);
 		}
 		if(property.equals(AgentConfigProvider.TOAST_CHROMEDRIVER_PATH)) {
-			return ConfigPanel.testWebAppDirectory(webConfigProvider.get().getChromeDriverPath(), true, true);
+			return ConfigTesterHelper.testWebAppDirectory(webConfigProvider.get().getChromeDriverPath(), true, true);
 		}
 		return false;
 	}
