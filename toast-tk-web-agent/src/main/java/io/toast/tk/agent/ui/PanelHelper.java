@@ -70,7 +70,7 @@ public class PanelHelper {
 		return createBasicJLabel(" ");
 	}
 	public static JLabel createBasicJLabel(String str) {
-		return createBasicJLabel(str, new Font("Verdana",Font.PLAIN,12));
+		return createBasicJLabel(str, PanelHelper.FONT_TITLE_3);
 	}
 	public static JLabel createBasicJLabel(String str, Font font) {
 		JLabel label = new JLabel(str);

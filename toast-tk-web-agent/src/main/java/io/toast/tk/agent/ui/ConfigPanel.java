@@ -42,6 +42,7 @@ public class ConfigPanel extends JFrame {
 	public String apiKeyName = AgentConfigProvider.TOAST_API_KEY;
 	public String pluginName = AgentConfigProvider.TOAST_PLUGIN_DIR;
 	public String scriptsName = AgentConfigProvider.TOAST_SCRIPTS_DIR;
+	public String proxyActivate = AgentConfigProvider.TOAST_PROXY_ACTIVATE;
 	public String proxyAdress = AgentConfigProvider.TOAST_PROXY_ADRESS;
 	public String proxyPort = AgentConfigProvider.TOAST_PROXY_PORT;
 	public String proxyUser = AgentConfigProvider.TOAST_PROXY_USER_NAME;
@@ -53,6 +54,8 @@ public class ConfigPanel extends JFrame {
 	
 	private BoxPanel chromePanel, webAppPanel, recorderPanel, apiKeyPanel, pluginPanel, scriptsPanel,
 			proxyAdressPanel, proxyPortPanel, proxyUserNamePanel, proxyUserPswdPanel;
+	
+	private JButton tryButton;
 
 	private JTabbedPane secondPane;
 
@@ -72,6 +75,10 @@ public class ConfigPanel extends JFrame {
 		this.propertyFile = propertyFile;
 		
 		buildContentPanel();
+		
+		tryButton.doClick();
+		
+		this.setVisible(true);
 	}
 	
 	
@@ -84,13 +91,13 @@ public class ConfigPanel extends JFrame {
 		
 		secondPane.setBackground(Color.white);
 
-		ImageIcon general_logo = PanelHelper.createImageIcon(this, "ToastLogo_24.png");
+		ImageIcon general_logo = PanelHelper.createImageIcon(this, "general_icon.png");
 		secondPane.addTab("General parameters", general_logo, createGeneralPanel());
 
-		ImageIcon record_logo = PanelHelper.createImageIcon(this,"ToastLogo_24.png");
+		ImageIcon record_logo = PanelHelper.createImageIcon(this,"recorder_icon.png");
 		secondPane.addTab("Recording", record_logo, createRecorderPanel());
 
-		ImageIcon proxy_logo = PanelHelper.createImageIcon(this, "ToastLogo_24.png");
+		ImageIcon proxy_logo = PanelHelper.createImageIcon(this, "proxy_icon.png");
 		secondPane.addTab("Proxy", proxy_logo, createProxyPanel());
 
 		JPanel contentPanel = PanelHelper.createBasicPanel();
@@ -105,7 +112,7 @@ public class ConfigPanel extends JFrame {
 		panIcon.add(new JLabel(new ImageIcon(this.backGround_image)));
 		panIcon.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		
-	    JLabel firstMainPanel = new JLabel("AGENT SETTING");
+	    JLabel firstMainPanel = new JLabel("Agent setting");
 	    firstMainPanel.setFont(PanelHelper.FONT_TITLE_1);
 	    firstMainPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 15, 15));
 	    
@@ -130,14 +137,14 @@ public class ConfigPanel extends JFrame {
 		setResizable(false);
 		pack();
 		PanelHelper.centerWindow(this); // setLocationRelativeTo(null) does not work
-		setVisible(true);
-
 	}
 
 	private void saveAndClose() {
 		for (Entry<String, BoxPanel> entry : boxFields.entrySet()) {
 			properties.setProperty(entry.getKey(), entry.getValue().getTextValue());
 		}
+		properties.setProperty(proxyActivate, Boolean.toString(proxyCheckBox.isSelected()));
+		
 		try {
 			properties.store(FileUtils.openOutputStream(propertyFile), "Saved !");
 		} catch (IOException e) {
@@ -155,10 +162,10 @@ public class ConfigPanel extends JFrame {
 		JPanel generalParameters = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 	    JPanel generalParameters1 = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
 	    JPanel generalParameters2 = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
-		generalParameters1.add(webAppPanel.panel);
-		generalParameters1.add(apiKeyPanel.panel);
-		generalParameters2.add(pluginPanel.panel);
-		generalParameters2.add(scriptsPanel.panel);
+		generalParameters1.add(webAppPanel);
+		generalParameters1.add(apiKeyPanel);
+		generalParameters2.add(pluginPanel);
+		generalParameters2.add(scriptsPanel);
 		generalParameters.add(generalParameters1);
 		generalParameters.add(generalParameters2);
 		return generalParameters;
@@ -166,8 +173,8 @@ public class ConfigPanel extends JFrame {
 	
 	private JPanel createRecorderPanel() {
 		JPanel recorderParameters = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
-		recorderParameters.add(chromePanel.panel);
-		recorderParameters.add(recorderPanel.panel);
+		recorderParameters.add(chromePanel);
+		recorderParameters.add(recorderPanel);
 		recorderParameters.setLayout(new BoxLayout(recorderParameters, BoxLayout.Y_AXIS));
 		return recorderParameters;
 	}
@@ -179,10 +186,10 @@ public class ConfigPanel extends JFrame {
 	    JPanel proxyPanel3 = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 	    
 	    proxyPanel1.add(proxyCheckBox);
-	    proxyPanel2.add(proxyAdressPanel.panel);
-	    proxyPanel2.add(proxyPortPanel.panel);
-	    proxyPanel3.add(proxyUserNamePanel.panel);
-	    proxyPanel3.add(proxyUserPswdPanel.panel);
+	    proxyPanel2.add(proxyAdressPanel);
+	    proxyPanel2.add(proxyPortPanel);
+	    proxyPanel3.add(proxyUserNamePanel);
+	    proxyPanel3.add(proxyUserPswdPanel);
 	    proxyPanel.add(proxyPanel1);
 	    proxyPanel.add(proxyPanel2);
 	    proxyPanel.add(proxyPanel3);
@@ -226,20 +233,22 @@ public class ConfigPanel extends JFrame {
 	}
 	
 	private JButton createBasicTestButton() {
-		JButton tryButton = new JButton("Test");
+		tryButton = new JButton("Test");
 		tryButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 	
 				for (Object key : EnumerationUtils.toList(properties.propertyNames())) {
 					String strKey = (String) key;
-					BoxPanel box = boxFields.get(strKey);
-					try {
-						box.testIconValid(strKey, false);
-						secondPane.repaint();
-						secondPane.revalidate();
-					} catch (IOException e) {
-						LOG.error(e.getMessage(), e);
-					}
+					if(strKey != proxyActivate) {
+						BoxPanel box = boxFields.get(strKey);
+						try {
+							box.testIconValid(strKey, false);
+							secondPane.repaint();
+							secondPane.revalidate();
+						} catch (IOException e) {
+							LOG.error(e.getMessage(), e);
+						}
+					} 
 				}
 				NotificationManager.showMessage("The parameters have been tested !");
 	
@@ -254,55 +263,59 @@ public class ConfigPanel extends JFrame {
 		//%% API PANEL %%
 		String strKey = apiKeyName;
 		apiKeyPanel = new BoxPanel( properties, strKey);
+		boxFields.put(strKey, apiKeyPanel);
 		
 		//%% PLUGIN PANEL %%
 		strKey = pluginName;
 		pluginPanel = new BoxPanel( properties, strKey);
+		boxFields.put(strKey, pluginPanel);
 			
 		//%% SCRIPTS PANEL %%
 		strKey = scriptsName;
 		scriptsPanel = new BoxPanel( properties, strKey);
+		boxFields.put(strKey, scriptsPanel);
 		
 		//%% CHROME PANEL %%
 		strKey = chromeDriverName;
 		chromePanel = new BoxPanel( properties, strKey);
+		boxFields.put(strKey, chromePanel);
 
 		//%% PROXY CHECK BOX %%
+		strKey = proxyActivate;
 		proxyCheckBox = new JCheckBox("Activation");
 		proxyCheckBox.setBackground(Color.white);
-		proxyCheckBox.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(proxyCheckBox.isSelected()) {
-					ConfigTesterHelper.proxy = true;
-				} else {
-					ConfigTesterHelper.proxy = false;
-				}
-			}
-		});
+		String proxyValue = properties.getProperty(strKey);
+		if(proxyValue == "true") {
+			proxyCheckBox.setSelected(true);
+		}
 				
 		//%% PROXY ADRESS PANEL %%
 		strKey = proxyAdress;
 		proxyAdressPanel = new BoxPanel( properties, strKey);
+		boxFields.put(strKey, proxyAdressPanel);
 		
 		//%% PROXY PORT PANEL %%
 		strKey = proxyPort;
 		proxyPortPanel = new BoxPanel( properties, strKey);
 		chromeDriverName = "chromedriver";
+		boxFields.put(strKey, proxyPortPanel);
 
 		//%% PROXY USER NAME PANEL %%
 		strKey = proxyUser;
 		proxyUserNamePanel = new BoxPanel( properties, strKey);
+		boxFields.put(strKey, proxyUserNamePanel);
 		
 		//%% PROXY USER PSWD PANEL %%
 		strKey = proxyPswd;
 		proxyUserPswdPanel = new BoxPanel( properties, strKey);
+		boxFields.put(strKey, proxyUserPswdPanel);
 		
 		//%% WEBAPP PANEL %%
 		strKey = webAppName;
 		webAppPanel = new BoxPanel( properties, strKey, 
 				proxyAdressPanel, proxyPortPanel,
 				proxyUserNamePanel, proxyUserPswdPanel, proxyCheckBox);
+		boxFields.put(strKey, webAppPanel);
 				
 
 		//%% RECORDER PANEL %%
@@ -310,6 +323,7 @@ public class ConfigPanel extends JFrame {
 		recorderPanel= new BoxPanel( properties, strKey, 
 						proxyAdressPanel, proxyPortPanel,
 						proxyUserNamePanel, proxyUserPswdPanel, proxyCheckBox);
+		boxFields.put(strKey, recorderPanel);
 	}
 	
 

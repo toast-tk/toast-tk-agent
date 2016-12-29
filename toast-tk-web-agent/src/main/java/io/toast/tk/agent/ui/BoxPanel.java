@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,6 +23,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,14 +33,19 @@ import io.toast.tk.agent.config.AgentConfigProvider;
 /**
  * Box panel
  */
-public class BoxPanel {
+public class BoxPanel extends JPanel {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 
 	private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
 
 
 	private final Properties properties;
 
-	public JPanel panel;
 	private static Dimension dim = null;
 	
 	private String strkey;
@@ -88,10 +96,10 @@ public class BoxPanel {
 		this.buildContentPanel();
 		
 		if(dim == null) {
-			dim = panel.getPreferredSize();
+			dim = getPreferredSize();
 		}
 		else 
-			panel.setPreferredSize(dim);
+			setPreferredSize(dim);
 	}
 	public BoxPanel(Properties properties, String strkey, 
 			BoxPanel proxyAdress, BoxPanel proxyPort, 
@@ -119,7 +127,7 @@ public class BoxPanel {
 		JFileChooser dialogue = new JFileChooser();
 		dialogue.setDialogTitle("Select file");
 		dialogue.showOpenDialog(null);
-		dialogue.setMaximumSize(panel.getMaximumSize());
+		dialogue.setMaximumSize(getMaximumSize());
 
 		if (dialogue.getSelectedFile() != null) {
 			if (dialogue.getSelectedFile().isFile()) {
@@ -191,8 +199,8 @@ public class BoxPanel {
 				errorLabel.setText(" ");
 			}
 		} 
-		panel.repaint();
-		panel.revalidate();
+		this.repaint();
+		this.revalidate();
 	}
 
 	private JTextField createBasicTextPanel (String strKey) {
@@ -271,7 +279,13 @@ public class BoxPanel {
 		return iconNotValid;
 	}
 	
-	private void buildContentPanel() throws IOException{		
+	private void buildContentPanel() throws IOException{	
+		this.add(Box.createHorizontalGlue());
+		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		this.setAlignmentX(Component.CENTER_ALIGNMENT);
+		this.setAlignmentY(Component.CENTER_ALIGNMENT);
+		this.setBackground(Color.white);
+		
 		textField = createBasicTextPanel(strkey);
 		iconPanel = PanelHelper.createBasicPanel();
 		textButtonPanel = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
@@ -281,13 +295,13 @@ public class BoxPanel {
 		//%% WEBAPP PANEL %%
 		if(strkey == webAppName) {
 			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 3);
-			panel = PanelHelper.createBasicPanel("Toast WebApp URL", BoxLayout.PAGE_AXIS);
+			this.setBorder(BorderFactory.createTitledBorder(null, "Toast WebApp URL",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 		}
 		
 		//%% API PANEL %%
 		if(strkey == apiKeyName) {
 			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 4);
-			panel = PanelHelper.createBasicPanel("User API key", BoxLayout.PAGE_AXIS);
+			this.setBorder(BorderFactory.createTitledBorder(null, "User API key",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 		}
 
 		//%% PLUGIN PANEL %%
@@ -295,7 +309,7 @@ public class BoxPanel {
 			fileSearch = createBasicFileSearch(textField, strkey);
 			textButtonPanel.add(fileSearch);
 			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 2);
-			panel = PanelHelper.createBasicPanel("Plugin directory", BoxLayout.PAGE_AXIS);
+			this.setBorder(BorderFactory.createTitledBorder(null, "Plugin directory",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 		}	
 			
 		//%% SCRIPTS PANEL %%
@@ -303,7 +317,7 @@ public class BoxPanel {
 			fileSearch = createBasicFileSearch(textField, strkey);
 			textButtonPanel.add(fileSearch);
 			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 2);
-			panel = PanelHelper.createBasicPanel("Script directory", BoxLayout.PAGE_AXIS);
+			this.setBorder(BorderFactory.createTitledBorder(null, "Script directory",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 		}
 		
 		//%% CHROME PANEL %%
@@ -311,44 +325,44 @@ public class BoxPanel {
 			fileSearch = createBasicFileSearch(textField, strkey);
 			textButtonPanel.add(fileSearch);
 			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 1);;
-			panel = PanelHelper.createBasicPanel("ChromeDriver path directory", BoxLayout.PAGE_AXIS);
+			this.setBorder(BorderFactory.createTitledBorder(null, "ChromeDriver path directory",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 		}
 		
 		//%% RECORDER PANEL %%
 		if(strkey == recorderName) {
 			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 3);
-			panel = PanelHelper.createBasicPanel("Recorded WebApp URL", BoxLayout.PAGE_AXIS);
+			this.setBorder(BorderFactory.createTitledBorder(null, "Recorded WebApp URL",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 		}
 		
 		//%% PROXY ADRESS PANEL %%
 		if(strkey == proxyAdress) {
 			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 0);
-			panel = PanelHelper.createBasicPanel("Proxy adress", BoxLayout.PAGE_AXIS);
+			this.setBorder(BorderFactory.createTitledBorder(null, "Proxy adress",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 		}
 		
 		//%% PROXY PORT PANEL %%
 		if(strkey == proxyPort) {
 			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 0);
-			panel = PanelHelper.createBasicPanel("Proxy port", BoxLayout.PAGE_AXIS);
+			this.setBorder(BorderFactory.createTitledBorder(null, "Proxy port",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 			chromeDriverName = "chromedriver";
 		}
 
 		//%% PROXY USER NAME PANEL %%
 		if(strkey == proxyUser) {
 			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 0);
-			panel = PanelHelper.createBasicPanel("Proxy user name", BoxLayout.PAGE_AXIS);
+			this.setBorder(BorderFactory.createTitledBorder(null, "Proxy user name",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 		}
 		
 		//%% PROXY USER PSWD PANEL %%
 		if(strkey == proxyPswd) {
 			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 0);
-			panel = PanelHelper.createBasicPanel("Proxy user password", BoxLayout.PAGE_AXIS);
+			this.setBorder(BorderFactory.createTitledBorder(null, "Proxy user password",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 		}
 		
 		textButtonPanel.add(textField);
 		textButtonPanel.add(iconPanel);
-		panel.add(textButtonPanel);
-		panel.add(errorLabel);
+		this.add(textButtonPanel);
+		this.add(errorLabel);
 	}
 	
 
@@ -363,53 +377,17 @@ public class BoxPanel {
 		JLabel iconNotValid = new JLabel(new ImageIcon(this.notvalid_image));
 		iconValid.setBackground(Color.white);
 		iconNotValid.setBackground(Color.white);
-		String errorMessage = null;
-		if(testValue == 1) {
-			errorMessage = errorMessageSelectFile;				
-			if(ConfigTesterHelper.testWebAppDirectory(textField.getText(),false, true) ) {
-				iconPanel.add(iconValid);
-				return PanelHelper.createBasicJLabel(" ", PanelHelper.FONT_TEXT_BOLD);
-			}
-			else {
-				iconPanel.add(iconNotValid);
-				return PanelHelper.createBasicJLabel(errorMessage, PanelHelper.FONT_TEXT_BOLD);
-			}
-		}
-		else if(testValue == 2) {
-			errorMessage = errorMessageSelectFile;
-			if( ConfigTesterHelper.testWebAppDirectory(textField.getText(),false, false) ) {
-				iconPanel.add(iconValid);
-				return PanelHelper.createBasicJLabel(" ", PanelHelper.FONT_TEXT_BOLD);
-			} else {
-				iconPanel.add(iconNotValid);
-				return PanelHelper.createBasicJLabel(errorMessage, PanelHelper.FONT_TEXT_BOLD);
-			}
-		} else if(testValue == 3) {
-			errorMessage = errorMessageSelectURL;
-			if (ConfigTesterHelper.testWebAppURL(textField.getText(), false)) {
-				iconPanel.add(iconValid);
-				return PanelHelper.createBasicJLabel(" ", PanelHelper.FONT_TEXT_BOLD);
-			} else {
-				iconPanel.add(iconNotValid);
-				return PanelHelper.createBasicJLabel(errorMessage, PanelHelper.FONT_TEXT_BOLD);
-			}
-		} else if(testValue == 4) { // apiKey does not have verification
-				JLabel toastLogo = new JLabel(new ImageIcon(this.toast_logo));
-				toastLogo.setBackground(Color.white);
-				iconPanel.add(toastLogo);
-				errorMessage = errorMessageApiKey;
-				return PanelHelper.createBasicJLabel(errorMessage, PanelHelper.FONT_TEXT_BOLD);
-		} else { // Proxy tests will be tested through the webApp URL
+		if(testValue == 1 || testValue == 2 ||testValue == 3) {
+			iconPanel.add(iconValid);		
+		} else { // apiKey does not have verification & Proxy tests will be tested through the webApp URL
 			JLabel toastLogo = new JLabel(new ImageIcon(this.toast_logo));
 			toastLogo.setBackground(Color.white);
 			iconPanel.add(toastLogo);
-			
-			errorMessage = " ";
-			return PanelHelper.createBasicJLabel(errorMessage, PanelHelper.FONT_TEXT_BOLD);
 		} 
+		return PanelHelper.createBasicJLabel(" ", PanelHelper.FONT_TEXT_BOLD);
 	}
 
-	private String render(Object object) {
+	public static String render(Object object) {
 		if (object instanceof List) {
 			String raw = object.toString();
 			return raw.substring(1, raw.length() - 1);

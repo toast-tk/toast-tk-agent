@@ -258,8 +258,17 @@ public class MainApp implements IAgentApp {
 	}
 
 	public boolean verificationWebApp(String property) throws IOException{
+		
 		if(property.equals(AgentConfigProvider.TOAST_TEST_WEB_APP_URL)) {
-			return ConfigTesterHelper.testWebAppURL(webConfigProvider.get().getWebAppUrl(), true);
+			if(webConfigProvider.get().getProxyActivate().equals("true")) {
+				return ConfigTesterHelper.testWebAppURL(webConfigProvider.get().getWebAppUrl(), true,
+						webConfigProvider.get().getProxyAdress(),
+						webConfigProvider.get().getProxyPort(),
+						webConfigProvider.get().getProxyUserName(),
+						webConfigProvider.get().getProxyUserPswd());
+			}
+			else 
+				return ConfigTesterHelper.testWebAppURL(webConfigProvider.get().getWebAppUrl(), true);
 		}
 		if(property.equals(AgentConfigProvider.TOAST_PLUGIN_DIR)) {
 			return ConfigTesterHelper.testWebAppDirectory(webConfigProvider.get().getPluginDir(), true, false);
@@ -268,7 +277,15 @@ public class MainApp implements IAgentApp {
 			return ConfigTesterHelper.testWebAppDirectory(webConfigProvider.get().getScriptsDir(), true, false);
 		}
 		if(property.equals(AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL)) {
-			return ConfigTesterHelper.testWebAppURL(webConfigProvider.get().getWebInitRecordingUrl(), true);
+			if(webConfigProvider.get().getProxyActivate() == "true") {
+				return ConfigTesterHelper.testWebAppURL(webConfigProvider.get().getWebInitRecordingUrl(), true,
+						webConfigProvider.get().getProxyAdress(),
+						webConfigProvider.get().getProxyPort(),
+						webConfigProvider.get().getProxyUserName(),
+						webConfigProvider.get().getProxyUserPswd());
+			}
+			else 
+				return ConfigTesterHelper.testWebAppURL(webConfigProvider.get().getWebInitRecordingUrl(), true);
 		}
 		if(property.equals(AgentConfigProvider.TOAST_CHROMEDRIVER_PATH)) {
 			return ConfigTesterHelper.testWebAppDirectory(webConfigProvider.get().getChromeDriverPath(), true, true);

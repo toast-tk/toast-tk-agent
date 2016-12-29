@@ -15,7 +15,6 @@ public class AgentConfigProvider implements Provider<AgentConfig> {
 	private static final Logger LOG = LogManager.getLogger(AgentConfigProvider.class);
 
 	private AgentConfig webConfig;
-
 	
 	public static final String TOAST_TEST_WEB_INIT_RECORDING_URL = "toast.web.recording.url";
 
@@ -29,6 +28,8 @@ public class AgentConfigProvider implements Provider<AgentConfig> {
 	
 	public static final String TOAST_PLUGIN_DIR = "toast.plugin.dir";
 
+	public static final String TOAST_PROXY_ACTIVATE = "toast.proxy.activate";
+	
 	public static final String TOAST_PROXY_ADRESS = "toast.proxy.adress";
 
 	public static final String TOAST_PROXY_PORT = "toast.proxy.port";
@@ -62,6 +63,7 @@ public class AgentConfigProvider implements Provider<AgentConfig> {
 		webConfig.setApiKey(p.getProperty(TOAST_API_KEY, "Web App Api Key"));
 		webConfig.setPluginDir(p.getProperty(TOAST_PLUGIN_DIR, webConfig.getPluginDir()));
 		webConfig.setScriptsDir(p.getProperty(TOAST_SCRIPTS_DIR, "Scripts Directory Path"));
+		webConfig.setProxyActivate(p.getProperty(TOAST_PROXY_ACTIVATE, "false"));
 		webConfig.setProxyAdress(p.getProperty(TOAST_PROXY_ADRESS, "Proxy Adress"));
 		webConfig.setProxyPort(p.getProperty(TOAST_PROXY_PORT, "Proxy Port"));
 		webConfig.setProxyUserName(p.getProperty(TOAST_PROXY_USER_NAME, "Proxy User Name"));

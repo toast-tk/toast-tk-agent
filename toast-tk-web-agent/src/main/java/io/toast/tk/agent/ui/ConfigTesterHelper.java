@@ -12,19 +12,12 @@ import java.net.URL;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import io.toast.tk.agent.config.AgentConfigProvider;
 import io.toast.tk.agent.web.RestRecorderService;
 
 /**
  * Configuration panel
  */
 public class ConfigTesterHelper {
-
-	public static String proxyAdress = AgentConfigProvider.TOAST_PROXY_ADRESS;
-	public static String proxyPort = AgentConfigProvider.TOAST_PROXY_PORT;
-	public static String proxyUser = AgentConfigProvider.TOAST_PROXY_USER_NAME;
-	public static String proxyPswd = AgentConfigProvider.TOAST_PROXY_USER_PSWD;
-	public static boolean proxy = false;
 
 	private static final Logger LOG = LogManager.getLogger(RestRecorderService.class);
 	private static int timeout = 500; // in milliseconds
@@ -101,7 +94,7 @@ public class ConfigTesterHelper {
 	}
 
 	public static boolean testWebAppURL(String URL, boolean runTryValue) throws IOException {
-		return testWebAppURL(URL, runTryValue, null, null, null, null);
+		return testWebAppURL(URL, runTryValue, null, null, null, null);					
 	}
 
 	public static boolean testWebAppURL(String URL, boolean runTryValue, String proxyAdress, String proxyPort,
@@ -114,7 +107,7 @@ public class ConfigTesterHelper {
 			return false;
 		}
 
-		if (getStatus(URL)) {
+		if (getStatus(URL,proxyAdress, proxyPort, proxyUserName, proxyUserPswd)) {
 			LOG.info("Status of " + URL + " : OK");
 			return true;
 		} else {
@@ -124,13 +117,6 @@ public class ConfigTesterHelper {
 			LOG.info("Status of " + URL + " : KO");
 			return false;
 		}
-	}
-
-	public static boolean getStatus(String url) throws IOException {
-		if(proxy) {
-			return getStatus(url,proxyAdress, proxyPort, proxyUser, proxyPswd);
-		} else
-			return getStatus(url,null,null,null,null);
 	}
 	
 	public static boolean getStatus(String url, String proxyAdress, String proxyPort, String proxyUserName,

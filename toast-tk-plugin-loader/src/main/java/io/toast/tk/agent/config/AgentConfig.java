@@ -20,6 +20,7 @@ public class AgentConfig {
 	
 	private String pluginDirectory;
 
+	private String proxyActivate;
 	private String proxyAdress;
 	private String proxyPort;
 	private String proxyUser;
@@ -84,6 +85,14 @@ public class AgentConfig {
 		this.pluginDirectory = PluginDirectory;
 	}
 
+	public void setProxyActivate(
+		String ProxyActivate) {
+		this.proxyActivate = ProxyActivate;
+	}
+	public String getProxyActivate() {
+		return this.proxyActivate;
+	}
+	
 	public void setProxyAdress(
 		String ProxyAdress) {
 		this.proxyAdress = ProxyAdress;
