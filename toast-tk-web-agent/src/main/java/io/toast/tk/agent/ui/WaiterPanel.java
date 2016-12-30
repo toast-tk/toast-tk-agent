@@ -55,7 +55,6 @@ public class WaiterPanel extends JFrame {
 		updateScriptValue(name);
 		
 		updateLabel(scriptNumberLabel, PanelHelper.numbToStr(scriptNumber));
-		updateLabel(scriptNameLabel);
 		
 		panIcon.repaint();
 		panIcon.revalidate();
@@ -71,7 +70,7 @@ public class WaiterPanel extends JFrame {
 		if(name != null) {
 			if(scriptNameLabel.getText() != null) {
 				if(!scriptNameLabel.getText().contains(name)) {
-					scriptNameLabel.setText(name);
+					updateLabel(scriptNameLabel, name);
 					scriptNumber ++;
 				}			
 			}
@@ -87,11 +86,8 @@ public class WaiterPanel extends JFrame {
 		}
 	}
 
-	public void updateLabel(JLabel label) {
-		updateLabel(label, label.getText());
-	}
 	public void updateLabel(JLabel label, String name) {
-		label.setText(PanelHelper.secToHMS(scriptTime));
+		label.setText(name);
 		label.repaint();
 		label.revalidate();
 	}
@@ -161,15 +157,15 @@ public class WaiterPanel extends JFrame {
 		int mHeight = 50;
 		
 	    scriptNameLabel = PanelHelper.createBasicJLabel();
-	    JPanel scriptNamePanel = buildRightlPanelPanel("Script in progress : ", scriptNameLabel, pHeight, mHeight);
+	    JPanel scriptNamePanel = buildRightlPanelPanel("Script in progress : ", scriptNameLabel, 250, pHeight, 210, mHeight);
 	    scriptNumberLabel = PanelHelper.createBasicJLabel();
-	    JPanel scriptNumberPanel = buildRightlPanelPanel("N°", scriptNumberLabel, pHeight, mHeight);
+	    JPanel scriptNumberPanel = buildRightlPanelPanel("N°", scriptNumberLabel, 50, pHeight, 40, mHeight);
 	    JPanel scriptPanel = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 	    scriptPanel.add(scriptNumberPanel);
 	    scriptPanel.add(scriptNamePanel);
 
 	    timeLabel = PanelHelper.createBasicJLabel(PanelHelper.secToHMS(scriptTime));
-	    JPanel timePanel = buildRightlPanelPanel("Progress time : ", timeLabel, pHeight, mHeight);
+	    JPanel timePanel = buildRightlPanelPanel("Progress time : ", timeLabel, 300, pHeight, 250, mHeight);
 	    
         rightPanel = PanelHelper.createBasicPanel(BoxLayout.Y_AXIS);
         rightPanel.add(scriptPanel);
@@ -179,10 +175,10 @@ public class WaiterPanel extends JFrame {
         rightPanel.setMaximumSize(new Dimension(250, mHeight * 2 + 60));
 	}
 	
-	private JPanel buildRightlPanelPanel(String title, JLabel label, int pHeight, int mHeight) {
+	private JPanel buildRightlPanelPanel(String title, JLabel label, int pHeightX, int pHeightY, int mHeightX, int mHeightY) {
 		JPanel scriptNumberPanel = PanelHelper.createBasicPanel(title, PanelHelper.FONT_TEXT_BOLD);
-	    scriptNumberPanel.setPreferredSize(new Dimension(50, pHeight));
-	    scriptNumberPanel.setMinimumSize(new Dimension(40, mHeight));
+	    scriptNumberPanel.setPreferredSize(new Dimension(pHeightX, pHeightY));
+	    scriptNumberPanel.setMinimumSize(new Dimension(mHeightX, mHeightY));
 	    scriptNumberPanel.add(label);
 	    return scriptNumberPanel;
 	}

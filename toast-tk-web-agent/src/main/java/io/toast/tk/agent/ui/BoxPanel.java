@@ -124,7 +124,7 @@ public class BoxPanel extends JPanel {
 	}
 
 	private void chooseFile(JTextField textField, String strKey) {	
-		JFileChooser dialogue = new JFileChooser();
+		JFileChooser dialogue = new JFileChooser(textField.getText());
 		dialogue.setDialogTitle("Select file");
 		dialogue.showOpenDialog(null);
 		dialogue.setMaximumSize(getMaximumSize());
@@ -252,9 +252,6 @@ public class BoxPanel extends JPanel {
 		return textField;
 	}
 	
-	public JButton createBasicFileSearch(JTextField textField, String strKey) {
-		return createBasicFileSearch(textField, strKey, true);
-	}
 	public JButton createBasicFileSearch(JTextField textField, String strKey, Boolean fileOrDir) {	
 		JButton fileSearch = new JButton();
 		fileSearch.setText("...");
@@ -312,7 +309,7 @@ public class BoxPanel extends JPanel {
 
 		//%% PLUGIN PANEL %%
 		if(strkey == pluginName) {
-			fileSearch = createBasicFileSearch(textField, strkey);
+			fileSearch = createBasicFileSearch(textField, strkey, false);
 			textButtonPanel.add(fileSearch);
 			errorLabel = buildErrorLabel(iconPanel, textField, 2);
 			this.setBorder(BorderFactory.createTitledBorder(null, "Plugin directory",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
@@ -320,7 +317,7 @@ public class BoxPanel extends JPanel {
 			
 		//%% SCRIPTS PANEL %%
 		if(strkey == scriptsName) {
-			fileSearch = createBasicFileSearch(textField, strkey);
+			fileSearch = createBasicFileSearch(textField, strkey, false);
 			textButtonPanel.add(fileSearch);
 			errorLabel = buildErrorLabel(iconPanel, textField, 2);
 			this.setBorder(BorderFactory.createTitledBorder(null, "Script directory",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
@@ -328,7 +325,7 @@ public class BoxPanel extends JPanel {
 		
 		//%% CHROME PANEL %%
 		if(strkey == chromeDriverName) {
-			fileSearch = createBasicFileSearch(textField, strkey);
+			fileSearch = createBasicFileSearch(textField, strkey, true);
 			textButtonPanel.add(fileSearch);
 			errorLabel = buildErrorLabel(iconPanel, textField, 1);;
 			this.setBorder(BorderFactory.createTitledBorder(null, "ChromeDriver path directory",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
