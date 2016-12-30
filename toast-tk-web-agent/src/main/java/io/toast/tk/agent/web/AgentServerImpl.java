@@ -73,6 +73,7 @@ public class AgentServerImpl  implements IAgentServer{
 							 port,
 							 app.getConfig().getProxyUserName(),
 							 app.getConfig().getProxyUserPswd());
+		request.setApiKey(apiKey);
 		return request;
 	}
 

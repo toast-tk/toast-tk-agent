@@ -20,7 +20,7 @@ import io.toast.tk.agent.web.RestRecorderService;
 public class ConfigTesterHelper {
 
 	private static final Logger LOG = LogManager.getLogger(RestRecorderService.class);
-	private static int timeout = 500; // in milliseconds
+	private static int timeout = 1000; // in milliseconds
 	
 	public static boolean testWebAppDirectory(String directory, boolean runTryValue, boolean fileOrDirectory)
 			throws IOException {

@@ -27,7 +27,7 @@ import java.awt.Component;
  */
 public class PanelHelper {
 
-	public static Font FONT_TEXT_BOLD = new Font("Verdana",Font.BOLD,16);
+	public static Font FONT_TEXT_BOLD = new Font("SansSerif",Font.BOLD + Font.ITALIC,16);
 	public static Font FONT_TEXT_ITALIC = new Font("Verdana",Font.ITALIC,16);
 	public static Font FONT_TEXT = new Font("Verdana",Font.PLAIN,16);
 	public static Font FONT_TITLE_3 = new Font("Verdana",Font.BOLD,18);
