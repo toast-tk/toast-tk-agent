@@ -112,18 +112,25 @@ public class ConfigPanel extends JFrame {
 		panIcon.add(new JLabel(new ImageIcon(this.backGround_image)));
 		panIcon.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		
-	    JLabel firstMainPanel = new JLabel("Agent setting");
-	    firstMainPanel.setFont(PanelHelper.FONT_TITLE_1);
-	    firstMainPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 15, 15));
+		JPanel firstMainPanel = PanelHelper.createBasicPanel();
+	    JLabel firstMainLabel = new JLabel("Agent setting");
+	    firstMainLabel.setFont(PanelHelper.FONT_TITLE_1);
+	    firstMainLabel.setBorder(BorderFactory.createEmptyBorder(0, 15, 15, 15));
+		JPanel firstMainIcon = PanelHelper.createBasicPanel();
+		firstMainIcon.setLayout(new BorderLayout());
+		Image firstMainIcon_Image = PanelHelper.createImage(this,"AgentSetting_icon.png");
+		firstMainIcon.add(new JLabel(new ImageIcon(firstMainIcon_Image)));
+		firstMainPanel.add(firstMainLabel);
+		firstMainPanel.add(firstMainIcon);
 	    
-		JPanel secondMainPanel = PanelHelper.createBasicPanel(BoxLayout.X_AXIS);
-		secondMainPanel.add(panIcon);
+		JPanel secondMainPanel = PanelHelper.createBasicPanel(BoxLayout.Y_AXIS);
+		secondMainPanel.add(firstMainPanel);
 		secondMainPanel.add(contentPanel);
 		
 		mainPane = PanelHelper.createBasicPanel();
-		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
+		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.X_AXIS));
 		mainPane.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-		mainPane.add(firstMainPanel);
+		mainPane.add(panIcon);
 		mainPane.add(secondMainPanel);
 
 
@@ -239,7 +246,7 @@ public class ConfigPanel extends JFrame {
 	
 				for (Object key : EnumerationUtils.toList(properties.propertyNames())) {
 					String strKey = (String) key;
-					if(strKey != proxyActivate) {
+					if(!strKey.equals(proxyActivate)) {
 						BoxPanel box = boxFields.get(strKey);
 						try {
 							box.testIconValid(strKey, false);
@@ -285,7 +292,7 @@ public class ConfigPanel extends JFrame {
 		proxyCheckBox = new JCheckBox("Activation");
 		proxyCheckBox.setBackground(Color.white);
 		String proxyValue = properties.getProperty(strKey);
-		if(proxyValue == "true") {
+		if(proxyValue.equals("true")) {
 			proxyCheckBox.setSelected(true);
 		}
 				
