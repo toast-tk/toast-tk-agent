@@ -137,9 +137,6 @@
                     <Component Id = "jretbintjavauexe" Guid = "9a221cc3-71db-40f8-a52c-044d8ac0903c" >
                       <File Id = "jretbintjavauexe" Source="jre\bin\java.exe"/>
                     </Component>
-                    <Component Id = "jretbintJavaAccessBridgeu32udll" Guid = "1695d057-218e-4641-93b8-2ce31f189770" >
-                      <File Id = "jretbintJavaAccessBridgeu32udll" Source="jre\bin\JavaAccessBridge-32.dll"/>
-                    </Component>
                     <Component Id = "jretbintJavaAccessBridgeu64udll" Guid = "5a75037c-0411-4728-a610-0114d931e527" >
                       <File Id = "jretbintJavaAccessBridgeu64udll" Source="jre\bin\JavaAccessBridge-64.dll"/>
                     </Component>
@@ -169,9 +166,6 @@
                     </Component>
                     <Component Id = "jretbintjawtudll" Guid = "fcfd1e4c-3db8-4562-9762-eb3144b23306" >
                       <File Id = "jretbintjawtudll" Source="jre\bin\jawt.dll"/>
-                    </Component>
-                    <Component Id = "jretbintJAWTAccessBridgeu32udll" Guid = "66a84580-e7ce-4bc3-bba9-bdc4caf6f2d7" >
-                      <File Id = "jretbintJAWTAccessBridgeu32udll" Source="jre\bin\JAWTAccessBridge-32.dll"/>
                     </Component>
                     <Component Id = "jretbintJAWTAccessBridgeu64udll" Guid = "b17381a9-0af3-4d29-a89c-303097539d09" >
                       <File Id = "jretbintJAWTAccessBridgeu64udll" Source="jre\bin\JAWTAccessBridge-64.dll"/>
@@ -323,9 +317,6 @@
                     <Component Id = "jretbintw2kulsauauthudll" Guid = "7090eabc-b3a7-486c-8495-c23104540471" >
                       <File Id = "jretbintw2kulsauauthudll" Source="jre\bin\w2k_lsa_auth.dll"/>
                     </Component>
-                    <Component Id = "jretbintWindowsAccessBridgeu32udll" Guid = "74336073-095c-42d0-927d-dc37afc7e800" >
-                      <File Id = "jretbintWindowsAccessBridgeu32udll" Source="jre\bin\WindowsAccessBridge-32.dll"/>
-                    </Component>
                     <Component Id = "jretbintWindowsAccessBridgeu64udll" Guid = "1d8d06b6-1f16-4f4d-8c0c-8034424080cd" >
                       <File Id = "jretbintWindowsAccessBridgeu64udll" Source="jre\bin\WindowsAccessBridge-64.dll"/>
                     </Component>
@@ -335,17 +326,6 @@
                     <Component Id = "jretbintzipudll" Guid = "b3500bee-c28b-4cee-8b05-f1910b47a476" >
                       <File Id = "jretbintzipudll" Source="jre\bin\zip.dll"/>
                     </Component>
-                    <Directory Id = "jrebinclient" Name = "client">
-                       <Component Id = "jretbintclienttclassesujsa" Guid = "2d3d89a1-cae2-4ac6-b7b6-aed8d4009361" >
-                         <File Id = "jretbintclienttclassesujsa" Source="jre\bin\client\classes.jsa"/>
-                       </Component>
-                       <Component Id = "jretbintclienttjvmudll" Guid = "1eb8ea83-a2fd-47d8-b7f4-da4a95ea742d" >
-                         <File Id = "jretbintclienttjvmudll" Source="jre\bin\client\jvm.dll"/>
-                       </Component>
-                       <Component Id = "jretbintclienttXusageutxt" Guid = "aac441e6-3cb9-49dc-afe2-dc9d8815b9cd" >
-                         <File Id = "jretbintclienttXusageutxt" Source="jre\bin\client\Xusage.txt"/>
-                       </Component>
-                    </Directory>
                     <Directory Id = "jrebindtplugin" Name = "dtplugin">
                        <Component Id = "jretbintdtplugintdeployJava1udll" Guid = "5f146c3f-4a9e-43b4-9b45-e2400b810910" >
                          <File Id = "jretbintdtplugintdeployJava1udll" Source="jre\bin\dtplugin\deployJava1.dll"/>
@@ -543,9 +523,6 @@
                        </Component>
                     </Directory>
                     <Directory Id = "jrelibext" Name = "ext">
-                       <Component Id = "jretlibtexttaccessubridgeu32ujar" Guid = "7666f351-7185-4913-831c-aa0a1ce727ce" >
-                         <File Id = "jretlibtexttaccessubridgeu32ujar" Source="jre\lib\ext\access-bridge-32.jar"/>
-                       </Component>
                        <Component Id = "jretlibtexttaccessubridgeu64ujar" Guid = "be5d94eb-f4c6-42cd-a08c-e81b2f81089e" >
                          <File Id = "jretlibtexttaccessubridgeu64ujar" Source="jre\lib\ext\access-bridge-64.jar"/>
                        </Component>
@@ -610,11 +587,6 @@
                        </Component>
                        <Component Id = "jretlibtfontstLucidaTypewriterRegularuttf" Guid = "7a1c8f5f-5712-45d3-a738-d3db81b0fa6e" >
                          <File Id = "jretlibtfontstLucidaTypewriterRegularuttf" Source="jre\lib\fonts\LucidaTypewriterRegular.ttf"/>
-                       </Component>
-                    </Directory>
-                    <Directory Id = "jrelibi386" Name = "i386">
-                       <Component Id = "jretlibti386tjvmucfg" Guid = "1d15c3c8-c5e3-4d73-9f58-0df7acbb715b" >
-                         <File Id = "jretlibti386tjvmucfg" Source="jre\lib\i386\jvm.cfg"/>
                        </Component>
                     </Directory>
                     <Directory Id = "jrelibimages" Name = "images">
@@ -781,7 +753,6 @@
        <ComponentRef Id = "jretbintjavaurmiuexe" />
        <ComponentRef Id = "jretbintjavaudll" />
        <ComponentRef Id = "jretbintjavauexe" />
-       <ComponentRef Id = "jretbintJavaAccessBridgeu32udll" />
        <ComponentRef Id = "jretbintJavaAccessBridgeu64udll" />
        <ComponentRef Id = "jretbintjavacplucpl" />
        <ComponentRef Id = "jretbintjavacpluexe" />
@@ -792,7 +763,6 @@
        <ComponentRef Id = "jretbintjavawsuexe" />
        <ComponentRef Id = "jretbintjavaucrwudemoudll" />
        <ComponentRef Id = "jretbintjawtudll" />
-       <ComponentRef Id = "jretbintJAWTAccessBridgeu32udll" />
        <ComponentRef Id = "jretbintJAWTAccessBridgeu64udll" />
        <ComponentRef Id = "jretbintjdwpudll" />
        <ComponentRef Id = "jretbintjfrudll" />
@@ -843,13 +813,9 @@
        <ComponentRef Id = "jretbintunpack200uexe" />
        <ComponentRef Id = "jretbintverifyudll" />
        <ComponentRef Id = "jretbintw2kulsauauthudll" />
-       <ComponentRef Id = "jretbintWindowsAccessBridgeu32udll" />
        <ComponentRef Id = "jretbintWindowsAccessBridgeu64udll" />
        <ComponentRef Id = "jretbintwsdetectudll" />
        <ComponentRef Id = "jretbintzipudll" />
-       <ComponentRef Id = "jretbintclienttclassesujsa" />
-       <ComponentRef Id = "jretbintclienttjvmudll" />
-       <ComponentRef Id = "jretbintclienttXusageutxt" />
        <ComponentRef Id = "jretbintdtplugintdeployJava1udll" />
        <ComponentRef Id = "jretbintdtplugintnpdeployJava1udll" />
        <ComponentRef Id = "jretbintplugin2tmsvcr100udll" />
@@ -910,7 +876,6 @@
        <ComponentRef Id = "jretlibtdeploytsplashu2xugif" />
        <ComponentRef Id = "jretlibtdeploytsplashu11ulicugif" />
        <ComponentRef Id = "jretlibtdeploytsplashu11u2xulicugif" />
-       <ComponentRef Id = "jretlibtexttaccessubridgeu32ujar" />
        <ComponentRef Id = "jretlibtexttaccessubridgeu64ujar" />
        <ComponentRef Id = "jretlibtexttcldrdataujar" />
        <ComponentRef Id = "jretlibtexttdnsnsujar" />
@@ -932,7 +897,6 @@
        <ComponentRef Id = "jretlibtfontstLucidaSansRegularuttf" />
        <ComponentRef Id = "jretlibtfontstLucidaTypewriterBolduttf" />
        <ComponentRef Id = "jretlibtfontstLucidaTypewriterRegularuttf" />
-       <ComponentRef Id = "jretlibti386tjvmucfg" />
        <ComponentRef Id = "jretlibtimagestcursorstcursorsuproperties" />
        <ComponentRef Id = "jretlibtimagestcursorstinvalid32x32ugif" />
        <ComponentRef Id = "jretlibtimagestcursorstwin32uCopyDrop32x32ugif" />

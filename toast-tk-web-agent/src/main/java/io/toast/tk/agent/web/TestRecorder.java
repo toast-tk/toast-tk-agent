@@ -17,7 +17,7 @@ public class TestRecorder {
 		String[] args) throws IOException {
 		RestRecorderService service = new RestRecorderService();
 		service.start();
-		injectRecordScript();
+		//injectRecordScript();
 	}
 	
 	private static void injectRecordScript() throws IOException {

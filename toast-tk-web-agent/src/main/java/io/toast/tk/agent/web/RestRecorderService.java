@@ -12,7 +12,7 @@ import org.vertx.java.platform.Verticle;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import io.toast.tk.agent.config.WebConfig;
+import io.toast.tk.agent.config.AgentConfig;
 import io.toast.tk.agent.guice.WebAgentModule;
 import io.toast.tk.agent.ui.MainApp;
 import io.toast.tk.agent.ui.NotificationManager;
@@ -35,13 +35,13 @@ public class RestRecorderService extends Verticle {
 		RouteMatcher matcher = initMatchers();
 		try{
 			//SECURE ONE
-			vertx.createHttpServer().requestHandler(matcher)
+			/*vertx.createHttpServer().requestHandler(matcher)
 			.setSSL(true)
-			.setKeyStorePath(WebConfig.getToastHome() + SystemUtils.FILE_SEPARATOR + "server-keystore.jks")
+			.setKeyStorePath(AgentConfig.getToastHome() + SystemUtils.FILE_SEPARATOR + "server-keystore.jks")
 			.setKeyStorePassword("wibble").listen(4445);
 			
 			//PLAIN ONE
-			vertx.createHttpServer().requestHandler(matcher).listen(4444);
+			vertx.createHttpServer().requestHandler(matcher).listen(4444);*/
 			
 			NotificationManager.showMessage("Web Agent - Active !").showNotification();
 			LOG.info("Started !");

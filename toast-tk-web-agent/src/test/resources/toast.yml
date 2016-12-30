@@ -1,0 +1,14 @@
+default-web-driver:
+  - navigate: Navigate to $1 
+  - type_in_web_component: Saisir dans $2 la valeur $1 
+  - click_on_web_component: Cliquer sur $1 
+  - select_in_web_component: Selectionner $1 dans $2 
+  - web_component_exists: Le composant $1 existe 
+  - close_browser: Fermer le navigateur
+json-adapter:
+  - integrate: Intégrer le json $1
+xml-adapter:
+  - integrate: Intégrer l'xml $1
+dynamic-service-adapter:
+  - sql: run the following sql request $1
+  

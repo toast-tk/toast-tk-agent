@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 
 import io.toast.tk.agent.ui.IAgentApp;
 import io.toast.tk.core.agent.interpret.WebEventRecord;
+import io.toast.tk.core.rest.HttpRequest;
 import io.toast.tk.core.rest.RestUtils;
 
 public class AgentServerImpl  implements IAgentServer{
@@ -30,23 +31,25 @@ public class AgentServerImpl  implements IAgentServer{
 		}
 	}
 
-	public void sendEvent(WebEventRecord eventRecord, String ApiKey) {
+	public void sendEvent(WebEventRecord eventRecord, String apiKey) {
 		String json = new Gson().toJson(eventRecord);
-		RestUtils.postWebEventRecord(getWebAppURI()+"/record", json, ApiKey);
+		String url = getWebAppURI() + "/record";
+		RestUtils.postWebEventRecord(buildRequest(url, json, apiKey));
 	}
 
 	public boolean register() {
 		return register(null);
 	}
-	public boolean register(String ApiKey) {
+	
+	public boolean register(String apiKey) {
 		try {
 			String url = getWebAppURI() + "/susbcribe";
 
 			String localAddress = Inet4Address.getLocalHost().getHostAddress();
-			AgentInformation info = new AgentInformation(localAddress, ApiKey);
+			AgentInformation info = new AgentInformation(localAddress, apiKey);
 			String json = new Gson().toJson(info);
 			
-			boolean isRegistered = RestUtils.registerAgent(url, json, ApiKey);
+			boolean isRegistered = RestUtils.registerAgent(buildRequest(url, json, apiKey));
 			
 			if(isRegistered) {
 				LOG.info("Agent registred with hotname {}", hostName);
@@ -60,6 +63,19 @@ public class AgentServerImpl  implements IAgentServer{
 		}
 		return false;
 	}
+	
+
+	private HttpRequest buildRequest(String uri, String json, String apiKey) {
+		HttpRequest request = new HttpRequest(uri, json);
+		String proxyPort = app.getConfig().getProxyPort();
+		int port = proxyPort == null ? -1 : Integer.valueOf(proxyPort).intValue();
+		request.setProxyInfo(app.getConfig().getProxyAdress(),
+							 port,
+							 app.getConfig().getProxyUserName(),
+							 app.getConfig().getProxyUserPswd());
+		return request;
+	}
+
 
 	@Override
 	public void unRegister() {
@@ -67,7 +83,7 @@ public class AgentServerImpl  implements IAgentServer{
 	}
 	
 	private String getWebAppURI(){
-		String url = this.app.getWebConfig().getWebAppUrl();
+		String url = this.app.getConfig().getWebAppUrl();
 		if(url.endsWith("/")) {
 			url = (new StringBuilder(url)).deleteCharAt(url.length()-1).toString();
 		}

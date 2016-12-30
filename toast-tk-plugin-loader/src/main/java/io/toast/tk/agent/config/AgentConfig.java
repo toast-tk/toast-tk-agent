@@ -2,10 +2,9 @@ package io.toast.tk.agent.config;
 
 import org.apache.commons.lang.SystemUtils;
 
-public class WebConfig {
+public class AgentConfig {
 
-
-	public static final String TOAST_PROPERTIES_FILE = getToastHome() + SystemUtils.FILE_SEPARATOR + "toast.web.properties";
+	public static final String TOAST_PROPERTIES_FILE = getToastHome() + SystemUtils.FILE_SEPARATOR + "agent.properties";
 
 	public static final String TOAST_LOG_DIR = getToastHome() + SystemUtils.FILE_SEPARATOR + "log.web";
 		
@@ -16,6 +15,8 @@ public class WebConfig {
 	private String webAppUrl;
 	
 	private String apiKey;
+
+	private String scriptsDir;
 	
 	private String pluginDirectory;
 
@@ -32,10 +33,10 @@ public class WebConfig {
 		return getToastHome() + "log/";
 	}
 
-	public String getBasicPluginDir() {
-		return getToastHome() + SystemUtils.FILE_SEPARATOR + "plugins/";
+	public String getPluginDir() {
+		return this.pluginDirectory == null ? getToastHome() + SystemUtils.FILE_SEPARATOR + "plugins/": this.pluginDirectory;
 	}
-
+	
 	public void setWebInitRecordingUrl(
 		String webStartRecordingUrl) {
 		this.webStartRecordingUrl = webStartRecordingUrl;
@@ -69,12 +70,18 @@ public class WebConfig {
 		return this.apiKey;
 	}
 
+
+	public String getScriptsDir() {
+		return this.scriptsDir;		
+	}
+	
+	public void setScriptsDir(String scriptsDir) {
+		this.scriptsDir = scriptsDir;		
+	}
+
 	public void setPluginDir(
 		String PluginDirectory) {
 		this.pluginDirectory = PluginDirectory;
-	}
-	public String getPluginDir() {
-		return this.pluginDirectory;
 	}
 
 	public void setProxyAdress(

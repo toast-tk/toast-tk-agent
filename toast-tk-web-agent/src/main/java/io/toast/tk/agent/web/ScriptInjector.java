@@ -17,7 +17,7 @@ import org.openqa.selenium.WebElement;
 
 import com.google.inject.Inject;
 
-import io.toast.tk.agent.config.WebConfigProvider;
+import io.toast.tk.agent.config.AgentConfigProvider;
 import io.toast.tk.agent.ui.NotificationManager;
 import io.toast.tk.core.agent.interpret.WebEventRecord;
 
@@ -29,10 +29,10 @@ public class ScriptInjector {
 	private JFrame frmOpt; 
 	private IAgentServer server;
 	private UriChangeListener uriChangeListener;
-	private WebConfigProvider configProvider;
+	private AgentConfigProvider configProvider;
 	
 	@Inject
-	public ScriptInjector(IAgentServer server, UriChangeListener uriChangeListener, WebConfigProvider configProvider){
+	public ScriptInjector(IAgentServer server, UriChangeListener uriChangeListener, AgentConfigProvider configProvider){
 		this.server = server;
 		this.uriChangeListener = uriChangeListener;
 		this.configProvider = configProvider;

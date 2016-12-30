@@ -3,7 +3,12 @@ package io.toast.tk.agent.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Font;
 import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -11,7 +16,11 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.Authenticator;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.PasswordAuthentication;
+import java.net.Proxy;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -29,454 +38,165 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
 import org.apache.commons.collections4.EnumerationUtils;
 import org.apache.commons.io.FileUtils;
-import org.apache.http.HttpHost;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import io.toast.tk.agent.config.AgentConfigProvider;
+
 /**
- * Stub for displaying Configuration item.
+ * Configuration panel
  */
 public class ConfigPanel extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-		
-	private String chromeDriverName = "chromedriver";
-	private String webAppName = "webapp";
-	private String recorderName = "recording";
-	private String apiKeyName = "api";
-	private String pluginName = "plugin";
-	private String proxyAdress = "proxyAdress";
-	private String proxyPort = "proxyPort";
-	private String proxyUser = "proxyUser";
-	private String proxyPswd = "proxyPswd";
-	private static int timeout = 1000; // in milliseconds
+
+	public String chromeDriverName = AgentConfigProvider.TOAST_CHROMEDRIVER_PATH;
+	public String webAppName = AgentConfigProvider.TOAST_TEST_WEB_APP_URL;
+	public String recorderName = AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL;
+	public String apiKeyName = AgentConfigProvider.TOAST_API_KEY;
+	public String pluginName = AgentConfigProvider.TOAST_PLUGIN_DIR;
+	public String scriptsName = AgentConfigProvider.TOAST_SCRIPTS_DIR;
+	public String proxyAdress = AgentConfigProvider.TOAST_PROXY_ADRESS;
+	public String proxyPort = AgentConfigProvider.TOAST_PROXY_PORT;
+	public String proxyUser = AgentConfigProvider.TOAST_PROXY_USER_NAME;
+	public String proxyPswd = AgentConfigProvider.TOAST_PROXY_USER_PSWD;
+	private static int timeout = 500; // in milliseconds
 
 	private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
 
-	private JPanel mainPane, secondPane, chromePanel, webAppPanel, recorderPanel, apiKeyPanel, pluginPanel,
-		proxyAdressPanel, proxyPortPanel, proxyUserNamePanel, proxyUserPswdPanel;
+	private JPanel mainPane, chromePanel, webAppPanel, recorderPanel, apiKeyPanel, pluginPanel, scriptsPanel,
+			proxyAdressPanel, proxyPortPanel, proxyUserNamePanel, proxyUserPswdPanel;
 
-	private JLabel icon;
+	private JTabbedPane secondPane;
+
 	private JTextField textFieldChrome, textFieldWebApp, textFieldRecorder, textFieldApiKey, textFieldPlugin,
-		textFieldProxyAdress, textFieldProxyPort, textFieldProxyUserName, textFieldProxyUserPswd;
-	private JPanel textButtonPanelChrome, textButtonPanelWebApp, textButtonPanelRecorder, textButtonPanelApiKey, textButtonPanelPlugin,
-		textButtonPanelProxyAdress, textButtonPanelProxyPort, textButtonPanelProxyUserName, textButtonPanelProxyUserPswd,
-		iconPanelChrome, iconPanelWebApp, iconPanelRecorder, iconPanelApiKey, iconPanelPlugin,
-		iconPanelProxyAdress, iconPanelProxyPort, iconPanelProxyUserName, iconPanelProxyUserPswd;
-	private JLabel errorLabelChrome, errorLabelWebApp, errorLabelRecorder, errorLabelApiKey, errorLabelPlugin,
-		errorLabelProxyAdress, errorLabelProxyPort, errorLabelProxyUserName, errorLabelProxyUserPswd;;
-	private JButton fileSearchChrome, fileSearchPlugin;
+			textFieldProxyAdress, textFieldProxyPort, textFieldProxyUserName, textFieldProxyUserPswd, textFieldScripts;
 
-	private JLabel iconValidChrome, iconValidWebApp, iconValidRecorder, iconValidPlugin,iconValidProxyAdress,
-		iconNotValidChrome, 	iconNotValidWebApp, 	iconNotValidRecorder, iconNotValidPlugin, iconNotValidProxyAdress;
-	
+	private JPanel textButtonPanelChrome, textButtonPanelWebApp, textButtonPanelRecorder, textButtonPanelApiKey,
+			textButtonPanelPlugin, textButtonPanelScripts, textButtonPanelProxyAdress, textButtonPanelProxyPort,
+			textButtonPanelProxyUserName, textButtonPanelProxyUserPswd, iconPanelChrome, iconPanelWebApp,
+			iconPanelRecorder, iconPanelApiKey, iconPanelPlugin, iconPanelProxyAdress, iconPanelProxyPort,
+			iconPanelProxyUserName, iconPanelProxyUserPswd, iconPanelScripts;
+
+	private JLabel errorLabelChrome, errorLabelWebApp, errorLabelRecorder, errorLabelApiKey, errorLabelPlugin, errorLabelScripts,
+			errorLabelProxyAdress, errorLabelProxyPort, errorLabelProxyUserName, errorLabelProxyUserPswd;
+
+	private JButton fileSearchChrome, fileSearchPlugin, fileSearchScripts;
+
+	private JLabel iconValidChrome, iconValidWebApp, iconValidRecorder, iconValidPlugin,
+			iconValidScripts, iconNotValidChrome, iconNotValidWebApp, iconNotValidRecorder, iconNotValidPlugin, iconNotValidScripts;
+
+
+	public static JCheckBox proxyCheckBox;
+
 	private final Properties properties;
 
 	private HashMap<String, JTextField> textFields;
 
 	private final File propertyFile;
-	
+
 	private Image notvalid_image;
 	private Image valid_image;
 	private Image toast_logo;
 	private Image backGround_image;
-	
+
 	private String errorMessageSelectFile = "The file that you have selected do not exist.";
 	private String errorMessageSelectURL = "The URL does not anwser.";
 	private String errorMessageApiKey = "The Api Key have to match with the WebApp";
-	
+
 	/**
 	 * This is the default constructor
 	 * 
 	 * @param propertiesConfiguration
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	public ConfigPanel(
-		Properties propertiesConfiguration,
-		File propertyFile) throws IOException {
+	public ConfigPanel(Properties propertiesConfiguration, File propertyFile) throws IOException {
 		super();
 		this.properties = propertiesConfiguration;
 		this.propertyFile = propertyFile;
+		
 		initialize();
 	}
-
+	
 	/**
-	 * This method initializes this
+	 * TODO: refactor and create a JComponent with a FieldFactory ! This method
+	 * initializes this
 	 * 
 	 * @return void
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	private void initialize() throws IOException {
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		mainPane = new JPanel();
-		mainPane.setBackground(Color.white);
-		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.X_AXIS));
-		mainPane.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+		
 		this.textFields = new HashMap<String, JTextField>();
-		JPanel configEntry = new JPanel();
-		configEntry.setAlignmentX(Component.LEFT_ALIGNMENT);
-		configEntry.setLayout(new BoxLayout(configEntry, BoxLayout.PAGE_AXIS));
-
-		InputStream AgentParamBackGroundAsStream = this.getClass().getClassLoader().getResourceAsStream("AgentParamBackGround.jpg");   
-		this.backGround_image = ImageIO.read(AgentParamBackGroundAsStream);
-	    icon = new JLabel(new ImageIcon(this.backGround_image));
-	    JPanel panIcon = new JPanel();
-	    panIcon.setBackground(Color.white);
-	    panIcon.setLayout(new BorderLayout());
-	    panIcon.add(icon);
-	    
-	    mainPane.add(panIcon);
-	    
-		secondPane = new JPanel();
-		secondPane.setBackground(Color.white);
-		secondPane.setLayout(new BoxLayout(secondPane, BoxLayout.PAGE_AXIS));
-	    
-		InputStream notvalid_imageAsStream = this.getClass().getClassLoader().getResourceAsStream("picto-non-valide.png");   
+		this.secondPane = new JTabbedPane();
+		
+		InputStream notvalid_imageAsStream = this.getClass().getClassLoader()
+				.getResourceAsStream("picto-non-valide.png");
 		this.notvalid_image = ImageIO.read(notvalid_imageAsStream);
 
-		InputStream valid_imageAsStream = this.getClass().getClassLoader().getResourceAsStream("picto-valide.png");   
+		InputStream valid_imageAsStream = this.getClass().getClassLoader().getResourceAsStream("picto-valide.png");
 		this.valid_image = ImageIO.read(valid_imageAsStream);
-		
-		InputStream toast_logoAsStream = this.getClass().getClassLoader().getResourceAsStream("ToastLogo_24.png");   
+
+		InputStream toast_logoAsStream = this.getClass().getClassLoader().getResourceAsStream("ToastLogo_24.png");
 		this.toast_logo = ImageIO.read(toast_logoAsStream);
 		
-		for(Object key : EnumerationUtils.toList(properties.propertyNames())) {
-			String strKey = (String) key;
-			String errorMessage = "";
-			JPanel panel = new JPanel();
-			panel.setAlignmentX(LEFT_ALIGNMENT);
-			panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-			panel.add(Box.createHorizontalGlue());
-			panel.setBackground(Color.white);
-			panel.setBorder(BorderFactory.createTitledBorder(strKey));
+		buildFields();
 		
-			JTextField textField = new JTextField(render(properties.getProperty(strKey)));
-			textField.setColumns(30);
-			textField.setAlignmentX(LEFT_ALIGNMENT);
-			textFields.put(strKey, textField);
-			
-			
-			JPanel textButtonPanel = new JPanel();
-			textButtonPanel.setAlignmentX(LEFT_ALIGNMENT);
-			textButtonPanel.setLayout(new BoxLayout(textButtonPanel, BoxLayout.LINE_AXIS));
-			textButtonPanel.add(Box.createHorizontalGlue());
-			
-			JPanel iconPanel = new JPanel();
-			
-			JLabel iconValid = new JLabel(new ImageIcon(this.valid_image));
-			iconValid.setBackground(Color.white);
-			JLabel iconNotValid = new JLabel(new ImageIcon(this.notvalid_image));
-			iconNotValid.setBackground(Color.white);
+		secondPane.setBackground(Color.white);
+		secondPane.addTab("General parameters", createGeneralPanel());
+		secondPane.addTab("Recording", createRecorderPanel());
+		secondPane.addTab("Proxy", createProxyPanel());
 
-			JLabel errorLabel = null;
-			if(strKey.contains(chromeDriverName) || strKey.contains(pluginName)){
-				errorMessage = errorMessageSelectFile;
-				
-				if( testWebAppDirectory(textField.getText(),false) ) {
-					iconPanel.add(iconValid);
-					errorLabel = new JLabel(" ");
-				}
-				else 
-				{
-					iconPanel.add(iconNotValid);
-					errorLabel = new JLabel(errorMessage);
-				}
-			}
-			else {
-				if(strKey.contains(apiKeyName)){ // apiKey does not have verification
-					JLabel toastLogo = new JLabel(new ImageIcon(this.toast_logo));
-					toastLogo.setBackground(Color.white);
-					iconPanel.add(toastLogo);
-					
-					errorMessage = errorMessageApiKey;
-					errorLabel = new JLabel(errorMessage);
-				}
-				else if(strKey.contains(proxyUser) ||
-						strKey.contains(proxyPswd) ||
-						strKey.contains(proxyPort)){ // Proxy tests will only be for the proxy adress
-					JLabel toastLogo = new JLabel(new ImageIcon(this.toast_logo));
-					toastLogo.setBackground(Color.white);
-					iconPanel.add(toastLogo);
-					
-					errorMessage = "";
-					errorLabel = new JLabel(errorMessage);
-				}
-				else {
-					errorMessage = errorMessageSelectURL;
+		JPanel contentPanel = PanelHelper.createBasicPanel();
+		contentPanel.add(secondPane);
+		contentPanel.add(createFullButtonPanel());
+		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.PAGE_AXIS));
 
-					if( testWebAppURL(textField.getText(),false) ) {
-						iconPanel.add(iconValid);
-						errorLabel = new JLabel(" ");
-					}
-					else 
-					{
-						iconPanel.add(iconNotValid);
-						errorLabel = new JLabel(errorMessage);
-					}
-				}
-			}
-			
-			textField.addKeyListener(new KeyListener() {
-				public void keyPressed(
-					KeyEvent a) {
-			        if(a.getKeyCode()==KeyEvent.VK_ENTER)
-			        {
-			        	try {
-							testIconValid(strKey, false);
-							secondPane.repaint();
-							secondPane.revalidate();
-								
-						} catch (IOException e) {
-							LOG.error(e.getMessage(), e);
-						}
-			        }
-				}
-
-				@Override
-				public void keyReleased(KeyEvent e) {
-					// TODO Auto-generated method stub
-					
-				}
-
-				@Override
-				public void keyTyped(KeyEvent e) {
-					// TODO Auto-generated method stub
-					
-				}
-			});
-
-			JButton fileSearch = new JButton();
-			fileSearch.setText("...");
-			if(strKey.contains(chromeDriverName) || strKey.contains(pluginName)){
-				fileSearch.addActionListener(new ActionListener() {
-	
-					public void actionPerformed(ActionEvent arg0) {
-						
-						chooseFile(strKey);
-						
-					}
-					
-				});
-			}
-
-			if(strKey.contains(chromeDriverName)) {
-				textFieldChrome = textField;
-				iconPanelChrome = iconPanel;
-				iconValidChrome = iconValid;
-				iconNotValidChrome = iconNotValid;
-				fileSearchChrome = fileSearch;
-				textButtonPanelChrome = textButtonPanel;
-				textButtonPanelChrome.add(fileSearchChrome);
-				textButtonPanelChrome.add(textFieldChrome);
-				textButtonPanelChrome.add(iconPanelChrome);
-				errorLabelChrome = errorLabel;
-				
-				chromePanel = panel;
-				chromePanel.add(textButtonPanelChrome);
-				chromePanel.add(errorLabelChrome);
-			}else if(strKey.contains(webAppName)) {
-				textFieldWebApp = textField;
-				iconPanelWebApp = iconPanel;
-				iconValidWebApp = iconValid;
-				iconNotValidWebApp = iconNotValid;
-				textButtonPanelWebApp = textButtonPanel;
-				textButtonPanelWebApp.add(textFieldWebApp);
-				textButtonPanelWebApp.add(iconPanelWebApp);
-				errorLabelWebApp = errorLabel;
-
-				webAppPanel = panel;
-				webAppPanel.add(textButtonPanelWebApp);
-				webAppPanel.add(errorLabelWebApp);
-			}else if(strKey.contains(recorderName)) {
-				textFieldRecorder = textField;
-				iconPanelRecorder = iconPanel;
-				iconValidRecorder = iconValid;
-				iconNotValidRecorder = iconNotValid;
-				textButtonPanelRecorder = textButtonPanel;
-				textButtonPanelRecorder.add(textFieldRecorder);
-				textButtonPanelRecorder.add(iconPanelRecorder);
-				errorLabelRecorder = errorLabel;
-
-				recorderPanel = panel;
-				recorderPanel.add(textButtonPanelRecorder);
-				recorderPanel.add(errorLabelRecorder);
-			} else if(strKey.contains(apiKeyName)) {
-				textFieldApiKey = textField;
-				iconPanelApiKey = iconPanel;
-				textButtonPanelApiKey = textButtonPanel;
-				textButtonPanelApiKey.add(textFieldApiKey);
-				textButtonPanelApiKey.add(iconPanelApiKey);
-				errorLabelApiKey = errorLabel;
-
-				apiKeyPanel = panel;
-				apiKeyPanel.add(textButtonPanelApiKey);
-				apiKeyPanel.add(errorLabelApiKey);
-			} 	else if(strKey.contains(pluginName)) {
-				textFieldPlugin = textField;
-				iconValidPlugin = iconValid;
-				iconNotValidPlugin = iconNotValid;
-				fileSearchPlugin = fileSearch;
-				textButtonPanelPlugin = textButtonPanel;
-				textButtonPanelPlugin.add(fileSearchPlugin);
-				textButtonPanelPlugin.add(textFieldPlugin);
-				textButtonPanelPlugin.add(iconPanelPlugin);
-				errorLabelPlugin = errorLabel;
-
-				pluginPanel = panel;
-				pluginPanel.add(textButtonPanelPlugin);
-				pluginPanel.add(errorLabelPlugin);
-			} else if(strKey.contains(proxyAdress)) {
-				textFieldProxyAdress = textField;
-				iconPanelProxyAdress = iconPanel;
-				textButtonPanelProxyAdress = textButtonPanel;
-				textButtonPanelProxyAdress.add(textFieldProxyAdress);
-				textButtonPanelProxyAdress.add(iconPanelProxyAdress);
-				errorLabelProxyAdress = errorLabel;
-
-				proxyAdressPanel = panel;
-				proxyAdressPanel.add(textButtonPanelProxyAdress);
-				proxyAdressPanel.add(errorLabelProxyAdress);
-			} else if(strKey.contains(proxyPort)) {
-				textFieldProxyPort = textField;
-				iconPanelProxyPort = iconPanel;
-				textButtonPanelProxyPort = textButtonPanel;
-				textButtonPanelProxyPort.add(textFieldProxyPort);
-				textButtonPanelProxyPort.add(iconPanelProxyPort);
-				errorLabelProxyPort = errorLabel;
-
-				proxyPortPanel = panel;
-				proxyPortPanel.add(textButtonPanelProxyPort);
-				proxyPortPanel.add(errorLabelProxyPort);
-			} else if(strKey.contains(proxyUser)) {
-				textFieldProxyUserName = textField;
-				iconPanelProxyUserName = iconPanel;
-				textButtonPanelProxyUserName = textButtonPanel;
-				textButtonPanelProxyUserName.add(textFieldProxyUserName);
-				textButtonPanelProxyUserName.add(iconPanelProxyUserName);
-				errorLabelProxyUserName = errorLabel;
-
-				proxyUserNamePanel = panel;
-				proxyUserNamePanel.add(textButtonPanelProxyUserName);
-				proxyUserNamePanel.add(errorLabelProxyUserName);
-			} else if(strKey.contains(proxyPswd)) {
-				textFieldProxyUserPswd = textField;
-				iconPanelProxyUserPswd = iconPanel;
-				textButtonPanelProxyUserPswd = textButtonPanel;
-				textButtonPanelProxyUserPswd.add(textFieldProxyUserPswd);
-				textButtonPanelProxyUserPswd.add(iconPanelProxyUserPswd);
-				errorLabelProxyUserPswd = errorLabel;
-
-				proxyUserPswdPanel = panel;
-				proxyUserPswdPanel.add(textButtonPanelProxyUserPswd);
-				proxyUserPswdPanel.add(errorLabelProxyUserPswd);
-			}
-		}
 		
 
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.setAlignmentX(LEFT_ALIGNMENT);
-		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
-		buttonPanel.add(Box.createHorizontalGlue());
-		JButton okButton = new JButton("Ok");
+		InputStream AgentParamBackGroundAsStream = this.getClass().getClassLoader()
+				.getResourceAsStream("AgentParamBackGround.png");
+		this.backGround_image = ImageIO.read(AgentParamBackGroundAsStream);
+
+		JPanel panIcon = PanelHelper.createBasicPanel();
+		panIcon.setLayout(new BorderLayout());
+		panIcon.add(new JLabel(new ImageIcon(this.backGround_image)));
+		panIcon.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		
-		okButton.addActionListener(new ActionListener() {
-
-			public void actionPerformed(
-				ActionEvent e) {
-				saveAndClose();
-			}
-		});
-		JButton cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(new ActionListener() {
-
-			public void actionPerformed(
-				ActionEvent e) {
-				close();
-			}
-		});
+		//"Arial",Font.BOLD,14));
+	    JLabel firstMainPanel = new JLabel("AGENT SETTING");
+	    firstMainPanel.setFont(new Font("Verdana",Font.BOLD,22));
+		JPanel secondMainPanel = PanelHelper.createBasicPanel(BoxLayout.X_AXIS);
+		secondMainPanel.add(panIcon);
+		secondMainPanel.add(contentPanel);
 		
-
-		JButton tryButton = new JButton("Test");
-		tryButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-
-		        for(Object key : EnumerationUtils.toList(properties.propertyNames())) 
-				{
-					String strKey = (String) key;
-					try {
-						testIconValid(strKey, false);
-						secondPane.repaint();
-						secondPane.revalidate();
-					} catch (IOException e) {
-						LOG.error(e.getMessage(), e);
-					}
-				}		        
-		        NotificationManager.showMessage("The parameters have been tested !");
-
-			}
-			
-		});
+		mainPane = PanelHelper.createBasicPanel();
+		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
+		mainPane.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+		mainPane.add(firstMainPanel);
+		mainPane.add(secondMainPanel);
 
 		
-		buttonPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
-		buttonPanel.setBackground(Color.white);
-		buttonPanel.add(tryButton);
-		buttonPanel.add(cancelButton);
-		buttonPanel.add(okButton);
-
-	    JPanel generalParameters = new JPanel();
-	    generalParameters.setBackground(Color.white);
-	    generalParameters.setBorder(BorderFactory.createTitledBorder("General Parameters"));
-	    generalParameters.add(webAppPanel);
-	    generalParameters.add(apiKeyPanel);
-	    generalParameters.add(pluginPanel);
-
-	    JPanel recorderParameters = new JPanel();
-	    recorderParameters.setBackground(Color.white);
-	    recorderParameters.setBorder(BorderFactory.createTitledBorder("Recorder Parameters"));
-	    recorderParameters.add(chromePanel);
-	    recorderParameters.add(recorderPanel);
-
-	    JPanel proxyPanel = new JPanel();
-		JCheckBox proxyCheckBox = new JCheckBox("Proxy");
-	    proxyPanel.setBackground(Color.white);
-	    proxyPanel.setBorder(BorderFactory.createTitledBorder("Proxy Parameters"));
-	    proxyPanel.add(proxyCheckBox);
-	    proxyPanel.add(proxyAdressPanel);
-	    proxyPanel.add(proxyPortPanel);
-	    proxyPanel.add(proxyUserNamePanel);
-	    proxyPanel.add(proxyUserPswdPanel);
-
-	    secondPane.add(generalParameters);
-	    secondPane.add(recorderParameters);
-	    secondPane.add(proxyPanel);
-	    secondPane.add(buttonPanel);
-		
-	    mainPane.add(secondPane);
-		
-		setTitle("AGENT SETTINGS");
-		setSize(500, 500);
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setBackground(Color.white);
+		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		setContentPane(mainPane);
 		setResizable(false);
-		setLocationRelativeTo(null);
 		setAlwaysOnTop(true);
 		pack();
+		centerWindow(); // setLocationRelativeTo(null) does not work
 		setVisible(true);
-		
+
 	}
 
-	private String render(
-		Object object) {
-		if(object instanceof List) {
+	private String render(Object object) {
+		if (object instanceof List) {
 			String raw = object.toString();
 			return raw.substring(1, raw.length() - 1);
 		}
@@ -484,13 +204,12 @@ public class ConfigPanel extends JDialog {
 	}
 
 	private void saveAndClose() {
-		for(Entry<String, JTextField> entry : textFields.entrySet()) {
+		for (Entry<String, JTextField> entry : textFields.entrySet()) {
 			properties.setProperty(entry.getKey(), entry.getValue().getText());
 		}
 		try {
 			properties.store(FileUtils.openOutputStream(propertyFile), "Saved !");
-		}
-		catch(IOException e) {
+		} catch (IOException e) {
 			LOG.warn("Could not save properties", e);
 		}
 		setAlwaysOnTop(false);
@@ -501,201 +220,666 @@ public class ConfigPanel extends JDialog {
 		this.setVisible(false);
 		this.dispose();
 	}
-	
-	private void chooseFile(String strKey) {
-		try {
-			setAlwaysOnTop(false);
-			
-	        JFileChooser dialogue = new JFileChooser();
-	        dialogue.setDialogTitle("Directory to the chromeDriver");
-	        dialogue.showOpenDialog(null);
-	        dialogue.setMaximumSize(getMaximumSize());
-	        
-	        if(dialogue.getSelectedFile() != null)
-	        {
-		        if(dialogue.getSelectedFile().isDirectory())
-		        {
-					NotificationManager.showMessage("You choosed a Directory. You have to choose a File.").showNotification();
-		        }
-		        
-		        if(dialogue.getSelectedFile().isFile())
-		        {
-			        LOG.info("File selected : " + dialogue.getSelectedFile().getAbsolutePath());
-			        textFieldChrome.setText(dialogue.getSelectedFile().getAbsolutePath());
-			    
-					testIconValid(strKey, false);
-		        }
-	        }
 
-			setAlwaysOnTop(true);
-	         
-		} catch (IOException e) {
-			LOG.error(e.getMessage(), e);
+	private void chooseFile(JTextField textField, String strKey) {	
+		setAlwaysOnTop(false);
+
+		JFileChooser dialogue = new JFileChooser();
+		dialogue.setDialogTitle("Select file");
+		dialogue.showOpenDialog(null);
+		dialogue.setMaximumSize(getMaximumSize());
+
+		if (dialogue.getSelectedFile() != null) {
+			if (dialogue.getSelectedFile().isFile()) {
+				LOG.info("File selected : " + dialogue.getSelectedFile().getAbsolutePath());
+				textField.setText(dialogue.getSelectedFile().getAbsolutePath());
+				try {
+					testIconValid(strKey, false);
+				} catch (IOException e) {
+					LOG.error(e.getMessage(), e);
+				}
+			}
 		}
+		setAlwaysOnTop(true);
+		
 	}
-	
-	
+
+	private void chooseDirectory(JTextField textField, String strKey) {
+		setAlwaysOnTop(false);
+
+		JFileChooser dialogue = new JFileChooser(textField.getText());
+		dialogue.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		dialogue.setDialogTitle("Select directory for " + strKey);
+		dialogue.showOpenDialog(null);
+		dialogue.setMaximumSize(getMaximumSize());
+
+		if (dialogue.getSelectedFile() != null) {
+			if (dialogue.getSelectedFile().isDirectory()) {
+				LOG.info("File selected : " + dialogue.getSelectedFile().getAbsolutePath());
+				textField.setText(dialogue.getSelectedFile().getAbsolutePath());
+				try {
+					testIconValid(strKey, false);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		setAlwaysOnTop(true);
+	}
+
 	private void testIconValid(String strKey, boolean runTryValue) throws IOException {
-		if(strKey.contains(webAppName))
-		{
-			if(!testWebAppURL(textFieldWebApp.getText(),runTryValue))
-			{
+		if(strKey.contains(webAppName)) {
+			boolean test = false;
+			if(proxyCheckBox.isSelected()) {
+				test = testWebAppURL(textFieldWebApp.getText(),runTryValue, 
+						textFieldProxyAdress.getText(), textFieldProxyPort.getText(), 
+						textFieldProxyUserName.getText(), textFieldProxyUserPswd.getText());
+			}
+			else {
+				test = testWebAppURL(textFieldWebApp.getText(),runTryValue);
+			}
+			if(!test){
 				iconPanelWebApp.removeAll();
 				iconPanelWebApp.add(iconNotValidWebApp);
 				errorLabelWebApp.setText(errorMessageSelectURL);
-			}
-			else 
-			{
+			} else {
 				iconPanelWebApp.removeAll();
 				iconPanelWebApp.add(iconValidWebApp);
 				errorLabelWebApp.setText(" ");
 			}
-		} else if(strKey.contains(recorderName))
-		{
-			if(!testWebAppURL(textFieldRecorder.getText(),runTryValue))
+		}
+		else if (strKey.contains(recorderName)) {
+			boolean test = false;
+			if(proxyCheckBox.isSelected()) {
+				test = testWebAppURL(textFieldRecorder.getText(),runTryValue, 
+						textFieldProxyAdress.getText(), textFieldProxyPort.getText(), 
+						textFieldProxyUserName.getText(), textFieldProxyUserPswd.getText());
+			}
+			else {
+				test = testWebAppURL(textFieldRecorder.getText(),runTryValue);
+			}
+			
+			if(!test)
 			{
 				iconPanelRecorder.removeAll();
 				iconPanelRecorder.add(iconNotValidRecorder);
 				errorLabelRecorder.setText(errorMessageSelectURL);
-			}
-			else 
-			{
+			} else {
 				iconPanelRecorder.removeAll();
 				iconPanelRecorder.add(iconValidRecorder);
 				errorLabelRecorder.setText(" ");
 			}
+
 		} else if(strKey.contains(chromeDriverName)) {
-			if(!testWebAppDirectory(textFieldChrome.getText(),runTryValue))
+			if(!testWebAppDirectory(textFieldChrome.getText(),runTryValue, true))
 			{
 				iconPanelChrome.removeAll();
 				iconPanelChrome.add(iconNotValidChrome);
 				errorLabelChrome.setText(errorMessageSelectFile);
-			}
-			else 
-			{
+			} else {
 				iconPanelChrome.removeAll();
 				iconPanelChrome.add(iconValidChrome);
 				errorLabelChrome.setText(" ");
 			}
 		} else if(strKey.contains(pluginName)) {
-			if(!testWebAppDirectory(textFieldPlugin.getText(),runTryValue))
+			if(!testWebAppDirectory(textFieldPlugin.getText(),runTryValue, false))
 			{
 				iconPanelPlugin.removeAll();
 				iconPanelPlugin.add(iconNotValidPlugin);
 				errorLabelPlugin.setText(errorMessageSelectFile);
-			}
-			else 
-			{
+			} else {
 				iconPanelPlugin.removeAll();
 				iconPanelPlugin.add(iconValidPlugin);
 				errorLabelPlugin.setText(" ");
 			}
-		} else if(strKey.contains(proxyAdress)) {
-			if(!testWebAppDirectory(textFieldProxyAdress.getText(),runTryValue))
+		} else if(strKey.contains(scriptsName)) {
+			if(!testWebAppDirectory(textFieldScripts.getText(),runTryValue, false))
 			{
-				iconPanelProxyAdress.removeAll();
-				iconPanelProxyAdress.add(iconNotValidProxyAdress);
-				errorLabelProxyAdress.setText(errorMessageSelectFile);
+				iconPanelScripts.removeAll();
+				iconPanelScripts.add(iconNotValidScripts);
+				errorLabelScripts.setText(errorMessageSelectFile);
+			} else {
+				iconPanelScripts.removeAll();
+				iconPanelScripts.add(iconValidScripts);
+				errorLabelScripts.setText(" ");
 			}
-			else 
-			{
-				iconPanelProxyAdress.removeAll();
-				iconPanelProxyAdress.add(iconValidProxyAdress);
-				errorLabelProxyAdress.setText(" ");
+		} 
+	}
+
+	public static boolean testWebAppDirectory(String directory, boolean runTryValue, boolean fileOrDirectory)
+			throws IOException {
+		String fileName = directory.split("/")[directory.split("/").length - 1];
+		if (directory.contains(" ")) {
+			if (runTryValue) {
+				NotificationManager.showMessage(directory + " has spaces in its name.").showNotification();
+			}
+			LOG.info("Status of " + directory + " : KO");
+			return false;
+		}
+
+		if (fileOrDirectory) {
+			if (testFileDirectory(directory, runTryValue, fileName)) {
+				LOG.info("Status of " + directory + " : OK");
+				return true;
+			} else {
+				LOG.info("Status of " + directory + " : KO");
+				return false;
+			}
+		} else {
+			if (testDirectory(directory, runTryValue, fileName)) {
+				LOG.info("Status of " + directory + " : OK");
+				return true;
+			} else {
+				LOG.info("Status of " + directory + " : KO");
+				return false;
 			}
 		}
 	}
-		
-	public static boolean testWebAppDirectory(String directory, boolean runTryValue) throws IOException{
-		String fileName = directory.split("/")[directory.split("/").length - 1];
-		
-		if(directory.contains(" ")){
-			if(runTryValue) 
-    		{
-				NotificationManager.showMessage(directory + " has spaces in its name.").showNotification();
-    		}
-			LOG.info("Status of " + directory + " : KO");
-    		return false;
-    	}
-    	
-    	if(testFileDirectory(directory, runTryValue, fileName)){
-    		LOG.info("Status of " + directory + " : OK");
-    		return true;
-    	}
-    	else {
-    		
-    		LOG.info("Status of " + directory + " : KO");
-    		return false;
-    	}
-	}
 
-	public static boolean testFileDirectory(String directory, boolean runTryValue, String fileName) {
-		File myFile = new File(directory); 
-		if(myFile.exists()) 
-		{
-			if(myFile.isFile())
-			{
+	public static boolean testDirectory(String directory, boolean runTryValue, String fileName) {
+		File myFile = new File(directory);
+		if (myFile.exists()) {
+			if (myFile.isDirectory()) {
 				return true;
-			}
-			else
-			{
-				if(runTryValue) 
-	    		{
-	    			NotificationManager.showMessage("You did not select a file.").showNotification();
-	    		}
+			} else {
+				if (runTryValue) {
+					NotificationManager.showMessage("You did not select a directory.").showNotification();
+				}
 				return false;
 			}
-		} 
-		else
-		{
-			if(runTryValue) 
-    		{
-    			NotificationManager.showMessage(fileName + " does not exist in the directory : " + directory.split(fileName)[0]).showNotification();
-    		}
+		} else {
+			if (runTryValue) {
+				NotificationManager.showMessage("The directory : " + directory.split(fileName)[0] + " does not exist !")
+						.showNotification();
+			}
 			return false;
 		}
 	}
-	
-	public static boolean testWebAppURL(String URL, boolean runTryValue) throws IOException{
-		if(URL.contains(" ")){
-			if(runTryValue) 
-    		{
+
+	public static boolean testFileDirectory(String directory, boolean runTryValue, String fileName) {
+		File myFile = new File(directory);
+		if (myFile.exists()) {
+			if (myFile.isFile()) {
+				return true;
+			} else {
+				if (runTryValue) {
+					NotificationManager.showMessage("You did not select a file.").showNotification();
+				}
+				return false;
+			}
+		} else {
+			if (runTryValue) {
+				NotificationManager
+						.showMessage(fileName + " does not exist in the directory : " + directory.split(fileName)[0])
+						.showNotification();
+			}
+			return false;
+		}
+	}
+
+	public static boolean testWebAppURL(String URL, boolean runTryValue) throws IOException {
+		return testWebAppURL(URL, runTryValue, null, null, null, null);
+	}
+
+	public static boolean testWebAppURL(String URL, boolean runTryValue, String proxyAdress, String proxyPort,
+			String proxyUserName, String proxyUserPswd) throws IOException {
+		if (URL.contains(" ")) {
+			if (runTryValue) {
 				NotificationManager.showMessage(URL + " has spaces in its name.").showNotification();
-    		}
+			}
 			LOG.info("Status of " + URL + " : KO");
-    		return false;
-    	}
-    	
-    	if(getStatus(URL)){
-    		LOG.info("Status of " + URL + " : OK");
-    		return true;
-    	}
-    	else {
-    		if(runTryValue) 
-    		{
-    			NotificationManager.showMessage(URL + " does not answer.").showNotification();
-    		}
-    		LOG.info("Status of " + URL + " : KO");
-    		return false;
-    	}
+			return false;
+		}
+
+		if (getStatus(URL)) {
+			LOG.info("Status of " + URL + " : OK");
+			return true;
+		} else {
+			if (runTryValue) {
+				NotificationManager.showMessage(URL + " does not answer.").showNotification();
+			}
+			LOG.info("Status of " + URL + " : KO");
+			return false;
+		}
+	}
+
+	public static boolean getStatus(String url) throws IOException {
+		boolean result = false;
+		try {
+			URL siteURL = new URL(url);
+			HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
+			connection.setRequestMethod("GET");
+			connection.connect();
+
+			int code = connection.getResponseCode();
+			if (code == 200) {
+				result = true;
+			}
+		} catch (Exception e) {
+			result = false;
+		}
+		return result;
+	}
+
+	public boolean isChecked() {
+		return proxyCheckBox.isSelected();
+	}
+
+	public static boolean getStatus(String url, String proxyAdress, String proxyPort, String proxyUserName,
+			String proxyUserPswd) throws IOException {
+		boolean result = false;
+		try {
+			URL siteURL = new URL(url);
+			HttpURLConnection connection = null;
+			if (proxyUserName != null && proxyUserPswd != null) {
+				Authenticator authenticator = new Authenticator() {
+
+					public PasswordAuthentication getPasswordAuthentication() {
+						return (new PasswordAuthentication(proxyUserName, proxyUserPswd.toCharArray()));
+					}
+				};
+				Authenticator.setDefault(authenticator);
+			}
+
+			if (proxyAdress != null && proxyUserName != null) {
+				Proxy proxy = new Proxy(Proxy.Type.HTTP,
+						new InetSocketAddress(proxyAdress, Integer.parseInt(proxyPort)));
+				connection = (HttpURLConnection) siteURL.openConnection(proxy);
+			} else
+				connection = (HttpURLConnection) siteURL.openConnection();
+
+			connection.setRequestMethod("GET");
+			connection.setConnectTimeout(timeout);
+			connection.connect();
+
+			int code = connection.getResponseCode();
+			if (code == 200) {
+				result = true;
+			}
+		} catch (Exception e) {
+			result = false;
+		}
+		return result;
 	}
 	
-	public static boolean getStatus(String url) throws IOException {	 
-        boolean result = false;
-        try {
-            URL siteURL = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) siteURL
-                    .openConnection();
-            connection.setRequestMethod("GET");
-            connection.connect();
- 
-            int code = connection.getResponseCode();
-            if (code == 200) {
-                result = true;
-            }
-        } catch (Exception e) {
-            result = false;
-        }
-        return result;
-    }
+	private JPanel createFullButtonPanel() {
+		JPanel buttonPanel = PanelHelper.createBasicPanel();
+		buttonPanel.setAlignmentX(LEFT_ALIGNMENT);
+		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
+		buttonPanel.add(Box.createHorizontalGlue());
+		buttonPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
+		buttonPanel.setBackground(Color.white);
+		buttonPanel.add(createBasicTestButton());
+		buttonPanel.add(createBasicCancelButton());
+		buttonPanel.add(createBasicOkButton());
+		return buttonPanel;
+	}
+	
+	private JPanel createGeneralPanel() {
+		JPanel generalParameters = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+	    JPanel generalParameters1 = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
+	    JPanel generalParameters2 = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
+		generalParameters1.add(webAppPanel);
+		generalParameters1.add(apiKeyPanel);
+		generalParameters2.add(pluginPanel);
+		generalParameters2.add(scriptsPanel);
+		generalParameters.add(generalParameters1);
+		generalParameters.add(generalParameters2);
+		return generalParameters;
+	}
+	
+	private JPanel createRecorderPanel() {
+		JPanel recorderParameters = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
+		recorderParameters.add(chromePanel);
+		recorderParameters.add(recorderPanel);
+		recorderParameters.setLayout(new BoxLayout(recorderParameters, BoxLayout.Y_AXIS));
+		return recorderParameters;
+	}
+	
+	private JPanel createProxyPanel() {
+		JPanel proxyPanel = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
+	    JPanel proxyPanel1 = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+	    JPanel proxyPanel2 = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+	    JPanel proxyPanel3 = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+		proxyCheckBox = new JCheckBox("Activation");
+		proxyCheckBox.setBackground(Color.white);
+	    proxyPanel1.add(proxyCheckBox);
+	    proxyPanel2.add(proxyAdressPanel);
+	    proxyPanel2.add(proxyPortPanel);
+	    proxyPanel3.add(proxyUserNamePanel);
+	    proxyPanel3.add(proxyUserPswdPanel);
+	    proxyPanel.add(proxyPanel1);
+	    proxyPanel.add(proxyPanel2);
+	    proxyPanel.add(proxyPanel3);
+	    return proxyPanel;
+	}
+
+	private JButton createBasicOkButton() {
+		JButton okButton = new JButton("Ok");
+		
+		okButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				saveAndClose();				
+			}
+		});
+		return okButton;
+	}
+	
+	private JButton createBasicCancelButton() {
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(new ActionListener() {
+	
+			public void actionPerformed(ActionEvent e) {
+				close();
+			}
+		});
+		return cancelButton;
+	}
+	
+	private JButton createBasicTestButton() {
+		JButton tryButton = new JButton("Test");
+		tryButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+	
+				for (Object key : EnumerationUtils.toList(properties.propertyNames())) {
+					String strKey = (String) key;
+					try {
+						testIconValid(strKey, false);
+						secondPane.repaint();
+						secondPane.revalidate();
+					} catch (IOException e) {
+						LOG.error(e.getMessage(), e);
+					}
+				}
+				NotificationManager.showMessage("The parameters have been tested !");
+	
+			}
+	
+		});
+		return tryButton;
+	}
+
+	private JTextField createBasicTextPanel (String strKey) {
+
+		JTextField textField = new JTextField(render(properties.getProperty(strKey)));
+		textField.setPreferredSize(new Dimension(200, 30));
+		textField.setLayout(new BorderLayout());
+		textField.setColumns(30);
+		textField.setAlignmentX(LEFT_ALIGNMENT);
+		textFields.put(strKey, textField);
+		
+		
+		textField.addKeyListener(new KeyListener() {
+			@Override
+			public void keyPressed(KeyEvent a) {
+				if (a.getKeyCode() == KeyEvent.VK_ENTER) {
+					try {
+						testIconValid(strKey, false);
+						secondPane.repaint();
+						secondPane.revalidate();
+
+					} catch (IOException e) {
+						LOG.error(e.getMessage(), e);
+					}
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+		});
+		
+		return textField;
+	}
+	
+	public JButton createBasicFileSearch(JTextField textField, String strKey) {
+		return createBasicFileSearch(textField, strKey, true);
+	}
+	public JButton createBasicFileSearch(JTextField textField, String strKey, Boolean fileOrDir) {	
+		JButton fileSearch = new JButton();
+		fileSearch.setText("...");
+		if (fileOrDir) {
+			fileSearch.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					chooseFile(textField, strKey);
+				}
+			});
+		} 	else {
+			fileSearch.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					chooseDirectory(textField, strKey);
+				}
+			});
+		}
+	
+		return fileSearch;
+	}
+	
+		
+	
+	public JLabel createIconValid() {
+		JLabel iconValid = new JLabel(new ImageIcon(this.valid_image));
+		iconValid.setBackground(Color.white);
+		return iconValid;
+	}
+	
+	public JLabel createIconNotValid() {
+		JLabel iconNotValid = new JLabel(new ImageIcon(this.notvalid_image));
+		iconNotValid.setBackground(Color.white);
+		return iconNotValid;
+	}
+	
+	private void buildFields() throws IOException{		
+		//%% WEBAPP PANEL %%
+		String strKey = webAppName;
+		textFieldWebApp = createBasicTextPanel(strKey);
+		iconPanelWebApp = PanelHelper.createBasicPanel();
+		iconValidWebApp = createIconValid();
+		iconNotValidWebApp = createIconNotValid();
+		textButtonPanelWebApp = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+		textButtonPanelWebApp.add(textFieldWebApp);
+		textButtonPanelWebApp.add(iconPanelWebApp);
+		errorLabelWebApp = buildErrorLabel(strKey, iconPanelWebApp, textFieldWebApp, 3);
+		webAppPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		webAppPanel.add(textButtonPanelWebApp);
+		webAppPanel.add(errorLabelWebApp);
+
+		//%% API PANEL %%
+		strKey = apiKeyName;
+		textFieldApiKey = createBasicTextPanel(strKey);
+		iconPanelApiKey = PanelHelper.createBasicPanel();
+		textButtonPanelApiKey = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+		textButtonPanelApiKey.add(textFieldApiKey);
+		textButtonPanelApiKey.add(iconPanelApiKey);
+		errorLabelApiKey = buildErrorLabel(strKey, iconPanelApiKey, textFieldApiKey, 4);
+		apiKeyPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		apiKeyPanel.add(textButtonPanelApiKey);
+		apiKeyPanel.add(errorLabelApiKey);
+
+		//%% PLUGIN PANEL %%
+		strKey = pluginName;
+		textFieldPlugin = createBasicTextPanel(strKey);
+		iconPanelPlugin = PanelHelper.createBasicPanel();
+		iconValidPlugin = createIconValid();
+		iconNotValidPlugin = createIconNotValid();
+		fileSearchPlugin = createBasicFileSearch(textFieldPlugin, strKey,false);
+		textButtonPanelPlugin = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+		textButtonPanelPlugin.add(fileSearchPlugin);
+		textButtonPanelPlugin.add(textFieldPlugin);
+		textButtonPanelPlugin.add(iconPanelPlugin);
+		errorLabelPlugin = buildErrorLabel(strKey, iconPanelPlugin, textFieldPlugin, 2);
+		pluginPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		pluginPanel.add(textButtonPanelPlugin);
+		pluginPanel.add(errorLabelPlugin);
+			
+		//%% SCRIPTS PANEL %%
+		strKey = scriptsName;
+		textFieldScripts = createBasicTextPanel(strKey);
+		iconPanelScripts = PanelHelper.createBasicPanel();
+		iconValidScripts = createIconValid();
+		iconNotValidScripts = createIconNotValid();
+		fileSearchScripts = createBasicFileSearch(textFieldScripts, strKey, false);
+		textButtonPanelScripts = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+		textButtonPanelScripts.add(fileSearchScripts);
+		textButtonPanelScripts.add(textFieldScripts);
+		textButtonPanelScripts.add(iconPanelScripts);
+		errorLabelScripts = buildErrorLabel(strKey, iconPanelScripts, textFieldScripts, 2);
+		scriptsPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		scriptsPanel.add(textButtonPanelScripts);
+		scriptsPanel.add(errorLabelScripts);
+		
+		//%% CHROME PANEL %%
+		strKey = chromeDriverName;
+		textFieldChrome = createBasicTextPanel(strKey);
+		textFieldChrome.setSize(textFieldWebApp.getSize());
+		iconPanelChrome = PanelHelper.createBasicPanel();
+		iconValidChrome = createIconValid();
+		iconNotValidChrome = createIconNotValid();
+		fileSearchChrome = createBasicFileSearch(textFieldChrome, strKey);
+		textButtonPanelChrome = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+		textButtonPanelChrome.add(fileSearchChrome);
+		textButtonPanelChrome.add(textFieldChrome);
+		textButtonPanelChrome.add(iconPanelChrome);
+		errorLabelChrome = buildErrorLabel(strKey, iconPanelChrome, textFieldChrome, 1);;
+		chromePanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		chromePanel.add(textButtonPanelChrome);
+		chromePanel.add(errorLabelChrome);
+		
+		//%% RECORDER PANEL %%
+		strKey = recorderName;
+		textFieldRecorder = createBasicTextPanel(strKey);
+		textFieldRecorder.setSize(textFieldWebApp.getSize());
+		iconPanelRecorder = PanelHelper.createBasicPanel();
+		iconValidRecorder = createIconValid();
+		iconNotValidRecorder = createIconNotValid();
+		textButtonPanelRecorder = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+		textButtonPanelRecorder.add(textFieldRecorder);
+		textButtonPanelRecorder.add(iconPanelRecorder);
+		errorLabelRecorder = buildErrorLabel(strKey, iconPanelRecorder, textFieldRecorder, 3);
+		recorderPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		recorderPanel.add(textButtonPanelRecorder);
+		recorderPanel.add(errorLabelRecorder);		
+		
+		//%% PROXY ADRESS PANEL %%
+		strKey = proxyAdress;
+		textFieldProxyAdress = createBasicTextPanel(strKey);
+		iconPanelProxyAdress = PanelHelper.createBasicPanel();
+		textButtonPanelProxyAdress = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+		textButtonPanelProxyAdress.add(textFieldProxyAdress);
+		textButtonPanelProxyAdress.add(iconPanelProxyAdress);
+		errorLabelProxyAdress = buildErrorLabel(strKey, iconPanelProxyAdress, textFieldProxyAdress, 0);
+		proxyAdressPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		proxyAdressPanel.add(textButtonPanelProxyAdress);
+		proxyAdressPanel.add(errorLabelProxyAdress);
+		
+		//%% PROXY PORT PANEL %%
+		strKey = proxyPort;
+		textFieldProxyPort = createBasicTextPanel(strKey);
+		iconPanelProxyPort = PanelHelper.createBasicPanel();
+		textButtonPanelProxyPort = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+		textButtonPanelProxyPort.add(textFieldProxyPort);
+		textButtonPanelProxyPort.add(iconPanelProxyPort);
+		errorLabelProxyPort = buildErrorLabel(strKey, iconPanelProxyPort, textFieldProxyPort, 0);
+		proxyPortPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		proxyPortPanel.add(textButtonPanelProxyPort);
+		proxyPortPanel.add(errorLabelProxyPort);
+		chromeDriverName = "chromedriver";
+
+		//%% PROXY USER NAME PANEL %%
+		strKey = proxyUser;
+		textFieldProxyUserName = createBasicTextPanel(strKey);
+		iconPanelProxyUserName = PanelHelper.createBasicPanel();
+		textButtonPanelProxyUserName = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+		textButtonPanelProxyUserName.add(textFieldProxyUserName);
+		textButtonPanelProxyUserName.add(iconPanelProxyUserName);
+		errorLabelProxyUserName = buildErrorLabel(strKey, iconPanelProxyUserName, textFieldProxyUserName, 0);
+		proxyUserNamePanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		proxyUserNamePanel.add(textButtonPanelProxyUserName);
+		proxyUserNamePanel.add(errorLabelProxyUserName);
+		
+		//%% PROXY USER PSWD PANEL %%
+		strKey = proxyPswd;
+		textFieldProxyUserPswd = createBasicTextPanel(strKey);
+		iconPanelProxyUserPswd = PanelHelper.createBasicPanel();
+		textButtonPanelProxyUserPswd = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+		textButtonPanelProxyUserPswd.add(textFieldProxyUserPswd);
+		textButtonPanelProxyUserPswd.add(iconPanelProxyUserPswd);
+		errorLabelProxyUserPswd = buildErrorLabel(strKey, iconPanelProxyUserPswd, textFieldProxyUserPswd, 0);
+		proxyUserPswdPanel = PanelHelper.createBasicPanel(strKey, BoxLayout.PAGE_AXIS);
+		proxyUserPswdPanel.add(textButtonPanelProxyUserPswd);
+		proxyUserPswdPanel.add(errorLabelProxyUserPswd);
+	}
+	
+
+	private JLabel buildErrorLabel(String strKey, JPanel iconPanel, JTextField textField, int testValue) throws IOException{
+		// testValue : 
+		// 0 for nothing
+		// 1 for File
+		// 2 for Directory
+		// 3 for URL
+		// 4 for ApiKey message
+		
+		JLabel iconValid = new JLabel(new ImageIcon(this.valid_image));
+		JLabel iconNotValid = new JLabel(new ImageIcon(this.notvalid_image));
+		iconValid.setBackground(Color.white);
+		iconNotValid.setBackground(Color.white);
+		String errorMessage = null;
+		if(testValue == 1) {
+			errorMessage = errorMessageSelectFile;				
+			if( testWebAppDirectory(textField.getText(),false, true) ) {
+				iconPanel.add(iconValid);
+				return new JLabel(" ");
+			}
+			else {
+				iconPanel.add(iconNotValid);
+				return new JLabel(errorMessage);
+			}
+		}
+		else if(testValue == 2) {
+			errorMessage = errorMessageSelectFile;
+			if( testWebAppDirectory(textField.getText(),false, false) ) {
+				iconPanel.add(iconValid);
+				return new JLabel(" ");
+			} else {
+				iconPanel.add(iconNotValid);
+				return new JLabel(errorMessage);
+			}
+		} else if(testValue == 3) {
+			errorMessage = errorMessageSelectURL;
+			if (testWebAppURL(textField.getText(), false)) {
+				iconPanel.add(iconValid);
+				return new JLabel(" ");
+			} else {
+				iconPanel.add(iconNotValid);
+				return new JLabel(errorMessage);
+			}
+		} else if(testValue == 4) { // apiKey does not have verification
+				JLabel toastLogo = new JLabel(new ImageIcon(this.toast_logo));
+				toastLogo.setBackground(Color.white);
+				iconPanel.add(toastLogo);
+				errorMessage = errorMessageApiKey;
+				return new JLabel(errorMessage);
+		} else { // Proxy tests will be tested through the webApp URL
+			JLabel toastLogo = new JLabel(new ImageIcon(this.toast_logo));
+			toastLogo.setBackground(Color.white);
+			iconPanel.add(toastLogo);
+			
+			errorMessage = " ";
+			return new JLabel(errorMessage);
+		} 
+	}
+	
+	public void centerWindow() {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Point middle = new Point(screenSize.width / 2, screenSize.height / 2);
+		Point newLocation = new Point(middle.x - (this.getWidth() / 2), 
+		                              middle.y - (this.getHeight() / 2));
+		this.setLocation(newLocation);
+	}
 }
