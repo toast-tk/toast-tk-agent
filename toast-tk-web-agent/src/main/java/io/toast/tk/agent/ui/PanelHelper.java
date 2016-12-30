@@ -1,11 +1,8 @@
 package io.toast.tk.agent.ui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -86,16 +83,7 @@ public class PanelHelper {
 	public static Image createImage(Object frame, String str) throws IOException {
 		InputStream stream = frame.getClass().getClassLoader().getResourceAsStream(str);
 		return ImageIO.read(stream);
-	}
-	
-	public static void centerWindow(JFrame mainJDialog) {
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Point middle = new Point(screenSize.width / 2, screenSize.height / 2);
-		Point newLocation = new Point(middle.x - (mainJDialog.getWidth() / 2), 
-		                              middle.y - (mainJDialog.getHeight() / 2));
-		mainJDialog.setLocation(newLocation);
-	}
-	
+	}	
 	
 	public static String secToHMS(long nb) {
 		long m = nb/60;

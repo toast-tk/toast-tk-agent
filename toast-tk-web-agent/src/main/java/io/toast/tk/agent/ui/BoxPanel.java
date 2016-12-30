@@ -56,13 +56,13 @@ public class BoxPanel extends JPanel {
 
 	private JLabel iconValid, iconNotValid;
 
-	private Image toast_logo;
-	private Image notvalid_image;
-	private Image valid_image;
+	private Image toastLogo;
+	private Image notvalidImage;
+	private Image validImage;
 
-	private String errorMessageSelectFile = "The file that you have selected do not exist.";
-	private String errorMessageSelectURL = "The URL does not anwser.";
-	private String errorMessageApiKey = "The Api Key have to match with the WebApp";
+	private final String errorMessageSelectFile = "The file that you have selected do not exist.";
+	private final String errorMessageSelectUrl = "The URL does not anwser.";
+	private final String errorMessageApiKey = "The Api Key have to match with the WebApp";
 
 	private JCheckBox proxyCheckBox = null;
 	private BoxPanel proxyAdressPanel = null;
@@ -89,9 +89,9 @@ public class BoxPanel extends JPanel {
 		this.proxyUserPanel = null;
 		this.proxyPswdPanel = null;
 		
-		this.notvalid_image = PanelHelper.createImage(this,"picto-non-valide.png");
-		this.valid_image = PanelHelper.createImage(this,"picto-valide.png");
-		this.toast_logo = PanelHelper.createImage(this,"ToastLogo_24.png");
+		this.notvalidImage = PanelHelper.createImage(this,"picto-non-valide.png");
+		this.validImage = PanelHelper.createImage(this,"picto-valide.png");
+		this.toastLogo = PanelHelper.createImage(this,"ToastLogo_24.png");
 				
 		this.buildContentPanel();
 		
@@ -112,9 +112,9 @@ public class BoxPanel extends JPanel {
 		this.proxyPswdPanel = proxyPswd;
 		this.proxyCheckBox = proxyCheckBox;
 	
-		this.notvalid_image = PanelHelper.createImage(this,"picto-non-valide.png");
-		this.valid_image = PanelHelper.createImage(this,"picto-valide.png");
-		this.toast_logo = PanelHelper.createImage(this,"ToastLogo_24.png");
+		this.notvalidImage = PanelHelper.createImage(this,"picto-non-valide.png");
+		this.validImage = PanelHelper.createImage(this,"picto-valide.png");
+		this.toastLogo = PanelHelper.createImage(this,"ToastLogo_24.png");
 		
 		this.buildContentPanel();
 	}
@@ -129,15 +129,13 @@ public class BoxPanel extends JPanel {
 		dialogue.showOpenDialog(null);
 		dialogue.setMaximumSize(getMaximumSize());
 
-		if (dialogue.getSelectedFile() != null) {
-			if (dialogue.getSelectedFile().isFile()) {
-				LOG.info("File selected : " + dialogue.getSelectedFile().getAbsolutePath());
-				textField.setText(dialogue.getSelectedFile().getAbsolutePath());
-				try {
-					testIconValid(strKey, false);
-				} catch (IOException e) {
-					LOG.error(e.getMessage(), e);
-				}
+		if (dialogue.getSelectedFile() != null && dialogue.getSelectedFile().isFile()) {
+			LOG.info("File selected : " + dialogue.getSelectedFile().getAbsolutePath());
+			textField.setText(dialogue.getSelectedFile().getAbsolutePath());
+			try {
+				testIconValid(false);
+			} catch (IOException e) {
+				LOG.error(e.getMessage(), e);
 			}
 		}		
 	}
@@ -153,7 +151,7 @@ public class BoxPanel extends JPanel {
 				LOG.info("File selected : " + dialogue.getSelectedFile().getAbsolutePath());
 				textField.setText(dialogue.getSelectedFile().getAbsolutePath());
 				try {
-					testIconValid(strKey, false);
+					testIconValid(false);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -162,50 +160,60 @@ public class BoxPanel extends JPanel {
 		}
 	}
 
-	public void testIconValid(String strKey, boolean runTryValue) throws IOException {
-		if(strKey.contains(webAppName) || strKey.contains(recorderName)) {
-			boolean test = false;
-			if(proxyCheckBox.isSelected()) {
-				test = ConfigTesterHelper.testWebAppURL(this.getTextValue(),runTryValue, 
-						proxyAdressPanel.getTextValue(), proxyPortPanel.getTextValue(), 
-						proxyUserPanel.getTextValue(), proxyPswdPanel.getTextValue());
-			}
-			else {
-				test = ConfigTesterHelper.testWebAppURL(textField.getText(),runTryValue);
-			}
-			if(!test){
-				iconPanel.removeAll();
-				iconPanel.add(iconNotValid);
-				errorLabel.setText(errorMessageSelectURL);
-			} else {
-				iconPanel.removeAll();
-				iconPanel.add(iconValid);
-				errorLabel.setText(" ");
-			}
-		} else if(strKey.contains(chromeDriverName) ||
-				strKey.contains(pluginName) ||
-				strKey.contains(scriptsName)) {
-			boolean FileOrDirectory = false;
-			if(strKey.contains(chromeDriverName)) FileOrDirectory = true;
-				
-			if(!ConfigTesterHelper.testWebAppDirectory(textField.getText(),runTryValue, FileOrDirectory))
-			{
-				iconPanel.removeAll();
-				iconPanel.add(iconNotValid);
-				errorLabel.setText(errorMessageSelectFile);
-			} else {
-				iconPanel.removeAll();
-				iconPanel.add(iconValid);
-				errorLabel.setText(" ");
-			}
+	public void testIconValid(boolean runTryValue) throws IOException {
+		if(strkey.contains(webAppName) || strkey.contains(recorderName)) {
+			testIconValidURL(runTryValue);
+		} else if(strkey.contains(chromeDriverName) ||
+				strkey.contains(pluginName) ||
+				strkey.contains(scriptsName)) {
+			testIconValidDirectory(runTryValue);
 		} 
 		this.repaint();
 		this.revalidate();
 	}
+	
+	public void testIconValidURL(boolean runTryValue) throws IOException {
+		boolean test = false;
+		if(proxyCheckBox.isSelected()) {
+			test = ConfigTesterHelper.testWebAppUrl(this.getTextValue(),runTryValue, 
+					proxyAdressPanel.getTextValue(), proxyPortPanel.getTextValue(), 
+					proxyUserPanel.getTextValue(), proxyPswdPanel.getTextValue());
+		}
+		else {
+			test = ConfigTesterHelper.testWebAppUrl(textField.getText(),runTryValue);
+		}
+		if(!test){
+			iconPanel.removeAll();
+			iconPanel.add(iconNotValid);
+			errorLabel.setText(errorMessageSelectUrl);
+		} else {
+			iconPanel.removeAll();
+			iconPanel.add(iconValid);
+			errorLabel.setText(" ");
+		}
+	}
+	
+	public void testIconValidDirectory(boolean runTryValue) throws IOException {
+		boolean FileOrDirectory = false;
+		if(strkey.contains(chromeDriverName)) {
+			FileOrDirectory = true;
+		}
+			
+		if(!ConfigTesterHelper.testWebAppDirectory(textField.getText(),runTryValue, FileOrDirectory))
+		{
+			iconPanel.removeAll();
+			iconPanel.add(iconNotValid);
+			errorLabel.setText(errorMessageSelectFile);
+		} else {
+			iconPanel.removeAll();
+			iconPanel.add(iconValid);
+			errorLabel.setText(" ");
+		}
+	}
 
-	private JTextField createBasicTextPanel (String strKey) {
+	private JTextField createBasicTextPanel () {
 
-		JTextField textField = new JTextField(render(properties.getProperty(strKey)));
+		JTextField textField = new JTextField(render(properties.getProperty(strkey)));
 
 		Dimension pD = new Dimension(textField.getPreferredSize().width, 30);
 		Dimension mD = new Dimension(textField.getMaximumSize().width, 40);
@@ -224,7 +232,7 @@ public class BoxPanel extends JPanel {
 			public void keyPressed(KeyEvent a) {
 				if (a.getKeyCode() == KeyEvent.VK_ENTER) {
 					try {
-						testIconValid(strKey, false);
+						testIconValid(false);
 
 					} catch (IOException e) {
 						LOG.error(e.getMessage(), e);
@@ -267,15 +275,13 @@ public class BoxPanel extends JPanel {
 		return fileSearch;
 	}
 	
-		
-	
 	public JLabel createIconValid() {
-		JLabel iconValid = new JLabel(new ImageIcon(this.valid_image));
+		JLabel iconValid = new JLabel(new ImageIcon(this.validImage));
 		return iconValid;
 	}
 	
 	public JLabel createIconNotValid() {
-		JLabel iconNotValid = new JLabel(new ImageIcon(this.notvalid_image));
+		JLabel iconNotValid = new JLabel(new ImageIcon(this.notvalidImage));
 		return iconNotValid;
 	}
 	
@@ -286,7 +292,7 @@ public class BoxPanel extends JPanel {
 		this.setAlignmentY(Component.CENTER_ALIGNMENT);
 		this.setBackground(Color.white);
 		
-		textField = createBasicTextPanel(strkey);
+		textField = createBasicTextPanel();
 		iconPanel = PanelHelper.createBasicPanel();
 		textButtonPanel = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 		iconValid = createIconValid();
@@ -294,13 +300,13 @@ public class BoxPanel extends JPanel {
 		
 		//%% WEBAPP PANEL %%
 		if(strkey == webAppName) {
-			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 3);
+			errorLabel = buildErrorLabel(iconPanel, textField, 3);
 			this.setBorder(BorderFactory.createTitledBorder(null, "Toast WebApp URL",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 		}
 		
 		//%% API PANEL %%
 		if(strkey == apiKeyName) {
-			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 4);
+			errorLabel = buildErrorLabel(iconPanel, textField, 4);
 			this.setBorder(BorderFactory.createTitledBorder(null, "User API key",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 		}
 
@@ -308,7 +314,7 @@ public class BoxPanel extends JPanel {
 		if(strkey == pluginName) {
 			fileSearch = createBasicFileSearch(textField, strkey);
 			textButtonPanel.add(fileSearch);
-			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 2);
+			errorLabel = buildErrorLabel(iconPanel, textField, 2);
 			this.setBorder(BorderFactory.createTitledBorder(null, "Plugin directory",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 		}	
 			
@@ -316,7 +322,7 @@ public class BoxPanel extends JPanel {
 		if(strkey == scriptsName) {
 			fileSearch = createBasicFileSearch(textField, strkey);
 			textButtonPanel.add(fileSearch);
-			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 2);
+			errorLabel = buildErrorLabel(iconPanel, textField, 2);
 			this.setBorder(BorderFactory.createTitledBorder(null, "Script directory",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 		}
 		
@@ -324,38 +330,38 @@ public class BoxPanel extends JPanel {
 		if(strkey == chromeDriverName) {
 			fileSearch = createBasicFileSearch(textField, strkey);
 			textButtonPanel.add(fileSearch);
-			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 1);;
+			errorLabel = buildErrorLabel(iconPanel, textField, 1);;
 			this.setBorder(BorderFactory.createTitledBorder(null, "ChromeDriver path directory",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 		}
 		
 		//%% RECORDER PANEL %%
 		if(strkey == recorderName) {
-			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 3);
+			errorLabel = buildErrorLabel(iconPanel, textField, 3);
 			this.setBorder(BorderFactory.createTitledBorder(null, "Recorded WebApp URL",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 		}
 		
 		//%% PROXY ADRESS PANEL %%
 		if(strkey == proxyAdress) {
-			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 0);
+			errorLabel = buildErrorLabel(iconPanel, textField, 0);
 			this.setBorder(BorderFactory.createTitledBorder(null, "Proxy adress",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 		}
 		
 		//%% PROXY PORT PANEL %%
 		if(strkey == proxyPort) {
-			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 0);
+			errorLabel = buildErrorLabel(iconPanel, textField, 0);
 			this.setBorder(BorderFactory.createTitledBorder(null, "Proxy port",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 			chromeDriverName = "chromedriver";
 		}
 
 		//%% PROXY USER NAME PANEL %%
 		if(strkey == proxyUser) {
-			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 0);
+			errorLabel = buildErrorLabel(iconPanel, textField, 0);
 			this.setBorder(BorderFactory.createTitledBorder(null, "Proxy user name",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 		}
 		
 		//%% PROXY USER PSWD PANEL %%
 		if(strkey == proxyPswd) {
-			errorLabel = buildErrorLabel(strkey, iconPanel, textField, 0);
+			errorLabel = buildErrorLabel(iconPanel, textField, 0);
 			this.setBorder(BorderFactory.createTitledBorder(null, "Proxy user password",TitledBorder.LEFT, TitledBorder.TOP,PanelHelper.FONT_TITLE_3,Color.BLACK));
 		}
 		
@@ -366,25 +372,31 @@ public class BoxPanel extends JPanel {
 	}
 	
 
-	private JLabel buildErrorLabel(String strKey, JPanel iconPanel, JTextField textField, int testValue) throws IOException{
+	private JLabel buildErrorLabel(JPanel iconPanel, JTextField textField, int testValue) throws IOException{
 		// testValue : 
 		// 0 for nothing
 		// 1 for File
 		// 2 for Directory
 		// 3 for URL
 		// 4 for ApiKey message
-		JLabel iconValid = new JLabel(new ImageIcon(this.valid_image));
-		JLabel iconNotValid = new JLabel(new ImageIcon(this.notvalid_image));
+		JLabel iconValid = new JLabel(new ImageIcon(this.validImage));
+		JLabel iconNotValid = new JLabel(new ImageIcon(this.notvalidImage));
 		iconValid.setBackground(Color.white);
 		iconNotValid.setBackground(Color.white);
+		String errorMessage = " ";
 		if(testValue == 1 || testValue == 2 ||testValue == 3) {
 			iconPanel.add(iconValid);		
-		} else { // apiKey does not have verification & Proxy tests will be tested through the webApp URL
-			JLabel toastLogo = new JLabel(new ImageIcon(this.toast_logo));
+		} else if(testValue == 4) { // apiKey does not have verification 
+			errorMessage = errorMessageApiKey;
+			JLabel toastLogo = new JLabel(new ImageIcon(this.toastLogo));
+			toastLogo.setBackground(Color.white);
+			iconPanel.add(toastLogo);
+		} else { // Proxy tests will be tested through the webApp URL
+			JLabel toastLogo = new JLabel(new ImageIcon(this.toastLogo));
 			toastLogo.setBackground(Color.white);
 			iconPanel.add(toastLogo);
 		} 
-		return PanelHelper.createBasicJLabel(" ", PanelHelper.FONT_TEXT_BOLD);
+		return PanelHelper.createBasicJLabel(errorMessage, PanelHelper.FONT_TEXT_BOLD);
 	}
 
 	public static String render(Object object) {

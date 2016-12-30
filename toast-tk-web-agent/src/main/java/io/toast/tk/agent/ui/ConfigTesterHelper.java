@@ -20,11 +20,12 @@ import io.toast.tk.agent.web.RestRecorderService;
 public class ConfigTesterHelper {
 
 	private static final Logger LOG = LogManager.getLogger(RestRecorderService.class);
+	private static final String FILE_DIRECTORY_SEPARATOR = "/";
 	private static int timeout = 1000; // in milliseconds
 	
 	public static boolean testWebAppDirectory(String directory, boolean runTryValue, boolean fileOrDirectory)
 			throws IOException {
-		String fileName = directory.split("/")[directory.split("/").length - 1];
+		String fileName = directory.split(FILE_DIRECTORY_SEPARATOR)[directory.split(FILE_DIRECTORY_SEPARATOR).length - 1];
 		if (directory.contains(" ")) {
 			if (runTryValue) {
 				NotificationManager.showMessage(directory + " has spaces in its name.").showNotification();
@@ -93,28 +94,28 @@ public class ConfigTesterHelper {
 		}
 	}
 
-	public static boolean testWebAppURL(String URL, boolean runTryValue) throws IOException {
-		return testWebAppURL(URL, runTryValue, null, null, null, null);					
+	public static boolean testWebAppUrl(String Url, boolean runTryValue) throws IOException {
+		return testWebAppUrl(Url, runTryValue, null, null, null, null);					
 	}
 
-	public static boolean testWebAppURL(String URL, boolean runTryValue, String proxyAdress, String proxyPort,
+	public static boolean testWebAppUrl(String Url, boolean runTryValue, String proxyAdress, String proxyPort,
 			String proxyUserName, String proxyUserPswd) throws IOException {
-		if (URL.contains(" ")) {
+		if (Url.contains(" ")) {
 			if (runTryValue) {
-				NotificationManager.showMessage(URL + " has spaces in its name.").showNotification();
+				NotificationManager.showMessage(Url + " has spaces in its name.").showNotification();
 			}
-			LOG.info("Status of " + URL + " : KO");
+			LOG.info("Status of " + Url + " : KO");
 			return false;
 		}
 
-		if (getStatus(URL,proxyAdress, proxyPort, proxyUserName, proxyUserPswd)) {
-			LOG.info("Status of " + URL + " : OK");
+		if (getStatus(Url,proxyAdress, proxyPort, proxyUserName, proxyUserPswd)) {
+			LOG.info("Status of " + Url + " : OK");
 			return true;
 		} else {
 			if (runTryValue) {
-				NotificationManager.showMessage(URL + " does not answer.").showNotification();
+				NotificationManager.showMessage(Url + " does not answer.").showNotification();
 			}
-			LOG.info("Status of " + URL + " : KO");
+			LOG.info("Status of " + Url + " : KO");
 			return false;
 		}
 	}
@@ -123,7 +124,7 @@ public class ConfigTesterHelper {
 			String proxyUserPswd) throws IOException {
 		boolean result = false;
 		try {
-			URL siteURL = new URL(url);
+			URL siteUrl = new URL(url);
 			HttpURLConnection connection = null;
 			if (proxyUserName != null && proxyUserPswd != null) {
 				Authenticator authenticator = new Authenticator() {
@@ -138,9 +139,9 @@ public class ConfigTesterHelper {
 			if (proxyAdress != null && proxyUserName != null) {
 				Proxy proxy = new Proxy(Proxy.Type.HTTP,
 						new InetSocketAddress(proxyAdress, Integer.parseInt(proxyPort)));
-				connection = (HttpURLConnection) siteURL.openConnection(proxy);
+				connection = (HttpURLConnection) siteUrl.openConnection(proxy);
 			} else
-				connection = (HttpURLConnection) siteURL.openConnection();
+				connection = (HttpURLConnection) siteUrl.openConnection();
 
 			connection.setRequestMethod("GET");
 			connection.setConnectTimeout(timeout);

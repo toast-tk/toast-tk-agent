@@ -17,7 +17,7 @@ import com.google.inject.Module;
 import io.toast.tk.agent.config.AgentConfigProvider;
 import io.toast.tk.agent.ui.NotificationManager;
 import io.toast.tk.dao.domain.impl.test.block.ITestPage;
-import io.toast.tk.dao.domain.impl.test.block.ITestPlan;
+//import io.toast.tk.dao.domain.impl.test.block.ITestPlan;
 import io.toast.tk.plugin.IAgentPlugin;
 import io.toast.tk.plugin.PluginLoader;
 import io.toast.tk.runtime.parse.FileHelper;
@@ -27,7 +27,7 @@ public class TestRunner {
 
 	private static final Logger LOG = LogManager.getLogger(TestRunner.class);
 	private TestPageRunner testPageRunner;
-	private TestPlanRunner testPlanRunner;
+	//private TestPlanRunner testPlanRunner;
 	private AgentConfigProvider provider;
 	public String fileName;
 	
@@ -77,7 +77,7 @@ public class TestRunner {
 	public void kill() {
 		this.interupted = true;
 		this.testPageRunner = null;
-		this.testPlanRunner = null;
+		//this.testPlanRunner = null;
 		this.provider = null;
 		this.fileName = null;
 	}
@@ -97,6 +97,4 @@ public class TestRunner {
 		this.testPlanRunner =  new TestPlanRunner(pluginModules);
 		testPlanRunner.execute(testPlan, true);
 	}*/
-	
-	
 }

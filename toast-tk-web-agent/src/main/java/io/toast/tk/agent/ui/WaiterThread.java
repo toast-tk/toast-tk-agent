@@ -14,7 +14,7 @@ public class WaiterThread implements Runnable {
 		  	WaiterPanel waiterPanel = new WaiterPanel();
 			this.panel = waiterPanel;
 			this.testrunner = new TestRunner(webConfigProvider);   
-			this.thread = new Thread(new RunnerThread(webConfigProvider, testrunner));
+			this.thread = new Thread(new RunnerThread(testrunner));
         
 	  }
 	  
@@ -32,8 +32,9 @@ public class WaiterThread implements Runnable {
 	  			  	panel.setScript(testrunner.fileName, "Interupting");
 	  			  	testrunner.kill();
 	  			}
-	  			else 
+	  			else {
 	  				panel.setScript(testrunner.fileName, "In progress");
+	  			}
 	  		}
 	  		panel.stop();
 	  		this.kill();
@@ -51,7 +52,7 @@ public class WaiterThread implements Runnable {
 	  protected class RunnerThread implements Runnable {
 		  public TestRunner runner;
 		   
-		  public RunnerThread(AgentConfigProvider webConfigProvider, TestRunner testrunner) throws IOException {           
+		  public RunnerThread(TestRunner testrunner) throws IOException {           
 				this.runner = testrunner;
 		  }
 		  

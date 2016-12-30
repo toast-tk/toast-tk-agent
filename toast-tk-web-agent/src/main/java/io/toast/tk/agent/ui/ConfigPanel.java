@@ -49,8 +49,6 @@ public class ConfigPanel extends JFrame {
 	public String proxyPswd = AgentConfigProvider.TOAST_PROXY_USER_PSWD;
 
 	private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
-
-	private JPanel mainPane;
 	
 	private BoxPanel chromePanel, webAppPanel, recorderPanel, apiKeyPanel, pluginPanel, scriptsPanel,
 			proxyAdressPanel, proxyPortPanel, proxyUserNamePanel, proxyUserPswdPanel;
@@ -66,8 +64,6 @@ public class ConfigPanel extends JFrame {
 	private HashMap<String, BoxPanel> boxFields;
 
 	private final File propertyFile;
-
-	private Image backGround_image;
 	
 	public ConfigPanel(Properties propertiesConfiguration, File propertyFile) throws IOException {
 		super();
@@ -87,55 +83,13 @@ public class ConfigPanel extends JFrame {
 		this.boxFields = new HashMap<String, BoxPanel>();
 		this.secondPane = new JTabbedPane();
 		secondPane.setFont(PanelHelper.FONT_TITLE_2);
+		
 		buildFields();
+
+		JPanel mainPane = buildRightMainPanel();
 		
-		secondPane.setBackground(Color.white);
-
-		ImageIcon general_logo = PanelHelper.createImageIcon(this, "general_icon.png");
-		secondPane.addTab("General parameters", general_logo, createGeneralPanel());
-
-		ImageIcon record_logo = PanelHelper.createImageIcon(this,"recorder_icon.png");
-		secondPane.addTab("Recording", record_logo, createRecorderPanel());
-
-		ImageIcon proxy_logo = PanelHelper.createImageIcon(this, "proxy_icon.png");
-		secondPane.addTab("Proxy", proxy_logo, createProxyPanel());
-
-		JPanel contentPanel = PanelHelper.createBasicPanel();
-		contentPanel.add(secondPane);
-		contentPanel.add(createFullButtonPanel());
-		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.PAGE_AXIS));
-
-		this.backGround_image = PanelHelper.createImage(this,"AgentParamBackGround.png");
-
-		JPanel panIcon = PanelHelper.createBasicPanel();
-		panIcon.setLayout(new BorderLayout());
-		panIcon.add(new JLabel(new ImageIcon(this.backGround_image)));
-		panIcon.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-		
-		JPanel firstMainPanel = PanelHelper.createBasicPanel();
-	    JLabel firstMainLabel = new JLabel("Agent setting");
-	    firstMainLabel.setFont(PanelHelper.FONT_TITLE_1);
-	    firstMainLabel.setBorder(BorderFactory.createEmptyBorder(0, 15, 15, 15));
-		JPanel firstMainIcon = PanelHelper.createBasicPanel();
-		firstMainIcon.setLayout(new BorderLayout());
-		Image firstMainIcon_Image = PanelHelper.createImage(this,"AgentSetting_icon.png");
-		firstMainIcon.add(new JLabel(new ImageIcon(firstMainIcon_Image)));
-		firstMainPanel.add(firstMainLabel);
-		firstMainPanel.add(firstMainIcon);
-	    
-		JPanel secondMainPanel = PanelHelper.createBasicPanel(BoxLayout.Y_AXIS);
-		secondMainPanel.add(firstMainPanel);
-		secondMainPanel.add(contentPanel);
-		
-		mainPane = PanelHelper.createBasicPanel();
-		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.X_AXIS));
-		mainPane.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-		mainPane.add(panIcon);
-		mainPane.add(secondMainPanel);
-
-
-		Image toast_logo = PanelHelper.createImage(this,"ToastLogo.png");
-		this.setIconImage(toast_logo);
+		Image toastLogo = PanelHelper.createImage(this,"ToastLogo.png");
+		this.setIconImage(toastLogo);
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setBackground(Color.white);
@@ -143,14 +97,78 @@ public class ConfigPanel extends JFrame {
 		setContentPane(mainPane);
 		setResizable(false);
 		pack();
-		PanelHelper.centerWindow(this); // setLocationRelativeTo(null) does not work
+		setLocationRelativeTo(null);
+	}
+	
+	private JPanel buildRightMainPanel() throws IOException {
+		JPanel contentPanel = buildContentTabbedPanel();
+		
+		JPanel topMainPanel = buildTopMainPanel();
+	    
+		JPanel contentMainPanel = PanelHelper.createBasicPanel(BoxLayout.Y_AXIS);
+		contentMainPanel.add(topMainPanel);
+		contentMainPanel.add(contentPanel);
+		
+		JPanel mainPane = PanelHelper.createBasicPanel();
+		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.X_AXIS));
+		mainPane.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+		mainPane.add(buildBackgrounIconPanel());
+		mainPane.add(contentMainPanel);
+		
+		return mainPane;
+	}
+	
+	private JPanel buildTopMainPanel() throws IOException {
+		JPanel topMainPanel = PanelHelper.createBasicPanel();
+	    JLabel topMainLabel = new JLabel("Agent setting");
+	    topMainLabel.setFont(PanelHelper.FONT_TITLE_1);
+	    topMainLabel.setBorder(BorderFactory.createEmptyBorder(0, 15, 15, 15));
+		JPanel topIcon = PanelHelper.createBasicPanel();
+		topIcon.setLayout(new BorderLayout());
+		Image topIconImage = PanelHelper.createImage(this,"AgentSetting_icon.png");
+		topIcon.add(new JLabel(new ImageIcon(topIconImage)));
+		topMainPanel.add(topMainLabel);
+		topMainPanel.add(topIcon);
+		return topMainPanel;
+	}
+	
+	private JPanel buildBackgrounIconPanel() throws IOException {
+		JPanel panIcon = PanelHelper.createBasicPanel();
+		panIcon.setLayout(new BorderLayout());
+		Image backGroundImage = PanelHelper.createImage(this,"AgentParamBackGround.png");
+		panIcon.add(new JLabel(new ImageIcon(backGroundImage)));
+		panIcon.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+		return panIcon;
+	}
+
+	private JPanel buildContentTabbedPanel() throws IOException {
+		this.secondPane = new JTabbedPane();
+		secondPane.setFont(PanelHelper.FONT_TITLE_2);
+		buildFields();
+		
+		secondPane.setBackground(Color.white);
+
+		ImageIcon general_logo = PanelHelper.createImageIcon(this, "general_icon.png");
+		secondPane.addTab("General parameters", general_logo, buildGeneralPanel());
+
+		ImageIcon record_logo = PanelHelper.createImageIcon(this,"recorder_icon.png");
+		secondPane.addTab("Recording", record_logo, buildRecorderPanel());
+
+		ImageIcon proxy_logo = PanelHelper.createImageIcon(this, "proxy_icon.png");
+		secondPane.addTab("Proxy", proxy_logo, buildProxyPanel());
+
+		JPanel contentPanel = PanelHelper.createBasicPanel();
+		contentPanel.add(secondPane);
+		contentPanel.add(buildFullButtonPanel());
+		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.PAGE_AXIS));
+		return contentPanel;
 	}
 
 	private void saveAndClose() {
 		for (Entry<String, BoxPanel> entry : boxFields.entrySet()) {
 			properties.setProperty(entry.getKey(), entry.getValue().getTextValue());
 		}
-		properties.setProperty(proxyActivate, Boolean.toString(proxyCheckBox.isSelected()));
+		properties.setProperty(AgentConfigProvider.TOAST_PROXY_ACTIVATE, Boolean.toString(proxyCheckBox.isSelected()));
 		
 		try {
 			properties.store(FileUtils.openOutputStream(propertyFile), "Saved !");
@@ -165,7 +183,7 @@ public class ConfigPanel extends JFrame {
 		this.dispose();
 	}
 	
-	private JPanel createGeneralPanel() {
+	private JPanel buildGeneralPanel() {
 		JPanel generalParameters = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 	    JPanel generalParameters1 = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
 	    JPanel generalParameters2 = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
@@ -178,7 +196,7 @@ public class ConfigPanel extends JFrame {
 		return generalParameters;
 	}
 	
-	private JPanel createRecorderPanel() {
+	private JPanel buildRecorderPanel() {
 		JPanel recorderParameters = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
 		recorderParameters.add(chromePanel);
 		recorderParameters.add(recorderPanel);
@@ -186,7 +204,7 @@ public class ConfigPanel extends JFrame {
 		return recorderParameters;
 	}
 	
-	private JPanel createProxyPanel() {
+	private JPanel buildProxyPanel() {
 		JPanel proxyPanel = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
 	    JPanel proxyPanel1 = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 	    JPanel proxyPanel2 = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
@@ -203,7 +221,7 @@ public class ConfigPanel extends JFrame {
 	    return proxyPanel;
 	}
 
-	private JPanel createFullButtonPanel() {
+	private JPanel buildFullButtonPanel() {
 		JPanel buttonPanel = PanelHelper.createBasicPanel();
 		buttonPanel.setAlignmentX(LEFT_ALIGNMENT);
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
@@ -243,52 +261,53 @@ public class ConfigPanel extends JFrame {
 		tryButton = new JButton("Test");
 		tryButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-	
-				for (Object key : EnumerationUtils.toList(properties.propertyNames())) {
-					String strKey = (String) key;
-					if(!strKey.equals(proxyActivate)) {
-						BoxPanel box = boxFields.get(strKey);
-						try {
-							box.testIconValid(strKey, false);
-							secondPane.repaint();
-							secondPane.revalidate();
-						} catch (IOException e) {
-							LOG.error(e.getMessage(), e);
-						}
-					} 
-				}
-				NotificationManager.showMessage("The parameters have been tested !");
-	
+				test();
 			}
 	
 		});
 		return tryButton;
 	}
 	
-	private void buildFields() throws IOException{	
-		
+	private void test() {
+		for (Object key : EnumerationUtils.toList(properties.propertyNames())) {
+			String strKey = (String) key;
+			if(!strKey.equals(AgentConfigProvider.TOAST_PROXY_ACTIVATE)) {
+				BoxPanel box = boxFields.get(strKey);
+				try {
+					box.testIconValid(false);
+					secondPane.repaint();
+					secondPane.revalidate();
+				} catch (IOException e) {
+					LOG.error(e.getMessage(), e);
+				}
+			} 
+		}
+		NotificationManager.showMessage("The parameters have been tested !");
+	}
+	
+	private void buildFields() throws IOException{		
 		//%% API PANEL %%
-		String strKey = apiKeyName;
+		String strKey = AgentConfigProvider.TOAST_API_KEY;
 		apiKeyPanel = new BoxPanel( properties, strKey);
 		boxFields.put(strKey, apiKeyPanel);
 		
 		//%% PLUGIN PANEL %%
-		strKey = pluginName;
+		strKey = AgentConfigProvider.TOAST_PLUGIN_DIR;
 		pluginPanel = new BoxPanel( properties, strKey);
 		boxFields.put(strKey, pluginPanel);
 			
 		//%% SCRIPTS PANEL %%
-		strKey = scriptsName;
+		strKey = AgentConfigProvider.TOAST_SCRIPTS_DIR;
 		scriptsPanel = new BoxPanel( properties, strKey);
 		boxFields.put(strKey, scriptsPanel);
 		
 		//%% CHROME PANEL %%
-		strKey = chromeDriverName;
+		strKey = AgentConfigProvider.TOAST_CHROMEDRIVER_PATH;
 		chromePanel = new BoxPanel( properties, strKey);
 		boxFields.put(strKey, chromePanel);
 
 		//%% PROXY CHECK BOX %%
-		strKey = proxyActivate;
+		strKey = AgentConfigProvider.TOAST_PROXY_ACTIVATE;
 		proxyCheckBox = new JCheckBox("Activation");
 		proxyCheckBox.setBackground(Color.white);
 		String proxyValue = properties.getProperty(strKey);
@@ -297,28 +316,27 @@ public class ConfigPanel extends JFrame {
 		}
 				
 		//%% PROXY ADRESS PANEL %%
-		strKey = proxyAdress;
+		strKey = AgentConfigProvider.TOAST_PROXY_ADRESS;
 		proxyAdressPanel = new BoxPanel( properties, strKey);
 		boxFields.put(strKey, proxyAdressPanel);
 		
 		//%% PROXY PORT PANEL %%
-		strKey = proxyPort;
+		strKey = AgentConfigProvider.TOAST_PROXY_PORT;
 		proxyPortPanel = new BoxPanel( properties, strKey);
-		chromeDriverName = "chromedriver";
 		boxFields.put(strKey, proxyPortPanel);
 
 		//%% PROXY USER NAME PANEL %%
-		strKey = proxyUser;
+		strKey = AgentConfigProvider.TOAST_PROXY_USER_NAME;
 		proxyUserNamePanel = new BoxPanel( properties, strKey);
 		boxFields.put(strKey, proxyUserNamePanel);
 		
 		//%% PROXY USER PSWD PANEL %%
-		strKey = proxyPswd;
+		strKey = AgentConfigProvider.TOAST_PROXY_USER_PSWD;
 		proxyUserPswdPanel = new BoxPanel( properties, strKey);
 		boxFields.put(strKey, proxyUserPswdPanel);
 		
 		//%% WEBAPP PANEL %%
-		strKey = webAppName;
+		strKey = AgentConfigProvider.TOAST_TEST_WEB_APP_URL;
 		webAppPanel = new BoxPanel( properties, strKey, 
 				proxyAdressPanel, proxyPortPanel,
 				proxyUserNamePanel, proxyUserPswdPanel, proxyCheckBox);
@@ -326,12 +344,10 @@ public class ConfigPanel extends JFrame {
 				
 
 		//%% RECORDER PANEL %%
-		strKey = recorderName;
+		strKey = AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL;
 		recorderPanel= new BoxPanel( properties, strKey, 
 						proxyAdressPanel, proxyPortPanel,
 						proxyUserNamePanel, proxyUserPswdPanel, proxyCheckBox);
 		boxFields.put(strKey, recorderPanel);
 	}
-	
-
 }
