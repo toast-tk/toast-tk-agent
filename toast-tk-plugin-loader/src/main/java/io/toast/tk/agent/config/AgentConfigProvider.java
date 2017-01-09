@@ -44,17 +44,15 @@ public class AgentConfigProvider implements Provider<AgentConfig> {
 		super();
 	}
 
-	private void initConfig() {
+	private void initConfig() throws NullPointerException {
 		String userHomepath = AgentConfig.getToastHome() + "/";
 		Properties p = null;
-		if(userHomepath != null) {
-			p = new Properties();
-			try {
-				p.load(new FileReader(userHomepath + "agent.properties"));
-			}
-			catch(IOException e) {
-				LOG.error(e.getMessage(), e);
-			}
+		p = new Properties();
+		try {
+			p.load(new FileReader(userHomepath + "agent.properties"));
+		}
+		catch(IOException e) {
+			LOG.error(e.getMessage(), e);
 		}
 		webConfig = new AgentConfig();
 		webConfig.setWebInitRecordingUrl(p.getProperty(TOAST_TEST_WEB_INIT_RECORDING_URL, "URL to record"));
