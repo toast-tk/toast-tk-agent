@@ -52,7 +52,7 @@ public class RestRecorderService extends Verticle {
 
 	private RouteMatcher initMatchers() {
 		RouteMatcher matcher = new RouteMatcher();
-		matcher.options("/record/event", new Handler<HttpServerRequest>() {
+		matcher.options("/api/record/event", new Handler<HttpServerRequest>() {
 			@Override
 			public void handle(HttpServerRequest req) {
 				req.response().headers().add("Access-Control-Allow-Origin", "*");
@@ -60,9 +60,9 @@ public class RestRecorderService extends Verticle {
 				req.response().setStatusCode(200).end();
 			}
 		});
-		matcher.post("/record/event", injector.getInstance(RecordHandler.class));
-		matcher.get("/record/ping", new PingHandler());
-		matcher.get("/record/stop", injector.getInstance(StopHandler.class));
+		matcher.post("/api/record/event", injector.getInstance(RecordHandler.class));
+		matcher.get("/api/record/ping", new PingHandler());
+		matcher.get("/api/record/stop", injector.getInstance(StopHandler.class));
 		return matcher;
 	}
 

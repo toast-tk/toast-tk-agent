@@ -32,7 +32,7 @@ public class AgentServerImpl  implements IAgentServer{
 
 	public void sendEvent(WebEventRecord eventRecord, String ApiKey) {
 		String json = new Gson().toJson(eventRecord);
-		RestUtils.postWebEventRecord(getWebAppURI()+"/record", json, ApiKey);
+		RestUtils.postWebEventRecord(getWebAppURI()+"/api/record", json, ApiKey);
 	}
 
 	public boolean register() {
@@ -40,7 +40,7 @@ public class AgentServerImpl  implements IAgentServer{
 	}
 	public boolean register(String ApiKey) {
 		try {
-			String url = getWebAppURI() + "/susbcribe";
+			String url = getWebAppURI() + "/api/susbcribe";
 
 			String localAddress = Inet4Address.getLocalHost().getHostAddress();
 			AgentInformation info = new AgentInformation(localAddress, ApiKey);
