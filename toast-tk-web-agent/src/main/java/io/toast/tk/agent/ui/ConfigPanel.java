@@ -12,8 +12,9 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.*;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -569,58 +570,89 @@ public class ConfigPanel extends JDialog {
 	public static boolean getStatus(String url) throws IOException {
 
         boolean result = false;
-        try {
-            URL siteURL = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
-            connection.setRequestMethod("GET");
-            connection.connect();
-            int code = connection.getResponseCode();
-            if (code == 200) {
-                result = true;
-            }
-        } catch(SSLHandshakeException sslException){
+		InetSocketAddress proxyInet = new InetSocketAddress("10.23.252.215",3128);
+		Proxy proxy = new Proxy(Proxy.Type.HTTP, proxyInet);
+
+		try {
+			HttpURLConnection connection;
+			if(url.startsWith("https")){
+				connection = pingHttpsUrl(url, proxy);
+			} else {
+				connection = pingHttpUrl(url, proxy);
+			}
+			int code = connection.getResponseCode();
+			if(code == 301){
+				result = getStatus(connection.getHeaderField("Location"));
+			} else if (code == 200) {
+				result = true;
+			}
+		} catch(SSLHandshakeException sslException){
             try {
-                TrustManager[] trustAllCerts = new TrustManager[]{
-                        new X509TrustManager() {
-                            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                                return null;
-                            }
-                            public void checkClientTrusted(
-                                    java.security.cert.X509Certificate[] certs, String authType) {
-                            }
-                            public void checkServerTrusted(
-                                    java.security.cert.X509Certificate[] certs, String authType) {
-                            }
-                        }
-                };
-                SSLContext sc = SSLContext.getInstance("SSL");
-                sc.init(null, trustAllCerts, new java.security.SecureRandom());
-                URL siteURL = new URL(url);
-                HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-                // Create all-trusting host name verifier
-                HostnameVerifier allHostsValid = new HostnameVerifier() {
-                    public boolean verify(String hostname, SSLSession session) {
-                        return true;
-                    }
-                };
-                // Install the all-trusting host verifier
-                HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-
-                HttpsURLConnection connection = (HttpsURLConnection) siteURL.openConnection();
-                connection.setSSLSocketFactory(sc.getSocketFactory());
-                connection.setRequestMethod("GET");
-                connection.connect();
-
-                int code = connection.getResponseCode();
-                if (code == 200) {
-                    result = true;
-                }
+				HttpsURLConnection connection = pingHttpsUrl(url, proxy);
+				int code = connection.getResponseCode();
+				if(code == 301){
+					result = getStatus(connection.getHeaderField("Location"));
+				} else if (code == 200) {
+					result = true;
+				}
             } catch (Exception e) {
                 result = false;
             }
-        } catch (Exception e) {
+        } catch (SocketTimeoutException e) {
+			return false;
+		}
+		catch (Exception e) {
             result = false;
         }
         return result;
     }
+
+	public static HttpURLConnection pingHttpUrl(String url, Proxy proxy) throws IOException {
+		URL siteURL = new URL(url);
+		HttpURLConnection connection;
+		if(url.contains("localhost")){
+			connection = (HttpURLConnection) siteURL.openConnection();
+		} else {
+			connection = (HttpURLConnection) siteURL.openConnection(proxy);
+		}
+		connection.setRequestMethod("GET");
+		connection.setConnectTimeout(5000);
+		connection.connect();
+		return connection;
+	}
+
+	public static HttpsURLConnection pingHttpsUrl(String url, Proxy proxy) throws IOException, NoSuchAlgorithmException, KeyManagementException {
+		TrustManager[] trustAllCerts = new TrustManager[]{
+				new X509TrustManager() {
+					public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+						return null;
+					}
+					public void checkClientTrusted(
+							java.security.cert.X509Certificate[] certs, String authType) {
+					}
+					public void checkServerTrusted(
+							java.security.cert.X509Certificate[] certs, String authType) {
+					}
+				}
+		};
+		SSLContext sc = SSLContext.getInstance("SSL");
+		sc.init(null, trustAllCerts, new java.security.SecureRandom());
+		URL siteURL = new URL(url);
+		HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+		// Create all-trusting host name verifier
+		HostnameVerifier allHostsValid = new HostnameVerifier() {
+			public boolean verify(String hostname, SSLSession session) {
+				return true;
+			}
+		};
+		// Install the all-trusting host verifier
+		HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
+		HttpsURLConnection connection = (HttpsURLConnection) siteURL.openConnection(proxy);
+		connection.setSSLSocketFactory(sc.getSocketFactory());
+		connection.setRequestMethod("GET");
+		connection.connect();
+
+		return connection;
+	}
 }
