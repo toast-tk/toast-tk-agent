@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c871d1c99ce74589b8d0e0a634a866d5)](https://www.codacy.com/app/toast-tk/toast-tk-agent?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=toast-tk/toast-tk-agent&amp;utm_campaign=Badge_Grade)
 [![License](http://img.shields.io/:license-Apache%202-red.svg)](https://github.com/toast-tk/toast-tk-engine/blob/snapshot/LICENSE.md)
 
 # Toast-Tk Agent
