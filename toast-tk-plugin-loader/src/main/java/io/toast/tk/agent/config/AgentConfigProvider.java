@@ -44,10 +44,9 @@ public class AgentConfigProvider implements Provider<AgentConfig> {
 		super();
 	}
 
-	private void initConfig() throws NullPointerException {
+	private void initConfig() {
 		String userHomepath = AgentConfig.getToastHome() + "/";
-		Properties p = null;
-		p = new Properties();
+		Properties p = new Properties();
 		try {
 			p.load(new FileReader(userHomepath + "agent.properties"));
 		}
