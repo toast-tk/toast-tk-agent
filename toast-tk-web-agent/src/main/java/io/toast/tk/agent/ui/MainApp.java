@@ -206,7 +206,7 @@ public class MainApp implements IAgentApp {
 	    ActionListener listener = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
 	        	agentServer.unRegister();
-	        	Runtime.getRuntime().exit(0);
+	        	System.exit(0);
 	        }
 	    };
 	    return listener;
@@ -296,7 +296,7 @@ public class MainApp implements IAgentApp {
 			return ConfigTesterHelper.testWebAppDirectory(webConfigProvider.get().getScriptsDir(), true, false);
 		}
 		if(property.equals(AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL)) {
-			if(webConfigProvider.get().getProxyActivate() == "true") {
+			if(webConfigProvider.get().getProxyActivate().equals("true")) {
 				return ConfigTesterHelper.testWebAppUrl(webConfigProvider.get().getWebInitRecordingUrl(), true,
 						webConfigProvider.get().getProxyAdress(),
 						webConfigProvider.get().getProxyPort(),

@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import io.toast.tk.agent.config.AgentConfigProvider;
 
-
 public class AgentBoot {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AgentBoot.class);

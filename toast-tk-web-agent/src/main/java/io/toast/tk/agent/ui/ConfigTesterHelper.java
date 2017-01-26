@@ -7,50 +7,42 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
+import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import io.toast.tk.agent.web.RestRecorderService;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLHandshakeException;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 /**
  * Configuration panel
  */
 public class ConfigTesterHelper {
 
-	private static final Logger LOG = LogManager.getLogger(RestRecorderService.class);
 	private static final String FILE_DIRECTORY_SEPARATOR = "/";
-	private static int timeout = 1000; // in milliseconds
+	private static final int timeout = 500;
 	
 	public static boolean testWebAppDirectory(String directory, boolean runTryValue, boolean fileOrDirectory)
 			throws IOException {
 		String fileName = directory.split(FILE_DIRECTORY_SEPARATOR)[directory.split(FILE_DIRECTORY_SEPARATOR).length - 1];
-		if (directory.contains(" ")) {
-			if (runTryValue) {
-				NotificationManager.showMessage(directory + " has spaces in its name.").showNotification();
-			}
-			LOG.info("Status of " + directory + " : KO");
-			return false;
-		}
-
+		
+		boolean isKo = true;
 		if (fileOrDirectory) {
 			if (testFileDirectory(directory, runTryValue, fileName)) {
-				LOG.info("Status of " + directory + " : OK");
-				return true;
-			} else {
-				LOG.info("Status of " + directory + " : KO");
-				return false;
+				isKo = false;
 			}
 		} else {
 			if (testDirectory(directory, runTryValue, fileName)) {
-				LOG.info("Status of " + directory + " : OK");
-				return true;
-			} else {
-				LOG.info("Status of " + directory + " : KO");
-				return false;
+				isKo = false;
 			}
 		}
+		return !isKo;
 	}
 
 	public static boolean testDirectory(String directory, boolean runTryValue, String fileName) {
@@ -94,66 +86,130 @@ public class ConfigTesterHelper {
 		}
 	}
 
-	public static boolean testWebAppUrl(String Url, boolean runTryValue) throws IOException {
-		return testWebAppUrl(Url, runTryValue, null, null, null, null);					
+	public static boolean testWebAppUrl(String url, boolean runTryValue) throws IOException {
+		return testWebAppUrl(url, runTryValue, null, null, null, null);					
 	}
 
-	public static boolean testWebAppUrl(String Url, boolean runTryValue, String proxyAdress, String proxyPort,
+	public static boolean testWebAppUrl(String url, boolean runTryValue, String proxyAdress, String proxyPort,
 			String proxyUserName, String proxyUserPswd) throws IOException {
-		if (Url.contains(" ")) {
+
+		boolean isKo = true;
+		if (url.contains(" ")) {
 			if (runTryValue) {
-				NotificationManager.showMessage(Url + " has spaces in its name.").showNotification();
+				NotificationManager.showMessage(url + " has spaces in its name.").showNotification();
 			}
-			LOG.info("Status of " + Url + " : KO");
-			return false;
 		}
 
-		if (getStatus(Url,proxyAdress, proxyPort, proxyUserName, proxyUserPswd)) {
-			LOG.info("Status of " + Url + " : OK");
-			return true;
+		if (getStatus(url,proxyAdress, proxyPort, proxyUserName, proxyUserPswd)) {
+			isKo = false;
 		} else {
 			if (runTryValue) {
-				NotificationManager.showMessage(Url + " does not answer.").showNotification();
+				NotificationManager.showMessage(url + " does not answer.").showNotification();
 			}
-			LOG.info("Status of " + Url + " : KO");
-			return false;
 		}
+		return !isKo;
 	}
+	
+	
 	
 	public static boolean getStatus(String url, String proxyAdress, String proxyPort, String proxyUserName,
 			String proxyUserPswd) throws IOException {
-		boolean result = false;
-		try {
-			URL siteUrl = new URL(url);
-			HttpURLConnection connection = null;
-			if (proxyUserName != null && proxyUserPswd != null) {
-				Authenticator authenticator = new Authenticator() {
 
-					public PasswordAuthentication getPasswordAuthentication() {
-						return (new PasswordAuthentication(proxyUserName, proxyUserPswd.toCharArray()));
+	        boolean result = false;
+	        Proxy proxy = null;
+	        if(proxyAdress != null && proxyPort != null) {
+				InetSocketAddress proxyInet = new InetSocketAddress(proxyAdress,Integer.parseInt(proxyPort));
+				proxy = new Proxy(Proxy.Type.HTTP, proxyInet);
+	        }
+	        
+	        Authenticator.setDefault (new Authenticator() {
+	            protected PasswordAuthentication getPasswordAuthentication() {
+	                return new PasswordAuthentication (proxyUserName, proxyUserPswd.toCharArray());
+	            }
+	        });
+
+			try {
+				HttpURLConnection connection;
+				if(url.startsWith("https")){
+					connection = pingHttpsUrl(url, proxy);
+				} else {
+					connection = pingHttpUrl(url, proxy);
+				}
+				int code = connection.getResponseCode();
+				if(code == 301){
+					result = getStatus(connection.getHeaderField("Location"), proxyAdress, proxyPort, proxyUserName, proxyUserPswd);
+				} else if (code == 200) {
+					result = true;
+				}
+			} catch(SSLHandshakeException sslException){
+	            try {
+					HttpsURLConnection connection = pingHttpsUrl(url, proxy);
+					int code = connection.getResponseCode();
+					if(code == 301){
+						result = getStatus(connection.getHeaderField("Location"), proxyAdress, proxyPort, proxyUserName, proxyUserPswd);
+					} else if (code == 200) {
+						result = true;
 					}
-				};
-				Authenticator.setDefault(authenticator);
+	            } catch (Exception e) {
+	                result = false;
+	            }
+	        } catch (SocketTimeoutException e) {
+				return false;
 			}
-
-			if (proxyAdress != null && proxyUserName != null) {
-				Proxy proxy = new Proxy(Proxy.Type.HTTP,
-						new InetSocketAddress(proxyAdress, Integer.parseInt(proxyPort)));
-				connection = (HttpURLConnection) siteUrl.openConnection(proxy);
-			} else
-				connection = (HttpURLConnection) siteUrl.openConnection();
-
-			connection.setRequestMethod("GET");
-			connection.setConnectTimeout(timeout);
-			connection.connect();
-
-			int code = connection.getResponseCode();
-			if (code == 200) {
-				result = true;
-			}
-		} catch (Exception e) {
-			result = false;
+			catch (Exception e) {
+	            result = false;
+	        }
+	        return result;
+	}
+	
+	public static HttpURLConnection pingHttpUrl(String url, Proxy proxy) throws IOException {
+		URL siteURL = new URL(url);
+		HttpURLConnection connection;
+		if(url.contains("localhost")){
+			connection = (HttpURLConnection) siteURL.openConnection();
+		} else {
+			connection = (HttpURLConnection) siteURL.openConnection(proxy);
 		}
-		return result;
+		connection.setRequestMethod("GET");
+		connection.setConnectTimeout(5000);
+		connection.connect();
+		return connection;
+	}
+
+	public static HttpsURLConnection pingHttpsUrl(String url, Proxy proxy) throws IOException, NoSuchAlgorithmException, KeyManagementException {
+		TrustManager[] trustAllCerts = new TrustManager[]{
+				new X509TrustManager() {
+					public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+						return null;
+					}
+					public void checkClientTrusted(
+							java.security.cert.X509Certificate[] certs, String authType) {
+					}
+					public void checkServerTrusted(
+							java.security.cert.X509Certificate[] certs, String authType) {
+					}
+				}
+		};
+		SSLContext sc = SSLContext.getInstance("SSL");
+		sc.init(null, trustAllCerts, new java.security.SecureRandom());
+		URL siteURL = new URL(url);
+		HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+		// Create all-trusting host name verifier
+		HostnameVerifier allHostsValid = new HostnameVerifier() {
+			public boolean verify(String hostname, SSLSession session) {
+				return true;
+			}
+		};
+			
+		// Install the all-trusting host verifier
+		HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
+		HttpsURLConnection connection = (HttpsURLConnection) siteURL.openConnection(proxy);
+		connection.setSSLSocketFactory(sc.getSocketFactory());
+		connection.setRequestMethod("GET");
+		connection.setConnectTimeout(timeout);
+		connection.connect();
+
+		return connection;
 	}
 }

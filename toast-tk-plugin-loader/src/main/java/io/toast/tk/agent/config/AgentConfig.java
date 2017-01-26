@@ -54,7 +54,6 @@ public class AgentConfig {
 		return this.chromeDriverPath;
 	}
 	
-	
 	public void setWebAppUrl(
 		String webAppUrl) {
 		this.webAppUrl = webAppUrl;
@@ -81,45 +80,45 @@ public class AgentConfig {
 	}
 
 	public void setPluginDir(
-		String PluginDirectory) {
-		this.pluginDirectory = PluginDirectory;
+		String pluginDirectory) {
+		this.pluginDirectory = pluginDirectory;
 	}
 
 	public void setProxyActivate(
-		String ProxyActivate) {
-		this.proxyActivate = ProxyActivate;
+		String proxyActivate) {
+		this.proxyActivate = proxyActivate;
 	}
 	public String getProxyActivate() {
 		return this.proxyActivate;
 	}
 	
 	public void setProxyAdress(
-		String ProxyAdress) {
-		this.proxyAdress = ProxyAdress;
+		String proxyAdress) {
+		this.proxyAdress = proxyAdress;
 	}
 	public String getProxyAdress() {
 		return this.proxyAdress;
 	}
 
 	public void setProxyPort(
-		String ProxyPort) {
-		this.proxyPort = ProxyPort;
+		String proxyPort) {
+		this.proxyPort = proxyPort;
 	}
 	public String getProxyPort() {
 		return this.proxyPort;
 	}
 
 	public void setProxyUserName(
-		String ProxyUser) {
-		this.proxyUser = ProxyUser;
+		String proxyUser) {
+		this.proxyUser = proxyUser;
 	}
 	public String getProxyUserName() {
 		return this.proxyUser;
 	}
 
 	public void setProxyUserPswd(
-		String ProxyPswd) {
-		this.proxyPswd = ProxyPswd;
+		String proxyPswd) {
+		this.proxyPswd = proxyPswd;
 	}
 	public String getProxyUserPswd() {
 		return this.proxyPswd;

@@ -148,14 +148,14 @@ public class ConfigPanel extends JFrame {
 		
 		secondPane.setBackground(Color.white);
 
-		ImageIcon general_logo = PanelHelper.createImageIcon(this, "general_icon.png");
-		secondPane.addTab("General parameters", general_logo, buildGeneralPanel());
+		ImageIcon generalLogo = PanelHelper.createImageIcon(this, "general_icon.png");
+		secondPane.addTab("General parameters", generalLogo, buildGeneralPanel());
 
-		ImageIcon record_logo = PanelHelper.createImageIcon(this,"recorder_icon.png");
-		secondPane.addTab("Recording", record_logo, buildRecorderPanel());
+		ImageIcon recordLogo = PanelHelper.createImageIcon(this,"recorder_icon.png");
+		secondPane.addTab("Recording", recordLogo, buildRecorderPanel());
 
-		ImageIcon proxy_logo = PanelHelper.createImageIcon(this, "proxy_icon.png");
-		secondPane.addTab("Proxy", proxy_logo, buildProxyPanel());
+		ImageIcon proxyLogo = PanelHelper.createImageIcon(this, "proxy_icon.png");
+		secondPane.addTab("Proxy", proxyLogo, buildProxyPanel());
 
 		JPanel contentPanel = PanelHelper.createBasicPanel();
 		contentPanel.add(secondPane);
@@ -288,22 +288,22 @@ public class ConfigPanel extends JFrame {
 	private void buildFields() throws IOException{		
 		//%% API PANEL %%
 		String strKey = AgentConfigProvider.TOAST_API_KEY;
-		apiKeyPanel = new BoxPanel( properties, strKey);
+		apiKeyPanel = new BoxPanel(properties, strKey);
 		boxFields.put(strKey, apiKeyPanel);
 		
 		//%% PLUGIN PANEL %%
 		strKey = AgentConfigProvider.TOAST_PLUGIN_DIR;
-		pluginPanel = new BoxPanel( properties, strKey);
+		pluginPanel = new BoxPanel(properties, strKey);
 		boxFields.put(strKey, pluginPanel);
 			
 		//%% SCRIPTS PANEL %%
 		strKey = AgentConfigProvider.TOAST_SCRIPTS_DIR;
-		scriptsPanel = new BoxPanel( properties, strKey);
+		scriptsPanel = new BoxPanel(properties, strKey);
 		boxFields.put(strKey, scriptsPanel);
 		
 		//%% CHROME PANEL %%
 		strKey = AgentConfigProvider.TOAST_CHROMEDRIVER_PATH;
-		chromePanel = new BoxPanel( properties, strKey);
+		chromePanel = new BoxPanel(properties, strKey);
 		boxFields.put(strKey, chromePanel);
 
 		//%% PROXY CHECK BOX %%
@@ -311,41 +311,40 @@ public class ConfigPanel extends JFrame {
 		proxyCheckBox = new JCheckBox("Activation");
 		proxyCheckBox.setBackground(Color.white);
 		String proxyValue = properties.getProperty(strKey);
-		if(proxyValue.equals("true")) {
+		if("true".equals(proxyValue)) {
 			proxyCheckBox.setSelected(true);
 		}
 				
 		//%% PROXY ADRESS PANEL %%
 		strKey = AgentConfigProvider.TOAST_PROXY_ADRESS;
-		proxyAdressPanel = new BoxPanel( properties, strKey);
+		proxyAdressPanel = new BoxPanel(properties, strKey);
 		boxFields.put(strKey, proxyAdressPanel);
 		
 		//%% PROXY PORT PANEL %%
 		strKey = AgentConfigProvider.TOAST_PROXY_PORT;
-		proxyPortPanel = new BoxPanel( properties, strKey);
+		proxyPortPanel = new BoxPanel(properties, strKey);
 		boxFields.put(strKey, proxyPortPanel);
 
 		//%% PROXY USER NAME PANEL %%
 		strKey = AgentConfigProvider.TOAST_PROXY_USER_NAME;
-		proxyUserNamePanel = new BoxPanel( properties, strKey);
+		proxyUserNamePanel = new BoxPanel(properties, strKey);
 		boxFields.put(strKey, proxyUserNamePanel);
 		
 		//%% PROXY USER PSWD PANEL %%
 		strKey = AgentConfigProvider.TOAST_PROXY_USER_PSWD;
-		proxyUserPswdPanel = new BoxPanel( properties, strKey);
+		proxyUserPswdPanel = new BoxPanel(properties, strKey);
 		boxFields.put(strKey, proxyUserPswdPanel);
 		
 		//%% WEBAPP PANEL %%
 		strKey = AgentConfigProvider.TOAST_TEST_WEB_APP_URL;
-		webAppPanel = new BoxPanel( properties, strKey, 
+		webAppPanel = new BoxPanel(properties, strKey, 
 				proxyAdressPanel, proxyPortPanel,
 				proxyUserNamePanel, proxyUserPswdPanel, proxyCheckBox);
 		boxFields.put(strKey, webAppPanel);
 				
-
 		//%% RECORDER PANEL %%
 		strKey = AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL;
-		recorderPanel= new BoxPanel( properties, strKey, 
+		recorderPanel= new BoxPanel(properties, strKey, 
 						proxyAdressPanel, proxyPortPanel,
 						proxyUserNamePanel, proxyUserPswdPanel, proxyCheckBox);
 		boxFields.put(strKey, recorderPanel);

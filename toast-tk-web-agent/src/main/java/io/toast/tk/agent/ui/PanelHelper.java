@@ -18,18 +18,18 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 import java.awt.Component;
 
-
 /**
  * Configuration panel
  */
 public class PanelHelper {
-
+	
+	private static String fontName = "Verdana";
 	public static Font FONT_TEXT_BOLD = new Font("SansSerif",Font.BOLD + Font.ITALIC,16);
-	public static Font FONT_TEXT_ITALIC = new Font("Verdana",Font.ITALIC,16);
-	public static Font FONT_TEXT = new Font("Verdana",Font.PLAIN,16);
-	public static Font FONT_TITLE_3 = new Font("Verdana",Font.BOLD,18);
-	public static Font FONT_TITLE_2 = new Font("Verdana",Font.BOLD,22);
-	public static Font FONT_TITLE_1 = new Font("Verdana",Font.BOLD,26);
+	public static Font FONT_TEXT_ITALIC = new Font(fontName,Font.ITALIC,16);
+	public static Font FONT_TEXT = new Font(fontName,Font.PLAIN,16);
+	public static Font FONT_TITLE_3 = new Font(fontName,Font.BOLD,18);
+	public static Font FONT_TITLE_2 = new Font(fontName,Font.BOLD,22);
+	public static Font FONT_TITLE_1 = new Font(fontName,Font.BOLD,26);
 
 	public static JPanel createBasicPanel() {
 		JPanel panel = new JPanel();
@@ -85,20 +85,21 @@ public class PanelHelper {
 		return ImageIO.read(stream);
 	}	
 	
-	public static String secToHMS(long nb) {
-		long m = nb/60;
-		long rs = nb%60;
-		long h = m/60;
-		long rm = m %60;
-		return h + " h " + rm + " m " + rs + " s";
+	public static String secToHms(long nb) {
+		long min = nb/60;
+		long rsec = nb%60;
+		long hours = min/60;
+		long rmin = min %60;
+		return hours + " h " + rmin + " m " + rsec + " s";
 	}
 	
 	public static String numbToStr(int nb) {
 		if(nb < 10) {
 			return "0" + nb;
 		}
-		else 
+		else {
 			return String.valueOf(nb);
+		}
 	}
 	
 	public static String addPoint(String state, int iteration) {

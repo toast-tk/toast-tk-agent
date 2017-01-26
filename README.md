@@ -1,6 +1,10 @@
-# TOAST TK Agent
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c871d1c99ce74589b8d0e0a634a866d5)](https://www.codacy.com/app/toast-tk/toast-tk-agent?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=toast-tk/toast-tk-agent&amp;utm_campaign=Badge_Grade)
+[![License](http://img.shields.io/:license-Apache%202-red.svg)](https://github.com/toast-tk/toast-tk-engine/blob/snapshot/LICENSE.md)
 
-Toast Tk Agent is a backdoor tool like application to record and replay user interactions with the application.
+# Toast-Tk Agent
+
+<a href="http://toast-tk.io"><img src="https://github.com/toast-tk/toast-tk-webapp/blob/master/public/images/ToastLogo.png?raw=true" align="left" height="50"></a>
+**Toast-tk-agent** is the leightweight desktop application of Toast-Tk framework that records and replays user interactions with the application.
 
 # Contribution
 
@@ -11,4 +15,4 @@ For contribution rules and guidelines, See [CONTRIBUTING.md](https://github.com/
 If you'd like to help, [get in touch](https://gitter.im/toast-tk/toast-tk-engine) and let us know how you'd like to help. We love contributors!! 
 
 # Licence
-See [Toast-tk Apache License 2.0](https://github.com/toast-tk/toast-tk-engine/blob/snapshot/LICENSE.md)
+_Toast TK regroups multiple open source projects licensed under the Apache Software License 2._

@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Provider;
 
-
 public class AgentConfigProvider implements Provider<AgentConfig> {
 	
 	private static final Logger LOG = LogManager.getLogger(AgentConfigProvider.class);
@@ -38,33 +37,27 @@ public class AgentConfigProvider implements Provider<AgentConfig> {
 
 	public static final String TOAST_PROXY_USER_PSWD = "toast.proxy.userpswd";
 
-
-
-	public AgentConfigProvider() {
-		super();
-	}
-
 	private void initConfig() {
 		String userHomepath = AgentConfig.getToastHome() + "/";
-		Properties p = new Properties();
+		Properties prop = new Properties();
 		try {
-			p.load(new FileReader(userHomepath + "agent.properties"));
+			prop.load(new FileReader(userHomepath + "agent.properties"));
 		}
 		catch(IOException e) {
 			LOG.error(e.getMessage(), e);
 		}
 		webConfig = new AgentConfig();
-		webConfig.setWebInitRecordingUrl(p.getProperty(TOAST_TEST_WEB_INIT_RECORDING_URL, "URL to record"));
-		webConfig.setChromeDriverPath(p.getProperty(TOAST_CHROMEDRIVER_PATH, userHomepath + "chromedriver.exe"));
-		webConfig.setWebAppUrl(p.getProperty(TOAST_TEST_WEB_APP_URL, "Toast WebApp url"));
-		webConfig.setApiKey(p.getProperty(TOAST_API_KEY, "Web App Api Key"));
-		webConfig.setPluginDir(p.getProperty(TOAST_PLUGIN_DIR, webConfig.getPluginDir()));
-		webConfig.setScriptsDir(p.getProperty(TOAST_SCRIPTS_DIR, "Scripts Directory Path"));
-		webConfig.setProxyActivate(p.getProperty(TOAST_PROXY_ACTIVATE, "false"));
-		webConfig.setProxyAdress(p.getProperty(TOAST_PROXY_ADRESS, "Proxy Adress"));
-		webConfig.setProxyPort(p.getProperty(TOAST_PROXY_PORT, "Proxy Port"));
-		webConfig.setProxyUserName(p.getProperty(TOAST_PROXY_USER_NAME, "Proxy User Name"));
-		webConfig.setProxyUserPswd(p.getProperty(TOAST_PROXY_USER_PSWD, "Proxy User Password"));
+		webConfig.setWebInitRecordingUrl(prop.getProperty(TOAST_TEST_WEB_INIT_RECORDING_URL, "URL to record"));
+		webConfig.setChromeDriverPath(prop.getProperty(TOAST_CHROMEDRIVER_PATH, userHomepath + "chromedriver.exe"));
+		webConfig.setWebAppUrl(prop.getProperty(TOAST_TEST_WEB_APP_URL, "Toast WebApp url"));
+		webConfig.setApiKey(prop.getProperty(TOAST_API_KEY, "Web App Api Key"));
+		webConfig.setPluginDir(prop.getProperty(TOAST_PLUGIN_DIR, webConfig.getPluginDir()));
+		webConfig.setScriptsDir(prop.getProperty(TOAST_SCRIPTS_DIR, "Scripts Directory Path"));
+		webConfig.setProxyActivate(prop.getProperty(TOAST_PROXY_ACTIVATE, "false"));
+		webConfig.setProxyAdress(prop.getProperty(TOAST_PROXY_ADRESS, "Proxy Adress"));
+		webConfig.setProxyPort(prop.getProperty(TOAST_PROXY_PORT, "Proxy Port"));
+		webConfig.setProxyUserName(prop.getProperty(TOAST_PROXY_USER_NAME, "Proxy User Name"));
+		webConfig.setProxyUserPswd(prop.getProperty(TOAST_PROXY_USER_PSWD, "Proxy User Password"));
 	}
 
 	@Override

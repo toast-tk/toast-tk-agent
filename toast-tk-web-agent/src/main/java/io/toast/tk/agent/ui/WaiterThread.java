@@ -14,8 +14,7 @@ public class WaiterThread implements Runnable {
 		  	WaiterPanel waiterPanel = new WaiterPanel();
 			this.panel = waiterPanel;
 			this.testrunner = new TestRunner(webConfigProvider);   
-			this.thread = new Thread(new RunnerThread(testrunner));
-        
+			this.thread = new Thread(new RunnerThread(testrunner));      
 	  }
 	  
 	  public void run() {

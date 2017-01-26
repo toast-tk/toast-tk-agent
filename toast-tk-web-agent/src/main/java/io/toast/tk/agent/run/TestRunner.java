@@ -24,7 +24,6 @@ import io.toast.tk.runtime.parse.FileHelper;
 import io.toast.tk.runtime.parse.TestParser;
 
 public class TestRunner {
-
 	private static final Logger LOG = LogManager.getLogger(TestRunner.class);
 	private TestPageRunner testPageRunner;
 	//private TestPlanRunner testPlanRunner;
@@ -43,7 +42,14 @@ public class TestRunner {
 		if(!Strings.isEmpty(scriptsPath) || !Files.isDirectory(path)){
 			NotificationManager.showMessage("No script directory defined, check agent settings !");
 		}
-		final List<ITestPage> testScripts = new ArrayList<>();
+		
+		final List<ITestPage> testScripts = getScripts(path);
+		
+		executeScripts(testScripts);
+	}
+	
+	private List<ITestPage> getScripts(Path path) {
+		List<ITestPage> testScripts = new ArrayList<>();
 		TestParser parser = new TestParser();
 		try {
 			Files.list(path).forEach(p -> {
@@ -60,7 +66,10 @@ public class TestRunner {
 			LOG.error(e.getMessage(), e);
 			NotificationManager.showMessage("Unable to list files in scripts path " + path.getFileName() + " !");
 		}
-		
+		return testScripts;
+	}
+	
+	private void executeScripts( List<ITestPage> testScripts) {
 		testScripts.forEach(script ->{
 			try {
 				if(!interupted) {

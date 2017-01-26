@@ -17,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-
 /**
  * Waiter panel
  */
@@ -29,7 +28,7 @@ public class WaiterPanel extends JFrame {
 	private int scriptNumber = 0;
 	private boolean interupted = false;
 	private boolean done = false;
-	private int iteration = 0, i = 0;
+	private int iteration = 0, iTemp = 0;
 	
 	private JPanel leftPanel, rightPanel, panIcon;
 	private JLabel timeLabel, scriptNameLabel, scriptNumberLabel, secondMainPanel;
@@ -59,7 +58,7 @@ public class WaiterPanel extends JFrame {
 		panIcon.repaint();
 		panIcon.revalidate();
 		
-		updateLabel(timeLabel, PanelHelper.secToHMS(scriptTime));
+		updateLabel(timeLabel, PanelHelper.secToHms(scriptTime));
 		
 		updateLabel(secondMainPanel, PanelHelper.addPoint(state,iteration));
 	}
@@ -80,8 +79,8 @@ public class WaiterPanel extends JFrame {
 			}
 		}
 		
-		i++;
-		if(i % 20 == 0) {
+		iTemp++;
+		if(iTemp % 20 == 0) {
 			iteration++;
 		}
 	}
@@ -121,11 +120,11 @@ public class WaiterPanel extends JFrame {
 	}
 	
 	private void buildLeftPanel() throws IOException {
-		Dimension pD = new Dimension(300, 25);
-		Dimension mD = new Dimension(250, 25);
+		Dimension prefDim = new Dimension(300, 25);
+		Dimension moyDim = new Dimension(250, 25);
 		
-		JLabel firstMainPanel = buildLeftPanelLabel("Script runner", pD, mD);	    
-	    secondMainPanel = buildLeftPanelLabel("In progress...", pD, mD);
+		JLabel firstMainPanel = buildLeftPanelLabel("Script runner", prefDim, moyDim);	    
+	    secondMainPanel = buildLeftPanelLabel("In progress...", prefDim, moyDim);
 
 		Image toastLogo = PanelHelper.createImage(this,"toast-loading.gif");
 		panIcon = PanelHelper.createBasicPanel();
@@ -142,43 +141,42 @@ public class WaiterPanel extends JFrame {
         leftPanel.setMinimumSize(new Dimension(250, 300));
         leftPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 	}
-	
-	
-	private JLabel buildLeftPanelLabel(String str, Dimension pD, Dimension mD) {
+		
+	private JLabel buildLeftPanelLabel(String str, Dimension prefDim, Dimension moyDim) {
 		JLabel firstMainPanel = PanelHelper.createBasicJLabel(str,PanelHelper.FONT_TITLE_2);
         firstMainPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-	    firstMainPanel.setPreferredSize(pD);
-	    firstMainPanel.setMinimumSize(mD);
+	    firstMainPanel.setPreferredSize(prefDim);
+	    firstMainPanel.setMinimumSize(moyDim);
 	    return firstMainPanel;
 	}
 	
 	private void buildRightPanel() throws IOException {
-		int pHeight = 75;
-		int mHeight = 50;
+		int prefHeight = 75;
+		int moyHeight = 50;
 		
 	    scriptNameLabel = PanelHelper.createBasicJLabel();
-	    JPanel scriptNamePanel = buildRightlPanelPanel("Script in progress : ", scriptNameLabel, 250, pHeight, 210, mHeight);
+	    JPanel scriptNamePanel = buildRightlPanelPanel("Script in progress : ", scriptNameLabel, 250, prefHeight, 210, moyHeight);
 	    scriptNumberLabel = PanelHelper.createBasicJLabel();
-	    JPanel scriptNumberPanel = buildRightlPanelPanel("N°", scriptNumberLabel, 50, pHeight, 40, mHeight);
+	    JPanel scriptNumberPanel = buildRightlPanelPanel("N°", scriptNumberLabel, 50, prefHeight, 40, moyHeight);
 	    JPanel scriptPanel = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 	    scriptPanel.add(scriptNumberPanel);
 	    scriptPanel.add(scriptNamePanel);
 
-	    timeLabel = PanelHelper.createBasicJLabel(PanelHelper.secToHMS(scriptTime));
-	    JPanel timePanel = buildRightlPanelPanel("Progress time : ", timeLabel, 300, pHeight, 250, mHeight);
+	    timeLabel = PanelHelper.createBasicJLabel(PanelHelper.secToHms(scriptTime));
+	    JPanel timePanel = buildRightlPanelPanel("Progress time : ", timeLabel, 300, prefHeight, 250, moyHeight);
 	    
         rightPanel = PanelHelper.createBasicPanel(BoxLayout.Y_AXIS);
         rightPanel.add(scriptPanel);
         rightPanel.add(timePanel);
         rightPanel.add(buildRightPanelButton());
-        rightPanel.setPreferredSize(new Dimension(300, pHeight * 2 + 70));
-        rightPanel.setMaximumSize(new Dimension(250, mHeight * 2 + 60));
+        rightPanel.setPreferredSize(new Dimension(300, prefHeight * 2 + 70));
+        rightPanel.setMaximumSize(new Dimension(250, moyHeight * 2 + 60));
 	}
 	
-	private JPanel buildRightlPanelPanel(String title, JLabel label, int pHeightX, int pHeightY, int mHeightX, int mHeightY) {
+	private JPanel buildRightlPanelPanel(String title, JLabel label, int prefHeightX, int prefHeightY, int moyHeightX, int moyHeightY) {
 		JPanel scriptNumberPanel = PanelHelper.createBasicPanel(title, PanelHelper.FONT_TEXT_BOLD);
-	    scriptNumberPanel.setPreferredSize(new Dimension(pHeightX, pHeightY));
-	    scriptNumberPanel.setMinimumSize(new Dimension(mHeightX, mHeightY));
+	    scriptNumberPanel.setPreferredSize(new Dimension(prefHeightX, prefHeightY));
+	    scriptNumberPanel.setMinimumSize(new Dimension(moyHeightX, moyHeightY));
 	    scriptNumberPanel.add(label);
 	    return scriptNumberPanel;
 	}
@@ -189,23 +187,27 @@ public class WaiterPanel extends JFrame {
 	    interputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(!interupted) {
-					int rep = JOptionPane.showConfirmDialog(null,
-									"Do you want to interupt the script ?",
-									"Interruption of the script",
-									JOptionPane.YES_NO_OPTION);	
-					if(rep == 0) {
-						interupted = true;	
-					}
-				}
-				else {
-					if(done) {
-						dispose();
-					}
-				}
+				interupt();
 			}
 		});
 	    return interputButton;
+	}
+	
+	private void interupt() {
+		if(!interupted) {
+			int rep = JOptionPane.showConfirmDialog(null,
+							"Do you want to interupt the script ?",
+							"Interruption of the script",
+							JOptionPane.YES_NO_OPTION);	
+			if(rep == 0) {
+				interupted = true;	
+			}
+		}
+		else {
+			if(done) {
+				dispose();
+			}
+		}
 	}
 	
 	private JButton buildIconButton(String str, Image image) {

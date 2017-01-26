@@ -15,10 +15,11 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Module;
 
 import io.toast.tk.agent.config.AgentConfigProvider;
+import io.toast.tk.plugin.IAgentPlugin;
 
 public class PluginLoader {
 
-	static final Logger LOG = LoggerFactory.getLogger(PluginLoader.class);
+	private static final Logger LOG = LoggerFactory.getLogger(PluginLoader.class);
 	private AgentConfigProvider configProvider;
 
 	public PluginLoader(AgentConfigProvider provider) {
