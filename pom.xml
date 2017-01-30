@@ -61,6 +61,11 @@
 			<id>skokaina</id>
 			<email>sallah.kokaina@gmail.com</email>
 		</developer>
+		<developer>
+			<name>Cohen Nathan</name>
+			<id>NathCoco</id>
+			<email>nathan66330@gmail.com</email>
+		</developer>
 	</developers>
 	<dependencies>
 		<dependency>
