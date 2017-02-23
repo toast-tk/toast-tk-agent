@@ -165,10 +165,10 @@ public class ConfigTesterHelper {
 	public static HttpURLConnection pingHttpUrl(String url, Proxy proxy) throws IOException {
 		URL siteURL = new URL(url);
 		HttpURLConnection connection;
-		if(url.contains("localhost")){
+		if(url.contains("localhost") || proxy == null){
 			connection = (HttpURLConnection) siteURL.openConnection();
 		} else {
-			connection = (HttpURLConnection) siteURL.openConnection(proxy);
+			connection = (HttpURLConnection) siteURL.openConnection(proxy);		
 		}
 		connection.setRequestMethod("GET");
 		connection.setConnectTimeout(5000);
