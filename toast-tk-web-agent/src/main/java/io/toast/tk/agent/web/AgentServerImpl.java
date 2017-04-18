@@ -67,14 +67,13 @@ public class AgentServerImpl  implements IAgentServer{
 	
 
 	private HttpRequest buildRequest(String uri, String json, String apiKey) {
-		HttpRequest request = new HttpRequest(uri, json);
+		HttpRequest request = HttpRequest.Builder.create().uri(uri).json(json).withKey(apiKey).build();
 		String proxyPort = app.getConfig().getProxyPort();
 		int port = proxyPort == null ? -1 : Integer.valueOf(proxyPort).intValue();
 		request.setProxyInfo(app.getConfig().getProxyAdress(),
 							 port,
 							 app.getConfig().getProxyUserName(),
 							 app.getConfig().getProxyUserPswd());
-		request.setApiKey(apiKey);
 		return request;
 	}
 

@@ -2,9 +2,9 @@ package io.toast.tk.agent.run;
 
 import com.google.inject.Module;
 
-import io.toast.tk.runtime.AbstractProjectRunner;
+import io.toast.tk.runtime.AbstractTestPlanRunner;
 
-public class TestPlanRunner extends AbstractProjectRunner{
+public class TestPlanRunner extends AbstractTestPlanRunner{
 
 	public TestPlanRunner(Module[] pluginModules) {
 		super(pluginModules);
