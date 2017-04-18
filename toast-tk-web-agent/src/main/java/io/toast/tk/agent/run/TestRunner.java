@@ -26,7 +26,6 @@ import io.toast.tk.runtime.parse.TestParser;
 public class TestRunner {
 	private static final Logger LOG = LogManager.getLogger(TestRunner.class);
 	private TestPageRunner testPageRunner;
-	//private TestPlanRunner testPlanRunner;
 	private AgentConfigProvider provider;
 	public String fileName;
 	
@@ -86,7 +85,6 @@ public class TestRunner {
 	public void kill() {
 		this.interupted = true;
 		this.testPageRunner = null;
-		//this.testPlanRunner = null;
 		this.provider = null;
 		this.fileName = null;
 	}
@@ -99,11 +97,4 @@ public class TestRunner {
 		return testPageRunner.runTestPage(testPage);
 	}
 
-	/*public void run(ITestPlan testPlan) throws Exception {
-		LOG.info("Agent plugin class loader: " + IAgentPlugin.class.getClassLoader());
-		PluginLoader loader = new PluginLoader(provider);
-		Module[] pluginModules = loader.collectGuiceModules(loader.loadPlugins(IAgentPlugin.class.getClassLoader()));
-		this.testPlanRunner =  new TestPlanRunner(pluginModules);
-		testPlanRunner.execute(testPlan, true);
-	}*/
 }

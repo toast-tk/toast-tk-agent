@@ -20,10 +20,14 @@ import io.toast.tk.plugin.IAgentPlugin;
 public class PluginLoader {
 
 	private static final Logger LOG = LoggerFactory.getLogger(PluginLoader.class);
-	private AgentConfigProvider configProvider;
+	private final String pluginDir;
 
 	public PluginLoader(AgentConfigProvider provider) {
-		this.configProvider = provider;
+		this(provider.get().getPluginDir());
+	}
+
+	public PluginLoader(String pluginDir) {
+		this.pluginDir = pluginDir;
 	}
 
 	private static void addSoftwareLibrary(File file,
@@ -35,7 +39,7 @@ public class PluginLoader {
 	
 	public  List<IAgentPlugin> loadPlugins(
 			ClassLoader classLoader) {
-		extendClassLoaderPath(configProvider.get().getPluginDir(), classLoader);
+		extendClassLoaderPath(pluginDir, classLoader);
 		ServiceLoader<IAgentPlugin> loader = ServiceLoader.load(IAgentPlugin.class, classLoader);
 		List<IAgentPlugin> list = new ArrayList<>();
 		loader.forEach(list::add);
