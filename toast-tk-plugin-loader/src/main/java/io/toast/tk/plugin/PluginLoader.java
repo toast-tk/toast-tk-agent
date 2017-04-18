@@ -1,7 +1,6 @@
 package io.toast.tk.plugin;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -15,9 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Module;
-
 import io.toast.tk.agent.config.AgentConfigProvider;
-import io.toast.tk.plugin.IAgentPlugin;
 
 public class PluginLoader {
 
@@ -82,7 +79,7 @@ public class PluginLoader {
 			List<URL> jars,
 			File dir) {
 		try {
-			for (File jar : dir.listFiles((pathname) -> pathname.isFile() && pathname.getName().endsWith(".jar"))) {
+			for (File jar : dir.listFiles(pathname -> pathname.isFile() && pathname.getName().endsWith(".jar"))) {
 				jars.add(jar.toURI().toURL());
 			}
 		} catch (Exception e) {
