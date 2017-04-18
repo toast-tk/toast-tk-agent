@@ -24,12 +24,12 @@ import java.awt.Component;
 public class PanelHelper {
 	
 	private static String fontName = "Verdana";
-	public static Font FONT_TEXT_BOLD = new Font("SansSerif",Font.BOLD + Font.ITALIC,16);
-	public static Font FONT_TEXT_ITALIC = new Font(fontName,Font.ITALIC,16);
-	public static Font FONT_TEXT = new Font(fontName,Font.PLAIN,16);
-	public static Font FONT_TITLE_3 = new Font(fontName,Font.BOLD,18);
-	public static Font FONT_TITLE_2 = new Font(fontName,Font.BOLD,22);
-	public static Font FONT_TITLE_1 = new Font(fontName,Font.BOLD,26);
+	public static Font FONT_TEXT_BOLD = new Font("SansSerif",Font.BOLD + Font.ITALIC,14);
+	public static Font FONT_TEXT_ITALIC = new Font(fontName,Font.ITALIC,14);
+	public static Font FONT_TEXT = new Font(fontName,Font.PLAIN,14);
+	public static Font FONT_TITLE_3 = new Font(fontName,Font.BOLD,16);
+	public static Font FONT_TITLE_2 = new Font(fontName,Font.BOLD,18);
+	public static Font FONT_TITLE_1 = new Font(fontName,Font.BOLD,22);
 
 	public static JPanel createBasicPanel() {
 		JPanel panel = new JPanel();

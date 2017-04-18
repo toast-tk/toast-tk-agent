@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- Change the product version at every update -->
-<?define ProductVersion = "0.1.4"?>
+<?define ProductVersion = "0.1.5.1"?>
 <!-- Do not change the ProductUpgradeCode -->
 <?define ProductUpgradeCode = "ab67ea4c-d2c3-4729-95eb-0ba451da5db2"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
@@ -36,6 +36,7 @@
             <Component Id="ApplicationSourceFiles" Guid="651b4f52-9256-4e56-a0c6-b7aa69482f7c">
               <File Id="ServerKeystoreFile" Source="resources\server-keystore.jks"/>
               <File Id="AgentStandAloneFile" Source="resources\agent-1.0-fat.jar"/>
+              <File Id="ToastProperties" Source="resources\toast.properties"/>
               <File Id="ChromeDriverFile" Source="resources\chromedriver.exe"/>
             </Component>
             

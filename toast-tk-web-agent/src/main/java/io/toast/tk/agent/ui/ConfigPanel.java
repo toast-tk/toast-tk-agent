@@ -149,7 +149,7 @@ public class ConfigPanel extends JFrame {
 		secondPane.setBackground(Color.white);
 
 		ImageIcon generalLogo = PanelHelper.createImageIcon(this, "general_icon.png");
-		secondPane.addTab("General parameters", generalLogo, buildGeneralPanel());
+		secondPane.addTab("General", generalLogo, buildGeneralPanel());
 
 		ImageIcon recordLogo = PanelHelper.createImageIcon(this,"recorder_icon.png");
 		secondPane.addTab("Recording", recordLogo, buildRecorderPanel());
@@ -184,15 +184,11 @@ public class ConfigPanel extends JFrame {
 	}
 	
 	private JPanel buildGeneralPanel() {
-		JPanel generalParameters = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
-	    JPanel generalParameters1 = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
-	    JPanel generalParameters2 = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
-		generalParameters1.add(webAppPanel);
-		generalParameters1.add(apiKeyPanel);
-		generalParameters2.add(pluginPanel);
-		generalParameters2.add(scriptsPanel);
-		generalParameters.add(generalParameters1);
-		generalParameters.add(generalParameters2);
+		JPanel generalParameters = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
+		generalParameters.add(webAppPanel);
+		generalParameters.add(apiKeyPanel);
+		generalParameters.add(pluginPanel);
+		generalParameters.add(scriptsPanel);
 		return generalParameters;
 	}
 	
@@ -206,18 +202,12 @@ public class ConfigPanel extends JFrame {
 	
 	private JPanel buildProxyPanel() {
 		JPanel proxyPanel = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
-	    JPanel proxyPanel1 = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
-	    JPanel proxyPanel2 = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
-	    JPanel proxyPanel3 = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 	    
-	    proxyPanel1.add(proxyCheckBox);
-	    proxyPanel2.add(proxyAdressPanel);
-	    proxyPanel2.add(proxyPortPanel);
-	    proxyPanel3.add(proxyUserNamePanel);
-	    proxyPanel3.add(proxyUserPswdPanel);
-	    proxyPanel.add(proxyPanel1);
-	    proxyPanel.add(proxyPanel2);
-	    proxyPanel.add(proxyPanel3);
+	    proxyPanel.add(proxyCheckBox);
+	    proxyPanel.add(proxyAdressPanel);
+	    proxyPanel.add(proxyPortPanel);
+	    proxyPanel.add(proxyUserNamePanel);
+	    proxyPanel.add(proxyUserPswdPanel);
 	    return proxyPanel;
 	}
 

@@ -171,7 +171,7 @@ public class ConfigTesterHelper {
 			connection = (HttpURLConnection) siteURL.openConnection(proxy);		
 		}
 		connection.setRequestMethod("GET");
-		connection.setConnectTimeout(5000);
+		connection.setConnectTimeout(timeout);
 		connection.connect();
 		return connection;
 	}
@@ -203,8 +203,14 @@ public class ConfigTesterHelper {
 			
 		// Install the all-trusting host verifier
 		HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-
-		HttpsURLConnection connection = (HttpsURLConnection) siteURL.openConnection(proxy);
+		HttpsURLConnection connection = null;
+		
+		if(proxy != null) {
+			connection = (HttpsURLConnection) siteURL.openConnection(proxy);
+		} else {
+			connection = (HttpsURLConnection) siteURL.openConnection();
+		}
+		
 		connection.setSSLSocketFactory(sc.getSocketFactory());
 		connection.setRequestMethod("GET");
 		connection.setConnectTimeout(timeout);
