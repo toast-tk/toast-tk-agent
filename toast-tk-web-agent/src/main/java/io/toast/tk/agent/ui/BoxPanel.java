@@ -293,9 +293,11 @@ public class BoxPanel extends JPanel {
 		this.setAlignmentY(Component.CENTER_ALIGNMENT);
 		this.setBackground(Color.white);
 		
+		JPanel textButtonPanel = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+
+		
 		textField = createBasicTextPanel();
 		iconPanel = PanelHelper.createBasicPanel();
-		JPanel textButtonPanel = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
 		iconValid = createIconValid();
 		iconNotValid = createIconNotValid();
 		
@@ -368,6 +370,10 @@ public class BoxPanel extends JPanel {
 		
 		textButtonPanel.add(textField);
 		textButtonPanel.add(iconPanel);
+
+		textButtonPanel.setSize(new Dimension(textButtonPanel.getSize().width, 50));
+		textButtonPanel.setMaximumSize(new Dimension(textButtonPanel.getMaximumSize().width, 50));
+		
 		this.add(textButtonPanel);
 		this.add(errorLabel);
 	}

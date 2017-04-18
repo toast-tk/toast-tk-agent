@@ -73,7 +73,11 @@ public class TestRunner {
 			try {
 				if(!interupted) {
 					fileName = script.getName();
-					run(script);
+					
+					// Do not look into hide scripts
+					if(!fileName.startsWith(".")){
+						run(script);
+					}
 				}
 			} catch (Exception e) {
 				LOG.error(e.getMessage(), e);
