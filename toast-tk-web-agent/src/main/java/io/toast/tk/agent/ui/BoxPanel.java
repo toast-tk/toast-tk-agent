@@ -25,6 +25,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import io.toast.tk.agent.ui.utils.ConfigTesterHelper;
+import io.toast.tk.agent.ui.utils.PanelHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,6 +34,7 @@ import io.toast.tk.agent.config.AgentConfigProvider;
 
 /**
  * Box panel
+ * TODO: split in multiple panels
  */
 public class BoxPanel extends JPanel {
 
@@ -41,7 +44,7 @@ public class BoxPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 
-	private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
+	private static final Logger LOG = LogManager.getLogger(BoxPanel.class);
 
 	private final Properties properties;
 
@@ -197,7 +200,7 @@ public class BoxPanel extends JPanel {
 	
 	private boolean testIconValidUrl(boolean runTryValue) throws IOException {
 		if(proxyCheckBox.isSelected()) {
-			return ConfigTesterHelper.testWebAppUrl(this.getTextValue(),runTryValue, 
+			return ConfigTesterHelper.testWebAppUrl(this.getTextValue(),runTryValue,
 					proxyAdressPanel.getTextValue(), proxyPortPanel.getTextValue(), 
 					proxyUserPanel.getTextValue(), proxyPswdPanel.getTextValue());
 		}

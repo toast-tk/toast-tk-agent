@@ -1,4 +1,4 @@
-package io.toast.tk.agent.ui;
+package io.toast.tk.agent.ui.utils;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -42,7 +42,6 @@ public class PanelHelper {
 		JPanel panel = createBasicPanel();
 		panel.add(Box.createHorizontalGlue());
 		panel.setLayout(new BoxLayout(panel, boxLayout));
-		
 		return panel;
 	}
 	public static JPanel createBasicPanel(String strKey, int boxLayout) {

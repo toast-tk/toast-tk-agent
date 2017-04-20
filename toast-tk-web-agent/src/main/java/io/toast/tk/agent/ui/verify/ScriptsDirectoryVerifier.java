@@ -2,7 +2,7 @@ package io.toast.tk.agent.ui.verify;
 
 import com.google.inject.Inject;
 import io.toast.tk.agent.config.AgentConfigProvider;
-import io.toast.tk.agent.ui.ConfigTesterHelper;
+import io.toast.tk.agent.ui.utils.ConfigTesterHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

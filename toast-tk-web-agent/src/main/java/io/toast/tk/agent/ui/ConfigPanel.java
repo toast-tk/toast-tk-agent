@@ -22,6 +22,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import com.google.inject.Inject;
+import io.toast.tk.agent.ui.utils.PanelHelper;
 import org.apache.commons.collections4.EnumerationUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -35,18 +37,6 @@ import io.toast.tk.agent.config.AgentConfigProvider;
 public class ConfigPanel extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-
-	public String chromeDriverName = AgentConfigProvider.TOAST_CHROMEDRIVER_PATH;
-	public String webAppName = AgentConfigProvider.TOAST_TEST_WEB_APP_URL;
-	public String recorderName = AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL;
-	public String apiKeyName = AgentConfigProvider.TOAST_API_KEY;
-	public String pluginName = AgentConfigProvider.TOAST_PLUGIN_DIR;
-	public String scriptsName = AgentConfigProvider.TOAST_SCRIPTS_DIR;
-	public String proxyActivate = AgentConfigProvider.TOAST_PROXY_ACTIVATE;
-	public String proxyAdress = AgentConfigProvider.TOAST_PROXY_ADRESS;
-	public String proxyPort = AgentConfigProvider.TOAST_PROXY_PORT;
-	public String proxyUser = AgentConfigProvider.TOAST_PROXY_USER_NAME;
-	public String proxyPswd = AgentConfigProvider.TOAST_PROXY_USER_PSWD;
 
 	private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
 	
@@ -64,11 +54,12 @@ public class ConfigPanel extends JFrame {
 	private HashMap<String, BoxPanel> boxFields;
 
 	private final File propertyFile;
-	
-	public ConfigPanel(Properties propertiesConfiguration, File propertyFile) throws IOException {
+
+	@Inject
+	public ConfigPanel(PropertiesHolder pHolder) throws IOException {
 		super();
-		this.properties = propertiesConfiguration;
-		this.propertyFile = propertyFile;
+		this.properties = pHolder.getProperties();
+		this.propertyFile = pHolder.getFile();
 		
 		buildContentPanel();
 		
@@ -76,8 +67,7 @@ public class ConfigPanel extends JFrame {
 		
 		this.setVisible(true);
 	}
-	
-	
+
 	private void buildContentPanel() throws IOException {
 		
 		this.boxFields = new HashMap<String, BoxPanel>();
@@ -202,7 +192,6 @@ public class ConfigPanel extends JFrame {
 	
 	private JPanel buildProxyPanel() {
 		JPanel proxyPanel = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
-	    
 	    proxyPanel.add(proxyCheckBox);
 	    proxyPanel.add(proxyAdressPanel);
 	    proxyPanel.add(proxyPortPanel);

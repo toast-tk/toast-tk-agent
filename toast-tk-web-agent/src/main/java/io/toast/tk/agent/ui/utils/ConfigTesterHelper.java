@@ -1,4 +1,6 @@
-package io.toast.tk.agent.ui;
+package io.toast.tk.agent.ui.utils;
+
+import io.toast.tk.agent.ui.NotificationManager;
 
 import java.io.File;
 import java.io.IOException;
