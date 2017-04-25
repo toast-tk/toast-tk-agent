@@ -13,7 +13,6 @@ public class UiModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(ConfigPanel.class);
         bind(PropertiesHolder.class).toProvider(PropertiesProvider.class);
         bind(ConfigPanel.class).toProvider(ConfigPanelProvider.class);
     }

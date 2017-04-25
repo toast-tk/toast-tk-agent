@@ -23,6 +23,8 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import com.google.inject.Inject;
+import io.toast.tk.agent.ui.i18n.UIMessages;
+import io.toast.tk.agent.ui.panels.*;
 import io.toast.tk.agent.ui.utils.PanelHelper;
 import org.apache.commons.collections4.EnumerationUtils;
 import org.apache.commons.io.FileUtils;
@@ -40,7 +42,7 @@ public class ConfigPanel extends JFrame {
 
 	private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
 	
-	private BoxPanel chromePanel, webAppPanel, recorderPanel, apiKeyPanel, pluginPanel, scriptsPanel,
+	private AbstractPanel chromePanel, webAppPanel, recorderPanel, apiKeyPanel, pluginPanel, scriptsPanel,
 			proxyAdressPanel, proxyPortPanel, proxyUserNamePanel, proxyUserPswdPanel;
 	
 	private JButton tryButton;
@@ -51,7 +53,7 @@ public class ConfigPanel extends JFrame {
 
 	private final Properties properties;
 
-	private HashMap<String, BoxPanel> boxFields;
+	private HashMap<String, AbstractPanel> boxFields;
 
 	private final File propertyFile;
 
@@ -70,7 +72,7 @@ public class ConfigPanel extends JFrame {
 
 	private void buildContentPanel() throws IOException {
 		
-		this.boxFields = new HashMap<String, BoxPanel>();
+		this.boxFields = new HashMap<String, AbstractPanel>();
 		this.secondPane = new JTabbedPane();
 		secondPane.setFont(PanelHelper.FONT_TITLE_2);
 		
@@ -155,7 +157,7 @@ public class ConfigPanel extends JFrame {
 	}
 
 	private void saveAndClose() {
-		for (Entry<String, BoxPanel> entry : boxFields.entrySet()) {
+		for (Entry<String, AbstractPanel> entry : boxFields.entrySet()) {
 			properties.setProperty(entry.getKey(), entry.getValue().getTextValue());
 		}
 		properties.setProperty(AgentConfigProvider.TOAST_PROXY_ACTIVATE, Boolean.toString(proxyCheckBox.isSelected()));
@@ -251,7 +253,7 @@ public class ConfigPanel extends JFrame {
 		for (Object key : EnumerationUtils.toList(properties.propertyNames())) {
 			String strKey = (String) key;
 			if(!strKey.equals(AgentConfigProvider.TOAST_PROXY_ACTIVATE)) {
-				BoxPanel box = boxFields.get(strKey);
+				AbstractPanel box = boxFields.get(strKey);
 				try {
 					box.testIconValid(false);
 					secondPane.repaint();
@@ -267,27 +269,27 @@ public class ConfigPanel extends JFrame {
 	private void buildFields() throws IOException{		
 		//%% API PANEL %%
 		String strKey = AgentConfigProvider.TOAST_API_KEY;
-		apiKeyPanel = new BoxPanel(properties, strKey);
+		apiKeyPanel = new SimplePanel(properties, strKey, UIMessages.USER_API_KEY, EnumError.APIKEY);
 		boxFields.put(strKey, apiKeyPanel);
 		
 		//%% PLUGIN PANEL %%
 		strKey = AgentConfigProvider.TOAST_PLUGIN_DIR;
-		pluginPanel = new BoxPanel(properties, strKey);
+		pluginPanel = new FileChoosePanel(properties, strKey, UIMessages.PLUGIN_DIR, EnumError.DIRECTORY);
 		boxFields.put(strKey, pluginPanel);
 			
 		//%% SCRIPTS PANEL %%
 		strKey = AgentConfigProvider.TOAST_SCRIPTS_DIR;
-		scriptsPanel = new BoxPanel(properties, strKey);
+		scriptsPanel = new FileChoosePanel(properties, strKey, UIMessages.SCRIPT_DIR, EnumError.DIRECTORY);
 		boxFields.put(strKey, scriptsPanel);
 		
 		//%% CHROME PANEL %%
 		strKey = AgentConfigProvider.TOAST_CHROMEDRIVER_PATH;
-		chromePanel = new BoxPanel(properties, strKey);
+		chromePanel = new FileChoosePanel(properties, strKey, UIMessages.CHROME_BIN_PATH, EnumError.FILE);
 		boxFields.put(strKey, chromePanel);
 
 		//%% PROXY CHECK BOX %%
 		strKey = AgentConfigProvider.TOAST_PROXY_ACTIVATE;
-		proxyCheckBox = new JCheckBox("Activation");
+		proxyCheckBox = new JCheckBox(UIMessages.ACTIVATE);
 		proxyCheckBox.setBackground(Color.white);
 		String proxyValue = properties.getProperty(strKey);
 		if("true".equals(proxyValue)) {
@@ -296,34 +298,34 @@ public class ConfigPanel extends JFrame {
 				
 		//%% PROXY ADRESS PANEL %%
 		strKey = AgentConfigProvider.TOAST_PROXY_ADRESS;
-		proxyAdressPanel = new BoxPanel(properties, strKey);
+		proxyAdressPanel = new SimplePanel(properties, strKey, UIMessages.PROXY_ADDR, EnumError.NOTHING);
 		boxFields.put(strKey, proxyAdressPanel);
 		
 		//%% PROXY PORT PANEL %%
 		strKey = AgentConfigProvider.TOAST_PROXY_PORT;
-		proxyPortPanel = new BoxPanel(properties, strKey);
+		proxyPortPanel = new SimplePanel(properties, strKey, UIMessages.PROXY_PORT, EnumError.NOTHING);
 		boxFields.put(strKey, proxyPortPanel);
 
 		//%% PROXY USER NAME PANEL %%
 		strKey = AgentConfigProvider.TOAST_PROXY_USER_NAME;
-		proxyUserNamePanel = new BoxPanel(properties, strKey);
+		proxyUserNamePanel = new SimplePanel(properties, strKey, UIMessages.PROXY_USER, EnumError.NOTHING);
 		boxFields.put(strKey, proxyUserNamePanel);
 		
 		//%% PROXY USER PSWD PANEL %%
 		strKey = AgentConfigProvider.TOAST_PROXY_USER_PSWD;
-		proxyUserPswdPanel = new BoxPanel(properties, strKey);
+		proxyUserPswdPanel = new SimplePanel(properties, strKey, UIMessages.PROXY_PWD, EnumError.NOTHING);
 		boxFields.put(strKey, proxyUserPswdPanel);
 		
 		//%% WEBAPP PANEL %%
 		strKey = AgentConfigProvider.TOAST_TEST_WEB_APP_URL;
-		webAppPanel = new BoxPanel(properties, strKey, 
+		webAppPanel = new WebAppPanel(properties, strKey,
 				proxyAdressPanel, proxyPortPanel,
 				proxyUserNamePanel, proxyUserPswdPanel, proxyCheckBox);
 		boxFields.put(strKey, webAppPanel);
 				
 		//%% RECORDER PANEL %%
 		strKey = AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL;
-		recorderPanel= new BoxPanel(properties, strKey, 
+		recorderPanel= new RecorderPanel(properties, strKey,
 						proxyAdressPanel, proxyPortPanel,
 						proxyUserNamePanel, proxyUserPswdPanel, proxyCheckBox);
 		boxFields.put(strKey, recorderPanel);

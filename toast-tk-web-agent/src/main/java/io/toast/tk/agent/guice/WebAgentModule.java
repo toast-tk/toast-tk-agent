@@ -27,6 +27,8 @@ public class WebAgentModule extends AbstractModule{
 
 	@Override
 	protected void configure() {
+		install(new UiModule());
+
 		bind(AgentConfigProvider.class).in(Singleton.class);
 		bind(AgentConfig.class).toProvider(AgentConfigProvider.class);
 		bind(BrowserManager.class).in(Singleton.class);
