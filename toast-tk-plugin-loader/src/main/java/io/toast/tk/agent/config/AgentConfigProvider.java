@@ -37,8 +37,10 @@ public class AgentConfigProvider implements Provider<AgentConfig> {
 
 	public static final String TOAST_PROXY_USER_PSWD = "toast.proxy.userpswd";
 
+	private static final String PATH_DELIM = "/";
+
 	private void initConfig() {
-		String userHomepath = AgentConfig.getToastHome() + "/";
+		String userHomepath = AgentConfig.getToastHome() + PATH_DELIM;
 		Properties prop = new Properties();
 		try {
 			prop.load(new FileReader(userHomepath + "agent.properties"));
@@ -54,7 +56,7 @@ public class AgentConfigProvider implements Provider<AgentConfig> {
 		webConfig.setPluginDir(prop.getProperty(TOAST_PLUGIN_DIR, webConfig.getPluginDir()));
 		webConfig.setScriptsDir(prop.getProperty(TOAST_SCRIPTS_DIR, "Scripts Directory Path"));
 		webConfig.setProxyActivate(prop.getProperty(TOAST_PROXY_ACTIVATE, "false"));
-		webConfig.setProxyAdress(prop.getProperty(TOAST_PROXY_ADRESS, "Proxy Adress"));
+		webConfig.setProxyAdress(prop.getProperty(TOAST_PROXY_ADRESS, "Proxy Address"));
 		webConfig.setProxyPort(prop.getProperty(TOAST_PROXY_PORT, "Proxy Port"));
 		webConfig.setProxyUserName(prop.getProperty(TOAST_PROXY_USER_NAME, "Proxy User Name"));
 		webConfig.setProxyUserPswd(prop.getProperty(TOAST_PROXY_USER_PSWD, "Proxy User Password"));

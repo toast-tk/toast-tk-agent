@@ -1,8 +1,9 @@
 package io.toast.tk.plugin;
 
 import java.io.File;
-import java.io.FileFilter;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -13,21 +14,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Module;
-
 import io.toast.tk.agent.config.AgentConfigProvider;
-import io.toast.tk.plugin.IAgentPlugin;
 
 public class PluginLoader {
 
 	private static final Logger LOG = LoggerFactory.getLogger(PluginLoader.class);
-	private AgentConfigProvider configProvider;
+	private final String pluginDir;
 
 	public PluginLoader(AgentConfigProvider provider) {
-		this.configProvider = provider;
+		this(provider.get().getPluginDir());
+	}
+
+	public PluginLoader(String pluginDir) {
+		this.pluginDir = pluginDir;
 	}
 
 	private static void addSoftwareLibrary(File file,
-			ClassLoader classLoader) throws Exception {
+			ClassLoader classLoader) throws NoSuchMethodException, MalformedURLException, InvocationTargetException, IllegalAccessException {
 	    Method method = URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{URL.class});
 	    method.setAccessible(true);
 	    method.invoke(classLoader, new Object[]{file.toURI().toURL()});
@@ -35,7 +38,7 @@ public class PluginLoader {
 	
 	public  List<IAgentPlugin> loadPlugins(
 			ClassLoader classLoader) {
-		extendClassLoaderPath(configProvider.get().getPluginDir(), classLoader);
+		extendClassLoaderPath(pluginDir, classLoader);
 		ServiceLoader<IAgentPlugin> loader = ServiceLoader.load(IAgentPlugin.class, classLoader);
 		List<IAgentPlugin> list = new ArrayList<>();
 		loader.forEach(list::add);
@@ -76,19 +79,11 @@ public class PluginLoader {
 			List<URL> jars,
 			File dir) {
 		try {
-			for (File jar : dir.listFiles(JAR_FILTER)) {
+			for (File jar : dir.listFiles(pathname -> pathname.isFile() && pathname.getName().endsWith(".jar"))) {
 				jars.add(jar.toURI().toURL());
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 	}
-
-	private static final FileFilter JAR_FILTER = new FileFilter() {
-		@Override
-		public boolean accept(
-				File pathname) {
-			return pathname.isFile() && pathname.getName().endsWith(".jar");
-		}
-	};
 }

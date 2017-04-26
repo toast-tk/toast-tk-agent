@@ -1,5 +1,7 @@
 package io.toast.tk.agent.ui;
 
+import io.toast.tk.agent.ui.utils.PanelHelper;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -183,7 +185,7 @@ public class WaiterPanel extends JFrame {
 	
 	private JButton buildRightPanelButton() throws IOException {
 		Image powerButton = PanelHelper.createImage(this,"power_button.png");
-		JButton interputButton = buildIconButton("Interruption of the script", powerButton);
+		JButton interputButton = buildIconButton("Strop script", powerButton);
 	    interputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -196,7 +198,7 @@ public class WaiterPanel extends JFrame {
 	private void interupt() {
 		if(!interupted) {
 			int rep = JOptionPane.showConfirmDialog(null,
-							"Do you want to interupt the script ?",
+							"Do you want to interrupt the script ?",
 							"Interruption of the script",
 							JOptionPane.YES_NO_OPTION);	
 			if(rep == 0) {
