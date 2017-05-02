@@ -47,6 +47,7 @@ public class MainApp implements IAgentApp {
 	
 	private boolean connectedToWebApp = false;
 	private boolean listenerStarted = false;
+	private Image onlineImage;
 
 	@Inject
 	public MainApp(AgentConfigProvider webConfig,
@@ -81,7 +82,7 @@ public class MainApp implements IAgentApp {
 		    	InputStream offlineImageAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo_off.png");
 				Image offlineImage = ImageIO.read(offlineImageAsStream);
 				InputStream onlineImageAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo_on.png");
-			 	Image onlineImage = ImageIO.read(onlineImageAsStream);
+			 	this.onlineImage = ImageIO.read(onlineImageAsStream);
 				PopupMenu popup = initMenuItem();
 			    this.trayIcon = new TrayIcon(offlineImage, "Toast TK - Web Agent", popup);
 			    this.trayIcon.setImageAutoSize(true);

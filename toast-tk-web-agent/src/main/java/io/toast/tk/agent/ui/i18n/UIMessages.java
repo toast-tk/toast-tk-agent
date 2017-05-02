@@ -3,6 +3,8 @@ package io.toast.tk.agent.ui.i18n;
 
 public class UIMessages {
 
+    private UIMessages(){}
+
     public static final String PROXY_ADDR = "Proxy address";
     public static final String PROXY_PORT = "Proxy port";
     public static final String PROXY_USER = "Proxy User Name";
