@@ -10,15 +10,12 @@
 	<name>Toast Toolkit - Agent</name>
 	<artifactId>toast-tk-web-agent</artifactId>
 	<properties>
-        <toast.tk.studioAgentPath>toast-tk-studio-agent-standalone.jar</toast.tk.studioAgentPath>
-        <vertx.plugin.version>2.0.12-final</vertx.plugin.version>
         <common.cli.version>1.3</common.cli.version>
-		<vertx.shade.plugin>2.3</vertx.shade.plugin>>
+		<vertx.shade.plugin>2.3</vertx.shade.plugin>
         <vertx.version>3.0.0</vertx.version>
         <selenium.version>2.53.1</selenium.version>
-        <toast.vertx.module>toast~agent~1.0</toast.vertx.module>
+        <toast.agent.version>1.0</toast.agent.version>
 		<async.client.version>2.0.31</async.client.version>
-        <sonar.skip>true</sonar.skip>
     </properties>
 	<build>
 		<resources>
@@ -31,23 +28,6 @@
 			</resource>
 		</resources>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.5.3</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>attached</goal>
-						</goals>
-						<phase>package</phase>
-						<configuration>
-							<finalName>toast-tk-studio-agent</finalName>
-							<descriptor>src/assembly/bin.xml</descriptor>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
@@ -64,60 +44,23 @@
 										implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<manifestEntries>
 										<Main-Class>io.vertx.core.Starter</Main-Class>
-										<Main-Verticle>tio.toast.tk.agent.web.RestRecorderService</Main-Verticle>
+										<Main-Verticle>io.toast.tk.agent.web.RestRecorderService</Main-Verticle>
 									</manifestEntries>
 								</transformer>
 							</transformers>
 							<artifactSet/>
-							<outputFile>${project.build.directory}/${project.artifactId}-${project.version}-fat.jar</outputFile>
+							<filters>
+								<filter>
+									<artifact>*:*</artifact>
+									<excludes>
+										<exclude>META-INF/*.SF</exclude>
+										<exclude>META-INF/*.DSA</exclude>
+										<exclude>META-INF/*.RSA</exclude>
+									</excludes>
+								</filter>
+							</filters>
+							<outputFile>${project.build.directory}/agent-${toast.agent.version}-fat.jar</outputFile>
 						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-lib-dependencies</id>
-						<phase>package</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<tasks>
-								<copy file="${project.build.directory}/${toast.tk.studioAgentPath}"
-									todir="${project.build.directory}/classes/${toast.vertx.module}/lib" />
-								<copy file="${project.build.directory}/classes/recorder.js"
-									tofile="${project.build.directory}/classes/${toast.vertx.module}/recorder.js" />
-								<copy file="${project.build.directory}/classes/server-keystore.jks"
-									tofile="${project.build.directory}/classes/${toast.vertx.module}/server-keystore.jks" />
-								<copy file="${project.build.directory}/classes/toast.png"
-									tofile="${project.build.directory}/classes/${toast.vertx.module}/toast.png" />
-								<copy file="${project.build.directory}/classes/ToastLogo.png"
-									tofile="${project.build.directory}/classes/${toast.vertx.module}/ToastLogo.png" />
-							</tasks>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>io.vertx</groupId>
-				<artifactId>vertx-maven-plugin</artifactId>
-				<version>${vertx.plugin.version}</version>
-				<configuration>
-					<createFatJar>true</createFatJar>
-					<modsDir>${project.build.directory}\classes</modsDir>
-					<moduleName>${toast.vertx.module}</moduleName>
-					<classpath>src/main/resources/:src/test/resources:target/classes/</classpath>
-					<pullInDeps>true</pullInDeps>
-				</configuration>
-				<executions>
-					<execution>
-						<id>assemble</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>fatJar</goal>
-						</goals>
 					</execution>
 				</executions>
 			</plugin>

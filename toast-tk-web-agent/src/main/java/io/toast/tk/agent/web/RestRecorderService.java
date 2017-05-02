@@ -7,7 +7,6 @@ import io.vertx.core.Future;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.net.JksOptions;
-import io.vertx.core.net.TrustOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.ErrorHandler;
@@ -25,7 +24,6 @@ import io.toast.tk.agent.ui.NotificationManager;
 import io.toast.tk.agent.web.rest.PingHandler;
 import io.toast.tk.agent.web.rest.RecordHandler;
 import io.toast.tk.agent.web.rest.StopHandler;
-import org.apache.logging.log4j.core.net.ssl.TrustStoreConfiguration;
 
 
 public class RestRecorderService extends AbstractVerticle {
