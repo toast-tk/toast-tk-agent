@@ -5,8 +5,6 @@ public class AgentInformation {
 	
 	private String host;
 	private String token;
-	private Boolean isAlive;
-	private String sentence;
 
 
 	protected AgentInformation(){
