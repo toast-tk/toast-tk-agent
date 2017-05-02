@@ -65,7 +65,8 @@ public class WebAppPanel extends AbstractPanel {
 
     protected JComponent buildPanel() throws IOException {
         errorLabel = buildErrorLabel(iconPanel, EnumError.URL);
-        this.setBorder(BorderFactory.createTitledBorder(null, UIMessages.URL_TOAST,
+        this.setBorder(BorderFactory.createTitledBorder(null,
+                UIMessages.URL_TOAST,
                 TitledBorder.LEFT, TitledBorder.TOP,
                 PanelHelper.FONT_TITLE_3, Color.BLACK));
         return null;

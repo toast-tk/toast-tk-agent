@@ -111,9 +111,7 @@ public class ConfigTesterHelper {
 		}
 		return !isKo;
 	}
-	
-	
-	
+
 	public static boolean getStatus(String url, String proxyAdress, String proxyPort, String proxyUserName,
 			String proxyUserPswd) throws IOException {
 

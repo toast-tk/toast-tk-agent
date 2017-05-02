@@ -15,9 +15,9 @@ import io.toast.tk.core.agent.interpret.WebEventRecord;
 import io.toast.tk.core.rest.HttpRequest;
 import io.toast.tk.core.rest.RestUtils;
 
-public class AgentServerImpl  implements IAgentServer{
+public class AgentServerImpl implements IAgentServer {
 
-	private static final Logger LOG = LogManager.getLogger(RestRecorderService.class);
+	private static final Logger LOG = LogManager.getLogger(AgentServerImpl.class);
 	private String hostName;
 	private IAgentApp app;
 	
@@ -35,11 +35,6 @@ public class AgentServerImpl  implements IAgentServer{
 		String json = new Gson().toJson(eventRecord);
 		String url = getWebAppURI() + "/api/record";
 		RestUtils.postWebEventRecord(buildRequest(url, json, apiKey));
-
-	}
-
-	public boolean register() {
-		return register(null);
 	}
 	
 	public boolean register(String apiKey) {
@@ -49,13 +44,14 @@ public class AgentServerImpl  implements IAgentServer{
 			String localAddress = Inet4Address.getLocalHost().getHostAddress();
 			AgentInformation info = new AgentInformation(localAddress, apiKey);
 			String json = new Gson().toJson(info);
+
+			LOG.info("Registering driver: {}", json);
 			
 			boolean isRegistered = RestUtils.registerAgent(buildRequest(url, json, apiKey));
 			
 			if(isRegistered) {
 				LOG.info("Agent registred with hotname {}", hostName);
-			}
-			else {
+			} else {
 				LOG.info("The webApp does not anwser at " + url);
 			}
 			return isRegistered;
@@ -68,15 +64,16 @@ public class AgentServerImpl  implements IAgentServer{
 
 	private HttpRequest buildRequest(String uri, String json, String apiKey) {
 		HttpRequest request = HttpRequest.Builder.create().uri(uri).json(json).withKey(apiKey).build();
-		String proxyPort = app.getConfig().getProxyPort();
-		int port = proxyPort == null ? -1 : Integer.valueOf(proxyPort).intValue();
-		request.setProxyInfo(app.getConfig().getProxyAdress(),
-							 port,
-							 app.getConfig().getProxyUserName(),
-							 app.getConfig().getProxyUserPswd());
+		if(Boolean.valueOf(app.getConfig().getProxyActivate()) == true){
+			String proxyPort = app.getConfig().getProxyPort();
+			int port = proxyPort == null || proxyPort.isEmpty() ? -1 : Integer.valueOf(proxyPort).intValue();
+			request.setProxyInfo(app.getConfig().getProxyAdress(),
+					port,
+					app.getConfig().getProxyUserName(),
+					app.getConfig().getProxyUserPswd());
+		}
 		return request;
 	}
-
 
 	@Override
 	public void unRegister() {

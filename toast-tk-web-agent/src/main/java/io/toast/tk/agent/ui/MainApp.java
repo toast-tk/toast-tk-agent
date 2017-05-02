@@ -50,14 +50,15 @@ public class MainApp implements IAgentApp {
 
 	@Inject
 	public MainApp(AgentConfigProvider webConfig,
-				   BrowserManager browserManager, IAgentServer agentServer,
+				   BrowserManager browserManager,
+				   IAgentServer agentServer,
 				   Map<String, IPropertyVerifier> verifier,
 				   PropertiesProvider propertiesProvider,
 				   ConfigPanelProvider configPanelProvider) {
 		this.webConfigProvider = webConfig;
 		this.browserManager = browserManager;
 		this.propertiesProvider = propertiesProvider;
-		this.agentServer= agentServer;
+		this.agentServer = agentServer;
 		this.configPanelProvider = configPanelProvider;
 		this.verifier = verifier;
 		initWorkspace();
@@ -65,17 +66,10 @@ public class MainApp implements IAgentApp {
 	}
 
 	private void initWorkspace() {
-		AgentConfig webConfig = webConfigProvider.get();
-		final String workSpaceDir = AgentConfig.getToastHome();
-		LOG.info("creating workspace directory at: " + workSpaceDir );
-		createHomeDirectories(workSpaceDir);
+		webConfigProvider.get();
 		propertiesProvider.get();
+	}
 
-	}
-	
-	private void createHomeDirectories(String workSpaceDir) {
-		new File(workSpaceDir).mkdir();
-	}
 
 	/**
 	 * Initialise systray if supported and append the agent contextual menu

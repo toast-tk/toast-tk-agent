@@ -9,7 +9,7 @@ import io.toast.tk.agent.web.RestRecorderService;
 
 public class PingHandler implements Handler<HttpServerRequest>{
 
-	private static final Logger LOG = LogManager.getLogger(RestRecorderService.class);
+	private static final Logger LOG = LogManager.getLogger(PingHandler.class);
 	
 	@Override
 	public void handle(HttpServerRequest event) {

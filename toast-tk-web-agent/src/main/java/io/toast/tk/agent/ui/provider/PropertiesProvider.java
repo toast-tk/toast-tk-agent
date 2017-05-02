@@ -28,6 +28,7 @@ public class PropertiesProvider implements Provider<PropertiesHolder> {
         this.configProvider = configProvider;
         this.toastWebPropertiesFile = new File(AgentConfig.TOAST_PROPERTIES_FILE);
         if(!Files.exists(Paths.get(AgentConfig.getToastHome()))){
+            LOG.info("creating workspace directory at: " + AgentConfig.getToastHome() );
             new File(AgentConfig.getToastHome()).mkdir();
         }
         if (!toastWebPropertiesFile.exists()) {
