@@ -55,6 +55,7 @@ public class BrowserManager {
 	
 	public void closeBrowser() {
 		if(driver != null){
+			this.scriptInjector.stop();
 			driver.close();
 			driver = null;
 		}
