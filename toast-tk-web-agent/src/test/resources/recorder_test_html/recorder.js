@@ -4,7 +4,7 @@ function recorder(){
 	var eventHistory = {};
 	var processing = false;
 	var port = location.protocol === 'https:' ? 4445 : 4444;
-	var host = location.protocol + '//localhost:'+port+'/record';
+	var host = 'https://localhost:4445/api/record';
 	
 	var xmlhttp = new XMLHttpRequest();
 
@@ -150,9 +150,9 @@ function recorder(){
 	
 	function publishEvent(event){
 		console.log(event);
-		//xmlhttp.open('POST', host + '/event');
-		//xmlhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-		//xmlhttp.send(JSON.stringify(event));
+		xmlhttp.open('POST', host + '/event');
+		xmlhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+		xmlhttp.send(JSON.stringify(event));
 	};
 
 	function extractLocatorFromEvent(target){

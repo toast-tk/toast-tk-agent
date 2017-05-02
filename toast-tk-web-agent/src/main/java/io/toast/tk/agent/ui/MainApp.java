@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.UnknownHostException;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -195,9 +196,15 @@ public class MainApp implements IAgentApp {
 
 	private ActionListener getKillListener(){
 	    ActionListener listener = new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-	        	agentServer.unRegister();
-	        	System.exit(0);
+	        public void actionPerformed(ActionEvent event) {
+				try {
+					agentServer.unRegister();
+				} catch (UnknownHostException exception) {
+					LOG.error(exception.getMessage(), exception);
+				}finally {
+					System.exit(0);
+				}
+
 	        }
 	    };
 	    return listener;

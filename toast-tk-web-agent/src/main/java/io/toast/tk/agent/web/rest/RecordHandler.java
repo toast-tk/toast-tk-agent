@@ -1,17 +1,16 @@
 package io.toast.tk.agent.web.rest;
 
-import org.vertx.java.core.Handler;
-import org.vertx.java.core.buffer.Buffer;
-import org.vertx.java.core.http.HttpServerRequest;
-
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 
 import io.toast.tk.agent.web.UriChangeListener;
 import io.toast.tk.agent.web.record.WebRecorder;
 import io.toast.tk.core.agent.interpret.WebEventRecord;
+import io.vertx.core.Handler;
+import io.vertx.core.json.Json;
+import io.vertx.ext.web.RoutingContext;
 
-public class RecordHandler implements Handler<HttpServerRequest>{
+public class RecordHandler implements Handler<RoutingContext> {
 	
 	final Gson gson = new Gson();
 	private WebRecorder recorder;
@@ -22,27 +21,22 @@ public class RecordHandler implements Handler<HttpServerRequest>{
 		this.uriChangeListener= uriChangeListener;
 		this.recorder = webRecorder;
 	}
-
-	@Override
-	public void handle(HttpServerRequest req) {
-		req.bodyHandler(new Handler<Buffer>() {
-			@Override
-			public void handle(Buffer buffer) {
-				String eventJson = buffer.toString();
-				WebEventRecord eventRecord = gson.fromJson(eventJson,WebEventRecord.class);
-				String pageName = uriChangeListener.getLocation() != null ? 
-								  uriChangeListener.getLocation() : 
-								  eventRecord.getParent();
-				eventRecord.setParent(pageName);
-				processEvent(eventRecord);
-			}
-		});
-		req.response().headers().add("Access-Control-Allow-Origin", "*");
-		req.response().setStatusCode(200).end();
-	}
 	
 	public void processEvent(WebEventRecord record) {
 		recorder.process(record);
+	}
+
+	@Override
+	public void handle(RoutingContext routingContext) {
+		final WebEventRecord eventRecord = Json.decodeValue(routingContext.getBodyAsString(),
+				WebEventRecord.class);
+		String pageName = uriChangeListener.getLocation() != null ?
+				uriChangeListener.getLocation() :
+				eventRecord.getParent();
+		eventRecord.setParent(pageName);
+		processEvent(eventRecord);
+		routingContext.response().headers().add("Access-Control-Allow-Origin", "*");
+		routingContext.response().setStatusCode(200).end();
 	}
 
 }

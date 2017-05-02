@@ -13,9 +13,11 @@
         <toast.tk.studioAgentPath>toast-tk-studio-agent-standalone.jar</toast.tk.studioAgentPath>
         <vertx.plugin.version>2.0.12-final</vertx.plugin.version>
         <common.cli.version>1.3</common.cli.version>
-        <vertx.version>2.1.6</vertx.version>
+		<vertx.shade.plugin>2.3</vertx.shade.plugin>>
+        <vertx.version>3.0.0</vertx.version>
         <selenium.version>2.53.1</selenium.version>
         <toast.vertx.module>toast~agent~1.0</toast.vertx.module>
+		<async.client.version>2.0.31</async.client.version>
         <sonar.skip>true</sonar.skip>
     </properties>
 	<build>
@@ -42,6 +44,32 @@
 						<configuration>
 							<finalName>toast-tk-studio-agent</finalName>
 							<descriptor>src/assembly/bin.xml</descriptor>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>${vertx.shade.plugin}</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<transformers>
+								<transformer
+										implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<manifestEntries>
+										<Main-Class>io.vertx.core.Starter</Main-Class>
+										<Main-Verticle>tio.toast.tk.agent.web.RestRecorderService</Main-Verticle>
+									</manifestEntries>
+								</transformer>
+							</transformers>
+							<artifactSet/>
+							<outputFile>${project.build.directory}/${project.artifactId}-${project.version}-fat.jar</outputFile>
 						</configuration>
 					</execution>
 				</executions>
@@ -103,8 +131,13 @@
 		</dependency>
 		<dependency>
 			<groupId>io.vertx</groupId>
-			<artifactId>vertx-platform</artifactId>
+			<artifactId>vertx-web</artifactId>
 			<version>${vertx.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.asynchttpclient</groupId>
+			<artifactId>async-http-client</artifactId>
+			<version>${async.client.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-cli</groupId>
