@@ -310,7 +310,7 @@ public class ConfigPanel extends JFrame {
 
 		//%% PROXY USER PSWD PANEL %%
 		proxyUserPswdPanel = new SimplePanel(properties,
-				AgentConfigProvider.TOAST_PROXY_USER_PSWD, UIMessages.PROXY_PWD, EnumError.NOTHING);
+				AgentConfigProvider.TOAST_PROXY_USER_PSWD, UIMessages.PROXY_PSENTENCE, EnumError.NOTHING);
 		boxFields.put(AgentConfigProvider.TOAST_PROXY_USER_PSWD, proxyUserPswdPanel);
 
 		//%% WEBAPP PANEL %%

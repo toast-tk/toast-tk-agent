@@ -8,7 +8,7 @@ public class UIMessages {
     public static final String PROXY_ADDR = "Proxy address";
     public static final String PROXY_PORT = "Proxy port";
     public static final String PROXY_USER = "Proxy User Name";
-    public static final String PROXY_PWD = "Proxy User Password";
+    public static final String PROXY_PSENTENCE = "Proxy User Password";
 
     public static final String ACTIVATE = "Activation";
     public static final String URL_TO_RECORD = "Target WebApp URL";

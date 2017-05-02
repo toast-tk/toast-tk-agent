@@ -75,7 +75,7 @@ public class ScriptInjector {
 	public void injectScript() throws IOException {
 		this.isStarted = true;
 		this.recording = true;
-		JavascriptExecutor executor = ((JavascriptExecutor) driver);
+		JavascriptExecutor executor = (JavascriptExecutor) driver;
 		InputStream resourceAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("recorder.js");
 		String script = IOUtils.toString(resourceAsStream);
 		StringBuilder subsScriptBuilder = new StringBuilder();
