@@ -11,8 +11,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
@@ -27,7 +25,7 @@ public class PropertiesProvider implements Provider<PropertiesHolder> {
     public PropertiesProvider(AgentConfigProvider configProvider) throws IOException {
         this.configProvider = configProvider;
         this.toastWebPropertiesFile = new File(AgentConfig.TOAST_PROPERTIES_FILE);
-        if(!Files.exists(Paths.get(AgentConfig.getToastHome()))){
+        if(!Paths.get(AgentConfig.getToastHome()).toFile().exists()){
             LOG.info("creating workspace directory at: " + AgentConfig.getToastHome() );
             new File(AgentConfig.getToastHome()).mkdir();
         }

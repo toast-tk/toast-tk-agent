@@ -95,17 +95,9 @@ public class FileChoosePanel extends AbstractPanel {
         JButton fileSearch = new JButton();
         fileSearch.setText("...");
         if (fileOrDir) {
-            fileSearch.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent arg0) {
-                    chooseFile(textField);
-                }
-            });
+            fileSearch.addActionListener(event ->  chooseFile(textField));
         } else {
-            fileSearch.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent arg0) {
-                    chooseDirectory(textField, strKey);
-                }
-            });
+            fileSearch.addActionListener(event -> chooseDirectory(textField, strKey));
         }
         return fileSearch;
     }

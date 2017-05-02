@@ -17,7 +17,6 @@ import com.google.inject.Module;
 import io.toast.tk.agent.config.AgentConfigProvider;
 import io.toast.tk.agent.ui.NotificationManager;
 import io.toast.tk.dao.domain.impl.test.block.ITestPage;
-//import io.toast.tk.dao.domain.impl.test.block.ITestPlan;
 import io.toast.tk.plugin.IAgentPlugin;
 import io.toast.tk.plugin.PluginLoader;
 import io.toast.tk.runtime.parse.FileHelper;
@@ -38,7 +37,7 @@ public class TestRunner {
 	public void execute(){
 		String scriptsPath = this.provider.get().getScriptsDir();
 		Path path = Paths.get(scriptsPath);
-		if(!Strings.isEmpty(scriptsPath) || !Files.isDirectory(path)){
+		if(!Strings.isEmpty(scriptsPath) || !path.toFile().isDirectory()){
 			NotificationManager.showMessage("No script directory defined, check agent settings !");
 		}
 		
@@ -52,14 +51,7 @@ public class TestRunner {
 		TestParser parser = new TestParser();
 		try {
 			Files.list(path).forEach(p -> {
-				try{
-					List<String> scriptLines = FileHelper.getScript(new FileInputStream(p.toFile()));
-					ITestPage testScript = parser.parse(scriptLines, p.getFileName().toString());
-					testScripts.add(testScript);
-				}catch(Exception e){
-					LOG.error(e.getMessage(), e);
-					NotificationManager.showMessage("Unable to parse " + p.getFileName() + " !");
-				}
+				collectScripts(testScripts, parser, p);
 			});
 		} catch (IOException e) {
 			LOG.error(e.getMessage(), e);
@@ -67,7 +59,18 @@ public class TestRunner {
 		}
 		return testScripts;
 	}
-	
+
+	private void collectScripts(List<ITestPage> testScripts, TestParser parser, Path p) {
+		try{
+            List<String> scriptLines = FileHelper.getScript(new FileInputStream(p.toFile()));
+            ITestPage testScript = parser.parse(scriptLines, p.getFileName().toString());
+            testScripts.add(testScript);
+        }catch(Exception e){
+            LOG.error(e.getMessage(), e);
+            NotificationManager.showMessage("Unable to parse " + p.getFileName() + " !");
+        }
+	}
+
 	private void executeScripts( List<ITestPage> testScripts) {
 		testScripts.forEach(script ->{
 			try {
