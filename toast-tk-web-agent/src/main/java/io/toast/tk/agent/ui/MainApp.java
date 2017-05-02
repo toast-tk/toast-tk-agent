@@ -21,6 +21,7 @@ import io.toast.tk.agent.ui.i18n.MainAppMessages;
 import io.toast.tk.agent.ui.provider.ConfigPanelProvider;
 import io.toast.tk.agent.ui.provider.PropertiesProvider;
 import io.toast.tk.agent.ui.verify.IPropertyVerifier;
+import io.toast.tk.core.annotation.ActionAdapter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -106,12 +107,12 @@ public class MainApp implements IAgentApp {
 	    MenuItem stopRecordingItem = new MenuItem("Stop Recording");
 	    MenuItem settingsItem = new MenuItem("Settings");
 	    
-	    quitItem.addActionListener(getKillListener());
-	    connectItem.addActionListener(getConnectListener());
-	    executeItem.addActionListener(getExecuteListener());
-	    stopRecordingItem.addActionListener(getStopListener());
-	    startRecordingItem.addActionListener(getStartListener());
-	    settingsItem.addActionListener(getSettingsListener());
+	    quitItem.addActionListener(this::killListener);
+	    connectItem.addActionListener(this::connectListener);
+	    executeItem.addActionListener(this::executeListener);
+	    stopRecordingItem.addActionListener(this::stopListener);
+	    startRecordingItem.addActionListener(this::start);
+	    settingsItem.addActionListener(this::settingsListener);
 	    
 	    popup.add(connectItem);
 	    popup.addSeparator();
@@ -127,13 +128,8 @@ public class MainApp implements IAgentApp {
 	    return popup;
 	}
 	
-	private ActionListener getConnectListener(){
-	    ActionListener listener = new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-	        	connect();
-	        }
-	    };
-	    return listener;
+	private void connectListener(ActionEvent e){
+		connect();
 	}
 	
 	//TODO: Switch implementation to websocket and have a connection watcher
@@ -165,13 +161,8 @@ public class MainApp implements IAgentApp {
 		return assertProperty(AgentConfigProvider.TOAST_TEST_WEB_APP_URL);
 	}
 
-	private ActionListener getExecuteListener(){
-	    ActionListener listener = new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-	        	execute();
-	        }
-	    };
-	    return listener;
+	private void executeListener(ActionEvent e){
+		execute();
 	}
 	
 	private void execute() {
@@ -194,32 +185,17 @@ public class MainApp implements IAgentApp {
 		return assertProperty(AgentConfigProvider.TOAST_SCRIPTS_DIR);
 	}
 
-	private ActionListener getKillListener(){
-	    ActionListener listener = new ActionListener() {
-	        public void actionPerformed(ActionEvent event) {
-				try {
-					agentServer.unRegister();
-				} catch (UnknownHostException exception) {
-					LOG.error(exception.getMessage(), exception);
-				}finally {
-					System.exit(0);
-				}
+	private void killListener(ActionEvent event){
+		try {
+			agentServer.unRegister();
+		} catch (UnknownHostException exception) {
+			LOG.error(exception.getMessage(), exception);
+		}finally {
+			System.exit(0);
+		}
+	}
 
-	        }
-	    };
-	    return listener;
-	}
-	
-	private ActionListener getStartListener(){
-	    ActionListener listener = new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-	        	start();
-	        }
-	    };
-	    return listener;
-	}
-	
-	private void start() {
+	private void start(ActionEvent e) {
 		try {
     		if(connectedToWebApp) {
 				if(hasValidRecordingEnvironment()) {
@@ -244,30 +220,20 @@ public class MainApp implements IAgentApp {
 				assertProperty(AgentConfigProvider.TOAST_TEST_WEB_APP_URL);
 	}
 
-	private ActionListener getStopListener(){
-	    ActionListener listener = new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-	        	if(listenerStarted) {
-		        	browserManager.closeBrowser();
-	        	}
-	        	else{
-	        		NotificationManager.showMessage(MainAppMessages.RECORDER_NOT_STARTED).showNotification();
-	        	}
-	        }
-	    };
-	    return listener;
+	private void stopListener(ActionEvent e){
+		if(listenerStarted) {
+			browserManager.closeBrowser();
+		}
+		else{
+			NotificationManager.showMessage(MainAppMessages.RECORDER_NOT_STARTED).showNotification();
+		}
 	}
 	
-	private ActionListener getSettingsListener(){
-	    ActionListener listener = new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-				ConfigPanel p = configPanelProvider.get();
-				if (p == null) {
-					NotificationManager.showMessage(CommonMessages.PROPERTIES_NOT_DISPLAYED);
-				}
-			}
-	    };
-	    return listener;
+	private void settingsListener(ActionEvent e){
+		ConfigPanel p = configPanelProvider.get();
+		if (p == null) {
+			NotificationManager.showMessage(CommonMessages.PROPERTIES_NOT_DISPLAYED);
+		}
 	}
 	
 	public AgentConfig getConfig() {
