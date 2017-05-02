@@ -17,9 +17,8 @@ import io.toast.tk.agent.web.UriChangeListener;
 import io.toast.tk.agent.web.record.WebRecorder;
 import io.toast.tk.agent.web.rest.RecordHandler;
 import io.toast.tk.agent.web.rest.StopHandler;
-import io.toast.tk.agent.web.rest.ToastAsyncHttpClientProvider;
+import io.toast.tk.agent.web.rest.AsyncHttpClientProvider;
 import org.asynchttpclient.AsyncHttpClient;
-import org.asynchttpclient.DefaultAsyncHttpClient;
 
 public class WebAgentModule extends AbstractModule{
 
@@ -37,7 +36,7 @@ public class WebAgentModule extends AbstractModule{
 		bind(StopHandler.class).in(Singleton.class);
 		bind(UriChangeListener.class).in(Singleton.class);
 		bind(WebRecorder.class).in(Singleton.class);
-		bind(AsyncHttpClient.class).toProvider(ToastAsyncHttpClientProvider.class);
+		bind(AsyncHttpClient.class).toProvider(AsyncHttpClientProvider.class);
 
 		MapBinder<String, IPropertyVerifier> verifierMapBinder = MapBinder.newMapBinder(binder(), String.class, IPropertyVerifier.class);
 		verifierMapBinder.addBinding(AgentConfigProvider.TOAST_TEST_WEB_APP_URL).to(WebAppUrlVerifier.class);

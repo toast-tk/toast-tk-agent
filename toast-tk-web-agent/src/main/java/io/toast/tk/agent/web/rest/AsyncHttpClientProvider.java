@@ -11,21 +11,21 @@ import org.asynchttpclient.Realm;
 import org.asynchttpclient.proxy.ProxyServer;
 
 
-public class ToastAsyncHttpClientProvider implements Provider<DefaultAsyncHttpClient> {
+public class AsyncHttpClientProvider implements Provider<DefaultAsyncHttpClient> {
 
 
     private final AgentConfig config;
 
     @Inject
-    public ToastAsyncHttpClientProvider(AgentConfig config){
+    public AsyncHttpClientProvider(AgentConfig config){
         this.config = config;
     }
 
     @Override
     public DefaultAsyncHttpClient get() {
-        if(Boolean.valueOf(this.config.getProxyActivate()) == true){
+        if(Boolean.valueOf(this.config.getProxyActivate())){
             String proxyPort = this.config.getProxyPort();
-            int port = proxyPort == null || proxyPort.isEmpty() ? -1 : Integer.valueOf(proxyPort).intValue();
+            int port = Strings.isNullOrEmpty(proxyPort ) ? -1 : Integer.parseInt(proxyPort);
             ProxyServer proxyServer = new ProxyServer.Builder(config.getProxyAdress(), port).build();
             if(!Strings.isNullOrEmpty(config.getProxyUserName()) && !Strings.isNullOrEmpty(config.getProxyUserPswd()) ){
                 Realm realm = new Realm.Builder(config.getProxyUserName(), config.getProxyUserPswd()).build();

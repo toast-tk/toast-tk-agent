@@ -4,8 +4,8 @@ import java.net.Inet4Address;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
 
-import io.toast.tk.agent.web.rest.ToastAsyncHttpClientProvider;
-import org.asynchttpclient.*;
+import com.google.common.base.Strings;
+import io.toast.tk.agent.web.rest.AsyncHttpClientProvider;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,11 +24,11 @@ import org.asynchttpclient.ws.WebSocketUpgradeHandler;
 public class AgentServerImpl implements IAgentServer {
 
 	private static final Logger LOG = LogManager.getLogger(AgentServerImpl.class);
-	private final ToastAsyncHttpClientProvider wsSlientProvider;
+	private final AsyncHttpClientProvider wsSlientProvider;
 	private IAgentApp app;
 
 	@Inject
-	public AgentServerImpl(IAgentApp app, ToastAsyncHttpClientProvider wsSlientProvider){
+	public AgentServerImpl(IAgentApp app, AsyncHttpClientProvider wsSlientProvider){
 		this.app = app;
 		this.wsSlientProvider = wsSlientProvider;
 	}
@@ -42,8 +42,6 @@ public class AgentServerImpl implements IAgentServer {
 	public boolean register(String apiKey) {
 		try {
 			String url = getWebAppURI() + "/api/susbcribe";
-
-			// request.getHeader("X-FORWARDED-FOR")
 			String localAddress = Inet4Address.getLocalHost().getHostAddress();
 			AgentInformation info = new AgentInformation(localAddress, apiKey);
 			String json = new Gson().toJson(info);
@@ -53,15 +51,7 @@ public class AgentServerImpl implements IAgentServer {
 			boolean isRegistered = RestUtils.registerAgent(buildRequest(url, json, apiKey));
 
 			if(isRegistered) {
-				LOG.info("Agent registred with hotname {}", localAddress);
-				//Open Alive WebSocket
-				try {
-					openAliveSocket(apiKey);
-				} catch (InterruptedException e) {
-					LOG.error(e.getMessage(), e);
-				} catch (ExecutionException e) {
-					LOG.error(e.getMessage(), e);
-				}
+				openAliveSocket(apiKey, localAddress);
 			} else {
 				LOG.info("The webApp does not anwser at " + url);
 			}
@@ -70,6 +60,16 @@ public class AgentServerImpl implements IAgentServer {
 			LOG.error(e.getMessage(), e);
 		}
 		return false;
+	}
+
+	private void openAliveSocket(String apiKey, String localAddress) {
+		LOG.info("Agent registered - hotname {}", localAddress);
+		//Open Alive WebSocket
+		try {
+            openAliveSocket(apiKey);
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error(e.getMessage(), e);
+        }
 	}
 
 	private void openAliveSocket(String apiKey) throws InterruptedException, ExecutionException {
@@ -83,21 +83,22 @@ public class AgentServerImpl implements IAgentServer {
 				new WebSocketTextListener() {
 					@Override
 					public void onOpen(WebSocket webSocket) {
+						//NO-OP
 					}
 
 					@Override
 					public void onClose(WebSocket webSocket) {
-
+						//NO-OP
 					}
 
 					@Override
 					public void onError(Throwable throwable) {
-
+						LOG.error(throwable.getMessage(), throwable);
 					}
 
 					@Override
 					public void onMessage(String s) {
-
+						//NO-OP
 					}
 				}
 		).build()).get();
@@ -106,9 +107,9 @@ public class AgentServerImpl implements IAgentServer {
 
 	private HttpRequest buildRequest(String uri, String json, String apiKey) {
 		HttpRequest request = HttpRequest.Builder.create().uri(uri).json(json).withKey(apiKey).build();
-		if(Boolean.valueOf(app.getConfig().getProxyActivate()) == true){
+		if(Boolean.valueOf(app.getConfig().getProxyActivate())){
 			String proxyPort = app.getConfig().getProxyPort();
-			int port = proxyPort == null || proxyPort.isEmpty() ? -1 : Integer.valueOf(proxyPort).intValue();
+			int port = Strings.isNullOrEmpty(proxyPort) ? -1 : Integer.parseInt(proxyPort);
 			request.setProxyInfo(app.getConfig().getProxyAdress(),
 					port,
 					app.getConfig().getProxyUserName(),

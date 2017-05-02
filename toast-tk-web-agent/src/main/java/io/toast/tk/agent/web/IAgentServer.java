@@ -6,7 +6,7 @@ import java.net.UnknownHostException;
 
 public interface IAgentServer {
 
-	void sendEvent(WebEventRecord eventRecord, String ApiKey);
+	void sendEvent(WebEventRecord EventRecord, String ApiKey);
 
 	boolean register(String ApiKey);
 	

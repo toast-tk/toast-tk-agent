@@ -42,8 +42,6 @@ public class MainApp implements IAgentApp {
 	private AgentConfigProvider webConfigProvider;
 	private final PropertiesProvider propertiesProvider;
 	private TrayIcon trayIcon;
-	private Image onlineImage;
-	private Image offlineImage;
 	private IAgentServer agentServer;
 	private Map<String, IPropertyVerifier> verifier;
 	
@@ -80,17 +78,14 @@ public class MainApp implements IAgentApp {
 		if (SystemTray.isSupported()) {
 		    SystemTray tray = SystemTray.getSystemTray();
 		     try {
-		    	InputStream offlineImageAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo_off.png");   
-				this.offlineImage = ImageIO.read(offlineImageAsStream);
-				
-				InputStream onlineImageAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo_on.png");   
-				this.onlineImage = ImageIO.read(onlineImageAsStream);
-
-			    PopupMenu popup = initMenuItem();
-			    
+		    	InputStream offlineImageAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo_off.png");
+				Image offlineImage = ImageIO.read(offlineImageAsStream);
+				InputStream onlineImageAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo_on.png");
+			 	Image onlineImage = ImageIO.read(onlineImageAsStream);
+				PopupMenu popup = initMenuItem();
 			    this.trayIcon = new TrayIcon(offlineImage, "Toast TK - Web Agent", popup);
-				 trayIcon.setImageAutoSize(true);
-				 tray.add(trayIcon);
+			    this.trayIcon.setImageAutoSize(true);
+			    tray.add(this.trayIcon);
 			} catch (IOException|AWTException e1) {
 				LOG.error(e1);
 			}
@@ -131,8 +126,7 @@ public class MainApp implements IAgentApp {
 	private void connectListener(ActionEvent e){
 		connect();
 	}
-	
-	//TODO: Switch implementation to websocket and have a connection watcher
+
 	private void connect() {
 		try {
 			if(isWebAppListening()) {
@@ -196,25 +190,21 @@ public class MainApp implements IAgentApp {
 	}
 
 	private void start(ActionEvent e) {
-		try {
-    		if(connectedToWebApp) {
-				if(hasValidRecordingEnvironment()) {
-					listenerStarted = true;
-					browserManager.startRecording();
-				}
-				else {
-					NotificationManager.showMessage(MainAppMessages.UNABLE_START_RECORDER).showNotification();
-				}
-    		}
-    		else {
-				NotificationManager.showMessage(MainAppMessages.UNABLE_CONNECT_WEBAPP).showNotification();
-    		}
-		} catch (IOException e1) {
-			LOG.error(e1.getMessage(), e1);
+		if(connectedToWebApp) {
+			if(hasValidRecordingEnvironment()) {
+				listenerStarted = true;
+				browserManager.startRecording();
+			}
+			else {
+				NotificationManager.showMessage(MainAppMessages.UNABLE_START_RECORDER).showNotification();
+			}
+		}
+		else {
+			NotificationManager.showMessage(MainAppMessages.UNABLE_CONNECT_WEBAPP).showNotification();
 		}
 	}
 
-	private boolean hasValidRecordingEnvironment() throws IOException {
+	private boolean hasValidRecordingEnvironment() {
 		return assertProperty(AgentConfigProvider.TOAST_CHROMEDRIVER_PATH) &&
 				assertProperty(AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL) &&
 				assertProperty(AgentConfigProvider.TOAST_TEST_WEB_APP_URL);
@@ -240,7 +230,7 @@ public class MainApp implements IAgentApp {
 		return webConfigProvider.get();
 	}
 
-	private boolean assertProperty(String property) throws IOException{
+	private boolean assertProperty(String property) {
 		return this.verifier.get(property).validate();
 	}
 }
