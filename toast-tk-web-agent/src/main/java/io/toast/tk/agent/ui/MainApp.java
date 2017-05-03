@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.UnknownHostException;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -20,6 +21,7 @@ import io.toast.tk.agent.ui.i18n.MainAppMessages;
 import io.toast.tk.agent.ui.provider.ConfigPanelProvider;
 import io.toast.tk.agent.ui.provider.PropertiesProvider;
 import io.toast.tk.agent.ui.verify.IPropertyVerifier;
+import io.toast.tk.core.annotation.ActionAdapter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,24 +42,24 @@ public class MainApp implements IAgentApp {
 	private AgentConfigProvider webConfigProvider;
 	private final PropertiesProvider propertiesProvider;
 	private TrayIcon trayIcon;
-	private Image onlineImage;
-	private Image offlineImage;
 	private IAgentServer agentServer;
 	private Map<String, IPropertyVerifier> verifier;
 	
 	private boolean connectedToWebApp = false;
 	private boolean listenerStarted = false;
+	private Image onlineImage;
 
 	@Inject
 	public MainApp(AgentConfigProvider webConfig,
-				   BrowserManager browserManager, IAgentServer agentServer,
+				   BrowserManager browserManager,
+				   IAgentServer agentServer,
 				   Map<String, IPropertyVerifier> verifier,
 				   PropertiesProvider propertiesProvider,
 				   ConfigPanelProvider configPanelProvider) {
 		this.webConfigProvider = webConfig;
 		this.browserManager = browserManager;
 		this.propertiesProvider = propertiesProvider;
-		this.agentServer= agentServer;
+		this.agentServer = agentServer;
 		this.configPanelProvider = configPanelProvider;
 		this.verifier = verifier;
 		initWorkspace();
@@ -65,17 +67,10 @@ public class MainApp implements IAgentApp {
 	}
 
 	private void initWorkspace() {
-		AgentConfig webConfig = webConfigProvider.get();
-		final String workSpaceDir = AgentConfig.getToastHome();
-		LOG.info("creating workspace directory at: " + workSpaceDir );
-		createHomeDirectories(workSpaceDir);
+		webConfigProvider.get();
 		propertiesProvider.get();
+	}
 
-	}
-	
-	private void createHomeDirectories(String workSpaceDir) {
-		new File(workSpaceDir).mkdir();
-	}
 
 	/**
 	 * Initialise systray if supported and append the agent contextual menu
@@ -84,17 +79,14 @@ public class MainApp implements IAgentApp {
 		if (SystemTray.isSupported()) {
 		    SystemTray tray = SystemTray.getSystemTray();
 		     try {
-		    	InputStream offlineImageAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo_off.png");   
-				this.offlineImage = ImageIO.read(offlineImageAsStream);
-				
-				InputStream onlineImageAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo_on.png");   
-				this.onlineImage = ImageIO.read(onlineImageAsStream);
-
-			    PopupMenu popup = initMenuItem();
-			    
+		    	InputStream offlineImageAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo_off.png");
+				Image offlineImage = ImageIO.read(offlineImageAsStream);
+				InputStream onlineImageAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo_on.png");
+			 	this.onlineImage = ImageIO.read(onlineImageAsStream);
+				PopupMenu popup = initMenuItem();
 			    this.trayIcon = new TrayIcon(offlineImage, "Toast TK - Web Agent", popup);
-				 trayIcon.setImageAutoSize(true);
-				 tray.add(trayIcon);
+			    this.trayIcon.setImageAutoSize(true);
+			    tray.add(this.trayIcon);
 			} catch (IOException|AWTException e1) {
 				LOG.error(e1);
 			}
@@ -111,12 +103,12 @@ public class MainApp implements IAgentApp {
 	    MenuItem stopRecordingItem = new MenuItem("Stop Recording");
 	    MenuItem settingsItem = new MenuItem("Settings");
 	    
-	    quitItem.addActionListener(getKillListener());
-	    connectItem.addActionListener(getConnectListener());
-	    executeItem.addActionListener(getExecuteListener());
-	    stopRecordingItem.addActionListener(getStopListener());
-	    startRecordingItem.addActionListener(getStartListener());
-	    settingsItem.addActionListener(getSettingsListener());
+	    quitItem.addActionListener(this::killListener);
+	    connectItem.addActionListener(this::connectListener);
+	    executeItem.addActionListener(this::executeListener);
+	    stopRecordingItem.addActionListener(this::stopListener);
+	    startRecordingItem.addActionListener(this::start);
+	    settingsItem.addActionListener(this::settingsListener);
 	    
 	    popup.add(connectItem);
 	    popup.addSeparator();
@@ -132,16 +124,10 @@ public class MainApp implements IAgentApp {
 	    return popup;
 	}
 	
-	private ActionListener getConnectListener(){
-	    ActionListener listener = new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-	        	connect();
-	        }
-	    };
-	    return listener;
+	private void connectListener(ActionEvent e){
+		connect();
 	}
-	
-	//TODO: Switch implementation to websocket and have a connection watcher
+
 	private void connect() {
 		try {
 			if(isWebAppListening()) {
@@ -170,13 +156,8 @@ public class MainApp implements IAgentApp {
 		return assertProperty(AgentConfigProvider.TOAST_TEST_WEB_APP_URL);
 	}
 
-	private ActionListener getExecuteListener(){
-	    ActionListener listener = new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-	        	execute();
-	        }
-	    };
-	    return listener;
+	private void executeListener(ActionEvent e){
+		execute();
 	}
 	
 	private void execute() {
@@ -199,81 +180,58 @@ public class MainApp implements IAgentApp {
 		return assertProperty(AgentConfigProvider.TOAST_SCRIPTS_DIR);
 	}
 
-	private ActionListener getKillListener(){
-	    ActionListener listener = new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-	        	agentServer.unRegister();
-	        	System.exit(0);
-	        }
-	    };
-	    return listener;
-	}
-	
-	private ActionListener getStartListener(){
-	    ActionListener listener = new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-	        	start();
-	        }
-	    };
-	    return listener;
-	}
-	
-	private void start() {
+	private void killListener(ActionEvent event){
 		try {
-    		if(connectedToWebApp) {
-				if(hasValidRecordingEnvironment()) {
-					listenerStarted = true;
-					browserManager.startRecording();
-				}
-				else {
-					NotificationManager.showMessage(MainAppMessages.UNABLE_START_RECORDER).showNotification();
-				}
-    		}
-    		else {
-				NotificationManager.showMessage(MainAppMessages.UNABLE_CONNECT_WEBAPP).showNotification();
-    		}
-		} catch (IOException e1) {
-			LOG.error(e1.getMessage(), e1);
+			agentServer.unRegister();
+		} catch (UnknownHostException exception) {
+			LOG.error(exception.getMessage(), exception);
+		}finally {
+			System.exit(0);
 		}
 	}
 
-	private boolean hasValidRecordingEnvironment() throws IOException {
+	private void start(ActionEvent e) {
+		if(connectedToWebApp) {
+			if(hasValidRecordingEnvironment()) {
+				listenerStarted = true;
+				browserManager.startRecording();
+			}
+			else {
+				NotificationManager.showMessage(MainAppMessages.UNABLE_START_RECORDER).showNotification();
+			}
+		}
+		else {
+			NotificationManager.showMessage(MainAppMessages.UNABLE_CONNECT_WEBAPP).showNotification();
+		}
+	}
+
+	private boolean hasValidRecordingEnvironment() {
 		return assertProperty(AgentConfigProvider.TOAST_CHROMEDRIVER_PATH) &&
 				assertProperty(AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL) &&
 				assertProperty(AgentConfigProvider.TOAST_TEST_WEB_APP_URL);
 	}
 
-	private ActionListener getStopListener(){
-	    ActionListener listener = new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-	        	if(listenerStarted) {
-		        	browserManager.closeBrowser();
-	        	}
-	        	else{
-	        		NotificationManager.showMessage(MainAppMessages.RECORDER_NOT_STARTED).showNotification();
-	        	}
-	        }
-	    };
-	    return listener;
+	private void stopListener(ActionEvent e){
+		if(listenerStarted) {
+			browserManager.closeBrowser();
+		}
+		else{
+			NotificationManager.showMessage(MainAppMessages.RECORDER_NOT_STARTED).showNotification();
+		}
 	}
 	
-	private ActionListener getSettingsListener(){
-	    ActionListener listener = new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-				ConfigPanel p = configPanelProvider.get();
-				if (p == null) {
-					NotificationManager.showMessage(CommonMessages.PROPERTIES_NOT_DISPLAYED);
-				}
-			}
-	    };
-	    return listener;
+	private void settingsListener(ActionEvent e){
+		ConfigPanel p = configPanelProvider.get();
+		if (p == null) {
+			NotificationManager.showMessage(CommonMessages.PROPERTIES_NOT_DISPLAYED);
+		}
 	}
 	
 	public AgentConfig getConfig() {
 		return webConfigProvider.get();
 	}
 
-	private boolean assertProperty(String property) throws IOException{
+	private boolean assertProperty(String property) {
 		return this.verifier.get(property).validate();
 	}
 }

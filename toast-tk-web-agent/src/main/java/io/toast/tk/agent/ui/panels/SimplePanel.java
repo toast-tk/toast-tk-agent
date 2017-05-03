@@ -1,8 +1,6 @@
 package io.toast.tk.agent.ui.panels;
 
 import io.toast.tk.agent.ui.utils.PanelHelper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -13,7 +11,6 @@ import java.util.Properties;
 
 public class SimplePanel extends AbstractPanel {
 
-    private static final Logger LOG = LogManager.getLogger(SimplePanel.class);
     private final String label;
     private final EnumError errorType;
 

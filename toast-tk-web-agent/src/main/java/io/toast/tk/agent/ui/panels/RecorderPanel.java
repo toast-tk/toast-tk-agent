@@ -24,8 +24,6 @@ public class RecorderPanel extends AbstractPanel {
     private AbstractPanel proxyUserPanel = null;
     private AbstractPanel proxyPswdPanel = null;
 
-    private String recorderName = AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL;
-
     public RecorderPanel(Properties properties, String strkey, AbstractPanel proxyAdress, AbstractPanel proxyPort,
                          AbstractPanel proxyUser, AbstractPanel proxyPswd, JCheckBox proxyCheckBox) throws IOException {
         super(properties,strkey);

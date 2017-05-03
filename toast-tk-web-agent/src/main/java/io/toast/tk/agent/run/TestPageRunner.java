@@ -12,26 +12,22 @@ public class TestPageRunner extends AbstractScenarioRunner{
 
 	@Override
 	public void tearDownEnvironment() {
-		// TODO Auto-generated method stub
-		
+		//NO-OP
 	}
 
 	@Override
 	public void beginTest() {
-		// TODO Auto-generated method stub
-		
+		//NO-OP
 	}
 
 	@Override
 	public void endTest() {
-		// TODO Auto-generated method stub
-		
+		//NO-OP
 	}
 
 	@Override
 	public void initEnvironment() {
-		// TODO Auto-generated method stub
-		
+		//NO-OP
 	}
 
 

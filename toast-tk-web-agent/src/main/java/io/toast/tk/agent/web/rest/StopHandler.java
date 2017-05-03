@@ -1,14 +1,16 @@
 package io.toast.tk.agent.web.rest;
 
-import org.vertx.java.core.Handler;
-import org.vertx.java.core.http.HttpServerRequest;
-
+import io.vertx.core.Handler;
+import io.vertx.core.http.HttpServerRequest;
 import com.google.inject.Inject;
 
 import io.toast.tk.agent.web.BrowserManager;
 import io.toast.tk.agent.web.IAgentServer;
+import io.vertx.ext.web.RoutingContext;
 
-public class StopHandler implements Handler<HttpServerRequest>{
+import java.net.UnknownHostException;
+
+public class StopHandler implements Handler<RoutingContext>{
 	
 	private BrowserManager browserManager;
 	private IAgentServer agentServer;
@@ -20,14 +22,20 @@ public class StopHandler implements Handler<HttpServerRequest>{
 	}
 
 	@Override
-	public void handle(HttpServerRequest req) {
+	public void handle(RoutingContext rc) {
 		if (browserManager.getDriver() != null) {
 			browserManager.getDriver().close();
 		}
-		agentServer.unRegister();
-		req.response().headers().add("Access-Control-Allow-Origin", "*");
-		req.response().setStatusCode(200).end();
-		System.exit(0);
+		try {
+			agentServer.unRegister();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}finally {
+			rc.response().headers().add("Access-Control-Allow-Origin", "*");
+			rc.response().setStatusCode(200).end();
+			System.exit(0);
+		}
+
 	}
 
 }

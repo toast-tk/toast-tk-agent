@@ -30,8 +30,9 @@ public class ConfigTesterHelper {
 	private static final String FILE_DIRECTORY_SEPARATOR = "/";
 	private static final int timeout = 500;
 	
-	public static boolean testWebAppDirectory(String directory, boolean runTryValue, boolean fileOrDirectory)
-			throws IOException {
+	public static boolean testWebAppDirectory(String directory,
+											  boolean runTryValue,
+											  boolean fileOrDirectory) {
 		String fileName = directory.split(FILE_DIRECTORY_SEPARATOR)[directory.split(FILE_DIRECTORY_SEPARATOR).length - 1];
 		
 		boolean isKo = true;
@@ -104,16 +105,12 @@ public class ConfigTesterHelper {
 
 		if (getStatus(url,proxyAdress, proxyPort, proxyUserName, proxyUserPswd)) {
 			isKo = false;
-		} else {
-			if (runTryValue) {
-				NotificationManager.showMessage(url + " does not answer.").showNotification();
-			}
+		} else if (runTryValue) {
+			NotificationManager.showMessage(url + " does not answer.").showNotification();
 		}
 		return !isKo;
 	}
-	
-	
-	
+
 	public static boolean getStatus(String url, String proxyAdress, String proxyPort, String proxyUserName,
 			String proxyUserPswd) throws IOException {
 

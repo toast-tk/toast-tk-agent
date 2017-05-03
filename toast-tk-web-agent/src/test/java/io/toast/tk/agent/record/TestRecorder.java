@@ -1,9 +1,10 @@
-package io.toast.tk.agent.web;
+package io.toast.tk.agent.record;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import io.toast.tk.agent.web.RestRecorderService;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.JavascriptExecutor;
@@ -16,8 +17,6 @@ public class TestRecorder {
 	public static void main(
 		String[] args) throws IOException {
 		RestRecorderService service = new RestRecorderService();
-		service.start();
-		//injectRecordScript();
 	}
 	
 	private static void injectRecordScript() throws IOException {

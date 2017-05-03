@@ -18,8 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-public abstract class AbstractPanel extends JPanel {
-
+public abstract class AbstractPanel extends JComponent {
 
 	private static final long serialVersionUID = 1L;
 

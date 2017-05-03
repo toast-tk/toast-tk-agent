@@ -5,7 +5,8 @@ public class AgentInformation {
 	
 	private String host;
 	private String token;
-	
+
+
 	protected AgentInformation(){
 		
 	}

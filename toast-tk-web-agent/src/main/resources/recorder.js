@@ -4,7 +4,7 @@ function recorder(){
 	var eventHistory = {};
 	var processing = false;
 	var port = location.protocol === 'https:' ? 4445 : 4444;
-	var host = location.protocol + '//localhost:'+port+'/record';
+	var host = location.protocol + '//localhost:'+port+'/api/record';
 	
 	var xmlhttp = new XMLHttpRequest();
 

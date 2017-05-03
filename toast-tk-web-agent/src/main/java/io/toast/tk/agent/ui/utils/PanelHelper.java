@@ -88,7 +88,7 @@ public class PanelHelper {
 		long min = nb/60;
 		long rsec = nb%60;
 		long hours = min/60;
-		long rmin = min %60;
+		long rmin = min%60;
 		return hours + " h " + rmin + " m " + rsec + " s";
 	}
 	
