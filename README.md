@@ -16,3 +16,14 @@ If you'd like to help, [get in touch](https://gitter.im/toast-tk/toast-tk-engine
 
 # Licence
 _Toast TK regroups multiple open source projects licensed under the Apache Software License 2._
+
+
+# How to debug
+
+To run the agent on an IDE with all the right parameters, you have to create a new java application runner :
+* Create a new run configuration (Run > Run configuration > New)
+* Set the configurations to :
+	- Project : toast-tk-web-agent
+	- Main Class : io.vertx.core.Starter
+	- Program Arguments : run io.toast.tk.agent.web.RestRecorderService
+* Save and run with this configuration
