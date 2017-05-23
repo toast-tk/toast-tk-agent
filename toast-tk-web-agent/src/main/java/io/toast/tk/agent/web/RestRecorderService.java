@@ -1,18 +1,23 @@
 package io.toast.tk.agent.web;
 
 
+import io.vertx.core.AbstractVerticle;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
+import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.HttpServerOptions;
+import io.vertx.core.net.JksOptions;
+import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.ErrorHandler;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.vertx.java.core.Handler;
-import org.vertx.java.core.http.HttpServerRequest;
-import org.vertx.java.core.http.RouteMatcher;
-import org.vertx.java.platform.Verticle;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import io.toast.tk.agent.config.WebConfig;
+import io.toast.tk.agent.config.AgentConfig;
 import io.toast.tk.agent.guice.WebAgentModule;
 import io.toast.tk.agent.ui.MainApp;
 import io.toast.tk.agent.ui.NotificationManager;
@@ -20,50 +25,62 @@ import io.toast.tk.agent.web.rest.PingHandler;
 import io.toast.tk.agent.web.rest.RecordHandler;
 import io.toast.tk.agent.web.rest.StopHandler;
 
-public class RestRecorderService extends Verticle {
+
+public class RestRecorderService extends AbstractVerticle {
 
 	private static final Logger LOG = LogManager.getLogger(RestRecorderService.class);
 
 	private Injector injector;
-
 	private MainApp app;
 	 
 	@Override
-	public void start() {
+	public void start(Future<Void> fut) {
 		//LOG.info("Starting..");
 		initInjectors();
-		RouteMatcher matcher = initMatchers();
+		Router router = Router.router(vertx);
+		router.route().failureHandler(errorHandler());
+		initRouter(router);
 		try{
 			//SECURE ONE
-			vertx.createHttpServer().requestHandler(matcher)
-			.setSSL(true)
-			.setKeyStorePath(WebConfig.getToastHome() + SystemUtils.FILE_SEPARATOR + "server-keystore.jks")
-			.setKeyStorePassword("wibble").listen(4445);
+			String keyPath = AgentConfig.getToastHome() + SystemUtils.FILE_SEPARATOR + "server-keystore.jks";
+			HttpServerOptions options = new HttpServerOptions().setSsl(true).setKeyStoreOptions(new JksOptions()
+							.setPath(keyPath)
+							.setPassword("wibble"));
+			vertx.createHttpServer(options).requestHandler(router::accept).listen(4445, this::handleResult);
 			
 			//PLAIN ONE
-			vertx.createHttpServer().requestHandler(matcher).listen(4444);
-			
-			NotificationManager.showMessage("Web Agent - Active !").showNotification();
+			vertx.createHttpServer().requestHandler(router::accept).listen(4444, this::handleResult);
+
 			LOG.info("Started !");
 		}catch(Exception e){
 			LOG.error(e.getMessage(), e);
 		}
 	}
 
-	private RouteMatcher initMatchers() {
-		RouteMatcher matcher = new RouteMatcher();
-		matcher.options("/api/record/event", new Handler<HttpServerRequest>() {
-			@Override
-			public void handle(HttpServerRequest req) {
-				req.response().headers().add("Access-Control-Allow-Origin", "*");
-				req.response().headers().add("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept, POST");
-				req.response().setStatusCode(200).end();
+	private void  handleResult(AsyncResult<HttpServer> result){
+		if (result.succeeded()) {
+			NotificationManager.showMessage("Web Agent - Active !").showNotification();
+		} else {
+			NotificationManager.showMessage("Web Agent - Not able to start server, shutting down...").showNotification();
+			System.exit(-1);
+		}
+	}
+
+	private ErrorHandler errorHandler() {
+		return ErrorHandler.create();
+	}
+
+	private void initRouter(Router router) {
+		router.options("/api/record/event").handler(rc ->{
+				rc.response().headers().add("Access-Control-Allow-Origin", "*");
+				rc.response().headers().add("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept, POST");
+				rc.response().setStatusCode(200).end();
 			}
-		});
-		matcher.post("/api/record/event", injector.getInstance(RecordHandler.class));
-		matcher.get("/api/record/ping", new PingHandler());
-		matcher.get("/api/record/stop", injector.getInstance(StopHandler.class));
-		return matcher;
+		);
+		router.route("/api/record/event*").handler(BodyHandler.create());
+		router.post("/api/record/event").handler(injector.getInstance(RecordHandler.class));
+		router.get("/api/record/ping").handler(new PingHandler());
+		router.get("/api/record/stop").handler(injector.getInstance(StopHandler.class));
 	}
 
 	private void initInjectors() {

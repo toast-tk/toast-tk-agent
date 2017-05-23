@@ -6,21 +6,21 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import io.toast.tk.agent.config.WebConfigProvider;
+import io.toast.tk.agent.config.AgentConfigProvider;
 import io.toast.tk.agent.web.record.WebRecorder;
 import io.toast.tk.core.agent.interpret.WebEventRecord;
 
 public class EventRecordTest {
 	
 	static FakeKryoServer server;
-	static WebConfigProvider configProvider;
+	static AgentConfigProvider configProvider;
 	EventRecordBuilder builder;
 	static WebRecorder webRecorder;
 	
 	@BeforeClass
 	public static void before(){
 		server = new FakeKryoServer();
-		configProvider = new WebConfigProvider();
+		configProvider = new AgentConfigProvider();
 		webRecorder = new WebRecorder(server, configProvider);		
 	}
 	

@@ -11,18 +11,24 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Properties;
+import java.net.UnknownHostException;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.io.FileUtils;
+import io.toast.tk.agent.ui.i18n.CommonMessages;
+import io.toast.tk.agent.ui.i18n.MainAppMessages;
+import io.toast.tk.agent.ui.provider.ConfigPanelProvider;
+import io.toast.tk.agent.ui.provider.PropertiesProvider;
+import io.toast.tk.agent.ui.verify.IPropertyVerifier;
+import io.toast.tk.core.annotation.ActionAdapter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Inject;
 
-import io.toast.tk.agent.config.WebConfig;
-import io.toast.tk.agent.config.WebConfigProvider;
+import io.toast.tk.agent.config.AgentConfig;
+import io.toast.tk.agent.config.AgentConfigProvider;
 import io.toast.tk.agent.web.BrowserManager;
 import io.toast.tk.agent.web.IAgentServer;
 import io.toast.tk.agent.web.RestRecorderService;
@@ -30,227 +36,202 @@ import io.toast.tk.agent.web.RestRecorderService;
 public class MainApp implements IAgentApp {
 
 	private static final Logger LOG = LogManager.getLogger(MainApp.class);
-	
-	final static String PROPERTY_FILE = "/toast.web.properties";
-	private BrowserManager browserManager;
-	private File toastWebPropertiesFile;
-	private WebConfigProvider webConfigProvider;
-	private final Properties webProperties;
-	private TrayIcon trayIcon;
-	private Image online_image;
-	private Image offline_image;
-	private IAgentServer agentServer;
 
-	private String chromeDriverName = "chromedriver";
-	private String webAppName = "webApp";
-	private String recorderName = "recording";
+	private final ConfigPanelProvider configPanelProvider;
+	private BrowserManager browserManager;
+	private AgentConfigProvider webConfigProvider;
+	private final PropertiesProvider propertiesProvider;
+	private TrayIcon trayIcon;
+	private IAgentServer agentServer;
+	private Map<String, IPropertyVerifier> verifier;
 	
 	private boolean connectedToWebApp = false;
 	private boolean listenerStarted = false;
-	
+	private Image onlineImage;
+
 	@Inject
-	public MainApp(WebConfigProvider webConfig, 
-			BrowserManager browserManager, IAgentServer agentServer){
+	public MainApp(AgentConfigProvider webConfig,
+				   BrowserManager browserManager,
+				   IAgentServer agentServer,
+				   Map<String, IPropertyVerifier> verifier,
+				   PropertiesProvider propertiesProvider,
+				   ConfigPanelProvider configPanelProvider) {
 		this.webConfigProvider = webConfig;
 		this.browserManager = browserManager;
-		this.webProperties = new Properties();
-		this.agentServer= agentServer;
+		this.propertiesProvider = propertiesProvider;
+		this.agentServer = agentServer;
+		this.configPanelProvider = configPanelProvider;
+		this.verifier = verifier;
 		initWorkspace();
 		init();
 	}
 
 	private void initWorkspace() {
-		try {
-			WebConfig webConfig = webConfigProvider.get();
-			final String workSpaceDir = WebConfig.getToastHome();
-			LOG.info("creating workspace directory at: " + workSpaceDir );
-			createHomeDirectories(workSpaceDir);
-			this.toastWebPropertiesFile = new File(workSpaceDir + PROPERTY_FILE);
-			if (!toastWebPropertiesFile.exists()) {
-				toastWebPropertiesFile.createNewFile();
-			}
-			initAndStoreProperties(webConfig);
-		} catch (IOException e) {
-			LOG.error(e.getMessage(), e);
-			throw new Error(e.getMessage());
-		}
-	}
-	
-	private void createHomeDirectories(String workSpaceDir) {
-		new File(workSpaceDir).mkdir();
+		webConfigProvider.get();
+		propertiesProvider.get();
 	}
 
-	private void initAndStoreProperties(final WebConfig webConfig) throws IOException {
-		Properties p = new Properties();
-		p.setProperty(WebConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL, webConfig.getWebInitRecordingUrl());
-		p.setProperty(WebConfigProvider.TOAST_CHROMEDRIVER_PATH, webConfig.getChromeDriverPath());
-		p.setProperty(WebConfigProvider.TOAST_TEST_WEB_APP_URL, webConfig.getWebAppUrl());
-		p.setProperty(WebConfigProvider.TOAST_API_KEY, webConfig.getApiKey());
-		p.store(FileUtils.openOutputStream(this.toastWebPropertiesFile), null);
-		this.webProperties.load(FileUtils.openInputStream(this.toastWebPropertiesFile));
-	}
-	
+
+	/**
+	 * Initialise systray if supported and append the agent contextual menu
+	 */
 	public void init(){
 		if (SystemTray.isSupported()) {
 		    SystemTray tray = SystemTray.getSystemTray();
 		     try {
-		    	InputStream offline_imageAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo_off.png");   
-				this.offline_image = ImageIO.read(offline_imageAsStream);
-				
-				InputStream online_imageAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo_on.png");   
-				this.online_image = ImageIO.read(online_imageAsStream);
-
-			    PopupMenu popup = new PopupMenu();
-			    
-			    MenuItem killItem = new MenuItem("Kill agent");
-			    MenuItem connectItem = new MenuItem("Connect to WebApp");
-			    MenuItem startRecordingItem = new MenuItem("Start Recording");
-			    MenuItem stopRecordingItem = new MenuItem("Stop Recording");
-			    MenuItem settingsItem = new MenuItem("Settings");
-			    
-			    killItem.addActionListener(getKillListener());
-			    connectItem.addActionListener(getConnectListener());
-			    stopRecordingItem.addActionListener(getStopListener());
-			    startRecordingItem.addActionListener(getStartListener());
-			    settingsItem.addActionListener(getSettingsListener());
-			    
-			    popup.add(connectItem);
-			    popup.addSeparator();
-			    popup.add(startRecordingItem);
-			    popup.add(stopRecordingItem);
-			    popup.addSeparator();
-			    popup.add(killItem);
-			    popup.addSeparator();
-			    popup.add(settingsItem); 
-			    
-			    this.trayIcon = new TrayIcon(offline_image, "Toast TK - Web Agent", popup);
-			} catch (IOException e1) {
-				LOG.info(e1);
+		    	InputStream offlineImageAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo_off.png");
+				Image offlineImage = ImageIO.read(offlineImageAsStream);
+				InputStream onlineImageAsStream = RestRecorderService.class.getClassLoader().getResourceAsStream("ToastLogo_on.png");
+			 	this.onlineImage = ImageIO.read(onlineImageAsStream);
+				PopupMenu popup = initMenuItem();
+			    this.trayIcon = new TrayIcon(offlineImage, "Toast TK - Web Agent", popup);
+			    this.trayIcon.setImageAutoSize(true);
+			    tray.add(this.trayIcon);
+			} catch (IOException|AWTException e1) {
+				LOG.error(e1);
 			}
-		    trayIcon.setImageAutoSize(true);
-		    try {
-		        tray.add(trayIcon);
-		    } catch (AWTException e) {
-		    	LOG.info(e);
-		    }
 		}
 	}
 	
-	ActionListener getConnectListener(){
-	    ActionListener listener = new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-	        	try {
-					if(verificationWebApp(webAppName)) {
-						if(agentServer.register(webConfigProvider.get().getApiKey())) {
-							trayIcon.setImage(online_image);
-							connectedToWebApp = true;
-							NotificationManager.showMessage("Web Agent - Connected to Webapp !").showNotification();
-						}
-						else
-							NotificationManager.showMessage("The ApiKey does not match with the WebApp: \n" + webConfigProvider.get().getApiKey()).showNotification();
-					}
-					else 
-						NotificationManager.showMessage("The Web App does not anwser").showNotification();
-				} catch (IOException e1) {
-					LOG.error(e1.getMessage(), e1);
+	private PopupMenu initMenuItem() {
+		PopupMenu popup = new PopupMenu();
+	    
+	    MenuItem quitItem = new MenuItem("Quit");
+	    MenuItem connectItem = new MenuItem("Connect");
+	    MenuItem executeItem = new MenuItem("Execute Scripts");
+	    MenuItem startRecordingItem = new MenuItem("Start Recording");
+	    MenuItem stopRecordingItem = new MenuItem("Stop Recording");
+	    MenuItem settingsItem = new MenuItem("Settings");
+	    
+	    quitItem.addActionListener(this::killListener);
+	    connectItem.addActionListener(this::connectListener);
+	    executeItem.addActionListener(this::executeListener);
+	    stopRecordingItem.addActionListener(this::stopListener);
+	    startRecordingItem.addActionListener(this::start);
+	    settingsItem.addActionListener(this::settingsListener);
+	    
+	    popup.add(connectItem);
+	    popup.addSeparator();
+	    popup.add(startRecordingItem);
+	    popup.add(stopRecordingItem);
+	    popup.addSeparator();
+	    popup.add(executeItem);
+	    popup.addSeparator();
+	    popup.add(settingsItem);
+	    popup.addSeparator();
+	    popup.add(quitItem); 
+	    
+	    return popup;
+	}
+	
+	private void connectListener(ActionEvent e){
+		connect();
+	}
+
+	private void connect() {
+		try {
+			if(isWebAppListening()) {
+				if(agentServer.register(webConfigProvider.get().getApiKey())) {
+					makeAgentOnline();
+					NotificationManager.showMessage("Web Agent - Connected to Webapp !").showNotification();
 				}
-	        }
-	    };
-	    return listener;
-	}
-	
-	ActionListener getKillListener(){
-	    ActionListener listener = new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-	        	agentServer.unRegister();
-	        	System.exit(-1);
-	        }
-	    };
-	    return listener;
-	}
-	
-	ActionListener getStartListener(){
-	    ActionListener listener = new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-	        	try {
-	        		if(connectedToWebApp) {
-	        			boolean flag = false;
-		        		
-						if(verificationWebApp(chromeDriverName)) {
-							if(verificationWebApp(recorderName)) {
-								if(verificationWebApp(webAppName)) {
-									flag = true;
-									listenerStarted = true;
-									browserManager.startRecording();
-								}
-							}
-						}
-						
-						if(!flag) {
-							NotificationManager.showMessage("Unable to start recorder, please check recoder parameters !").showNotification();
-						}
-	        		}
-	        		else 
-						NotificationManager.showMessage("You have to be connected to the WebApp !").showNotification();
-				} catch (IOException e1) {
-					LOG.error(e1.getMessage(), e1);
+				else{
+					NotificationManager.showMessage("The ApiKey does not match with the WebApp: \n" + webConfigProvider.get().getApiKey()).showNotification();
 				}
-	        }
-	    };
-	    return listener;
+			}
+			else {
+				NotificationManager.showMessage("The Web App does not anwser").showNotification();
+			}
+		} catch (IOException e1) {
+			LOG.error(e1.getMessage(), e1);
+		}
+	}
+
+	private void makeAgentOnline() {
+		trayIcon.setImage(onlineImage);
+		connectedToWebApp = true;
+	}
+
+	private boolean isWebAppListening() throws IOException {
+		return assertProperty(AgentConfigProvider.TOAST_TEST_WEB_APP_URL);
+	}
+
+	private void executeListener(ActionEvent e){
+		execute();
 	}
 	
-	ActionListener getStopListener(){
-	    ActionListener listener = new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-	        	if(listenerStarted) {
-		        	browserManager.closeBrowser();
-	        	}
-	        	else
-					NotificationManager.showMessage("The recorder has not been started !").showNotification();
-	        }
-	    };
-	    return listener;
+	private void execute() {
+		try {
+			if(hasPluginDirectory() && hasScriptsDirectory()) {
+				NotificationManager.showMessage(MainAppMessages.SCRIPTS_EXECUTION).showNotification();
+				Thread thread = new Thread(new WaiterThread(webConfigProvider));
+				thread.start();
+			}
+		} catch (IOException e1) {
+			LOG.error(e1.getMessage(), e1);
+		}
+	}
+
+	private boolean hasPluginDirectory() throws IOException {
+		return assertProperty(AgentConfigProvider.TOAST_PLUGIN_DIR);
+	}
+
+	private boolean hasScriptsDirectory() throws IOException {
+		return assertProperty(AgentConfigProvider.TOAST_SCRIPTS_DIR);
+	}
+
+	private void killListener(ActionEvent event){
+		try {
+			agentServer.unRegister();
+		} catch (UnknownHostException exception) {
+			LOG.error(exception.getMessage(), exception);
+		}finally {
+			System.exit(0);
+		}
+	}
+
+	private void start(ActionEvent e) {
+		if(connectedToWebApp) {
+			if(hasValidRecordingEnvironment()) {
+				listenerStarted = true;
+				browserManager.startRecording();
+			}
+			else {
+				NotificationManager.showMessage(MainAppMessages.UNABLE_START_RECORDER).showNotification();
+			}
+		}
+		else {
+			NotificationManager.showMessage(MainAppMessages.UNABLE_CONNECT_WEBAPP).showNotification();
+		}
+	}
+
+	private boolean hasValidRecordingEnvironment() {
+		return assertProperty(AgentConfigProvider.TOAST_CHROMEDRIVER_PATH) &&
+				assertProperty(AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL) &&
+				assertProperty(AgentConfigProvider.TOAST_TEST_WEB_APP_URL);
+	}
+
+	private void stopListener(ActionEvent e){
+		if(listenerStarted) {
+			browserManager.closeBrowser();
+		}
+		else{
+			NotificationManager.showMessage(MainAppMessages.RECORDER_NOT_STARTED).showNotification();
+		}
 	}
 	
-	ActionListener getSettingsListener(){
-	    ActionListener listener = new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-	        	try {
-					new ConfigPanel(webProperties, toastWebPropertiesFile);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-	        }
-	    };
-	    return listener;
+	private void settingsListener(ActionEvent e){
+		ConfigPanel p = configPanelProvider.get();
+		if (p == null) {
+			NotificationManager.showMessage(CommonMessages.PROPERTIES_NOT_DISPLAYED);
+		}
 	}
 	
-	public WebConfig getWebConfig() {
+	public AgentConfig getConfig() {
 		return webConfigProvider.get();
 	}
 
-	public boolean verificationWebApp(String nomUrlATester) throws IOException{
-		String input = "";
-		if(nomUrlATester == webAppName) {
-			input = webConfigProvider.get().getWebAppUrl();
-		}
-		if(nomUrlATester == recorderName) {
-			input = webConfigProvider.get().getWebInitRecordingUrl();
-		}
-		if(nomUrlATester == chromeDriverName) {
-			input = webConfigProvider.get().getChromeDriverPath();
-		}
-		if(nomUrlATester == webAppName || nomUrlATester == recorderName) {
-			return ConfigPanel.testWebAppURL(input, true);
-		}
-		else {
-			if(nomUrlATester ==  chromeDriverName) {
-				return ConfigPanel.testWebAppDirectory(input, true);
-			}
-			else {
-				return false;
-			}	
-		}
+	private boolean assertProperty(String property) {
+		return this.verifier.get(property).validate();
 	}
 }

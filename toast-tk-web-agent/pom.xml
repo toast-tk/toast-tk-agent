@@ -4,19 +4,18 @@
 	<parent>
 		<groupId>io.toast-tk</groupId>
 		<artifactId>toast-tk-agent</artifactId>
-		<version>0.1.4-SNAPSHOT</version>
+		<version>0.1.5-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<name>Toast Toolkit - Agent</name>
 	<artifactId>toast-tk-web-agent</artifactId>
 	<properties>
-        <toast.tk.studioAgentPath>toast-tk-studio-agent-standalone.jar</toast.tk.studioAgentPath>
-        <vertx.plugin.version>2.0.12-final</vertx.plugin.version>
         <common.cli.version>1.3</common.cli.version>
-        <vertx.version>2.1.6</vertx.version>
+		<vertx.shade.plugin>2.3</vertx.shade.plugin>
+        <vertx.version>3.0.0</vertx.version>
         <selenium.version>2.53.1</selenium.version>
-        <toast.vertx.module>toast~agent~1.0</toast.vertx.module>
-        <sonar.skip>true</sonar.skip>
+        <toast.agent.version>1.0</toast.agent.version>
+		<async.client.version>2.0.31</async.client.version>
     </properties>
 	<build>
 		<resources>
@@ -31,65 +30,37 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.5.3</version>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>${vertx.shade.plugin}</version>
 				<executions>
 					<execution>
-						<goals>
-							<goal>attached</goal>
-						</goals>
-						<phase>package</phase>
-						<configuration>
-							<finalName>toast-tk-studio-agent</finalName>
-							<descriptor>src/assembly/bin.xml</descriptor>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-lib-dependencies</id>
 						<phase>package</phase>
 						<goals>
-							<goal>run</goal>
+							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<tasks>
-								<copy file="${project.build.directory}/${toast.tk.studioAgentPath}"
-									todir="${project.build.directory}/classes/${toast.vertx.module}/lib" />
-								<copy file="${project.build.directory}/classes/recorder.js"
-									tofile="${project.build.directory}/classes/${toast.vertx.module}/recorder.js" />
-								<copy file="${project.build.directory}/classes/server-keystore.jks"
-									tofile="${project.build.directory}/classes/${toast.vertx.module}/server-keystore.jks" />
-								<copy file="${project.build.directory}/classes/toast.png"
-									tofile="${project.build.directory}/classes/${toast.vertx.module}/toast.png" />
-								<copy file="${project.build.directory}/classes/ToastLogo.png"
-									tofile="${project.build.directory}/classes/${toast.vertx.module}/ToastLogo.png" />
-							</tasks>
+							<transformers>
+								<transformer
+										implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<manifestEntries>
+										<Main-Class>io.vertx.core.Starter</Main-Class>
+										<Main-Verticle>io.toast.tk.agent.web.RestRecorderService</Main-Verticle>
+									</manifestEntries>
+								</transformer>
+							</transformers>
+							<artifactSet/>
+							<filters>
+								<filter>
+									<artifact>*:*</artifact>
+									<excludes>
+										<exclude>META-INF/*.SF</exclude>
+										<exclude>META-INF/*.DSA</exclude>
+										<exclude>META-INF/*.RSA</exclude>
+									</excludes>
+								</filter>
+							</filters>
+							<outputFile>${project.build.directory}/agent-${toast.agent.version}-fat.jar</outputFile>
 						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>io.vertx</groupId>
-				<artifactId>vertx-maven-plugin</artifactId>
-				<version>${vertx.plugin.version}</version>
-				<configuration>
-					<createFatJar>true</createFatJar>
-					<modsDir>${project.build.directory}\classes</modsDir>
-					<moduleName>${toast.vertx.module}</moduleName>
-					<classpath>src/main/resources/:src/test/resources:target/classes/</classpath>
-					<pullInDeps>true</pullInDeps>
-				</configuration>
-				<executions>
-					<execution>
-						<id>assemble</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>fatJar</goal>
-						</goals>
 					</execution>
 				</executions>
 			</plugin>
@@ -103,8 +74,13 @@
 		</dependency>
 		<dependency>
 			<groupId>io.vertx</groupId>
-			<artifactId>vertx-platform</artifactId>
+			<artifactId>vertx-web</artifactId>
 			<version>${vertx.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.asynchttpclient</groupId>
+			<artifactId>async-http-client</artifactId>
+			<version>${async.client.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-cli</groupId>
@@ -116,9 +92,29 @@
 			<artifactId>toast-tk-adapters-api</artifactId>
 			<version>${toast-tk.engine.version}</version>
 		</dependency>
+			<dependency>
+			<groupId>io.toast-tk</groupId>
+			<artifactId>toast-tk-runtime</artifactId>
+			<version>${toast-tk.engine.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>io.toast-tk</groupId>
 			<artifactId>toast-tk-rest-utils</artifactId>
+			<version>${toast-tk.engine.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.toast-tk</groupId>
+			<artifactId>toast-tk-selenium-plugin</artifactId>
+			<version>${toast-tk.engine.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.toast-tk</groupId>
+			<artifactId>toast-tk-plugin-loader</artifactId>
+			<version>${toast-tk.engine.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.toast-tk</groupId>
+			<artifactId>toast-tk-agent-api</artifactId>
 			<version>${toast-tk.engine.version}</version>
 		</dependency>
 		<dependency>

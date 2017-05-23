@@ -1,9 +1,9 @@
 package io.toast.tk.agent.ui;
 
-import io.toast.tk.agent.config.WebConfig;
+import io.toast.tk.agent.config.AgentConfig;
 
 public interface IAgentApp {
 
-	WebConfig getWebConfig();
+	AgentConfig getConfig();
 
 }

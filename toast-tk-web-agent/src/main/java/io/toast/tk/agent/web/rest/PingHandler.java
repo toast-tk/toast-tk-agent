@@ -1,21 +1,20 @@
 package io.toast.tk.agent.web.rest;
 
+import io.vertx.ext.web.RoutingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.vertx.java.core.Handler;
-import org.vertx.java.core.http.HttpServerRequest;
+import io.vertx.core.Handler;
 
-import io.toast.tk.agent.web.RestRecorderService;
 
-public class PingHandler implements Handler<HttpServerRequest>{
+public class PingHandler implements Handler<RoutingContext>{
 
-	private static final Logger LOG = LogManager.getLogger(RestRecorderService.class);
+	private static final Logger LOG = LogManager.getLogger(PingHandler.class);
 	
 	@Override
-	public void handle(HttpServerRequest event) {
+	public void handle(RoutingContext rc) {
 		LOG.info("Alive ping check!");
-		event.response().headers().add("Access-Control-Allow-Origin", "*");
-		event.response().setStatusCode(200).end();
+		rc.response().headers().add("Access-Control-Allow-Origin", "*");
+		rc.response().setStatusCode(200).end();
 	}
 
 }

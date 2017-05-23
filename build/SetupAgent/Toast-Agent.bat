@@ -1,6 +1,6 @@
 echo off
 set toastDirectory=C:\Users\%USERNAME%\.toast
-set javaDirectory=C:\Users\%USERNAME%\.toast\java
+set javaDirectory=C:\Users\%USERNAME%\.toast\java\jre\bin
 
 :: We figure out if ToastTk-Agent have been installed
 if not exist %javaDirectory%\java.exe goto 1

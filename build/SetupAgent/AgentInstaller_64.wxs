@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- Change the product version at every update -->
-<?define ProductVersion = "0.1.4"?>
+<?define ProductVersion = "0.1.5.1"?>
 <!-- Do not change the ProductUpgradeCode -->
 <?define ProductUpgradeCode = "ab67ea4c-d2c3-4729-95eb-0ba451da5db2"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
@@ -36,6 +36,7 @@
             <Component Id="ApplicationSourceFiles" Guid="651b4f52-9256-4e56-a0c6-b7aa69482f7c">
               <File Id="ServerKeystoreFile" Source="resources\server-keystore.jks"/>
               <File Id="AgentStandAloneFile" Source="resources\agent-1.0-fat.jar"/>
+              <File Id="ToastProperties" Source="resources\toast.properties"/>
               <File Id="ChromeDriverFile" Source="resources\chromedriver.exe"/>
             </Component>
             
@@ -46,12 +47,632 @@
             </Directory>
                 
             <Directory Id="JAVALOCATION">
-              <Component Id="Java64" Guid="bfe32484-5610-4249-891c-4ca716e75ff6">
-                <File Id="Java64" Source="resources_64\java.exe"/>
-              </Component>
-              <Component Id="Javaw64" Guid="3EF0EC19-72CA-4734-82CC-CCFD34F19EA2">
-                <File Id="Javaw64" Source="resources_64\javaw.exe"/>
-              </Component>
+
+              <!-- JRE COMPONENT -->
+              <Directory Id = "jre" Name = "jre">
+                 <Component Id = "jretCOPYRIGHT" Guid = "71172986-d1d3-400d-a81d-05fc36684fc5" >
+                   <File Id = "jretCOPYRIGHT" Source="jre\COPYRIGHT"/>
+                 </Component>
+                 <Component Id = "jretLICENSE" Guid = "cbe9c6c2-e475-4902-9842-0587199681db" >
+                   <File Id = "jretLICENSE" Source="jre\LICENSE"/>
+                 </Component>
+                 <Component Id = "jretREADMEutxt" Guid = "98584c97-3a1b-4d4f-88a2-de772840db98" >
+                   <File Id = "jretREADMEutxt" Source="jre\README.txt"/>
+                 </Component>
+                 <Component Id = "jretrelease" Guid = "574a523a-4e3c-477b-97c2-a4eb6ac97dbe" >
+                   <File Id = "jretrelease" Source="jre\release"/>
+                 </Component>
+                 <Component Id = "jretTHIRDPARTYLICENSEREADMEuJAVAFXutxt" Guid = "b5562fbe-e507-4ba3-8c02-a757d16b70c5" >
+                   <File Id = "jretTHIRDPARTYLICENSEREADMEuJAVAFXutxt" Source="jre\THIRDPARTYLICENSEREADME-JAVAFX.txt"/>
+                 </Component>
+                 <Component Id = "jretTHIRDPARTYLICENSEREADMEutxt" Guid = "94686e72-cb60-46ed-a628-c145aa2edaf4" >
+                   <File Id = "jretTHIRDPARTYLICENSEREADMEutxt" Source="jre\THIRDPARTYLICENSEREADME.txt"/>
+                 </Component>
+                 <Component Id = "jretWelcomeuhtml" Guid = "0089fa6c-3778-4a4a-9f75-89bbd6ff26c3" >
+                   <File Id = "jretWelcomeuhtml" Source="jre\Welcome.html"/>
+                 </Component>
+                 <Directory Id = "jrebin" Name = "bin">
+                    <Component Id = "jretbintawtudll" Guid = "08079605-e74e-4bcf-ab98-553c10807120" >
+                      <File Id = "jretbintawtudll" Source="jre\bin\awt.dll"/>
+                    </Component>
+                    <Component Id = "jretbintbciudll" Guid = "a796bea3-4e6e-489e-af25-9f186c5d32d7" >
+                      <File Id = "jretbintbciudll" Source="jre\bin\bci.dll"/>
+                    </Component>
+                    <Component Id = "jretbintdcprudll" Guid = "3b66c39e-dcc2-407e-84d7-e0b3b70ba3ab" >
+                      <File Id = "jretbintdcprudll" Source="jre\bin\dcpr.dll"/>
+                    </Component>
+                    <Component Id = "jretbintdecorausseudll" Guid = "00dd67e1-9173-4ed6-876c-cd5c2a682e97" >
+                      <File Id = "jretbintdecorausseudll" Source="jre\bin\decora_sse.dll"/>
+                    </Component>
+                    <Component Id = "jretbintdeployudll" Guid = "d1328e5a-8d97-42e5-9c5d-76b1c7674a0f" >
+                      <File Id = "jretbintdeployudll" Source="jre\bin\deploy.dll"/>
+                    </Component>
+                    <Component Id = "jretbintdtushmemudll" Guid = "0b137f91-2ecd-4964-8eb1-54734bf09412" >
+                      <File Id = "jretbintdtushmemudll" Source="jre\bin\dt_shmem.dll"/>
+                    </Component>
+                    <Component Id = "jretbintdtusocketudll" Guid = "922c8fe4-6a0d-4622-b3ec-aa98b5106d19" >
+                      <File Id = "jretbintdtusocketudll" Source="jre\bin\dt_socket.dll"/>
+                    </Component>
+                    <Component Id = "jretbinteulaudll" Guid = "c4eda086-f45a-4a0d-b4b2-83e57cc80626" >
+                      <File Id = "jretbinteulaudll" Source="jre\bin\eula.dll"/>
+                    </Component>
+                    <Component Id = "jretbintfontmanagerudll" Guid = "a466f608-e2bb-4e55-9d0d-7a0d1f394f46" >
+                      <File Id = "jretbintfontmanagerudll" Source="jre\bin\fontmanager.dll"/>
+                    </Component>
+                    <Component Id = "jretbintfxpluginsudll" Guid = "282d01d6-6896-4b16-89a6-1d07fc90e485" >
+                      <File Id = "jretbintfxpluginsudll" Source="jre\bin\fxplugins.dll"/>
+                    </Component>
+                    <Component Id = "jretbintglassudll" Guid = "003b7a5e-984b-4d62-a7d6-aa5f1081ced0" >
+                      <File Id = "jretbintglassudll" Source="jre\bin\glass.dll"/>
+                    </Component>
+                    <Component Id = "jretbintglibuliteudll" Guid = "554c8eec-45d4-40a4-8967-92779fee17f5" >
+                      <File Id = "jretbintglibuliteudll" Source="jre\bin\glib-lite.dll"/>
+                    </Component>
+                    <Component Id = "jretbintgstreameruliteudll" Guid = "b866e18c-f49f-4ef2-a1b3-bef792f8e8d4" >
+                      <File Id = "jretbintgstreameruliteudll" Source="jre\bin\gstreamer-lite.dll"/>
+                    </Component>
+                    <Component Id = "jretbinthprofudll" Guid = "bd9119fc-b91b-4def-87d7-e5e03d3b9917" >
+                      <File Id = "jretbinthprofudll" Source="jre\bin\hprof.dll"/>
+                    </Component>
+                    <Component Id = "jretbintinstrumentudll" Guid = "bce066d3-c824-44b4-95f2-5eed042c8181" >
+                      <File Id = "jretbintinstrumentudll" Source="jre\bin\instrument.dll"/>
+                    </Component>
+                    <Component Id = "jretbintj2pcscudll" Guid = "3e329c64-f60b-4372-b1d3-29fd5a5f2e19" >
+                      <File Id = "jretbintj2pcscudll" Source="jre\bin\j2pcsc.dll"/>
+                    </Component>
+                    <Component Id = "jretbintj2pkcs11udll" Guid = "987f020f-7401-494e-9473-c693dcaa1092" >
+                      <File Id = "jretbintj2pkcs11udll" Source="jre\bin\j2pkcs11.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjaasuntudll" Guid = "203255c7-3d26-4922-ad0d-7a01fd3fd4e7" >
+                      <File Id = "jretbintjaasuntudll" Source="jre\bin\jaas_nt.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjabswitchuexe" Guid = "c870a376-6783-45ec-a82a-95e09f2f0fe9" >
+                      <File Id = "jretbintjabswitchuexe" Source="jre\bin\jabswitch.exe"/>
+                    </Component>
+                    <Component Id = "jretbintjavaurmiuexe" Guid = "e48b3393-bc5b-47be-a96d-2d9de7fc5ad7" >
+                      <File Id = "jretbintjavaurmiuexe" Source="jre\bin\java-rmi.exe"/>
+                    </Component>
+                    <Component Id = "jretbintjavaudll" Guid = "8e4eda24-5963-4ca4-b6bd-9aaed3b87736" >
+                      <File Id = "jretbintjavaudll" Source="jre\bin\java.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjavauexe" Guid = "9a221cc3-71db-40f8-a52c-044d8ac0903c" >
+                      <File Id = "jretbintjavauexe" Source="jre\bin\java.exe"/>
+                    </Component>
+                    <Component Id = "jretbintJavaAccessBridgeu64udll" Guid = "5a75037c-0411-4728-a610-0114d931e527" >
+                      <File Id = "jretbintJavaAccessBridgeu64udll" Source="jre\bin\JavaAccessBridge-64.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjavacplucpl" Guid = "c8600573-4468-4018-b015-71727e299468" >
+                      <File Id = "jretbintjavacplucpl" Source="jre\bin\javacpl.cpl"/>
+                    </Component>
+                    <Component Id = "jretbintjavacpluexe" Guid = "8840a486-8ec0-4010-9ea6-035b7f038636" >
+                      <File Id = "jretbintjavacpluexe" Source="jre\bin\javacpl.exe"/>
+                    </Component>
+                    <Component Id = "jretbintjavafxufontudll" Guid = "05a2a44d-228a-4dfc-8133-8e7f8ba8b687" >
+                      <File Id = "jretbintjavafxufontudll" Source="jre\bin\javafx_font.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjavafxufontut2kudll" Guid = "de77cf40-4b73-4d56-ac07-e5901d86d1e6" >
+                      <File Id = "jretbintjavafxufontut2kudll" Source="jre\bin\javafx_font_t2k.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjavafxuiioudll" Guid = "2ca2a1c7-a7e6-413c-8603-479a288ea5d3" >
+                      <File Id = "jretbintjavafxuiioudll" Source="jre\bin\javafx_iio.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjavawuexe" Guid = "0358bbff-a3b9-4d79-a225-b4bb6f815384" >
+                      <File Id = "jretbintjavawuexe" Source="jre\bin\javaw.exe"/>
+                    </Component>
+                    <Component Id = "jretbintjavawsuexe" Guid = "687618bd-247a-4e25-be33-6385fed2ac02" >
+                      <File Id = "jretbintjavawsuexe" Source="jre\bin\javaws.exe"/>
+                    </Component>
+                    <Component Id = "jretbintjavaucrwudemoudll" Guid = "1a7dd694-2c9f-488f-ba0c-df2727c20ba1" >
+                      <File Id = "jretbintjavaucrwudemoudll" Source="jre\bin\java_crw_demo.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjawtudll" Guid = "fcfd1e4c-3db8-4562-9762-eb3144b23306" >
+                      <File Id = "jretbintjawtudll" Source="jre\bin\jawt.dll"/>
+                    </Component>
+                    <Component Id = "jretbintJAWTAccessBridgeu64udll" Guid = "b17381a9-0af3-4d29-a89c-303097539d09" >
+                      <File Id = "jretbintJAWTAccessBridgeu64udll" Source="jre\bin\JAWTAccessBridge-64.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjdwpudll" Guid = "b7c8a4f9-ba22-48c5-a567-66b5d4689e9a" >
+                      <File Id = "jretbintjdwpudll" Source="jre\bin\jdwp.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjfrudll" Guid = "ccc85bbc-1ea5-4f37-99db-6b29a5655e7d" >
+                      <File Id = "jretbintjfrudll" Source="jre\bin\jfr.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjfxmediaudll" Guid = "b680b683-3512-44d7-817b-74fd2347788d" >
+                      <File Id = "jretbintjfxmediaudll" Source="jre\bin\jfxmedia.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjfxwebkitudll" Guid = "022b3e39-ac55-4041-8d92-72f55d49d30d" >
+                      <File Id = "jretbintjfxwebkitudll" Source="jre\bin\jfxwebkit.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjjsuexe" Guid = "05d76213-d565-4787-b3dc-93d0d13866cd" >
+                      <File Id = "jretbintjjsuexe" Source="jre\bin\jjs.exe"/>
+                    </Component>
+                    <Component Id = "jretbintjliudll" Guid = "d244adb6-c38f-480e-bba0-6a541c6bd970" >
+                      <File Id = "jretbintjliudll" Source="jre\bin\jli.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjp2iexpudll" Guid = "2b963bde-9389-42f4-8649-d7ddf8cba575" >
+                      <File Id = "jretbintjp2iexpudll" Source="jre\bin\jp2iexp.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjp2launcheruexe" Guid = "338c5df5-bcee-46c8-94fe-5d618e4bd95a" >
+                      <File Id = "jretbintjp2launcheruexe" Source="jre\bin\jp2launcher.exe"/>
+                    </Component>
+                    <Component Id = "jretbintjp2nativeudll" Guid = "e552e99e-a03c-4c8b-bf24-dfb256e023ab" >
+                      <File Id = "jretbintjp2nativeudll" Source="jre\bin\jp2native.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjp2ssvudll" Guid = "922124bb-dfa7-4268-b371-8bc32d2e73ab" >
+                      <File Id = "jretbintjp2ssvudll" Source="jre\bin\jp2ssv.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjpegudll" Guid = "8b2b43cd-e148-4d15-b7f4-e712be6e1e56" >
+                      <File Id = "jretbintjpegudll" Source="jre\bin\jpeg.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjsdtudll" Guid = "af3004ad-4df4-4c49-9560-2db448d4b1e7" >
+                      <File Id = "jretbintjsdtudll" Source="jre\bin\jsdt.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjsoundudll" Guid = "a98f7800-d200-44ca-8bd3-bd22de93c074" >
+                      <File Id = "jretbintjsoundudll" Source="jre\bin\jsound.dll"/>
+                    </Component>
+                    <Component Id = "jretbintjsounddsudll" Guid = "1e47422c-b260-44bd-a94a-244b52d300ee" >
+                      <File Id = "jretbintjsounddsudll" Source="jre\bin\jsoundds.dll"/>
+                    </Component>
+                    <Component Id = "jretbintkcmsudll" Guid = "bb131c11-359a-4e2d-b1fb-07f29122b014" >
+                      <File Id = "jretbintkcmsudll" Source="jre\bin\kcms.dll"/>
+                    </Component>
+                    <Component Id = "jretbintkeytooluexe" Guid = "80728d6b-f742-4bfe-98e3-2b4505affa7f" >
+                      <File Id = "jretbintkeytooluexe" Source="jre\bin\keytool.exe"/>
+                    </Component>
+                    <Component Id = "jretbintkinituexe" Guid = "ecdb9951-c2c0-459e-a351-f7223b93a7d9" >
+                      <File Id = "jretbintkinituexe" Source="jre\bin\kinit.exe"/>
+                    </Component>
+                    <Component Id = "jretbintklistuexe" Guid = "f17d2f06-810c-40f8-b5a1-38a3d25365e0" >
+                      <File Id = "jretbintklistuexe" Source="jre\bin\klist.exe"/>
+                    </Component>
+                    <Component Id = "jretbintktabuexe" Guid = "d1220430-1ac2-49df-825c-60403bcdde66" >
+                      <File Id = "jretbintktabuexe" Source="jre\bin\ktab.exe"/>
+                    </Component>
+                    <Component Id = "jretbintlcmsudll" Guid = "e667de30-961b-4f35-ad8f-a6e5710192fd" >
+                      <File Id = "jretbintlcmsudll" Source="jre\bin\lcms.dll"/>
+                    </Component>
+                    <Component Id = "jretbintmanagementudll" Guid = "4ea55ce5-7234-4b17-990e-076a248432a0" >
+                      <File Id = "jretbintmanagementudll" Source="jre\bin\management.dll"/>
+                    </Component>
+                    <Component Id = "jretbintmlibuimageudll" Guid = "5813289f-542d-469f-9b0b-488e94bd89f8" >
+                      <File Id = "jretbintmlibuimageudll" Source="jre\bin\mlib_image.dll"/>
+                    </Component>
+                    <Component Id = "jretbintmsvcp120udll" Guid = "bacdd045-851b-4006-9f90-1e78e97f63e5" >
+                      <File Id = "jretbintmsvcp120udll" Source="jre\bin\msvcp120.dll"/>
+                    </Component>
+                    <Component Id = "jretbintmsvcr100udll" Guid = "3addb89a-4d6a-477e-8544-df4b56975475" >
+                      <File Id = "jretbintmsvcr100udll" Source="jre\bin\msvcr100.dll"/>
+                    </Component>
+                    <Component Id = "jretbintmsvcr120udll" Guid = "55d9ff09-7e2a-4797-a48c-216139cdca07" >
+                      <File Id = "jretbintmsvcr120udll" Source="jre\bin\msvcr120.dll"/>
+                    </Component>
+                    <Component Id = "jretbintnetudll" Guid = "223caa6f-ad67-4091-968a-174908b2e276" >
+                      <File Id = "jretbintnetudll" Source="jre\bin\net.dll"/>
+                    </Component>
+                    <Component Id = "jretbintnioudll" Guid = "b36dee75-507b-4267-8396-8318e28ca56d" >
+                      <File Id = "jretbintnioudll" Source="jre\bin\nio.dll"/>
+                    </Component>
+                    <Component Id = "jretbintnptudll" Guid = "058ed26e-1c03-4b48-bcfa-68dca78ac5f4" >
+                      <File Id = "jretbintnptudll" Source="jre\bin\npt.dll"/>
+                    </Component>
+                    <Component Id = "jretbintorbduexe" Guid = "6695bd2f-d34b-4d08-9b03-c46590441755" >
+                      <File Id = "jretbintorbduexe" Source="jre\bin\orbd.exe"/>
+                    </Component>
+                    <Component Id = "jretbintpack200uexe" Guid = "0451fa2e-e99e-4b5b-97ca-a68873e111f2" >
+                      <File Id = "jretbintpack200uexe" Source="jre\bin\pack200.exe"/>
+                    </Component>
+                    <Component Id = "jretbintpolicytooluexe" Guid = "8d851ff0-e487-44de-9d03-1c4f933901d9" >
+                      <File Id = "jretbintpolicytooluexe" Source="jre\bin\policytool.exe"/>
+                    </Component>
+                    <Component Id = "jretbintprismucommonudll" Guid = "714e0e90-f844-4f43-8eb0-26a09abc86d0" >
+                      <File Id = "jretbintprismucommonudll" Source="jre\bin\prism_common.dll"/>
+                    </Component>
+                    <Component Id = "jretbintprismud3dudll" Guid = "df3fcc08-93c4-4186-98c4-1414c88c32c9" >
+                      <File Id = "jretbintprismud3dudll" Source="jre\bin\prism_d3d.dll"/>
+                    </Component>
+                    <Component Id = "jretbintprismuswudll" Guid = "e0e39657-4943-43f2-bd8a-d8f22e3ef665" >
+                      <File Id = "jretbintprismuswudll" Source="jre\bin\prism_sw.dll"/>
+                    </Component>
+                    <Component Id = "jretbintresourceudll" Guid = "29615740-aad5-43b1-b816-4808624e6daf" >
+                      <File Id = "jretbintresourceudll" Source="jre\bin\resource.dll"/>
+                    </Component>
+                    <Component Id = "jretbintrmiduexe" Guid = "d94788af-40c9-48c3-be85-62bc26bfc1c2" >
+                      <File Id = "jretbintrmiduexe" Source="jre\bin\rmid.exe"/>
+                    </Component>
+                    <Component Id = "jretbintrmiregistryuexe" Guid = "c7e388c8-dce8-47c5-894f-296e817544cd" >
+                      <File Id = "jretbintrmiregistryuexe" Source="jre\bin\rmiregistry.exe"/>
+                    </Component>
+                    <Component Id = "jretbintservertooluexe" Guid = "e41f12dd-baa4-4a63-8c35-655ae026206c" >
+                      <File Id = "jretbintservertooluexe" Source="jre\bin\servertool.exe"/>
+                    </Component>
+                    <Component Id = "jretbintsplashscreenudll" Guid = "f1306e53-f252-42db-a2c9-92c172a82dc8" >
+                      <File Id = "jretbintsplashscreenudll" Source="jre\bin\splashscreen.dll"/>
+                    </Component>
+                    <Component Id = "jretbintssvudll" Guid = "390adca0-68a5-45c1-ac18-bc6359d0a2bd" >
+                      <File Id = "jretbintssvudll" Source="jre\bin\ssv.dll"/>
+                    </Component>
+                    <Component Id = "jretbintssvagentuexe" Guid = "e44732b7-3569-4eae-922e-28a06620c991" >
+                      <File Id = "jretbintssvagentuexe" Source="jre\bin\ssvagent.exe"/>
+                    </Component>
+                    <Component Id = "jretbintsunecudll" Guid = "373859ad-617a-410d-b485-9d27e934ac65" >
+                      <File Id = "jretbintsunecudll" Source="jre\bin\sunec.dll"/>
+                    </Component>
+                    <Component Id = "jretbintsunmscapiudll" Guid = "ab341d10-c512-4dba-b722-c2a578e27e5d" >
+                      <File Id = "jretbintsunmscapiudll" Source="jre\bin\sunmscapi.dll"/>
+                    </Component>
+                    <Component Id = "jretbintt2kudll" Guid = "eacf5143-c9d4-41f6-b96a-3b2ce979420e" >
+                      <File Id = "jretbintt2kudll" Source="jre\bin\t2k.dll"/>
+                    </Component>
+                    <Component Id = "jretbinttnameservuexe" Guid = "5de491ab-1f7d-40ad-a526-7abd3ae7d867" >
+                      <File Id = "jretbinttnameservuexe" Source="jre\bin\tnameserv.exe"/>
+                    </Component>
+                    <Component Id = "jretbintunpackudll" Guid = "9c1b0ce8-8363-49fe-a3aa-1a0131dc658f" >
+                      <File Id = "jretbintunpackudll" Source="jre\bin\unpack.dll"/>
+                    </Component>
+                    <Component Id = "jretbintunpack200uexe" Guid = "01d91f23-8928-4154-bd98-d4a21fda4b47" >
+                      <File Id = "jretbintunpack200uexe" Source="jre\bin\unpack200.exe"/>
+                    </Component>
+                    <Component Id = "jretbintverifyudll" Guid = "a761063f-060f-4b55-aaba-f266a2c5a58f" >
+                      <File Id = "jretbintverifyudll" Source="jre\bin\verify.dll"/>
+                    </Component>
+                    <Component Id = "jretbintw2kulsauauthudll" Guid = "7090eabc-b3a7-486c-8495-c23104540471" >
+                      <File Id = "jretbintw2kulsauauthudll" Source="jre\bin\w2k_lsa_auth.dll"/>
+                    </Component>
+                    <Component Id = "jretbintWindowsAccessBridgeu64udll" Guid = "1d8d06b6-1f16-4f4d-8c0c-8034424080cd" >
+                      <File Id = "jretbintWindowsAccessBridgeu64udll" Source="jre\bin\WindowsAccessBridge-64.dll"/>
+                    </Component>
+                    <Component Id = "jretbintwsdetectudll" Guid = "19d5f316-ec1c-4687-bd77-4958bda14b0e" >
+                      <File Id = "jretbintwsdetectudll" Source="jre\bin\wsdetect.dll"/>
+                    </Component>
+                    <Component Id = "jretbintzipudll" Guid = "b3500bee-c28b-4cee-8b05-f1910b47a476" >
+                      <File Id = "jretbintzipudll" Source="jre\bin\zip.dll"/>
+                    </Component>
+                    <Directory Id = "jrebindtplugin" Name = "dtplugin">
+                       <Component Id = "jretbintdtplugintdeployJava1udll" Guid = "5f146c3f-4a9e-43b4-9b45-e2400b810910" >
+                         <File Id = "jretbintdtplugintdeployJava1udll" Source="jre\bin\dtplugin\deployJava1.dll"/>
+                       </Component>
+                       <Component Id = "jretbintdtplugintnpdeployJava1udll" Guid = "9abe877b-1740-4fde-a117-50f69a8cf170" >
+                         <File Id = "jretbintdtplugintnpdeployJava1udll" Source="jre\bin\dtplugin\npdeployJava1.dll"/>
+                       </Component>
+                    </Directory>
+                    <Directory Id = "jrebinplugin2" Name = "plugin2">
+                       <Component Id = "jretbintplugin2tmsvcr100udll" Guid = "897b721c-461a-421a-9495-64502a3efa6d" >
+                         <File Id = "jretbintplugin2tmsvcr100udll" Source="jre\bin\plugin2\msvcr100.dll"/>
+                       </Component>
+                       <Component Id = "jretbintplugin2tnpjp2udll" Guid = "d1ff7dc8-f38a-42ab-a4ad-3f555683d697" >
+                         <File Id = "jretbintplugin2tnpjp2udll" Source="jre\bin\plugin2\npjp2.dll"/>
+                       </Component>
+                    </Directory>
+                    <Directory Id = "jrebinserver" Name = "server">
+                       <Component Id = "jretbintservertclassesujsa" Guid = "d9f95862-d8ad-4350-ab1f-1c8da6927c1f" >
+                         <File Id = "jretbintservertclassesujsa" Source="jre\bin\server\classes.jsa"/>
+                       </Component>
+                       <Component Id = "jretbintservertjvmudll" Guid = "a7aff870-8e6d-4e0c-b5df-787fc4eac036" >
+                         <File Id = "jretbintservertjvmudll" Source="jre\bin\server\jvm.dll"/>
+                       </Component>
+                       <Component Id = "jretbintservertXusageutxt" Guid = "d0fa0bdf-3fbc-4080-931d-a7f9788df3dc" >
+                         <File Id = "jretbintservertXusageutxt" Source="jre\bin\server\Xusage.txt"/>
+                       </Component>
+                    </Directory>
+                 </Directory>
+                 <Directory Id = "jrelib" Name = "lib">
+                    <Component Id = "jretlibtaccessibilityuproperties" Guid = "a8440368-4be2-480e-9a53-edc7ab8476b3" >
+                      <File Id = "jretlibtaccessibilityuproperties" Source="jre\lib\accessibility.properties"/>
+                    </Component>
+                    <Component Id = "jretlibtcalendarsuproperties" Guid = "22111bdf-e8cd-45ab-9406-a045dd48d7d9" >
+                      <File Id = "jretlibtcalendarsuproperties" Source="jre\lib\calendars.properties"/>
+                    </Component>
+                    <Component Id = "jretlibtcharsetsujar" Guid = "fc98c407-4d2f-4994-a9da-14a79205a187" >
+                      <File Id = "jretlibtcharsetsujar" Source="jre\lib\charsets.jar"/>
+                    </Component>
+                    <Component Id = "jretlibtclasslist" Guid = "97596238-8f73-471c-b6ea-31189a9a864b" >
+                      <File Id = "jretlibtclasslist" Source="jre\lib\classlist"/>
+                    </Component>
+                    <Component Id = "jretlibtcontentutypesuproperties" Guid = "98e5a925-178a-4902-8c1b-c319d658202d" >
+                      <File Id = "jretlibtcontentutypesuproperties" Source="jre\lib\content-types.properties"/>
+                    </Component>
+                    <Component Id = "jretlibtcurrencyudata" Guid = "a49b7a87-2243-4b1f-8506-694c3aafe032" >
+                      <File Id = "jretlibtcurrencyudata" Source="jre\lib\currency.data"/>
+                    </Component>
+                    <Component Id = "jretlibtdeployujar" Guid = "831bfca7-e0cc-4881-9eb9-1ccd2390725c" >
+                      <File Id = "jretlibtdeployujar" Source="jre\lib\deploy.jar"/>
+                    </Component>
+                    <Component Id = "jretlibtflavormapuproperties" Guid = "0983db8e-1936-4871-8e0d-fbfe91697b01" >
+                      <File Id = "jretlibtflavormapuproperties" Source="jre\lib\flavormap.properties"/>
+                    </Component>
+                    <Component Id = "jretlibtfontconfigubfc" Guid = "47cac593-09ef-46e3-808a-4da029921758" >
+                      <File Id = "jretlibtfontconfigubfc" Source="jre\lib\fontconfig.bfc"/>
+                    </Component>
+                    <Component Id = "jretlibtfontconfigupropertiesusrc" Guid = "b8932da8-4344-45a4-a798-11bf730e5759" >
+                      <File Id = "jretlibtfontconfigupropertiesusrc" Source="jre\lib\fontconfig.properties.src"/>
+                    </Component>
+                    <Component Id = "jretlibthijrahuconfiguumalqurauproperties" Guid = "68518e7d-16b4-4f09-b4dd-67979b136def" >
+                      <File Id = "jretlibthijrahuconfiguumalqurauproperties" Source="jre\lib\hijrah-config-umalqura.properties"/>
+                    </Component>
+                    <Component Id = "jretlibtjavafxuproperties" Guid = "a16f33d6-1f38-4fb8-bce8-a27219be6342" >
+                      <File Id = "jretlibtjavafxuproperties" Source="jre\lib\javafx.properties"/>
+                    </Component>
+                    <Component Id = "jretlibtjavawsujar" Guid = "8978b052-6c22-4754-9d66-5ae994b50f63" >
+                      <File Id = "jretlibtjavawsujar" Source="jre\lib\javaws.jar"/>
+                    </Component>
+                    <Component Id = "jretlibtjceujar" Guid = "4dde6cb4-38ac-4e38-a600-4e68da3d759d" >
+                      <File Id = "jretlibtjceujar" Source="jre\lib\jce.jar"/>
+                    </Component>
+                    <Component Id = "jretlibtjfrujar" Guid = "a7c414c3-6521-4b06-8352-3e0280a5ee70" >
+                      <File Id = "jretlibtjfrujar" Source="jre\lib\jfr.jar"/>
+                    </Component>
+                    <Component Id = "jretlibtjfxswtujar" Guid = "1e877ccc-5829-4dbf-aa9a-29fb8d8f4020" >
+                      <File Id = "jretlibtjfxswtujar" Source="jre\lib\jfxswt.jar"/>
+                    </Component>
+                    <Component Id = "jretlibtjsseujar" Guid = "08b3afbc-dfb6-40d1-b29b-718d633117d5" >
+                      <File Id = "jretlibtjsseujar" Source="jre\lib\jsse.jar"/>
+                    </Component>
+                    <Component Id = "jretlibtjvmuhprofutxt" Guid = "94149306-6a03-40b9-9476-83fab29e8bb3" >
+                      <File Id = "jretlibtjvmuhprofutxt" Source="jre\lib\jvm.hprof.txt"/>
+                    </Component>
+                    <Component Id = "jretlibtlogginguproperties" Guid = "62f2be78-dbf8-4c10-9c50-0c157cd61cfd" >
+                      <File Id = "jretlibtlogginguproperties" Source="jre\lib\logging.properties"/>
+                    </Component>
+                    <Component Id = "jretlibtmanagementuagentujar" Guid = "be68892b-6c91-4b6e-9f62-621b434b1f75" >
+                      <File Id = "jretlibtmanagementuagentujar" Source="jre\lib\management-agent.jar"/>
+                    </Component>
+                    <Component Id = "jretlibtmetauindex" Guid = "785874ff-5650-4bca-8215-5dbf9c8dd9f8" >
+                      <File Id = "jretlibtmetauindex" Source="jre\lib\meta-index"/>
+                    </Component>
+                    <Component Id = "jretlibtnetuproperties" Guid = "ec9765a8-3909-4f6c-9a13-13e02e3d7a9e" >
+                      <File Id = "jretlibtnetuproperties" Source="jre\lib\net.properties"/>
+                    </Component>
+                    <Component Id = "jretlibtpluginujar" Guid = "8b5291f9-3e47-49f5-9666-21116690f0d4" >
+                      <File Id = "jretlibtpluginujar" Source="jre\lib\plugin.jar"/>
+                    </Component>
+                    <Component Id = "jretlibtpsfontupropertiesuja" Guid = "f74810d8-e49c-459d-b7ed-847cd5911d4c" >
+                      <File Id = "jretlibtpsfontupropertiesuja" Source="jre\lib\psfont.properties.ja"/>
+                    </Component>
+                    <Component Id = "jretlibtpsfontj2duproperties" Guid = "eb0c3f42-7f74-4436-8e3e-c6aba3059582" >
+                      <File Id = "jretlibtpsfontj2duproperties" Source="jre\lib\psfontj2d.properties"/>
+                    </Component>
+                    <Component Id = "jretlibtresourcesujar" Guid = "4480c38d-8c89-441b-8dd2-314be3d3b479" >
+                      <File Id = "jretlibtresourcesujar" Source="jre\lib\resources.jar"/>
+                    </Component>
+                    <Component Id = "jretlibtrtujar" Guid = "e0d8e553-2896-41bd-bf02-a2f056aa2c8d" >
+                      <File Id = "jretlibtrtujar" Source="jre\lib\rt.jar"/>
+                    </Component>
+                    <Component Id = "jretlibtsounduproperties" Guid = "7eacb7d5-a19c-47d1-8533-99b65b34ecab" >
+                      <File Id = "jretlibtsounduproperties" Source="jre\lib\sound.properties"/>
+                    </Component>
+                    <Component Id = "jretlibttzdbudat" Guid = "3344842d-65f4-4183-ad53-3b5babeea9a6" >
+                      <File Id = "jretlibttzdbudat" Source="jre\lib\tzdb.dat"/>
+                    </Component>
+                    <Component Id = "jretlibttzmappings" Guid = "ae006369-b6c1-45bb-a1a4-1e7526f6ffcc" >
+                      <File Id = "jretlibttzmappings" Source="jre\lib\tzmappings"/>
+                    </Component>
+                    <Directory Id = "jrelibamd64" Name = "amd64">
+                       <Component Id = "jretlibtamd64tjvmucfg" Guid = "a3609b35-7c39-45eb-aa20-5966131810ad" >
+                         <File Id = "jretlibtamd64tjvmucfg" Source="jre\lib\amd64\jvm.cfg"/>
+                       </Component>
+                    </Directory>
+                    <Directory Id = "jrelibapplet" Name = "applet">
+                    </Directory>
+                    <Directory Id = "jrelibcmm" Name = "cmm">
+                       <Component Id = "jretlibtcmmtCIEXYZupf" Guid = "4d11fda0-f893-4caa-ac39-cdceef61f83b" >
+                         <File Id = "jretlibtcmmtCIEXYZupf" Source="jre\lib\cmm\CIEXYZ.pf"/>
+                       </Component>
+                       <Component Id = "jretlibtcmmtGRAYupf" Guid = "ddc0862b-a378-4a94-b91c-0c354c955f80" >
+                         <File Id = "jretlibtcmmtGRAYupf" Source="jre\lib\cmm\GRAY.pf"/>
+                       </Component>
+                       <Component Id = "jretlibtcmmtLINEARuRGBupf" Guid = "e22210fc-b1a1-4049-9362-f632dbdff882" >
+                         <File Id = "jretlibtcmmtLINEARuRGBupf" Source="jre\lib\cmm\LINEAR_RGB.pf"/>
+                       </Component>
+                       <Component Id = "jretlibtcmmtPYCCupf" Guid = "f04ad62e-fb6f-467d-af45-71d9e4efd462" >
+                         <File Id = "jretlibtcmmtPYCCupf" Source="jre\lib\cmm\PYCC.pf"/>
+                       </Component>
+                       <Component Id = "jretlibtcmmtsRGBupf" Guid = "5c026ea6-43a6-400e-9da6-fa5152564f1d" >
+                         <File Id = "jretlibtcmmtsRGBupf" Source="jre\lib\cmm\sRGB.pf"/>
+                       </Component>
+                    </Directory>
+                    <Directory Id = "jrelibdeploy" Name = "deploy">
+                       <Component Id = "jretlibtdeploytffjcextuzip" Guid = "3e3f7139-00e5-41a6-a3e0-e52a4efbd4f7" >
+                         <File Id = "jretlibtdeploytffjcextuzip" Source="jre\lib\deploy\ffjcext.zip"/>
+                       </Component>
+                       <Component Id = "jretlibtdeploytmessagesuproperties" Guid = "d3008bb1-7b6c-40db-84cb-b197a6442f94" >
+                         <File Id = "jretlibtdeploytmessagesuproperties" Source="jre\lib\deploy\messages.properties"/>
+                       </Component>
+                       <Component Id = "jretlibtdeploytmessagesudeuproperties" Guid = "9d6146ea-4179-42d9-9920-360c99890f08" >
+                         <File Id = "jretlibtdeploytmessagesudeuproperties" Source="jre\lib\deploy\messages_de.properties"/>
+                       </Component>
+                       <Component Id = "jretlibtdeploytmessagesuesuproperties" Guid = "90f638a7-d33b-444a-bbf3-37193d695022" >
+                         <File Id = "jretlibtdeploytmessagesuesuproperties" Source="jre\lib\deploy\messages_es.properties"/>
+                       </Component>
+                       <Component Id = "jretlibtdeploytmessagesufruproperties" Guid = "31232ad0-d12f-45f9-9646-cd896d1bb8ef" >
+                         <File Id = "jretlibtdeploytmessagesufruproperties" Source="jre\lib\deploy\messages_fr.properties"/>
+                       </Component>
+                       <Component Id = "jretlibtdeploytmessagesuituproperties" Guid = "9777b816-d5f9-4d90-b228-27a560a12d2c" >
+                         <File Id = "jretlibtdeploytmessagesuituproperties" Source="jre\lib\deploy\messages_it.properties"/>
+                       </Component>
+                       <Component Id = "jretlibtdeploytmessagesujauproperties" Guid = "51718db1-de81-4f2a-a5e7-6e43f81701e7" >
+                         <File Id = "jretlibtdeploytmessagesujauproperties" Source="jre\lib\deploy\messages_ja.properties"/>
+                       </Component>
+                       <Component Id = "jretlibtdeploytmessagesukouproperties" Guid = "9a5d9f2f-c442-4162-8509-9ce9367c4a10" >
+                         <File Id = "jretlibtdeploytmessagesukouproperties" Source="jre\lib\deploy\messages_ko.properties"/>
+                       </Component>
+                       <Component Id = "jretlibtdeploytmessagesuptuBRuproperties" Guid = "394d0872-0e94-4659-9811-65f11cfe37d3" >
+                         <File Id = "jretlibtdeploytmessagesuptuBRuproperties" Source="jre\lib\deploy\messages_pt_BR.properties"/>
+                       </Component>
+                       <Component Id = "jretlibtdeploytmessagesusvuproperties" Guid = "d5a180ef-2af6-4939-85de-330f878a1174" >
+                         <File Id = "jretlibtdeploytmessagesusvuproperties" Source="jre\lib\deploy\messages_sv.properties"/>
+                       </Component>
+                       <Component Id = "jretlibtdeploytmessagesuzhuCNuproperties" Guid = "640d2d7f-1187-442f-a1fd-58565670e598" >
+                         <File Id = "jretlibtdeploytmessagesuzhuCNuproperties" Source="jre\lib\deploy\messages_zh_CN.properties"/>
+                       </Component>
+                       <Component Id = "jretlibtdeploytmessagesuzhuHKuproperties" Guid = "aff79508-9d46-48a5-8911-6743203cc755" >
+                         <File Id = "jretlibtdeploytmessagesuzhuHKuproperties" Source="jre\lib\deploy\messages_zh_HK.properties"/>
+                       </Component>
+                       <Component Id = "jretlibtdeploytmessagesuzhuTWuproperties" Guid = "e1b06621-dfc1-41e6-86a4-a95885b42d52" >
+                         <File Id = "jretlibtdeploytmessagesuzhuTWuproperties" Source="jre\lib\deploy\messages_zh_TW.properties"/>
+                       </Component>
+                       <Component Id = "jretlibtdeploytsplashugif" Guid = "1c55d214-23da-449a-9dc4-f036e2cb60bf" >
+                         <File Id = "jretlibtdeploytsplashugif" Source="jre\lib\deploy\splash.gif"/>
+                       </Component>
+                       <Component Id = "jretlibtdeploytsplashu2xugif" Guid = "cd531dc7-a021-4c9a-a285-aebcdf2106b5" >
+                         <File Id = "jretlibtdeploytsplashu2xugif" Source="jre\lib\deploy\splash@2x.gif"/>
+                       </Component>
+                       <Component Id = "jretlibtdeploytsplashu11ulicugif" Guid = "88c96439-5eca-4b17-b99d-d308ed3c39fd" >
+                         <File Id = "jretlibtdeploytsplashu11ulicugif" Source="jre\lib\deploy\splash_11-lic.gif"/>
+                       </Component>
+                       <Component Id = "jretlibtdeploytsplashu11u2xulicugif" Guid = "52bdaf80-aa8b-4ed2-bbc6-c0ee165811b6" >
+                         <File Id = "jretlibtdeploytsplashu11u2xulicugif" Source="jre\lib\deploy\splash_11@2x-lic.gif"/>
+                       </Component>
+                    </Directory>
+                    <Directory Id = "jrelibext" Name = "ext">
+                       <Component Id = "jretlibtexttaccessubridgeu64ujar" Guid = "be5d94eb-f4c6-42cd-a08c-e81b2f81089e" >
+                         <File Id = "jretlibtexttaccessubridgeu64ujar" Source="jre\lib\ext\access-bridge-64.jar"/>
+                       </Component>
+                       <Component Id = "jretlibtexttcldrdataujar" Guid = "18e8131e-b04e-40de-aaac-d6d0b0e2110d" >
+                         <File Id = "jretlibtexttcldrdataujar" Source="jre\lib\ext\cldrdata.jar"/>
+                       </Component>
+                       <Component Id = "jretlibtexttdnsnsujar" Guid = "a3929125-a674-49c2-bfeb-01eb50627ccd" >
+                         <File Id = "jretlibtexttdnsnsujar" Source="jre\lib\ext\dnsns.jar"/>
+                       </Component>
+                       <Component Id = "jretlibtexttjaccessujar" Guid = "9e8b4e9b-bd68-4d9c-b96e-89f08cec2641" >
+                         <File Id = "jretlibtexttjaccessujar" Source="jre\lib\ext\jaccess.jar"/>
+                       </Component>
+                       <Component Id = "jretlibtexttjfxrtujar" Guid = "9abf8ba8-5da2-4e3b-8f7b-ab1d04349a99" >
+                         <File Id = "jretlibtexttjfxrtujar" Source="jre\lib\ext\jfxrt.jar"/>
+                       </Component>
+                       <Component Id = "jretlibtexttlocaledataujar" Guid = "c7933f62-1703-4843-b02d-3cfe70b59d54" >
+                         <File Id = "jretlibtexttlocaledataujar" Source="jre\lib\ext\localedata.jar"/>
+                       </Component>
+                       <Component Id = "jretlibtexttmetauindex" Guid = "c5907c28-3385-4e9b-a8d5-25013a97d8e5" >
+                         <File Id = "jretlibtexttmetauindex" Source="jre\lib\ext\meta-index"/>
+                       </Component>
+                       <Component Id = "jretlibtexttnashornujar" Guid = "33e34162-7784-404a-b5c2-7ea50b09d0b4" >
+                         <File Id = "jretlibtexttnashornujar" Source="jre\lib\ext\nashorn.jar"/>
+                       </Component>
+                       <Component Id = "jretlibtexttsunecujar" Guid = "e722e35c-4458-4480-9d6d-119a085c6ff1" >
+                         <File Id = "jretlibtexttsunecujar" Source="jre\lib\ext\sunec.jar"/>
+                       </Component>
+                       <Component Id = "jretlibtexttsunjceuproviderujar" Guid = "47a2e548-b221-4329-b21c-881618e61322" >
+                         <File Id = "jretlibtexttsunjceuproviderujar" Source="jre\lib\ext\sunjce_provider.jar"/>
+                       </Component>
+                       <Component Id = "jretlibtexttsunmscapiujar" Guid = "4256b308-e40f-456f-8e4f-5ab53abd8ec9" >
+                         <File Id = "jretlibtexttsunmscapiujar" Source="jre\lib\ext\sunmscapi.jar"/>
+                       </Component>
+                       <Component Id = "jretlibtexttsunpkcs11ujar" Guid = "a1d753c1-0c17-4920-b13e-b78101c592b8" >
+                         <File Id = "jretlibtexttsunpkcs11ujar" Source="jre\lib\ext\sunpkcs11.jar"/>
+                       </Component>
+                       <Component Id = "jretlibtexttzipfsujar" Guid = "d92e9731-f89d-4c5c-8eeb-53c196dff22c" >
+                         <File Id = "jretlibtexttzipfsujar" Source="jre\lib\ext\zipfs.jar"/>
+                       </Component>
+                    </Directory>
+                    <Directory Id = "jrelibfonts" Name = "fonts">
+                       <Component Id = "jretlibtfontstLucidaBrightDemiBolduttf" Guid = "8cb9a40b-22bd-4b42-ba53-8b3850b73b04" >
+                         <File Id = "jretlibtfontstLucidaBrightDemiBolduttf" Source="jre\lib\fonts\LucidaBrightDemiBold.ttf"/>
+                       </Component>
+                       <Component Id = "jretlibtfontstLucidaBrightDemiItalicuttf" Guid = "7d881c06-faa1-4b8a-aac3-373dc0918b62" >
+                         <File Id = "jretlibtfontstLucidaBrightDemiItalicuttf" Source="jre\lib\fonts\LucidaBrightDemiItalic.ttf"/>
+                       </Component>
+                       <Component Id = "jretlibtfontstLucidaBrightItalicuttf" Guid = "5e1654c3-4526-4563-a149-9a59cd825040" >
+                         <File Id = "jretlibtfontstLucidaBrightItalicuttf" Source="jre\lib\fonts\LucidaBrightItalic.ttf"/>
+                       </Component>
+                       <Component Id = "jretlibtfontstLucidaBrightRegularuttf" Guid = "d5819123-91d9-4e81-add9-8293d357e514" >
+                         <File Id = "jretlibtfontstLucidaBrightRegularuttf" Source="jre\lib\fonts\LucidaBrightRegular.ttf"/>
+                       </Component>
+                       <Component Id = "jretlibtfontstLucidaSansDemiBolduttf" Guid = "4e1046ec-580a-4b4b-9850-94037a4a23fc" >
+                         <File Id = "jretlibtfontstLucidaSansDemiBolduttf" Source="jre\lib\fonts\LucidaSansDemiBold.ttf"/>
+                       </Component>
+                       <Component Id = "jretlibtfontstLucidaSansRegularuttf" Guid = "48776541-b9a4-40f2-8478-9697428dd6fa" >
+                         <File Id = "jretlibtfontstLucidaSansRegularuttf" Source="jre\lib\fonts\LucidaSansRegular.ttf"/>
+                       </Component>
+                       <Component Id = "jretlibtfontstLucidaTypewriterBolduttf" Guid = "0aacb1eb-3b5f-4005-9b9a-a68ab105da17" >
+                         <File Id = "jretlibtfontstLucidaTypewriterBolduttf" Source="jre\lib\fonts\LucidaTypewriterBold.ttf"/>
+                       </Component>
+                       <Component Id = "jretlibtfontstLucidaTypewriterRegularuttf" Guid = "7a1c8f5f-5712-45d3-a738-d3db81b0fa6e" >
+                         <File Id = "jretlibtfontstLucidaTypewriterRegularuttf" Source="jre\lib\fonts\LucidaTypewriterRegular.ttf"/>
+                       </Component>
+                    </Directory>
+                    <Directory Id = "jrelibimages" Name = "images">
+                       <Directory Id = "jrelibimagescursors" Name = "cursors">
+                          <Component Id = "jretlibtimagestcursorstcursorsuproperties" Guid = "3806cd11-4c93-4ba6-9b4f-ae9ce68042eb" >
+                            <File Id = "jretlibtimagestcursorstcursorsuproperties" Source="jre\lib\images\cursors\cursors.properties"/>
+                          </Component>
+                          <Component Id = "jretlibtimagestcursorstinvalid32x32ugif" Guid = "d0ac8ca9-c874-4afd-9e15-464602dceb6d" >
+                            <File Id = "jretlibtimagestcursorstinvalid32x32ugif" Source="jre\lib\images\cursors\invalid32x32.gif"/>
+                          </Component>
+                          <Component Id = "jretlibtimagestcursorstwin32uCopyDrop32x32ugif" Guid = "38caf612-5631-423f-8bb0-f0fd10a1adfb" >
+                            <File Id = "jretlibtimagestcursorstwin32uCopyDrop32x32ugif" Source="jre\lib\images\cursors\win32_CopyDrop32x32.gif"/>
+                          </Component>
+                          <Component Id = "jretlibtimagestcursorstwin32uCopyNoDrop32x32ugif" Guid = "b09577cb-7351-4065-8c4c-58c9035bb8e3" >
+                            <File Id = "jretlibtimagestcursorstwin32uCopyNoDrop32x32ugif" Source="jre\lib\images\cursors\win32_CopyNoDrop32x32.gif"/>
+                          </Component>
+                          <Component Id = "jretlibtimagestcursorstwin32uLinkDrop32x32ugif" Guid = "1ea9e5f8-22a0-4b90-b09f-cfe58c483f17" >
+                            <File Id = "jretlibtimagestcursorstwin32uLinkDrop32x32ugif" Source="jre\lib\images\cursors\win32_LinkDrop32x32.gif"/>
+                          </Component>
+                          <Component Id = "jretlibtimagestcursorstwin32uLinkNoDrop32x32ugif" Guid = "171dfe2a-9efb-483f-90d2-a1f035a362cd" >
+                            <File Id = "jretlibtimagestcursorstwin32uLinkNoDrop32x32ugif" Source="jre\lib\images\cursors\win32_LinkNoDrop32x32.gif"/>
+                          </Component>
+                          <Component Id = "jretlibtimagestcursorstwin32uMoveDrop32x32ugif" Guid = "bd66fe97-e45e-4d02-b57e-29d3dc593866" >
+                            <File Id = "jretlibtimagestcursorstwin32uMoveDrop32x32ugif" Source="jre\lib\images\cursors\win32_MoveDrop32x32.gif"/>
+                          </Component>
+                          <Component Id = "jretlibtimagestcursorstwin32uMoveNoDrop32x32ugif" Guid = "b22b446c-4f82-415b-8a67-1e7865565271" >
+                            <File Id = "jretlibtimagestcursorstwin32uMoveNoDrop32x32ugif" Source="jre\lib\images\cursors\win32_MoveNoDrop32x32.gif"/>
+                          </Component>
+                       </Directory>
+                    </Directory>
+                    <Directory Id = "jrelibjfr" Name = "jfr">
+                       <Component Id = "jretlibtjfrtdefaultujfc" Guid = "e0cfd029-10a9-4448-b138-00ae34d10996" >
+                         <File Id = "jretlibtjfrtdefaultujfc" Source="jre\lib\jfr\default.jfc"/>
+                       </Component>
+                       <Component Id = "jretlibtjfrtprofileujfc" Guid = "53b8ac17-0963-46af-b0da-a11043b6944d" >
+                         <File Id = "jretlibtjfrtprofileujfc" Source="jre\lib\jfr\profile.jfc"/>
+                       </Component>
+                    </Directory>
+                    <Directory Id = "jrelibmanagement" Name = "management">
+                       <Component Id = "jretlibtmanagementtjmxremoteuaccess" Guid = "219b1c70-1f6c-4fa3-b602-5925a5e9623c" >
+                         <File Id = "jretlibtmanagementtjmxremoteuaccess" Source="jre\lib\management\jmxremote.access"/>
+                       </Component>
+                       <Component Id = "jretlibtmanagementtjmxremoteupasswordutemplate" Guid = "65f5bedd-cbc0-4268-bb10-1ae8b851226d" >
+                         <File Id = "jretlibtmanagementtjmxremoteupasswordutemplate" Source="jre\lib\management\jmxremote.password.template"/>
+                       </Component>
+                       <Component Id = "jretlibtmanagementtmanagementuproperties" Guid = "38c9edd0-9b87-41bb-9dcb-5d9668233d6f" >
+                         <File Id = "jretlibtmanagementtmanagementuproperties" Source="jre\lib\management\management.properties"/>
+                       </Component>
+                       <Component Id = "jretlibtmanagementtsnmpuaclutemplate" Guid = "fb470f1f-afa7-45ab-b48e-f7dc39a0f920" >
+                         <File Id = "jretlibtmanagementtsnmpuaclutemplate" Source="jre\lib\management\snmp.acl.template"/>
+                       </Component>
+                    </Directory>
+                    <Directory Id = "jrelibsecurity" Name = "security">
+                       <Component Id = "jretlibtsecuritytblacklist" Guid = "5242f37a-6bc9-4b12-9e28-a31474055df9" >
+                         <File Id = "jretlibtsecuritytblacklist" Source="jre\lib\security\blacklist"/>
+                       </Component>
+                       <Component Id = "jretlibtsecuritytblacklisteducerts" Guid = "94bc57ee-62f3-4114-aec2-ea7a93274169" >
+                         <File Id = "jretlibtsecuritytblacklisteducerts" Source="jre\lib\security\blacklisted.certs"/>
+                       </Component>
+                       <Component Id = "jretlibtsecuritytcacerts" Guid = "b27df6f4-c3d6-455f-9ab7-12eddc51fcc9" >
+                         <File Id = "jretlibtsecuritytcacerts" Source="jre\lib\security\cacerts"/>
+                       </Component>
+                       <Component Id = "jretlibtsecuritytjavaupolicy" Guid = "5ea4f629-4e12-400b-b32f-c48f41828f4d" >
+                         <File Id = "jretlibtsecuritytjavaupolicy" Source="jre\lib\security\java.policy"/>
+                       </Component>
+                       <Component Id = "jretlibtsecuritytjavausecurity" Guid = "9f59325e-cb9b-48b9-8de0-33fcf22aa9a2" >
+                         <File Id = "jretlibtsecuritytjavausecurity" Source="jre\lib\security\java.security"/>
+                       </Component>
+                       <Component Id = "jretlibtsecuritytjavawsupolicy" Guid = "42154a73-979c-47bc-ae5d-30fc8b1c6e6b" >
+                         <File Id = "jretlibtsecuritytjavawsupolicy" Source="jre\lib\security\javaws.policy"/>
+                       </Component>
+                       <Component Id = "jretlibtsecuritytlocalupolicyujar" Guid = "0d38586e-6424-4100-aea3-e280b84ef3af" >
+                         <File Id = "jretlibtsecuritytlocalupolicyujar" Source="jre\lib\security\local_policy.jar"/>
+                       </Component>
+                       <Component Id = "jretlibtsecurityttrustedulibraries" Guid = "2bdfc9fc-3faf-4645-a1fd-5fce43d727a4" >
+                         <File Id = "jretlibtsecurityttrustedulibraries" Source="jre\lib\security\trusted.libraries"/>
+                       </Component>
+                       <Component Id = "jretlibtsecuritytUSuexportupolicyujar" Guid = "68f809fd-8bab-4de4-82eb-f0e46a5b6da6" >
+                         <File Id = "jretlibtsecuritytUSuexportupolicyujar" Source="jre\lib\security\US_export_policy.jar"/>
+                       </Component>
+                    </Directory>
+                 </Directory>
+              </Directory>
+              <!-- JRE COMPONENT -->
+
             </Directory>
           </Directory>
       
@@ -102,8 +723,207 @@
      </InstallExecuteSequence>
         
      <Feature Id="DefaultFeature" Level="1">
-       <ComponentRef Id="Java64"/>
-       <ComponentRef Id="Javaw64"/>
+
+       <!-- JRE COMPONENT -->
+       <ComponentRef Id = "jretCOPYRIGHT" />
+       <ComponentRef Id = "jretLICENSE" />
+       <ComponentRef Id = "jretREADMEutxt" />
+       <ComponentRef Id = "jretrelease" />
+       <ComponentRef Id = "jretTHIRDPARTYLICENSEREADMEuJAVAFXutxt" />
+       <ComponentRef Id = "jretTHIRDPARTYLICENSEREADMEutxt" />
+       <ComponentRef Id = "jretWelcomeuhtml" />
+       <ComponentRef Id = "jretbintawtudll" />
+       <ComponentRef Id = "jretbintbciudll" />
+       <ComponentRef Id = "jretbintdcprudll" />
+       <ComponentRef Id = "jretbintdecorausseudll" />
+       <ComponentRef Id = "jretbintdeployudll" />
+       <ComponentRef Id = "jretbintdtushmemudll" />
+       <ComponentRef Id = "jretbintdtusocketudll" />
+       <ComponentRef Id = "jretbinteulaudll" />
+       <ComponentRef Id = "jretbintfontmanagerudll" />
+       <ComponentRef Id = "jretbintfxpluginsudll" />
+       <ComponentRef Id = "jretbintglassudll" />
+       <ComponentRef Id = "jretbintglibuliteudll" />
+       <ComponentRef Id = "jretbintgstreameruliteudll" />
+       <ComponentRef Id = "jretbinthprofudll" />
+       <ComponentRef Id = "jretbintinstrumentudll" />
+       <ComponentRef Id = "jretbintj2pcscudll" />
+       <ComponentRef Id = "jretbintj2pkcs11udll" />
+       <ComponentRef Id = "jretbintjaasuntudll" />
+       <ComponentRef Id = "jretbintjabswitchuexe" />
+       <ComponentRef Id = "jretbintjavaurmiuexe" />
+       <ComponentRef Id = "jretbintjavaudll" />
+       <ComponentRef Id = "jretbintjavauexe" />
+       <ComponentRef Id = "jretbintJavaAccessBridgeu64udll" />
+       <ComponentRef Id = "jretbintjavacplucpl" />
+       <ComponentRef Id = "jretbintjavacpluexe" />
+       <ComponentRef Id = "jretbintjavafxufontudll" />
+       <ComponentRef Id = "jretbintjavafxufontut2kudll" />
+       <ComponentRef Id = "jretbintjavafxuiioudll" />
+       <ComponentRef Id = "jretbintjavawuexe" />
+       <ComponentRef Id = "jretbintjavawsuexe" />
+       <ComponentRef Id = "jretbintjavaucrwudemoudll" />
+       <ComponentRef Id = "jretbintjawtudll" />
+       <ComponentRef Id = "jretbintJAWTAccessBridgeu64udll" />
+       <ComponentRef Id = "jretbintjdwpudll" />
+       <ComponentRef Id = "jretbintjfrudll" />
+       <ComponentRef Id = "jretbintjfxmediaudll" />
+       <ComponentRef Id = "jretbintjfxwebkitudll" />
+       <ComponentRef Id = "jretbintjjsuexe" />
+       <ComponentRef Id = "jretbintjliudll" />
+       <ComponentRef Id = "jretbintjp2iexpudll" />
+       <ComponentRef Id = "jretbintjp2launcheruexe" />
+       <ComponentRef Id = "jretbintjp2nativeudll" />
+       <ComponentRef Id = "jretbintjp2ssvudll" />
+       <ComponentRef Id = "jretbintjpegudll" />
+       <ComponentRef Id = "jretbintjsdtudll" />
+       <ComponentRef Id = "jretbintjsoundudll" />
+       <ComponentRef Id = "jretbintjsounddsudll" />
+       <ComponentRef Id = "jretbintkcmsudll" />
+       <ComponentRef Id = "jretbintkeytooluexe" />
+       <ComponentRef Id = "jretbintkinituexe" />
+       <ComponentRef Id = "jretbintklistuexe" />
+       <ComponentRef Id = "jretbintktabuexe" />
+       <ComponentRef Id = "jretbintlcmsudll" />
+       <ComponentRef Id = "jretbintmanagementudll" />
+       <ComponentRef Id = "jretbintmlibuimageudll" />
+       <ComponentRef Id = "jretbintmsvcp120udll" />
+       <ComponentRef Id = "jretbintmsvcr100udll" />
+       <ComponentRef Id = "jretbintmsvcr120udll" />
+       <ComponentRef Id = "jretbintnetudll" />
+       <ComponentRef Id = "jretbintnioudll" />
+       <ComponentRef Id = "jretbintnptudll" />
+       <ComponentRef Id = "jretbintorbduexe" />
+       <ComponentRef Id = "jretbintpack200uexe" />
+       <ComponentRef Id = "jretbintpolicytooluexe" />
+       <ComponentRef Id = "jretbintprismucommonudll" />
+       <ComponentRef Id = "jretbintprismud3dudll" />
+       <ComponentRef Id = "jretbintprismuswudll" />
+       <ComponentRef Id = "jretbintresourceudll" />
+       <ComponentRef Id = "jretbintrmiduexe" />
+       <ComponentRef Id = "jretbintrmiregistryuexe" />
+       <ComponentRef Id = "jretbintservertooluexe" />
+       <ComponentRef Id = "jretbintsplashscreenudll" />
+       <ComponentRef Id = "jretbintssvudll" />
+       <ComponentRef Id = "jretbintssvagentuexe" />
+       <ComponentRef Id = "jretbintsunecudll" />
+       <ComponentRef Id = "jretbintsunmscapiudll" />
+       <ComponentRef Id = "jretbintt2kudll" />
+       <ComponentRef Id = "jretbinttnameservuexe" />
+       <ComponentRef Id = "jretbintunpackudll" />
+       <ComponentRef Id = "jretbintunpack200uexe" />
+       <ComponentRef Id = "jretbintverifyudll" />
+       <ComponentRef Id = "jretbintw2kulsauauthudll" />
+       <ComponentRef Id = "jretbintWindowsAccessBridgeu64udll" />
+       <ComponentRef Id = "jretbintwsdetectudll" />
+       <ComponentRef Id = "jretbintzipudll" />
+       <ComponentRef Id = "jretbintdtplugintdeployJava1udll" />
+       <ComponentRef Id = "jretbintdtplugintnpdeployJava1udll" />
+       <ComponentRef Id = "jretbintplugin2tmsvcr100udll" />
+       <ComponentRef Id = "jretbintplugin2tnpjp2udll" />
+       <ComponentRef Id = "jretbintservertclassesujsa" />
+       <ComponentRef Id = "jretbintservertjvmudll" />
+       <ComponentRef Id = "jretbintservertXusageutxt" />
+       <ComponentRef Id = "jretlibtaccessibilityuproperties" />
+       <ComponentRef Id = "jretlibtcalendarsuproperties" />
+       <ComponentRef Id = "jretlibtcharsetsujar" />
+       <ComponentRef Id = "jretlibtclasslist" />
+       <ComponentRef Id = "jretlibtcontentutypesuproperties" />
+       <ComponentRef Id = "jretlibtcurrencyudata" />
+       <ComponentRef Id = "jretlibtdeployujar" />
+       <ComponentRef Id = "jretlibtflavormapuproperties" />
+       <ComponentRef Id = "jretlibtfontconfigubfc" />
+       <ComponentRef Id = "jretlibtfontconfigupropertiesusrc" />
+       <ComponentRef Id = "jretlibthijrahuconfiguumalqurauproperties" />
+       <ComponentRef Id = "jretlibtjavafxuproperties" />
+       <ComponentRef Id = "jretlibtjavawsujar" />
+       <ComponentRef Id = "jretlibtjceujar" />
+       <ComponentRef Id = "jretlibtjfrujar" />
+       <ComponentRef Id = "jretlibtjfxswtujar" />
+       <ComponentRef Id = "jretlibtjsseujar" />
+       <ComponentRef Id = "jretlibtjvmuhprofutxt" />
+       <ComponentRef Id = "jretlibtlogginguproperties" />
+       <ComponentRef Id = "jretlibtmanagementuagentujar" />
+       <ComponentRef Id = "jretlibtmetauindex" />
+       <ComponentRef Id = "jretlibtnetuproperties" />
+       <ComponentRef Id = "jretlibtpluginujar" />
+       <ComponentRef Id = "jretlibtpsfontupropertiesuja" />
+       <ComponentRef Id = "jretlibtpsfontj2duproperties" />
+       <ComponentRef Id = "jretlibtresourcesujar" />
+       <ComponentRef Id = "jretlibtrtujar" />
+       <ComponentRef Id = "jretlibtsounduproperties" />
+       <ComponentRef Id = "jretlibttzdbudat" />
+       <ComponentRef Id = "jretlibttzmappings" />
+       <ComponentRef Id = "jretlibtamd64tjvmucfg" />
+       <ComponentRef Id = "jretlibtcmmtCIEXYZupf" />
+       <ComponentRef Id = "jretlibtcmmtGRAYupf" />
+       <ComponentRef Id = "jretlibtcmmtLINEARuRGBupf" />
+       <ComponentRef Id = "jretlibtcmmtPYCCupf" />
+       <ComponentRef Id = "jretlibtcmmtsRGBupf" />
+       <ComponentRef Id = "jretlibtdeploytffjcextuzip" />
+       <ComponentRef Id = "jretlibtdeploytmessagesuproperties" />
+       <ComponentRef Id = "jretlibtdeploytmessagesudeuproperties" />
+       <ComponentRef Id = "jretlibtdeploytmessagesuesuproperties" />
+       <ComponentRef Id = "jretlibtdeploytmessagesufruproperties" />
+       <ComponentRef Id = "jretlibtdeploytmessagesuituproperties" />
+       <ComponentRef Id = "jretlibtdeploytmessagesujauproperties" />
+       <ComponentRef Id = "jretlibtdeploytmessagesukouproperties" />
+       <ComponentRef Id = "jretlibtdeploytmessagesuptuBRuproperties" />
+       <ComponentRef Id = "jretlibtdeploytmessagesusvuproperties" />
+       <ComponentRef Id = "jretlibtdeploytmessagesuzhuCNuproperties" />
+       <ComponentRef Id = "jretlibtdeploytmessagesuzhuHKuproperties" />
+       <ComponentRef Id = "jretlibtdeploytmessagesuzhuTWuproperties" />
+       <ComponentRef Id = "jretlibtdeploytsplashugif" />
+       <ComponentRef Id = "jretlibtdeploytsplashu2xugif" />
+       <ComponentRef Id = "jretlibtdeploytsplashu11ulicugif" />
+       <ComponentRef Id = "jretlibtdeploytsplashu11u2xulicugif" />
+       <ComponentRef Id = "jretlibtexttaccessubridgeu64ujar" />
+       <ComponentRef Id = "jretlibtexttcldrdataujar" />
+       <ComponentRef Id = "jretlibtexttdnsnsujar" />
+       <ComponentRef Id = "jretlibtexttjaccessujar" />
+       <ComponentRef Id = "jretlibtexttjfxrtujar" />
+       <ComponentRef Id = "jretlibtexttlocaledataujar" />
+       <ComponentRef Id = "jretlibtexttmetauindex" />
+       <ComponentRef Id = "jretlibtexttnashornujar" />
+       <ComponentRef Id = "jretlibtexttsunecujar" />
+       <ComponentRef Id = "jretlibtexttsunjceuproviderujar" />
+       <ComponentRef Id = "jretlibtexttsunmscapiujar" />
+       <ComponentRef Id = "jretlibtexttsunpkcs11ujar" />
+       <ComponentRef Id = "jretlibtexttzipfsujar" />
+       <ComponentRef Id = "jretlibtfontstLucidaBrightDemiBolduttf" />
+       <ComponentRef Id = "jretlibtfontstLucidaBrightDemiItalicuttf" />
+       <ComponentRef Id = "jretlibtfontstLucidaBrightItalicuttf" />
+       <ComponentRef Id = "jretlibtfontstLucidaBrightRegularuttf" />
+       <ComponentRef Id = "jretlibtfontstLucidaSansDemiBolduttf" />
+       <ComponentRef Id = "jretlibtfontstLucidaSansRegularuttf" />
+       <ComponentRef Id = "jretlibtfontstLucidaTypewriterBolduttf" />
+       <ComponentRef Id = "jretlibtfontstLucidaTypewriterRegularuttf" />
+       <ComponentRef Id = "jretlibtimagestcursorstcursorsuproperties" />
+       <ComponentRef Id = "jretlibtimagestcursorstinvalid32x32ugif" />
+       <ComponentRef Id = "jretlibtimagestcursorstwin32uCopyDrop32x32ugif" />
+       <ComponentRef Id = "jretlibtimagestcursorstwin32uCopyNoDrop32x32ugif" />
+       <ComponentRef Id = "jretlibtimagestcursorstwin32uLinkDrop32x32ugif" />
+       <ComponentRef Id = "jretlibtimagestcursorstwin32uLinkNoDrop32x32ugif" />
+       <ComponentRef Id = "jretlibtimagestcursorstwin32uMoveDrop32x32ugif" />
+       <ComponentRef Id = "jretlibtimagestcursorstwin32uMoveNoDrop32x32ugif" />
+       <ComponentRef Id = "jretlibtjfrtdefaultujfc" />
+       <ComponentRef Id = "jretlibtjfrtprofileujfc" />
+       <ComponentRef Id = "jretlibtmanagementtjmxremoteuaccess" />
+       <ComponentRef Id = "jretlibtmanagementtjmxremoteupasswordutemplate" />
+       <ComponentRef Id = "jretlibtmanagementtmanagementuproperties" />
+       <ComponentRef Id = "jretlibtmanagementtsnmpuaclutemplate" />
+       <ComponentRef Id = "jretlibtsecuritytblacklist" />
+       <ComponentRef Id = "jretlibtsecuritytblacklisteducerts" />
+       <ComponentRef Id = "jretlibtsecuritytcacerts" />
+       <ComponentRef Id = "jretlibtsecuritytjavaupolicy" />
+       <ComponentRef Id = "jretlibtsecuritytjavausecurity" />
+       <ComponentRef Id = "jretlibtsecuritytjavawsupolicy" />
+       <ComponentRef Id = "jretlibtsecuritytlocalupolicyujar" />
+       <ComponentRef Id = "jretlibtsecurityttrustedulibraries" />
+       <ComponentRef Id = "jretlibtsecuritytUSuexportupolicyujar" />
+       <!-- JRE COMPONENT -->
+
+
        <ComponentRef Id="ApplicationSourceFiles"/>
        <ComponentRef Id="Plugins"/>
        <ComponentRef Id="ApplicationLauncherFiles64"/>
