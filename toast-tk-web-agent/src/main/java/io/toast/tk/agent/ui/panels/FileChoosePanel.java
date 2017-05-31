@@ -10,15 +10,17 @@ import org.apache.logging.log4j.Logger;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Properties;
 
 
 public class FileChoosePanel extends AbstractPanel {
 
-    private static final Logger LOG = LogManager.getLogger(FileChoosePanel.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3196229623723358193L;
+	private static final Logger LOG = LogManager.getLogger(FileChoosePanel.class);
     private final String label;
     private final EnumError errorType;
     private JButton fileSearch;

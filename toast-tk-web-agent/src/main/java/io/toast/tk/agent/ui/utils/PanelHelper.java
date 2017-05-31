@@ -31,30 +31,30 @@ public class PanelHelper {
 	public static Font FONT_TITLE_2 = new Font(fontName,Font.BOLD,18);
 	public static Font FONT_TITLE_1 = new Font(fontName,Font.BOLD,22);
 
-	public static JPanel createBasicPanel() {
+	public static JPanel createBasicJPanel() {
 		JPanel panel = new JPanel();
 		panel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel.setAlignmentY(Component.CENTER_ALIGNMENT);
 		panel.setBackground(Color.white);
 		return panel;
 	} 
-	public static JPanel createBasicPanel(int boxLayout) {
-		JPanel panel = createBasicPanel();
+	public static JPanel createBasicJPanel(int boxLayout) {
+		JPanel panel = createBasicJPanel();
 		panel.add(Box.createHorizontalGlue());
 		panel.setLayout(new BoxLayout(panel, boxLayout));
 		return panel;
 	}
-	public static JPanel createBasicPanel(String strKey, int boxLayout) {
-		return createBasicPanel(strKey, boxLayout, PanelHelper.FONT_TITLE_3);
+	public static JPanel createBasicJPanel(String strKey, int boxLayout) {
+		return createBasicJPanel(strKey, boxLayout, PanelHelper.FONT_TITLE_3);
 	}
-	public static JPanel createBasicPanel(String strKey, int boxLayout, Font font) {
-		JPanel panel = createBasicPanel(strKey, font);
+	public static JPanel createBasicJPanel(String strKey, int boxLayout, Font font) {
+		JPanel panel = createBasicJPanel(strKey, font);
 		panel.setLayout(new BoxLayout(panel, boxLayout));
 		
 		return panel;
 	}
-	public static JPanel createBasicPanel(String strKey, Font font) {
-		JPanel panel = createBasicPanel();
+	public static JPanel createBasicJPanel(String strKey, Font font) {
+		JPanel panel = createBasicJPanel();
 		panel.add(Box.createHorizontalGlue());
 		panel.setBorder(BorderFactory.createTitledBorder(panel.getBorder(),
 	    		strKey,TitledBorder.ABOVE_TOP,TitledBorder.CENTER, font));

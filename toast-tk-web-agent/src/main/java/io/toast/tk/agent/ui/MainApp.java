@@ -18,10 +18,11 @@ import javax.imageio.ImageIO;
 
 import io.toast.tk.agent.ui.i18n.CommonMessages;
 import io.toast.tk.agent.ui.i18n.MainAppMessages;
+import io.toast.tk.agent.ui.panels.DropPanel;
 import io.toast.tk.agent.ui.provider.ConfigPanelProvider;
+import io.toast.tk.agent.ui.provider.DropPanelProvider;
 import io.toast.tk.agent.ui.provider.PropertiesProvider;
 import io.toast.tk.agent.ui.verify.IPropertyVerifier;
-import io.toast.tk.core.annotation.ActionAdapter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,6 +39,7 @@ public class MainApp implements IAgentApp {
 	private static final Logger LOG = LogManager.getLogger(MainApp.class);
 
 	private final ConfigPanelProvider configPanelProvider;
+	private final DropPanelProvider dropPanelProvider;
 	private BrowserManager browserManager;
 	private AgentConfigProvider webConfigProvider;
 	private final PropertiesProvider propertiesProvider;
@@ -55,12 +57,14 @@ public class MainApp implements IAgentApp {
 				   IAgentServer agentServer,
 				   Map<String, IPropertyVerifier> verifier,
 				   PropertiesProvider propertiesProvider,
-				   ConfigPanelProvider configPanelProvider) {
+				   ConfigPanelProvider configPanelProvider,
+				   DropPanelProvider dropPanelProvider) {
 		this.webConfigProvider = webConfig;
 		this.browserManager = browserManager;
 		this.propertiesProvider = propertiesProvider;
 		this.agentServer = agentServer;
 		this.configPanelProvider = configPanelProvider;
+		this.dropPanelProvider = dropPanelProvider;
 		this.verifier = verifier;
 		initWorkspace();
 		init();
@@ -102,6 +106,7 @@ public class MainApp implements IAgentApp {
 	    MenuItem startRecordingItem = new MenuItem("Start Recording");
 	    MenuItem stopRecordingItem = new MenuItem("Stop Recording");
 	    MenuItem settingsItem = new MenuItem("Settings");
+	    MenuItem dropItem = new MenuItem("Drag & Drop");
 	    
 	    quitItem.addActionListener(this::killListener);
 	    connectItem.addActionListener(this::connectListener);
@@ -109,6 +114,7 @@ public class MainApp implements IAgentApp {
 	    stopRecordingItem.addActionListener(this::stopListener);
 	    startRecordingItem.addActionListener(this::start);
 	    settingsItem.addActionListener(this::settingsListener);
+	    dropItem.addActionListener(this::dropListener);
 	    
 	    popup.add(connectItem);
 	    popup.addSeparator();
@@ -116,6 +122,8 @@ public class MainApp implements IAgentApp {
 	    popup.add(stopRecordingItem);
 	    popup.addSeparator();
 	    popup.add(executeItem);
+	    popup.addSeparator();
+	    popup.add(dropItem);
 	    popup.addSeparator();
 	    popup.add(settingsItem);
 	    popup.addSeparator();
@@ -222,6 +230,13 @@ public class MainApp implements IAgentApp {
 	
 	private void settingsListener(ActionEvent e){
 		ConfigPanel p = configPanelProvider.get();
+		if (p == null) {
+			NotificationManager.showMessage(CommonMessages.PROPERTIES_NOT_DISPLAYED);
+		}
+	}
+
+	private void dropListener(ActionEvent e){
+		DropPanel p = dropPanelProvider.get();
 		if (p == null) {
 			NotificationManager.showMessage(CommonMessages.PROPERTIES_NOT_DISPLAYED);
 		}

@@ -81,7 +81,7 @@ public class ConfigPanel extends JFrame {
 		Image toastLogo = PanelHelper.createImage(this,"ToastLogo.png");
 		this.setIconImage(toastLogo);
 		
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(HIDE_ON_CLOSE);
 		setBackground(Color.white);
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		setContentPane(mainPane);
@@ -95,11 +95,11 @@ public class ConfigPanel extends JFrame {
 		
 		JPanel topMainPanel = buildTopMainPanel();
 	    
-		JPanel contentMainPanel = PanelHelper.createBasicPanel(BoxLayout.Y_AXIS);
+		JPanel contentMainPanel = PanelHelper.createBasicJPanel(BoxLayout.Y_AXIS);
 		contentMainPanel.add(topMainPanel);
 		contentMainPanel.add(contentPanel);
 		
-		JPanel mainPane = PanelHelper.createBasicPanel();
+		JPanel mainPane = PanelHelper.createBasicJPanel();
 		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.X_AXIS));
 		mainPane.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		mainPane.add(buildBackgrounIconPanel());
@@ -109,11 +109,11 @@ public class ConfigPanel extends JFrame {
 	}
 	
 	private JPanel buildTopMainPanel() throws IOException {
-		JPanel topMainPanel = PanelHelper.createBasicPanel();
+		JPanel topMainPanel = PanelHelper.createBasicJPanel();
 	    JLabel topMainLabel = new JLabel("Agent settings");
 	    topMainLabel.setFont(PanelHelper.FONT_TITLE_1);
 	    topMainLabel.setBorder(BorderFactory.createEmptyBorder(0, 15, 15, 15));
-		JPanel topIcon = PanelHelper.createBasicPanel();
+		JPanel topIcon = PanelHelper.createBasicJPanel();
 		topIcon.setLayout(new BorderLayout());
 		Image topIconImage = PanelHelper.createImage(this,"AgentSetting_icon.png");
 		topIcon.add(new JLabel(new ImageIcon(topIconImage)));
@@ -123,7 +123,7 @@ public class ConfigPanel extends JFrame {
 	}
 	
 	private JPanel buildBackgrounIconPanel() throws IOException {
-		JPanel panIcon = PanelHelper.createBasicPanel();
+		JPanel panIcon = PanelHelper.createBasicJPanel();
 		panIcon.setLayout(new BorderLayout());
 		Image backGroundImage = PanelHelper.createImage(this,"AgentParamBackGround.png");
 		panIcon.add(new JLabel(new ImageIcon(backGroundImage)));
@@ -147,7 +147,7 @@ public class ConfigPanel extends JFrame {
 		ImageIcon proxyLogo = PanelHelper.createImageIcon(this, "proxy_icon.png");
 		secondPane.addTab("Proxy", proxyLogo, buildProxyPanel());
 
-		JPanel contentPanel = PanelHelper.createBasicPanel();
+		JPanel contentPanel = PanelHelper.createBasicJPanel();
 		contentPanel.add(secondPane);
 		contentPanel.add(buildFullButtonPanel());
 		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.PAGE_AXIS));
@@ -174,7 +174,7 @@ public class ConfigPanel extends JFrame {
 	}
 	
 	private JPanel buildGeneralPanel() {
-		JPanel generalParameters = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
+		JPanel generalParameters = PanelHelper.createBasicJPanel(BoxLayout.PAGE_AXIS);
 		generalParameters.add(webAppPanel);
 		generalParameters.add(apiKeyPanel);
 		generalParameters.add(pluginPanel);
@@ -183,7 +183,7 @@ public class ConfigPanel extends JFrame {
 	}
 	
 	private JPanel buildRecorderPanel() {
-		JPanel recorderParameters = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
+		JPanel recorderParameters = PanelHelper.createBasicJPanel(BoxLayout.PAGE_AXIS);
 		recorderParameters.add(chromePanel);
 		recorderParameters.add(recorderPanel);
 		recorderParameters.setLayout(new BoxLayout(recorderParameters, BoxLayout.Y_AXIS));
@@ -191,7 +191,7 @@ public class ConfigPanel extends JFrame {
 	}
 	
 	private JPanel buildProxyPanel() {
-		JPanel proxyPanel = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
+		JPanel proxyPanel = PanelHelper.createBasicJPanel(BoxLayout.PAGE_AXIS);
 	    proxyPanel.add(proxyCheckBox);
 	    proxyPanel.add(proxyAdressPanel);
 	    proxyPanel.add(proxyPortPanel);
@@ -201,7 +201,7 @@ public class ConfigPanel extends JFrame {
 	}
 
 	private JPanel buildFullButtonPanel() {
-		JPanel buttonPanel = PanelHelper.createBasicPanel();
+		JPanel buttonPanel = PanelHelper.createBasicJPanel();
 		buttonPanel.setAlignmentX(LEFT_ALIGNMENT);
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
 		buttonPanel.add(Box.createHorizontalGlue());

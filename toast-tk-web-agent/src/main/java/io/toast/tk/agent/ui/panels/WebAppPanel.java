@@ -15,7 +15,12 @@ import java.util.Properties;
 
 public class WebAppPanel extends AbstractPanel {
 
-    private static final Logger LOG = LogManager.getLogger(WebAppPanel.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8058813011665641152L;
+
+	private static final Logger LOG = LogManager.getLogger(WebAppPanel.class);
 
     private JCheckBox proxyCheckBox = null;
     private AbstractPanel proxyAdressPanel = null;

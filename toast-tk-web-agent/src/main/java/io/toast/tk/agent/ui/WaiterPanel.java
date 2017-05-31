@@ -103,7 +103,7 @@ public class WaiterPanel extends JFrame {
 	}
 	
 	private void buildContentPanel() throws IOException {
-        JPanel mainPane = PanelHelper.createBasicPanel();
+        JPanel mainPane = PanelHelper.createBasicJPanel();
         mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.X_AXIS));
         buildLeftPanel();
         buildRightPanel();
@@ -129,11 +129,11 @@ public class WaiterPanel extends JFrame {
 	    secondMainPanel = buildLeftPanelLabel("In progress...", prefDim, moyDim);
 
 		Image toastLogo = PanelHelper.createImage(this,"toast-loading.gif");
-		panIcon = PanelHelper.createBasicPanel();
+		panIcon = PanelHelper.createBasicJPanel();
 		panIcon.add(new JLabel(new ImageIcon(toastLogo)));
         panIcon.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-        leftPanel = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
+        leftPanel = PanelHelper.createBasicJPanel(BoxLayout.PAGE_AXIS);
         leftPanel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
         leftPanel.add(firstMainPanel);
         leftPanel.add(panIcon);
@@ -160,14 +160,14 @@ public class WaiterPanel extends JFrame {
 	    JPanel scriptNamePanel = buildRightlPanelPanel("Script in progress : ", scriptNameLabel, 250, prefHeight, 210, moyHeight);
 	    scriptNumberLabel = PanelHelper.createBasicJLabel();
 	    JPanel scriptNumberPanel = buildRightlPanelPanel("N°", scriptNumberLabel, 50, prefHeight, 40, moyHeight);
-	    JPanel scriptPanel = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+	    JPanel scriptPanel = PanelHelper.createBasicJPanel(BoxLayout.LINE_AXIS);
 	    scriptPanel.add(scriptNumberPanel);
 	    scriptPanel.add(scriptNamePanel);
 
 	    timeLabel = PanelHelper.createBasicJLabel(PanelHelper.secToHms(scriptTime));
 	    JPanel timePanel = buildRightlPanelPanel("Progress time : ", timeLabel, 300, prefHeight, 250, moyHeight);
 	    
-        rightPanel = PanelHelper.createBasicPanel(BoxLayout.Y_AXIS);
+        rightPanel = PanelHelper.createBasicJPanel(BoxLayout.Y_AXIS);
         rightPanel.add(scriptPanel);
         rightPanel.add(timePanel);
         rightPanel.add(buildRightPanelButton());
@@ -176,7 +176,7 @@ public class WaiterPanel extends JFrame {
 	}
 	
 	private JPanel buildRightlPanelPanel(String title, JLabel label, int prefHeightX, int prefHeightY, int moyHeightX, int moyHeightY) {
-		JPanel scriptNumberPanel = PanelHelper.createBasicPanel(title, PanelHelper.FONT_TEXT_BOLD);
+		JPanel scriptNumberPanel = PanelHelper.createBasicJPanel(title, PanelHelper.FONT_TEXT_BOLD);
 	    scriptNumberPanel.setPreferredSize(new Dimension(prefHeightX, prefHeightY));
 	    scriptNumberPanel.setMinimumSize(new Dimension(moyHeightX, moyHeightY));
 	    scriptNumberPanel.add(label);

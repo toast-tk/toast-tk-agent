@@ -122,10 +122,10 @@ public abstract class AbstractPanel extends JComponent {
 		this.setAlignmentY(Component.CENTER_ALIGNMENT);
 		this.setBackground(Color.white);
 		
-		JPanel textButtonPanel = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+		JPanel textButtonPanel = PanelHelper.createBasicJPanel(BoxLayout.LINE_AXIS);
 
 		textField = createBasicTextPanel();
-		iconPanel = PanelHelper.createBasicPanel();
+		iconPanel = PanelHelper.createBasicJPanel();
 		iconValid = createIconValid();
 		iconNotValid = createIconNotValid();
 

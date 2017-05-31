@@ -41,6 +41,10 @@ public class TestRunner {
 			NotificationManager.showMessage("No script directory defined, check agent settings !");
 		}
 		
+		execute(path);
+	}
+
+	public void execute(Path path){
 		final List<ITestPage> testScripts = getScripts(path);
 		
 		executeScripts(testScripts);

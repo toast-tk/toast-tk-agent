@@ -1,6 +1,5 @@
 package io.toast.tk.agent.ui.panels;
 
-import io.toast.tk.agent.config.AgentConfigProvider;
 import io.toast.tk.agent.ui.i18n.UIMessages;
 import io.toast.tk.agent.ui.utils.ConfigTesterHelper;
 import io.toast.tk.agent.ui.utils.PanelHelper;
@@ -16,7 +15,12 @@ import java.util.Properties;
 
 public class RecorderPanel extends AbstractPanel {
 
-    private static final Logger LOG = LogManager.getLogger(RecorderPanel.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2064872997995836853L;
+
+	private static final Logger LOG = LogManager.getLogger(RecorderPanel.class);
 
     private JCheckBox proxyCheckBox = null;
     private AbstractPanel proxyAdressPanel = null;
