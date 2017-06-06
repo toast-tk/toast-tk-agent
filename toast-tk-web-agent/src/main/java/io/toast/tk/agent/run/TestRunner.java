@@ -96,7 +96,7 @@ public class TestRunner {
 		this.fileName = null;
 	}
 	
-	public ITestPage run(ITestPage testPage) throws IOException {
+	public ITestPage run(ITestPage testPage) throws IOException, IllegalAccessException {
 		LOG.info("Agent plugin class loader: " + IAgentPlugin.class.getClassLoader());
 		PluginLoader loader = new PluginLoader(provider);
 		Module[] pluginModules = loader.collectGuiceModules(loader.loadPlugins(IAgentPlugin.class.getClassLoader()));
