@@ -61,11 +61,12 @@ public class WaiterThread implements Runnable {
 		  private Path path;
 		   
 		  public RunnerThread(TestRunner testrunner) throws IOException {           
-				this.runner = testrunner;
+			  this.runner = testrunner;
 		  }
 
-		  public RunnerThread(TestRunner testrunner, Path path) throws IOException {           
-				this.runner = testrunner;
+		  public RunnerThread(TestRunner testrunner, Path path) throws IOException {     
+			  this.path = path;
+			  this.runner = testrunner;
 		  }
 		  
 		  public void run() {

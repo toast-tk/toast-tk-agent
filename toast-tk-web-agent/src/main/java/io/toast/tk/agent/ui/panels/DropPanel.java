@@ -61,7 +61,7 @@ public class DropPanel extends JFrame {
                     (java.util.List<File>)t.getTransferData(DataFlavor.javaFileListFlavor);
 
                 for (File f : l) {
-                	execute(f.toPath());
+                	this.execute(f.toPath());
                 }
             } catch (UnsupportedFlavorException e) {
                 return false;
@@ -94,12 +94,13 @@ public class DropPanel extends JFrame {
 
         getContentPane().add(dp);
         
-        this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setSize(170, 210);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         this.setResizable(false);
         this.lowerFrame();
+        this.setAlwaysOnTop(true);
     }
 
 	@Inject

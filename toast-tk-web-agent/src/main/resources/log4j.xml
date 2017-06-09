@@ -12,9 +12,7 @@
 	<!-- File -->
 	<appender name="FILEOUT" class="org.apache.log4j.DailyRollingFileAppender">
 		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
-		<param name="MaxFileSize" value="5MB"/>
-		<param name="MaxBackupIndex" value="10"/>
-		<param name="file" value="${user.home}/.toast/logs/test.log"/>
+		<param name="file" value="logs/log4j.log"/>
 		<layout class="org.apache.log4j.EnhancedPatternLayout">
 			<param name="ConversionPattern" value="%-5p [%t] %d{MM-dd HH:mm:ss:SSS} %m  (%F:%L) %throwable %n"/>
 		</layout>

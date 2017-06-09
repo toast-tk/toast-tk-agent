@@ -3,6 +3,7 @@ package io.toast.tk.agent.run;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -57,6 +58,8 @@ public class TestRunner {
 			Files.list(path).forEach(p -> {
 				collectScripts(testScripts, parser, p);
 			});
+		} catch (NotDirectoryException e) {
+			collectScripts(testScripts, parser, path);
 		} catch (IOException e) {
 			LOG.error(e.getMessage(), e);
 			NotificationManager.showMessage("Unable to list files in scripts path " + path.getFileName() + " !");
