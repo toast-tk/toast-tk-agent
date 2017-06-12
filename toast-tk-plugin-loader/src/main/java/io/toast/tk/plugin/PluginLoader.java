@@ -92,9 +92,6 @@ public class PluginLoader {
 	}
 	
 	private static boolean isJar(File pathname){
-		LOG.error("debug:" + pathname);
-		LOG.error("debug:" + pathname.getName());
-		LOG.error("debug:" + pathname.isFile());
 		return pathname.getName() != null && pathname.isFile() && pathname.getName().endsWith(".jar");
 	}
 }
