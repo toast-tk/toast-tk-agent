@@ -26,6 +26,7 @@ public class AgentServerImpl implements IAgentServer {
 	private static final Logger LOG = LogManager.getLogger(AgentServerImpl.class);
 	private final AsyncHttpClientProvider wsSlientProvider;
 	private IAgentApp app;
+	private WebSocket webSocket;
 
 	@Inject
 	public AgentServerImpl(IAgentApp app, AsyncHttpClientProvider wsSlientProvider){
@@ -73,13 +74,14 @@ public class AgentServerImpl implements IAgentServer {
 	}
 
 	private void openAliveSocket(String apiKey) throws InterruptedException, ExecutionException {
-		final String socketUrl = (app.getConfig().getWebAppUrl() + "/api/agent/stream/"+apiKey)
-				.replace("https://","wss://")
-				.replace("http://", "ws://")
-				.replace("//", "/")
-				.replace(":/", "://");
+		final String socketUrl = toWsSocketUrl(apiKey);
+		if(this.webSocket == null || !this.webSocket.isOpen()){
+			this.webSocket = createSocketAndConnect(socketUrl);
+		}
+	}
 
-		wsSlientProvider.get().prepareGet(socketUrl).execute(new WebSocketUpgradeHandler.Builder().addWebSocketListener(
+	private WebSocket createSocketAndConnect(final String socketUrl) throws InterruptedException, ExecutionException {
+		return wsSlientProvider.get().prepareGet(socketUrl).execute(new WebSocketUpgradeHandler.Builder().addWebSocketListener(
 				new WebSocketTextListener() {
 					@Override
 					public void onOpen(WebSocket webSocket) {
@@ -102,6 +104,14 @@ public class AgentServerImpl implements IAgentServer {
 					}
 				}
 		).build()).get();
+	}
+
+	private String toWsSocketUrl(String apiKey) {
+		return (app.getConfig().getWebAppUrl()+"/api/agent/stream/"+apiKey)
+				.replace("https://","wss://")
+				.replace("http://", "ws://")
+				.replace("//", "/")
+				.replace(":/", "://");
 	}
 
 

@@ -1,25 +1,27 @@
 package io.toast.tk.agent.web.rest;
 
-import com.google.common.base.Strings;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-
-import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
-import io.netty.handler.ssl.util.SelfSignedCertificate;
-import io.toast.tk.agent.config.AgentConfig;
-
 import java.security.cert.CertificateException;
 
 import javax.net.ssl.SSLException;
 
-import org.asynchttpclient.AsyncHttpClientConfig;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.asynchttpclient.DefaultAsyncHttpClientConfig;
 import org.asynchttpclient.DefaultAsyncHttpClientConfig.Builder;
 import org.asynchttpclient.Realm;
 import org.asynchttpclient.Realm.AuthScheme;
+import org.asynchttpclient.netty.ssl.InsecureTrustManagerFactory;
 import org.asynchttpclient.proxy.ProxyServer;
+
+import com.google.common.base.Strings;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.util.SelfSignedCertificate;
+import io.toast.tk.agent.config.AgentConfig;
 
 
 public class AsyncHttpClientProvider implements Provider<DefaultAsyncHttpClient> {
@@ -46,15 +48,14 @@ public class AsyncHttpClientProvider implements Provider<DefaultAsyncHttpClient>
                 Realm realm = new Realm.Builder(config.getProxyUserName(), config.getProxyUserPswd())
                 		.setScheme(AuthScheme.BASIC)
                 		.build();
-                
                 builder.setRealm(realm);
             }
             
 			try {
-				SelfSignedCertificate ssc = new SelfSignedCertificate();
-				 final SslContext sslCtx = SslContext.newServerContext(ssc.certificate(), ssc.privateKey());
-				builder.setSslContext(sslCtx);
-			} catch (SSLException | CertificateException e) {
+				if(proxyServer.getHost().startsWith("https")){
+					builder.setSslContext(SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build());
+				}
+			} catch (SSLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
