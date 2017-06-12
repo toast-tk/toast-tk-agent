@@ -19,14 +19,18 @@ import io.toast.tk.agent.config.AgentConfigProvider;
 public class PluginLoader {
 
 	private static final Logger LOG = LoggerFactory.getLogger(PluginLoader.class);
-	private final String pluginDir;
+	private final File pluginDir;
 
-	public PluginLoader(AgentConfigProvider provider) {
+	public PluginLoader(AgentConfigProvider provider) throws IllegalAccessException {
 		this(provider.get().getPluginDir());
 	}
 
-	public PluginLoader(String pluginDir) {
-		this.pluginDir = pluginDir;
+	public PluginLoader(String pluginDir) throws IllegalAccessException {
+		File file = new File(pluginDir);
+		if(!file.exists() || !file.isDirectory()){
+			throw new IllegalAccessException("Invalid directory: " + pluginDir);
+		}
+		this.pluginDir = file;
 	}
 
 	private static void addSoftwareLibrary(File file,
@@ -55,9 +59,9 @@ public class PluginLoader {
 	}
 
 	private static void  extendClassLoaderPath(
-			final String pluginDir,
+			final File pluginDir,
 			ClassLoader classLoader) {
-		URL[] collectJarsInDirector = collectJarsInDirector(new File(pluginDir));
+		URL[] collectJarsInDirector = collectJarsInDirector(pluginDir);
 		for (URL jar : collectJarsInDirector) {
 			LOG.info("Found plugin jar {}", jar);
 			try {
@@ -79,11 +83,18 @@ public class PluginLoader {
 			List<URL> jars,
 			File dir) {
 		try {
-			for (File jar : dir.listFiles(pathname -> pathname.isFile() && pathname.getName().endsWith(".jar"))) {
+			for (File jar : dir.listFiles(PluginLoader::isJar)) {
 				jars.add(jar.toURI().toURL());
 			}
 		} catch (Exception e) {
-			LOG.error(e.getMessage(), e);
+			LOG.error("Error to find jars in dir:" + dir + " - " + e.getMessage(), e);
 		}
+	}
+	
+	private static boolean isJar(File pathname){
+		LOG.error("debug:" + pathname);
+		LOG.error("debug:" + pathname.getName());
+		LOG.error("debug:" + pathname.isFile());
+		return pathname.getName() != null && pathname.isFile() && pathname.getName().endsWith(".jar");
 	}
 }
