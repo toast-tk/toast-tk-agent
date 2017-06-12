@@ -1,11 +1,9 @@
 package io.toast.tk.agent.web.rest;
 
-import java.security.cert.CertificateException;
-
 import javax.net.ssl.SSLException;
 
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
-import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.asynchttpclient.DefaultAsyncHttpClientConfig;
 import org.asynchttpclient.DefaultAsyncHttpClientConfig.Builder;
@@ -18,15 +16,14 @@ import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.util.SelfSignedCertificate;
 import io.toast.tk.agent.config.AgentConfig;
 
 
 public class AsyncHttpClientProvider implements Provider<DefaultAsyncHttpClient> {
 
 
+	private static final Logger LOG = LogManager.getLogger(AsyncHttpClientProvider.class);
     private final AgentConfig config;
 
     @Inject
@@ -41,8 +38,7 @@ public class AsyncHttpClientProvider implements Provider<DefaultAsyncHttpClient>
             int port = Strings.isNullOrEmpty(proxyPort ) ? -1 : Integer.parseInt(proxyPort);
             ProxyServer proxyServer = new ProxyServer.Builder(config.getProxyAdress(), port).build();
 
-            Builder builder = new DefaultAsyncHttpClientConfig.Builder()
-                    .setProxyServer(proxyServer);
+            Builder builder = new DefaultAsyncHttpClientConfig.Builder().setProxyServer(proxyServer);
             
             if(!Strings.isNullOrEmpty(config.getProxyUserName()) && !Strings.isNullOrEmpty(config.getProxyUserPswd()) ){
                 Realm realm = new Realm.Builder(config.getProxyUserName(), config.getProxyUserPswd())
@@ -56,8 +52,7 @@ public class AsyncHttpClientProvider implements Provider<DefaultAsyncHttpClient>
 					builder.setSslContext(SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build());
 				}
 			} catch (SSLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOG.error(e.getMessage(), e);
 			}
 			
             return new DefaultAsyncHttpClient(builder.build());
