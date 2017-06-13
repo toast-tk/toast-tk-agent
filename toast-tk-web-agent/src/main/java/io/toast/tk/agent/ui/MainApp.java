@@ -94,6 +94,8 @@ public class MainApp implements IAgentApp {
 			} catch (IOException|AWTException e1) {
 				LOG.error(e1);
 			}
+		} else {
+			LOG.error("The system Tray is not supported !");
 		}
 	}
 	
