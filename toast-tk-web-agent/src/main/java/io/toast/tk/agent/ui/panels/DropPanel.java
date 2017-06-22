@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,7 +24,7 @@ import io.toast.tk.agent.config.AgentConfigProvider;
 import io.toast.tk.agent.ui.WaiterThread;
 import io.toast.tk.agent.ui.utils.PanelHelper;
 
-public class DropPanel extends JFrame {
+public class DropPanel extends JDialog {
 
 	/**
 	 * 
@@ -94,7 +95,7 @@ public class DropPanel extends JFrame {
 
         getContentPane().add(dp);
         
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.setSize(170, 210);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -105,7 +106,6 @@ public class DropPanel extends JFrame {
 
 	@Inject
 	public DropPanel(AgentConfigProvider provider) throws IOException {
-        super("Script dropper");
     	this.provider = provider;
 		buildPanel();
     }

@@ -51,7 +51,7 @@ public class TestRunner {
 		executeScripts(testScripts);
 	}
 	
-	private List<ITestPage> getScripts(Path path) {
+	public List<ITestPage> getScripts(Path path) {
 		List<ITestPage> testScripts = new ArrayList<>();
 		TestParser parser = new TestParser();
 		try {
@@ -78,7 +78,7 @@ public class TestRunner {
         }
 	}
 
-	private void executeScripts( List<ITestPage> testScripts) {
+	public void executeScripts( List<ITestPage> testScripts) {
 		testScripts.forEach(script ->{
 			try {
 				if(!interupted) {

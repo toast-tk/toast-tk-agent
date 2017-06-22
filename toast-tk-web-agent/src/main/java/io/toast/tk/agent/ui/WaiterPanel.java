@@ -10,6 +10,9 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -34,6 +37,11 @@ public class WaiterPanel extends JFrame {
 	
 	private JPanel leftPanel, rightPanel, panIcon;
 	private JLabel timeLabel, scriptNameLabel, scriptNumberLabel, secondMainPanel;
+	private JLabel toastImageLabel;
+	
+	private List<ImageIcon> toastImage;
+	private long lastCurrentTime = System.currentTimeMillis();
+	private int imageIteration = 0;
 	
 	public WaiterPanel() throws IOException {
 		super();
@@ -56,6 +64,8 @@ public class WaiterPanel extends JFrame {
 		updateScriptValue(name);
 		
 		updateLabel(scriptNumberLabel, PanelHelper.numbToStr(scriptNumber));
+		
+		updateImage();
 		
 		panIcon.repaint();
 		panIcon.revalidate();
@@ -92,6 +102,12 @@ public class WaiterPanel extends JFrame {
 		label.repaint();
 		label.revalidate();
 	}
+
+	private void updateImage() {
+		toastImageLabel.setIcon(this.getToastIcon());
+		toastImageLabel.repaint();
+		toastImageLabel.revalidate();
+	}
 	
 	public void stop() {
 		secondMainPanel.setText("Done.");
@@ -122,15 +138,18 @@ public class WaiterPanel extends JFrame {
 	}
 	
 	private void buildLeftPanel() throws IOException {
+		buildImages();
+		
 		Dimension prefDim = new Dimension(300, 25);
 		Dimension moyDim = new Dimension(250, 25);
 		
 		JLabel firstMainPanel = buildLeftPanelLabel("Script runner", prefDim, moyDim);	    
 	    secondMainPanel = buildLeftPanelLabel("In progress...", prefDim, moyDim);
 
-		Image toastLogo = PanelHelper.createImage(this,"toast-loading.gif");
+	    toastImageLabel = new JLabel(this.getToastIcon());
+	    
 		panIcon = PanelHelper.createBasicJPanel();
-		panIcon.add(new JLabel(new ImageIcon(toastLogo)));
+		panIcon.add(toastImageLabel);
         panIcon.setLayout(new FlowLayout(FlowLayout.LEFT));
 
         leftPanel = PanelHelper.createBasicJPanel(BoxLayout.PAGE_AXIS);
@@ -222,5 +241,27 @@ public class WaiterPanel extends JFrame {
 	    interputButton.setMinimumSize(new Dimension(60, 60));
 	    interputButton.setAlignmentX(CENTER_ALIGNMENT);
 	    return interputButton;
+	}
+	
+	private void buildImages() throws IOException {
+		toastImage = new ArrayList<ImageIcon>();
+		toastImage.add(PanelHelper.createImageIcon(this,"ToastLogo_1.png"));
+		toastImage.add(PanelHelper.createImageIcon(this,"ToastLogo_2.png"));
+		toastImage.add(PanelHelper.createImageIcon(this,"ToastLogo_3.png"));
+		toastImage.add(PanelHelper.createImageIcon(this,"ToastLogo_4.png"));
+		toastImage.add(PanelHelper.createImageIcon(this,"ToastLogo_5.png"));
+	}
+	
+	private ImageIcon getToastIcon() {
+		long time = System.currentTimeMillis();
+		if(time - lastCurrentTime >= 1000) {
+			lastCurrentTime = System.currentTimeMillis();
+			if(imageIteration >= 4) {
+				imageIteration = 0;
+			} else {
+				imageIteration ++;
+			}
+		}
+		return toastImage.get(imageIteration);
 	}
 }
