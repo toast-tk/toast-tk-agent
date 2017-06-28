@@ -29,5 +29,11 @@ public class TestPlanRunner extends AbstractTestPlanRunner{
 	public void tearDownEnvironment() {
 		//NO-OP	
 	}
+	
+	@Override
+	public String getReportsOutputPath(){
+		return null;
+	}
+
 
 }

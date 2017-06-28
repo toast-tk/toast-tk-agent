@@ -2,6 +2,9 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+    <logger name="org.apache" level="WARN" />
+    <logger name="httpclient" level="WARN" /> 
+	
 	<!-- Console output -->
 	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
 		<layout class="org.apache.log4j.EnhancedPatternLayout">

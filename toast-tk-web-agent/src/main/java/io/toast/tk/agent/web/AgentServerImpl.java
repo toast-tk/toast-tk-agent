@@ -4,28 +4,27 @@ import java.net.Inet4Address;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
 
-import com.google.common.base.Strings;
-import io.toast.tk.agent.web.rest.AsyncHttpClientProvider;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.asynchttpclient.ws.WebSocket;
+import org.asynchttpclient.ws.WebSocketUpgradeHandler;
 
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 
 import io.toast.tk.agent.ui.IAgentApp;
+import io.toast.tk.agent.web.rest.AsyncHttpClientProvider;
 import io.toast.tk.core.agent.interpret.WebEventRecord;
 import io.toast.tk.core.rest.HttpRequest;
 import io.toast.tk.core.rest.RestUtils;
-import org.asynchttpclient.ws.WebSocket;
-import org.asynchttpclient.ws.WebSocketTextListener;
-import org.asynchttpclient.ws.WebSocketUpgradeHandler;
 
 public class AgentServerImpl implements IAgentServer {
 
 	private static final Logger LOG = LogManager.getLogger(AgentServerImpl.class);
 	private final AsyncHttpClientProvider wsSlientProvider;
 	private IAgentApp app;
+	private WebSocket webSocket;
 
 	@Inject
 	public AgentServerImpl(IAgentApp app, AsyncHttpClientProvider wsSlientProvider){
@@ -73,35 +72,24 @@ public class AgentServerImpl implements IAgentServer {
 	}
 
 	private void openAliveSocket(String apiKey) throws InterruptedException, ExecutionException {
-		final String socketUrl = (app.getConfig().getWebAppUrl() + "/api/agent/stream/"+apiKey)
+		final String socketUrl = toWsSocketUrl(apiKey);
+		if(this.webSocket == null || !this.webSocket.isOpen()){
+			this.webSocket = createSocketAndConnect(socketUrl);
+		}
+	}
+
+	private WebSocket createSocketAndConnect(final String socketUrl) throws InterruptedException, ExecutionException {
+		return wsSlientProvider.get().prepareGet(socketUrl)
+				.execute(new WebSocketUpgradeHandler.Builder()
+						.addWebSocketListener(new WebAppSocketListener()).build()).get();
+	}
+
+	private String toWsSocketUrl(String apiKey) {
+		return (app.getConfig().getWebAppUrl()+"/api/agent/stream/"+apiKey)
 				.replace("https://","wss://")
 				.replace("http://", "ws://")
 				.replace("//", "/")
 				.replace(":/", "://");
-
-		wsSlientProvider.get().prepareGet(socketUrl).execute(new WebSocketUpgradeHandler.Builder().addWebSocketListener(
-				new WebSocketTextListener() {
-					@Override
-					public void onOpen(WebSocket webSocket) {
-						//NO-OP
-					}
-
-					@Override
-					public void onClose(WebSocket webSocket) {
-						//NO-OP
-					}
-
-					@Override
-					public void onError(Throwable throwable) {
-						LOG.error(throwable.getMessage(), throwable);
-					}
-
-					@Override
-					public void onMessage(String s) {
-						//NO-OP
-					}
-				}
-		).build()).get();
 	}
 
 

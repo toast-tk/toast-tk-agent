@@ -29,6 +29,10 @@ public class TestPageRunner extends AbstractScenarioRunner{
 	public void initEnvironment() {
 		//NO-OP
 	}
-
-
+	
+	@Override
+	public String getReportsOutputPath(){
+		return null;
+	}
+	
 }
