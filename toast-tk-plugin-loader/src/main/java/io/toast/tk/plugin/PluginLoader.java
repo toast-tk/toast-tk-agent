@@ -25,6 +25,12 @@ public class PluginLoader {
 		this(provider.get().getPluginDir());
 	}
 
+	/**
+	 * Build a new plugin loader by passing in the path to the plugin directory
+	 * 
+	 * @param pluginDir
+	 * @throws IllegalAccessException
+	 */
 	public PluginLoader(String pluginDir) throws IllegalAccessException {
 		File file = new File(pluginDir);
 		if(!file.exists() || !file.isDirectory()){
