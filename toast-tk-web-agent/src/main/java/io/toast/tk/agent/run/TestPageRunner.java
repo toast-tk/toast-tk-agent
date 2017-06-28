@@ -34,7 +34,5 @@ public class TestPageRunner extends AbstractScenarioRunner{
 	public String getReportsOutputPath(){
 		return null;
 	}
-
-
-
+	
 }
