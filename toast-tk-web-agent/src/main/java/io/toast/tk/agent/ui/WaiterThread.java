@@ -5,6 +5,7 @@ import java.nio.file.Path;
 
 import io.toast.tk.agent.config.AgentConfigProvider;
 import io.toast.tk.agent.run.TestRunner;
+import io.toast.tk.agent.ui.panels.WaiterPanel;
 
 public class WaiterThread implements Runnable {
 	  private WaiterPanel panel;
@@ -35,7 +36,6 @@ public class WaiterThread implements Runnable {
 				}
 	  			
 	  			if(panel.isInterupted()) {
-	  				thread.interrupt();
 	  			  	panel.setScript(testrunner.fileName, "Interupting");
 	  			  	testrunner.kill();
 	  			}

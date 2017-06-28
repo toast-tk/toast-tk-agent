@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 
 import io.toast.tk.agent.ui.i18n.CommonMessages;
 import io.toast.tk.agent.ui.i18n.MainAppMessages;
+import io.toast.tk.agent.ui.panels.ConfigPanel;
 import io.toast.tk.agent.ui.panels.DropPanel;
 import io.toast.tk.agent.ui.provider.ConfigPanelProvider;
 import io.toast.tk.agent.ui.provider.DropPanelProvider;

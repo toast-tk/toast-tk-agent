@@ -11,7 +11,7 @@ import com.google.inject.Inject;
 
 import io.toast.tk.agent.config.AgentConfig;
 import io.toast.tk.agent.config.AgentConfigProvider;
-import io.toast.tk.agent.ui.ConfigPanel;
+import io.toast.tk.agent.ui.panels.ConfigPanel;
 
 public class BrowserManager {
 

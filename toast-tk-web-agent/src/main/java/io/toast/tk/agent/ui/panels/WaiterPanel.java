@@ -1,6 +1,7 @@
-package io.toast.tk.agent.ui;
+package io.toast.tk.agent.ui.panels;
 
 import io.toast.tk.agent.ui.utils.PanelHelper;
+import io.toast.tk.runtime.block.TestBlockRunner;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -22,12 +23,21 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * Waiter panel
  */
-@SuppressWarnings("serial")
 public class WaiterPanel extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7445278086983713584L;
+
+	private static final Logger LOG = LogManager.getLogger(WaiterPanel.class);
+	
 	private long firstTime;
 	private long scriptTime;
 	private int scriptNumber = 0;
@@ -36,7 +46,8 @@ public class WaiterPanel extends JFrame {
 	private int iteration = 0, iTemp = 0;
 	
 	private JPanel leftPanel, rightPanel, panIcon;
-	private JLabel timeLabel, scriptNameLabel, scriptNumberLabel, secondMainPanel;
+	private JLabel timeLabel, successLabel, errorLabel;
+	private JLabel scriptNameLabel, scriptNumberLabel, secondMainPanel;
 	private JLabel toastImageLabel;
 	
 	private List<ImageIcon> toastImage;
@@ -69,9 +80,11 @@ public class WaiterPanel extends JFrame {
 		
 		panIcon.repaint();
 		panIcon.revalidate();
-		
+
 		updateLabel(timeLabel, PanelHelper.secToHms(scriptTime));
-		
+		updateLabel(successLabel, String.valueOf(TestBlockRunner.getSuccessNumber()));
+		updateLabel(errorLabel, String.valueOf(TestBlockRunner.getFailureNumber()));
+				
 		updateLabel(secondMainPanel, PanelHelper.addPoint(state,iteration));
 	}
 	
@@ -115,7 +128,18 @@ public class WaiterPanel extends JFrame {
 		done = true;
 		secondMainPanel.repaint();
 		secondMainPanel.revalidate();
-	    this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);   
+	    this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);  
+	    sleepAndDispose();
+	}
+	
+	private void sleepAndDispose() {
+		int threeMinute = 3*60*1000;
+		try {
+			Thread.sleep(threeMinute);
+		} catch (InterruptedException e) {
+			LOG.debug(e.getMessage());
+		}
+		this.dispose();
 	}
 	
 	private void buildContentPanel() throws IOException {
@@ -186,12 +210,20 @@ public class WaiterPanel extends JFrame {
 	    timeLabel = PanelHelper.createBasicJLabel(PanelHelper.secToHms(scriptTime));
 	    JPanel timePanel = buildRightlPanelPanel("Progress time : ", timeLabel, 300, prefHeight, 250, moyHeight);
 	    
+		TestBlockRunner.initializeNumber();
+	    successLabel = PanelHelper.createBasicJLabel("0");
+	    JPanel successPanel = buildRightlPanelPanel("Success number : ", successLabel, 300, prefHeight, 250, moyHeight);
+	    errorLabel = PanelHelper.createBasicJLabel("0");
+	    JPanel errorPanel = buildRightlPanelPanel("Error number : ", errorLabel, 300, prefHeight, 250, moyHeight);
+	    
         rightPanel = PanelHelper.createBasicJPanel(BoxLayout.Y_AXIS);
         rightPanel.add(scriptPanel);
         rightPanel.add(timePanel);
+        rightPanel.add(successPanel);
+        rightPanel.add(errorPanel);
         rightPanel.add(buildRightPanelButton());
-        rightPanel.setPreferredSize(new Dimension(300, prefHeight * 2 + 70));
-        rightPanel.setMaximumSize(new Dimension(250, moyHeight * 2 + 60));
+        rightPanel.setPreferredSize(new Dimension(300, prefHeight * 4 + 70));
+        rightPanel.setMaximumSize(new Dimension(250, moyHeight * 4 + 60));
 	}
 	
 	private JPanel buildRightlPanelPanel(String title, JLabel label, int prefHeightX, int prefHeightY, int moyHeightX, int moyHeightY) {

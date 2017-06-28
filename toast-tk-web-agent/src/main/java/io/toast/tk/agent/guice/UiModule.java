@@ -1,8 +1,9 @@
 package io.toast.tk.agent.guice;
 
 import com.google.inject.AbstractModule;
-import io.toast.tk.agent.ui.ConfigPanel;
+
 import io.toast.tk.agent.ui.PropertiesHolder;
+import io.toast.tk.agent.ui.panels.ConfigPanel;
 import io.toast.tk.agent.ui.provider.ConfigPanelProvider;
 import io.toast.tk.agent.ui.provider.PropertiesProvider;
 

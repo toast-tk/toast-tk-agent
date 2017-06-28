@@ -98,9 +98,9 @@ public class TestRunner {
 	
 	public void kill() {
 		this.interupted = true;
-		this.testPageRunner = null;
-		this.provider = null;
-		this.fileName = null;
+		if(testPageRunner != null) {
+			this.testPageRunner.kill();
+		}
 	}
 	
 	public ITestPage run(ITestPage testPage) throws IOException {

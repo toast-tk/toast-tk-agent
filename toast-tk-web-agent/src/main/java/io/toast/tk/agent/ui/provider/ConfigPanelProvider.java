@@ -3,7 +3,9 @@ package io.toast.tk.agent.ui.provider;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import io.toast.tk.agent.ui.ConfigPanel;
+
+import io.toast.tk.agent.ui.panels.ConfigPanel;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

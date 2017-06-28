@@ -1,4 +1,4 @@
-package io.toast.tk.agent.ui;
+package io.toast.tk.agent.ui.panels;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -23,6 +23,9 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import com.google.inject.Inject;
+
+import io.toast.tk.agent.ui.NotificationManager;
+import io.toast.tk.agent.ui.PropertiesHolder;
 import io.toast.tk.agent.ui.i18n.UIMessages;
 import io.toast.tk.agent.ui.panels.*;
 import io.toast.tk.agent.ui.utils.PanelHelper;
