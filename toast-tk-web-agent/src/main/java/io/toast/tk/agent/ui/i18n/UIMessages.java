@@ -19,7 +19,8 @@ public class UIMessages {
 
     public static final String PLUGIN_DIR = "Plugin directory";
     public static final String SCRIPT_DIR = "Script directory";
-    public static final String CHROME_BIN_PATH = "ChromeDriver path directory";
+    public static final String DRIVER_SELECTED = "Driver selected";
+    public static final String DRIVER_BIN_PATH = "Driver path directory";
 
     public static final String ERROR_FILE_NOT_EXIST = "The file that you have selected do not exist.";
 

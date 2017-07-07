@@ -27,7 +27,6 @@ import com.google.inject.Inject;
 import io.toast.tk.agent.ui.NotificationManager;
 import io.toast.tk.agent.ui.PropertiesHolder;
 import io.toast.tk.agent.ui.i18n.UIMessages;
-import io.toast.tk.agent.ui.panels.*;
 import io.toast.tk.agent.ui.utils.PanelHelper;
 import org.apache.commons.collections4.EnumerationUtils;
 import org.apache.commons.io.FileUtils;
@@ -35,6 +34,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import io.toast.tk.agent.config.AgentConfigProvider;
+import io.toast.tk.agent.config.DriverFactory;
 
 
 public class ConfigPanel extends JFrame {
@@ -43,7 +43,7 @@ public class ConfigPanel extends JFrame {
 
 	private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
 	
-	private AbstractPanel chromePanel, webAppPanel, recorderPanel, apiKeyPanel, pluginPanel, scriptsPanel,
+	private AbstractPanel driverSelectPanel, webAppPanel, recorderPanel, apiKeyPanel, pluginPanel, scriptsPanel,
 			proxyAdressPanel, proxyPortPanel, proxyUserNamePanel, proxyUserPswdPanel;
 	
 	private JButton tryButton;
@@ -161,6 +161,7 @@ public class ConfigPanel extends JFrame {
 		for (Entry<String, AbstractPanel> entry : boxFields.entrySet()) {
 			properties.setProperty(entry.getKey(), entry.getValue().getTextValue());
 		}
+		properties.setProperty(DriverFactory.getDriver(), ((ComboBoxPanel) driverSelectPanel).getValue());
 		properties.setProperty(AgentConfigProvider.TOAST_PROXY_ACTIVATE, Boolean.toString(proxyCheckBox.isSelected()));
 		
 		try {
@@ -187,7 +188,7 @@ public class ConfigPanel extends JFrame {
 	
 	private JPanel buildRecorderPanel() {
 		JPanel recorderParameters = PanelHelper.createBasicJPanel(BoxLayout.PAGE_AXIS);
-		recorderParameters.add(chromePanel);
+		recorderParameters.add(driverSelectPanel);
 		recorderParameters.add(recorderPanel);
 		recorderParameters.setLayout(new BoxLayout(recorderParameters, BoxLayout.Y_AXIS));
 		return recorderParameters;
@@ -253,7 +254,13 @@ public class ConfigPanel extends JFrame {
 	private void test() {
 		for (Object key : EnumerationUtils.toList(properties.propertyNames())) {
 			String strKey = (String) key;
-			if(!strKey.equals(AgentConfigProvider.TOAST_PROXY_ACTIVATE)) {
+			if(!strKey.equals(AgentConfigProvider.TOAST_PROXY_ACTIVATE) && 
+					!strKey.equals(AgentConfigProvider.TOAST_CHROMEDRIVER_32_PATH) && 
+					!strKey.equals(AgentConfigProvider.TOAST_CHROMEDRIVER_64_PATH) &&
+					!strKey.equals(AgentConfigProvider.TOAST_FIREFOXDRIVER_32_PATH) && 
+					!strKey.equals(AgentConfigProvider.TOAST_FIREFOXDRIVER_64_PATH) &&
+					!strKey.equals(AgentConfigProvider.TOAST_IEDRIVER_32_PATH) && 
+					!strKey.equals(AgentConfigProvider.TOAST_IEDRIVER_64_PATH)) {
 				AbstractPanel box = boxFields.get(strKey);
 				try {
 					box.testIconValid(false);
@@ -283,11 +290,11 @@ public class ConfigPanel extends JFrame {
 				UIMessages.SCRIPT_DIR, EnumError.DIRECTORY);
 		boxFields.put( AgentConfigProvider.TOAST_SCRIPTS_DIR, scriptsPanel);
 
-		//%% CHROME PANEL %%
-		chromePanel = new FileChoosePanel(properties, AgentConfigProvider.TOAST_CHROMEDRIVER_PATH,
-				UIMessages.CHROME_BIN_PATH, EnumError.FILE);
-		boxFields.put(AgentConfigProvider.TOAST_CHROMEDRIVER_PATH, chromePanel);
-
+		//%% DRIVER SELECTION PANEL %%
+		driverSelectPanel = new ComboBoxPanel(properties, AgentConfigProvider.TOAST_DRIVER_SELECT,
+				UIMessages.DRIVER_SELECTED, EnumError.FILE);
+		boxFields.put(AgentConfigProvider.TOAST_DRIVER_SELECT, driverSelectPanel);
+		
 		//%% PROXY CHECK BOX %%
 		proxyCheckBox = new JCheckBox(UIMessages.ACTIVATE);
 		proxyCheckBox.setBackground(Color.white);

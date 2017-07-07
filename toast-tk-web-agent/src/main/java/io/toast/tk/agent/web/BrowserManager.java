@@ -28,7 +28,7 @@ public class BrowserManager {
 	}
 	
 	private WebDriver buildDriver() {
-		String chromeDriverPath = webConfigProvider.get().getChromeDriverPath();
+		String chromeDriverPath = webConfigProvider.get().getDriverPath();
 		LOG.info("Loading chrome driver: " + chromeDriverPath);
 		System.setProperty("webdriver.chrome.driver", chromeDriverPath);
 		WebDriver driver = new ChromeDriver();

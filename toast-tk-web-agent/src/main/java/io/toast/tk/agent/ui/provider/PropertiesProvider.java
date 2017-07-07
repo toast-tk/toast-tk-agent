@@ -48,7 +48,13 @@ public class PropertiesProvider implements Provider<PropertiesHolder> {
     private Properties buildAndStoreProperties(AgentConfig webConfig) throws IOException {
         Properties p = new Properties();
         p.setProperty(AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL, webConfig.getWebInitRecordingUrl());
-        p.setProperty(AgentConfigProvider.TOAST_CHROMEDRIVER_PATH, webConfig.getChromeDriverPath());
+        p.setProperty(AgentConfigProvider.TOAST_DRIVER_SELECT, webConfig.getDriverSelected());
+        p.setProperty(AgentConfigProvider.TOAST_CHROMEDRIVER_32_PATH, webConfig.getChrome32DriverPath());
+        p.setProperty(AgentConfigProvider.TOAST_CHROMEDRIVER_64_PATH, webConfig.getChrome64DriverPath());
+        p.setProperty(AgentConfigProvider.TOAST_FIREFOXDRIVER_32_PATH, webConfig.getFirefox32DriverPath());
+        p.setProperty(AgentConfigProvider.TOAST_FIREFOXDRIVER_64_PATH, webConfig.getFirefox64DriverPath());
+        p.setProperty(AgentConfigProvider.TOAST_IEDRIVER_32_PATH, webConfig.getIe32DriverPath());
+        p.setProperty(AgentConfigProvider.TOAST_IEDRIVER_64_PATH, webConfig.getIe64DriverPath());
         p.setProperty(AgentConfigProvider.TOAST_TEST_WEB_APP_URL, webConfig.getWebAppUrl());
         p.setProperty(AgentConfigProvider.TOAST_API_KEY, webConfig.getApiKey());
         p.setProperty(AgentConfigProvider.TOAST_PLUGIN_DIR, webConfig.getPluginDir());

@@ -7,9 +7,6 @@ import io.toast.tk.agent.ui.panels.ConfigPanel;
 import io.toast.tk.agent.ui.provider.ConfigPanelProvider;
 import io.toast.tk.agent.ui.provider.PropertiesProvider;
 
-import java.util.Properties;
-
-
 public class UiModule extends AbstractModule {
 
     @Override

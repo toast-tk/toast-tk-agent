@@ -7,8 +7,6 @@ import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.UnknownHostException;
@@ -31,6 +29,7 @@ import com.google.inject.Inject;
 
 import io.toast.tk.agent.config.AgentConfig;
 import io.toast.tk.agent.config.AgentConfigProvider;
+import io.toast.tk.agent.config.DriverFactory;
 import io.toast.tk.agent.web.BrowserManager;
 import io.toast.tk.agent.web.IAgentServer;
 import io.toast.tk.agent.web.RestRecorderService;
@@ -217,7 +216,7 @@ public class MainApp implements IAgentApp {
 	}
 
 	private boolean hasValidRecordingEnvironment() {
-		return assertProperty(AgentConfigProvider.TOAST_CHROMEDRIVER_PATH) &&
+		return assertProperty(DriverFactory.getDriver()) &&
 				assertProperty(AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL) &&
 				assertProperty(AgentConfigProvider.TOAST_TEST_WEB_APP_URL);
 	}
