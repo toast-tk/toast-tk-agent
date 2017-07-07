@@ -103,7 +103,19 @@ public class TestRunner {
 		}
 	}
 	
-	public ITestPage run(ITestPage testPage) throws IOException {
+	/**
+	 * Run a test page 
+	 * 
+	 * This method will collect the different available adapters 
+	 * The adapters are packed in different plugins 
+	 * The plugin loader collect the adapters through multiple Guice modules
+	 * 
+	 * @param testPage
+	 * @return
+	 * @throws IOException
+	 * @throws IllegalAccessException
+	 */
+	public ITestPage run(ITestPage testPage) throws IOException, IllegalAccessException {
 		LOG.info("Agent plugin class loader: " + IAgentPlugin.class.getClassLoader());
 		PluginLoader loader = new PluginLoader(provider);
 		Module[] pluginModules = loader.collectGuiceModules(loader.loadPlugins(IAgentPlugin.class.getClassLoader()));
