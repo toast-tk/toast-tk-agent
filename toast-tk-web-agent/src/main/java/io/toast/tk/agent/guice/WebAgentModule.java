@@ -44,6 +44,7 @@ public class WebAgentModule extends AbstractModule{
 		verifierMapBinder.addBinding(AgentConfigProvider.TOAST_SCRIPTS_DIR).to(ScriptsDirectoryVerifier.class);
 		verifierMapBinder.addBinding(AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL).to(WebRecordingVerifier.class);
 		verifierMapBinder.addBinding(AgentConfigProvider.TOAST_DRIVER_SELECT).to(DriverPathVerifier.class);
+		verifierMapBinder.addBinding(AgentConfigProvider.TOAST_MAIL_TO).to(MailVerifier.class);
 	}
 
 }

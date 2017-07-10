@@ -10,6 +10,8 @@ public class UIMessages {
     public static final String PROXY_USER = "Proxy User Name";
     public static final String PROXY_PSENTENCE = "Proxy User Password";
 
+    public static final String MAIL_TO_SENTENCE = "Mail to send";
+
     public static final String ACTIVATE = "Activation";
     public static final String URL_TO_RECORD = "Target WebApp URL";
 
@@ -23,5 +25,7 @@ public class UIMessages {
     public static final String DRIVER_BIN_PATH = "Driver path directory";
 
     public static final String ERROR_FILE_NOT_EXIST = "The file that you have selected do not exist.";
+
+    public static final String ERROR_MAIL_NOT_CONFORM = "The mail that you have set is not conform.";
 
 }

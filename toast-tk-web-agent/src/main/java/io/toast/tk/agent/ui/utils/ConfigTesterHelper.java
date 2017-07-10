@@ -13,6 +13,8 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -216,5 +218,11 @@ public class ConfigTesterHelper {
 		connection.connect();
 
 		return connection;
+	}
+
+	public static boolean testUserMail(String text, boolean runTryValue) {
+		Pattern p = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$");
+		Matcher m = p.matcher(text.toUpperCase());
+		return m.matches();
 	}
 }

@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
@@ -15,8 +13,6 @@ import java.util.Properties;
 
 import javax.swing.*;
 
-import io.toast.tk.agent.config.DriverFactory;
-import io.toast.tk.agent.config.DriverFactory.DRIVER;
 import io.toast.tk.agent.ui.utils.PanelHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,7 +23,7 @@ public abstract class AbstractPanel extends JComponent {
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger LOG = LogManager.getLogger(AbstractPanel.class);
-	private final Properties properties;
+	final Properties properties;
 	private static Dimension dim;
 
 	protected String strkey;
@@ -167,32 +163,6 @@ public abstract class AbstractPanel extends JComponent {
 			iconPanel.add(toastLogo);
 		} 
 		return PanelHelper.createBasicJLabel(errorMessage, PanelHelper.FONT_TEXT_BOLD);
-	}
-	
-	protected JComboBox<DriverFactory.DRIVER> buildComboBoxPanel() {
-		JComboBox<DriverFactory.DRIVER> comboBox = new JComboBox<DriverFactory.DRIVER>();
-		comboBox.addItem(DRIVER.CHROME_32);
-		comboBox.addItem(DRIVER.CHROME_64);
-		comboBox.addItem(DRIVER.FIREFOX_32);
-		comboBox.addItem(DRIVER.FIREFOX_64);
-		comboBox.addItem(DRIVER.IE_32);
-		comboBox.addItem(DRIVER.IE_64);
-		
-		comboBox.setSelectedItem(DriverFactory.getSelected());
-		
-		comboBox.addActionListener(new ActionListener () {
-		    public void actionPerformed(ActionEvent e) {
-		    	Object selectedObject = comboBox.getSelectedItem();
-		    	DriverFactory.setSelected((DRIVER) selectedObject);
-		    	textField.setText(properties.getProperty(DriverFactory.getDriver(selectedObject.toString())));
-		    }
-		});
-		
-		comboBox.setSize(new Dimension(comboBox.getSize().width, 50));
-		comboBox.setMaximumSize(new Dimension(comboBox.getMaximumSize().width, 50));
-		comboBox.setBackground(Color.orange);
-		
-		return comboBox;
 	}
 
 	public static String render(Object object) {

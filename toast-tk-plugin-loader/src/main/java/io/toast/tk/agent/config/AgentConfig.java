@@ -31,6 +31,9 @@ public class AgentConfig {
 	private String proxyPort;
 	private String proxyUser;
 	private String proxyPswd;
+
+	private String mailSend;
+	private String mailTo;
 	
 	public static String getToastHome() {
 		return System.getProperty("user.home") + SystemUtils.FILE_SEPARATOR + ".toast";
@@ -192,5 +195,21 @@ public class AgentConfig {
 	}
 	public String getProxyUserPswd() {
 		return this.proxyPswd;
+	}
+
+	public void setMailSend(
+		String mailSend) {
+		this.mailSend = mailSend;
+	}
+	public String getMailSend() {
+		return this.mailSend;
+	}
+
+	public void setMailTo(
+		String mailTo) {
+		this.mailTo = mailTo;
+	}
+	public String getMailTo() {
+		return this.mailTo;
 	}
 }

@@ -1,6 +1,7 @@
 package io.toast.tk.agent.ui.panels;
 
 import io.toast.tk.agent.config.DriverFactory;
+import io.toast.tk.agent.config.DriverFactory.DRIVER;
 import io.toast.tk.agent.ui.i18n.UIMessages;
 import io.toast.tk.agent.ui.utils.ConfigTesterHelper;
 import io.toast.tk.agent.ui.utils.PanelHelper;
@@ -12,6 +13,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -70,4 +74,37 @@ public class ComboBoxPanel extends AbstractPanel {
         this.setBorder(BorderFactory.createTitledBorder(null, label, TitledBorder.LEFT, TitledBorder.TOP, PanelHelper.FONT_TITLE_3, Color.BLACK));
         return comboBox;
     }
+
+	
+	protected JComboBox<DriverFactory.DRIVER> buildComboBoxPanel() {
+		JComboBox<DriverFactory.DRIVER> comboBox = new JComboBox<DriverFactory.DRIVER>();
+		comboBox.addItem(DRIVER.CHROME_32);
+		comboBox.addItem(DRIVER.CHROME_64);
+		comboBox.addItem(DRIVER.FIREFOX_32);
+		comboBox.addItem(DRIVER.FIREFOX_64);
+		comboBox.addItem(DRIVER.IE_32);
+		comboBox.addItem(DRIVER.IE_64);
+		
+		comboBox.setSelectedItem(DriverFactory.getSelected());
+		
+		comboBox.addActionListener(new ActionListener () {
+		    public void actionPerformed(ActionEvent e) {
+		    	Object selectedObject = comboBox.getSelectedItem();
+		    	DriverFactory.setSelected((DRIVER) selectedObject);
+		    	textField.setText(properties.getProperty(DriverFactory.getDriver(selectedObject.toString())));
+		    }
+		});
+		
+		comboBox.setSize(new Dimension(comboBox.getSize().width, 40));
+		comboBox.setMaximumSize(new Dimension(comboBox.getMaximumSize().width, 40));
+		comboBox.setBackground(Color.gray);
+		PanelHelper.setBasicLayout(comboBox, BoxLayout.LINE_AXIS);
+		
+		comboBox.setAlignmentX(RIGHT_ALIGNMENT);
+		JTextField editor = 
+			    (JTextField) comboBox.getEditor().getEditorComponent(); 
+		editor.setHorizontalAlignment(JTextField.LEFT);
+		
+		return comboBox;
+	}
 }

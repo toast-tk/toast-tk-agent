@@ -12,6 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -33,15 +34,12 @@ public class PanelHelper {
 
 	public static JPanel createBasicJPanel() {
 		JPanel panel = new JPanel();
-		panel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panel.setAlignmentY(Component.CENTER_ALIGNMENT);
-		panel.setBackground(Color.white);
+		setBasicLayout(panel);
 		return panel;
 	} 
 	public static JPanel createBasicJPanel(int boxLayout) {
 		JPanel panel = createBasicJPanel();
-		panel.add(Box.createHorizontalGlue());
-		panel.setLayout(new BoxLayout(panel, boxLayout));
+		setBasicLayout(panel, boxLayout);
 		return panel;
 	}
 	public static JPanel createBasicJPanel(String strKey, int boxLayout) {
@@ -49,17 +47,36 @@ public class PanelHelper {
 	}
 	public static JPanel createBasicJPanel(String strKey, int boxLayout, Font font) {
 		JPanel panel = createBasicJPanel(strKey, font);
-		panel.setLayout(new BoxLayout(panel, boxLayout));
-		
 		return panel;
 	}
 	public static JPanel createBasicJPanel(String strKey, Font font) {
 		JPanel panel = createBasicJPanel();
-		panel.add(Box.createHorizontalGlue());
-		panel.setBorder(BorderFactory.createTitledBorder(panel.getBorder(),
-	    		strKey,TitledBorder.ABOVE_TOP,TitledBorder.CENTER, font));
-		
+		setBasicLayout(panel, strKey, font);
 		return panel;
+	} 
+
+	public static void setBasicLayout(JComponent component) {
+		component.setAlignmentX(Component.CENTER_ALIGNMENT);
+		component.setAlignmentY(Component.CENTER_ALIGNMENT);
+		component.setBackground(Color.white);
+	} 
+	public static void setBasicLayout(JComponent component, int boxLayout) {
+		setBasicLayout(component);
+		component.add(Box.createHorizontalGlue());
+		component.setLayout(new BoxLayout(component, boxLayout));
+	}
+	public static void setBasicLayout(JComponent component, String strKey, int boxLayout) {
+		setBasicLayout(component, strKey, boxLayout, PanelHelper.FONT_TITLE_3);
+	}
+	public static void setBasicLayout(JComponent component, String strKey, int boxLayout, Font font) {
+		setBasicLayout(component, strKey, font);
+		component.setLayout(new BoxLayout(component, boxLayout));
+	}
+	public static void setBasicLayout(JComponent component, String strKey, Font font) {
+		setBasicLayout(component);
+		component.add(Box.createHorizontalGlue());
+		component.setBorder(BorderFactory.createTitledBorder(component.getBorder(),
+	    		strKey,TitledBorder.ABOVE_TOP,TitledBorder.CENTER, font));
 	} 
 	
 	public static JLabel createBasicJLabel() {

@@ -51,6 +51,10 @@ public class AgentConfigProvider implements Provider<AgentConfig> {
 
 	public static final String TOAST_PROXY_USER_PSWD = "toast.proxy.userpswd";
 
+	public static final String TOAST_MAIL_SEND = "toast.mail.send";
+
+	public static final String TOAST_MAIL_TO = "toast.mail.to";
+
 	private static final String PATH_DELIM = "/";
 
 	private void initConfig() {
@@ -69,12 +73,12 @@ public class AgentConfigProvider implements Provider<AgentConfig> {
 		webConfig = new AgentConfig();
 		webConfig.setWebInitRecordingUrl(prop.getProperty(TOAST_TEST_WEB_INIT_RECORDING_URL, "URL to record"));
 		webConfig.setDriverSelected(prop.getProperty(TOAST_DRIVER_SELECT, DriverFactory.getSelected().toString()));
-		webConfig.setChrome32DriverPath(prop.getProperty(TOAST_CHROMEDRIVER_32_PATH, userHomepath + "chromedriver_32.exe"));
-		webConfig.setChrome64DriverPath(prop.getProperty(TOAST_CHROMEDRIVER_64_PATH, userHomepath + "chromedriver_64.exe"));
+		webConfig.setChrome32DriverPath(prop.getProperty(TOAST_CHROMEDRIVER_32_PATH, userHomepath + "chromedriver.exe"));
+		webConfig.setChrome64DriverPath(prop.getProperty(TOAST_CHROMEDRIVER_64_PATH, userHomepath + "chromedriver.exe"));
 		webConfig.setFirefox32DriverPath(prop.getProperty(TOAST_FIREFOXDRIVER_32_PATH, userHomepath + "geckodriver_32.exe"));
-		webConfig.setFirefox64DriverPath(prop.getProperty(TOAST_FIREFOXDRIVER_64_PATH, userHomepath + "geckodriver_64.exe"));
-		webConfig.setIe32DriverPath(prop.getProperty(TOAST_IEDRIVER_32_PATH, userHomepath + "IEDriver_32.exe"));
-		webConfig.setIe64DriverPath(prop.getProperty(TOAST_IEDRIVER_64_PATH, userHomepath + "IEDriver_64.exe"));
+		webConfig.setFirefox64DriverPath(prop.getProperty(TOAST_FIREFOXDRIVER_64_PATH, userHomepath + "geckodriver.exe"));
+		webConfig.setIe32DriverPath(prop.getProperty(TOAST_IEDRIVER_32_PATH, userHomepath + "MicrosoftWebDriver.exe"));
+		webConfig.setIe64DriverPath(prop.getProperty(TOAST_IEDRIVER_64_PATH, userHomepath + "MicrosoftWebDriver.exe"));
 		webConfig.setWebAppUrl(prop.getProperty(TOAST_TEST_WEB_APP_URL, "Toast WebApp url"));
 		webConfig.setApiKey(prop.getProperty(TOAST_API_KEY, "Web App Api Key"));
 		webConfig.setPluginDir(prop.getProperty(TOAST_PLUGIN_DIR, webConfig.getPluginDir()));
@@ -84,6 +88,8 @@ public class AgentConfigProvider implements Provider<AgentConfig> {
 		webConfig.setProxyPort(prop.getProperty(TOAST_PROXY_PORT, "Proxy Port"));
 		webConfig.setProxyUserName(prop.getProperty(TOAST_PROXY_USER_NAME, "Proxy User Name"));
 		webConfig.setProxyUserPswd(prop.getProperty(TOAST_PROXY_USER_PSWD, "Proxy User Password"));
+		webConfig.setProxyUserName(prop.getProperty(TOAST_MAIL_SEND, "false"));
+		webConfig.setProxyUserPswd(prop.getProperty(TOAST_MAIL_TO, "Adress to send mail"));
 	}
 
 	@Override
