@@ -9,6 +9,9 @@ public class DriverFactory {
 	private static DRIVER selected;
 	
 	public enum DRIVER {
+		CHROME_32("-  Chrome 32", "CHROME"), CHROME_64("-  Chrome 64", "CHROME"), 
+		FIREFOX_32("-  Firefox 32", "FIREFOX"), FIREFOX_64("-  Firefox 64", "FIREFOX"), 
+		IE_32("-  IE 32", "IE"), IE_64("-  IE 64", "IE");
 
 	    private final String driverName;
 	    private final String driverType;
