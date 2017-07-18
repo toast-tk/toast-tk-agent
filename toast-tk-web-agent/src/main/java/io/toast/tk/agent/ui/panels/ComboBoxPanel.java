@@ -35,7 +35,7 @@ public class ComboBoxPanel extends AbstractPanel {
         super(properties, strkey);
         this.label = label;
         this.errorType = errorType;
-        super.setBasicProperties(DriverFactory.getDriver());
+        super.setBasicProperties(DriverFactory.getDriverValue());
     }
 
 	public String getTextValue() {
@@ -91,7 +91,7 @@ public class ComboBoxPanel extends AbstractPanel {
 		    public void actionPerformed(ActionEvent e) {
 		    	Object selectedObject = comboBox.getSelectedItem();
 		    	DriverFactory.setSelected((DRIVER) selectedObject);
-		    	textField.setText(properties.getProperty(DriverFactory.getDriver(selectedObject.toString())));
+		    	textField.setText(properties.getProperty(DriverFactory.getDriverValue(selectedObject.toString())));
 		    }
 		});
 		

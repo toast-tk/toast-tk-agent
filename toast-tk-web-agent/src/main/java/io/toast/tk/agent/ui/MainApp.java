@@ -16,10 +16,11 @@ import javax.imageio.ImageIO;
 
 import io.toast.tk.agent.ui.i18n.CommonMessages;
 import io.toast.tk.agent.ui.i18n.MainAppMessages;
-import io.toast.tk.agent.ui.panels.ConfigPanel;
 import io.toast.tk.agent.ui.panels.DropPanel;
+import io.toast.tk.agent.ui.panels.HelpPanel;
 import io.toast.tk.agent.ui.provider.ConfigPanelProvider;
 import io.toast.tk.agent.ui.provider.DropPanelProvider;
+import io.toast.tk.agent.ui.provider.HelpPanelProvider;
 import io.toast.tk.agent.ui.provider.PropertiesProvider;
 import io.toast.tk.agent.ui.verify.IPropertyVerifier;
 import org.apache.logging.log4j.LogManager;
@@ -40,6 +41,7 @@ public class MainApp implements IAgentApp {
 
 	private final ConfigPanelProvider configPanelProvider;
 	private final DropPanelProvider dropPanelProvider;
+	private final HelpPanelProvider helpPanelProvider;
 	private BrowserManager browserManager;
 	private AgentConfigProvider webConfigProvider;
 	private final PropertiesProvider propertiesProvider;
@@ -58,13 +60,15 @@ public class MainApp implements IAgentApp {
 				   Map<String, IPropertyVerifier> verifier,
 				   PropertiesProvider propertiesProvider,
 				   ConfigPanelProvider configPanelProvider,
-				   DropPanelProvider dropPanelProvider) {
+				   DropPanelProvider dropPanelProvider,
+				   HelpPanelProvider helpPanelProvider) {
 		this.webConfigProvider = webConfig;
 		this.browserManager = browserManager;
 		this.propertiesProvider = propertiesProvider;
 		this.agentServer = agentServer;
 		this.configPanelProvider = configPanelProvider;
 		this.dropPanelProvider = dropPanelProvider;
+		this.helpPanelProvider = helpPanelProvider;
 		this.verifier = verifier;
 		initWorkspace();
 		init();
@@ -108,6 +112,7 @@ public class MainApp implements IAgentApp {
 	    MenuItem startRecordingItem = new MenuItem("Start Recording");
 	    MenuItem stopRecordingItem = new MenuItem("Stop Recording");
 	    MenuItem settingsItem = new MenuItem("Settings");
+	    MenuItem helpItem = new MenuItem("Ask for help!");
 	    MenuItem dropItem = new MenuItem("Drag & Drop");
 	    
 	    quitItem.addActionListener(this::killListener);
@@ -116,6 +121,7 @@ public class MainApp implements IAgentApp {
 	    stopRecordingItem.addActionListener(this::stopListener);
 	    startRecordingItem.addActionListener(this::start);
 	    settingsItem.addActionListener(this::settingsListener);
+	    helpItem.addActionListener(this::helpingListener);
 	    dropItem.addActionListener(this::dropListener);
 	    
 	    popup.add(connectItem);
@@ -124,11 +130,13 @@ public class MainApp implements IAgentApp {
 	    popup.add(stopRecordingItem);
 	    popup.addSeparator();
 	    popup.add(executeItem);
-	    popup.addSeparator();
 	    popup.add(dropItem);
 	    popup.addSeparator();
 	    popup.add(settingsItem);
 	    popup.addSeparator();
+		// ADD THIS WHEN MAIL WORKS
+	    //popup.add(helpItem);
+	    //popup.addSeparator();
 	    popup.add(quitItem); 
 	    
 	    return popup;
@@ -216,7 +224,7 @@ public class MainApp implements IAgentApp {
 	}
 
 	private boolean hasValidRecordingEnvironment() {
-		return assertProperty(DriverFactory.getDriver()) &&
+		return assertProperty(DriverFactory.getDriverValue()) &&
 				assertProperty(AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL) &&
 				assertProperty(AgentConfigProvider.TOAST_TEST_WEB_APP_URL);
 	}
@@ -232,6 +240,13 @@ public class MainApp implements IAgentApp {
 	
 	private void settingsListener(ActionEvent e){
 		ConfigPanel p = configPanelProvider.get();
+		if (p == null) {
+			NotificationManager.showMessage(CommonMessages.PROPERTIES_NOT_DISPLAYED);
+		}
+	}
+
+	private void helpingListener(ActionEvent e){
+		HelpPanel p = helpPanelProvider.get();
 		if (p == null) {
 			NotificationManager.showMessage(CommonMessages.PROPERTIES_NOT_DISPLAYED);
 		}

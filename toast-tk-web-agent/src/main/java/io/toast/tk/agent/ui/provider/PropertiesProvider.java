@@ -64,8 +64,8 @@ public class PropertiesProvider implements Provider<PropertiesHolder> {
         p.setProperty(AgentConfigProvider.TOAST_PROXY_PORT, webConfig.getProxyPort());
         p.setProperty(AgentConfigProvider.TOAST_PROXY_USER_NAME, webConfig.getProxyUserName());
         p.setProperty(AgentConfigProvider.TOAST_PROXY_USER_PSWD, webConfig.getProxyUserPswd());
-        p.setProperty(AgentConfigProvider.TOAST_MAIL_SEND, webConfig.getProxyUserPswd());
-        p.setProperty(AgentConfigProvider.TOAST_MAIL_TO, webConfig.getProxyUserPswd());
+        p.setProperty(AgentConfigProvider.TOAST_MAIL_SEND, webConfig.getMailSend());
+        p.setProperty(AgentConfigProvider.TOAST_MAIL_TO, webConfig.getMailTo());
         p.store(FileUtils.openOutputStream(this.toastWebPropertiesFile), null);
         return p;
     }

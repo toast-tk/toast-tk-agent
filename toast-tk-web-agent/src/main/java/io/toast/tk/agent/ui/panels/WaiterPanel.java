@@ -3,11 +3,9 @@ package io.toast.tk.agent.ui.panels;
 import io.toast.tk.agent.ui.utils.PanelHelper;
 import io.toast.tk.runtime.block.TestBlockRunner;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -18,7 +16,6 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -29,7 +26,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * Waiter panel
  */
-public class WaiterPanel extends JFrame {
+public class WaiterPanel extends AbstractFrame {
 
 	/**
 	 * 
@@ -261,18 +258,6 @@ public class WaiterPanel extends JFrame {
 				dispose();
 			}
 		}
-	}
-	
-	private JButton buildIconButton(String str, Image image) {
-		JButton interputButton = new JButton(new ImageIcon(image));
-	    interputButton.setToolTipText(str);
-	    interputButton.setBorder(null);
-	    interputButton.setMargin(new Insets(0, 0, 0, 0));
-	    interputButton.setBackground(Color.WHITE);
-	    interputButton.setPreferredSize(new Dimension(70, 70));
-	    interputButton.setMinimumSize(new Dimension(60, 60));
-	    interputButton.setAlignmentX(CENTER_ALIGNMENT);
-	    return interputButton;
 	}
 	
 	private void buildImages() throws IOException {

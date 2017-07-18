@@ -69,7 +69,7 @@ public class FileChoosePanel extends AbstractPanel {
     }
     private boolean testIconValidDirectory(boolean runTryValue) throws IOException {
         boolean fileOrDirectory = false;
-        if(strkey.equals(DriverFactory.getDriver())) {
+        if(strkey.equals(DriverFactory.getDriverValue())) {
             fileOrDirectory = true;
         }
         return ConfigTesterHelper.testWebAppDirectory(textField.getText(),runTryValue, fileOrDirectory);

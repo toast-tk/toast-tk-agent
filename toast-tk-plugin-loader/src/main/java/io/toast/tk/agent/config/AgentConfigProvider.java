@@ -88,8 +88,8 @@ public class AgentConfigProvider implements Provider<AgentConfig> {
 		webConfig.setProxyPort(prop.getProperty(TOAST_PROXY_PORT, "Proxy Port"));
 		webConfig.setProxyUserName(prop.getProperty(TOAST_PROXY_USER_NAME, "Proxy User Name"));
 		webConfig.setProxyUserPswd(prop.getProperty(TOAST_PROXY_USER_PSWD, "Proxy User Password"));
-		webConfig.setProxyUserName(prop.getProperty(TOAST_MAIL_SEND, "false"));
-		webConfig.setProxyUserPswd(prop.getProperty(TOAST_MAIL_TO, "Adress to send mail"));
+		webConfig.setMailSend(prop.getProperty(TOAST_MAIL_SEND, "false"));
+		webConfig.setMailTo(prop.getProperty(TOAST_MAIL_TO, "Adress to send mail"));
 	}
 
 	@Override

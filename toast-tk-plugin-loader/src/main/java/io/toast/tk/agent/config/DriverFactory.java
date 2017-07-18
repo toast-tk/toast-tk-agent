@@ -34,17 +34,12 @@ public class DriverFactory {
 	    }
 	    
 	    public String getValue() {
-	        return getDriver(this.toString());
+	        return getDriverValue(this.toString());
 	    }
 	}
 
 	public static void setSelected(String driver) {
-		DRIVER value = DRIVER.CHROME_64;
-		try {
-			value = DRIVER.valueOf(driver);
-		} catch(IllegalArgumentException e) {
-			LOG.warn(e.getMessage());
-		}
+		DRIVER value = getDriver(driver);
 		setSelected(value);
 	}
 	public static void setSelected(DRIVER value) {
@@ -54,17 +49,32 @@ public class DriverFactory {
 	public static DRIVER getSelected() {
 		return selected;
 	}
-
-	public static String getDriver() {
-		return getDriver(getSelected().toString());
-	}
-	public static String getDriver(String driver) {
-		DRIVER value = DRIVER.CHROME_64;
-		try {
-			value = DRIVER.valueOf(driver);
-		} catch(IllegalArgumentException e) {
-			LOG.warn(e.getMessage());
+	
+	public static DRIVER getDriver(String driver) {
+		switch(driver) {
+		case "-  Chrome 32" : 
+			return DRIVER.CHROME_32;
+		case "-  Chrome 64" : 
+			return DRIVER.CHROME_64;
+		case "-  Firefox 32" : 
+			return DRIVER.FIREFOX_32;
+		case "-  Firefox 64" : 
+			return DRIVER.FIREFOX_64;
+		case "-  IE 32" : 
+			return DRIVER.IE_32;
+		case "-  IE 64" : 
+			return DRIVER.IE_64;
+		default : 
+			LOG.warn("Can't match the value " + driver);
+			return DRIVER.CHROME_64;
 		}
+	}
+
+	public static String getDriverValue() {
+		return getDriverValue(getSelected().toString());
+	}
+	public static String getDriverValue(String driver) {
+		DRIVER value = getDriver(driver);
 		
 		switch(value) {
 		case CHROME_32 : 

@@ -1,4 +1,4 @@
-package io.toast.tk.agent.ui.panels;
+package io.toast.tk.agent.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -24,9 +24,15 @@ import javax.swing.JTabbedPane;
 
 import com.google.inject.Inject;
 
-import io.toast.tk.agent.ui.NotificationManager;
-import io.toast.tk.agent.ui.PropertiesHolder;
 import io.toast.tk.agent.ui.i18n.UIMessages;
+import io.toast.tk.agent.ui.panels.AbstractPanel;
+import io.toast.tk.agent.ui.panels.ComboBoxPanel;
+import io.toast.tk.agent.ui.panels.EnumError;
+import io.toast.tk.agent.ui.panels.FileChoosePanel;
+import io.toast.tk.agent.ui.panels.MailPanel;
+import io.toast.tk.agent.ui.panels.RecorderPanel;
+import io.toast.tk.agent.ui.panels.SimplePanel;
+import io.toast.tk.agent.ui.panels.WebAppPanel;
 import io.toast.tk.agent.ui.utils.PanelHelper;
 import io.toast.tk.runtime.constant.Property;
 
@@ -168,7 +174,7 @@ public class ConfigPanel extends JFrame {
 		for (Entry<String, AbstractPanel> entry : boxFields.entrySet()) {
 			properties.setProperty(entry.getKey(), entry.getValue().getTextValue());
 		}
-		properties.setProperty(DriverFactory.getDriver(), ((ComboBoxPanel) driverSelectPanel).getValue());
+		properties.setProperty(DriverFactory.getDriverValue(), ((ComboBoxPanel) driverSelectPanel).getValue());
 		properties.setProperty(AgentConfigProvider.TOAST_PROXY_ACTIVATE, Boolean.toString(proxyCheckBox.isSelected()));
 		properties.setProperty(AgentConfigProvider.TOAST_MAIL_SEND, Boolean.toString(mailCheckBox.isSelected()));
 		
@@ -193,7 +199,7 @@ public class ConfigPanel extends JFrame {
 		p.setProperty(AdaptersConfigProvider.ADAPTER_WEB_DRIVER_PATH, ((ComboBoxPanel) driverSelectPanel).getValue());
 
 		p.setProperty(AdaptersConfigProvider.ADAPTER_MAIL_SEND, 
-				properties.getProperty(AgentConfigProvider.TOAST_PROXY_ACTIVATE));
+				properties.getProperty(AgentConfigProvider.TOAST_MAIL_SEND));
 		p.setProperty(AdaptersConfigProvider.ADAPTER_MAIL_TO, 
 				properties.getProperty(AgentConfigProvider.TOAST_MAIL_TO));
 
@@ -312,7 +318,7 @@ public class ConfigPanel extends JFrame {
 				}
 			} 
 		}
-		NotificationManager.showMessage("The parameters have been tested !");
+		NotificationManager.showMessage("The parameters have been tested !").showNotification();
 	}
 	
 	private void buildFields() throws IOException{
