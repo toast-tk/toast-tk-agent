@@ -35,6 +35,10 @@ public class TestRunner {
 		this.provider = provider;
 	}
 	
+	public TestPageRunner getTestPageRunner() {
+		return testPageRunner;
+	}
+	
 	public void execute(){
 		String scriptsPath = this.provider.get().getScriptsDir();
 		Path path = Paths.get(scriptsPath);

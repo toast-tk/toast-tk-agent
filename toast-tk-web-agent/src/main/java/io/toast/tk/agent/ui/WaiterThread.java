@@ -13,17 +13,17 @@ public class WaiterThread implements Runnable {
 	  private TestRunner testrunner;
 
 	  public WaiterThread(AgentConfigProvider webConfigProvider) throws IOException { 
-		  	WaiterPanel waiterPanel = new WaiterPanel();
-			this.panel = waiterPanel;
 			this.testrunner = new TestRunner(webConfigProvider);   
-			this.thread = new Thread(new RunnerThread(testrunner));      
+			this.thread = new Thread(new RunnerThread(testrunner));  
+		  	WaiterPanel waiterPanel = new WaiterPanel(testrunner);
+			this.panel = waiterPanel;    
 	  }
 	  
 	  public WaiterThread(AgentConfigProvider webConfigProvider, Path path) throws IOException { 
-		  	WaiterPanel waiterPanel = new WaiterPanel();
-			this.panel = waiterPanel;
 			this.testrunner = new TestRunner(webConfigProvider);   
-			this.thread = new Thread(new RunnerThread(testrunner, path));      
+			this.thread = new Thread(new RunnerThread(testrunner, path));     
+		  	WaiterPanel waiterPanel = new WaiterPanel(testrunner);
+			this.panel = waiterPanel; 
 	  }
 	  
 	  public void run() {

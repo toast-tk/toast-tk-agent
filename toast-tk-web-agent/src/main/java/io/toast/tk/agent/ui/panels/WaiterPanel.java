@@ -1,7 +1,9 @@
 package io.toast.tk.agent.ui.panels;
 
+import io.toast.tk.agent.run.TestPageRunner;
+import io.toast.tk.agent.run.TestRunner;
 import io.toast.tk.agent.ui.utils.PanelHelper;
-import io.toast.tk.runtime.block.TestBlockRunner;
+import io.toast.tk.runtime.AbstractScenarioRunner;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -35,12 +37,17 @@ public class WaiterPanel extends AbstractFrame {
 
 	private static final Logger LOG = LogManager.getLogger(WaiterPanel.class);
 	
+	private TestRunner testrunner;
+	
 	private long firstTime;
 	private long scriptTime;
 	private int scriptNumber = 0;
 	private boolean interupted = false;
 	private boolean done = false;
 	private int iteration = 0, iTemp = 0;
+	
+	private int successNumber = 0;
+	private int failureNumber = 0;
 	
 	private JPanel leftPanel, rightPanel, panIcon;
 	private JLabel timeLabel, successLabel, errorLabel;
@@ -51,8 +58,10 @@ public class WaiterPanel extends AbstractFrame {
 	private long lastCurrentTime = System.currentTimeMillis();
 	private int imageIteration = 0;
 	
-	public WaiterPanel() throws IOException {
+	public WaiterPanel(TestRunner testrunner) throws IOException {
 		super();
+		this.testrunner = testrunner;
+		
 		buildContentPanel();
 
 		this.firstTime= System.currentTimeMillis();
@@ -78,9 +87,10 @@ public class WaiterPanel extends AbstractFrame {
 		panIcon.repaint();
 		panIcon.revalidate();
 
+		setSuccesNumber();
 		updateLabel(timeLabel, PanelHelper.secToHms(scriptTime));
-		updateLabel(successLabel, String.valueOf(TestBlockRunner.getSuccessNumber()));
-		updateLabel(errorLabel, String.valueOf(TestBlockRunner.getFailureNumber()));
+		updateLabel(successLabel, String.valueOf(successNumber));
+		updateLabel(errorLabel, String.valueOf(failureNumber));
 				
 		updateLabel(secondMainPanel, PanelHelper.addPoint(state,iteration));
 	}
@@ -117,6 +127,17 @@ public class WaiterPanel extends AbstractFrame {
 		toastImageLabel.setIcon(this.getToastIcon());
 		toastImageLabel.repaint();
 		toastImageLabel.revalidate();
+	}
+	
+	private void setSuccesNumber() {
+		TestPageRunner scenarioRunner = testrunner.getTestPageRunner();
+		if(scenarioRunner instanceof AbstractScenarioRunner) {
+			io.toast.tk.runtime.TestRunner runner = ((AbstractScenarioRunner) scenarioRunner).getTestRunner();
+			if(runner != null) {
+				successNumber = runner.getSuccessNumber();
+				failureNumber = runner.getFailureNumber();
+			}
+		}
 	}
 	
 	public void stop() {
@@ -207,7 +228,6 @@ public class WaiterPanel extends AbstractFrame {
 	    timeLabel = PanelHelper.createBasicJLabel(PanelHelper.secToHms(scriptTime));
 	    JPanel timePanel = buildRightlPanelPanel("Progress time : ", timeLabel, 300, prefHeight, 250, moyHeight);
 	    
-		TestBlockRunner.initializeNumber();
 	    successLabel = PanelHelper.createBasicJLabel("0");
 	    JPanel successPanel = buildRightlPanelPanel("Success number : ", successLabel, 300, prefHeight, 250, moyHeight);
 	    errorLabel = PanelHelper.createBasicJLabel("0");
