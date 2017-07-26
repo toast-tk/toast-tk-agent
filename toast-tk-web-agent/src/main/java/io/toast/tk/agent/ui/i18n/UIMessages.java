@@ -10,7 +10,10 @@ public class UIMessages {
     public static final String PROXY_USER = "Proxy User Name";
     public static final String PROXY_PSENTENCE = "Proxy User Password";
 
-    public static final String MAIL_TO_SENTENCE = "Mail to send";
+    public static final String MAIL_HOST = "Mail User Name";
+    public static final String MAIL_PORT = "Mail User Name";
+    public static final String MAIL_USER = "Mail User Name";
+	public static final String MAIL_PSENTENCE = "Mail password";
 
     public static final String ACTIVATE = "Activation";
     public static final String URL_TO_RECORD = "Target WebApp URL";

@@ -7,7 +7,6 @@ import java.awt.Insets;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 public abstract class AbstractFrame extends JFrame {

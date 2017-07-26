@@ -9,6 +9,8 @@ import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.JTextComponent;
+
 import java.awt.*;
 import java.io.IOException;
 import java.util.Properties;
@@ -32,7 +34,7 @@ public class FileChoosePanel extends AbstractPanel {
         super.setBasicProperties(strkey);
     }
 
-    private void chooseDirectory(JTextField textField, String strKey) {
+    private void chooseDirectory(JTextComponent textField, String strKey) {
         JFileChooser dialogue = new JFileChooser(textField.getText());
         dialogue.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         dialogue.setDialogTitle("Select directory for " + strKey);
@@ -51,7 +53,7 @@ public class FileChoosePanel extends AbstractPanel {
         }
     }
 
-    private void chooseFile(JTextField textField) {
+    private void chooseFile(JTextComponent textField) {
         JFileChooser dialogue = new JFileChooser(textField.getText());
         dialogue.setDialogTitle(UIMessages.SELECT_FILE);
         dialogue.showOpenDialog(null);
@@ -93,7 +95,7 @@ public class FileChoosePanel extends AbstractPanel {
         this.revalidate();
     }
 
-    public JButton createBasicFileSearch(JTextField textField, String strKey, Boolean fileOrDir) {
+    public JButton createBasicFileSearch(JTextComponent textField, String strKey, Boolean fileOrDir) {
         JButton fileSearch = new JButton();
         fileSearch.setText("...");
         if (fileOrDir) {

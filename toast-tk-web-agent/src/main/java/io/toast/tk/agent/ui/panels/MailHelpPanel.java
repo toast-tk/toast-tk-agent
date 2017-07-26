@@ -8,10 +8,9 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,9 +38,9 @@ import io.toast.tk.runtime.constant.Property;
 import io.toast.tk.runtime.mail.MailSender;
 import io.toast.tk.runtime.parse.FileHelper;
 
-public class HelpPanel extends AbstractFrame {
+public class MailHelpPanel extends AbstractFrame {
 	
-	private static final Logger LOG = LogManager.getLogger(HelpPanel.class);
+	private static final Logger LOG = LogManager.getLogger(MailHelpPanel.class);
 
 	/**
 	 * 
@@ -90,7 +89,7 @@ public class HelpPanel extends AbstractFrame {
 		JPanel panel = PanelHelper.createBasicJPanel("Issue to send", PanelHelper.FONT_TITLE_1);
 		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("basicMailText.txt");
 		
-		textField = new JTextArea(getStringFromInputStream(inputStream));
+		textField = new JTextArea(FileHelper.getStringFromInputStream(inputStream));
 		textField.setColumns(30);
 		textField.setLineWrap(true);
 		
@@ -115,7 +114,7 @@ public class HelpPanel extends AbstractFrame {
 		powerButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(askUser()) {
+				if(askUser("Confirm send", CommonMessages.MAIL_SEND_CONFIRM, JOptionPane.QUESTION_MESSAGE)) {
 					send();
 				}
 			}
@@ -126,10 +125,9 @@ public class HelpPanel extends AbstractFrame {
 	    return panel;
 	}
 	
-	public boolean askUser() {
-		String question = "Are you sure to send this email to the toast support team ?";	
+	public boolean askUser(String title, String question, int typeMessage) {
 		this.setVisible(false);
-		int option = JOptionPane.showConfirmDialog(null, question, "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		int option = JOptionPane.showConfirmDialog(null, question, title, JOptionPane.YES_NO_OPTION, typeMessage);
 		
 		if(option == JOptionPane.YES_OPTION){
 		     return true;
@@ -140,33 +138,52 @@ public class HelpPanel extends AbstractFrame {
 	}
 	
 	private void send() {
-		String text = textField.getText();
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-		String date = df.format(new Date());
-		String subject = "[TOAST] Issue on " + date;
-		List<String> files = getFileToSend();
-		
-		List<String> mailTo = new ArrayList<String>();
-		mailTo.add(Property.TOAST_CONTACT);
-
 		this.dispose();
-		MailSender sender = new MailSender();
-		try {
-			sender.send(subject, text, mailTo, provider.get().getMailTo(), files);
-			NotificationManager.showMessage(CommonMessages.HELP_MESSAGE_SENT).showNotification();
-		}
-		catch(Exception e) {
-			LOG.error(e.getMessage());
-			NotificationManager.showMessage(CommonMessages.HELP_MESSAGE_ERROR + Property.TOAST_CONTACT).showNotification();
-		}
 
+		Thread thread;
+		thread = new Thread(new SenderThread());  
+		thread.start();
+	}
+	
+	protected class SenderThread implements Runnable {
+
+		  public void run() {	
+			  String text = textField.getText();
+			  DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			  String date = df.format(new Date());
+			  String subject = "[TOAST] Issue on " + date;
+			  List<String> files = getFileToSend();
+			  
+			  List<String> mailTo = new ArrayList<String>();
+			  mailTo.add(Property.TOAST_CONTACT);
+			  
+			  MailSender sender = new MailSender();
+			  
+			  if(provider.get().getProxyActivate().equals("true")) {
+				  sender.setProxy(provider.get().getProxyAdress(), provider.get().getProxyPort());
+			  }
+			  
+			  try {
+			  	sender.send(subject, text, mailTo, provider.get().getSmtpUser(), files);
+			  	NotificationManager.showMessage(CommonMessages.HELP_MESSAGE_SENT).showNotification();
+			  }
+			  catch(Exception e) {
+			  	LOG.error(e);
+			  	NotificationManager.showMessage(CommonMessages.HELP_MESSAGE_ERROR + Property.TOAST_CONTACT).showNotification();
+			  	
+			  	if(askUser("", CommonMessages.MOVEMENT_LOG_FILES, JOptionPane.WARNING_MESSAGE)) {
+				  	moveFileToDownload(files, text);
+				  	NotificationManager.showMessage(CommonMessages.USEFULL_FILE_MOVED).showNotification();
+				}
+			  }
+		  }
 	}
 	
 	private List<String> getFileToSend() {
 		List<String> res = new ArrayList<String>();
 		String logRep = Property.TOAST_LOG_DIR + "log4j.log";
 		res.add(logRep);
-		String logRep2 = Property.TOAST_LOG_DIR + "toast-log.log";
+		String logRep2 = Property.TOAST_HOME_DIR + "toast-log.log";
 		res.add(logRep2);
 		String resultRep = FileHelper.getLastModifiedFile(Property.TOAST_TARGET_DIR);
 		if(resultRep != "") {
@@ -174,36 +191,33 @@ public class HelpPanel extends AbstractFrame {
 		}
 		return res;
 	}
+	
+	private void moveFileToDownload(List<String> files, String body) {
+		String dir = Property.DOWNLOAD_DIR + "to_send_to_" + Property.TOAST_CONTACT + File.separatorChar;
+		FileHelper.createDirectory(dir);
 		
-	private static String getStringFromInputStream(InputStream is) {
-		BufferedReader br = null;
-		StringBuilder sb = new StringBuilder();
-
-		String line;
-		try {
-
-			br = new BufferedReader(new InputStreamReader(is));
-			while ((line = br.readLine()) != null) {
-				sb.append(line).append(System.lineSeparator());
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
+		for(String file : files) {
+			try {
+				File fileTemp = new File(file);
+				File fileToDelete = new File(dir + fileTemp.getName());
+				if(fileToDelete.exists()) {
+					fileToDelete.delete();
 				}
+				FileHelper.copyFile(file, dir);
+			} catch (IOException e) {
+				LOG.error(e);
 			}
 		}
 
-		return sb.toString();
-	}
+		try {
+			FileHelper.writeFile(body, dir + "Mail_Body.txt");
+		} catch (IOException e) {
+			LOG.error(e);
+		}
+	} 
 
 	@Inject
-	public HelpPanel(AgentConfigProvider provider) throws IOException {
+	public MailHelpPanel(AgentConfigProvider provider) throws IOException {
     	this.provider = provider;
 		buildPanel();
     }

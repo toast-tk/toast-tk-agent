@@ -17,7 +17,7 @@ import javax.imageio.ImageIO;
 import io.toast.tk.agent.ui.i18n.CommonMessages;
 import io.toast.tk.agent.ui.i18n.MainAppMessages;
 import io.toast.tk.agent.ui.panels.DropPanel;
-import io.toast.tk.agent.ui.panels.HelpPanel;
+import io.toast.tk.agent.ui.panels.MailHelpPanel;
 import io.toast.tk.agent.ui.provider.ConfigPanelProvider;
 import io.toast.tk.agent.ui.provider.DropPanelProvider;
 import io.toast.tk.agent.ui.provider.HelpPanelProvider;
@@ -135,8 +135,8 @@ public class MainApp implements IAgentApp {
 	    popup.add(settingsItem);
 	    popup.addSeparator();
 		// ADD THIS WHEN MAIL WORKS
-	    //popup.add(helpItem);
-	    //popup.addSeparator();
+	    popup.add(helpItem);
+	    popup.addSeparator();
 	    popup.add(quitItem); 
 	    
 	    return popup;
@@ -246,7 +246,7 @@ public class MainApp implements IAgentApp {
 	}
 
 	private void helpingListener(ActionEvent e){
-		HelpPanel p = helpPanelProvider.get();
+		MailHelpPanel p = helpPanelProvider.get();
 		if (p == null) {
 			NotificationManager.showMessage(CommonMessages.PROPERTIES_NOT_DISPLAYED);
 		}

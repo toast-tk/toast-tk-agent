@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 
-public class MailPanel extends AbstractPanel {
+public class SmtpPanel extends AbstractPanel {
 
 	/**
 	 * 
@@ -26,7 +26,7 @@ public class MailPanel extends AbstractPanel {
     
 	private static final Logger LOG = LogManager.getLogger(RecorderPanel.class);
 
-    public MailPanel(Properties properties, String strkey, String label, EnumError errorType) throws IOException {
+    public SmtpPanel(Properties properties, String strkey, String label, EnumError errorType) throws IOException {
         super(properties,strkey);
         this.label = label;
         this.errorType = errorType;

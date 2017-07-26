@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import com.google.inject.Provider;
 
 import io.toast.tk.agent.config.DriverFactory.DRIVER;
+import io.toast.tk.runtime.utils.EncryptHelper;
 
 public class AgentConfigProvider implements Provider<AgentConfig> {
 	
@@ -51,9 +52,15 @@ public class AgentConfigProvider implements Provider<AgentConfig> {
 
 	public static final String TOAST_PROXY_USER_PSWD = "toast.proxy.userpswd";
 
-	public static final String TOAST_MAIL_SEND = "toast.mail.send";
+	public static final String TOAST_SMTP_ACTIVATE = "toast.smtp.activate";
+	
+	public static final String TOAST_SMTP_HOST = "toast.smtp.auth";
+	
+	public static final String TOAST_SMTP_PORT = "toast.smtp.port";
 
-	public static final String TOAST_MAIL_TO = "toast.mail.to";
+	public static final String TOAST_SMTP_USER = "toast.smtp.user";
+	
+	public static final String TOAST_SMTP_PSWD = "toast.mail.pswd";
 
 	private static final String PATH_DELIM = "/";
 
@@ -87,9 +94,12 @@ public class AgentConfigProvider implements Provider<AgentConfig> {
 		webConfig.setProxyAdress(prop.getProperty(TOAST_PROXY_ADRESS, "Proxy Address"));
 		webConfig.setProxyPort(prop.getProperty(TOAST_PROXY_PORT, "Proxy Port"));
 		webConfig.setProxyUserName(prop.getProperty(TOAST_PROXY_USER_NAME, "Proxy User Name"));
-		webConfig.setProxyUserPswd(prop.getProperty(TOAST_PROXY_USER_PSWD, "Proxy User Password"));
-		webConfig.setMailSend(prop.getProperty(TOAST_MAIL_SEND, "false"));
-		webConfig.setMailTo(prop.getProperty(TOAST_MAIL_TO, "Adress to send mail"));
+		webConfig.setProxyUserPswd(EncryptHelper.decrypt(prop.getProperty(TOAST_PROXY_USER_PSWD, "")));
+		webConfig.setSmtpActivate(prop.getProperty(TOAST_SMTP_ACTIVATE, "false"));
+		webConfig.setSmtpHost(prop.getProperty(TOAST_SMTP_HOST, "smtp.gmail.com"));
+		webConfig.setSmtpPort(prop.getProperty(TOAST_SMTP_PORT, "465"));
+		webConfig.setSmtpUser(prop.getProperty(TOAST_SMTP_USER, "Mail user"));
+		webConfig.setSmtpUserPswd(EncryptHelper.decrypt(prop.getProperty(TOAST_SMTP_PSWD, "PasswordCrypted")));
 	}
 
 	@Override

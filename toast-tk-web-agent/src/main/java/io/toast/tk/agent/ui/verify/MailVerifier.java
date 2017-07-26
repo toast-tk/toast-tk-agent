@@ -18,6 +18,6 @@ public class MailVerifier implements IPropertyVerifier{
     public boolean validate() {
         final AgentConfig agentConfig = webConfigProvider.get();
         
-        return ConfigTesterHelper.testUserMail(agentConfig.getMailTo(), true);       
+        return ConfigTesterHelper.testUserMail(agentConfig.getSmtpUser(), true);       
     }
 }    

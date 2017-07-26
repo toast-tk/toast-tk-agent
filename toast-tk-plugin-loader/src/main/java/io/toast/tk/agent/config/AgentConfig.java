@@ -32,8 +32,11 @@ public class AgentConfig {
 	private String proxyUser;
 	private String proxyPswd;
 
-	private String mailSend;
-	private String mailTo;
+	private String smtpActivate;
+	private String smtpHost;
+	private String smtpPort;
+	private String smtpUser;
+	private String smtpPswd;
 	
 	public static String getToastHome() {
 		return System.getProperty("user.home") + SystemUtils.FILE_SEPARATOR + ".toast";
@@ -197,19 +200,43 @@ public class AgentConfig {
 		return this.proxyPswd;
 	}
 
-	public void setMailSend(
-		String mailSend) {
-		this.mailSend = mailSend;
+	public void setSmtpActivate(
+		String smtpActivate) {
+		this.smtpActivate = smtpActivate;
 	}
-	public String getMailSend() {
-		return this.mailSend;
+	public String getSmtpActivate() {
+		return this.smtpActivate;
 	}
 
-	public void setMailTo(
-		String mailTo) {
-		this.mailTo = mailTo;
+	public void setSmtpUser(
+		String smtpUser) {
+		this.smtpUser = smtpUser;
 	}
-	public String getMailTo() {
-		return this.mailTo;
+	public String getSmtpUser() {
+		return this.smtpUser;
+	}
+
+	public void setSmtpUserPswd(
+		String smtpPswd) {
+		this.smtpPswd = smtpPswd;
+	}
+	public String getSmtpUserPswd() {
+		return this.smtpPswd;
+	}
+
+	public String getSmtpHost() {
+		return smtpHost;
+	}
+
+	public void setSmtpHost(String smtpHost) {
+		this.smtpHost = smtpHost;
+	}
+
+	public String getSmtpPort() {
+		return smtpPort;
+	}
+
+	public void setSmtpPort(String smtpPort) {
+		this.smtpPort = smtpPort;
 	}
 }
