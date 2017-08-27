@@ -183,7 +183,7 @@ public class MailHelpPanel extends AbstractFrame {
 		List<String> res = new ArrayList<String>();
 		String logRep = Property.TOAST_LOG_DIR + "log4j.log";
 		res.add(logRep);
-		String logRep2 = Property.TOAST_HOME_DIR + "toast-log.log";
+		String logRep2 = Property.TOAST_HOME_DIR + "toast-logs.log";
 		res.add(logRep2);
 		String resultRep = FileHelper.getLastModifiedFile(Property.TOAST_TARGET_DIR);
 		if(resultRep != "") {

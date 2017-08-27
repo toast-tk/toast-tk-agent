@@ -287,13 +287,14 @@ public class WaiterPanel extends AbstractFrame {
 		toastImage.add(PanelHelper.createImageIcon(this,"ToastLogo_3.png"));
 		toastImage.add(PanelHelper.createImageIcon(this,"ToastLogo_4.png"));
 		toastImage.add(PanelHelper.createImageIcon(this,"ToastLogo_5.png"));
+		toastImage.add(PanelHelper.createImageIcon(this,"ToastLogo_6.png"));
 	}
 	
 	private ImageIcon getToastIcon() {
 		long time = System.currentTimeMillis();
 		if(time - lastCurrentTime >= 1000) {
 			lastCurrentTime = System.currentTimeMillis();
-			if(imageIteration >= 4) {
+			if(imageIteration >= toastImage.size()-1) {
 				imageIteration = 0;
 			} else {
 				imageIteration ++;

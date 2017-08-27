@@ -1,6 +1,5 @@
 package io.toast.tk.agent.ui.i18n;
 
-
 public class CommonMessages {
 
     private CommonMessages(){}
@@ -16,4 +15,5 @@ public class CommonMessages {
     public static final String MOVEMENT_LOG_FILES = "There is an issue with the email." 
     		+ System.lineSeparator()
     		+ "Do you want to move all the usefull files for analysis to download repertory ?";
+	public static final String DESKTOP_NOT_SUPPORTED = "The desktop is not supported !";
 }

@@ -79,7 +79,6 @@ public class WaiterThread implements Runnable {
 		  
 		  public void kill() {
 			  runner.kill();
-			  runner = null;
 		  }
 	  }
 	}

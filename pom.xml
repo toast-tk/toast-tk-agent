@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.toast-tk</groupId>
 	<artifactId>toast-tk-agent</artifactId>
-	<version>0.1.5-PLUGINS</version>
+	<version>0.1.5.2</version>
 	<packaging>pom</packaging>
 	<name>Toast Toolkit - POM Module</name>
 	<organization>
@@ -22,7 +22,7 @@
 	</modules>
 	<properties>
 		<root-directory>${project.basedir}</root-directory>
-		<toast-tk.engine.version>0.1.5-PLUGINS</toast-tk.engine.version>
+		<toast-tk.engine.version>0.1.5.2</toast-tk.engine.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>

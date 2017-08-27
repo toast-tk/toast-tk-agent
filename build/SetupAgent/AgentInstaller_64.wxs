@@ -696,7 +696,7 @@
                   <RegistryValue Root="HKCU" Key="Software\ToastTk\ToastTk-Agent" 
                             Name="installed" Type="integer" Value="1" KeyPath="yes"/>
                  <Shortcut Id="ApplicationShortcut1" Name="ToastTkAgentLauncher" Description="ToastTk-Agent"
-                           Target="[INSTALLDIR]AgentLauncher.exe" WorkingDirectory="INSTALLDIR"/>
+                           Target="[INSTALLDIR]Toast-Agent.exe" WorkingDirectory="INSTALLDIR"/>
                  <Shortcut Id="ApplicationShortcut2" Name="ToastTkAgentLauncher" Description="ToastTk-Agent"
                            Target="[INSTALLDIR]README.txt" WorkingDirectory="INSTALLDIR"/>
                   <RemoveFolder Id="ProgramMenuSubfolder" On="uninstall"/>

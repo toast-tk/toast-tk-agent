@@ -91,7 +91,7 @@ public class PanelHelper {
 		return label;
 	}
 
-	public static ImageIcon createImageIcon(JFrame frame, String str) {
+	public static ImageIcon createImageIcon(Object frame, String str) {
 		URL url = frame.getClass().getClassLoader().getResource(str);
 		return new ImageIcon(url);
 	}
