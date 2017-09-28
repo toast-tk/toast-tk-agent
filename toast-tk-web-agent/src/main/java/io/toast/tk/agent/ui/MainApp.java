@@ -46,6 +46,7 @@ import io.toast.tk.agent.config.DriverFactory;
 import io.toast.tk.agent.web.BrowserManager;
 import io.toast.tk.agent.web.IAgentServer;
 import io.toast.tk.agent.web.RestRecorderService;
+import io.toast.tk.runtime.AbstractScenarioRunner;
 
 public class MainApp implements IAgentApp {
 
@@ -287,6 +288,7 @@ public class MainApp implements IAgentApp {
 	private void execute() {
 		try {
 			if(hasPluginDirectory() && hasScriptsDirectory()) {
+				AbstractScenarioRunner.setOpenReport(false);
 				NotificationManager.showMessage(MainAppMessages.SCRIPTS_EXECUTION).showNotification();
 				Thread thread = new Thread(new WaiterThread(webConfigProvider));
 				thread.start();
