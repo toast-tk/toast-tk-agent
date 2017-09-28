@@ -224,7 +224,7 @@ public class ConfigPanel extends JFrame {
 		p.setProperty(SmtpConfigProvider.SMTP_PROPERTIES_HOST , mailHostPanel.getTextValue());
 		p.setProperty(SmtpConfigProvider.SMTP_PROPERTIES_PORT , mailPortPanel.getTextValue());
 		p.setProperty(SmtpConfigProvider.SMTP_PROPERTIES_USER , mailUserPanel.getTextValue());
-		p.setProperty(SmtpConfigProvider.SMTP_PROPERTIES_PASSWORD, EncryptHelper.encrypt(mailUserPswdPanel.getTextValue()));
+		p.setProperty(SmtpConfigProvider.SMTP_PROPERTIES_PASSWORD_NAME, EncryptHelper.encrypt(mailUserPswdPanel.getTextValue()));
 
 		try {
 			p.store(FileUtils.openOutputStream(new File(SmtpConfigProvider.SMTP_PROPERTIES_FILE_PATH)), "Saved !");

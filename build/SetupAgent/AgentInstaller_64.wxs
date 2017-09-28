@@ -36,6 +36,7 @@
             <Component Id="ApplicationSourceFiles" Guid="651b4f52-9256-4e56-a0c6-b7aa69482f7c">
               <File Id="ServerKeystoreFile" Source="resources\server-keystore.jks"/>
               <File Id="AgentStandAloneFile" Source="resources\agent-1.0-fat.jar"/>
+              <File Id="ToastProperties" Source="resources\smtp.properties"/>
               <File Id="ToastProperties" Source="resources\toast.properties"/>
               <File Id="ChromeDriverFile" Source="resources\chromedriver.exe"/>
               <File Id="Geckodriver32DriverFile" Source="resources\geckodriver_32.exe"/>

@@ -106,6 +106,8 @@ public class MainApp implements IAgentApp {
 			 	this.onlineImage = ImageIO.read(onlineImageAsStream);
 			    this.trayIcon = initTrayIcon();
 			    tray.add(this.trayIcon);
+			    
+			    dropPanelProvider.get();
 			} catch (IOException|AWTException e1) {
 				LOG.error(e1);
 			}
