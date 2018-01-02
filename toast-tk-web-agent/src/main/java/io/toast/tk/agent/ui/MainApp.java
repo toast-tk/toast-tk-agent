@@ -29,10 +29,12 @@ import io.toast.tk.agent.ui.i18n.CommonMessages;
 import io.toast.tk.agent.ui.i18n.MainAppMessages;
 import io.toast.tk.agent.ui.panels.DropPanel;
 import io.toast.tk.agent.ui.panels.MailHelpPanel;
+import io.toast.tk.agent.ui.panels.ReportPanel;
 import io.toast.tk.agent.ui.provider.ConfigPanelProvider;
 import io.toast.tk.agent.ui.provider.DropPanelProvider;
 import io.toast.tk.agent.ui.provider.HelpPanelProvider;
 import io.toast.tk.agent.ui.provider.PropertiesProvider;
+import io.toast.tk.agent.ui.provider.ReportPanelProvider;
 import io.toast.tk.agent.ui.utils.PanelHelper;
 import io.toast.tk.agent.ui.verify.IPropertyVerifier;
 import org.apache.logging.log4j.LogManager;
@@ -54,6 +56,7 @@ public class MainApp implements IAgentApp {
 
 	private final ConfigPanelProvider configPanelProvider;
 	private final DropPanelProvider dropPanelProvider;
+	private final ReportPanelProvider reportPanelProvider;
 	private final HelpPanelProvider helpPanelProvider;
 	private BrowserManager browserManager;
 	private AgentConfigProvider webConfigProvider;
@@ -66,8 +69,8 @@ public class MainApp implements IAgentApp {
 	private boolean listenerStarted = false;
 	private Image onlineImage, offlineImage;
 	
-	private final String TOAST_VERSION = "Lesotho"; //Swaziland Brunei
-	private final String TOAST_VERSION_URL = "https://fr.wikipedia.org/wiki/Lesotho";
+	private final String TOAST_VERSION = "Swaziland"; //Brunei
+	private final String TOAST_VERSION_URL = "https://fr.wikipedia.org/wiki/Swaziland";
 
 	@Inject
 	public MainApp(AgentConfigProvider webConfig,
@@ -77,6 +80,7 @@ public class MainApp implements IAgentApp {
 				   PropertiesProvider propertiesProvider,
 				   ConfigPanelProvider configPanelProvider,
 				   DropPanelProvider dropPanelProvider,
+				   ReportPanelProvider reportPanelProvider,
 				   HelpPanelProvider helpPanelProvider) {
 		this.webConfigProvider = webConfig;
 		this.browserManager = browserManager;
@@ -84,6 +88,7 @@ public class MainApp implements IAgentApp {
 		this.agentServer = agentServer;
 		this.configPanelProvider = configPanelProvider;
 		this.dropPanelProvider = dropPanelProvider;
+		this.reportPanelProvider = reportPanelProvider;
 		this.helpPanelProvider = helpPanelProvider;
 		this.verifier = verifier;
 		initWorkspace();
@@ -210,10 +215,14 @@ public class MainApp implements IAgentApp {
 	    		PanelHelper.createImageIcon(this, "executeFile_icon_30.png"));
 	    JMenuItem dropItem = new JMenuItem("Drag & Drop", 
 	    		PanelHelper.createImageIcon(this, "dragAndDrop_icon_30.png"));
+	    JMenuItem reportItem = new JMenuItem("Reports", 
+	    		PanelHelper.createImageIcon(this, "reports_icon_30.png"));
 	    executeItem.addActionListener(this::executeListener);
 	    dropItem.addActionListener(this::dropListener);
+	    reportItem.addActionListener(this::reportListener);
 	    executeMenu.add(executeItem);
 	    executeMenu.add(dropItem);
+	    executeMenu.add(reportItem);
 	    return executeMenu;
 	}
 	
@@ -362,6 +371,13 @@ public class MainApp implements IAgentApp {
 
 	private void dropListener(ActionEvent e){
 		DropPanel p = dropPanelProvider.get();
+		if (p == null) {
+			NotificationManager.showMessage(CommonMessages.PROPERTIES_NOT_DISPLAYED);
+		}
+	}
+	
+	private void reportListener(ActionEvent e){
+		ReportPanel p = reportPanelProvider.get();
 		if (p == null) {
 			NotificationManager.showMessage(CommonMessages.PROPERTIES_NOT_DISPLAYED);
 		}

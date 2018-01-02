@@ -253,7 +253,7 @@ public class WaiterPanel extends AbstractFrame {
 	
 	private JButton buildRightPanelButton() throws IOException {
 		Image powerButton = PanelHelper.createImage(this,"power_button.png");
-		JButton interputButton = buildIconButton("Strop script", powerButton);
+		JButton interputButton = buildIconButton("Stop script", powerButton);
 	    interputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

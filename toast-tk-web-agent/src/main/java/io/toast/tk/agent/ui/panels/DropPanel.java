@@ -23,6 +23,7 @@ import com.google.inject.Inject;
 import io.toast.tk.agent.config.AgentConfigProvider;
 import io.toast.tk.agent.ui.WaiterThread;
 import io.toast.tk.agent.ui.utils.PanelHelper;
+import io.toast.tk.runtime.AbstractScenarioRunner;
 
 public class DropPanel extends JDialog {
 
@@ -74,6 +75,7 @@ public class DropPanel extends JDialog {
         }
         
         private void execute(Path path) throws IOException {
+			AbstractScenarioRunner.setOpenReport(true);
         	Thread thread = new Thread(new WaiterThread(provider, path));
 			thread.start();
         }
