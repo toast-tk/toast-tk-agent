@@ -12,7 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
@@ -31,35 +31,51 @@ public class PanelHelper {
 	public static Font FONT_TITLE_2 = new Font(fontName,Font.BOLD,18);
 	public static Font FONT_TITLE_1 = new Font(fontName,Font.BOLD,22);
 
-	public static JPanel createBasicPanel() {
+	public static JPanel createBasicJPanel() {
 		JPanel panel = new JPanel();
-		panel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panel.setAlignmentY(Component.CENTER_ALIGNMENT);
-		panel.setBackground(Color.white);
+		setBasicLayout(panel);
 		return panel;
 	} 
-	public static JPanel createBasicPanel(int boxLayout) {
-		JPanel panel = createBasicPanel();
-		panel.add(Box.createHorizontalGlue());
-		panel.setLayout(new BoxLayout(panel, boxLayout));
+	public static JPanel createBasicJPanel(int boxLayout) {
+		JPanel panel = createBasicJPanel();
+		setBasicLayout(panel, boxLayout);
 		return panel;
 	}
-	public static JPanel createBasicPanel(String strKey, int boxLayout) {
-		return createBasicPanel(strKey, boxLayout, PanelHelper.FONT_TITLE_3);
+	public static JPanel createBasicJPanel(String strKey, int boxLayout) {
+		return createBasicJPanel(strKey, boxLayout, PanelHelper.FONT_TITLE_3);
 	}
-	public static JPanel createBasicPanel(String strKey, int boxLayout, Font font) {
-		JPanel panel = createBasicPanel(strKey, font);
-		panel.setLayout(new BoxLayout(panel, boxLayout));
-		
+	public static JPanel createBasicJPanel(String strKey, int boxLayout, Font font) {
+		JPanel panel = createBasicJPanel(strKey, font);
 		return panel;
 	}
-	public static JPanel createBasicPanel(String strKey, Font font) {
-		JPanel panel = createBasicPanel();
-		panel.add(Box.createHorizontalGlue());
-		panel.setBorder(BorderFactory.createTitledBorder(panel.getBorder(),
+	public static JPanel createBasicJPanel(String strKey, Font font) {
+		JPanel panel = createBasicJPanel();
+		setBasicLayout(panel, strKey, font);
+		return panel;
+	} 
+
+	public static void setBasicLayout(JComponent component) {
+		component.setAlignmentX(Component.CENTER_ALIGNMENT);
+		component.setAlignmentY(Component.CENTER_ALIGNMENT);
+		component.setBackground(Color.white);
+	} 
+	public static void setBasicLayout(JComponent component, int boxLayout) {
+		setBasicLayout(component);
+		component.add(Box.createHorizontalGlue());
+		component.setLayout(new BoxLayout(component, boxLayout));
+	}
+	public static void setBasicLayout(JComponent component, String strKey, int boxLayout) {
+		setBasicLayout(component, strKey, boxLayout, PanelHelper.FONT_TITLE_3);
+	}
+	public static void setBasicLayout(JComponent component, String strKey, int boxLayout, Font font) {
+		setBasicLayout(component, strKey, font);
+		component.setLayout(new BoxLayout(component, boxLayout));
+	}
+	public static void setBasicLayout(JComponent component, String strKey, Font font) {
+		setBasicLayout(component);
+		component.add(Box.createHorizontalGlue());
+		component.setBorder(BorderFactory.createTitledBorder(component.getBorder(),
 	    		strKey,TitledBorder.ABOVE_TOP,TitledBorder.CENTER, font));
-		
-		return panel;
 	} 
 	
 	public static JLabel createBasicJLabel() {
@@ -74,7 +90,7 @@ public class PanelHelper {
 		return label;
 	}
 
-	public static ImageIcon createImageIcon(JFrame frame, String str) {
+	public static ImageIcon createImageIcon(Object frame, String str) {
 		URL url = frame.getClass().getClassLoader().getResource(str);
 		return new ImageIcon(url);
 	}

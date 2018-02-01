@@ -10,7 +10,13 @@ public class AgentConfig {
 		
 	private String webStartRecordingUrl;
 
-	private String chromeDriverPath;
+	private String driverSelected;
+	private String chrome32DriverPath;
+	private String chrome64DriverPath;
+	private String firefox32DriverPath;
+	private String firefox64DriverPath;
+	private String ie32DriverPath;
+	private String ie64DriverPath;
 
 	private String webAppUrl;
 	
@@ -25,6 +31,12 @@ public class AgentConfig {
 	private String proxyPort;
 	private String proxyUser;
 	private String proxyPswd;
+
+	private String smtpActivate;
+	private String smtpHost;
+	private String smtpPort;
+	private String smtpUser;
+	private String smtpPswd;
 	
 	public static String getToastHome() {
 		return System.getProperty("user.home") + SystemUtils.FILE_SEPARATOR + ".toast";
@@ -45,13 +57,77 @@ public class AgentConfig {
 	public String getWebInitRecordingUrl() {
 		return this.webStartRecordingUrl;
 	}
-	
-	public void setChromeDriverPath(
-		String chromeDriverPath) {
-		this.chromeDriverPath = chromeDriverPath;
+
+	public void setDriverSelected(
+		String driverSelected) {
+		this.driverSelected = driverSelected;
 	}
-	public String getChromeDriverPath() {
-		return this.chromeDriverPath;
+	public String getDriverSelected() {
+		return this.driverSelected;
+	}
+	
+	public String getDriverPath() {
+		switch(this.getDriverSelected()) {
+			case AgentConfigProvider.TOAST_CHROMEDRIVER_32_PATH :
+				return getChrome32DriverPath();
+			case AgentConfigProvider.TOAST_CHROMEDRIVER_64_PATH :
+				return getChrome64DriverPath();
+			case AgentConfigProvider.TOAST_FIREFOXDRIVER_32_PATH :
+				return getFirefox32DriverPath();
+			case AgentConfigProvider.TOAST_FIREFOXDRIVER_64_PATH :
+				return getFirefox64DriverPath();
+			case AgentConfigProvider.TOAST_IEDRIVER_32_PATH :
+				return getIe32DriverPath();
+			case AgentConfigProvider.TOAST_IEDRIVER_64_PATH :
+				return getIe64DriverPath();
+			default :
+				return null;
+		}
+	}
+	
+	public void setChrome32DriverPath(
+		String driverPath) {
+		this.chrome32DriverPath = driverPath;
+	}
+	public String getChrome32DriverPath() {
+		return this.chrome32DriverPath;
+	}
+	public void setChrome64DriverPath(
+			String driverPath) {
+			this.chrome64DriverPath = driverPath;
+	}
+	public String getChrome64DriverPath() {
+		return this.chrome64DriverPath;
+	}
+
+	public void setFirefox32DriverPath(
+		String driverPath) {
+		this.firefox32DriverPath = driverPath;
+	}
+	public String getFirefox32DriverPath() {
+		return this.firefox32DriverPath;
+	}
+	public void setFirefox64DriverPath(
+			String driverPath) {
+			this.firefox64DriverPath = driverPath;
+	}
+	public String getFirefox64DriverPath() {
+		return this.firefox64DriverPath;
+	}
+
+	public void setIe32DriverPath(
+		String driverPath) {
+		this.ie32DriverPath = driverPath;
+	}
+	public String getIe32DriverPath() {
+		return this.ie32DriverPath;
+	}
+	public void setIe64DriverPath(
+			String driverPath) {
+			this.ie64DriverPath = driverPath;
+	}
+	public String getIe64DriverPath() {
+		return this.ie64DriverPath;
 	}
 	
 	public void setWebAppUrl(
@@ -122,5 +198,45 @@ public class AgentConfig {
 	}
 	public String getProxyUserPswd() {
 		return this.proxyPswd;
+	}
+
+	public void setSmtpActivate(
+		String smtpActivate) {
+		this.smtpActivate = smtpActivate;
+	}
+	public String getSmtpActivate() {
+		return this.smtpActivate;
+	}
+
+	public void setSmtpUser(
+		String smtpUser) {
+		this.smtpUser = smtpUser;
+	}
+	public String getSmtpUser() {
+		return this.smtpUser;
+	}
+
+	public void setSmtpUserPswd(
+		String smtpPswd) {
+		this.smtpPswd = smtpPswd;
+	}
+	public String getSmtpUserPswd() {
+		return this.smtpPswd;
+	}
+
+	public String getSmtpHost() {
+		return smtpHost;
+	}
+
+	public void setSmtpHost(String smtpHost) {
+		this.smtpHost = smtpHost;
+	}
+
+	public String getSmtpPort() {
+		return smtpPort;
+	}
+
+	public void setSmtpPort(String smtpPort) {
+		this.smtpPort = smtpPort;
 	}
 }

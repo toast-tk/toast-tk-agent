@@ -1,20 +1,29 @@
 package io.toast.tk.agent.ui;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 import io.toast.tk.agent.config.AgentConfigProvider;
 import io.toast.tk.agent.run.TestRunner;
+import io.toast.tk.agent.ui.panels.WaiterPanel;
 
 public class WaiterThread implements Runnable {
 	  private WaiterPanel panel;
 	  private Thread thread;
 	  private TestRunner testrunner;
-	   
+
 	  public WaiterThread(AgentConfigProvider webConfigProvider) throws IOException { 
-		  	WaiterPanel waiterPanel = new WaiterPanel();
-			this.panel = waiterPanel;
 			this.testrunner = new TestRunner(webConfigProvider);   
-			this.thread = new Thread(new RunnerThread(testrunner));      
+			this.thread = new Thread(new RunnerThread(testrunner));  
+		  	WaiterPanel waiterPanel = new WaiterPanel(testrunner);
+			this.panel = waiterPanel;    
+	  }
+	  
+	  public WaiterThread(AgentConfigProvider webConfigProvider, Path path) throws IOException { 
+			this.testrunner = new TestRunner(webConfigProvider);   
+			this.thread = new Thread(new RunnerThread(testrunner, path));     
+		  	WaiterPanel waiterPanel = new WaiterPanel(testrunner);
+			this.panel = waiterPanel; 
 	  }
 	  
 	  public void run() {
@@ -27,7 +36,6 @@ public class WaiterThread implements Runnable {
 				}
 	  			
 	  			if(panel.isInterupted()) {
-	  				thread.interrupt();
 	  			  	panel.setScript(testrunner.fileName, "Interupting");
 	  			  	testrunner.kill();
 	  			}
@@ -50,18 +58,27 @@ public class WaiterThread implements Runnable {
 	  
 	  protected class RunnerThread implements Runnable {
 		  public TestRunner runner;
+		  private Path path;
 		   
 		  public RunnerThread(TestRunner testrunner) throws IOException {           
-				this.runner = testrunner;
+			  this.runner = testrunner;
+		  }
+
+		  public RunnerThread(TestRunner testrunner, Path path) throws IOException {     
+			  this.path = path;
+			  this.runner = testrunner;
 		  }
 		  
 		  public void run() {
-	      		runner.execute();
+			  if(path != null) {
+				  	runner.execute(path);
+			  } else {
+		      		runner.execute();
+			  }
 		  }
 		  
 		  public void kill() {
 			  runner.kill();
-			  runner = null;
 		  }
-		}
+	  }
 	}

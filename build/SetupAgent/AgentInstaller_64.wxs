@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- Change the product version at every update -->
-<?define ProductVersion = "0.1.5.1"?>
+<?define ProductVersion = "0.1.5.2"?>
 <!-- Do not change the ProductUpgradeCode -->
 <?define ProductUpgradeCode = "ab67ea4c-d2c3-4729-95eb-0ba451da5db2"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
@@ -36,8 +36,12 @@
             <Component Id="ApplicationSourceFiles" Guid="651b4f52-9256-4e56-a0c6-b7aa69482f7c">
               <File Id="ServerKeystoreFile" Source="resources\server-keystore.jks"/>
               <File Id="AgentStandAloneFile" Source="resources\agent-1.0-fat.jar"/>
+              <File Id="ToastSmtpProperties" Source="resources\smtp.properties"/>
               <File Id="ToastProperties" Source="resources\toast.properties"/>
               <File Id="ChromeDriverFile" Source="resources\chromedriver.exe"/>
+              <File Id="Geckodriver32DriverFile" Source="resources\geckodriver_32.exe"/>
+              <File Id="Geckodriver64DriverFile" Source="resources\geckodriver.exe"/>
+              <File Id="MicrosoftWebDriverFile" Source="resources\MicrosoftWebDriver.exe"/>
             </Component>
             
             <Directory Id="PLUGINSDIR" Name="plugins">
@@ -693,7 +697,7 @@
                   <RegistryValue Root="HKCU" Key="Software\ToastTk\ToastTk-Agent" 
                             Name="installed" Type="integer" Value="1" KeyPath="yes"/>
                  <Shortcut Id="ApplicationShortcut1" Name="ToastTkAgentLauncher" Description="ToastTk-Agent"
-                           Target="[INSTALLDIR]AgentLauncher.exe" WorkingDirectory="INSTALLDIR"/>
+                           Target="[INSTALLDIR]Toast-Agent.exe" WorkingDirectory="INSTALLDIR"/>
                  <Shortcut Id="ApplicationShortcut2" Name="ToastTkAgentLauncher" Description="ToastTk-Agent"
                            Target="[INSTALLDIR]README.txt" WorkingDirectory="INSTALLDIR"/>
                   <RemoveFolder Id="ProgramMenuSubfolder" On="uninstall"/>

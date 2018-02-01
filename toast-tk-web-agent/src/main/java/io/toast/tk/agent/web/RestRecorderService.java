@@ -35,7 +35,7 @@ public class RestRecorderService extends AbstractVerticle {
 	 
 	@Override
 	public void start(Future<Void> fut) {
-		//LOG.info("Starting..");
+		LOG.info("Starting..");
 		initInjectors();
 		Router router = Router.router(vertx);
 		router.route().failureHandler(errorHandler());

@@ -23,15 +23,30 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import com.google.inject.Inject;
+
 import io.toast.tk.agent.ui.i18n.UIMessages;
-import io.toast.tk.agent.ui.panels.*;
+import io.toast.tk.agent.ui.panels.AbstractPanel;
+import io.toast.tk.agent.ui.panels.ComboBoxPanel;
+import io.toast.tk.agent.ui.panels.EnumError;
+import io.toast.tk.agent.ui.panels.FileChoosePanel;
+import io.toast.tk.agent.ui.panels.SmtpPanel;
+import io.toast.tk.agent.ui.panels.PasswordPanel;
+import io.toast.tk.agent.ui.panels.RecorderPanel;
+import io.toast.tk.agent.ui.panels.SimplePanel;
+import io.toast.tk.agent.ui.panels.WebAppPanel;
 import io.toast.tk.agent.ui.utils.PanelHelper;
+import io.toast.tk.runtime.constant.Property;
+import io.toast.tk.runtime.mail.SmtpConfigProvider;
+import io.toast.tk.runtime.utils.EncryptHelper;
+
 import org.apache.commons.collections4.EnumerationUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import io.toast.tk.adapter.constant.AdaptersConfigProvider;
 import io.toast.tk.agent.config.AgentConfigProvider;
+import io.toast.tk.agent.config.DriverFactory;
 
 
 public class ConfigPanel extends JFrame {
@@ -40,14 +55,15 @@ public class ConfigPanel extends JFrame {
 
 	private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
 	
-	private AbstractPanel chromePanel, webAppPanel, recorderPanel, apiKeyPanel, pluginPanel, scriptsPanel,
-			proxyAdressPanel, proxyPortPanel, proxyUserNamePanel, proxyUserPswdPanel;
+	private AbstractPanel driverSelectPanel, webAppPanel, recorderPanel, apiKeyPanel, pluginPanel, scriptsPanel,
+			proxyAdressPanel, proxyPortPanel, proxyUserNamePanel, proxyUserPswdPanel, 
+			mailHostPanel, mailPortPanel, mailUserPanel, mailUserPswdPanel;
 	
 	private JButton tryButton;
 
 	private JTabbedPane secondPane;
 
-	public static JCheckBox proxyCheckBox;
+	public static JCheckBox proxyCheckBox, mailCheckBox;
 
 	private final Properties properties;
 
@@ -81,7 +97,7 @@ public class ConfigPanel extends JFrame {
 		Image toastLogo = PanelHelper.createImage(this,"ToastLogo.png");
 		this.setIconImage(toastLogo);
 		
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(HIDE_ON_CLOSE);
 		setBackground(Color.white);
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		setContentPane(mainPane);
@@ -95,11 +111,11 @@ public class ConfigPanel extends JFrame {
 		
 		JPanel topMainPanel = buildTopMainPanel();
 	    
-		JPanel contentMainPanel = PanelHelper.createBasicPanel(BoxLayout.Y_AXIS);
+		JPanel contentMainPanel = PanelHelper.createBasicJPanel(BoxLayout.Y_AXIS);
 		contentMainPanel.add(topMainPanel);
 		contentMainPanel.add(contentPanel);
 		
-		JPanel mainPane = PanelHelper.createBasicPanel();
+		JPanel mainPane = PanelHelper.createBasicJPanel();
 		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.X_AXIS));
 		mainPane.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		mainPane.add(buildBackgrounIconPanel());
@@ -109,11 +125,11 @@ public class ConfigPanel extends JFrame {
 	}
 	
 	private JPanel buildTopMainPanel() throws IOException {
-		JPanel topMainPanel = PanelHelper.createBasicPanel();
+		JPanel topMainPanel = PanelHelper.createBasicJPanel();
 	    JLabel topMainLabel = new JLabel("Agent settings");
 	    topMainLabel.setFont(PanelHelper.FONT_TITLE_1);
 	    topMainLabel.setBorder(BorderFactory.createEmptyBorder(0, 15, 15, 15));
-		JPanel topIcon = PanelHelper.createBasicPanel();
+		JPanel topIcon = PanelHelper.createBasicJPanel();
 		topIcon.setLayout(new BorderLayout());
 		Image topIconImage = PanelHelper.createImage(this,"AgentSetting_icon.png");
 		topIcon.add(new JLabel(new ImageIcon(topIconImage)));
@@ -123,7 +139,7 @@ public class ConfigPanel extends JFrame {
 	}
 	
 	private JPanel buildBackgrounIconPanel() throws IOException {
-		JPanel panIcon = PanelHelper.createBasicPanel();
+		JPanel panIcon = PanelHelper.createBasicJPanel();
 		panIcon.setLayout(new BorderLayout());
 		Image backGroundImage = PanelHelper.createImage(this,"AgentParamBackGround.png");
 		panIcon.add(new JLabel(new ImageIcon(backGroundImage)));
@@ -147,7 +163,11 @@ public class ConfigPanel extends JFrame {
 		ImageIcon proxyLogo = PanelHelper.createImageIcon(this, "proxy_icon.png");
 		secondPane.addTab("Proxy", proxyLogo, buildProxyPanel());
 
-		JPanel contentPanel = PanelHelper.createBasicPanel();
+		// ADD THIS WHEN MAIL WORKS
+		ImageIcon mailLogo = PanelHelper.createImageIcon(this, "mail_icon.png");
+		secondPane.addTab("Mail", mailLogo, buildMailPanel());
+		
+		JPanel contentPanel = PanelHelper.createBasicJPanel();
 		contentPanel.add(secondPane);
 		contentPanel.add(buildFullButtonPanel());
 		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.PAGE_AXIS));
@@ -158,14 +178,60 @@ public class ConfigPanel extends JFrame {
 		for (Entry<String, AbstractPanel> entry : boxFields.entrySet()) {
 			properties.setProperty(entry.getKey(), entry.getValue().getTextValue());
 		}
+		properties.setProperty(DriverFactory.getDriverValue(), ((ComboBoxPanel) driverSelectPanel).getValue());
 		properties.setProperty(AgentConfigProvider.TOAST_PROXY_ACTIVATE, Boolean.toString(proxyCheckBox.isSelected()));
+		properties.setProperty(AgentConfigProvider.TOAST_SMTP_ACTIVATE, Boolean.toString(mailCheckBox.isSelected()));
+		properties.setProperty(AgentConfigProvider.TOAST_PROXY_USER_PSWD, EncryptHelper.encrypt(proxyUserPswdPanel.getTextValue()));
+		properties.setProperty(AgentConfigProvider.TOAST_SMTP_PSWD, EncryptHelper.encrypt(mailUserPswdPanel.getTextValue()));
 		
 		try {
 			properties.store(FileUtils.openOutputStream(propertyFile), "Saved !");
 		} catch (IOException e) {
 			LOG.warn("Could not save properties", e);
 		}
+		
+		savePropertyFile();
+		saveSmtpPropertyFile();
+		
 		this.close();
+	}
+	
+	private void savePropertyFile() {
+		Properties p = new Properties();
+		
+		String driver = DriverFactory.getSelected().getType();
+		
+		p.setProperty(AdaptersConfigProvider.ADAPTER_WEB_DRIVER, driver);
+		p.setProperty(AdaptersConfigProvider.ADAPTER_WEB_DRIVER_PATH, ((ComboBoxPanel) driverSelectPanel).getValue());
+
+		p.setProperty(AdaptersConfigProvider.ADAPTER_MAIL_SEND, 
+				properties.getProperty(AgentConfigProvider.TOAST_SMTP_ACTIVATE));
+		p.setProperty(AdaptersConfigProvider.ADAPTER_MAIL_TO, 
+				properties.getProperty(AgentConfigProvider.TOAST_SMTP_USER));
+
+		try {
+			p.store(FileUtils.openOutputStream(new File(Property.TOAST_PROPERTIES_FILE)), "Saved !");
+		} catch (IOException e) {
+			LOG.warn("Could not save properties", e);
+		}
+		
+	}
+
+	private void saveSmtpPropertyFile() {
+		SmtpConfigProvider config = new SmtpConfigProvider();
+		Properties p = config.get();
+
+		p.setProperty(SmtpConfigProvider.SMTP_PROPERTIES_HOST , mailHostPanel.getTextValue());
+		p.setProperty(SmtpConfigProvider.SMTP_PROPERTIES_PORT , mailPortPanel.getTextValue());
+		p.setProperty(SmtpConfigProvider.SMTP_PROPERTIES_USER , mailUserPanel.getTextValue());
+		p.setProperty(SmtpConfigProvider.SMTP_PROPERTIES_PASSWORD_NAME, EncryptHelper.encrypt(mailUserPswdPanel.getTextValue()));
+
+		try {
+			p.store(FileUtils.openOutputStream(new File(SmtpConfigProvider.SMTP_PROPERTIES_FILE_PATH)), "Saved !");
+		} catch (IOException e) {
+			LOG.warn("Could not save properties", e);
+		}
+		
 	}
 
 	private void close() {
@@ -174,7 +240,7 @@ public class ConfigPanel extends JFrame {
 	}
 	
 	private JPanel buildGeneralPanel() {
-		JPanel generalParameters = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
+		JPanel generalParameters = PanelHelper.createBasicJPanel(BoxLayout.PAGE_AXIS);
 		generalParameters.add(webAppPanel);
 		generalParameters.add(apiKeyPanel);
 		generalParameters.add(pluginPanel);
@@ -183,15 +249,15 @@ public class ConfigPanel extends JFrame {
 	}
 	
 	private JPanel buildRecorderPanel() {
-		JPanel recorderParameters = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
-		recorderParameters.add(chromePanel);
+		JPanel recorderParameters = PanelHelper.createBasicJPanel(BoxLayout.PAGE_AXIS);
+		recorderParameters.add(driverSelectPanel);
 		recorderParameters.add(recorderPanel);
 		recorderParameters.setLayout(new BoxLayout(recorderParameters, BoxLayout.Y_AXIS));
 		return recorderParameters;
 	}
 	
 	private JPanel buildProxyPanel() {
-		JPanel proxyPanel = PanelHelper.createBasicPanel(BoxLayout.PAGE_AXIS);
+		JPanel proxyPanel = PanelHelper.createBasicJPanel(BoxLayout.PAGE_AXIS);
 	    proxyPanel.add(proxyCheckBox);
 	    proxyPanel.add(proxyAdressPanel);
 	    proxyPanel.add(proxyPortPanel);
@@ -200,8 +266,18 @@ public class ConfigPanel extends JFrame {
 	    return proxyPanel;
 	}
 
+	private JPanel buildMailPanel() {
+		JPanel mailPanel = PanelHelper.createBasicJPanel(BoxLayout.PAGE_AXIS);
+		mailPanel.add(mailCheckBox);
+		mailPanel.add(mailHostPanel);
+		mailPanel.add(mailPortPanel);
+		mailPanel.add(mailUserPanel);
+		mailPanel.add(mailUserPswdPanel);
+	    return mailPanel;
+	}
+	
 	private JPanel buildFullButtonPanel() {
-		JPanel buttonPanel = PanelHelper.createBasicPanel();
+		JPanel buttonPanel = PanelHelper.createBasicJPanel();
 		buttonPanel.setAlignmentX(LEFT_ALIGNMENT);
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
 		buttonPanel.add(Box.createHorizontalGlue());
@@ -250,7 +326,14 @@ public class ConfigPanel extends JFrame {
 	private void test() {
 		for (Object key : EnumerationUtils.toList(properties.propertyNames())) {
 			String strKey = (String) key;
-			if(!strKey.equals(AgentConfigProvider.TOAST_PROXY_ACTIVATE)) {
+			if(!strKey.equals(AgentConfigProvider.TOAST_PROXY_ACTIVATE) && 
+					!strKey.equals(AgentConfigProvider.TOAST_SMTP_ACTIVATE) && 
+					!strKey.equals(AgentConfigProvider.TOAST_CHROMEDRIVER_32_PATH) && 
+					!strKey.equals(AgentConfigProvider.TOAST_CHROMEDRIVER_64_PATH) &&
+					!strKey.equals(AgentConfigProvider.TOAST_FIREFOXDRIVER_32_PATH) && 
+					!strKey.equals(AgentConfigProvider.TOAST_FIREFOXDRIVER_64_PATH) &&
+					!strKey.equals(AgentConfigProvider.TOAST_IEDRIVER_32_PATH) && 
+					!strKey.equals(AgentConfigProvider.TOAST_IEDRIVER_64_PATH)) {
 				AbstractPanel box = boxFields.get(strKey);
 				try {
 					box.testIconValid(false);
@@ -261,7 +344,7 @@ public class ConfigPanel extends JFrame {
 				}
 			} 
 		}
-		NotificationManager.showMessage("The parameters have been tested !");
+		NotificationManager.showMessage("The parameters have been tested !").showNotification();
 	}
 	
 	private void buildFields() throws IOException{
@@ -280,11 +363,11 @@ public class ConfigPanel extends JFrame {
 				UIMessages.SCRIPT_DIR, EnumError.DIRECTORY);
 		boxFields.put( AgentConfigProvider.TOAST_SCRIPTS_DIR, scriptsPanel);
 
-		//%% CHROME PANEL %%
-		chromePanel = new FileChoosePanel(properties, AgentConfigProvider.TOAST_CHROMEDRIVER_PATH,
-				UIMessages.CHROME_BIN_PATH, EnumError.FILE);
-		boxFields.put(AgentConfigProvider.TOAST_CHROMEDRIVER_PATH, chromePanel);
-
+		//%% DRIVER SELECTION PANEL %%
+		driverSelectPanel = new ComboBoxPanel(properties, AgentConfigProvider.TOAST_DRIVER_SELECT,
+				UIMessages.DRIVER_SELECTED, EnumError.FILE);
+		boxFields.put(AgentConfigProvider.TOAST_DRIVER_SELECT, driverSelectPanel);
+		
 		//%% PROXY CHECK BOX %%
 		proxyCheckBox = new JCheckBox(UIMessages.ACTIVATE);
 		proxyCheckBox.setBackground(Color.white);
@@ -309,10 +392,38 @@ public class ConfigPanel extends JFrame {
 		boxFields.put(AgentConfigProvider.TOAST_PROXY_USER_NAME, proxyUserNamePanel);
 
 		//%% PROXY USER PSWD PANEL %%
-		proxyUserPswdPanel = new SimplePanel(properties,
+		proxyUserPswdPanel = new PasswordPanel(properties,
 				AgentConfigProvider.TOAST_PROXY_USER_PSWD, UIMessages.PROXY_PSENTENCE, EnumError.NOTHING);
 		boxFields.put(AgentConfigProvider.TOAST_PROXY_USER_PSWD, proxyUserPswdPanel);
 
+		//%% MAIL CHECK BOX %%
+		mailCheckBox = new JCheckBox(UIMessages.ACTIVATE);
+		mailCheckBox.setBackground(Color.white);
+		String mailValue = properties.getProperty(AgentConfigProvider.TOAST_SMTP_ACTIVATE);
+		if("true".equals(mailValue)) {
+			mailCheckBox.setSelected(true);
+		}
+
+		//%% MAIL HOST PANEL %%
+		mailHostPanel = new SimplePanel(properties,
+				AgentConfigProvider.TOAST_SMTP_HOST, UIMessages.MAIL_HOST, EnumError.NOTHING);
+		boxFields.put(AgentConfigProvider.TOAST_SMTP_HOST, mailHostPanel);
+
+		//%% MAIL PORT PANEL %%
+		mailPortPanel = new SimplePanel(properties,
+				AgentConfigProvider.TOAST_SMTP_PORT, UIMessages.MAIL_PORT, EnumError.NOTHING);
+		boxFields.put(AgentConfigProvider.TOAST_SMTP_PORT, mailPortPanel);
+
+		//%% MAIL USER PANEL %%
+		mailUserPanel = new SmtpPanel(properties,
+				AgentConfigProvider.TOAST_SMTP_USER, UIMessages.MAIL_USER, EnumError.MAIL);
+		boxFields.put(AgentConfigProvider.TOAST_SMTP_USER, mailUserPanel);
+
+		//%% PROXY USER PSWD PANEL %%
+		mailUserPswdPanel = new PasswordPanel(properties,
+				AgentConfigProvider.TOAST_SMTP_PSWD, UIMessages.MAIL_PSENTENCE, EnumError.NOTHING);
+		boxFields.put(AgentConfigProvider.TOAST_SMTP_PSWD, mailUserPswdPanel);
+		
 		//%% WEBAPP PANEL %%
 		webAppPanel = new WebAppPanel(properties, AgentConfigProvider.TOAST_TEST_WEB_APP_URL,
 				proxyAdressPanel, proxyPortPanel,

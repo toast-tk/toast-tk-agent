@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 
 import io.toast.tk.agent.ui.utils.PanelHelper;
 import org.apache.logging.log4j.LogManager;
@@ -23,11 +24,11 @@ public abstract class AbstractPanel extends JComponent {
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger LOG = LogManager.getLogger(AbstractPanel.class);
-	private final Properties properties;
+	final Properties properties;
 	private static Dimension dim;
 
 	protected String strkey;
-	protected JTextField textField;
+	protected JTextComponent textField;
 	protected JPanel iconPanel;
 	protected JLabel errorLabel;
 
@@ -66,7 +67,11 @@ public abstract class AbstractPanel extends JComponent {
 		return this.textField.getText();
 	}
 
-	private JTextField createBasicTextPanel() {
+	public void setTextValue(String text) {
+		this.textField.setText(text);
+	}
+	
+	protected JTextField createBasicTextPanel() {
 		JTextField textField = new JTextField(render(properties.getProperty(strkey)));
 		Dimension prefDim = new Dimension(textField.getPreferredSize().width, 30);
 		Dimension moyDim = new Dimension(textField.getMaximumSize().width, 40);
@@ -122,10 +127,10 @@ public abstract class AbstractPanel extends JComponent {
 		this.setAlignmentY(Component.CENTER_ALIGNMENT);
 		this.setBackground(Color.white);
 		
-		JPanel textButtonPanel = PanelHelper.createBasicPanel(BoxLayout.LINE_AXIS);
+		JPanel textButtonPanel = PanelHelper.createBasicJPanel(BoxLayout.LINE_AXIS);
 
 		textField = createBasicTextPanel();
-		iconPanel = PanelHelper.createBasicPanel();
+		iconPanel = PanelHelper.createBasicJPanel();
 		iconValid = createIconValid();
 		iconNotValid = createIconNotValid();
 

@@ -5,6 +5,8 @@ import com.google.inject.Provider;
 import io.toast.tk.agent.config.AgentConfig;
 import io.toast.tk.agent.config.AgentConfigProvider;
 import io.toast.tk.agent.ui.PropertiesHolder;
+import io.toast.tk.runtime.utils.EncryptHelper;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,7 +50,13 @@ public class PropertiesProvider implements Provider<PropertiesHolder> {
     private Properties buildAndStoreProperties(AgentConfig webConfig) throws IOException {
         Properties p = new Properties();
         p.setProperty(AgentConfigProvider.TOAST_TEST_WEB_INIT_RECORDING_URL, webConfig.getWebInitRecordingUrl());
-        p.setProperty(AgentConfigProvider.TOAST_CHROMEDRIVER_PATH, webConfig.getChromeDriverPath());
+        p.setProperty(AgentConfigProvider.TOAST_DRIVER_SELECT, webConfig.getDriverSelected());
+        p.setProperty(AgentConfigProvider.TOAST_CHROMEDRIVER_32_PATH, webConfig.getChrome32DriverPath());
+        p.setProperty(AgentConfigProvider.TOAST_CHROMEDRIVER_64_PATH, webConfig.getChrome64DriverPath());
+        p.setProperty(AgentConfigProvider.TOAST_FIREFOXDRIVER_32_PATH, webConfig.getFirefox32DriverPath());
+        p.setProperty(AgentConfigProvider.TOAST_FIREFOXDRIVER_64_PATH, webConfig.getFirefox64DriverPath());
+        p.setProperty(AgentConfigProvider.TOAST_IEDRIVER_32_PATH, webConfig.getIe32DriverPath());
+        p.setProperty(AgentConfigProvider.TOAST_IEDRIVER_64_PATH, webConfig.getIe64DriverPath());
         p.setProperty(AgentConfigProvider.TOAST_TEST_WEB_APP_URL, webConfig.getWebAppUrl());
         p.setProperty(AgentConfigProvider.TOAST_API_KEY, webConfig.getApiKey());
         p.setProperty(AgentConfigProvider.TOAST_PLUGIN_DIR, webConfig.getPluginDir());
@@ -57,8 +65,17 @@ public class PropertiesProvider implements Provider<PropertiesHolder> {
         p.setProperty(AgentConfigProvider.TOAST_PROXY_ADRESS, webConfig.getProxyAdress());
         p.setProperty(AgentConfigProvider.TOAST_PROXY_PORT, webConfig.getProxyPort());
         p.setProperty(AgentConfigProvider.TOAST_PROXY_USER_NAME, webConfig.getProxyUserName());
-        p.setProperty(AgentConfigProvider.TOAST_PROXY_USER_PSWD, webConfig.getProxyUserPswd());
+        p.setProperty(AgentConfigProvider.TOAST_PROXY_USER_PSWD, EncryptHelper.encrypt(webConfig.getProxyUserPswd()));
+        p.setProperty(AgentConfigProvider.TOAST_SMTP_ACTIVATE, webConfig.getSmtpActivate());
+        p.setProperty(AgentConfigProvider.TOAST_SMTP_HOST, webConfig.getSmtpHost());
+        p.setProperty(AgentConfigProvider.TOAST_SMTP_PORT, webConfig.getSmtpPort());
+        p.setProperty(AgentConfigProvider.TOAST_SMTP_USER, webConfig.getSmtpUser());
+        p.setProperty(AgentConfigProvider.TOAST_SMTP_PSWD, EncryptHelper.encrypt(webConfig.getSmtpUserPswd()));
         p.store(FileUtils.openOutputStream(this.toastWebPropertiesFile), null);
+        
+        // Use of the uncrypted password
+        p.setProperty(AgentConfigProvider.TOAST_PROXY_USER_PSWD, webConfig.getProxyUserPswd());
+        p.setProperty(AgentConfigProvider.TOAST_SMTP_PSWD, webConfig.getSmtpUserPswd());
         return p;
     }
 

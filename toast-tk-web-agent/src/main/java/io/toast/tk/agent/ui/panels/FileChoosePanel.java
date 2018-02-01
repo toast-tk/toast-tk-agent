@@ -1,6 +1,6 @@
 package io.toast.tk.agent.ui.panels;
 
-import io.toast.tk.agent.config.AgentConfigProvider;
+import io.toast.tk.agent.config.DriverFactory;
 import io.toast.tk.agent.ui.i18n.UIMessages;
 import io.toast.tk.agent.ui.utils.ConfigTesterHelper;
 import io.toast.tk.agent.ui.utils.PanelHelper;
@@ -9,16 +9,20 @@ import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.JTextComponent;
+
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Properties;
 
 
 public class FileChoosePanel extends AbstractPanel {
 
-    private static final Logger LOG = LogManager.getLogger(FileChoosePanel.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3196229623723358193L;
+	private static final Logger LOG = LogManager.getLogger(FileChoosePanel.class);
     private final String label;
     private final EnumError errorType;
     private JButton fileSearch;
@@ -30,7 +34,7 @@ public class FileChoosePanel extends AbstractPanel {
         super.setBasicProperties(strkey);
     }
 
-    private void chooseDirectory(JTextField textField, String strKey) {
+    private void chooseDirectory(JTextComponent textField, String strKey) {
         JFileChooser dialogue = new JFileChooser(textField.getText());
         dialogue.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         dialogue.setDialogTitle("Select directory for " + strKey);
@@ -49,7 +53,7 @@ public class FileChoosePanel extends AbstractPanel {
         }
     }
 
-    private void chooseFile(JTextField textField) {
+    private void chooseFile(JTextComponent textField) {
         JFileChooser dialogue = new JFileChooser(textField.getText());
         dialogue.setDialogTitle(UIMessages.SELECT_FILE);
         dialogue.showOpenDialog(null);
@@ -67,7 +71,7 @@ public class FileChoosePanel extends AbstractPanel {
     }
     private boolean testIconValidDirectory(boolean runTryValue) throws IOException {
         boolean fileOrDirectory = false;
-        if(strkey.equals(AgentConfigProvider.TOAST_CHROMEDRIVER_PATH)) {
+        if(strkey.equals(DriverFactory.getDriverValue())) {
             fileOrDirectory = true;
         }
         return ConfigTesterHelper.testWebAppDirectory(textField.getText(),runTryValue, fileOrDirectory);
@@ -91,7 +95,7 @@ public class FileChoosePanel extends AbstractPanel {
         this.revalidate();
     }
 
-    public JButton createBasicFileSearch(JTextField textField, String strKey, Boolean fileOrDir) {
+    public JButton createBasicFileSearch(JTextComponent textField, String strKey, Boolean fileOrDir) {
         JButton fileSearch = new JButton();
         fileSearch.setText("...");
         if (fileOrDir) {

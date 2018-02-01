@@ -15,7 +15,12 @@ import java.util.Properties;
 
 public class WebAppPanel extends AbstractPanel {
 
-    private static final Logger LOG = LogManager.getLogger(WebAppPanel.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8058813011665641152L;
+
+	private static final Logger LOG = LogManager.getLogger(WebAppPanel.class);
 
     private JCheckBox proxyCheckBox = null;
     private AbstractPanel proxyAdressPanel = null;
@@ -53,8 +58,14 @@ public class WebAppPanel extends AbstractPanel {
     }
 
     private boolean testIconValidUrl(boolean runTryValue) throws IOException {
+    	String URL = this.getTextValue();
+    	if(!URL.startsWith("http") && !URL.startsWith("https")) {
+    		URL = "http://" + URL;
+    		this.setTextValue(URL);
+    	}
+    	
         if(proxyCheckBox.isSelected()) {
-            return ConfigTesterHelper.testWebAppUrl(this.getTextValue(),runTryValue,
+            return ConfigTesterHelper.testWebAppUrl(URL,runTryValue,
                     proxyAdressPanel.getTextValue(), proxyPortPanel.getTextValue(),
                     proxyUserPanel.getTextValue(), proxyPswdPanel.getTextValue());
         }

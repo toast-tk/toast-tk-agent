@@ -11,7 +11,11 @@ import java.util.Properties;
 
 public class SimplePanel extends AbstractPanel {
 
-    private final String label;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 9219045926752739314L;
+	private final String label;
     private final EnumError errorType;
 
     public SimplePanel(Properties properties, String strkey, String label, EnumError errorType) throws IOException {

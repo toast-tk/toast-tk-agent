@@ -3,6 +3,7 @@ package io.toast.tk.agent.run;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -34,6 +35,10 @@ public class TestRunner {
 		this.provider = provider;
 	}
 	
+	public TestPageRunner getTestPageRunner() {
+		return testPageRunner;
+	}
+	
 	public void execute(){
 		String scriptsPath = this.provider.get().getScriptsDir();
 		Path path = Paths.get(scriptsPath);
@@ -41,18 +46,24 @@ public class TestRunner {
 			NotificationManager.showMessage("No script directory defined, check agent settings !");
 		}
 		
+		execute(path);
+	}
+
+	public void execute(Path path){
 		final List<ITestPage> testScripts = getScripts(path);
 		
 		executeScripts(testScripts);
 	}
 	
-	private List<ITestPage> getScripts(Path path) {
+	public List<ITestPage> getScripts(Path path) {
 		List<ITestPage> testScripts = new ArrayList<>();
 		TestParser parser = new TestParser();
 		try {
 			Files.list(path).forEach(p -> {
 				collectScripts(testScripts, parser, p);
 			});
+		} catch (NotDirectoryException e) {
+			collectScripts(testScripts, parser, path);
 		} catch (IOException e) {
 			LOG.error(e.getMessage(), e);
 			NotificationManager.showMessage("Unable to list files in scripts path " + path.getFileName() + " !");
@@ -71,7 +82,7 @@ public class TestRunner {
         }
 	}
 
-	private void executeScripts( List<ITestPage> testScripts) {
+	public void executeScripts( List<ITestPage> testScripts) {
 		testScripts.forEach(script ->{
 			try {
 				if(!interupted) {
@@ -91,9 +102,9 @@ public class TestRunner {
 	
 	public void kill() {
 		this.interupted = true;
-		this.testPageRunner = null;
-		this.provider = null;
-		this.fileName = null;
+		if(testPageRunner != null) {
+			this.testPageRunner.kill();
+		}
 	}
 	
 	/**
