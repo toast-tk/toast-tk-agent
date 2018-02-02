@@ -339,14 +339,14 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-	<repositories>
+	<!--  repositories>
 		<repository>
 			<id>ossrh</id>
 			<url>
 				https://oss.sonatype.org/content/repositories/snapshots
 			</url>
 		</repository>
-	</repositories>
+	</repositories-->
 	<profiles>
 		<profile>
 			<id>deploy</id>
