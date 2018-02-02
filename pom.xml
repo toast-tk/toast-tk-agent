@@ -32,6 +32,10 @@
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
 		<maven-surefire-plugin.version>2.12.4</maven-surefire-plugin.version>
 		<maven-eclipse-plugin.version>2.8</maven-eclipse-plugin.version>
+		<maven-source-plugin.version>2.0.4</maven-source-plugin.version>
+		<maven-javadoc-plugin.version>2.3</maven-javadoc-plugin.version>
+		<maven-release-plugin.version>2.4</maven-release-plugin.version>
+		<maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
 		<build-helper-maven-plugin>1.7</build-helper-maven-plugin>
 		<maven-processor-plugin.version>2.2.1</maven-processor-plugin.version>
 		<lifecycle-mapping-plugin.version>1.0.0</lifecycle-mapping-plugin.version>
