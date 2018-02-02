@@ -16,10 +16,10 @@
 package ch.swingfx.window.translucentandshaped;
 
 /**
- * Factory for creating {@link ITranslucentAndShapedWindowApi} objects depending on the JRE<br />
+ * Factory for creating {@link ITranslucentAndShapedWindowApi} objects depending on the JRE 
  * Prior to JRE 6 update 10 there is no support for this. As of JRE 6u10 there is support in private APIs.
- * As of JRE 7 there is official support for this.<br />
- * This factory figures out which one to use.<br />
+ * As of JRE 7 there is official support for this. 
+ * This factory figures out which one to use. 
  * Note: Only Sun/Oracle JREs support sun.awt.AWTUtilities. Other JDK/JREs (example OpenJDK) do not support the private API
  * @author Heinrich Spreiter
  */

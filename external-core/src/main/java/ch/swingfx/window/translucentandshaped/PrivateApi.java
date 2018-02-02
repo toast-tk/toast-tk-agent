@@ -22,11 +22,11 @@ import java.awt.Window;
 import java.lang.reflect.Method;
 
 /**
- * Wrapper around com.sun.awt.AWTUtilities API for Translucent and Shaped Window support.<br />
- * As of JRE 6 update 10 there is a private API for creating these types of windows.<br />
+ * Wrapper around com.sun.awt.AWTUtilities API for Translucent and Shaped Window support. 
+ * As of JRE 6 update 10 there is a private API for creating these types of windows. 
  * You shouldn't use this class directly. Instead use {@link TranslucentAndShapedWindowApiFactory} to
  * get the correct instance depending on your system JRE. For more details see
- * http://download.oracle.com/javase/tutorial/uiswing/misc/trans_shaped_windows.html#6u10<br />
+ * http://download.oracle.com/javase/tutorial/uiswing/misc/trans_shaped_windows.html#6u10 
  * Note: Only Sun/Oracle JREs support sun.awt.AWTUtilities. Other JDK/JREs (example OpenJDK) do not support the private API
  * @author Heinrich Spreiter
  *

@@ -16,8 +16,8 @@
 package ch.swingfx.window.translucentandshaped;
 
 /**
- * Enum off all supported API types for translucent and shaped windows<br />
- * For more details see http://download.oracle.com/javase/tutorial/uiswing/misc/trans_shaped_windows.html#6u10<br />
+ * Enum off all supported API types for translucent and shaped windows 
+ * For more details see http://download.oracle.com/javase/tutorial/uiswing/misc/trans_shaped_windows.html#6u10 
  * Note: Only Sun/Oracle JREs support sun.awt.AWTUtilities. Other JDK/JREs (example OpenJDK) do not support the private API
  * @author Heinrich Spreiter
  *

@@ -20,10 +20,10 @@ import java.awt.GraphicsDevice;
 import java.awt.Shape;
 import java.awt.Window;
 /**
- * Class that represents no support for translucent and shaped windows because there is no api we can wrap.<br />
+ * Class that represents no support for translucent and shaped windows because there is no api we can wrap. 
  * You shouldn't use this class directly. Instead use {@link TranslucentAndShapedWindowApiFactory} to
  * get the correct instance depending on your system JRE. For more details see
- * http://download.oracle.com/javase/tutorial/uiswing/misc/trans_shaped_windows.html#6u10<br />
+ * http://download.oracle.com/javase/tutorial/uiswing/misc/trans_shaped_windows.html#6u10 
  * Note: Only Sun/Oracle JREs support sun.awt.AWTUtilities. Other JDK/JREs (example OpenJDK) do not support the private API
  * @author Heinrich Spreiter
  *

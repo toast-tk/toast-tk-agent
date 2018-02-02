@@ -22,7 +22,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 /**
- * Class for simple animation. Example:<br />
+ * Class for simple animation. Example: 
  * <pre>
  * AnimationTimer at = new AnimationTimer(FrameRate.FPS_25);
  * at.setDuration(2500); // 2500 milliseconds
@@ -44,7 +44,7 @@ import javax.swing.Timer;
  */
 public class AnimationTimer {
 	/**
-	 * Frame rates for the {@link AnimationTimer}<br />
+	 * Frame rates for the {@link AnimationTimer} 
 	 * Note: These frame rates are approximations.
 	 * @author Heinrich Spreiter
 	 */
@@ -174,7 +174,7 @@ public class AnimationTimer {
 	}
 	
 	/**
-	 * Used with {@link AnimationTimer}.setAnimationTarget().<br />
+	 * Used with {@link AnimationTimer}.setAnimationTarget(). 
 	 * Implement this interface to receive events from the {@link AnimationTimer}
 	 * @author Heinrich Spreiter
 	 *

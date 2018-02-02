@@ -16,7 +16,7 @@
 package ch.swingfx.window.translucentandshaped;
 
 /**
- * This enum is used in combination with {@link ITranslucentAndShapedWindowApi}.isTranslucencySupported()<br />
+ * This enum is used in combination with {@link ITranslucentAndShapedWindowApi}.isTranslucencySupported() 
  * @author Heinrich Spreiter
  *
  */

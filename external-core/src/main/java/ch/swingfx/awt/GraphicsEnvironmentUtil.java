@@ -32,7 +32,7 @@ public final class GraphicsEnvironmentUtil {
 	}
 	
 	/**
-	 * Depending on the JRE Toolkit.getScreenInsets() doesn't always work on OS X.<br />
+	 * Depending on the JRE Toolkit.getScreenInsets() doesn't always work on OS X. 
 	 * Because the menu bar is always 22 we can provide
 	 * the screen insets for the screen with the menu bar in this constant.
 	 */
@@ -53,10 +53,10 @@ public final class GraphicsEnvironmentUtil {
 	}
 	
 	/**
-	 * Get the x11 net workarea from a call to<br />
-	 * <code>xprop -root -notype _NET_WORKAREA</code><br />
+	 * Get the x11 net workarea from a call to 
+	 * <code>xprop -root -notype _NET_WORKAREA</code> 
 	 * On some systems (jvms) we can not get the real screen insets
-	 * so we read _NET_WORKAREA from the command line.<br />
+	 * so we read _NET_WORKAREA from the command line. 
 	 * The output is translated to an Rectangle
 	 * Output: _NET_WORKAREA = 0, 0, 1680, 1025
 	 * Rectangle: x, y, width, height
