@@ -18,7 +18,7 @@ package ch.swingfx.twinkle.style.overlay;
 import java.awt.Graphics;
 
 /**
- * Extend this class if you want to create your own {@link IOverlay} implementations.<br />
+ * Extend this class if you want to create your own {@link IOverlay} implementations.
  * It implements the logic for {@link OverlayPaintMode} values.
  * @author Heinrich Spreiter
  *

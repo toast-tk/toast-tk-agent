@@ -24,7 +24,7 @@ import ch.swingfx.twinkle.style.AbstractNotificationStyle;
 import ch.swingfx.twinkle.style.INotificationStyle;
 
 /**
- * Use this interface to create your own notification windows. Use:<br />
+ * Use this interface to create your own notification windows. Use:
  * <code>
  * {@link AbstractNotificationStyle}.withNotificationWindowCreator()
  * </code>

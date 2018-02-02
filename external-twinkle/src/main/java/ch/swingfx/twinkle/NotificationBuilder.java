@@ -38,7 +38,7 @@ import java.awt.event.*;
 import java.util.UUID;
 
 /**
- * This class lets you build a notification window.<br />
+ * This class lets you build a notification window. 
  * @author Heinrich Spreiter
  *
  */
@@ -209,7 +209,7 @@ public class NotificationBuilder {
 	}
 	
 	/**
-	 * set true if you want to fade in the notification.<br />
+	 * set true if you want to fade in the notification. 
 	 * Note fade in is not supported on all platform. If it doesn't
 	 * work on a platform it will use no animation.
 	 * @param animate true if you want to fade in the notification
@@ -221,7 +221,7 @@ public class NotificationBuilder {
 	}
 	
 	/**
-	 * set true if you want to fade out the notification.<br />
+	 * set true if you want to fade out the notification. 
 	 * Note fade out is not supported on all platform. If it doesn't
 	 * work on a platform it will use no animation.
 	 * @param animate true if you want to fade in the notification

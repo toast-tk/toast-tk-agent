@@ -35,7 +35,7 @@ public interface IBackground {
 	public void paintBackground(Graphics g, boolean isMouseOver, int cornerRadius);
 	/**
 	 * Set the alpha of this component. Usual you don't call this
-	 * method. Instead use {@link NotificationBuilder}.withAlpha(float)<br />
+	 * method. Instead use {@link NotificationBuilder}.withAlpha(float)
 	 * Note this only works if the {@link GraphicsConfiguration} supports per-pixel translucency.
 	 * @param alpha value between 0.0f (completely transparent) and 1.0f (opaque)
 	 */

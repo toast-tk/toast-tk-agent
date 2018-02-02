@@ -36,17 +36,13 @@ import ch.swingfx.window.translucentandshaped.Translucency;
 import ch.swingfx.window.translucentandshaped.TranslucentAndShapedWindowApiFactory;
 
 /**
- * The default notification window layout.<br />
+ * The default notification window layout.
  * You can override the insets for the icon, title and message. Example
- * <code>
- *     <pre>
  *         map.put(DefaultNotificationWindow.OVERRIDE_ICON_INSETS, new Insets(5,5,5,5));
  *         map.put(DefaultNotificationWindow.OVERRIDE_TITLE_INSETS, new Insets(5,5,5,5));
  *         map.put(DefaultNotificationWindow.OVERRIDE_MESSAGE_INSETS, new Insets(5,5,5,5));
  *         ...
  *         style.withCustomParams(map);
- *     </pre>
- * </code>
  * @author Heinrich Spreiter
  *
  */
