@@ -25,7 +25,7 @@ public enum Translucency {
 	PERPIXEL_TRANSPARENT,
 	/** simple translucency (everything or nothing) */
 	TRANSLUCENT,
-	/** per-pixel translucency (example: Only window but not the button).<br/>
+	/** per-pixel translucency (example: Only window but not the button).
 	 * check with isTranslucencyCapable(gc)  */
 	PERPIXEL_TRANSLUCENT
 }
